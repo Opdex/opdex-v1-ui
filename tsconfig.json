@@ -19,7 +19,13 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@environments/*": ["./src/environments/*"],
+      "@sharedPipes/*": ["./src/app/pipes/*"],
+      "@sharedComponents/*": ["./src/app/components/*"],
+      "@sharedServices/*": ["./src/app/services/*"],
+    }
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
