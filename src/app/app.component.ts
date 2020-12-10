@@ -8,7 +8,7 @@ import { ThemeService } from './services/theme.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  // @HostBinding('class') componentCssClass: string;
+  @HostBinding('class') componentCssClass: string;
   theme: string;
 
   constructor(
@@ -16,13 +16,17 @@ export class AppComponent implements OnInit {
     private _theme: ThemeService)
   {
     // Initialize all variables or turn off strict mode...
-    // this.componentCssClass = "";
+    this.componentCssClass = "";
     this.theme = "";
   }
 
   async ngOnInit() {
     this._theme.getTheme()
       .subscribe(theme => this.setTheme(theme));
+  }
+
+  toggleTheme(): void {
+    this.setTheme(this.theme === 'light-mode' ? 'dark-mode' : 'light-mode');
   }
 
   private setTheme(theme: string): void {
@@ -33,7 +37,7 @@ export class AppComponent implements OnInit {
       overlayClassList.remove(this.theme);
     }
 
-    // this.componentCssClass = `${theme} main`;
+    this.componentCssClass = `${theme} root`;
     this.theme = theme;
   }
 }

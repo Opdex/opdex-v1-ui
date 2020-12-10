@@ -1,0 +1,34 @@
+aside {
+  padding-top: 100px;
+
+  h1 {
+    text-align: center;
+  }
+
+  .logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0px auto;
+    background: blue;
+  }
+
+  ul {
+    li {
+      list-style-type: none;
+      padding: 10px 0px;
+    }
+  }
+
+  &.light-mode {
+    width: 300px;
+    background-color: #dfe5e6;
+    height: 100%;
+  }
+
+  &.dark-mode {
+    width: 300px;
+    background-color: #0f0f0f;
+    height: 100%;
+  }
+}

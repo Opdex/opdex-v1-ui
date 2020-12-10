@@ -1,9 +1,7 @@
 <main [ngClass]="theme">
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <h1>OPDEX</h1>
-      </div>
-    </div>
+  <opdex-sidebar></opdex-sidebar>
+
+  <div id="page-content">
+    <router-outlet></router-outlet>
   </div>
 </main>

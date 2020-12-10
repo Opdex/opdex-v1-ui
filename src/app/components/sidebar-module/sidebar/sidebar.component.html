@@ -1,0 +1,24 @@
+
+<ng-container *ngIf="theme$ | async as theme">
+  <aside [ngClass]="theme">
+    <div class="logo"></div>
+    <h1 class="mt-3">OPDEX</h1>
+
+    <ul>
+      <li>
+        <button mat-button><h3 class="mb-0">Overview</h3></button>
+      </li>
+      <li>
+        <button mat-button><h3 class="mb-0">Pairs</h3></button>
+      </li>
+      <li>
+        <button mat-button><h3 class="mb-0">Accounts</h3></button>
+      </li>
+    </ul>
+
+
+    <button mat-icon-button (click)="setTheme(theme === 'dark-mode' ? 'light-mode' : 'dark-mode')" class="small mt-5 ml-1">
+      <mat-icon>{{theme === 'dark-mode' ? 'wb_sunny' : 'brightness_3'}}</mat-icon>
+    </button>
+  </aside>
+</ng-container>
