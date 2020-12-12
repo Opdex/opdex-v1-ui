@@ -1,0 +1,27 @@
+<ng-container *ngIf="theme$ | async as theme">
+  <mat-card [ngClass]="theme">
+    <form [formGroup]="form" name="swap" id="swap">
+      <div class="input">
+        <label for="">From</label>
+        <input [formControl]="from" type="number" placeholder="100" required />
+      </div>
+
+      <div class="input mt-3">
+        <label for="">To</label>
+        <input [formControl]="to" type="number" placeholder="100" required />
+      </div>
+    </form>
+
+    <div class="space-between"></div>
+
+    <div class="swap-info mt-3">
+      <p class="mb-0">Slippage: .1%</p>
+      <p class="mb-0">Minimum Recieved: 12345</p>
+      <p class="mb-0">Price: 12345</p>
+      <p class="mb-0">Price Impact: 12345</p>
+      <p class="mb-0">Fee: .03%</p>
+    </div>
+
+    <button mat-flat-button color="primary" class="mt-4 w-100">Swap</button>
+  </mat-card>
+</ng-container>

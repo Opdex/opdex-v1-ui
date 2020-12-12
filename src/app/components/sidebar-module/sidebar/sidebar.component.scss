@@ -1,16 +1,39 @@
 aside {
-  padding-top: 100px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 
   h1 {
     text-align: center;
   }
 
   .logo {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin: 0px auto;
-    background: blue;
+    display: flex;
+    align-items: center;
+    height: 50px;
+    margin-bottom: 20px;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    img {
+      width: 40px;
+    }
+
+    .opdex {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0px;
+      margin-left: 10px;
+      font-size: 2em;
+      font-weight: bold;
+    }
   }
 
   ul {
@@ -21,14 +44,11 @@ aside {
   }
 
   &.light-mode {
-    width: 300px;
-    background-color: #dfe5e6;
-    height: 100%;
+    background: #fff !important;
+    // border-right: 1px solid #1da7dc;
   }
 
   &.dark-mode {
-    width: 300px;
-    background-color: #0f0f0f;
-    height: 100%;
+    background: #0f0f0f !important;
   }
 }

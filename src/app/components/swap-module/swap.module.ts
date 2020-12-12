@@ -1,27 +1,29 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 
-import { SidebarComponent } from './sidebar/sidebar.component';
+import { SwapComponent } from './swap/swap.component';
 
 // Material Imports
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatListModule } from '@angular/material/list';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
-    SidebarComponent
+    SwapComponent
   ],
   imports: [
     CommonModule,
-    RouterModule,
+    ReactiveFormsModule,
     MatIconModule,
     MatButtonModule,
-    MatListModule
+    MatCardModule,
+    MatInputModule
   ],
   exports: [
-    SidebarComponent
+    SwapComponent
   ]
 })
-export class SidebarModule { }
+export class SwapModule { }

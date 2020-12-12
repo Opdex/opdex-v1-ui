@@ -1,0 +1,43 @@
+mat-card {
+  height: 100% !important;
+}
+
+mat-selection-list {
+  &:focus {
+    outline: 0;
+  }
+}
+mat-list-item {
+  &:focus {
+    outline: none;
+  }
+
+  &:hover {
+    background: #fff;
+    cursor: pointer;
+  }
+}
+
+
+.light-mode {
+  mat-list-item:hover {
+    background: #fff;
+  }
+
+  input {
+    background: #fff;
+    border: 1px solid #f4f4f4;
+  }
+}
+
+.dark-mode {
+  mat-list-item:hover {
+    background: #1a1a1a;
+  }
+
+  input {
+    background: #202020;
+    color: #fff;
+    border: 1px solid #363636;
+  }
+}

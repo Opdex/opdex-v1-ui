@@ -111,7 +111,7 @@ $mat-light-theme-background: (
 );
 
 // Dark bg
-$dark-background:     #121214;
+$dark-background:     #0d0d13;
 $dark-bg-lighter-5:   lighten($dark-background, 5%);
 $dark-bg-lighter-10:  lighten($dark-background, 10%);
 $dark-bg-lighter-20:  lighten($dark-background, 20%);
@@ -125,7 +125,7 @@ $mat-dark-theme-background: (
   status-bar:               $dark-bg-lighter-20,
   app-bar:                  $dark-bg-lighter-5,
   hover:                    $light-bg-alpha-4,
-  card:                     lighten($dark-background, 2%),
+  card:                     $dark-background,
   dialog:                   $dark-background,
   disabled-button:          $light-bg-alpha-12,
   raised-button:            $dark-bg-lighter-5,
@@ -143,10 +143,10 @@ $mat-dark-theme-background: (
 // Theme Config
 
 $mat-primary: (
-  main: #0067a2,
-  lighter: #3da1db,
-  darker: #0a5783,
-  200: #2f3133, // For slide toggle,
+  main: #1da7dc,
+  lighter: #46bceb,
+  darker: #1b91c0,
+  200: #1da7dc, // For slide toggle,
   contrast : (
     main: $light-primary-text,
     lighter: $dark-primary-text,
@@ -156,10 +156,10 @@ $mat-primary: (
 $theme-primary: mat-palette($mat-primary, main, lighter, darker);
 
 $mat-accent: (
-  main: #539e57,
-  lighter: #63be67,
-  darker: #418343,
-  200: #23b32a, // For slide toggle,
+  main: #1B192F,
+  lighter: #252342,
+  darker: #11101d,
+  200: #1B192F, // For slide toggle,
   contrast : (
     main: $light-primary-text,
     lighter: $light-primary-text,
@@ -188,7 +188,7 @@ $altTheme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
 
 
 
-html, body { height: 100vh; }
+html, body { height: 100%; }
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
@@ -196,8 +196,8 @@ body {
 
 main {
   display: flex;
-  height: 100vh;
-  flex-direction: column;
+  min-height: 100%;
+  flex-direction: row;
   overflow-y: auto;
 
   .main-route-container {
@@ -211,9 +211,16 @@ main {
   $background: map-get($theme, background);
   $backgroundColor: mat-color($background, background);
 
+  $primary: map-get($theme, primary);
+  $primaryDarkerColor: mat-color($primary, darker);
+
   background: #f5f5f5;  /* fallback for old browsers */
   background: -webkit-linear-gradient(to right, #f9fdff, #f1f1f1, #f9fdff);  /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to right,  #f9fdff, #f1f1f1, #f9fdff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  a {
+    color: $primaryDarkerColor;
+  }
 }
 
 .dark-mode {
@@ -225,8 +232,11 @@ main {
 
   color: #fff;
 
+  $primary: map-get($altTheme, primary);
+  $primaryDarkerColor: mat-color($primary, darker);
+
   a {
-    color: #fff !important;
+    color: $primaryDarkerColor;
   }
 }
 

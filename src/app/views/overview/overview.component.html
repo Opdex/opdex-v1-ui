@@ -1,0 +1,55 @@
+<div id="overview">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <h1>Market Overview</h1>
+
+        <div class="stats">
+          <mat-divider></mat-divider>
+          <div class="row">
+            <div class="col-3">
+              <p class="mb-0">
+                Volume: 234234234
+              </p>
+            </div>
+
+            <div class="col-3">
+              <p class="mb-o">
+                Liquidity: 65754342353
+              </p>
+            </div>
+
+            <div class="col-3">
+              <p class="mb-0">
+                Fees: 65754342353
+              </p>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col-12 col-md-8">
+        <mat-card>
+          <opdex-line-chart [chartData]="ohlcPoints" [type]="chartType"></opdex-line-chart>
+        </mat-card>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <opdex-swap></opdex-swap>
+      </div>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col-12 mb-4">
+        <opdex-pairs-table></opdex-pairs-table>
+      </div>
+
+      <div class="col-12">
+        <opdex-tokens-table></opdex-tokens-table>
+      </div>
+    </div>
+  </div>
+</div>

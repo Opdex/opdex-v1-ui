@@ -1,0 +1,35 @@
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ThemeService } from '@sharedServices/theme.service';
+import { Observable } from 'rxjs';
+
+@Component({
+  selector: 'opdex-swap',
+  templateUrl: './swap.component.html',
+  styleUrls: ['./swap.component.scss']
+})
+export class SwapComponent implements OnInit {
+  form: FormGroup;
+  theme$: Observable<string>;
+
+  get from(): FormControl {
+    return this.form.get('from') as FormControl;
+  }
+
+  get to(): FormControl {
+    return this.form.get('to') as FormControl;
+  }
+
+  constructor(private _fb: FormBuilder, private _themeService: ThemeService) {
+    this.form = this._fb.group({
+      from: [0, [Validators.required, Validators.min(.00000001)]],
+      to: [0, [Validators.required, Validators.min(.00000001)]],
+    });
+
+    this.theme$ = this._themeService.getTheme();
+  }
+
+
+
+  ngOnInit(): void { }
+}
