@@ -22,8 +22,8 @@ export class SwapComponent implements OnInit {
 
   constructor(private _fb: FormBuilder, private _themeService: ThemeService) {
     this.form = this._fb.group({
-      from: [0, [Validators.required, Validators.min(.00000001)]],
-      to: [0, [Validators.required, Validators.min(.00000001)]],
+      from: [null, [Validators.required, Validators.min(.00000001)]],
+      to: [null, [Validators.required, Validators.min(.00000001)]],
     });
 
     this.theme$ = this._themeService.getTheme();

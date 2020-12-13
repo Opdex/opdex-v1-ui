@@ -1,3 +1,3 @@
-<div [hidden]="loading">
-  <div #chartContainer id="chartdiv" (window:resize)="onResize($event)"></div>
+<div [hidden]="loading" #chartContainer class="w-100">
+  <div id="chartdiv" (window:resize)="onResize()"></div>
 </div>

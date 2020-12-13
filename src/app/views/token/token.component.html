@@ -1,5 +1,5 @@
 <div id="overview">
-  <div class="container-fluid">
+  <div class="container">
     <div class="row">
       <div class="col-12">
         <h1>MEDI</h1>
@@ -9,19 +9,19 @@
           <div class="row">
             <div class="col-3">
               <p class="mb-0">
-                Volume: 234234234
+                Volume: $109,733,139
               </p>
             </div>
 
             <div class="col-3">
               <p class="mb-o">
-                Liquidity: 65754342353
+                Liquidity: $1,754,342,353
               </p>
             </div>
 
             <div class="col-3">
               <p class="mb-0">
-                Fees: 65754342353
+                Fees: $329,199.41
               </p>
             </div>
           </div>
@@ -33,7 +33,7 @@
     <div class="row mb-4">
       <div class="col-12 col-md-8">
         <mat-card>
-          <opdex-line-chart [chartData]="ohlcPoints" [type]="chartType"></opdex-line-chart>
+          <opdex-line-chart [chartData]="ohlcPoints" [type]="chartType" *ngIf="ohlcPoints"></opdex-line-chart>
         </mat-card>
       </div>
 
@@ -44,10 +44,7 @@
 
     <div class="row mb-4">
       <div class="col-12 mb-4">
-        <mat-card>
-          <h2>Swaps</h2>
-          <br><br><br>
-        </mat-card>
+        <opdex-transactions-table></opdex-transactions-table>
       </div>
     </div>
   </div>

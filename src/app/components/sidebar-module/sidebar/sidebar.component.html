@@ -29,8 +29,23 @@
 
     <button color="primary" mat-flat-button class="w-100 mb-1">Connect Wallet</button>
 
-    <button mat-icon-button (click)="setTheme(theme === 'dark-mode' ? 'light-mode' : 'dark-mode')" class="small mt-2 ml-1">
-      <mat-icon>{{theme === 'dark-mode' ? 'wb_sunny' : 'brightness_3'}}</mat-icon>
-    </button>
+    <div class="connection-theme-row">
+      <div class="connection">
+        <span class="connection-badge"></span> Connected
+      </div>
+
+      <div class="theme-selection">
+        <button mat-icon-button (click)="setTheme('light-mode')" class="tiny" [ngClass]="{'inactive': theme === 'dark-mode'}">
+          <mat-icon>wb_sunny</mat-icon>
+        </button>
+
+        <span class="theme-divider">/</span>
+
+        <button mat-icon-button (click)="setTheme('dark-mode')" class="tiny" [ngClass]="{'inactive': theme === 'light-mode'}">
+          <mat-icon>brightness_3</mat-icon>
+        </button>
+      </div>
+    </div>
+
   </aside>
 </ng-container>

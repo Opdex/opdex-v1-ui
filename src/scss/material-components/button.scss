@@ -1,0 +1,44 @@
+
+button {
+  &.tiny {
+    &.mat-button-base {
+      line-height: 20px;
+    }
+
+    &.mat-icon-button {
+      width: 20px;
+      height: 20px;
+    }
+
+    .mat-icon {
+      line-height: 18px;
+      height: 18px;
+      width: 18px;
+
+      &.material-icons {
+        font-size: 18px;
+      }
+    }
+  }
+
+  &.small {
+    &.mat-button-base {
+      line-height: 28px;
+    }
+
+    &.mat-icon-button {
+      width: 28px;
+      height: 28px;
+    }
+
+    .mat-icon {
+      line-height: 22px;
+      height: 22px;
+      width: 22px;
+
+      &.material-icons {
+        font-size: 22px;
+      }
+    }
+  }
+}

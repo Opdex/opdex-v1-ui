@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { ThemeService } from '../../services/theme.service';
+import { ThemeService } from '@sharedServices/theme.service';
 
 @Component({
   selector: 'opdex-pairs-table',

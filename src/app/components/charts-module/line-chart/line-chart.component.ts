@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { createChart, ISeriesApi, IChartApi } from 'lightweight-charts';
 
 @Component({
@@ -7,6 +7,7 @@ import { createChart, ISeriesApi, IChartApi } from 'lightweight-charts';
   styleUrls: ['./line-chart.component.scss']
 })
 export class LineChartComponent implements OnInit, OnChanges {
+  @ViewChild('chartContainer') container : ElementRef;
   @Input() theme: string;
   @Input() chartData: any;
   @Input() type: string;
@@ -18,6 +19,7 @@ export class LineChartComponent implements OnInit, OnChanges {
   greenColor = 'rgba(83, 158, 87, 0.8)';
   loading = true;
 
+  // Todo: Going directly between 2 views that contain charts, cause the 2nd view to not render
   ngOnChanges() {
     this.ngOnInit();
 
@@ -43,7 +45,6 @@ export class LineChartComponent implements OnInit, OnChanges {
       }
       else if (this.type === 'Area') {
         const data: any = [];
-        console.log('hit')
 
         this.chartData.forEach((point: any) => {
           data.push({
@@ -109,21 +110,23 @@ export class LineChartComponent implements OnInit, OnChanges {
           bottom: 0,
         }
       });
-
-      this.onResize();
     }
+  }
+
+  ngAfterViewInit(): void {
+    this.onResize();
   }
 
   private applyChartOptions() {
     this.chart.applyOptions({
       grid: {
         vertLines: {
-            color: '#696969',
+            color: '#f4f4f4',
             style: 1,
             visible: true,
         },
         horzLines: {
-            color: '#696969',
+            color: '#f4f4f4',
             style: 1,
             visible: true,
         },
@@ -142,12 +145,16 @@ export class LineChartComponent implements OnInit, OnChanges {
     });
   }
 
-  onResize(event?: any) {
-    const minSize = 470;
+  onResize() {
+    if (this.container) {
+      const size = (this.container.nativeElement as HTMLElement).offsetWidth;
 
-    // 850 Size of all three sections
-    const size = window.innerWidth - 775;
+      this.chart.resize(size, 350);
+    }
 
-    this.chart.resize(size >= minSize ? size : minSize, 350);
+  }
+
+  ngOnDestroy() {
+    this.chart.remove();
   }
 }

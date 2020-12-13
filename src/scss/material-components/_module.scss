@@ -1,0 +1,19 @@
+@import 'list';
+@import 'card';
+@import 'table';
+@import 'button';
+
+.light-mode {
+  input {
+    background: #fff;
+    border: 1px solid #f4f4f4;
+  }
+}
+
+.dark-mode {
+  input {
+    background: #202020;
+    color: #fff;
+    border: 1px solid #363636;
+  }
+}

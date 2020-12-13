@@ -1,0 +1,28 @@
+mat-selection-list {
+  &:focus {
+    outline: 0;
+  }
+
+  mat-list-item {
+    &:focus {
+      outline: none;
+    }
+
+    &:hover {
+      background: #fff;
+      cursor: pointer;
+    }
+  }
+}
+
+.light-mode {
+  mat-list-item:hover {
+    background: #fff;
+  }
+}
+
+.dark-mode {
+  mat-list-item:hover {
+    background: #1a1a1a;
+  }
+}

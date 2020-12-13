@@ -45,10 +45,41 @@ aside {
 
   &.light-mode {
     background: #fff !important;
-    // border-right: 1px solid #1da7dc;
   }
 
   &.dark-mode {
     background: #0f0f0f !important;
+  }
+
+  .connection-theme-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 10px;
+
+    .theme-selection {
+      display: flex;
+      flex-direction: row;
+
+      .theme-divider {
+        color: #777;
+        font-size: 1.4em;
+        margin: 0px 3px 0px 6px;
+      }
+
+      .inactive {
+        color: #777;
+      }
+    }
+
+    .connection {
+      .connection-badge {
+        width: 6px;
+        height: 6px;
+        background: green;
+        border-radius: 50%;
+        display: inline-block;
+      }
+    }
   }
 }
