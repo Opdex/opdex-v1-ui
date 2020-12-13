@@ -60,7 +60,7 @@ $light-text: #ffffff;
 $light-primary-text: $light-text;
 $light-accent-text: rgba($light-primary-text, 0.7);
 $light-disabled-text: rgba($light-primary-text, 0.5);
-$light-dividers: rgba($light-primary-text, 0.12);
+$light-dividers: rgba($light-primary-text, 0.08);
 $light-focused: rgba($light-primary-text, 0.12);
 
 $mat-dark-theme-foreground: (
@@ -111,7 +111,7 @@ $mat-light-theme-background: (
 );
 
 // Dark bg
-$dark-background:     #0d0d13;
+$dark-background:     #100f1d;
 $dark-bg-lighter-5:   lighten($dark-background, 5%);
 $dark-bg-lighter-10:  lighten($dark-background, 10%);
 $dark-bg-lighter-20:  lighten($dark-background, 20%);
@@ -226,9 +226,9 @@ main {
 .dark-mode {
   @include angular-material-theme($altTheme);
 
-  background: #1c2338;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #0c0d0e, #0e0f13, #0c0d0e);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right,  #0c0d0e, #0e0f13, #0c0d0e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #0d0c18;  /* fallback for old browsers */
+  // background: -webkit-linear-gradient(to right, #0c0d0e, #0e0f13, #0c0d0e);  /* Chrome 10-25, Safari 5.1-6 */
+  // background: linear-gradient(to right,  #0c0d0e, #0e0f13, #0c0d0e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
   color: #fff;
 

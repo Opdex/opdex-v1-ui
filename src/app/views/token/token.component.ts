@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ThemeService } from '@sharedServices/theme.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'opdex-token',
@@ -8,7 +10,11 @@ import { Component, OnInit } from '@angular/core';
 export class TokenComponent implements OnInit {
   chartType: string = 'Area';
   ohlcPoints: any[];
-  constructor() { }
+  theme$: Observable<string>;
+
+  constructor(private _themeService: ThemeService) {
+    this.theme$ = this._themeService.getTheme();
+  }
 
   ngOnInit(): void {
     setTimeout(() => {

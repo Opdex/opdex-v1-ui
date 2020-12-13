@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'opdex-pair',
@@ -8,7 +10,11 @@ import { Component, OnInit } from '@angular/core';
 export class PairComponent implements OnInit {
   chartType: string = 'Area';
   ohlcPoints: any[];
-  constructor() { }
+  theme$: Observable<string>;
+
+  constructor(private _themeService: ThemeService) {
+    this.theme$ = this._themeService.getTheme();
+  }
 
   ngOnInit(): void {
     setTimeout(() => {
@@ -62,5 +68,4 @@ export class PairComponent implements OnInit {
   dateToChartTime(date:Date) {
     return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), 0) / 1000;
   };
-
 }

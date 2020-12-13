@@ -1,52 +1,64 @@
 <ng-container *ngIf="theme$ | async as theme">
-  <div class="transaction-container">
-    <div class="transaction-sidebar">
-      <ul>
-        <li>
-          <button mat-icon-button class="small">
-            <mat-icon>swap_horiz</mat-icon>
-          </button>
-        </li>
-        <li>
-          <button mat-icon-button class="small">
-            <mat-icon>add</mat-icon>
-          </button>
-        </li>
-        <li>
-          <button mat-icon-button class="small">
-            <mat-icon>remove</mat-icon>
-          </button>
-        </li>
-      </ul>
-    </div>
-
-    <div class="transaction-view">
-      <div class="swap">
-        <h2>Swap</h2>
-        <form [formGroup]="form" name="swap" id="swap">
-          <div class="input">
-            <label for="">From</label>
-            <input [formControl]="from" type="number" placeholder="100" required />
-          </div>
-
-          <div class="input mt-3">
-            <label for="">To</label>
-            <input [formControl]="to" type="number" placeholder="100" required />
-          </div>
-        </form>
+  <mat-card class="p-0">
+    <div class="transaction-container">
+      <div class="transaction-sidebar">
+        <ul>
+          <li>
+            <button mat-icon-button class="small">
+              <mat-icon>swap_horiz</mat-icon>
+            </button>
+          </li>
+          <li>
+            <button mat-icon-button class="small">
+              <mat-icon>add</mat-icon>
+            </button>
+          </li>
+          <li>
+            <button mat-icon-button class="small">
+              <mat-icon>remove</mat-icon>
+            </button>
+          </li>
+        </ul>
 
         <div class="space-between"></div>
 
-        <div class="swap-info mt-3" *ngIf="form.controls.from.value > 0 && form.controls.to.value > 0">
-          <p class="mb-0">Slippage: .1%</p>
-          <p class="mb-0">Minimum Recieved: 12345</p>
-          <p class="mb-0">Price: 12345</p>
-          <p class="mb-0">Price Impact: 12345</p>
-          <p class="mb-0">Fee: .03%</p>
-        </div>
+        <ul>
+          <li class="pb-0">
+            <button mat-icon-button class="small">
+              <mat-icon>settings</mat-icon>
+            </button>
+          </li>
+        </ul>
+      </div>
 
-        <button mat-flat-button color="primary" class="mt-4 w-100">Swap</button>
+      <div class="transaction-view">
+        <div class="swap">
+          <h2>Swap</h2>
+          <form [formGroup]="form" name="swap" id="swap">
+            <div class="input">
+              <label for="">From</label>
+              <input [formControl]="from" type="number" placeholder="100" required />
+            </div>
+
+            <div class="input mt-3">
+              <label for="">To</label>
+              <input [formControl]="to" type="number" placeholder="100" required />
+            </div>
+          </form>
+
+          <div class="space-between"></div>
+
+          <div class="swap-info mt-3" *ngIf="form.controls.from.value > 0 && form.controls.to.value > 0">
+            <p class="mb-0">Slippage: .1%</p>
+            <p class="mb-0">Minimum Recieved: 12345</p>
+            <p class="mb-0">Price: 12345</p>
+            <p class="mb-0">Price Impact: 12345</p>
+            <p class="mb-0">Fee: .03%</p>
+          </div>
+
+          <button mat-stroked-button color="primary" class="mt-4 w-100">Swap</button>
+        </div>
       </div>
     </div>
-  </div>
+  </mat-card>
 </ng-container>

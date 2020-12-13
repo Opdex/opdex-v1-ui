@@ -1,4 +1,4 @@
-<div id="overview">
+<div id="token" *ngIf="theme$ | async as theme">
   <div class="container">
     <div class="row">
       <div class="col-12">
@@ -32,8 +32,8 @@
 
     <div class="row mb-4">
       <div class="col-12 col-md-8">
-        <mat-card>
-          <opdex-line-chart [chartData]="ohlcPoints" [type]="chartType" *ngIf="ohlcPoints"></opdex-line-chart>
+        <mat-card class="p-0">
+          <opdex-line-chart [theme]="theme" [chartData]="ohlcPoints" [type]="chartType" *ngIf="ohlcPoints"></opdex-line-chart>
         </mat-card>
       </div>
 
@@ -44,6 +44,7 @@
 
     <div class="row mb-4">
       <div class="col-12 mb-4">
+        <h2>Recent Transactions</h2>
         <opdex-transactions-table></opdex-transactions-table>
       </div>
     </div>

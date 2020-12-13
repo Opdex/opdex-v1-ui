@@ -19,7 +19,6 @@ export class LineChartComponent implements OnInit, OnChanges {
   greenColor = 'rgba(83, 158, 87, 0.8)';
   loading = true;
 
-  // Todo: Going directly between 2 views that contain charts, cause the 2nd view to not render
   ngOnChanges() {
     this.ngOnInit();
 
@@ -56,9 +55,9 @@ export class LineChartComponent implements OnInit, OnChanges {
 
         if (!this.lineSeries) {
           this.lineSeries = this.chart.addAreaSeries({
-            lineColor: 'rgba(0, 103, 162, .4)',
-            topColor: 'rgba(0, 103, 162, .2)',
-            bottomColor: 'rgba(0, 103, 162, 0)',
+            lineColor: 'rgba(71, 188, 235, .7)',
+            topColor: 'rgba(71, 188, 235, .3)',
+            bottomColor: 'rgba(71, 188, 235, .1)',
           });
         }
 
@@ -121,18 +120,18 @@ export class LineChartComponent implements OnInit, OnChanges {
     this.chart.applyOptions({
       grid: {
         vertLines: {
-            color: '#f4f4f4',
-            style: 1,
-            visible: true,
+          color: this.theme === 'dark-mode' ? '#111' : '#f4f4f4',
+          style: 1,
+          visible: false,
         },
         horzLines: {
-            color: '#f4f4f4',
-            style: 1,
-            visible: true,
+          color: this.theme === 'dark-mode' ? '#111' : '#f4f4f4',
+          style: 1,
+          visible: false,
         },
       },
       layout: {
-        backgroundColor: this.theme === 'dark-mode' ? '#0e0f13' : 'transparent',
+        backgroundColor: this.theme === 'dark-mode' ? '#100f1d' : 'transparent',
         textColor: '#696969',
         fontSize: 12,
         fontFamily: 'Calibri',
@@ -151,7 +150,6 @@ export class LineChartComponent implements OnInit, OnChanges {
 
       this.chart.resize(size, 350);
     }
-
   }
 
   ngOnDestroy() {

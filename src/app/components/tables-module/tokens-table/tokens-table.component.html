@@ -1,5 +1,4 @@
 <mat-card *ngIf="theme$ | async as theme" [ngClass]="theme">
-  <h2>Tokens</h2>
   <div class="table-container">
     <table mat-table [dataSource]="dataSource" [trackBy]="trackBy" class="w-100">
       <ng-container matColumnDef="name" >
