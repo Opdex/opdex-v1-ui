@@ -17,30 +17,36 @@ export class TokensTableComponent implements OnInit {
   constructor(private _themeService: ThemeService, private _router: Router) {
     this.theme$ = this._themeService.getTheme();
     this.dataSource = new MatTableDataSource<any>();
-    this.displayedColumns = ['name', 'liquidity', 'volume', 'fees'];
+    this.displayedColumns = ['name', 'symbol', 'liquidity', 'volumeDaily', 'price', 'change'];
   }
 
   ngOnInit(): void {
     this.dataSource.data = [
       {
-        name: 'MEDI',
-        fees: '$562.29',
-        volume: '$187,432',
+        name: 'MediConnect',
+        symbol: 'MEDI',
+        volumeDaily: '$187,432',
         liquidity: '$1,232,662',
+        price: '$0.02',
+        change: '-0.2%',
         address: 'asdlkfjasdf'
       },
       {
-        name: 'GLUON',
-        fees: '$562.29',
-        volume: '$187,432',
+        name: 'Gluon',
+        symbol: 'GLUON',
+        volumeDaily: '$187,432',
         liquidity: '$1,232,662',
+        price: '$0.02',
+        change: '-0.2%',
         address: 'asdlkfjasdf'
       },
       {
-        name: 'WETH',
-        fees: '$562.29',
-        volume: '$187,432',
+        name: 'Ether (Wrapped)',
+        symbol: 'WETH',
+        volumeDaily: '$187,432',
         liquidity: '$1,232,662',
+        price: '$0.02',
+        change: '-0.2%',
         address: 'asdlkfjasdf'
       }
     ]

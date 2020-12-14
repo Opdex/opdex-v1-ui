@@ -17,27 +17,33 @@ export class PairsTableComponent implements OnInit {
   constructor(private _themeService: ThemeService, private _router: Router) {
     this.theme$ = this._themeService.getTheme();
     this.dataSource = new MatTableDataSource<any>();
-    this.displayedColumns = ['name', 'liquidity', 'volume', 'fees'];
+    this.displayedColumns = ['name', 'liquidity', 'volumeDaily', 'volumeWeekly', 'feesDaily', 'feesWeekly'];
   }
 
   ngOnInit(): void {
     this.dataSource.data = [
       {
         name: 'MEDI-CRS',
-        fees: '$562.29',
-        volume: '$187,432',
+        feesDaily: '$562.29',
+        feesWeekly: '$562.29',
+        volumeDaily: '$187,432',
+        volumeWeekly: '$995,332',
         liquidity: '$1,232,662',
         address: 'asdlkfjasdf'
       }, {
         name: 'GLUON-CRS',
-        fees: '$562.29',
-        volume: '$187,432',
+        feesDaily: '$562.29',
+        feesWeekly: '$562.29',
+        volumeDaily: '$187,432',
+        volumeWeekly: '$995,332',
         liquidity: '$1,232,662',
         address: 'asdlkfjasdf'
       }, {
         name: 'WETH-CRS',
-        fees: '$562.29',
-        volume: '$187,432',
+        feesDaily: '$562.29',
+        feesWeekly: '$562.29',
+        volumeDaily: '$187,432',
+        volumeWeekly: '$995,332',
         liquidity: '$1,232,662',
         address: 'asdlkfjasdf'
       }
