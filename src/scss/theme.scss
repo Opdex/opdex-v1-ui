@@ -205,6 +205,10 @@ main {
   }
 }
 
+.cdk-overlay-container {
+  background: transparent !important;
+}
+
 .light-mode {
   @include angular-material-theme($theme);
 
@@ -226,7 +230,7 @@ main {
 .dark-mode {
   @include angular-material-theme($altTheme);
 
-  background: #0d0c18;  /* fallback for old browsers */
+  background: #090911;  /* fallback for old browsers */
   // background: -webkit-linear-gradient(to right, #0c0d0e, #0e0f13, #0c0d0e);  /* Chrome 10-25, Safari 5.1-6 */
   // background: linear-gradient(to right,  #0c0d0e, #0e0f13, #0c0d0e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 

@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 import { TxBoxSwapComponent } from './tx-box-swap/tx-box-swap.component';
@@ -31,7 +32,8 @@ import { TxBoxComponent } from './tx-box/tx-box.component';
     MatButtonModule,
     MatCardModule,
     MatInputModule,
-    MatListModule
+    MatListModule,
+    MatDialogModule
   ],
   exports: [
     TxBoxSwapComponent,
