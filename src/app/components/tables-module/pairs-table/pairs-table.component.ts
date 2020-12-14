@@ -46,6 +46,22 @@ export class PairsTableComponent implements OnInit {
         volumeWeekly: '$995,332',
         liquidity: '$1,232,662',
         address: 'asdlkfjasdf'
+      }, {
+        name: 'WBTC-CRS',
+        feesDaily: '$562.29',
+        feesWeekly: '$562.29',
+        volumeDaily: '$187,432',
+        volumeWeekly: '$995,332',
+        liquidity: '$1,232,662',
+        address: 'asdlkfjasdf'
+      }, {
+        name: 'WUSDT-CRS',
+        feesDaily: '$562.29',
+        feesWeekly: '$562.29',
+        volumeDaily: '$187,432',
+        volumeWeekly: '$995,332',
+        liquidity: '$1,232,662',
+        address: 'asdlkfjasdf'
       }
     ]
   }

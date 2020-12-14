@@ -1,12 +1,15 @@
+$sidebar-width: 200px;
+
 opdex-sidebar {
   height: 100%;
-  width: 200px;
+  width: $sidebar-width;
   position: fixed;
+  box-shadow: 0px 0px 4px rgba(0,0,0,0.1);
 }
 
 #page-content {
   height: 100%;
-  margin-left: 250px;
+  margin-left: $sidebar-width;
   flex: 1 1 auto;
   padding: 10px 0;
 }

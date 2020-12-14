@@ -4,11 +4,11 @@ import { ThemeService } from '@sharedServices/theme.service';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'opdex-swap',
-  templateUrl: './swap.component.html',
-  styleUrls: ['./swap.component.scss']
+  selector: 'opdex-tx-box-swap',
+  templateUrl: './tx-box-swap.component.html',
+  styleUrls: ['./tx-box-swap.component.scss']
 })
-export class SwapComponent implements OnInit {
+export class TxBoxSwapComponent implements OnInit {
   form: FormGroup;
   theme$: Observable<string>;
 
@@ -28,8 +28,6 @@ export class SwapComponent implements OnInit {
 
     this.theme$ = this._themeService.getTheme();
   }
-
-
 
   ngOnInit(): void { }
 }

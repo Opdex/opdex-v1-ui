@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SidebarModule } from './components/sidebar-module/sidebar.module';
-import { SwapModule } from './components/swap-module/swap.module';
+import { TxBoxModule } from './components/tx-box-module/tx-box.module';
 import { ChartsModule } from './components/charts-module/charts.module';
 import { TablesModule } from '@sharedComponents/tables-module/tables.module';
 
@@ -36,7 +36,7 @@ import { MatButtonModule } from '@angular/material/button';
     AppRoutingModule,
     BrowserAnimationsModule,
     SidebarModule,
-    SwapModule,
+    TxBoxModule,
     ChartsModule,
     TablesModule,
     MatCardModule,

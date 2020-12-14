@@ -48,6 +48,24 @@ export class TokensTableComponent implements OnInit {
         price: '$0.02',
         change: '-0.2%',
         address: 'asdlkfjasdf'
+      },
+      {
+        name: 'Bitcoin (Wrapped)',
+        symbol: 'WBTC',
+        volumeDaily: '$187,432',
+        liquidity: '$1,232,662',
+        price: '$0.02',
+        change: '-0.2%',
+        address: 'asdlkfjasdf'
+      },
+      {
+        name: 'USDT (Wrapped)',
+        symbol: 'WUSDT',
+        volumeDaily: '$187,432',
+        liquidity: '$1,232,662',
+        price: '$0.02',
+        change: '-0.2%',
+        address: 'asdlkfjasdf'
       }
     ]
   }

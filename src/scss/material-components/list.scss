@@ -1,6 +1,12 @@
 mat-selection-list {
+  padding-top: 0px !important;
+
   &:focus {
     outline: 0;
+  }
+
+  .mat-list-item-content {
+    padding: 0px 10px !important;
   }
 
   mat-list-item {
@@ -11,6 +17,12 @@ mat-selection-list {
     &:hover {
       background: #fff;
       cursor: pointer;
+    }
+  }
+
+  mat-list-option {
+    .mat-list-text {
+      padding-right: 0px !important;
     }
   }
 }
