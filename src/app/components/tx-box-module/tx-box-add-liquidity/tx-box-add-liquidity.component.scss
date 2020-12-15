@@ -1,0 +1,15 @@
+.add-liquidity {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+input {
+  border-radius: 4px;
+  width: 100%;
+  padding: 10px;
+
+  &:focus {
+    outline: none;
+  }
+}

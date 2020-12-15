@@ -15,7 +15,7 @@ $fontConfig: (
   display-3: mat-typography-level(56px, 56px, 400, 'Roboto', -0.0089em),
   display-2: mat-typography-level(45px, 48px, 400, 'Roboto', 0.0000em),
   display-1: mat-typography-level(34px, 40px, 400, 'Roboto', 0.0074em),
-  headline: mat-typography-level(24px, 32px, 400, 'Roboto', 0.0000em),
+  headline: mat-typography-level(28px, 32px, 400, 'Roboto', 0.0000em),
   title: mat-typography-level(20px, 32px, 500, 'Roboto', 0.0075em),
   subheading-2: mat-typography-level(16px, 28px, 400, 'Roboto', 0.0094em),
   subheading-1: mat-typography-level(15px, 24px, 500, 'Roboto', 0.0067em),
@@ -145,7 +145,7 @@ $mat-dark-theme-background: (
 $mat-primary: (
   main: #1da7dc,
   lighter: #46bceb,
-  darker: #1b91c0,
+  darker: #1287b6,
   200: #1da7dc, // For slide toggle,
   contrast : (
     main: $light-primary-text,

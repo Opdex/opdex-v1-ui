@@ -1,33 +1,60 @@
-<div id="overview" *ngIf="theme$ | async as theme">
-  <div class="container">
+<div id="overview" *ngIf="theme$ | async as theme" [ngClass]="theme">
+  <div class="container pt-3">
     <div class="row mb-4">
       <div class="col-12">
-        <mat-card>
-          <h1>Market Overview</h1>
+        <h1>Market Overview</h1>
 
-          <div class="stats">
-            <mat-divider></mat-divider>
-            <div class="row">
-              <div class="col-3">
-                <p class="mb-0">
-                  Volume: $109,733,139
+        <div class="stats">
+          <div class="row">
+            <div class="col-3">
+              <mat-card>
+                <h4 class="stat-header">
+                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
+                  Cirrus (CRS)
+                </h4>
+                <p class="stat-value">
+                  $1.25
                 </p>
-              </div>
+              </mat-card>
+            </div>
 
-              <div class="col-3">
-                <p class="mb-0">
-                  Liquidity: $1,754,342,353
+            <div class="col-3">
+              <mat-card>
+                <h4 class="stat-header">
+                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
+                  Volume
+                </h4>
+                <p class="stat-value">
+                  $109,733,139
                 </p>
-              </div>
+              </mat-card>
+            </div>
 
-              <div class="col-3">
-                <p class="mb-0">
-                  Fees: $329,199.41
+            <div class="col-3">
+              <mat-card>
+                <h4 class="stat-header">
+                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
+                  Liquidity
+                </h4>
+                <p class="stat-value">
+                  $1,754,342,353
                 </p>
-              </div>
+              </mat-card>
+            </div>
+
+            <div class="col-3">
+              <mat-card>
+                <h4 class="stat-header">
+                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
+                  Fees
+                </h4>
+                <p class="stat-value">
+                  $329,199.41
+                </p>
+              </mat-card>
             </div>
           </div>
-        </mat-card>
+        </div>
       </div>
     </div>
 

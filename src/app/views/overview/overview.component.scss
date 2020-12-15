@@ -1,7 +1,30 @@
 .stats {
-  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
 
-  p {
-    margin: 15px 0px;
+  .stat-header {
+    display: flex;
+    font-weight: 400;
+    margin-bottom: 5px;
+    vertical-align: middle;
+  }
+
+  .stat-value {
+    font-size: 1.5em;
   }
 }
+
+.light-mode {
+  .stats {
+    .stat-header {
+      color: #575757 !important;
+    }
+  }
+}
+
+.dark-mode {
+  .stat-header {
+    color: #bebebe;
+  }
+}
+

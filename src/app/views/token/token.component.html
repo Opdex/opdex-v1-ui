@@ -1,31 +1,59 @@
 <div id="token" *ngIf="theme$ | async as theme">
-  <div class="container">
-    <div class="row">
+  <div class="container pt-3">
+    <div class="row mb-4">
       <div class="col-12">
-        <h1>MEDI</h1>
+        <h1>MediConnect (MEDI)</h1>
 
         <div class="stats">
-          <mat-divider></mat-divider>
           <div class="row">
             <div class="col-3">
-              <p class="mb-0">
-                Volume: $109,733,139
-              </p>
+              <mat-card>
+                <h4 class="stat-header">
+                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
+                  Cirrus (CRS)
+                </h4>
+                <p class="stat-value">
+                  $1.25
+                </p>
+              </mat-card>
             </div>
 
             <div class="col-3">
-              <p class="mb-o">
-                Liquidity: $1,754,342,353
-              </p>
+              <mat-card>
+                <h4 class="stat-header">
+                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
+                  Volume
+                </h4>
+                <p class="stat-value">
+                  $109,733,139
+                </p>
+              </mat-card>
             </div>
 
             <div class="col-3">
-              <p class="mb-0">
-                Fees: $329,199.41
-              </p>
+              <mat-card>
+                <h4 class="stat-header">
+                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
+                  Liquidity
+                </h4>
+                <p class="stat-value">
+                  $1,754,342,353
+                </p>
+              </mat-card>
+            </div>
+
+            <div class="col-3">
+              <mat-card>
+                <h4 class="stat-header">
+                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
+                  Fees
+                </h4>
+                <p class="stat-value">
+                  $329,199.41
+                </p>
+              </mat-card>
             </div>
           </div>
-          <mat-divider></mat-divider>
         </div>
       </div>
     </div>
