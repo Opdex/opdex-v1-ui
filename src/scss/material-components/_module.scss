@@ -4,16 +4,21 @@
 @import 'button';
 
 .light-mode {
-  input {
-    background: #fff;
-    border: 1px solid #f4f4f4;
-  }
+  // input {
+  //   background: #fff;
+  //   border: 1px solid #f4f4f4;
+  // }
 }
 
 .dark-mode {
-  input {
-    background: #1B192F;
-    color: #fff;
-    border: 1px solid #363636;
-  }
+  // input {
+  //   background: #1B192F;
+  //   color: #fff;
+  //   border: 1px solid #363636;
+  // }
+}
+
+
+.mat-form-field-infix {
+  border-top-width : .3em;
 }

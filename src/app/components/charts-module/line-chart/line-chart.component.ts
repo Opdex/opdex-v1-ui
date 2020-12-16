@@ -158,7 +158,10 @@ const garbagePoints = [
   styleUrls: ['./line-chart.component.scss']
 })
 export class LineChartComponent implements OnInit, OnChanges {
-  @ViewChild('chartContainer') container : ElementRef;
+  @ViewChild('chartContainer') container: ElementRef;
+  @Input() title: string;
+  @Input() valueKey: string;
+  @Input() otherText: string
   @Input() theme: string;
   @Input() chartData: any;
   @Input() type: string;

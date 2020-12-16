@@ -2,3 +2,28 @@
   width: 100%;
   min-height: 350px;
 }
+
+.chart-legend {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 999;
+  padding: 10px;
+
+  .title {
+    margin: 0;
+    font-size: 1.3em;
+    line-height: 1.4em;
+  }
+
+  .value {
+    margin: 0;
+    font-size: 1.6em;
+    line-height: 1.7em;
+  }
+
+  .other-text {
+    margin: 0;
+    font-size: 1em;
+  }
+}

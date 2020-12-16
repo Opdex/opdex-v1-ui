@@ -1,20 +1,53 @@
 <div class="swap">
-  <h3>Swap</h3>
-  <form [formGroup]="form" name="swap" id="swap">
-    <div class="input">
-      <label for="">From</label>
-      <input [formControl]="from" type="number" placeholder="100" required />
+  <form [formGroup]="form" name="swap-form" id="swap-form">
+    <div class="row">
+      <div class="col-12">
+        <label for="">Swap From</label>
+      </div>
+
+      <div class="col-7">
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput type="text" [required]="true" [formControl]="from" autocomplete="off" placeholder="0">
+        </mat-form-field>
+      </div>
+
+      <div class="col-5">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select [formControl]="fromToken" name="fromToken" placeholder="Select Token">
+            <mat-option *ngFor="let token of tokens" [value]="token.address">
+              {{token.ticker}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
 
-    <div class="input mt-3">
-      <label for="">To</label>
-      <input [formControl]="to" type="number" placeholder="100" required />
+    <div class="row">
+      <div class="col-12">
+        <label for="">Swap To</label>
+      </div>
+
+      <div class="col-7">
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput type="text" [required]="true" [formControl]="to" autocomplete="off" placeholder="0">
+        </mat-form-field>
+      </div>
+
+      <div class="col-5">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select [formControl]="toToken" name="toToken" placeholder="Select Token">
+            <mat-option *ngFor="let token of tokens" [value]="token.address">
+              {{token.ticker}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
   </form>
 
   <div class="space-between"></div>
 
-  <div class="swap-info mt-3" *ngIf="form.controls.from.value > 0 && form.controls.to.value > 0">
+  <div class="swap-info mt-1" *ngIf="form.controls.from.value > 0 && form.controls.to.value > 0">
     <p class="mb-0">Slippage: .1%</p>
     <p class="mb-0">Minimum Recieved: 12345</p>
     <p class="mb-0">Price: 12345</p>
