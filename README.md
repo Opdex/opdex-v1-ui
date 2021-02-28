@@ -1,6 +1,6 @@
 # OpdexUI
 
-Opdex App UI repository.
+Opdex App UI repository, connecting to Opdex Platform API.
 
 ## Install Dependencies
 
