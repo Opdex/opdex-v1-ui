@@ -197,7 +197,10 @@ export class LineChartComponent implements OnInit, OnChanges {
         }
       }
       else if (this.type === 'Area') {
-        const data: any = garbagePoints;
+        const data: any = garbagePoints.map(point => {
+          point.value += 24342272;
+          return point;
+        });
 
         // this.chartData.forEach((point: any) => {
         //   data.push({
@@ -249,7 +252,7 @@ export class LineChartComponent implements OnInit, OnChanges {
         width: 850,
         height: 300,
         localization: {
-          priceFormatter: (price:number) => price.toFixed(2)
+          priceFormatter: (price: number) => `$${price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
         },
       });
 

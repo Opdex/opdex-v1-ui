@@ -15,6 +15,10 @@ export class TxBoxSwapComponent implements OnInit {
     name: 'MediConnect',
     ticker: 'MEDI',
     address: 'lkdfhalkushef89'
+  }, {
+    name: 'Cirrus',
+    ticker: 'CRS',
+    address: 'ntsirhniuabeaoadrhjkluysihrabgergasdf'
   }];
 
   get from(): FormControl {

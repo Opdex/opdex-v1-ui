@@ -8,6 +8,7 @@ import { SidebarModule } from './components/sidebar-module/sidebar.module';
 import { TxBoxModule } from './components/tx-box-module/tx-box.module';
 import { ChartsModule } from './components/charts-module/charts.module';
 import { TablesModule } from '@sharedComponents/tables-module/tables.module';
+import { ModalsModule } from '@sharedComponents/modals-module/modals.module';
 
 import { PairsComponent } from './views/pairs/pairs.component';
 import { PairComponent } from './views/pair/pair.component';
@@ -40,6 +41,7 @@ import { MatIconModule } from '@angular/material/icon';
     TxBoxModule,
     ChartsModule,
     TablesModule,
+    ModalsModule,
     MatCardModule,
     MatDividerModule,
     MatButtonModule,
