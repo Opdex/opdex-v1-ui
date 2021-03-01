@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { environment } from '@environments/environment';
-import { StorageService } from './storage.service';
+import { StorageService } from './utility/storage.service';
 
 @Injectable({
   providedIn: 'root'

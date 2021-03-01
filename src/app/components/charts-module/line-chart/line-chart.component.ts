@@ -291,7 +291,7 @@ export class LineChartComponent implements OnInit, OnChanges {
         backgroundColor: this.theme === 'dark-mode' ? '#100f1d' : 'transparent',
         textColor: '#696969',
         fontSize: 12,
-        fontFamily: 'Calibri'
+        fontFamily: 'Arial'
       },
       timeScale: {
         visible: true,

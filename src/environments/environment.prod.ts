@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  defaultTheme: 'light-mode'
+  defaultTheme: 'light-mode',
+  api: ''
 };

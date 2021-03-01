@@ -9,6 +9,7 @@ import { TxBoxModule } from './components/tx-box-module/tx-box.module';
 import { ChartsModule } from './components/charts-module/charts.module';
 import { TablesModule } from '@sharedComponents/tables-module/tables.module';
 import { ModalsModule } from '@sharedComponents/modals-module/modals.module';
+import { SharedPipesModule } from './pipes/shared-pipes.module';
 
 import { PairsComponent } from './views/pairs/pairs.component';
 import { PairComponent } from './views/pair/pair.component';
@@ -22,6 +23,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -36,12 +38,14 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     SidebarModule,
     TxBoxModule,
     ChartsModule,
     TablesModule,
     ModalsModule,
+    SharedPipesModule,
     MatCardModule,
     MatDividerModule,
     MatButtonModule,

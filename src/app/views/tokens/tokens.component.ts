@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 
 @Component({
   selector: 'opdex-tokens',
@@ -6,8 +7,22 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./tokens.component.scss']
 })
 export class TokensComponent implements OnInit {
+  tokens: any[];
 
-  constructor() { }
+  constructor(
+    private _platformApiService: PlatformApiService
+  ) {
 
-  ngOnInit(): void { }
+  }
+
+  async ngOnInit(): Promise<void> {
+    const tokensResponse = await this._platformApiService.getTokens();
+    if (tokensResponse.hasError || tokensResponse.data?.length) {
+      // handle
+    }
+
+    this.tokens = tokensResponse.data;
+
+    console.log(this.tokens);
+  }
 }

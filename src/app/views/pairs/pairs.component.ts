@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 
 @Component({
   selector: 'opdex-pairs',
@@ -6,8 +7,22 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./pairs.component.scss']
 })
 export class PairsComponent implements OnInit {
+  pairs: any[];
 
-  constructor() { }
+  constructor(
+    private _platformApiService: PlatformApiService
+  ) {
 
-  ngOnInit(): void { }
+  }
+
+  async ngOnInit(): Promise<void> {
+    const pairsResponse = await this._platformApiService.getPairs();
+    if (pairsResponse.hasError || pairsResponse.data?.length) {
+      // handle
+    }
+
+    this.pairs = pairsResponse.data;
+
+    console.log(this.pairs);
+  }
 }

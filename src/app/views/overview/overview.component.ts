@@ -1,3 +1,4 @@
+import { PlatformApiService } from './../../services/api/platform-api.service';
 import { Component, OnInit } from '@angular/core';
 import { ThemeService } from '@sharedServices/theme.service';
 import { Observable } from 'rxjs';
@@ -11,12 +12,16 @@ export class OverviewComponent implements OnInit {
   chartType: string = 'Area';
   ohlcPoints: any[];
   theme$: Observable<string>;
+  market: any;
 
-  constructor(private _themeService: ThemeService) {
+  constructor(
+    private _themeService: ThemeService,
+    private _platformApiService: PlatformApiService
+  ) {
     this.theme$ = this._themeService.getTheme();
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     setTimeout(() => {
       this.ohlcPoints = [
         {
@@ -63,6 +68,15 @@ export class OverviewComponent implements OnInit {
         }
       ];
     }, 100)
+
+    const marketResponse = await this._platformApiService.getMarketOverview();
+    if (marketResponse.hasError || !marketResponse.data) {
+      // handle
+    }
+
+    this.market = marketResponse.data;
+
+    console.log(this.market);
   }
 
   dateToChartTime(date:Date) {
