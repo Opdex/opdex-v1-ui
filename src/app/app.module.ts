@@ -11,8 +11,8 @@ import { TablesModule } from '@sharedComponents/tables-module/tables.module';
 import { ModalsModule } from '@sharedComponents/modals-module/modals.module';
 import { SharedPipesModule } from './pipes/shared-pipes.module';
 
-import { PairsComponent } from './views/pairs/pairs.component';
-import { PairComponent } from './views/pair/pair.component';
+import { PoolsComponent } from './views/pools/pools.component';
+import { PoolComponent } from './views/pool/pool.component';
 import { OverviewComponent } from './views/overview/overview.component';
 import { NotFoundComponent } from './views/not-found/not-found.component';
 import { TokensComponent } from './views/tokens/tokens.component';
@@ -24,16 +24,20 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpClientModule } from '@angular/common/http';
+import { HoldingsComponent } from './views/holdings/holdings.component';
+import { HistoryComponent } from './views/history/history.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PairsComponent,
-    PairComponent,
+    PoolsComponent,
+    PoolComponent,
     OverviewComponent,
     NotFoundComponent,
     TokensComponent,
-    TokenComponent
+    TokenComponent,
+    HoldingsComponent,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,

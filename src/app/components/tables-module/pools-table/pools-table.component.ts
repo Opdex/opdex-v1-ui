@@ -5,11 +5,11 @@ import { Observable } from 'rxjs';
 import { ThemeService } from '@sharedServices/theme.service';
 
 @Component({
-  selector: 'opdex-pairs-table',
-  templateUrl: './pairs-table.component.html',
-  styleUrls: ['./pairs-table.component.scss']
+  selector: 'opdex-pools-table',
+  templateUrl: './pools-table.component.html',
+  styleUrls: ['./pools-table.component.scss']
 })
-export class PairsTableComponent implements OnInit {
+export class PoolsTableComponent implements OnInit {
   theme$: Observable<string>;
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
@@ -67,10 +67,10 @@ export class PairsTableComponent implements OnInit {
   }
 
   navigate(name: string) {
-    this._router.navigateByUrl(`/pairs/${name}`);
+    this._router.navigateByUrl(`/pools/${name}`);
   }
 
-  trackBy(index: number, pair: any) {
-    return pair.name + pair.address
+  trackBy(index: number, pool: any) {
+    return pool.name + pool.address
   }
 }

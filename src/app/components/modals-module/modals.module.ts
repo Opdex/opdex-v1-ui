@@ -9,14 +9,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDividerModule } from '@angular/material/divider';
 
 import { ConnectWalletModalComponent } from './connect-wallet-modal/connect-wallet-modal.component';
 import { TxBoxSettingsModalComponent } from './tx-box-settings-modal/tx-box-settings-modal.component';
+import { SignTxModalComponent } from './sign-tx-modal/sign-tx-modal.component';
 
 @NgModule({
   declarations: [
     ConnectWalletModalComponent,
-    TxBoxSettingsModalComponent
+    TxBoxSettingsModalComponent,
+    SignTxModalComponent
   ],
   imports: [
     CommonModule,
@@ -26,7 +29,8 @@ import { TxBoxSettingsModalComponent } from './tx-box-settings-modal/tx-box-sett
     MatIconModule,
     MatButtonModule,
     MatDialogModule,
-    MatInputModule
+    MatInputModule,
+    MatDividerModule
   ],
   exports: [
   ]

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PairComponent } from './pair.component';
+import { HoldingsComponent } from './holdings.component';
 
-describe('PairComponent', () => {
-  let component: PairComponent;
-  let fixture: ComponentFixture<PairComponent>;
+describe('HoldingsComponent', () => {
+  let component: HoldingsComponent;
+  let fixture: ComponentFixture<HoldingsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PairComponent ]
+      declarations: [ HoldingsComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PairComponent);
+    fixture = TestBed.createComponent(HoldingsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

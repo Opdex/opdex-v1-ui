@@ -1,7 +1,9 @@
+import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ThemeService } from '@sharedServices/theme.service';
 import { Observable } from 'rxjs';
+import { SignTxModalComponent } from 'src/app/components/modals-module/sign-tx-modal/sign-tx-modal.component';
 
 @Component({
   selector: 'opdex-tx-box-add-liquidity',
@@ -33,7 +35,7 @@ export class TxBoxAddLiquidityComponent implements OnInit {
     return this.form.get('toToken') as FormControl;
   }
 
-  constructor(private _fb: FormBuilder, private _themeService: ThemeService) {
+  constructor(private _fb: FormBuilder, private _themeService: ThemeService, private _dialog: MatDialog) {
     this.form = this._fb.group({
       from: [null, [Validators.required, Validators.min(.00000001)]],
       fromToken: [null, [Validators.required]],
@@ -45,4 +47,13 @@ export class TxBoxAddLiquidityComponent implements OnInit {
   }
 
   ngOnInit(): void { }
+
+  signTx(): void {
+    this._dialog.open(SignTxModalComponent, {
+      width: '600px',
+      position: { top: '200px' },
+      data:  {},
+      panelClass: ''
+    });
+  }
 }

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { PairsTableComponent } from './pairs-table/pairs-table.component';
+import { PoolsTableComponent } from './pools-table/pools-table.component';
 import { TokensTableComponent } from './tokens-table/tokens-table.component';
 
 import { MatCardModule } from '@angular/material/card';
@@ -12,7 +12,7 @@ import { TransactionsTableComponent } from './transactions-table/transactions-ta
 
 @NgModule({
   declarations: [
-    PairsTableComponent,
+    PoolsTableComponent,
     TokensTableComponent,
     TransactionsTableComponent
   ],
@@ -24,7 +24,7 @@ import { TransactionsTableComponent } from './transactions-table/transactions-ta
     MatSortModule
   ],
   exports: [
-    PairsTableComponent,
+    PoolsTableComponent,
     TokensTableComponent,
     TransactionsTableComponent
   ]

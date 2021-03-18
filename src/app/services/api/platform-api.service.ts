@@ -34,15 +34,15 @@ export class PlatformApiService extends RestApiService {
   }
 
   //////////////
-  // Pair
+  // Pool
   //////////////
 
-  public async getPair(address: string): Promise<ApiResponse<any>> {
-    return await this.get(`${this.api}/pairs/${address}`);
+  public async getPool(address: string): Promise<ApiResponse<any>> {
+    return await this.get(`${this.api}/pools/${address}`);
   }
 
-  public async getPairs(): Promise<ApiResponse<any[]>> {
-    return await this.get(`${this.api}/pairs`);
+  public async getPools(): Promise<ApiResponse<any[]>> {
+    return await this.get(`${this.api}/pools`);
   }
 
   //////////////

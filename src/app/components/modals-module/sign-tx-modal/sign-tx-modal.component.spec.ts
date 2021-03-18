@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PairsTableComponent } from './pairs-table.component';
+import { SignTxModalComponent } from './sign-tx-modal.component';
 
-describe('PairsTableComponent', () => {
-  let component: PairsTableComponent;
-  let fixture: ComponentFixture<PairsTableComponent>;
+describe('SignTxModalComponent', () => {
+  let component: SignTxModalComponent;
+  let fixture: ComponentFixture<SignTxModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PairsTableComponent ]
+      declarations: [ SignTxModalComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PairsTableComponent);
+    fixture = TestBed.createComponent(SignTxModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -74,7 +74,7 @@ export class TokensTableComponent implements OnInit {
     this._router.navigateByUrl(`/tokens/${name}`);
   }
 
-  trackBy(index: number, pair: any) {
-    return pair.name + pair.address
+  trackBy(index: number, pool: any) {
+    return pool.name + pool.address
   }
 }

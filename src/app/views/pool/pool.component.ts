@@ -3,11 +3,11 @@ import { Observable } from 'rxjs';
 import { ThemeService } from '../../services/theme.service';
 
 @Component({
-  selector: 'opdex-pair',
-  templateUrl: './pair.component.html',
-  styleUrls: ['./pair.component.scss']
+  selector: 'opdex-pool',
+  templateUrl: './pool.component.html',
+  styleUrls: ['./pool.component.scss']
 })
-export class PairComponent implements OnInit {
+export class PoolComponent implements OnInit {
   chartType: string = 'Area';
   ohlcPoints: any[];
   theme$: Observable<string>;
