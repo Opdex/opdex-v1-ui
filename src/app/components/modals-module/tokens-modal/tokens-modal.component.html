@@ -1,0 +1,25 @@
+<div class="container">
+  <h2>Tokens</h2>
+
+  <mat-divider></mat-divider>
+
+
+  <ng-container *ngIf="tokens">
+    <div class="row token-row" *ngFor="let token of tokens" (click)="selectToken(token)">
+      <div class="col-3">
+        {{token.name}}
+      </div>
+
+      <div class="col-3">
+        {{token.symbol}}
+      </div>
+
+      <div class="col-6">
+        {{token.address}}
+      </div>
+    </div>
+  </ng-container>
+
+  <mat-divider></mat-divider>
+  <button mat-flat-button color="primary" class="mt-2 w-100">Add New Token</button>
+</div>

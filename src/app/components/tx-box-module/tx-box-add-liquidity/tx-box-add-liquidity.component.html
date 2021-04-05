@@ -1,59 +1,46 @@
 <div class="add-liquidity">
-  <form [formGroup]="form" name="add-liquidity-form" id="add-liquidity-form">
-    <div class="row">
-      <div class="col-12">
-        <label for="">Token Liquidity</label>
+  <h3 class="mb-0">Add Liquidity</h3>
+
+  <form [formGroup]="form" name="add-liquidity" id="add-liquidity-form">
+    <div class="exactly swap-row">
+      <div class="spend-receive-button">
+        <button mat-icon-button color="primary" type="button" class="small" disabled><mat-icon>add</mat-icon></button>
       </div>
 
-      <div class="col-7">
-        <mat-form-field appearance="outline" class="w-100">
-          <input matInput type="text" [required]="true" [formControl]="from" autocomplete="off" placeholder="0">
+      <div class="amount">
+        <mat-form-field appearance="outline" class="w-100" >
+          <input matInput type="text" [required]="true" [formControl]="token0Amount" autocomplete="off" placeholder="0">
         </mat-form-field>
       </div>
 
-      <div class="col-5">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-select [formControl]="fromToken" name="fromToken" placeholder="Select Token">
-            <mat-option *ngFor="let token of tokens" [value]="token.address">
-              {{token.ticker}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+      <div class="token">
+        <button mat-stroked-button color="primary" type="button" disabled>CRS</button>
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-12">
-        <label for="">Cirrus Liquidity</label>
+
+    <div class="exactly swap-row">
+      <div class="spend-receive-button">
+        <button mat-icon-button color="primary" type="button" class="small" disabled><mat-icon>add</mat-icon></button>
       </div>
 
-      <div class="col-7">
+      <div class="amount">
         <mat-form-field appearance="outline" class="w-100">
-          <input matInput type="text" [required]="true" [formControl]="to" autocomplete="off" placeholder="0">
+          <input matInput type="text" [required]="true" [formControl]="token1Amount" autocomplete="off" placeholder="0">
         </mat-form-field>
       </div>
 
-      <div class="col-5">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-select [formControl]="toToken" name="toToken" placeholder="Select Token">
-            <mat-option *ngFor="let token of tokens" [value]="token.address">
-              {{token.ticker}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+      <div class="token">
+        <button mat-stroked-button color="primary" type="button" (click)="changeToken()">{{token1Details?.symbol || 'Select Token'}}</button>
       </div>
     </div>
   </form>
 
   <div class="space-between"></div>
 
-  <div class="swap-info mt-3" *ngIf="form.controls.from.value > 0 && form.controls.to.value > 0">
-    <p class="mb-0">Slippage: .1%</p>
-    <p class="mb-0">Minimum Recieved: 12345</p>
-    <p class="mb-0">Price: 12345</p>
-    <p class="mb-0">Price Impact: 12345</p>
-    <p class="mb-0">Fee: .03%</p>
+  <div *ngIf="txHash">
+    {{txHash}}
   </div>
 
-  <button mat-stroked-button color="primary" class="mt-4 w-100" (click)="signTx()">Add Liquidity</button>
+  <button mat-stroked-button color="primary" class="mt-4 w-100" (click)="submit()">Add Liquidity</button>
 </div>

@@ -1,0 +1,9 @@
+.token-row {
+  padding: 5px 0px;
+  margin: 5px 0px;
+
+  &:hover {
+    background: #f4f4f4;
+    cursor: pointer;
+  }
+}

@@ -20,3 +20,9 @@
 // Dark Blue 2: #1B192F
 // Dark Blue 3: #171244
 // Gray: #7C7C7C
+
+.transaction-container {
+  .mat-form-field-wrapper {
+    padding-bottom: 0px !important;
+  }
+}
