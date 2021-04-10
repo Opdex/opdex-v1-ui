@@ -1,8 +1,8 @@
 <div id="pool" *ngIf="theme$ | async as theme">
-  <div class="container pt-3">
+  <div class="container pt-3" *ngIf="pool">
     <div class="row mb-4">
       <div class="col-12">
-        <h1>MEDI-CRS</h1>
+        <h1>{{pool.token.symbol}}-CRS</h1>
 
         <div class="stats">
           <div class="row">

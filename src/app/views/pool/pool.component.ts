@@ -1,4 +1,6 @@
+import { PlatformApiService } from './../../services/api/platform-api.service';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ThemeService } from '../../services/theme.service';
 
@@ -11,12 +13,19 @@ export class PoolComponent implements OnInit {
   chartType: string = 'Area';
   ohlcPoints: any[];
   theme$: Observable<string>;
+  poolAddress: string;
+  pool: any;
 
-  constructor(private _themeService: ThemeService) {
+  constructor(
+    private _themeService: ThemeService,
+    private _route: ActivatedRoute,
+    private _platformApiService: PlatformApiService
+  ) {
     this.theme$ = this._themeService.getTheme();
+    this.poolAddress = this._route.snapshot.params.pool;
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     setTimeout(() => {
       this.ohlcPoints = [
         {
@@ -63,6 +72,14 @@ export class PoolComponent implements OnInit {
         }
       ];
     }, 100)
+
+
+    const poolResponse = await this._platformApiService.getPool(this.poolAddress);
+    if (poolResponse.hasError) {
+      //handle
+    }
+
+    this.pool = poolResponse.data;
   }
 
   dateToChartTime(date:Date) {

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { ThemeService } from '@sharedServices/theme.service';
@@ -9,10 +11,14 @@ import { Observable } from 'rxjs';
   templateUrl: './tokens-table.component.html',
   styleUrls: ['./tokens-table.component.scss']
 })
-export class TokensTableComponent implements OnInit {
+export class TokensTableComponent implements OnChanges, AfterViewInit {
   theme$: Observable<string>;
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
+  @Input() tokens: any[];
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(private _themeService: ThemeService, private _router: Router) {
     this.theme$ = this._themeService.getTheme();
@@ -20,54 +26,24 @@ export class TokensTableComponent implements OnInit {
     this.displayedColumns = ['name', 'symbol', 'liquidity', 'volumeDaily', 'price', 'change'];
   }
 
-  ngOnInit(): void {
-    this.dataSource.data = [
-      {
-        name: 'MediConnect',
-        symbol: 'MEDI',
+  ngOnChanges() {
+    if (!this.tokens?.length) return;
+
+    this.dataSource.data = this.tokens.map(t => {
+      return {
+        name: t.name,
+        symbol: t.symbol,
         volumeDaily: '$187,432',
         liquidity: '$1,232,662',
         price: '$0.02',
         change: '-0.2%',
-        address: 'asdlkfjasdf'
-      },
-      {
-        name: 'Gluon',
-        symbol: 'GLUON',
-        volumeDaily: '$187,432',
-        liquidity: '$1,232,662',
-        price: '$0.02',
-        change: '-0.2%',
-        address: 'asdlkfjasdf'
-      },
-      {
-        name: 'Ether (Wrapped)',
-        symbol: 'WETH',
-        volumeDaily: '$187,432',
-        liquidity: '$1,232,662',
-        price: '$0.02',
-        change: '-0.2%',
-        address: 'asdlkfjasdf'
-      },
-      {
-        name: 'Bitcoin (Wrapped)',
-        symbol: 'WBTC',
-        volumeDaily: '$187,432',
-        liquidity: '$1,232,662',
-        price: '$0.02',
-        change: '-0.2%',
-        address: 'asdlkfjasdf'
-      },
-      {
-        name: 'USDT (Wrapped)',
-        symbol: 'WUSDT',
-        volumeDaily: '$187,432',
-        liquidity: '$1,232,662',
-        price: '$0.02',
-        change: '-0.2%',
-        address: 'asdlkfjasdf'
+        address: t.address
       }
-    ]
+    });
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
   navigate(name: string) {
