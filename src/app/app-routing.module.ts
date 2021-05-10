@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'pools', component: PoolsComponent },
   { path: 'pools/:pool', component: PoolComponent },
   { path: 'tokens', component: TokensComponent },
-  { path: 'tokens/:pool', component: TokenComponent },
+  { path: 'tokens/:token', component: TokenComponent },
   { path: 'holdings', component: HoldingsComponent },
   { path: 'history', component: HistoryComponent },
   { path: '**', component: NotFoundComponent },

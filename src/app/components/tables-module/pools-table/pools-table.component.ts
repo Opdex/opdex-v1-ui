@@ -23,7 +23,7 @@ export class PoolsTableComponent implements OnChanges, AfterViewInit {
   constructor(private _themeService: ThemeService, private _router: Router) {
     this.theme$ = this._themeService.getTheme();
     this.dataSource = new MatTableDataSource<any>();
-    this.displayedColumns = ['name', 'liquidity', 'volumeDaily', 'volumeWeekly', 'feesDaily', 'feesWeekly'];
+    this.displayedColumns = ['name', 'liquidity', 'stakingWeight', 'volumeDaily', 'providerRewards', 'stakerRewards'];
   }
 
   ngOnChanges() {
@@ -32,10 +32,10 @@ export class PoolsTableComponent implements OnChanges, AfterViewInit {
     this.dataSource.data = this.pools.map(p => {
       return {
         name: `${p.token.symbol}-CRS`,
-        feesDaily: '$6,399.42',
-        feesWeekly: '$44,795.94',
+        stakingWeight: `376556789.83`,
+        providerRewards: '$44,795.94',
         volumeDaily: '$2,133,139',
-        volumeWeekly: '$14,931,973',
+        stakerRewards: '$14,931,973',
         liquidity: '$4,057,013',
         address: p.address
       }

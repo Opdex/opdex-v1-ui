@@ -1,8 +1,8 @@
 <div id="token" *ngIf="theme$ | async as theme">
-  <div class="container pt-3">
+  <div class="container pt-3" *ngIf="token">
     <div class="row mb-4">
       <div class="col-12">
-        <h1>MediConnect (MEDI)</h1>
+        <h1>{{token.name}} {{token.symbol}}</h1>
 
         <div class="stats">
           <div class="row">

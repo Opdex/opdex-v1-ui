@@ -10,6 +10,7 @@ import { ChartsModule } from './components/charts-module/charts.module';
 import { TablesModule } from '@sharedComponents/tables-module/tables.module';
 import { ModalsModule } from '@sharedComponents/modals-module/modals.module';
 import { SharedPipesModule } from './pipes/shared-pipes.module';
+import { CardsModule } from '@sharedComponents/cards-module/cards.module';
 
 import { PoolsComponent } from './views/pools/pools.component';
 import { PoolComponent } from './views/pool/pool.component';
@@ -50,6 +51,7 @@ import { HistoryComponent } from './views/history/history.component';
     TablesModule,
     ModalsModule,
     SharedPipesModule,
+    CardsModule,
     MatCardModule,
     MatDividerModule,
     MatButtonModule,

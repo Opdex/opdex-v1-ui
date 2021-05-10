@@ -1,0 +1,12 @@
+
+.blur-background {
+  filter: blur(25px);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.foreground {
+  backdrop-filter: blur(50px);
+  padding: 15px;
+}

@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  defaultTheme: 'light-mode',
+  defaultTheme: 'dark-mode',
   api: 'http://localhost:44391'
 };

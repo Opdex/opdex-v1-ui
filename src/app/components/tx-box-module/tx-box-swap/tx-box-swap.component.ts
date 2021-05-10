@@ -1,7 +1,6 @@
-import { Address } from 'bitcore-lib';
 import { TokensModalComponent } from '../../modals-module/tokens-modal/tokens-modal.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ThemeService } from '@sharedServices/theme.service';
@@ -14,7 +13,7 @@ import { SignTxModalComponent } from 'src/app/components/modals-module/sign-tx-m
   templateUrl: './tx-box-swap.component.html',
   styleUrls: ['./tx-box-swap.component.scss']
 })
-export class TxBoxSwapComponent implements OnInit {
+export class TxBoxSwapComponent implements OnDestroy{
   tokenInExactly = true;
   form: FormGroup;
   theme$: Observable<string>;
@@ -22,15 +21,6 @@ export class TxBoxSwapComponent implements OnInit {
   txHash: string;
   fromTokenDetails: any;
   toTokenDetails: any;
-  tokens = [{
-    name: 'Bitcoin (Wrapped)',
-    ticker: 'xBTC',
-    address: 'PN4GHHJwbeed3UqMH5fVRkfecMF7BANGSp'
-  }, {
-    name: 'Cirrus',
-    ticker: 'CRS',
-    address: null
-  }];
 
   get from(): FormControl {
     return this.form.get('from') as FormControl;
@@ -48,21 +38,24 @@ export class TxBoxSwapComponent implements OnInit {
     return this.form.get('toToken') as FormControl;
   }
 
-  constructor(private _fb: FormBuilder, private _themeService: ThemeService,
-    private _dialog: MatDialog, private _platformApi: PlatformApiService) {
+  constructor(
+    private _fb: FormBuilder,
+    private _themeService: ThemeService,
+    private _dialog: MatDialog,
+    private _platformApi: PlatformApiService
+  ) {
     this.form = this._fb.group({
       from: [null, [Validators.required, Validators.min(.00000001)]],
-      fromToken: [this.tokens[0].address, [Validators.required]],
-      to: ["10", [Validators.required, Validators.min(.00000001)]],
-      toToken: [this.tokens[1].address, [Validators.required]]
+      fromToken: [null, [Validators.required]],
+      to: [null, [Validators.required, Validators.min(.00000001)]],
+      toToken: [null, [Validators.required]]
     });
 
     this.theme$ = this._themeService.getTheme();
 
-    this.exactInput$ = this.from.valueChanges.subscribe((change: string) => this.updateExactAmount(change));
+    this.exactInput$ = this.from.valueChanges
+      .subscribe((change: string) => this.updateExactAmount(change));
   }
-
-  ngOnInit(): void { }
 
   signTx(): void {
     this._dialog.open(SignTxModalComponent, {
@@ -118,11 +111,28 @@ export class TxBoxSwapComponent implements OnInit {
     const response = await this._platformApi.swap(payload);
     if (response.hasError) {
       // handle
-      console.log(response.error);
     }
 
     this.txHash = response.data.txHash;
-    console.log(response.data);
+  }
+
+  switch() {
+    const from = this.from.value;
+    const fromToken = this.fromToken.value;
+    const to = this.to.value;
+    const toToken = this.toToken.value;
+    const fromTokenDetails = this.fromTokenDetails;
+    const toTokenDetails = this.toTokenDetails;
+
+    this.from.setValue(to);
+    this.to.setValue(from);
+    this.fromToken.setValue(toToken);
+    this.toToken.setValue(fromToken);
+
+    this.fromTokenDetails = toTokenDetails;
+    this.toTokenDetails = fromTokenDetails;
+
+    this.toggleTokenInExactly();
   }
 
   ngOnDestroy() {

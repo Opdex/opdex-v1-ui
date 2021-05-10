@@ -1,6 +1,7 @@
 
 <ng-container *ngIf="theme$ | async as theme">
-  <aside [ngClass]="theme">
+  <div class="background"></div>
+  <aside class="foreground" [ngClass]="theme">
     <div class="logo" routerLink="/">
       <img src="/assets/logo-light-blue.png" alt="Opdex Logo">
       <p class="opdex">OPDEX</p>

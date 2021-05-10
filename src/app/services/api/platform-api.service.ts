@@ -45,6 +45,10 @@ export class PlatformApiService extends RestApiService {
     return await this.get(`${this.api}/pools`);
   }
 
+  public async getPoolTransactions(address: string): Promise<ApiResponse<any>> {
+    return await this.get(`${this.api}/pools/${address}/transactions`);
+  }
+
   //////////////
   // Markets
   //////////////

@@ -15,6 +15,7 @@ export class PoolComponent implements OnInit {
   theme$: Observable<string>;
   poolAddress: string;
   pool: any;
+  transactions: any[];
 
   constructor(
     private _themeService: ThemeService,
@@ -26,54 +27,15 @@ export class PoolComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    setTimeout(() => {
-      this.ohlcPoints = [
-        {
-          open: 1,
-          high: 3,
-          low: 0,
-          close: 2,
-          time: this.dateToChartTime(new Date(2020, 12, 11))
-        },
-        {
-          open: 2,
-          high: 3,
-          low: 0,
-          close: 3,
-          time: this.dateToChartTime(new Date(2020, 12, 12))
-        },
-        {
-          open: 3,
-          high: 3,
-          low: 0,
-          close: 4,
-          time: this.dateToChartTime(new Date(2020, 12, 13))
-        },
-        {
-          open: 3,
-          high: 3,
-          low: 0,
-          close: 3,
-          time: this.dateToChartTime(new Date(2020, 12, 14))
-        },
-        {
-          open: 3,
-          high: 6,
-          low: 0,
-          close: 6,
-          time: this.dateToChartTime(new Date(2020, 12, 15))
-        },
-        {
-          open: 6,
-          high: 6,
-          low: 0,
-          close: 8,
-          time: this.dateToChartTime(new Date(2020, 12, 16))
-        }
-      ];
-    }, 100)
+    setTimeout(() => this.ohlcPoints = [], 100);
 
+    await Promise.all([
+      this.getPool(),
+      this.getPoolTransactions()
+    ]);
+  }
 
+  private async getPool():Promise<void> {
     const poolResponse = await this._platformApiService.getPool(this.poolAddress);
     if (poolResponse.hasError) {
       //handle
@@ -82,7 +44,13 @@ export class PoolComponent implements OnInit {
     this.pool = poolResponse.data;
   }
 
-  dateToChartTime(date:Date) {
-    return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), 0) / 1000;
-  };
+  private async getPoolTransactions():Promise<void> {
+    const transactionsResponse = await this._platformApiService.getPoolTransactions(this.poolAddress);
+    if (transactionsResponse.hasError) {
+      //handle
+    }
+
+    this.transactions = transactionsResponse.data;
+    console.log(this.transactions)
+  }
 }

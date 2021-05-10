@@ -43,13 +43,13 @@ aside {
     }
   }
 
-  &.light-mode {
-    background: #fff !important;
-  }
+  // &.light-mode {
+  //   background: #fff !important;
+  // }
 
-  &.dark-mode {
-    background: #1B192F !important;
-  }
+  // &.dark-mode {
+  //   background: #1B192F !important;
+  // }
 
   .connection-theme-row {
     display: flex;
@@ -82,4 +82,16 @@ aside {
       }
     }
   }
+}
+
+
+.background {
+  filter: blur(25px);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.foreground {
+  backdrop-filter: blur(50px);
 }

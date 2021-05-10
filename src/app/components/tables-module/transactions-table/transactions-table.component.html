@@ -1,4 +1,4 @@
-<mat-card *ngIf="theme$ | async as theme" [ngClass]="theme" class="pb-0">
+<opdex-card *ngIf="theme$ | async as theme" [ngClass]="theme" class="pb-0">
   <div class="table-container">
     <table mat-table [dataSource]="dataSource" matSort [trackBy]="trackBy" class="w-100">
       <ng-container matColumnDef="action" >
@@ -40,4 +40,4 @@
     <!-- <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons [length]="dataSource?.data?.length || 0" (page)="getNext($event)" [pageSize]="filterOptions.itemsPerPage" [pageIndex]="filterOptions.pageNo"></mat-paginator> -->
     <mat-paginator [pageSizeOptions]="[10, 20]" [length]="dataSource?.data?.length"></mat-paginator>
   </div>
-</mat-card>
+</opdex-card>

@@ -13,3 +13,10 @@ opdex-sidebar {
   flex: 1 1 auto;
   padding: 10px 0;
 }
+
+.background {
+  width: 100%;
+  background-image: url('/assets/dashboard@2x.png');
+  background-size: cover;
+  background-attachment: fixed;
+}

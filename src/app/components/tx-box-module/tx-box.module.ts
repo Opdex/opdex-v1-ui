@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
-
+import { MatDividerModule } from '@angular/material/divider';
 
 import { TxBoxSwapComponent } from './tx-box-swap/tx-box-swap.component';
 import { TxBoxSidebarComponent } from './tx-box-sidebar/tx-box-sidebar.component';
@@ -35,7 +35,8 @@ import { TxBoxComponent } from './tx-box/tx-box.component';
     MatInputModule,
     MatListModule,
     MatDialogModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDividerModule
   ],
   exports: [
     TxBoxSwapComponent,

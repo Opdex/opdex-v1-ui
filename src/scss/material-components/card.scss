@@ -1,10 +1,13 @@
 .mat-card {
-  // height: 100% !important;
-}
+  background: rgba(49,47, 72, 0.6) !important;
+  padding: 0px !important;
+  border-radius: 8px !important;
 
+  .background {
+    border-radius: 8px !important;
+  }
 
-.light-mode {
-  .mat-card {
-    box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.14)!important;
+  .foreground {
+    border-radius: 8px !important;
   }
 }
