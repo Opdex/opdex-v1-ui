@@ -12,9 +12,14 @@
                   <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
                   Cirrus (CRS)
                 </h4>
-                <p class="stat-value">
-                  ${{market?.crsPrice | formatNumber}}
-                </p>
+
+                <div class="stat">
+                  <p class="stat-value">
+                    ${{market?.crsPrice | formatNumber}}
+                  </p>
+
+                  <opdex-change-indicator [value]="4.25"></opdex-change-indicator>
+                </div>
               </opdex-card>
             </div>
 
@@ -24,9 +29,14 @@
                   <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
                   Volume
                 </h4>
-                <p class="stat-value">
-                  ${{market?.dailyVolume | formatNumber}}
-                </p>
+
+                <div class="stat">
+                  <p class="stat-value">
+                    ${{market?.dailyVolume | formatNumber}}
+                  </p>
+
+                  <opdex-change-indicator [value]="4.25"></opdex-change-indicator>
+                </div>
               </opdex-card>
             </div>
 
@@ -36,21 +46,14 @@
                   <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
                   Liquidity
                 </h4>
-                <p class="stat-value">
-                  ${{market?.liquidity | formatNumber}}
-                </p>
-              </opdex-card>
-            </div>
 
-            <div class="col">
-              <opdex-card>
-                <h4 class="stat-header">
-                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Rewards
-                </h4>
-                <p class="stat-value">
-                  ${{market?.dailyFees | formatNumber}}
-                </p>
+                <div class="stat">
+                  <p class="stat-value">
+                    ${{market?.liquidity | formatNumber}}
+                  </p>
+
+                  <opdex-change-indicator [value]="-10.12"></opdex-change-indicator>
+                </div>
               </opdex-card>
             </div>
 
@@ -60,9 +63,31 @@
                   <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
                   Weight
                 </h4>
-                <p class="stat-value">
-                  349863234.32
-                </p>
+
+                <div class="stat">
+                  <p class="stat-value">
+                    ${{market?.dailyFees | formatNumber}}
+                  </p>
+
+                  <opdex-change-indicator [value]="4.25"></opdex-change-indicator>
+                </div>
+              </opdex-card>
+            </div>
+
+            <div class="col">
+              <opdex-card>
+                <h4 class="stat-header">
+                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
+                  Rewards
+                </h4>
+
+                <div class="stat">
+                  <p class="stat-value">
+                    ${{market?.dailyFees | formatNumber}}
+                  </p>
+
+                  <!-- <opdex-change-indicator [value]="4.25"></opdex-change-indicator> -->
+                </div>
               </opdex-card>
             </div>
           </div>
@@ -84,79 +109,106 @@
 
     <div class="row mb-4">
       <div class="col-12">
-        <h2 class="mb-0">Liquidity Mining</h2>
-        <h3>32 Days Remaining</h3>
+        <h2 class="mb-1">Liquidity Mining</h2>
+        <p class="mining-days-remaining mb-3">32 Days Remaining</p>
 
         <div class="row">
           <div class="col-3">
-            <opdex-card class="trending-item">
-              <div class="d-flex justify-content-between">
-                <h3 class="d-inline">OPDX/CRS</h3>
+            <opdex-card class="mining-pool">
+              <div class="d-flex justify-content-between align-items-center">
+                <h3 class="d-inline mb-0">ODX/CRS</h3>
                 <div>
-                  <button mat-icon-button color="primary" class="tiny"><mat-icon>remove_circle_outline</mat-icon></button>
-                  <button mat-icon-button color="primary" class="tiny"><mat-icon>add_circle_outline</mat-icon></button>
+                  <button mat-icon-button class="remove small mr-2"><mat-icon>remove</mat-icon></button>
+                  <button mat-icon-button class="add small"><mat-icon>add</mat-icon></button>
                 </div>
               </div>
 
-              <mat-divider></mat-divider>
+              <div class="details">
+                <div class="mining">
+                  <p class="sub-heading">Mining</p>
+                  <p class="value">$49,592</p>
+                </div>
 
-              <h3 class="pt-3 mb-0">$122,049 Mining</h3>
-              <h3>1234 OPDX Remaining</h3>
+                <div class="remaining">
+                  <p class="sub-heading">Remaining</p>
+                  <p class="value">1234 ODX</p>
+                </div>
+              </div>
             </opdex-card>
           </div>
 
           <div class="col-3">
-            <opdex-card class="trending-item">
-              <div class="d-flex justify-content-between">
-                <h3 class="d-inline">WBTC/CRS</h3>
+            <opdex-card class="mining-pool">
+              <div class="d-flex justify-content-between align-items-center">
+                <h3 class="d-inline mb-0">WBTC/CRS</h3>
                 <div>
-                  <button mat-icon-button color="primary" class="tiny"><mat-icon>remove_circle_outline</mat-icon></button>
-                  <button mat-icon-button color="primary" class="tiny"><mat-icon>add_circle_outline</mat-icon></button>
+                  <button mat-icon-button class="remove small mr-2"><mat-icon>remove</mat-icon></button>
+                  <button mat-icon-button class="add small"><mat-icon>add</mat-icon></button>
                 </div>
               </div>
 
-              <mat-divider></mat-divider>
+              <div class="details">
+                <div class="mining">
+                  <p class="sub-heading">Mining</p>
+                  <p class="value">$49,592</p>
+                </div>
 
-              <h3 class="pt-3 mb-0">$54,432 Mining</h3>
-              <h3>1234 OPDX Remaining</h3>
+                <div class="remaining">
+                  <p class="sub-heading">Remaining</p>
+                  <p class="value">1234 ODX</p>
+                </div>
+              </div>
             </opdex-card>
           </div>
 
           <div class="col-3">
-            <opdex-card class="trending-item">
-              <div class="d-flex justify-content-between">
-                <h3 class="d-inline">WETH/CRS</h3>
+            <opdex-card class="mining-pool">
+              <div class="d-flex justify-content-between align-items-center">
+                <h3 class="d-inline mb-0">WETH/CRS</h3>
                 <div>
-                  <button mat-icon-button color="primary" class="tiny"><mat-icon>remove_circle_outline</mat-icon></button>
-                  <button mat-icon-button color="primary" class="tiny"><mat-icon>add_circle_outline</mat-icon></button>
+                  <button mat-icon-button class="remove small mr-2"><mat-icon>remove</mat-icon></button>
+                  <button mat-icon-button class="add small"><mat-icon>add</mat-icon></button>
                 </div>
               </div>
 
-              <mat-divider></mat-divider>
+              <div class="details">
+                <div class="mining">
+                  <p class="sub-heading">Mining</p>
+                  <p class="value">$49,592</p>
+                </div>
 
-              <h3 class="pt-3 mb-0">$49,592 Mining</h3>
-              <h3>1234 OPDX Remaining</h3>
+                <div class="remaining">
+                  <p class="sub-heading">Remaining</p>
+                  <p class="value">1234 ODX</p>
+                </div>
+              </div>
             </opdex-card>
           </div>
 
           <div class="col-3">
-            <opdex-card class="trending-item">
-              <div class="d-flex justify-content-between">
-                <h3 class="d-inline">GLUON/CRS</h3>
+            <opdex-card class="mining-pool">
+              <div class="d-flex justify-content-between align-items-center">
+                <h3 class="d-inline mb-0">WDOGE/CRS</h3>
                 <div>
-                  <button mat-icon-button color="primary" class="tiny"><mat-icon>remove_circle_outline</mat-icon></button>
-                  <button mat-icon-button color="primary" class="tiny"><mat-icon>add_circle_outline</mat-icon></button>
+                  <button mat-icon-button class="remove small mr-2"><mat-icon>remove</mat-icon></button>
+                  <button mat-icon-button class="add small"><mat-icon>add</mat-icon></button>
                 </div>
               </div>
 
-              <mat-divider></mat-divider>
+              <div class="details">
+                <div class="mining">
+                  <p class="sub-heading">Mining</p>
+                  <p class="value">$49,592</p>
+                </div>
 
-              <h3 class="pt-3 mb-0">$32,049 Mining</h3>
-              <h3>1234 OPDX Remaining</h3>
+                <div class="remaining">
+                  <p class="sub-heading">Remaining</p>
+                  <p class="value">1234 ODX</p>
+                </div>
+              </div>
             </opdex-card>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -175,3 +227,5 @@
     </div>
   </div>
 </div>
+
+

@@ -16,14 +16,14 @@ $fontConfig: (
   display-2: mat-typography-level(45px, 48px, 400, 'Roboto', 0.0000em),
   display-1: mat-typography-level(34px, 40px, 400, 'Roboto', 0.0074em),
   headline: mat-typography-level(28px, 32px, 400, 'Roboto', 0.0000em),
-  title: mat-typography-level(20px, 32px, 500, 'Roboto', 0.0075em),
-  subheading-2: mat-typography-level(16px, 28px, 400, 'Roboto', 0.0094em),
-  subheading-1: mat-typography-level(15px, 24px, 500, 'Roboto', 0.0067em),
-  body-2: mat-typography-level(12px, 24px, 500, 'Roboto', 0.0179em),
-  body-1: mat-typography-level(12px, 20px, 400, 'Roboto', 0.0179em),
-  button: mat-typography-level(12px, 14px, 500, 'Roboto', 0.0893em),
-  caption: mat-typography-level(10px, 20px, 400, 'Roboto', 0.0333em),
-  input: mat-typography-level(12px, 1.125, 400, 'Roboto', 0px)
+  title: mat-typography-level(34px, 32px, 500, 'Roboto', 0.0075em),
+  subheading-2: mat-typography-level(24px, 28px, 400, 'Roboto', 0.0094em),
+  subheading-1: mat-typography-level(20px, 24px, 500, 'Roboto', 0.0067em),
+  body-2: mat-typography-level(16px, 24px, 500, 'Roboto', 0.0179em),
+  body-1: mat-typography-level(16px, 20px, 400, 'Roboto', 0.0179em),
+  button: mat-typography-level(16px, 14px, 500, 'Roboto', 0.0893em),
+  caption: mat-typography-level(14px, 20px, 400, 'Roboto', 0.0333em),
+  input: mat-typography-level(16px, 1.125, 400, 'Roboto', 0px)
 );
 
 // Foreground Elements
@@ -121,7 +121,7 @@ $light-bg-alpha-12:   rgba(#fafafa, 0.12);
 
 // Background palette for dark themes.
 $mat-dark-theme-background: (
-  background:               transparent,
+  background:               $dark-background,
   status-bar:               $dark-bg-lighter-20,
   app-bar:                  $dark-bg-lighter-5,
   hover:                    $light-bg-alpha-4,

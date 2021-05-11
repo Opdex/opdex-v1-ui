@@ -3,7 +3,7 @@
     <table mat-table [dataSource]="dataSource" matSort [trackBy]="trackBy" class="w-100">
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef> Name </th>
-        <td mat-cell *matCellDef="let element"> <a href="javascript:void(0)" (click)="navigate(element.address)">{{element.name}} </a></td>
+        <td mat-cell *matCellDef="let element"> <a href="javascript:void(0)" (click)="navigate(element.address)">{{element.name}}</a></td>
       </ng-container>
 
       <ng-container matColumnDef="liquidity">
@@ -29,6 +29,11 @@
       <ng-container matColumnDef="stakerRewards">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Staker Rewards </th>
         <td mat-cell *matCellDef="let element"> {{element.stakerRewards}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="liquidityHistory">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Liquidity (7d) </th>
+        <td mat-cell *matCellDef="let element"><opdex-line-change></opdex-line-change></td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

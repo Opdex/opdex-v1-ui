@@ -1,3 +1,5 @@
+import { SharedModule } from '@sharedComponents/shared-module/shared.module';
+import { ChartsModule } from './../charts-module/charts.module';
 import { CardsModule } from '@sharedComponents/cards-module/cards.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -23,7 +25,9 @@ import { TransactionsTableComponent } from './transactions-table/transactions-ta
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    CardsModule
+    CardsModule,
+    ChartsModule,
+    SharedModule
   ],
   exports: [
     PoolsTableComponent,

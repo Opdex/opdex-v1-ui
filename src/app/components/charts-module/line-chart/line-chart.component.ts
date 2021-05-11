@@ -218,7 +218,9 @@ export class LineChartComponent implements OnInit, OnChanges {
             // topColor: 'rgba(71, 188, 235, .2)', // Uncomment for gradient affect
             // bottomColor: 'rgba(71, 188, 235, 0)',
             topColor: 'transparent',
-            bottomColor: 'transparent'
+            bottomColor: 'transparent',
+            priceLineVisible: false,
+            lastValueVisible: false
           });
         }
 
@@ -347,7 +349,7 @@ export class LineChartComponent implements OnInit, OnChanges {
         axisPressedMouseMove: false,
         mouseWheel: false,
         pinch: false
-      }
+      },
     });
   }
 

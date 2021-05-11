@@ -8,5 +8,13 @@
 
 .foreground {
   backdrop-filter: blur(50px);
-  padding: 15px;
+  padding: 25px;
+}
+
+.h-100 {
+  height: 100%;
+
+  .foreground {
+    height: 100%;
+  }
 }

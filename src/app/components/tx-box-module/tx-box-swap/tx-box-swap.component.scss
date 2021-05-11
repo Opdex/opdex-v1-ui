@@ -37,16 +37,17 @@
 
 .switch {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   flex-direction: row;
 
-  .divider {
-    border-bottom: 1px solid #5e5e5e;
-    width: 100%;
-  }
-
   button {
-    margin: 10px;
+    margin: 5px;
+
+    .mat-icon {
+      width: 36px;
+      height: 36px;
+      font-size: 36px;
+    }
   }
 }

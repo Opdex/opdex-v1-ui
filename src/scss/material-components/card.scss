@@ -1,13 +1,15 @@
 .mat-card {
-  background: rgba(49,47, 72, 0.6) !important;
+  background: rgba(38, 37, 56, 0.6) !important; //#27253A
   padding: 0px !important;
-  border-radius: 8px !important;
+  border-radius: 10px !important;
+  // height: 100%;
 
   .background {
-    border-radius: 8px !important;
+    border-radius: 10px !important;
   }
 
   .foreground {
-    border-radius: 8px !important;
+    border-radius: 10px !important;
+    // height: 100%;
   }
 }

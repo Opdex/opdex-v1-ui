@@ -1,3 +1,4 @@
+import { CardsModule } from '@sharedComponents/cards-module/cards.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -29,6 +30,7 @@ import { TxBoxComponent } from './tx-box/tx-box.component';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    CardsModule,
     MatIconModule,
     MatButtonModule,
     MatCardModule,

@@ -11,8 +11,6 @@ aside {
   .logo {
     display: flex;
     align-items: center;
-    height: 50px;
-    margin-bottom: 20px;
 
     &:hover {
       cursor: pointer;
@@ -23,33 +21,36 @@ aside {
     }
 
     img {
-      width: 40px;
-    }
-
-    .opdex {
-      display: flex;
-      align-items: center;
-      margin-bottom: 0px;
-      margin-left: 10px;
-      font-size: 2em;
-      font-weight: bold;
+      width: 100%;
     }
   }
 
-  ul {
+  .sidebar-nav {
+    padding-left: 0;
+    list-style-type: none;
+
     li {
-      list-style-type: none;
-      padding: 10px 0px;
+      margin: 10px 0;
+      text-align: center;
+      // padding: 10px 0;
+
+      .mat-icon {
+        // color: #fff;
+        font-size: 32px;
+        height: 32px;
+        width: 32px;
+        margin: 10px 0;
+      }
     }
   }
 
-  // &.light-mode {
-  //   background: #fff !important;
-  // }
-
-  // &.dark-mode {
-  //   background: #1B192F !important;
-  // }
+  .defi-blocks {
+    position: absolute;
+    right: -20px;
+    width: 100px;
+    bottom: 25px;
+    z-index: 99;
+  }
 
   .connection-theme-row {
     display: flex;

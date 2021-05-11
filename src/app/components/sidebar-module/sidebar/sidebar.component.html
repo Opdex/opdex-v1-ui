@@ -4,33 +4,56 @@
   <aside class="foreground" [ngClass]="theme">
     <div class="logo" routerLink="/">
       <img src="/assets/logo-light-blue.png" alt="Opdex Logo">
-      <p class="opdex">OPDEX</p>
+      <!-- <p class="opdex">OPDEX</p> -->
     </div>
 
-    <mat-selection-list #navigation [multiple]="false">
-      <mat-list-item routerLink="/">
-        <mat-icon class="mr-3" color="primary">show_chart</mat-icon> Market
-      </mat-list-item>
-      <mat-list-item routerLink="/pools">
-        <mat-icon class="mr-3" color="primary">bubble_chart</mat-icon> Pools
-      </mat-list-item>
-      <mat-list-item routerLink="/tokens">
-        <mat-icon class="mr-3" color="primary">scatter_plot</mat-icon> Tokens
-      </mat-list-item>
-      <mat-list-item routerLink="/holdings">
-        <mat-icon class="mr-3" color="primary">list</mat-icon> Holdings
-      </mat-list-item>
-      <mat-list-item routerLink="/history">
-        <mat-icon class="mr-3" color="primary">history</mat-icon> History
-      </mat-list-item>
-    </mat-selection-list>
+    <ul class="sidebar-nav">
+      <li>
+        <a mat-button routerLink="/">
+          <mat-icon>show_chart</mat-icon>
+        </a>
+        <!-- Market -->
+      </li>
+      <li>
+        <a mat-button routerLink="/pools">
+          <mat-icon>bubble_chart</mat-icon>
+        </a>
+        <!-- Pools -->
+      </li>
+      <li>
+        <a mat-button routerLink="/tokens">
+          <mat-icon>scatter_plot</mat-icon>
+        </a>
+        <!-- Tokens -->
+      </li>
+      <li>
+        <a mat-button routerLink="/holdings">
+          <mat-icon>list</mat-icon>
+        </a>
+        <!-- Holdings -->
+      </li>
+      <li>
+        <a mat-button routerLink="/history">
+          <mat-icon>history</mat-icon>
+        </a>
+        <!-- History -->
+      </li>
+      <li>
+        <a mat-button>
+          <mat-icon>account_balance_wallet</mat-icon>
+        </a>
+        <!-- History -->
+      </li>
+    </ul>
+
+
 
 
     <div class="space-between"></div>
 
-    <button color="primary" mat-flat-button class="w-100 mb-1" (click)="openConnectWalletModal()">Connect Wallet</button>
+    <!-- <button color="primary" mat-flat-button class="w-100 mb-1" (click)="openConnectWalletModal()">Connect Wallet</button> -->
 
-    <div class="connection-theme-row">
+    <!-- <div class="connection-theme-row">
       <div class="connection">
         <span class="connection-badge mr-1"></span> Connected
       </div>
@@ -46,7 +69,8 @@
           <mat-icon>brightness_3</mat-icon>
         </button>
       </div>
-    </div>
+    </div> -->
 
+  <img class="defi-blocks" src="assets/defi2@2x.png">
   </aside>
 </ng-container>

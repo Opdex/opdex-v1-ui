@@ -1,0 +1,26 @@
+.change-indicator {
+  display: inline-block;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &.positive {
+    color: #00EB93;
+  }
+
+  &.negative {
+    color: #F2435B;
+  }
+
+  .mat-icon {
+    margin-right: 10px;
+    width: 30px;
+    height: 30px;
+    font-size: 30px;
+  }
+
+  .change {
+    font-size: 24px;
+    margin: 0;
+  }
+}

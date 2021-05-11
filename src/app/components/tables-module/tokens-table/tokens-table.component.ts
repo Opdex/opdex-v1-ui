@@ -23,7 +23,7 @@ export class TokensTableComponent implements OnChanges, AfterViewInit {
   constructor(private _themeService: ThemeService, private _router: Router) {
     this.theme$ = this._themeService.getTheme();
     this.dataSource = new MatTableDataSource<any>();
-    this.displayedColumns = ['name', 'symbol', 'price', 'change'];
+    this.displayedColumns = ['name', 'symbol', 'price', 'change', 'price7d'];
   }
 
   ngOnChanges() {

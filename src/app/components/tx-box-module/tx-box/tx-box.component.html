@@ -1,7 +1,7 @@
 <ng-container *ngIf="theme$ | async as theme">
-  <mat-card class="p-0">
+  <opdex-card class="p-0" [fullHeight]="true">
     <div class="transaction-container">
-      <opdex-tx-box-sidebar class="d-flex" [(view)]="view"></opdex-tx-box-sidebar>
+      <!-- <opdex-tx-box-sidebar class="d-flex" [(view)]="view"></opdex-tx-box-sidebar> -->
 
       <div class="transaction-view">
         <opdex-tx-box-swap class="d-flex" style="height: 100%;" *ngIf="view === 'swap'"></opdex-tx-box-swap>
@@ -9,5 +9,5 @@
         <opdex-tx-box-remove-liquidity class="d-flex" style="height: 100%;" *ngIf="view === 'remove'"></opdex-tx-box-remove-liquidity>
       </div>
     </div>
-  </mat-card>
+  </opdex-card>
 </ng-container>
