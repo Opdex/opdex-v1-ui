@@ -1,16 +1,23 @@
 .stats {
-  display: flex;
-  flex-direction: column;
-
   .stat-header {
     display: flex;
+    vertical-align: middle;
     font-weight: 400;
     margin-bottom: 5px;
-    vertical-align: middle;
   }
 
-  .stat-value {
-    font-size: 1.5em;
+  .stat {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+
+    .stat-value {
+      font-size: 24px;
+      margin-bottom: 0px;
+      line-height: 30px;
+    }
   }
 }
 
@@ -28,3 +35,50 @@
   }
 }
 
+
+
+.mining-pool {
+  h3 {
+    font-weight: 500;
+  }
+
+  .swap {
+    background: #1da7dc;
+    color: #1b192f;
+    font-weight: 500;
+  }
+
+  .add {
+    background: #00EB93;
+    color: #1b192f;
+    font-weight: 500;
+  }
+
+  .remove {
+    background: #F2435B;
+    color: #1b192f;
+    font-weight: 500;
+  }
+
+  .details {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .sub-heading {
+      color: #ccc;
+    }
+
+    .remaining {
+      p {
+        text-align: right;
+      }
+    }
+
+    .value {
+      font-size: 20px;
+      margin-bottom: 0px;
+    }
+  }
+}

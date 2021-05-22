@@ -255,7 +255,7 @@ export class LineChartComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     if (!this.chart) {
       this.chart = createChart('chartdiv', {
-        width: 850,
+        // width: 850,
         height: 300,
         localization: {
           priceFormatter: (price: number) => {
@@ -358,6 +358,8 @@ export class LineChartComponent implements OnInit, OnChanges {
       const size = (this.container.nativeElement as HTMLElement).offsetWidth;
 
       this.chart.resize(size, 350);
+
+      this.chart.timeScale().fitContent();
     }
   }
 

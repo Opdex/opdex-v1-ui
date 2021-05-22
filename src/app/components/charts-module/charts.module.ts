@@ -3,18 +3,21 @@ import { CommonModule } from '@angular/common';
 
 import { LineChartComponent } from './line-chart/line-chart.component';
 import { LineChangeComponent } from './line-change/line-change.component';
+import { VolumeChartComponent } from './volume-chart/volume-chart.component';
 
 @NgModule({
   declarations: [
     LineChartComponent,
-    LineChangeComponent
+    LineChangeComponent,
+    VolumeChartComponent
   ],
   imports: [
     CommonModule
   ],
   exports: [
     LineChartComponent,
-    LineChangeComponent
+    LineChangeComponent,
+    VolumeChartComponent
   ]
 })
 export class ChartsModule { }

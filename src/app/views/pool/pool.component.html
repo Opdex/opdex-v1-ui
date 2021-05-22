@@ -6,52 +6,89 @@
 
         <div class="stats">
           <div class="row">
-            <div class="col-3">
-              <mat-card>
+            <div class="col">
+              <opdex-card>
                 <h4 class="stat-header">
                   <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Cirrus (CRS)
+                  Staking Weight
                 </h4>
-                <p class="stat-value">
-                  $1.25
-                </p>
-              </mat-card>
+
+                <div class="stat">
+                  <p class="stat-value">
+                    1.25M ODX
+                  </p>
+
+                  <opdex-change-indicator [value]="4.25"></opdex-change-indicator>
+                </div>
+              </opdex-card>
             </div>
 
-            <div class="col-3">
-              <mat-card>
+            <div class="col">
+              <opdex-card>
                 <h4 class="stat-header">
                   <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
                   Volume
                 </h4>
-                <p class="stat-value">
-                  $109,733,139
-                </p>
-              </mat-card>
+
+                <div class="stat">
+                  <p class="stat-value">
+                    $87657829038
+                  </p>
+
+                  <opdex-change-indicator [value]="4.25"></opdex-change-indicator>
+                </div>
+              </opdex-card>
             </div>
 
-            <div class="col-3">
-              <mat-card>
+            <div class="col">
+              <opdex-card>
                 <h4 class="stat-header">
                   <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
                   Liquidity
                 </h4>
-                <p class="stat-value">
-                  $1,754,342,353
-                </p>
-              </mat-card>
+
+                <div class="stat">
+                  <p class="stat-value">
+                    $8765456789
+                  </p>
+
+                  <opdex-change-indicator [value]="-10.12"></opdex-change-indicator>
+                </div>
+              </opdex-card>
             </div>
 
-            <div class="col-3">
-              <mat-card>
+            <div class="col">
+              <opdex-card>
                 <h4 class="stat-header">
                   <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Fees
+                  Weight
                 </h4>
-                <p class="stat-value">
-                  $329,199.41
-                </p>
-              </mat-card>
+
+                <div class="stat">
+                  <p class="stat-value">
+                    $9876545678
+                  </p>
+
+                  <opdex-change-indicator [value]="4.25"></opdex-change-indicator>
+                </div>
+              </opdex-card>
+            </div>
+
+            <div class="col">
+              <opdex-card>
+                <h4 class="stat-header">
+                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
+                  Rewards
+                </h4>
+
+                <div class="stat">
+                  <p class="stat-value">
+                    $87654567890
+                  </p>
+
+                  <!-- <opdex-change-indicator [value]="4.25"></opdex-change-indicator> -->
+                </div>
+              </opdex-card>
             </div>
           </div>
         </div>
@@ -59,14 +96,117 @@
     </div>
 
     <div class="row mb-4">
-      <div class="col-12 col-md-8">
-        <mat-card class="p-0">
+      <div class="col-12 col-md-6">
+        <opdex-card class="p-0">
           <opdex-line-chart [theme]="theme" [chartData]="ohlcPoints" [type]="chartType" *ngIf="ohlcPoints"></opdex-line-chart>
-        </mat-card>
+        </opdex-card>
       </div>
 
-      <div class="col-12 col-md-4">
-        <opdex-tx-box></opdex-tx-box>
+      <div class="col-12 col-md-6">
+        <opdex-card>
+          <opdex-volume-chart [theme]="theme" [chartData]="ohlcPoints" *ngIf="ohlcPoints"></opdex-volume-chart>
+        </opdex-card>
+      </div>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-3">
+            <opdex-card class="mining-pool">
+              <div class="d-flex justify-content-between align-items-center">
+                <h3 class="d-inline mb-0">Balances</h3>
+                <div>
+                  <button mat-icon-button class="swap small"><mat-icon>swap_horiz</mat-icon></button>
+                </div>
+              </div>
+
+              <div class="details">
+                <div class="mining">
+                  <p class="sub-heading">CRS</p>
+                  <p class="value">49,592.0000</p>
+                </div>
+
+                <div class="remaining">
+                  <p class="sub-heading">ODX</p>
+                  <p class="value">1234.0000</p>
+                </div>
+              </div>
+            </opdex-card>
+          </div>
+
+          <div class="col-3">
+            <opdex-card class="mining-pool">
+              <div class="d-flex justify-content-between align-items-center">
+                <h3 class="d-inline mb-0">Providing</h3>
+                <div>
+                  <button mat-icon-button class="remove small mr-2"><mat-icon>remove</mat-icon></button>
+                  <button mat-icon-button class="add small"><mat-icon>add</mat-icon></button>
+                </div>
+              </div>
+
+              <div class="details">
+                <div class="mining">
+                  <p class="sub-heading">Position</p>
+                  <p class="value">6564.273243 LPT</p>
+                </div>
+
+                <!-- <div class="remaining">
+                  <p class="sub-heading">Rewards</p>
+                  <p class="value">1234 CRS/234 ODX</p>
+                </div> -->
+              </div>
+            </opdex-card>
+          </div>
+
+          <div class="col-3">
+            <opdex-card class="mining-pool">
+              <div class="d-flex justify-content-between align-items-center">
+                <h3 class="d-inline mb-0">Staking</h3>
+                <div>
+                  <button mat-icon-button class="remove small mr-2"><mat-icon>remove</mat-icon></button>
+                  <button mat-icon-button class="add small"><mat-icon>add</mat-icon></button>
+                </div>
+              </div>
+
+              <div class="details">
+                <div class="mining">
+                  <p class="sub-heading">Position</p>
+                  <p class="value">592.237462 ODX</p>
+                </div>
+
+                <!-- <div class="remaining">
+                  <p class="sub-heading">Rewards</p>
+                  <p class="value">1234 LPT</p>
+                </div> -->
+              </div>
+            </opdex-card>
+          </div>
+
+          <div class="col-3">
+            <opdex-card class="mining-pool">
+              <div class="d-flex justify-content-between align-items-center">
+                <h3 class="d-inline mb-0">Mining</h3>
+                <div>
+                  <button mat-icon-button class="remove small mr-2"><mat-icon>remove</mat-icon></button>
+                  <button mat-icon-button class="add small"><mat-icon>add</mat-icon></button>
+                </div>
+              </div>
+
+              <div class="details">
+                <div class="mining">
+                  <p class="sub-heading">Position</p>
+                  <p class="value">6564.273243 LPT</p>
+                </div>
+
+                <!-- <div class="remaining">
+                  <p class="sub-heading">Rewards</p>
+                  <p class="value">1234 ODX</p>
+                </div> -->
+              </div>
+            </opdex-card>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -74,8 +214,6 @@
       <div class="col-12">
         <h2>Recent Transactions</h2>
         <opdex-transactions-table></opdex-transactions-table>
-
-        <pre>{{transactions | json}}</pre>
       </div>
     </div>
   </div>
