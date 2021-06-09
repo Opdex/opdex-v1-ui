@@ -12,7 +12,6 @@ import { Observable } from 'rxjs';
   styleUrls: ['./tokens-table.component.scss']
 })
 export class TokensTableComponent implements OnChanges, AfterViewInit {
-  theme$: Observable<string>;
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
   @Input() tokens: any[];
@@ -21,7 +20,6 @@ export class TokensTableComponent implements OnChanges, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private _themeService: ThemeService, private _router: Router) {
-    this.theme$ = this._themeService.getTheme();
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['name', 'symbol', 'price', 'change', 'price7d'];
   }

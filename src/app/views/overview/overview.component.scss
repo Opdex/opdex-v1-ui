@@ -35,11 +35,17 @@
   }
 }
 
+.text-shadow {
+  text-shadow: 1px 1px 1px black;
+}
+
 .mining-pool {
   h3 {
     color: #1da7dc;
     font-weight: 500;
   }
+
+
 
   .add {
     background: #00EB93;
@@ -74,8 +80,4 @@
       margin-bottom: 0px;
     }
   }
-}
-
-.mining-days-remaining {
-  color: #bebebe;
 }

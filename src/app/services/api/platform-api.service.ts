@@ -57,12 +57,15 @@ export class PlatformApiService extends RestApiService {
     return await this.get(`${this.api}/market`);
   }
 
+  public async getSwapQuote(payload: any): Promise<ApiResponse<any>> {
+    return await this.post(`${this.api}/quote/swap`, payload);
+  }
 
   //////////////////////////////////////////////////
   // Wallet Transactions - Temporary Local ENV only
   /////////////////////////////////////////////////
   public async swap(payload: any): Promise<ApiResponse<any>> {
-    return await this.post(`${this.api}/wallet-transactions/build/swap`, payload);
+    return await this.post(`${this.api}/build-transaction/local-broadcast/swap`, payload);
   }
 
   public async addLiquidity(payload: any): Promise<ApiResponse<any>> {

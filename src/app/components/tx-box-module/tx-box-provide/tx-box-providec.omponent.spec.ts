@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TxBoxAddLiquidityComponent } from './tx-box-add-liquidity.component';
+import { TxBoxProvideComponent } from './tx-box-provide.component';
 
-describe('TxBoxAddLiquidityComponent', () => {
-  let component: TxBoxAddLiquidityComponent;
-  let fixture: ComponentFixture<TxBoxAddLiquidityComponent>;
+describe('TxBoxProvideComponent', () => {
+  let component: TxBoxProvideComponent;
+  let fixture: ComponentFixture<TxBoxProvideComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TxBoxAddLiquidityComponent ]
+      declarations: [ TxBoxProvideComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TxBoxAddLiquidityComponent);
+    fixture = TestBed.createComponent(TxBoxProvideComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

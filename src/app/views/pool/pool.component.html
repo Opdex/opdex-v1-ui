@@ -1,11 +1,114 @@
-<div id="pool" *ngIf="theme$ | async as theme">
+<div id="pool">
   <div class="container pt-3" *ngIf="pool">
+
+    <div class="row mb-4">
+      <div class="col">
+        <h1 class="mb-3">{{pool.token.symbol}}-CRS</h1>
+        <mat-chip-list aria-label="Amenities">
+          <mat-chip color="primary" selected>0.3% Fee</mat-chip>
+          <mat-chip color="primary" selected>Nominated</mat-chip>
+          <mat-chip selected>Mining</mat-chip>
+        </mat-chip-list>
+      </div>
+
+      <div class="col">
+        <!-- search bar component-->
+      </div>
+    </div>
     <div class="row mb-4">
       <div class="col-12">
-        <h1>{{pool.token.symbol}}-CRS</h1>
-
         <div class="stats">
+          <div class="row mb-4">
+            <div class="col">
+              <opdex-card>
+                <div class="d-flex justify-content-between align-items-center">
+                  <h4 class="mb-0">1 {{pool.token.symbol}} ($1)</h4>
+                  <mat-icon>swap_horiz</mat-icon>
+                  <h4 class="mb-0">0.5 CRS</h4>
+                </div>
+              </opdex-card>
+            </div>
+
+            <div class="col">
+              <opdex-card>
+                <div class="d-flex justify-content-between align-items-center">
+                  <h4 class="mb-0">1 CRS ($2)</h4>
+                  <mat-icon>swap_horiz</mat-icon>
+                  <h4 class="mb-0">2 {{pool.token.symbol}}</h4>
+                </div>
+              </opdex-card>
+            </div>
+
+            <div class="col">
+              <opdex-card>
+                <div class="d-flex justify-content-between align-items-center">
+                  <h4 class="mb-0">Pool Balance</h4>
+                    <h4 class="mb-0">1.12M CRS</h4>
+                </div>
+              </opdex-card>
+            </div>
+
+            <div class="col">
+              <opdex-card>
+                <div class="d-flex justify-content-between align-items-center">
+                  <h4 class="mb-0">Pool Balance</h4>
+                  <h4 class="mb-0">103 {{pool.token.symbol}}</h4>
+                </div>
+              </opdex-card>
+            </div>
+          </div>
           <div class="row">
+            <div class="col">
+              <opdex-card>
+                <h4 class="stat-header">
+                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
+                  Liquidity
+                </h4>
+
+                <div class="stat">
+                  <p class="stat-value">
+                    $11.87M
+                  </p>
+
+                  <opdex-change-indicator [value]="-10.12"></opdex-change-indicator>
+                </div>
+              </opdex-card>
+            </div>
+
+            <div class="col">
+              <opdex-card>
+                <h4 class="stat-header">
+                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
+                  Volume (24hr)
+                </h4>
+
+                <div class="stat">
+                  <p class="stat-value">
+                    $1.43M
+                  </p>
+
+                  <opdex-change-indicator [value]="4.25"></opdex-change-indicator>
+                </div>
+              </opdex-card>
+            </div>
+
+            <div class="col">
+              <opdex-card>
+                <h4 class="stat-header">
+                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
+                  Rewards (24hr)
+                </h4>
+
+                <div class="stat">
+                  <p class="stat-value">
+                    $21,854.23
+                  </p>
+
+                  <!-- <opdex-change-indicator [value]="4.25"></opdex-change-indicator> -->
+                </div>
+              </opdex-card>
+            </div>
+
             <div class="col">
               <opdex-card>
                 <h4 class="stat-header">
@@ -22,74 +125,6 @@
                 </div>
               </opdex-card>
             </div>
-
-            <div class="col">
-              <opdex-card>
-                <h4 class="stat-header">
-                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Volume
-                </h4>
-
-                <div class="stat">
-                  <p class="stat-value">
-                    $87657829038
-                  </p>
-
-                  <opdex-change-indicator [value]="4.25"></opdex-change-indicator>
-                </div>
-              </opdex-card>
-            </div>
-
-            <div class="col">
-              <opdex-card>
-                <h4 class="stat-header">
-                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Liquidity
-                </h4>
-
-                <div class="stat">
-                  <p class="stat-value">
-                    $8765456789
-                  </p>
-
-                  <opdex-change-indicator [value]="-10.12"></opdex-change-indicator>
-                </div>
-              </opdex-card>
-            </div>
-
-            <div class="col">
-              <opdex-card>
-                <h4 class="stat-header">
-                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Weight
-                </h4>
-
-                <div class="stat">
-                  <p class="stat-value">
-                    $9876545678
-                  </p>
-
-                  <opdex-change-indicator [value]="4.25"></opdex-change-indicator>
-                </div>
-              </opdex-card>
-            </div>
-
-            <div class="col">
-              <opdex-card>
-                <h4 class="stat-header">
-                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Rewards
-                </h4>
-
-                <div class="stat">
-                  <p class="stat-value">
-                    $87654567890
-                  </p>
-
-                  <!-- <opdex-change-indicator [value]="4.25"></opdex-change-indicator> -->
-                </div>
-              </opdex-card>
-            </div>
           </div>
         </div>
       </div>
@@ -98,13 +133,13 @@
     <div class="row mb-4">
       <div class="col-12 col-md-6">
         <opdex-card class="p-0">
-          <opdex-line-chart [theme]="theme" [chartData]="ohlcPoints" [type]="chartType" *ngIf="ohlcPoints"></opdex-line-chart>
+          <opdex-line-chart [chartData]="ohlcPoints" [type]="chartType" *ngIf="ohlcPoints"></opdex-line-chart>
         </opdex-card>
       </div>
 
       <div class="col-12 col-md-6">
         <opdex-card>
-          <opdex-volume-chart [theme]="theme" [chartData]="ohlcPoints" *ngIf="ohlcPoints"></opdex-volume-chart>
+          <opdex-volume-chart [chartData]="ohlcPoints" *ngIf="ohlcPoints"></opdex-volume-chart>
         </opdex-card>
       </div>
     </div>
@@ -117,7 +152,7 @@
               <div class="d-flex justify-content-between align-items-center">
                 <h3 class="d-inline mb-0">Balances</h3>
                 <div>
-                  <button mat-icon-button class="swap small"><mat-icon>swap_horiz</mat-icon></button>
+                  <button mat-icon-button class="swap small" (click)="openTransactionSidebar(1)"><mat-icon>swap_horiz</mat-icon></button>
                 </div>
               </div>
 
@@ -140,8 +175,8 @@
               <div class="d-flex justify-content-between align-items-center">
                 <h3 class="d-inline mb-0">Providing</h3>
                 <div>
-                  <button mat-icon-button class="remove small mr-2"><mat-icon>remove</mat-icon></button>
-                  <button mat-icon-button class="add small"><mat-icon>add</mat-icon></button>
+                  <button mat-icon-button class="remove small mr-2" (click)="openTransactionSidebar(2)"><mat-icon>remove</mat-icon></button>
+                  <button mat-icon-button class="add small" (click)="openTransactionSidebar(2)"><mat-icon>add</mat-icon></button>
                 </div>
               </div>
 
@@ -164,8 +199,8 @@
               <div class="d-flex justify-content-between align-items-center">
                 <h3 class="d-inline mb-0">Staking</h3>
                 <div>
-                  <button mat-icon-button class="remove small mr-2"><mat-icon>remove</mat-icon></button>
-                  <button mat-icon-button class="add small"><mat-icon>add</mat-icon></button>
+                  <button mat-icon-button class="remove small mr-2" (click)="openTransactionSidebar(3)"><mat-icon>remove</mat-icon></button>
+                  <button mat-icon-button class="add small" (click)="openTransactionSidebar(3)"><mat-icon>add</mat-icon></button>
                 </div>
               </div>
 
@@ -188,8 +223,8 @@
               <div class="d-flex justify-content-between align-items-center">
                 <h3 class="d-inline mb-0">Mining</h3>
                 <div>
-                  <button mat-icon-button class="remove small mr-2"><mat-icon>remove</mat-icon></button>
-                  <button mat-icon-button class="add small"><mat-icon>add</mat-icon></button>
+                  <button mat-icon-button class="remove small mr-2" (click)="openTransactionSidebar(4)"><mat-icon>remove</mat-icon></button>
+                  <button mat-icon-button class="add small" (click)="openTransactionSidebar(4)"><mat-icon>add</mat-icon></button>
                 </div>
               </div>
 

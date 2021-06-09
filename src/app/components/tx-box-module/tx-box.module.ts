@@ -14,18 +14,17 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 
 import { TxBoxSwapComponent } from './tx-box-swap/tx-box-swap.component';
-import { TxBoxSidebarComponent } from './tx-box-sidebar/tx-box-sidebar.component';
-import { TxBoxAddLiquidityComponent } from './tx-box-add-liquidity/tx-box-add-liquidity.component';
-import { TxBoxRemoveLiquidityComponent } from './tx-box-remove-liquidity/tx-box-remove-liquidity.component';
-import { TxBoxComponent } from './tx-box/tx-box.component';
+import { TxBoxProvideComponent } from './tx-box-provide/tx-box-provide.component';
+import { TxBoxMineComponent } from './tx-box-mine/tx-box-mine.component';
+import { TxBoxStakeComponent } from './tx-box-stake/tx-box-stake.component';
+
 
 @NgModule({
   declarations: [
     TxBoxSwapComponent,
-    TxBoxSidebarComponent,
-    TxBoxAddLiquidityComponent,
-    TxBoxRemoveLiquidityComponent,
-    TxBoxComponent
+    TxBoxProvideComponent,
+    TxBoxMineComponent,
+    TxBoxStakeComponent
   ],
   imports: [
     CommonModule,
@@ -42,10 +41,9 @@ import { TxBoxComponent } from './tx-box/tx-box.component';
   ],
   exports: [
     TxBoxSwapComponent,
-    TxBoxSidebarComponent,
-    TxBoxAddLiquidityComponent,
-    TxBoxRemoveLiquidityComponent,
-    TxBoxComponent
+    TxBoxProvideComponent,
+    TxBoxMineComponent,
+    TxBoxStakeComponent
   ]
 })
 export class TxBoxModule { }

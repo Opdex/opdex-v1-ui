@@ -277,10 +277,8 @@ export class VolumeChartComponent implements OnInit {
 
   onResize() {
     if (this.container) {
-      console.log('hit')
       const size = (this.container.nativeElement as HTMLElement).offsetWidth;
 
-      console.log(size)
       this.chart.resize(size, 350);
       this.chart.timeScale().fitContent();
     }

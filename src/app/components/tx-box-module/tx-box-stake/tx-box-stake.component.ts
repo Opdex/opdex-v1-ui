@@ -9,11 +9,11 @@ import { TokensModalComponent } from '@sharedComponents/modals-module/tokens-mod
 import { take } from 'rxjs/operators';
 
 @Component({
-  selector: 'opdex-tx-box-add-liquidity',
-  templateUrl: './tx-box-add-liquidity.component.html',
-  styleUrls: ['./tx-box-add-liquidity.component.scss']
+  selector: 'opdex-tx-box-stake',
+  templateUrl: './tx-box-stake.component.html',
+  styleUrls: ['./tx-box-stake.component.scss']
 })
-export class TxBoxAddLiquidityComponent implements OnInit {
+export class TxBoxStakeComponent implements OnInit {
   form: FormGroup;
   theme$: Observable<string>;
   token1Details: any;

@@ -18,7 +18,47 @@
   // }
 }
 
+.mat-form-field {
+  width: 100% !important;
+}
 
 .mat-form-field-infix {
   border-top-width : .3em;
+  width: 100% !important;
+}
+
+.dark-mode  {
+  .mat-drawer-container {
+    background: none;
+
+    .mat-drawer {
+      background: rgba(38, 37, 56, 1) !important; //#27253A
+
+      .blur-background {
+        // transition: all .2s ease-in-out;
+        // filter: blur(25px);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      .foreground {
+        // transition: all .2s ease-in-out;
+        // backdrop-filter: blur(50px);
+        padding: 25px;
+        height: 100%;
+      }
+    }
+  }
+}
+
+
+.mat-drawer-backdrop {
+  opacity: 0 !important;
+}
+
+
+.mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 10px 0px !important;
+  border-radius: 8px !important;
 }

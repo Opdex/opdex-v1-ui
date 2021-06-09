@@ -1,9 +1,69 @@
 <main [ngClass]="theme">
-  <div class="background">
-    <opdex-sidebar></opdex-sidebar>
+  <div class="background"></div>
+  <mat-sidenav-container (backdropClick)="closeSidenav()" *ngIf="!loading" class="w-100 h-100">
+    <mat-sidenav #sidenav (keydown.escape)="closeSidenav()" position="end" class="sidenav" [fixedInViewport]="true" [fixedTopGap]="0" [fixedBottomGap]="0" [mode]="sidenavMode">
+      <div class="sidenav-container">
 
-    <div id="page-content">
-      <router-outlet></router-outlet>
-    </div>
-  </div>
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <button mat-icon-button color="primary" class="small" (click)="toggleSidenavAppearance()">
+            <mat-icon>{{sidenavMode == 'over' ? 'unfold_more' : 'unfold_less' }}</mat-icon>
+          </button>
+
+          <button mat-button class="d-flex" color="primary" [matMenuTriggerFor]="beforeMenu" style="width: 125px; text-align: left;">
+            <div class="menu-content d-flex justify-content-between align-items-center">
+              <span *ngIf="message?.view === 1">Swap</span>
+              <span *ngIf="message?.view === 2">Provide</span>
+              <span *ngIf="message?.view === 3">Stake</span>
+              <span *ngIf="message?.view === 4">Mine</span>
+
+              <mat-icon>keyboard_arrow_down</mat-icon>
+            </div>
+
+          </button>
+          <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
+            <button mat-menu-item *ngIf="message?.view !== 1" (click)="setSidenavView(1)" style="width: 125px;">Swap</button>
+            <button mat-menu-item *ngIf="message?.view !== 2" (click)="setSidenavView(2)" style="width: 125px;">Provide</button>
+            <button mat-menu-item *ngIf="message?.view !== 3" (click)="setSidenavView(3)" style="width: 125px;">Stake</button>
+            <button mat-menu-item *ngIf="message?.view !== 4" (click)="setSidenavView(4)" style="width: 125px;">Mine</button>
+          </mat-menu>
+
+          <button mat-icon-button color="primary" (click)="closeSidenav()" class="small" aria-label="Close Sidenav">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+
+        <!-- <section class="mb-5 mt-4">
+          <mat-button-toggle-group aria-label="Transaction Type" class="w-100" value="{{message?.view}}">
+            <mat-button-toggle value="1" class="w-100" (click)="setSidenavView(1)">Swap</mat-button-toggle>
+            <mat-button-toggle value="2" class="w-100" (click)="setSidenavView(2)">Provide</mat-button-toggle>
+            <mat-button-toggle value="3" class="w-100" (click)="setSidenavView(3)">Stake</mat-button-toggle>
+            <mat-button-toggle value="4" class="w-100" (click)="setSidenavView(4)">Mine</mat-button-toggle>
+          </mat-button-toggle-group>
+        </section> -->
+
+
+        <opdex-tx-box-swap class="d-flex" style="height: 100%;" *ngIf="message?.view === 1"></opdex-tx-box-swap>
+        <opdex-tx-box-provide class="d-flex" style="height: 100%;" *ngIf="message?.view === 2"></opdex-tx-box-provide>
+        <opdex-tx-box-stake class="d-flex" style="height: 100%;" *ngIf="message?.view === 3"></opdex-tx-box-stake>
+        <opdex-tx-box-mine class="d-flex" style="height: 100%;" *ngIf="message?.view === 4"></opdex-tx-box-mine>
+      </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <opdex-sidebar></opdex-sidebar>
+
+      <div id="page-content">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </main>
+
+
+
+
+
+
+
+
+

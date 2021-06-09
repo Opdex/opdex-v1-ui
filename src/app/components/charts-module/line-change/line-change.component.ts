@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, AfterViewInit, NgZone } from '@angular/core';
 import { createChart, DeepPartial, IChartApi, ISeriesApi, LineWidth } from 'lightweight-charts';
 
 const up = [

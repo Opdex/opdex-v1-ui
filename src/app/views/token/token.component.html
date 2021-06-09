@@ -7,7 +7,7 @@
         <div class="stats">
           <div class="row">
             <div class="col-3">
-              <mat-card>
+              <opdex-card>
                 <h4 class="stat-header">
                   <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
                   Cirrus (CRS)
@@ -15,11 +15,11 @@
                 <p class="stat-value">
                   $1.25
                 </p>
-              </mat-card>
+              </opdex-card>
             </div>
 
             <div class="col-3">
-              <mat-card>
+              <opdex-card>
                 <h4 class="stat-header">
                   <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
                   Volume
@@ -27,11 +27,11 @@
                 <p class="stat-value">
                   $109,733,139
                 </p>
-              </mat-card>
+              </opdex-card>
             </div>
 
             <div class="col-3">
-              <mat-card>
+              <opdex-card>
                 <h4 class="stat-header">
                   <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
                   Liquidity
@@ -39,11 +39,11 @@
                 <p class="stat-value">
                   $1,754,342,353
                 </p>
-              </mat-card>
+              </opdex-card>
             </div>
 
             <div class="col-3">
-              <mat-card>
+              <opdex-card>
                 <h4 class="stat-header">
                   <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
                   Fees
@@ -51,7 +51,7 @@
                 <p class="stat-value">
                   $329,199.41
                 </p>
-              </mat-card>
+              </opdex-card>
             </div>
           </div>
         </div>
@@ -60,13 +60,13 @@
 
     <div class="row mb-4">
       <div class="col-12 col-md-8">
-        <mat-card class="p-0">
+        <opdex-card class="p-0">
           <opdex-line-chart [theme]="theme" [chartData]="ohlcPoints" [type]="chartType" *ngIf="ohlcPoints"></opdex-line-chart>
-        </mat-card>
+        </opdex-card>
       </div>
 
       <div class="col-12 col-md-4">
-        <opdex-tx-box></opdex-tx-box>
+        <opdex-card></opdex-card>
       </div>
     </div>
 

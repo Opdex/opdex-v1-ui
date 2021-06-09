@@ -12,7 +12,6 @@ import { MatSort } from '@angular/material/sort';
   styleUrls: ['./pools-table.component.scss']
 })
 export class PoolsTableComponent implements OnChanges, AfterViewInit {
-  theme$: Observable<string>;
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
   @Input() pools: any[];
@@ -21,7 +20,6 @@ export class PoolsTableComponent implements OnChanges, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private _themeService: ThemeService, private _router: Router) {
-    this.theme$ = this._themeService.getTheme();
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['name', 'liquidity', 'stakingWeight', 'volumeDaily', 'providerRewards', 'stakerRewards', 'liquidityHistory'];
   }

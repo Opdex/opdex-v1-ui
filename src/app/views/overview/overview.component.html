@@ -1,6 +1,6 @@
-<div id="overview" *ngIf="theme$ | async as theme" [ngClass]="theme">
-  <div class="container pt-3">
-    <div class="row mb-4">
+<div id="overview" class="mt-5">
+  <div class="container">
+    <div class="row mb-5">
       <div class="col-12">
         <h1>Market Overview</h1>
 
@@ -95,22 +95,23 @@
       </div>
     </div>
 
-    <div class="row mb-4">
-      <div class="col-12 col-md-8">
+    <div class="row mb-5">
+      <div class="col-12 col-md-6">
         <opdex-card class="p-0">
-          <opdex-line-chart [theme]="theme" [chartData]="ohlcPoints" [type]="chartType" *ngIf="ohlcPoints"></opdex-line-chart>
+          <opdex-line-chart [chartData]="ohlcPoints" [type]="chartType" *ngIf="ohlcPoints"></opdex-line-chart>
         </opdex-card>
       </div>
 
-      <div class="col-12 col-md-4">
-        <opdex-tx-box></opdex-tx-box>
+      <div class="col-12 col-md-6">
+        <opdex-card>
+          <opdex-volume-chart [chartData]="ohlcPoints" *ngIf="ohlcPoints"></opdex-volume-chart>
+        </opdex-card>
       </div>
     </div>
 
-    <div class="row mb-4">
+    <div class="row mb-5">
       <div class="col-12">
-        <h2 class="mb-1">Liquidity Mining</h2>
-        <p class="mining-days-remaining mb-3">32 Days Remaining</p>
+        <h2 class="mb-3 text-shadow">Liquidity Mining</h2>
 
         <div class="row">
           <div class="col-3">
@@ -212,17 +213,21 @@
       </div>
     </div>
 
-    <div class="row mb-4">
+    <div class="row mb-5">
       <div class="col-12">
-        <h2>Top Pools</h2>
-        <opdex-pools-table [pools]="pools"></opdex-pools-table>
+        <opdex-card>
+          <h2>Top Pools</h2>
+          <opdex-pools-table [pools]="pools"></opdex-pools-table>
+        </opdex-card>
       </div>
     </div>
 
-    <div class="row mb-4">
+    <div class="row mb-5">
       <div class="col-12">
-        <h2>Top Tokens</h2>
-        <opdex-tokens-table [tokens]="tokens"></opdex-tokens-table>
+        <opdex-card>
+          <h2>Top Tokens</h2>
+          <opdex-tokens-table [tokens]="tokens"></opdex-tokens-table>
+        </opdex-card>
       </div>
     </div>
   </div>

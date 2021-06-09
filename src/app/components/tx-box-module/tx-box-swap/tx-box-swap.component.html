@@ -1,6 +1,4 @@
 <div class="swap">
-  <h3 class="mb-0">Swap Tokens</h3>
-
   <form [formGroup]="form" name="swap-form" id="swap-form">
     <div class="exactly swap-row">
       <div class="spend-receive-button">
@@ -9,12 +7,12 @@
 
       <div class="amount">
         <mat-form-field appearance="outline" class="w-100" >
-          <input matInput type="text" [required]="true" [formControl]="from" autocomplete="off" placeholder="0">
+          <input matInput type="text" [required]="true" [formControl]="tokenInAmount" autocomplete="off" placeholder="0">
         </mat-form-field>
       </div>
 
       <div class="token">
-        <button mat-stroked-button color="primary" type="button" (click)="changeToken('fromToken')">{{fromTokenDetails?.symbol || 'CRS'}}</button>
+        <button mat-stroked-button color="primary" type="button" (click)="changeToken('tokenIn')">{{tokenInDetails?.symbol || 'CRS'}}</button>
       </div>
     </div>
 
@@ -29,19 +27,19 @@
 
       <div class="amount">
         <mat-form-field appearance="outline" class="w-100">
-          <input matInput type="text" [value]="to.value" placeholder="0" disabled>
+          <input matInput type="text" [value]="tokenOutAmount?.value" placeholder="0" disabled>
         </mat-form-field>
       </div>
 
       <div class="token">
-        <button mat-stroked-button color="primary" type="button" (click)="changeToken('toToken')">{{toTokenDetails?.symbol || 'Select Token'}}</button>
+        <button mat-stroked-button color="primary" type="button" (click)="changeToken('tokenOut')">{{tokenOutDetails?.symbol || 'Select Token'}}</button>
       </div>
     </div>
   </form>
 
   <div class="space-between"></div>
 
-  <!-- <div class="swap-info mt-1" *ngIf="form.controls.from.value > 0 && form.controls.to.value > 0">
+  <!-- <div class="swap-info mt-1" *ngIf="form.controls.tokenIn.value > 0 && form.controls.to.value > 0">
     <p class="mb-0">Slippage: .1%</p>
     <p class="mb-0">Minimum Received: 12345</p>
     <p class="mb-0">Price: 12345</p>

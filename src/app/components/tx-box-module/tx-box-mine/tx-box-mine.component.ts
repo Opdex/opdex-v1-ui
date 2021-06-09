@@ -3,11 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { ConnectWalletModalComponent } from 'src/app/components/modals-module/connect-wallet-modal/connect-wallet-modal.component';
 
 @Component({
-  selector: 'opdex-tx-box-remove-liquidity',
-  templateUrl: './tx-box-remove-liquidity.component.html',
-  styleUrls: ['./tx-box-remove-liquidity.component.scss']
+  selector: 'opdex-tx-box-mine',
+  templateUrl: './tx-box-mine.component.html',
+  styleUrls: ['./tx-box-mine.component.scss']
 })
-export class TxBoxRemoveLiquidityComponent implements OnInit {
+export class TxBoxMineComponent implements OnInit {
 
   constructor(private _dialog: MatDialog) { }
 

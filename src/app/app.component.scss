@@ -19,7 +19,26 @@ opdex-sidebar {
 
 .background {
   width: 100%;
+  height: 100%;
   background-image: url('/assets/dashboard@2x.png');
   background-size: cover;
   background-attachment: fixed;
+  position: fixed;
 }
+
+.sidenav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 320px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: inset 10px 0px 10px -10px #000000;
+  border-left: 0px !important;
+
+  .sidenav-container {
+    padding: 25px;
+  }
+}
+

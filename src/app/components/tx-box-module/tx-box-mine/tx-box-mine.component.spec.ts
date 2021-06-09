@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TxBoxComponent } from './tx-box.component';
+import { TxBoxMineComponent } from './tx-box-mine.component';
 
-describe('TxBoxComponent', () => {
-  let component: TxBoxComponent;
-  let fixture: ComponentFixture<TxBoxComponent>;
+describe('TxBoxMineComponent', () => {
+  let component: TxBoxMineComponent;
+  let fixture: ComponentFixture<TxBoxMineComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TxBoxComponent ]
+      declarations: [ TxBoxMineComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TxBoxComponent);
+    fixture = TestBed.createComponent(TxBoxMineComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

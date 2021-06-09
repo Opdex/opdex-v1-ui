@@ -19,23 +19,23 @@ export class TxBoxSwapComponent implements OnDestroy{
   theme$: Observable<string>;
   exactInput$: Subscription;
   txHash: string;
-  fromTokenDetails: any;
-  toTokenDetails: any;
+  tokenInDetails: any;
+  tokenOutDetails: any;
 
-  get from(): FormControl {
-    return this.form.get('from') as FormControl;
+  get tokenInAmount(): FormControl {
+    return this.form.get('tokenInAmount') as FormControl;
   }
 
-  get fromToken(): FormControl {
-    return this.form.get('fromToken') as FormControl;
+  get tokenIn(): FormControl {
+    return this.form.get('tokenIn') as FormControl;
   }
 
-  get to(): FormControl {
-    return this.form.get('to') as FormControl;
+  get tokenOutAmount(): FormControl {
+    return this.form.get('tokenOutAmount') as FormControl;
   }
 
-  get toToken(): FormControl {
-    return this.form.get('toToken') as FormControl;
+  get tokenOut(): FormControl {
+    return this.form.get('tokenOut') as FormControl;
   }
 
   constructor(
@@ -45,15 +45,15 @@ export class TxBoxSwapComponent implements OnDestroy{
     private _platformApi: PlatformApiService
   ) {
     this.form = this._fb.group({
-      from: [null, [Validators.required, Validators.min(.00000001)]],
-      fromToken: [null, [Validators.required]],
-      to: [null, [Validators.required, Validators.min(.00000001)]],
-      toToken: [null, [Validators.required]]
+      tokenInAmount: [null, [Validators.required, Validators.min(.00000001)]],
+      tokenIn: [null, [Validators.required]],
+      tokenOutAmount: [null, [Validators.required, Validators.min(.00000001)]],
+      tokenOut: [null, [Validators.required]]
     });
 
     this.theme$ = this._themeService.getTheme();
 
-    this.exactInput$ = this.from.valueChanges
+    this.exactInput$ = this.tokenInAmount.valueChanges
       .subscribe((change: string) => this.updateExactAmount(change));
   }
 
@@ -71,7 +71,7 @@ export class TxBoxSwapComponent implements OnDestroy{
   }
 
   updateExactAmount(change: string): void {
-    console.log(change);
+    this.quote();
   }
 
   changeToken(tokenField: string): void {
@@ -88,10 +88,10 @@ export class TxBoxSwapComponent implements OnDestroy{
         const field = this.form.get(tokenField);
         field.setValue(rsp.address);
 
-        if (tokenField === 'fromToken') {
-          this.fromTokenDetails = rsp;
+        if (tokenField === 'tokenIn') {
+          this.tokenInDetails = rsp;
         } else {
-          this.toTokenDetails = rsp;
+          this.tokenOutDetails = rsp;
         }
       }
     });
@@ -99,10 +99,10 @@ export class TxBoxSwapComponent implements OnDestroy{
 
   async submit() {
     const payload = {
-      tokenIn: !this.tokenInExactly ? this.fromToken.value : null,
-      tokenOut: this.tokenInExactly ? this.fromToken.value : null,
-      tokenInAmount: this.tokenInExactly ? this.from.value : "0",
-      tokenOutAmount: !this.tokenInExactly ? this.from.value * 100000000 : "0",
+      tokenIn: !this.tokenInExactly ? this.tokenIn.value : null,
+      tokenOut: this.tokenInExactly ? this.tokenIn.value : null,
+      tokenInAmount: this.tokenInExactly ? this.tokenInAmount.value : "0.00",
+      tokenOutAmount: !this.tokenInExactly ? this.tokenInAmount.value : "0.00",
       tokenInExactAmount: this.tokenInExactly,
       tolerance: 0,
       to: "PVTCoqP2FkWAiC158K7YUapo8UAgdRePrY"
@@ -117,22 +117,37 @@ export class TxBoxSwapComponent implements OnDestroy{
   }
 
   switch() {
-    const from = this.from.value;
-    const fromToken = this.fromToken.value;
-    const to = this.to.value;
-    const toToken = this.toToken.value;
-    const fromTokenDetails = this.fromTokenDetails;
-    const toTokenDetails = this.toTokenDetails;
+    const tokenInAmount = this.tokenInAmount.value;
+    const tokenIn = this.tokenIn.value;
+    const tokenOutAmount = this.tokenOutAmount.value;
+    const tokenOut = this.tokenOut.value;
+    const tokenInDetails = this.tokenInDetails;
+    const tokenOutDetails = this.tokenOutDetails;
 
-    this.from.setValue(to);
-    this.to.setValue(from);
-    this.fromToken.setValue(toToken);
-    this.toToken.setValue(fromToken);
+    this.tokenInAmount.setValue(tokenOutAmount);
+    this.tokenOutAmount.setValue(tokenInAmount);
+    this.tokenIn.setValue(tokenOut);
+    this.tokenOut.setValue(tokenIn);
 
-    this.fromTokenDetails = toTokenDetails;
-    this.toTokenDetails = fromTokenDetails;
+    this.tokenInDetails = tokenOutDetails;
+    this.tokenOutDetails = tokenInDetails;
 
     this.toggleTokenInExactly();
+  }
+
+  async quote() {
+    const payload = {
+      tokenIn: !this.tokenInExactly ? this.tokenIn.value : this.tokenOut.value,
+      tokenOut: this.tokenInExactly ? this.tokenIn.value : this.tokenOut.value,
+      tokenInAmount: this.tokenInExactly ? this.tokenInAmount.value : "0.00",
+      tokenOutAmount: !this.tokenInExactly ? this.tokenInAmount.value : "0.00",
+      market: "P8uhn2EFsAZ28mzzmtpttAMVcTNzncLeiC"
+    };
+
+    const response = await this._platformApi.getSwapQuote(payload);
+
+    console.log(response.data);
+    this.form.get("tokenOutAmount").setValue(response.data);
   }
 
   ngOnDestroy() {

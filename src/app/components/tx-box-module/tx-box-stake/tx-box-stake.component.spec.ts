@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TxBoxSidebarComponent } from './tx-box-sidebar.component';
+import { TxBoxStakeComponent } from './tx-box-stake.component';
 
-describe('TxBoxSidebarComponent', () => {
-  let component: TxBoxSidebarComponent;
-  let fixture: ComponentFixture<TxBoxSidebarComponent>;
+describe('TxBoxStakeComponent', () => {
+  let component: TxBoxStakeComponent;
+  let fixture: ComponentFixture<TxBoxStakeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TxBoxSidebarComponent ]
+      declarations: [ TxBoxStakeComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TxBoxSidebarComponent);
+    fixture = TestBed.createComponent(TxBoxStakeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

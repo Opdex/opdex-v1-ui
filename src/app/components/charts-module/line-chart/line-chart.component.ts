@@ -1,4 +1,5 @@
 import { Component, ElementRef, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { ResizedEvent } from 'angular-resize-event';
 import { createChart, ISeriesApi, IChartApi, LineWidth, DeepPartial } from 'lightweight-charts';
 
 const garbagePoints = [
@@ -244,6 +245,8 @@ export class LineChartComponent implements OnInit, OnChanges {
       }));
 
       this.applyChartOptions();
+
+
 
       if (this.loading) {
         this.chart.timeScale().fitContent()
