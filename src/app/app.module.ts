@@ -1,6 +1,8 @@
+import { WalletService } from '@sharedServices/wallet.service';
+import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { ApiInterceptor } from './services/api/api-interceptor';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { Injector, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
@@ -78,7 +80,8 @@ import { AngularResizedEventModule } from 'angular-resize-event';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ApiInterceptor,
-      multi: true
+      multi: true,
+      deps: [WalletService]
     }
   ],
   bootstrap: [AppComponent]

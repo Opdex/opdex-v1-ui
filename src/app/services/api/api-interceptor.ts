@@ -1,16 +1,30 @@
+import { WalletService } from './../wallet.service';
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
 
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtYXJrZXQiOiJhc2Rmc2FkZiIsIndhbGxldCI6ImFzZGZhc2RmIiwibmJmIjoxNjIzMjQ5MTk2LCJleHAiOjE2MjMyNTI3OTYsImlhdCI6MTYyMzI0OTE5Nn0.MkK9EuWNYNBSZwvHK094raFyffEHY2JeBGPrkz2faM8';
 @Injectable()
 export class ApiInterceptor implements HttpInterceptor {
+  constructor(private _wallet: WalletService) {}
+
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    const finalReq = req.clone({
-      headers: req.headers.set('Content-Type', 'application/json'),
-      setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+    const token = this._wallet.getToken();
+    let finalReq = req;
+
+    if (token) {
+      finalReq = req.clone({
+        headers: req.headers.set('Content-Type', 'application/json'),
+        setHeaders: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    }
+    else {
+      finalReq = req.clone({
+        headers: req.headers.set('Content-Type', 'application/json'),
+        responseType: 'text'
+      });
+    }
+
 
     return next.handle(finalReq);
   }

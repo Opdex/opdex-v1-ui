@@ -52,7 +52,7 @@
     <mat-sidenav-content>
       <opdex-sidebar></opdex-sidebar>
 
-      <div id="page-content">
+      <div id="page-content" *ngIf="!loading">
         <router-outlet></router-outlet>
       </div>
     </mat-sidenav-content>

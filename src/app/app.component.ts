@@ -1,3 +1,4 @@
+import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { SidenavService } from './services/sidenav.service';
 import { Component, HostBinding, OnInit, ViewChild } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
@@ -17,21 +18,26 @@ export class AppComponent implements OnInit {
   message: ISidenavMessage;
   sidenavMode: 'over' | 'side' = 'over';
   theme: string;
-  loading = false;
+  loading = true;
   subscription = new Subscription();
 
 
   constructor(
     public overlayContainer: OverlayContainer,
     private _theme: ThemeService,
-    private _sidenav: SidenavService
+    private _sidenav: SidenavService,
+    private _api: PlatformApiService
   ) {}
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
+    await this._api.auth('asdf', 'asdf');
+
     this._theme.getTheme()
       .subscribe(theme => this.setTheme(theme));
 
       this.listenToSidenav();
+
+      this.loading = false;
   }
 
   private listenToSidenav(): void {

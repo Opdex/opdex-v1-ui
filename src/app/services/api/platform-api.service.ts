@@ -5,6 +5,7 @@ import { ApiResponse } from '@sharedModels/responses/api-response';
 import { RestApiService } from './rest-api.service';
 import { ErrorService } from '@sharedServices/utility/error.service';
 import { LoggerService } from '@sharedServices/utility/logger.service';
+import { WalletService } from '@sharedServices/wallet.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +16,24 @@ export class PlatformApiService extends RestApiService {
   constructor(
     protected _http: HttpClient,
     protected _error: ErrorService,
-    private _log: LoggerService
+    private _log: LoggerService,
+    private _wallet: WalletService
   ) {
     super(_http, _error);
     this.api = environment.api;
+  }
+
+  //////////////
+  // Auth
+  //////////////
+
+  public async auth(market: string, wallet: string): Promise<void> {
+    const response = await this.post(`${this.api}/auth/authorize?wallet=${wallet}&market=${market}`, {});
+    if (response.hasError) {
+      // handle
+    }
+
+    this._wallet.setToken(response.data);
   }
 
   //////////////
