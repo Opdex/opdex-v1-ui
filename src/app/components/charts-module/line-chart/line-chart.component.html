@@ -1,7 +1,7 @@
-<div #chartContainer class="w-100">
+<div #chartContainer class="w-100" (resized)="onResized($event)">
   <div class="chart-legend">
     <h3 class="title">Market Liquidity</h3>
     <p class="value">$24,342,353</p>
   </div>
-  <div id="chartdiv" (window:resize)="onResize()"></div>
+  <div id="chartdiv"></div>
 </div>

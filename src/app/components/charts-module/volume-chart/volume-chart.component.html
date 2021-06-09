@@ -1,6 +1,6 @@
-<div [hidden]="loading" #volumeChart class="w-100">
+<div [hidden]="loading" #volumeChart class="w-100" (resized)="onResized($event)">
   <div class="chart-legend">
     <h3 class="title">Volume</h3>
   </div>
-  <div id="volumeChart" (window:resize)="onResize()"></div>
+  <div id="volumeChart"></div>
 </div>

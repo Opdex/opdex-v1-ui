@@ -1,6 +1,7 @@
 import { ElementRef, Input } from '@angular/core';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { createChart, DeepPartial, IChartApi, ISeriesApi, LineWidth } from 'lightweight-charts';
+import { ResizedEvent } from 'angular-resize-event';
+import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 
 const volume = [
 	{ time: '2018-10-19', value: 19103293.00, color: 'rgba(71, 188, 235, .7)' },
@@ -169,8 +170,6 @@ export class VolumeChartComponent implements OnInit {
   @Input() chartData: any;
   volumeSeries: ISeriesApi<'Histogram'>;
   chart: IChartApi;
-  redColor = 'rgba(226, 90, 57, 0.8)';
-  greenColor = 'rgba(83, 158, 87, 0.8)';
   loading = true;
 
   ngOnChanges() {
@@ -199,6 +198,7 @@ export class VolumeChartComponent implements OnInit {
         priceFormat: {
           type: 'volume',
         },
+        lastValueVisible: false,
         priceScaleId: '',
         base: 0,
         scaleMargins: {
@@ -231,10 +231,6 @@ export class VolumeChartComponent implements OnInit {
     return '$'+(num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
   }
 
-  ngAfterViewInit(): void {
-    this.onResize();
-  }
-
   private applyChartOptions() {
     this.chart.applyOptions({
       grid: {
@@ -258,7 +254,7 @@ export class VolumeChartComponent implements OnInit {
         borderVisible: false,
       },
       rightPriceScale: {
-        visible: true,
+        visible: false,
         borderVisible: false
       },
       handleScroll: {
@@ -275,13 +271,9 @@ export class VolumeChartComponent implements OnInit {
     });
   }
 
-  onResize() {
-    if (this.container) {
-      const size = (this.container.nativeElement as HTMLElement).offsetWidth;
-
-      this.chart.resize(size, 350);
-      this.chart.timeScale().fitContent();
-    }
+  onResized(event: ResizedEvent) {
+    this.chart.resize(event.newWidth, 350);
+    this.chart.timeScale().fitContent();
   }
 
   ngOnDestroy() {

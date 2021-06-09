@@ -1,5 +1,5 @@
-import { NgZone } from '@angular/core';
 import { Component, ElementRef, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { ResizedEvent } from 'angular-resize-event';
 import { createChart, ISeriesApi, IChartApi, LineWidth, DeepPartial } from 'lightweight-charts';
 
 const garbagePoints = [
@@ -84,21 +84,10 @@ export class LineChartComponent implements OnInit, OnChanges {
           return point;
         });
 
-        // this.chartData.forEach((point: any) => {
-        //   data.push({
-        //     time: point.time,
-        //     value: point.close,
-        //     color: '#000'
-        //   });
-        // });
-
         if (!this.lineSeries) {
           this.lineSeries = this.chart.addAreaSeries({
             lineColor: 'rgba(71, 188, 235, .7)',
             lineWidth: <DeepPartial<LineWidth>>6,
-            // lineStyle: 1,
-            // topColor: 'rgba(71, 188, 235, .2)', // Uncomment for gradient affect
-            // bottomColor: 'rgba(71, 188, 235, 0)',
             topColor: 'transparent',
             bottomColor: 'transparent',
             priceLineVisible: false,
@@ -167,6 +156,11 @@ export class LineChartComponent implements OnInit, OnChanges {
     }
   }
 
+  onResized(event: ResizedEvent) {
+    this.chart.resize(event.newWidth, 350);
+    this.chart.timeScale().fitContent();
+  }
+
   // Todo: copied from https://stackoverflow.com/questions/9461621/format-a-number-as-2-5k-if-a-thousand-or-more-otherwise-900
   // Rip out and write our own, using this for short term
   nFormatter(num, digits): string {
@@ -187,10 +181,6 @@ export class LineChartComponent implements OnInit, OnChanges {
       }
     }
     return '$'+(num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
-  }
-
-  ngAfterViewInit(): void {
-    this.onResize();
   }
 
   private applyChartOptions() {
@@ -235,16 +225,6 @@ export class LineChartComponent implements OnInit, OnChanges {
         pinch: false
       },
     });
-  }
-
-  onResize() {
-    if (this.container) {
-      const size = (this.container.nativeElement as HTMLElement).offsetWidth;
-
-      this.chart.resize(size, 350);
-
-      this.chart.timeScale().fitContent();
-    }
   }
 
   ngOnDestroy() {
