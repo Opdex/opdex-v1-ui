@@ -38,8 +38,6 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { LayoutModule } from '@angular/cdk/layout';
 
-import { AngularResizedEventModule } from 'angular-resize-event';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -73,8 +71,7 @@ import { AngularResizedEventModule } from 'angular-resize-event';
     MatSidenavModule,
     MatChipsModule,
     MatMenuModule,
-    LayoutModule,
-    AngularResizedEventModule
+    LayoutModule
   ],
   providers: [
     {

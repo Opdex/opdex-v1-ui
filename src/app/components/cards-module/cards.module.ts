@@ -3,19 +3,26 @@ import { CommonModule } from '@angular/common';
 
 // Material Imports
 import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 import { CardComponent } from './card/card.component';
+import { MiningCardComponent } from './mining-card/mining-card.component';
 
 @NgModule({
   declarations: [
-    CardComponent
+    CardComponent,
+    MiningCardComponent
   ],
   imports: [
     CommonModule,
-    MatCardModule
+    MatCardModule,
+    MatIconModule,
+    MatButtonModule
   ],
   exports: [
-    CardComponent
+    CardComponent,
+    MiningCardComponent
   ]
 })
 export class CardsModule { }

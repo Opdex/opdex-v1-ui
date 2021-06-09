@@ -21,7 +21,6 @@
     "@angular/platform-browser": "~11.2.3",
     "@angular/platform-browser-dynamic": "~11.2.3",
     "@angular/router": "~11.2.3",
-    "bitcore-lib": "^8.23.1",
     "bootstrap-4-grid": "^3.4.0",
     "lightweight-charts": "^3.2.0",
     "rxjs": "~6.6.6",

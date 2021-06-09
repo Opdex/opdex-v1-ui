@@ -1,0 +1,40 @@
+.mining-pool {
+  h3 {
+    color: #1da7dc;
+    font-weight: 500;
+  }
+
+  .add {
+    background: #00EB93;
+    color: #1b192f;
+    font-weight: 500;
+  }
+
+  .remove {
+    background: #F2435B;
+    color: #1b192f;
+    font-weight: 500;
+  }
+
+  .details {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .sub-heading {
+      color: #ccc;
+    }
+
+    .remaining {
+      p {
+        text-align: right;
+      }
+    }
+
+    .value {
+      font-size: 24px;
+      margin-bottom: 0px;
+    }
+  }
+}
