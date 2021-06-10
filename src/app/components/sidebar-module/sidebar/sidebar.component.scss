@@ -1,11 +1,26 @@
 aside {
-  padding: 10px;
   display: flex;
   flex-direction: column;
-  height: 100%;
   border-right: 1px solid #292929;
-  background: rgba(27,25,47, .9);
-  background: radial-gradient(circle, rgba(46, 102, 122, 0.1) 0%, rgba(27,25,47, .9) 80%);
+  background: rgba(27,25,47, .7) !important;
+  height: 100%;
+
+  &:hover {
+    .defi-blocks {
+      transition: .35s ease-in;
+      position: fixed;
+      left: 220px;
+    }
+  }
+
+
+  .foreground {
+    padding: 10px;
+    height: 100%;
+    background: rgba(27,25,47, .9);
+    background: radial-gradient(circle, rgba(46, 102, 122, 0.1) 0%, rgba(27,25,47, .9) 80%);
+  }
+
 
   .mat-button {
     width: 100%;
@@ -70,6 +85,7 @@ aside {
     width: 100px;
     bottom: 25px;
     z-index: 9999;
+    transition: .35s ease-in;
   }
 
   .connection-theme-row {

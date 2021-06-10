@@ -82,7 +82,7 @@ export class LineChangeComponent implements AfterViewInit {
   chart: IChartApi;
   redColor = 'rgba(242, 67, 91, 0.8)';
   greenColor = 'rgba(0, 235, 147, 0.8)';
-  loading = true;
+  loading = false;
   id = `${Math.random()}-chart`;
   points = Math.random() > .5 ? up : down;
 
@@ -109,10 +109,7 @@ export class LineChangeComponent implements AfterViewInit {
 
         this.applyChartOptions();
 
-        if (this.loading) {
-          this.chart.timeScale().fitContent();
-          this.loading = false;
-        }
+        this.chart.timeScale().fitContent();
       }
     }
   }

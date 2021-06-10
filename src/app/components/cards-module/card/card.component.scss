@@ -1,15 +1,20 @@
-.foreground {
-  padding: 25px;
-  background: rgba(27,25,47, .9);
-  background: radial-gradient(circle, rgba(46, 102, 122, 0.1) 0%, rgba(27,25,47, .9) 80%);
 
-  border: 1px solid #292929;
-}
-
-.h-100 {
-  height: 100%;
+.card {
+  background: rgba(27,25,47, .85) !important;
 
   .foreground {
+    padding: 25px;
+    background: rgba(27,25,47, .9);
+    background: radial-gradient(circle, rgba(46, 102, 122, 0.1) 0%, rgba(27,25,47, .9) 80%);
+
+    border: 1px solid #292929;
+  }
+
+  &.h-100 {
     height: 100%;
+
+    .foreground {
+      height: 100%;
+    }
   }
 }

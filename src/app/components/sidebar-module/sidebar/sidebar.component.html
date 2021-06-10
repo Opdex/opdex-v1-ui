@@ -1,38 +1,40 @@
 <aside>
-  <div class="logo" routerLink="/">
-    <img src="/assets/logo-light-blue.png" alt="Opdex Logo">
-    <p class="opdex">OPDEX</p>
+  <div class="foreground">
+    <div class="logo" routerLink="/">
+      <img src="/assets/logo-light-blue.png" alt="Opdex Logo">
+      <p class="opdex">OPDEX</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li>
+        <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <mat-icon>show_chart</mat-icon> Market
+        </a>
+      </li>
+      <li>
+        <a mat-button routerLink="/pools" routerLinkActive="active">
+          <mat-icon>bubble_chart</mat-icon> Pools
+        </a>
+      </li>
+      <li>
+        <a mat-button routerLink="/tokens" routerLinkActive="active">
+          <mat-icon>toll</mat-icon> Tokens
+        </a>
+      </li>
+      <li>
+        <a mat-button routerLink="/history" routerLinkActive="active">
+          <mat-icon>history</mat-icon> History
+        </a>
+      </li>
+      <li>
+        <a mat-button routerLink="/wallet" routerLinkActive="active">
+          <mat-icon>account_balance_wallet</mat-icon> Wallet
+        </a>
+      </li>
+    </ul>
+
+    <div class="space-between"></div>
+
+    <img class="defi-blocks" src="assets/defi2@2x.png">
   </div>
-
-  <ul class="sidebar-nav">
-    <li>
-      <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-        <mat-icon>show_chart</mat-icon> Market
-      </a>
-    </li>
-    <li>
-      <a mat-button routerLink="/pools" routerLinkActive="active">
-        <mat-icon>bubble_chart</mat-icon> Pools
-      </a>
-    </li>
-    <li>
-      <a mat-button routerLink="/tokens" routerLinkActive="active">
-        <mat-icon>toll</mat-icon> Tokens
-      </a>
-    </li>
-    <li>
-      <a mat-button routerLink="/history" routerLinkActive="active">
-        <mat-icon>history</mat-icon> History
-      </a>
-    </li>
-    <li>
-      <a mat-button routerLink="/wallet" routerLinkActive="active">
-        <mat-icon>account_balance_wallet</mat-icon> Wallet
-      </a>
-    </li>
-  </ul>
-
-  <div class="space-between"></div>
-
-  <img class="defi-blocks" src="assets/defi2@2x.png">
 </aside>

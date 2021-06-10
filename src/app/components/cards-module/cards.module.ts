@@ -1,3 +1,4 @@
+import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -8,21 +9,25 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { CardComponent } from './card/card.component';
 import { MiningCardComponent } from './mining-card/mining-card.component';
+import { LiquidityPoolCardComponent } from './liquidity-pool-card/liquidity-pool-card.component';
 
 @NgModule({
   declarations: [
     CardComponent,
-    MiningCardComponent
+    MiningCardComponent,
+    LiquidityPoolCardComponent
   ],
   imports: [
     CommonModule,
+    RouterModule,
     MatCardModule,
     MatIconModule,
     MatButtonModule
   ],
   exports: [
     CardComponent,
-    MiningCardComponent
+    MiningCardComponent,
+    LiquidityPoolCardComponent
   ]
 })
 export class CardsModule { }

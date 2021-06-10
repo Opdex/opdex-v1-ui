@@ -9,11 +9,7 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 export class PoolsComponent implements OnInit {
   pools: any[];
 
-  constructor(
-    private _platformApiService: PlatformApiService
-  ) {
-
-  }
+  constructor(private _platformApiService: PlatformApiService) { }
 
   async ngOnInit(): Promise<void> {
     const poolsResponse = await this._platformApiService.getPools();

@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   @HostBinding('class') componentCssClass: string;
   @ViewChild('sidenav') sidenav: MatSidenav;
   message: ISidenavMessage;
-  sidenavMode: 'over' | 'side' = 'over';
+  sidenavMode: 'over' | 'side' = 'side';
   theme: string;
   loading = true;
   subscription = new Subscription();

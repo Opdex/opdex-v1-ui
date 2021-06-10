@@ -23,7 +23,7 @@
 
       <ng-container matColumnDef="wallet">
         <th mat-header-cell *matHeaderCellDef> Wallet </th>
-        <td mat-cell *matCellDef="let element"> {{element.wallet}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.wallet | shortAddress:8}} </td>
       </ng-container>
 
       <ng-container matColumnDef="time">

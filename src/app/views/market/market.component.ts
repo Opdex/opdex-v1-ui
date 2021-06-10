@@ -1,13 +1,13 @@
-import { PlatformApiService } from './../../services/api/platform-api.service';
+import { PlatformApiService } from '../../services/api/platform-api.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'opdex-overview',
-  templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.scss']
+  selector: 'opdex-market',
+  templateUrl: './market.component.html',
+  styleUrls: ['./market.component.scss']
 })
-export class OverviewComponent implements OnInit {
+export class MarketComponent implements OnInit {
   ohlcPoints: any[];
   theme$: Observable<string>;
   market: any;

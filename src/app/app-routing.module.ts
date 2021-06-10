@@ -2,7 +2,7 @@ import { HistoryComponent } from './views/history/history.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { OverviewComponent } from './views/overview/overview.component';
+import { MarketComponent } from './views/market/market.component';
 import { PoolsComponent } from './views/pools/pools.component';
 import { PoolComponent } from './views/pool/pool.component';
 import { TokensComponent } from './views/tokens/tokens.component';
@@ -11,7 +11,7 @@ import { WalletComponent } from './views/wallet/wallet.component';
 import { NotFoundComponent } from './views/not-found/not-found.component';
 
 const routes: Routes = [
-  { path: '', component: OverviewComponent },
+  { path: '', component: MarketComponent },
   { path: 'pools', component: PoolsComponent },
   { path: 'pools/:pool', component: PoolComponent },
   { path: 'tokens', component: TokensComponent },

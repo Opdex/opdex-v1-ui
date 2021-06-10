@@ -28,7 +28,7 @@ export class PoolsTableComponent implements OnChanges, AfterViewInit {
     this.dataSource.data = this.pools.map(p => {
       return {
         name: `${p.token.symbol}-CRS`,
-        stakingWeight: `376556789.83`,
+        stakingWeight: `1,984,456.8321 ODX`,
         providerRewards: '$44,795.94',
         volumeDaily: '$2,133,139',
         stakerRewards: '$14,931,973',

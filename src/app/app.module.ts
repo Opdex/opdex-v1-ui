@@ -1,8 +1,7 @@
 import { WalletService } from '@sharedServices/wallet.service';
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { ApiInterceptor } from './services/api/api-interceptor';
 import { BrowserModule } from '@angular/platform-browser';
-import { Injector, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
@@ -20,7 +19,7 @@ import { SharedModule } from '@sharedComponents/shared-module/shared.module';
 
 import { PoolsComponent } from './views/pools/pools.component';
 import { PoolComponent } from './views/pool/pool.component';
-import { OverviewComponent } from './views/overview/overview.component';
+import { MarketComponent } from './views/market/market.component';
 import { NotFoundComponent } from './views/not-found/not-found.component';
 import { TokensComponent } from './views/tokens/tokens.component';
 import { TokenComponent } from './views/token/token.component';
@@ -43,7 +42,7 @@ import { LayoutModule } from '@angular/cdk/layout';
     AppComponent,
     PoolsComponent,
     PoolComponent,
-    OverviewComponent,
+    MarketComponent,
     NotFoundComponent,
     TokensComponent,
     TokenComponent,

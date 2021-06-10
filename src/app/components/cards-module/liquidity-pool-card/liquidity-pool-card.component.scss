@@ -1,21 +1,29 @@
-.mining-pool {
+.liquidity-pool {
   h3 {
     color: #1da7dc;
     font-weight: 500;
-
-    a {
-      text-decoration: none;
-    }
   }
 
-  .add {
-    background: #00EB93;
+  .provide {
+    background: #12ee9d;
     color: #1b192f;
     font-weight: 500;
   }
 
-  .remove {
-    background: #F2435B;
+  .mine {
+    background: #f7556b;
+    color: #1b192f;
+    font-weight: 500;
+  }
+
+  .stake {
+    background: #9129f1;
+    color: #1b192f;
+    font-weight: 500;
+  }
+
+  .swap {
+    background: #1da7dc;
     color: #1b192f;
     font-weight: 500;
   }
@@ -41,4 +49,8 @@
       margin-bottom: 0px;
     }
   }
+}
+
+.mining-days-remaining {
+  color: #bebebe;
 }
