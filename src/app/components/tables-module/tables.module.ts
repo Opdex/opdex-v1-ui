@@ -1,3 +1,4 @@
+import { SharedPipesModule } from './../../pipes/shared-pipes.module';
 import { SharedModule } from '@sharedComponents/shared-module/shared.module';
 import { ChartsModule } from './../charts-module/charts.module';
 import { CardsModule } from '@sharedComponents/cards-module/cards.module';
@@ -27,7 +28,8 @@ import { TransactionsTableComponent } from './transactions-table/transactions-ta
     MatSortModule,
     CardsModule,
     ChartsModule,
-    SharedModule
+    SharedModule,
+    SharedPipesModule
   ],
   exports: [
     PoolsTableComponent,

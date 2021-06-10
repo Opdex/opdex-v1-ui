@@ -27,7 +27,7 @@
               <opdex-card>
                 <h4 class="stat-header">
                   <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Volume
+                  Total Volume (24hr)
                 </h4>
 
                 <div class="stat">
@@ -35,7 +35,7 @@
                     ${{market?.dailyVolume | formatNumber}}
                   </p>
 
-                  <opdex-change-indicator [value]="4.25"></opdex-change-indicator>
+                  <!-- <opdex-change-indicator [value]="4.25"></opdex-change-indicator> -->
                 </div>
               </opdex-card>
             </div>
@@ -44,7 +44,7 @@
               <opdex-card>
                 <h4 class="stat-header">
                   <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Liquidity
+                  Total Liquidity
                 </h4>
 
                 <div class="stat">
@@ -61,7 +61,7 @@
               <opdex-card>
                 <h4 class="stat-header">
                   <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Weight
+                  Staking Weight
                 </h4>
 
                 <div class="stat">
@@ -78,7 +78,7 @@
               <opdex-card>
                 <h4 class="stat-header">
                   <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Rewards
+                  Rewards (24hr)
                 </h4>
 
                 <div class="stat">
@@ -98,7 +98,7 @@
     <div class="row mb-5">
       <div class="col-12 col-md-6">
         <opdex-card class="p-0">
-          <opdex-line-chart [chartData]="ohlcPoints" [type]="chartType" *ngIf="ohlcPoints"></opdex-line-chart>
+          <opdex-line-chart [chartData]="ohlcPoints" title="Market Liquidity" *ngIf="ohlcPoints"></opdex-line-chart>
         </opdex-card>
       </div>
 

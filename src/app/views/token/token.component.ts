@@ -10,18 +10,14 @@ import { Observable } from 'rxjs';
   styleUrls: ['./token.component.scss']
 })
 export class TokenComponent implements OnInit {
-  chartType: string = 'Area';
   ohlcPoints: any[];
-  theme$: Observable<string>;
   tokenAddress: string;
   token: any;
 
   constructor(
-    private _themeService: ThemeService,
     private _route: ActivatedRoute,
     private _platformApiService: PlatformApiService
   ) {
-    this.theme$ = this._themeService.getTheme();
     this.tokenAddress = this._route.snapshot.params.token;
   }
 

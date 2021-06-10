@@ -32,20 +32,12 @@
           </button>
         </div>
 
-        <!-- <section class="mb-5 mt-4">
-          <mat-button-toggle-group aria-label="Transaction Type" class="w-100" value="{{message?.view}}">
-            <mat-button-toggle value="1" class="w-100" (click)="setSidenavView(1)">Swap</mat-button-toggle>
-            <mat-button-toggle value="2" class="w-100" (click)="setSidenavView(2)">Provide</mat-button-toggle>
-            <mat-button-toggle value="3" class="w-100" (click)="setSidenavView(3)">Stake</mat-button-toggle>
-            <mat-button-toggle value="4" class="w-100" (click)="setSidenavView(4)">Mine</mat-button-toggle>
-          </mat-button-toggle-group>
-        </section> -->
+        <mat-divider class="mb-3"></mat-divider>
 
-
-        <opdex-tx-box-swap class="d-flex" style="height: 100%;" *ngIf="message?.view === 1"></opdex-tx-box-swap>
-        <opdex-tx-box-provide class="d-flex" style="height: 100%;" *ngIf="message?.view === 2"></opdex-tx-box-provide>
-        <opdex-tx-box-stake class="d-flex" style="height: 100%;" *ngIf="message?.view === 3"></opdex-tx-box-stake>
-        <opdex-tx-box-mine class="d-flex" style="height: 100%;" *ngIf="message?.view === 4"></opdex-tx-box-mine>
+        <opdex-tx-swap class="d-flex" style="height: 100%;" *ngIf="message?.view === 1"></opdex-tx-swap>
+        <opdex-tx-provide class="d-flex" style="height: 100%;" *ngIf="message?.view === 2"></opdex-tx-provide>
+        <opdex-tx-stake class="d-flex" style="height: 100%;" *ngIf="message?.view === 3"></opdex-tx-stake>
+        <opdex-tx-mine class="d-flex" style="height: 100%;" *ngIf="message?.view === 4"></opdex-tx-mine>
       </div>
     </mat-sidenav>
 

@@ -6,7 +6,7 @@
 
   <ng-container *ngIf="tokens">
     <div class="row token-row" *ngFor="let token of tokens" (click)="selectToken(token)">
-      <div class="col-3">
+      <div class="col-4">
         {{token.name}}
       </div>
 
@@ -14,8 +14,8 @@
         {{token.symbol}}
       </div>
 
-      <div class="col-6">
-        {{token.address}}
+      <div class="col-5">
+        {{token.address | shortAddress:8}}
       </div>
     </div>
   </ng-container>

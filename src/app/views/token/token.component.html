@@ -1,4 +1,4 @@
-<div id="token" *ngIf="theme$ | async as theme">
+<div id="token">
   <div class="container pt-3" *ngIf="token">
     <div class="row mb-4">
       <div class="col-12">
@@ -61,7 +61,7 @@
     <div class="row mb-4">
       <div class="col-12 col-md-8">
         <opdex-card class="p-0">
-          <opdex-line-chart [theme]="theme" [chartData]="ohlcPoints" [type]="chartType" *ngIf="ohlcPoints"></opdex-line-chart>
+          <opdex-line-chart [chartData]="ohlcPoints" *ngIf="ohlcPoints"></opdex-line-chart>
         </opdex-card>
       </div>
 

@@ -1,7 +1,7 @@
 <div id="pool">
   <div class="container pt-3" *ngIf="pool">
 
-    <div class="row mb-4">
+    <div class="row mb-5">
       <div class="col">
         <h1 class="mb-3">{{pool.token.symbol}}-CRS</h1>
         <mat-chip-list aria-label="Amenities">
@@ -15,7 +15,7 @@
         <!-- search bar component-->
       </div>
     </div>
-    <div class="row mb-4">
+    <div class="row mb-5">
       <div class="col-12">
         <div class="stats">
           <div class="row mb-4">
@@ -130,10 +130,10 @@
       </div>
     </div>
 
-    <div class="row mb-4">
+    <div class="row mb-5">
       <div class="col-12 col-md-6">
         <opdex-card class="p-0">
-          <opdex-line-chart [chartData]="ohlcPoints" [type]="chartType" *ngIf="ohlcPoints"></opdex-line-chart>
+          <opdex-line-chart [chartData]="ohlcPoints" title="{{pool.token.symbol}}-CRS Liquidity" *ngIf="ohlcPoints"></opdex-line-chart>
         </opdex-card>
       </div>
 
@@ -144,7 +144,7 @@
       </div>
     </div>
 
-    <div class="row mb-4">
+    <div class="row mb-5">
       <div class="col-12">
         <div class="row">
           <div class="col-3">
@@ -245,7 +245,7 @@
       </div>
     </div>
 
-    <div class="row mb-4">
+    <div class="row mb-5">
       <div class="col-12">
         <h2>Recent Transactions</h2>
         <opdex-transactions-table></opdex-transactions-table>

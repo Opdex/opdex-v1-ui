@@ -1,6 +1,5 @@
 import { PlatformApiService } from './../../services/api/platform-api.service';
 import { Component, OnInit } from '@angular/core';
-import { ThemeService } from '@sharedServices/theme.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -9,19 +8,13 @@ import { Observable } from 'rxjs';
   styleUrls: ['./overview.component.scss']
 })
 export class OverviewComponent implements OnInit {
-  chartType: string = 'Area';
   ohlcPoints: any[];
   theme$: Observable<string>;
   market: any;
   pools: any[];
   tokens: any[];
 
-  constructor(
-    private _themeService: ThemeService,
-    private _platformApiService: PlatformApiService
-  ) {
-    this.theme$ = this._themeService.getTheme();
-  }
+  constructor(private _platformApiService: PlatformApiService) { }
 
   async ngOnInit(): Promise<void> {
     setTimeout(() => this.ohlcPoints = [], 100)

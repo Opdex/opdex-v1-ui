@@ -1,10 +1,8 @@
-import { AfterViewInit, Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { ThemeService } from '@sharedServices/theme.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'opdex-tokens-table',
@@ -19,9 +17,9 @@ export class TokensTableComponent implements OnChanges, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private _themeService: ThemeService, private _router: Router) {
+  constructor(private _router: Router) {
     this.dataSource = new MatTableDataSource<any>();
-    this.displayedColumns = ['name', 'symbol', 'price', 'change', 'price7d'];
+    this.displayedColumns = ['name', 'address', 'symbol', 'price', 'change', 'price7d'];
   }
 
   ngOnChanges() {

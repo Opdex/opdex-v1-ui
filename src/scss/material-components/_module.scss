@@ -19,7 +19,9 @@
 }
 
 .mat-form-field {
-  width: 100% !important;
+  &:not(.mat-paginator-page-size-select) {
+    width: 100% !important;
+  }
 }
 
 .mat-form-field-infix {

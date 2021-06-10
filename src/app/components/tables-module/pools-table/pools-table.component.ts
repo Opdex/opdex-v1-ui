@@ -1,8 +1,6 @@
-import { AfterViewInit, Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { ThemeService } from '@sharedServices/theme.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 
@@ -19,7 +17,7 @@ export class PoolsTableComponent implements OnChanges, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private _themeService: ThemeService, private _router: Router) {
+  constructor(private _router: Router) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['name', 'liquidity', 'stakingWeight', 'volumeDaily', 'providerRewards', 'stakerRewards', 'liquidityHistory'];
   }

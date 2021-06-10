@@ -1,7 +1,7 @@
 import { ElementRef, Input } from '@angular/core';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ResizedEvent } from 'angular-resize-event';
-import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
+import { createChart, IChartApi, ISeriesApi, MouseEventParams } from 'lightweight-charts';
 
 const volume = [
 	{ time: '2018-10-19', value: 19103293.00, color: 'rgba(71, 188, 235, .7)' },
@@ -164,9 +164,7 @@ const volume = [
 export class VolumeChartComponent implements OnInit {
   @ViewChild('volumeChart') container: ElementRef;
   @Input() title: string;
-  @Input() valueKey: string;
-  @Input() otherText: string
-  @Input() theme: string;
+  @Input() value: string;
   @Input() chartData: any;
   volumeSeries: ISeriesApi<'Histogram'>;
   chart: IChartApi;
@@ -183,6 +181,8 @@ export class VolumeChartComponent implements OnInit {
       if (this.loading) {
         this.chart.timeScale().fitContent()
         this.loading = false;
+        this.setLastBarText();
+        this.chart.subscribeCrosshairMove(params => this.crosshairMovedHandler(params));
       }
     }
   }
@@ -229,6 +229,18 @@ export class VolumeChartComponent implements OnInit {
       }
     }
     return '$'+(num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
+  }
+
+  crosshairMovedHandler(param: MouseEventParams): void {
+    if ( param === undefined || param.time === undefined || param.point.x < 0 || param.point.y < 0) {
+      this.setLastBarText();
+    } else {
+      this.value = this.nFormatter(param.seriesPrices.values().next().value, 2);
+    }
+  }
+
+  private setLastBarText() {
+    this.value = this.nFormatter(volume[volume.length - 1].value, 2);
   }
 
   private applyChartOptions() {

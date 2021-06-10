@@ -10,12 +10,10 @@ import { Observable } from 'rxjs';
   styleUrls: ['./transactions-table.component.scss']
 })
 export class TransactionsTableComponent implements OnInit {
-  theme$: Observable<string>;
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
 
-  constructor(private _themeService: ThemeService, private _router: Router) {
-    this.theme$ = this._themeService.getTheme();
+  constructor(private _router: Router) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['action', 'value', 'amount0', 'amount1', 'wallet', 'time'];
   }

@@ -1,39 +1,39 @@
 import { Component, ElementRef, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { ResizedEvent } from 'angular-resize-event';
-import { createChart, ISeriesApi, IChartApi, LineWidth, DeepPartial } from 'lightweight-charts';
+import { createChart, ISeriesApi, IChartApi, LineWidth, DeepPartial, MouseEventParams } from 'lightweight-charts';
 
-const garbagePoints = [
-  { time: '2019-04-12', value: 79.43 },
-  { time: '2019-04-15', value: 78.53 },
-  { time: '2019-04-16', value: 77.56 },
-  { time: '2019-04-17', value: 73.92 },
-  { time: '2019-04-18', value: 73.19 },
-  { time: '2019-04-22', value: 73.46 },
-  { time: '2019-04-23', value: 74.60 },
-  { time: '2019-04-24', value: 74.73 },
-  { time: '2019-04-25', value: 76.34 },
-  { time: '2019-04-26', value: 76.63 },
-  { time: '2019-04-29', value: 76.78 },
-  { time: '2019-04-30', value: 78.71 },
-  { time: '2019-05-01', value: 78.72 },
-  { time: '2019-05-02', value: 79.52 },
-  { time: '2019-05-03', value: 80.00 },
-  { time: '2019-05-06', value: 79.48 },
-  { time: '2019-05-07', value: 77.90 },
-  { time: '2019-05-08', value: 78.18 },
-  { time: '2019-05-09', value: 78.33 },
-  { time: '2019-05-10', value: 78.19 },
-  { time: '2019-05-13', value: 77.17 },
-  { time: '2019-05-14', value: 77.42 },
-  { time: '2019-05-15', value: 77.55 },
-  { time: '2019-05-16', value: 79.13 },
-  { time: '2019-05-17', value: 78.72 },
-  { time: '2019-05-20', value: 78.88 },
-  { time: '2019-05-21', value: 79.50 },
-  { time: '2019-05-22', value: 80.98 },
-  { time: '2019-05-23', value: 81.02 },
-  { time: '2019-05-24', value: 81.17 },
-  { time: '2019-05-28', value: 81.10 }];
+const data = [
+  { time: '2019-04-12', value: 7900000.43 },
+  { time: '2019-04-15', value: 7800000.53 },
+  { time: '2019-04-16', value: 7700000.56 },
+  { time: '2019-04-17', value: 7300000.92 },
+  { time: '2019-04-18', value: 7300000.19 },
+  { time: '2019-04-22', value: 7300000.46 },
+  { time: '2019-04-23', value: 7400000.60 },
+  { time: '2019-04-24', value: 7400000.73 },
+  { time: '2019-04-25', value: 7600000.34 },
+  { time: '2019-04-26', value: 7600000.63 },
+  { time: '2019-04-29', value: 7600000.78 },
+  { time: '2019-04-30', value: 7800000.71 },
+  { time: '2019-05-01', value: 7800000.72 },
+  { time: '2019-05-02', value: 7900000.52 },
+  { time: '2019-05-03', value: 8000000.00 },
+  { time: '2019-05-06', value: 7900000.48 },
+  { time: '2019-05-07', value: 7700000.90 },
+  { time: '2019-05-08', value: 7800000.18 },
+  { time: '2019-05-09', value: 7800000.33 },
+  { time: '2019-05-10', value: 7800000.19 },
+  { time: '2019-05-13', value: 7700000.17 },
+  { time: '2019-05-14', value: 7700000.42 },
+  { time: '2019-05-15', value: 7700000.55 },
+  { time: '2019-05-16', value: 7900000.13 },
+  { time: '2019-05-17', value: 7800000.72 },
+  { time: '2019-05-20', value: 7800000.88 },
+  { time: '2019-05-21', value: 7900000.50 },
+  { time: '2019-05-22', value: 8000000.98 },
+  { time: '2019-05-23', value: 8100000.02 },
+  { time: '2019-05-24', value: 8100000.17 },
+  { time: '2019-05-28', value: 8100000.10 }];
 @Component({
   selector: 'opdex-line-chart',
   templateUrl: './line-chart.component.html',
@@ -42,85 +42,36 @@ const garbagePoints = [
 export class LineChartComponent implements OnInit, OnChanges {
   @ViewChild('chartContainer') container: ElementRef;
   @Input() title: string;
-  @Input() valueKey: string;
-  @Input() otherText: string
-  @Input() theme: string;
   @Input() chartData: any;
-  @Input() type: string;
+  value: string;
   lineSeries: ISeriesApi<'Area'>;
-  barSeries: ISeriesApi<'Candlestick'>;
-  volumeSeries: ISeriesApi<'Histogram'>;
   chart: IChartApi;
-  redColor = 'rgba(226, 90, 57, 0.8)';
-  greenColor = 'rgba(83, 158, 87, 0.8)';
   loading = true;
 
   ngOnChanges() {
     this.ngOnInit();
 
     if (this.chartData) {
-      if (this.type === 'Candlestick') {
-        if (!this.barSeries) {
-          this.barSeries = this.chart.addCandlestickSeries({
-            downColor: this.redColor,
-            borderDownColor: this.redColor,
-            wickDownColor: this.redColor,
-            upColor: this.greenColor,
-            borderUpColor: this.greenColor,
-            wickUpColor: this.greenColor
-          });
-        }
-
-        this.barSeries.setData(this.chartData);
-
-        if (this.lineSeries) {
-          this.chart.removeSeries(this.lineSeries);
-          this.lineSeries = <ISeriesApi<'Area'>>{};
-        }
-      }
-      else if (this.type === 'Area') {
-        const data: any = garbagePoints.map(point => {
-          point.value += 24342272;
-          return point;
+      if (!this.lineSeries) {
+        this.lineSeries = this.chart.addAreaSeries({
+          lineColor: 'rgba(71, 188, 235, .7)',
+          lineWidth: <DeepPartial<LineWidth>>6,
+          topColor: 'transparent',
+          bottomColor: 'transparent',
+          priceLineVisible: false,
+          lastValueVisible: false
         });
-
-        if (!this.lineSeries) {
-          this.lineSeries = this.chart.addAreaSeries({
-            lineColor: 'rgba(71, 188, 235, .7)',
-            lineWidth: <DeepPartial<LineWidth>>6,
-            topColor: 'transparent',
-            bottomColor: 'transparent',
-            priceLineVisible: false,
-            lastValueVisible: false
-          });
-        }
-
-        this.lineSeries.setData(data);
-
-        if (this.barSeries) {
-          this.chart.removeSeries(this.barSeries);
-          this.lineSeries = <ISeriesApi<'Area'>>{};
-        }
       }
 
-      // Volume series no matter which chart type
-      this.volumeSeries.setData(this.chartData.map((point:any) => {
-        return {
-          time: point.time,
-          value: point.tradeVolume,
-          color: this.theme === 'light-mode'
-            ? 'rgba(196, 196, 196, .7)'
-            : 'rgba(50, 50, 50, .7)'
-        }
-      }));
+      this.lineSeries.setData(data);
 
       this.applyChartOptions();
-
-
 
       if (this.loading) {
         this.chart.timeScale().fitContent()
         this.loading = false;
+        this.setLastBarText();
+        this.chart.subscribeCrosshairMove(params => this.crosshairMovedHandler(params));
       }
     }
   }
@@ -128,31 +79,20 @@ export class LineChartComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     if (!this.chart) {
       this.chart = createChart('chartdiv', {
-        // width: 850,
-        height: 300,
         localization: {
           priceFormatter: (price: number) => {
-            // return `$${price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
-
-            // if (price > 1000000 && price <= 999999999) {
-            //   return `$${price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
-            // }
-
             return this.nFormatter(price, 2);
           }
         },
       });
+    }
+  }
 
-      this.volumeSeries = this.chart.addHistogramSeries({
-        priceFormat: {
-          type: 'volume',
-        },
-        priceScaleId: '',
-        scaleMargins: {
-          top: 0.8,
-          bottom: 0,
-        }
-      });
+  crosshairMovedHandler(param: MouseEventParams): void {
+    if ( param === undefined || param.time === undefined || param.point.x < 0 || param.point.y < 0) {
+      this.setLastBarText();
+    } else {
+      this.value = this.nFormatter(param.seriesPrices.values().next().value, 2);
     }
   }
 
@@ -183,16 +123,20 @@ export class LineChartComponent implements OnInit, OnChanges {
     return '$'+(num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
   }
 
+  private setLastBarText() {
+    this.value = this.nFormatter(data[data.length - 1].value, 2);
+  }
+
   private applyChartOptions() {
     this.chart.applyOptions({
       grid: {
         vertLines: {
-          color: this.theme === 'dark-mode' ? '#111' : '#f4f4f4',
+          color: '#f4f4f4',
           style: 1,
           visible: false,
         },
         horzLines: {
-          color: this.theme === 'dark-mode' ? '#111' : '#f4f4f4',
+          color: '#f4f4f4',
           style: 1,
           visible: false,
         },
@@ -229,5 +173,6 @@ export class LineChartComponent implements OnInit, OnChanges {
 
   ngOnDestroy() {
     this.chart.remove();
+    this.chart.unsubscribeCrosshairMove(this.crosshairMovedHandler);
   }
 }

@@ -9,7 +9,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SidebarModule } from './components/sidebar-module/sidebar.module';
-import { TxBoxModule } from './components/tx-box-module/tx-box.module';
+import { TransactionModule } from './components/tx-module/tx.module';
 import { ChartsModule } from './components/charts-module/charts.module';
 import { TablesModule } from '@sharedComponents/tables-module/tables.module';
 import { ModalsModule } from '@sharedComponents/modals-module/modals.module';
@@ -30,7 +30,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { HoldingsComponent } from './views/holdings/holdings.component';
+import { WalletComponent } from './views/wallet/wallet.component';
 import { HistoryComponent } from './views/history/history.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -47,7 +47,7 @@ import { LayoutModule } from '@angular/cdk/layout';
     NotFoundComponent,
     TokensComponent,
     TokenComponent,
-    HoldingsComponent,
+    WalletComponent,
     HistoryComponent
   ],
   imports: [
@@ -56,7 +56,7 @@ import { LayoutModule } from '@angular/cdk/layout';
     HttpClientModule,
     BrowserAnimationsModule,
     SidebarModule,
-    TxBoxModule,
+    TransactionModule,
     ChartsModule,
     TablesModule,
     ModalsModule,

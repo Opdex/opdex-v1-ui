@@ -1,8 +1,6 @@
 import { PlatformApiService } from './../../services/api/platform-api.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { ThemeService } from '../../services/theme.service';
 import { SidenavService } from '@sharedServices/sidenav.service';
 import { SidenavView } from '@sharedModels/sidenav-view';
 
@@ -12,20 +10,16 @@ import { SidenavView } from '@sharedModels/sidenav-view';
   styleUrls: ['./pool.component.scss']
 })
 export class PoolComponent implements OnInit {
-  chartType: string = 'Area';
   ohlcPoints: any[];
-  theme$: Observable<string>;
   poolAddress: string;
   pool: any;
   transactions: any[];
 
   constructor(
-    private _themeService: ThemeService,
     private _route: ActivatedRoute,
     private _platformApiService: PlatformApiService,
     private _sidenav: SidenavService
   ) {
-    this.theme$ = this._themeService.getTheme();
     this.poolAddress = this._route.snapshot.params.pool;
   }
 
@@ -62,6 +56,5 @@ export class PoolComponent implements OnInit {
     }
 
     this.transactions = transactionsResponse.data;
-    console.log(this.transactions)
   }
 }

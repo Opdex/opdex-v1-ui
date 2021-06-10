@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { ThemeService } from '../../../services/theme.service';
 import { ConnectWalletModalComponent } from '../../modals-module/connect-wallet-modal/connect-wallet-modal.component';
 
 @Component({
@@ -9,21 +8,10 @@ import { ConnectWalletModalComponent } from '../../modals-module/connect-wallet-
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent {
   theme$: Observable<string>;
 
-  constructor(
-    private _theme: ThemeService,
-    private _dialog: MatDialog
-  ) {
-    this.theme$ = this._theme.getTheme();
-  }
-
-  ngOnInit(): void { }
-
-  setTheme(theme: string) {
-    this._theme.setTheme(theme);
-  }
+  constructor(private _dialog: MatDialog) { }
 
   openConnectWalletModal(): void {
     this._dialog.open(ConnectWalletModalComponent, {

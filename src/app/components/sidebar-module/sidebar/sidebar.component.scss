@@ -3,6 +3,14 @@ aside {
   display: flex;
   flex-direction: column;
   height: 100%;
+  border-right: 1px solid #292929;
+  background: rgba(27,25,47, .9);
+  background: radial-gradient(circle, rgba(46, 102, 122, 0.1) 0%, rgba(27,25,47, .9) 80%);
+
+  .mat-button {
+    width: 100%;
+    text-align: left;
+  }
 
   h1 {
     text-align: center;
@@ -22,6 +30,14 @@ aside {
 
     img {
       width: 100%;
+      max-width: 80px;
+      margin-right: 15px;
+    }
+
+    p {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 0px;
     }
   }
 
@@ -31,25 +47,29 @@ aside {
 
     li {
       margin: 10px 0;
-      text-align: center;
-      // padding: 10px 0;
+      width: 100%;
+
+      a {
+        &.active, &:hover {
+          color: #1ca7dc;
+        }
+      }
 
       .mat-icon {
-        // color: #fff;
         font-size: 32px;
         height: 32px;
         width: 32px;
-        margin: 10px 0;
+        margin: 10px 30px 10px 10px;
       }
     }
   }
 
   .defi-blocks {
-    position: absolute;
-    right: -20px;
+    position: fixed;
+    left: 20px;
     width: 100px;
     bottom: 25px;
-    z-index: 99;
+    z-index: 9999;
   }
 
   .connection-theme-row {
@@ -83,16 +103,4 @@ aside {
       }
     }
   }
-}
-
-
-.background {
-  filter: blur(25px);
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-
-.foreground {
-  backdrop-filter: blur(50px);
 }

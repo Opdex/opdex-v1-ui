@@ -1,0 +1,11 @@
+<div class="remove-liquidity">
+  <mat-button-toggle-group aria-label="Transaction Type" class="w-100 mb-3" value="1">
+    <mat-button-toggle value="1" class="w-100">Start</mat-button-toggle>
+    <mat-button-toggle value="3" class="w-100">Stop</mat-button-toggle>
+    <mat-button-toggle value="4" class="w-100">Collect</mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <p>Connect your wallet to view your liquidity position.</p>
+  <div class="space-between"></div>
+  <button mat-stroked-button color="primary" class="w-100" (click)="connectWallet()">Connect Wallet</button>
+</div>

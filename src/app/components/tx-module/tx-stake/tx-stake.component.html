@@ -1,0 +1,50 @@
+<div class="staking">
+  <mat-button-toggle-group aria-label="Transaction Type" class="w-100 mb-3" value="1">
+    <mat-button-toggle value="1" class="w-100">Start</mat-button-toggle>
+    <mat-button-toggle value="3" class="w-100">Stop</mat-button-toggle>
+    <mat-button-toggle value="4" class="w-100">Collect</mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <form [formGroup]="form" name="add-liquidity" id="add-liquidity-form">
+    <div class="exactly swap-row">
+      <div class="spend-receive-button">
+        <button mat-icon-button color="primary" type="button" class="small" disabled><mat-icon>add</mat-icon></button>
+      </div>
+
+      <div class="amount">
+        <mat-form-field appearance="outline" class="w-100" >
+          <input matInput type="text" [required]="true" [formControl]="token0Amount" autocomplete="off" placeholder="0">
+        </mat-form-field>
+      </div>
+
+      <div class="token">
+        <button mat-stroked-button color="primary" type="button" disabled>CRS</button>
+      </div>
+    </div>
+
+
+    <div class="exactly swap-row">
+      <div class="spend-receive-button">
+        <button mat-icon-button color="primary" type="button" class="small" disabled><mat-icon>add</mat-icon></button>
+      </div>
+
+      <div class="amount">
+        <mat-form-field appearance="outline" class="w-100">
+          <input matInput type="text" [required]="true" [formControl]="token1Amount" autocomplete="off" placeholder="0">
+        </mat-form-field>
+      </div>
+
+      <div class="token">
+        <button mat-stroked-button color="primary" type="button" (click)="changeToken()">{{token1Details?.symbol || 'Select Token'}}</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="space-between"></div>
+
+  <div *ngIf="txHash">
+    {{txHash}}
+  </div>
+
+  <button mat-stroked-button color="primary" class="mt-4 w-100" (click)="submit()">Add Liquidity</button>
+</div>
