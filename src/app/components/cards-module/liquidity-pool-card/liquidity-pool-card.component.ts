@@ -8,25 +8,25 @@ import { SidenavService } from '@sharedServices/sidenav.service';
   styleUrls: ['./liquidity-pool-card.component.scss']
 })
 export class LiquidityPoolCardComponent implements OnInit {
-  @Input() pool: string = "ODX/CRS";
+  @Input() pool: any;
 
   constructor(private _sidebar: SidenavService) { }
 
   ngOnInit(): void { }
 
   provide() {
-    this._sidebar.openSidenav(SidenavView.pool);
+    this._sidebar.openSidenav(SidenavView.pool, {pool: this.pool});
   }
 
   swap() {
-    this._sidebar.openSidenav(SidenavView.swap);
+    this._sidebar.openSidenav(SidenavView.swap, {pool: this.pool});
   }
 
   stake() {
-    this._sidebar.openSidenav(SidenavView.stake);
+    this._sidebar.openSidenav(SidenavView.stake, {pool: this.pool});
   }
 
   mine() {
-    this._sidebar.openSidenav(SidenavView.mine);
+    this._sidebar.openSidenav(SidenavView.mine, {pool: this.pool});
   }
 }

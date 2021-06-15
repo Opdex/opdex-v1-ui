@@ -63,7 +63,7 @@ export class LineChartComponent implements OnInit, OnChanges {
         });
       }
 
-      this.lineSeries.setData(data);
+      this.lineSeries.setData(this.chartData || data);
 
       this.applyChartOptions();
 
@@ -124,7 +124,9 @@ export class LineChartComponent implements OnInit, OnChanges {
   }
 
   private setLastBarText() {
-    this.value = this.nFormatter(data[data.length - 1].value, 2);
+    if (this.chartData && this.chartData.length > 0) {
+      this.value = this.nFormatter(this.chartData[this.chartData.length - 1].value, 2);
+    }
   }
 
   private applyChartOptions() {
@@ -151,7 +153,7 @@ export class LineChartComponent implements OnInit, OnChanges {
       timeScale: {
         visible: true,
         timeVisible: true,
-        secondsVisible: false,
+        secondsVisible: true,
         borderVisible: false
       },
       rightPriceScale: {

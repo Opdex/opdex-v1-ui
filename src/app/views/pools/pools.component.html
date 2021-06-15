@@ -8,20 +8,9 @@
           <div class="col-12">
             <h3>Top Volume</h3>
           </div>
-          <div class="col-3">
-            <opdex-liquidity-pool-card pool="ODX/CRS"></opdex-liquidity-pool-card>
-          </div>
 
-          <div class="col-3">
-            <opdex-liquidity-pool-card pool="xBTC/CRS"></opdex-liquidity-pool-card>
-          </div>
-
-          <div class="col-3">
-            <opdex-liquidity-pool-card pool="xETH/CRS"></opdex-liquidity-pool-card>
-          </div>
-
-          <div class="col-3">
-            <opdex-liquidity-pool-card pool="xBNB/CRS"></opdex-liquidity-pool-card>
+          <div class="col-3" *ngFor="let pool of poolsByVolume; let i = index">
+            <opdex-liquidity-pool-card [pool]="pool" *ngIf="i < 4"></opdex-liquidity-pool-card>
           </div>
         </div>
       </div>
@@ -33,21 +22,8 @@
         <h3>Liquidity Mining</h3>
 
         <div class="row">
-          <div class="col-3">
-            <opdex-mining-card pool="GBPT/CRS"></opdex-mining-card>
-          </div>
-
-          <div class="col-3">
-            <opdex-mining-card pool="xBNB/CRS"></opdex-mining-card>
-
-          </div>
-
-          <div class="col-3">
-            <opdex-mining-card pool="xBTC/CRS"></opdex-mining-card>
-          </div>
-
-          <div class="col-3">
-            <opdex-mining-card pool="xETH/CRS"></opdex-mining-card>
+          <div class="col-3" *ngFor="let pool of pools">
+            <opdex-mining-card [pool]="pool" *ngIf="pool.miningEnabled"></opdex-mining-card>
           </div>
         </div>
       </div>

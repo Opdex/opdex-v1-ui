@@ -6,17 +6,15 @@ import { Pipe, PipeTransform } from "@angular/core";
 export class FormatNumberPipe implements PipeTransform {
   constructor() { }
 
-  transform(value: number): number | string {
-    if (typeof value === 'number') {
-      return this.numberWithCommas(value);
-    }
+  transform(value: number | string, decimals: number = 2): string {
+    if (value == null) value = 0;
 
-    return 0;
-  }
+    let parts: string[] = typeof value === 'number'
+      ? value.toFixed(decimals).toString().split('.')
+      : parseFloat(value).toFixed(decimals).split('.');
 
-  numberWithCommas(x) {
-    let parts = x.toString().split('.');
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
     return parts.join('.');
   }
 }

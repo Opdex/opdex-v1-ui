@@ -1,18 +1,18 @@
-<div class="swap">
+<opdex-card class="swap">
   <form [formGroup]="form" name="swap-form" id="swap-form">
     <div class="exactly swap-row">
       <div class="spend-receive-button">
-        <button mat-icon-button color="primary" type="button" class="small" (click)="toggleTokenInExactly()"><mat-icon>{{tokenInExactly ? 'add' : 'remove'}}</mat-icon></button>
+        <button mat-icon-button color="primary" type="button" class="small" (click)="toggleToken0In()"><mat-icon>{{token0In ? 'add' : 'remove'}}</mat-icon></button>
       </div>
 
       <div class="amount">
         <mat-form-field appearance="outline" class="w-100" >
-          <input matInput type="text" [required]="true" [formControl]="tokenInAmount" autocomplete="off" placeholder="0">
+          <input matInput type="text" [required]="true" [formControl]="token0Amount" autocomplete="off" placeholder="0">
         </mat-form-field>
       </div>
 
       <div class="token">
-        <button mat-stroked-button color="primary" type="button" (click)="changeToken('tokenIn')">{{tokenInDetails?.symbol || 'CRS'}}</button>
+        <button mat-stroked-button color="primary" type="button" (click)="changeToken('token0')">{{token0Details?.symbol || 'CRS'}}</button>
       </div>
     </div>
 
@@ -22,24 +22,24 @@
 
     <div class="exactly swap-row">
       <div class="spend-receive-button">
-        <button mat-icon-button color="primary" type="button" class="small" (click)="toggleTokenInExactly()"><mat-icon>{{!tokenInExactly ? 'add' : 'remove'}}</mat-icon></button>
+        <button mat-icon-button color="primary" type="button" class="small" (click)="toggleToken0In()"><mat-icon>{{!token0In ? 'add' : 'remove'}}</mat-icon></button>
       </div>
 
       <div class="amount">
         <mat-form-field appearance="outline" class="w-100">
-          <input matInput type="text" [value]="tokenOutAmount?.value" placeholder="0" disabled>
+          <input matInput type="text" [value]="token1Amount?.value" placeholder="0" disabled>
         </mat-form-field>
       </div>
 
       <div class="token">
-        <button mat-stroked-button color="primary" type="button" (click)="changeToken('tokenOut')">{{tokenOutDetails?.symbol || 'Select Token'}}</button>
+        <button mat-stroked-button color="primary" type="button" (click)="changeToken('token1')">{{token1Details?.symbol || 'Select Token'}}</button>
       </div>
     </div>
   </form>
 
   <div class="space-between"></div>
 
-  <!-- <div class="swap-info mt-1" *ngIf="form.controls.tokenIn.value > 0 && form.controls.to.value > 0">
+  <!-- <div class="swap-info mt-1" *ngIf="form.controls.token0.value > 0 && form.controls.to.value > 0">
     <p class="mb-0">Slippage: .1%</p>
     <p class="mb-0">Minimum Received: 12345</p>
     <p class="mb-0">Price: 12345</p>
@@ -48,8 +48,8 @@
   </div> -->
 
   <div *ngIf="txHash">
-    {{txHash}}
+    <span style="font-size: 10px;">{{txHash}}</span>
   </div>
 
   <button mat-flat-button color="primary" class="mt-4 w-100" (click)="submit()">Swap</button>
-</div>
+</opdex-card>

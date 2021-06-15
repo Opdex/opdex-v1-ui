@@ -1,6 +1,6 @@
-<opdex-card class="mining-pool">
+<opdex-card class="mining-pool" *ngIf="pool">
   <div class="d-flex justify-content-between align-items-center">
-    <h3 class="d-inline mb-0"><a href="javascript:void(0)" [routerLink]="['pools', pool]">{{pool}}</a></h3>
+    <h3 class="d-inline mb-0"><a href="javascript:void(0)" [routerLink]="['/pools', pool.address]">{{pool.token.symbol}}/CRS</a></h3>
     <div>
       <button mat-icon-button class="remove small mr-2" (click)="stopMining()"><mat-icon>remove</mat-icon></button>
       <button mat-icon-button class="add small" (click)="startMining()"><mat-icon>add</mat-icon></button>

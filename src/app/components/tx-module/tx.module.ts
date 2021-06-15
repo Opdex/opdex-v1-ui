@@ -1,3 +1,4 @@
+import { SharedPipesModule } from './../../pipes/shared-pipes.module';
 import { CardsModule } from '@sharedComponents/cards-module/cards.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -13,6 +14,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { TxSwapComponent } from './tx-swap/tx-swap.component';
 import { TxProvideComponent } from './tx-provide/tx-provide.component';
@@ -26,6 +28,8 @@ import { TxStakeStartComponent } from './tx-stake/tx-stake-start/tx-stake-start.
 import { TxStakeStopComponent } from './tx-stake/tx-stake-stop/tx-stake-stop.component';
 import { TxProvideAddComponent } from './tx-provide/tx-provide-add/tx-provide-add.component';
 import { TxProvideRemoveComponent } from './tx-provide/tx-provide-remove/tx-provide-remove.component';
+import { TxAllowanceComponent } from './tx-allowance/tx-allowance.component';
+import { PoolPreviewComponent } from './shared/pool-preview/pool-preview.component';
 
 
 @NgModule({
@@ -41,7 +45,9 @@ import { TxProvideRemoveComponent } from './tx-provide/tx-provide-remove/tx-prov
     TxStakeStartComponent,
     TxStakeStopComponent,
     TxProvideAddComponent,
-    TxProvideRemoveComponent
+    TxProvideRemoveComponent,
+    TxAllowanceComponent,
+    PoolPreviewComponent,
   ],
   imports: [
     CommonModule,
@@ -55,13 +61,16 @@ import { TxProvideRemoveComponent } from './tx-provide/tx-provide-remove/tx-prov
     MatDialogModule,
     MatSelectModule,
     MatDividerModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatCheckboxModule,
+    SharedPipesModule
   ],
   exports: [
     TxSwapComponent,
     TxProvideComponent,
     TxMineComponent,
-    TxStakeComponent
+    TxStakeComponent,
+    TxAllowanceComponent
   ]
 })
 export class TransactionModule { }

@@ -24,7 +24,8 @@ export class TxStakeCollectComponent extends TxBase implements OnInit {
     super(_dialog);
 
     this.form = this._fb.group({
-      pool: ['', [Validators.required]]
+      pool: ['', [Validators.required]],
+      liquidate: [false, [Validators.required]]
     });
   }
 

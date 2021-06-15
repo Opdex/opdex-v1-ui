@@ -9,6 +9,12 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 export class PoolsComponent implements OnInit {
   pools: any[];
 
+  get poolsByVolume() {
+    const pools = this.pools ? [...this.pools] : [];
+
+    return pools.sort((a, b) => b.summary.volume.usd - a.summary.volume.usd);
+  }
+
   constructor(private _platformApiService: PlatformApiService) { }
 
   async ngOnInit(): Promise<void> {

@@ -24,7 +24,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                   <h4 class="mb-0">1 {{pool.token.symbol}} ($1)</h4>
                   <mat-icon>swap_horiz</mat-icon>
-                  <h4 class="mb-0">0.5 CRS</h4>
+                  <h4 class="mb-0">{{pool.summary.cost.crsPerSrc.close | formatNumber:4}} CRS</h4>
                 </div>
               </opdex-card>
             </div>
@@ -34,7 +34,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                   <h4 class="mb-0">1 CRS ($2)</h4>
                   <mat-icon>swap_horiz</mat-icon>
-                  <h4 class="mb-0">2 {{pool.token.symbol}}</h4>
+                  <h4 class="mb-0">{{pool.summary.cost.srcPerCrs.close | formatNumber:4}} {{pool.token.symbol}}</h4>
                 </div>
               </opdex-card>
             </div>
@@ -43,7 +43,7 @@
               <opdex-card>
                 <div class="d-flex justify-content-between align-items-center">
                   <h4 class="mb-0">Pool Balance</h4>
-                    <h4 class="mb-0">1.12M CRS</h4>
+                    <h4 class="mb-0">{{pool.summary.reserves.crs | formatNumber:4}} CRS</h4>
                 </div>
               </opdex-card>
             </div>
@@ -52,7 +52,7 @@
               <opdex-card>
                 <div class="d-flex justify-content-between align-items-center">
                   <h4 class="mb-0">Pool Balance</h4>
-                  <h4 class="mb-0">103 {{pool.token.symbol}}</h4>
+                  <h4 class="mb-0">{{pool.summary.reserves.src | formatNumber:4}} {{pool.token.symbol}}</h4>
                 </div>
               </opdex-card>
             </div>
@@ -61,13 +61,13 @@
             <div class="col">
               <opdex-card>
                 <h4 class="stat-header">
-                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
                   Liquidity
+                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
                 </h4>
 
                 <div class="stat">
                   <p class="stat-value">
-                    $11.87M
+                    ${{pool.summary.reserves.usd | formatNumber}}
                   </p>
 
                   <opdex-change-indicator [value]="-10.12"></opdex-change-indicator>
@@ -78,30 +78,13 @@
             <div class="col">
               <opdex-card>
                 <h4 class="stat-header">
-                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Volume (24hr)
+                  Volume <small class="ml-2">(24hr)</small>
+                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
                 </h4>
 
                 <div class="stat">
                   <p class="stat-value">
-                    $1.43M
-                  </p>
-
-                  <opdex-change-indicator [value]="4.25"></opdex-change-indicator>
-                </div>
-              </opdex-card>
-            </div>
-
-            <div class="col">
-              <opdex-card>
-                <h4 class="stat-header">
-                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Rewards (24hr)
-                </h4>
-
-                <div class="stat">
-                  <p class="stat-value">
-                    $21,854.23
+                    ${{pool.summary.volume.usd | formatNumber}}
                   </p>
 
                   <!-- <opdex-change-indicator [value]="4.25"></opdex-change-indicator> -->
@@ -112,13 +95,30 @@
             <div class="col">
               <opdex-card>
                 <h4 class="stat-header">
-                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Staking Weight
+                  Rewards <small class="ml-2">(24hr)</small>
+                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
                 </h4>
 
                 <div class="stat">
                   <p class="stat-value">
-                    1.25M ODX
+                    ${{pool.summary.rewards.totalUsd | formatNumber}}
+                  </p>
+
+                  <!-- <opdex-change-indicator [value]="4.25"></opdex-change-indicator> -->
+                </div>
+              </opdex-card>
+            </div>
+
+            <div class="col">
+              <opdex-card>
+                <h4 class="stat-header">
+                  Staking Weight
+                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
+                </h4>
+
+                <div class="stat">
+                  <p class="stat-value">
+                    {{pool.summary.staking.weight | formatNumber:4}} ODX
                   </p>
 
                   <opdex-change-indicator [value]="4.25"></opdex-change-indicator>
@@ -133,13 +133,13 @@
     <div class="row mb-5">
       <div class="col-12 col-md-6">
         <opdex-card class="p-0">
-          <opdex-line-chart [chartData]="ohlcPoints" title="{{pool.token.symbol}}-CRS Liquidity" *ngIf="ohlcPoints"></opdex-line-chart>
+          <opdex-line-chart [chartData]="liquidityHistory" title="{{pool.token.symbol}}-CRS Liquidity" *ngIf="liquidityHistory"></opdex-line-chart>
         </opdex-card>
       </div>
 
       <div class="col-12 col-md-6">
         <opdex-card>
-          <opdex-volume-chart [chartData]="ohlcPoints" *ngIf="ohlcPoints"></opdex-volume-chart>
+          <opdex-volume-chart [chartData]="volumeHistory" *ngIf="volumeHistory"></opdex-volume-chart>
         </opdex-card>
       </div>
     </div>
@@ -163,7 +163,7 @@
                 </div>
 
                 <div class="remaining">
-                  <p class="sub-heading">ODX</p>
+                  <p class="sub-heading">{{pool.token.symbol}}</p>
                   <p class="value">1234.0000</p>
                 </div>
               </div>
@@ -247,8 +247,10 @@
 
     <div class="row mb-5">
       <div class="col-12">
-        <h2>Recent Transactions</h2>
-        <opdex-transactions-table></opdex-transactions-table>
+        <opdex-card>
+          <h2>Recent Transactions</h2>
+          <opdex-transactions-table></opdex-transactions-table>
+        </opdex-card>
       </div>
     </div>
   </div>

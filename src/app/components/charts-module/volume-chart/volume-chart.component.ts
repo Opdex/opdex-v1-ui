@@ -174,7 +174,7 @@ export class VolumeChartComponent implements OnInit {
     this.ngOnInit();
 
     if (this.chartData) {
-      this.volumeSeries.setData(volume);
+      this.volumeSeries.setData(this.chartData || volume);
 
       this.applyChartOptions();
 
@@ -198,6 +198,7 @@ export class VolumeChartComponent implements OnInit {
         priceFormat: {
           type: 'volume',
         },
+        color: 'rgba(71, 188, 235, .7)',
         lastValueVisible: false,
         priceScaleId: '',
         base: 0,
@@ -240,7 +241,9 @@ export class VolumeChartComponent implements OnInit {
   }
 
   private setLastBarText() {
-    this.value = this.nFormatter(volume[volume.length - 1].value, 2);
+    if (this.chartData && this.chartData.length > 0) {
+      this.value = this.nFormatter(this.chartData[this.chartData.length - 1].value, 2);
+    }
   }
 
   private applyChartOptions() {

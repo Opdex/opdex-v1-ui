@@ -1,3 +1,4 @@
+import { SharedPipesModule } from './../../pipes/shared-pipes.module';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -22,7 +23,8 @@ import { LiquidityPoolCardComponent } from './liquidity-pool-card/liquidity-pool
     RouterModule,
     MatCardModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    SharedPipesModule
   ],
   exports: [
     CardComponent,

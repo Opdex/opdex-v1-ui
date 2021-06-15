@@ -12,10 +12,6 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 export class TxMineStopComponent extends TxBase implements OnInit {
   form: FormGroup;
 
-  get pool(): FormControl {
-    return this.form.get('pool') as FormControl;
-  }
-
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
   }
@@ -32,7 +28,6 @@ export class TxMineStopComponent extends TxBase implements OnInit {
     super(_dialog);
 
     this.form = this._fb.group({
-      pool: ['', [Validators.required, Validators.min(.00000001)]],
       amount: ['0', [Validators.required, Validators.min(.00000001)]],
       liquidate: [false, [Validators.required]]
     });

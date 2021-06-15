@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
+import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-tx-provide-add',
@@ -10,11 +12,11 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
   styleUrls: ['./tx-provide-add.component.scss']
 })
 export class TxProvideAddComponent extends TxBase implements OnInit {
-  form: FormGroup;
+  @Input() pool: any;
+  txHash: string;
+  subscription = new Subscription();
 
-  get pool(): FormControl {
-    return this.form.get('pool') as FormControl;
-  }
+  form: FormGroup;
 
   get amountCrs(): FormControl {
     return this.form.get('amountCrs') as FormControl;
@@ -32,11 +34,74 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     super(_dialog);
 
     this.form = this._fb.group({
-      pool: ['', [Validators.required]],
       amountCrs: ['', [Validators.required]],
       amountSrc: ['', [Validators.required]]
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.subscription.add(
+      this.amountCrs.valueChanges.pipe(debounceTime(300))
+        .subscribe(async value => {
+          if (this.pool) {
+            const quote = await this.quote(value, 'CRS');
+            this.amountSrc.setValue(quote, { emitEvent: false });
+          }
+        }
+      )
+    );
+
+    this.subscription.add(
+      this.amountSrc.valueChanges.pipe(debounceTime(300))
+        .subscribe(async value => {
+          if (this.pool) {
+            const quote = await this.quote(value, this.pool?.token?.address);
+            this.amountCrs.setValue(quote, { emitEvent: false });
+          }
+        }
+      )
+    );
+  }
+
+  async quote(value: string, token: string): Promise<string> {
+    const payload = {
+      amountIn: parseFloat(value).toFixed(token === 'CRS' ? 8 : this.pool.token.decimals),
+      tokenIn: token,
+      pool: this.pool.address,
+      market: 'PUVKXiXNbvny8kVDnKAdfVZaUyvozMWKV4'
+    };
+
+    const quote = await this._platformApi.quoteAddLiquidity(payload);
+
+    if (quote.hasError) {
+      return '0.00';
+    }
+
+    return quote.data;
+  }
+
+  async submit() {
+    const payload = {
+      amountCrs: parseFloat(this.amountCrs.value).toFixed(8),
+      amountSrc: parseFloat(this.amountSrc.value).toFixed(this.pool.token.decimals),
+      tolerance: .001,
+      recipient: "PTsyKGQJ3eD9jnhHZKtvDmCMyGVMNTHay6",
+      liquidityPool: this.pool.address,
+      market: "PUVKXiXNbvny8kVDnKAdfVZaUyvozMWKV4",
+      walletName: "cirrusdev",
+      walletAddress: "PTsyKGQJ3eD9jnhHZKtvDmCMyGVMNTHay6",
+      walletPassword: "password"
+    }
+
+    const response = await this._platformApi.addLiquidity(payload);
+    if (response.hasError) {
+      // handle
+    }
+
+    this.txHash = response.data;
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 }

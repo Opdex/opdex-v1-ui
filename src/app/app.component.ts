@@ -6,6 +6,7 @@ import { ThemeService } from './services/theme.service';
 import { MatSidenav } from '@angular/material/sidenav';
 import { ISidenavMessage, SidenavView } from '@sharedModels/sidenav-view';
 import { Subscription } from 'rxjs';
+import { TransactionTypes } from '@sharedLookups/transaction-types.lookup';
 
 @Component({
   selector: 'opdex-root',
@@ -20,7 +21,7 @@ export class AppComponent implements OnInit {
   theme: string;
   loading = true;
   subscription = new Subscription();
-
+  transactionTypes = [...TransactionTypes];
 
   constructor(
     public overlayContainer: OverlayContainer,
@@ -63,9 +64,10 @@ export class AppComponent implements OnInit {
   }
 
   setSidenavView(view: SidenavView) {
+    const existingData = this.message.data;
     this.message = {
       view: view,
-      data: null,
+      data: existingData,
       status: true
     }
   }

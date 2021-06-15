@@ -5,7 +5,11 @@
     <mat-button-toggle value="3" class="w-100">Collect</mat-button-toggle>
   </mat-button-toggle-group>
 
-  <opdex-tx-stake-start *ngIf="group.value == 1"></opdex-tx-stake-start>
-  <opdex-tx-stake-stop *ngIf="group.value == 2"></opdex-tx-stake-stop>
-  <opdex-tx-stake-collect *ngIf="group.value == 3"></opdex-tx-stake-collect>
+  <opdex-pool-preview [pool]="pool"></opdex-pool-preview>
+
+  <opdex-card *ngIf="pool">
+    <opdex-tx-mine-start *ngIf="group.value == 1"></opdex-tx-mine-start>
+    <opdex-tx-mine-stop *ngIf="group.value == 2"></opdex-tx-mine-stop>
+    <opdex-tx-mine-collect *ngIf="group.value == 3"></opdex-tx-mine-collect>
+  </opdex-card>
 </div>

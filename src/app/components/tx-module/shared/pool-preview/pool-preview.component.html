@@ -1,0 +1,26 @@
+<div class="pool-details">
+  <div class="pool-selection" *ngIf="!pool">
+    <button mat-flat-button color="primary">Select Liquidity Pool</button>
+  </div>
+
+  <opdex-card class="pool-summary" *ngIf="pool">
+    <h4>{{pool.token.symbol}}-CRS</h4>
+    <small>{{pool.address}}</small>
+
+    <button mat-icon-button class="exit tiny" (click)="clearPool()">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <div class="reserves">
+      <div class="crs">
+        <h5>CRS Reserves</h5>
+        <small>{{pool.summary.reserves.crs | formatNumber:4}}</small>
+      </div>
+
+      <div class="src">
+        <h5>{{pool.token.symbol}} Reserves</h5>
+        <small>{{pool.summary.reserves.src | formatNumber:4}}</small>
+      </div>
+    </div>
+  </opdex-card>
+</div>

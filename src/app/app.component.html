@@ -11,20 +11,18 @@
 
           <button mat-button class="d-flex" color="primary" [matMenuTriggerFor]="beforeMenu" style="width: 125px; text-align: left;">
             <div class="menu-content d-flex justify-content-between align-items-center">
-              <span *ngIf="message?.view === 1">Swap</span>
-              <span *ngIf="message?.view === 2">Provide</span>
-              <span *ngIf="message?.view === 3">Stake</span>
-              <span *ngIf="message?.view === 4">Mine</span>
+              <ng-container *ngFor="let transactionType of transactionTypes">
+                <span *ngIf="message?.view === transactionType.view">{{transactionType.title}}</span>
+              </ng-container>
 
               <mat-icon>keyboard_arrow_down</mat-icon>
             </div>
 
           </button>
           <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
-            <button mat-menu-item *ngIf="message?.view !== 1" (click)="setSidenavView(1)" style="width: 125px;">Swap</button>
-            <button mat-menu-item *ngIf="message?.view !== 2" (click)="setSidenavView(2)" style="width: 125px;">Provide</button>
-            <button mat-menu-item *ngIf="message?.view !== 3" (click)="setSidenavView(3)" style="width: 125px;">Stake</button>
-            <button mat-menu-item *ngIf="message?.view !== 4" (click)="setSidenavView(4)" style="width: 125px;">Mine</button>
+            <ng-container *ngFor="let transactionType of transactionTypes">
+              <button mat-menu-item *ngIf="message?.view !== transactionType.view" (click)="setSidenavView(transactionType.view)" style="width: 125px;">{{transactionType.title}}</button>
+            </ng-container>
           </mat-menu>
 
           <button mat-icon-button color="primary" (click)="closeSidenav()" class="small" aria-label="Close Sidenav">
@@ -34,10 +32,13 @@
 
         <mat-divider class="mb-3"></mat-divider>
 
-        <opdex-tx-swap class="d-flex" style="height: 100%;" *ngIf="message?.view === 1"></opdex-tx-swap>
-        <opdex-tx-provide class="d-flex" style="height: 100%;" *ngIf="message?.view === 2"></opdex-tx-provide>
-        <opdex-tx-stake class="d-flex" style="height: 100%;" *ngIf="message?.view === 3"></opdex-tx-stake>
-        <opdex-tx-mine class="d-flex" style="height: 100%;" *ngIf="message?.view === 4"></opdex-tx-mine>
+        <ng-container [ngSwitch]="message?.view">
+          <opdex-tx-swap *ngSwitchCase="1" [data]="message?.data"></opdex-tx-swap>
+          <opdex-tx-provide *ngSwitchCase="2" [data]="message?.data"></opdex-tx-provide>
+          <opdex-tx-stake *ngSwitchCase="3" [data]="message?.data"></opdex-tx-stake>
+          <opdex-tx-mine *ngSwitchCase="4" [data]="message?.data"></opdex-tx-mine>
+          <opdex-tx-allowance *ngSwitchCase="5" [data]="message?.data"></opdex-tx-allowance>
+        </ng-container>
       </div>
     </mat-sidenav>
 

@@ -8,17 +8,17 @@ import { SidenavView } from '@sharedModels/sidenav-view';
   styleUrls: ['./mining-card.component.scss']
 })
 export class MiningCardComponent implements OnInit {
-  @Input() pool: string = "ODX/CRS";
+  @Input() pool: any;
 
   constructor(private _sidebar: SidenavService) { }
 
   ngOnInit(): void { }
 
   startMining() {
-    this._sidebar.openSidenav(SidenavView.mine);
+    this._sidebar.openSidenav(SidenavView.mine, {pool: this.pool});
   }
 
   stopMining() {
-    this._sidebar.openSidenav(SidenavView.mine);
+    this._sidebar.openSidenav(SidenavView.mine, {pool: this.pool});
   }
 }

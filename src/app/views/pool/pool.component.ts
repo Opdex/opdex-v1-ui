@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SidenavService } from '@sharedServices/sidenav.service';
 import { SidenavView } from '@sharedModels/sidenav-view';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'opdex-pool',
@@ -13,7 +14,10 @@ export class PoolComponent implements OnInit {
   ohlcPoints: any[];
   poolAddress: string;
   pool: any;
+  poolHistory: any[];
   transactions: any[];
+  liquidityHistory: any[] = [];
+  volumeHistory: any[] = [];
 
   constructor(
     private _route: ActivatedRoute,
@@ -26,10 +30,17 @@ export class PoolComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     setTimeout(() => this.ohlcPoints = [], 100);
 
-    await Promise.all([
-      this.getPool(),
-      this.getPoolTransactions()
-    ]);
+    // 30 seconds refresh view
+    timer(0, 30000)
+      .subscribe(async () => {
+        await Promise.all([
+          this.getPool(),
+          this.getPoolHistory(),
+          this.getPoolTransactions()
+        ]);
+
+
+      });
   }
 
   openTransactionSidebar(view: SidenavView) {
@@ -47,6 +58,33 @@ export class PoolComponent implements OnInit {
     }
 
     this.pool = poolResponse.data;
+  }
+
+  private async getPoolHistory():Promise<void> {
+    const poolResponse = await this._platformApiService.getPoolHistory(this.poolAddress);
+    if (poolResponse.hasError) {
+      //handle
+    }
+
+    this.poolHistory = poolResponse.data;
+
+    let liquidityPoints = [];
+    let volumePoints = [];
+
+    this.poolHistory.forEach(history => {
+      liquidityPoints.push({
+        time: Date.parse(history.startDate)/1000,
+        value: history.reserves.usd
+      });
+
+      volumePoints.push({
+        time: Date.parse(history.startDate)/1000,
+        value: history.volume.usd
+      })
+    });
+
+    this.liquidityHistory = liquidityPoints;
+    this.volumeHistory = volumePoints;
   }
 
   private async getPoolTransactions():Promise<void> {

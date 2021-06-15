@@ -114,21 +114,11 @@
         <h2 class="mb-3 text-shadow">Liquidity Mining</h2>
 
         <div class="row">
-          <div class="col-3">
-            <opdex-mining-card pool="xBTC/CRS"></opdex-mining-card>
-          </div>
-
-          <div class="col-3">
-            <opdex-mining-card pool="xETH/CRS"></opdex-mining-card>
-          </div>
-
-          <div class="col-3">
-            <opdex-mining-card pool="xBNB/CRS"></opdex-mining-card>
-          </div>
-
-          <div class="col-3">
-            <opdex-mining-card pool="GBPT/CRS"></opdex-mining-card>
-          </div>
+          <ng-container *ngFor="let pool of pools">
+            <div class="col-3" *ngIf="pool.miningEnabled">
+              <opdex-mining-card [pool]="pool"></opdex-mining-card>
+            </div>
+          </ng-container>
         </div>
       </div>
     </div>

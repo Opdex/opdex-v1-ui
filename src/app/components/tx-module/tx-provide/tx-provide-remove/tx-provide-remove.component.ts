@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
@@ -10,11 +10,9 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
   styleUrls: ['./tx-provide-remove.component.scss']
 })
 export class TxProvideRemoveComponent extends TxBase implements OnInit {
-  form: FormGroup;
+  @Input() pool: any;
 
-  get pool(): FormControl {
-    return this.form.get('pool') as FormControl;
-  }
+  form: FormGroup;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -28,8 +26,7 @@ export class TxProvideRemoveComponent extends TxBase implements OnInit {
     super(_dialog);
 
     this.form = this._fb.group({
-      pool: ['', [Validators.required]],
-      amount: ['0', [Validators.required, Validators.min(.00000001)]]
+      amount: ['', [Validators.required, Validators.min(.00000001)]]
     });
   }
 

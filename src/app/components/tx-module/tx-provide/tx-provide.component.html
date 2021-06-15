@@ -4,6 +4,10 @@
     <mat-button-toggle value="2" class="w-100">Remove</mat-button-toggle>
   </mat-button-toggle-group>
 
-  <opdex-tx-provide-add *ngIf="group.value == 1"></opdex-tx-provide-add>
-  <opdex-tx-provide-remove *ngIf="group.value == 2"></opdex-tx-provide-remove>
+  <opdex-pool-preview [pool]="pool"></opdex-pool-preview>
+
+  <opdex-card *ngIf="pool">
+    <opdex-tx-provide-add *ngIf="group.value == 1" [pool]="pool"></opdex-tx-provide-add>
+    <opdex-tx-provide-remove *ngIf="group.value == 2" [pool]="pool"></opdex-tx-provide-remove>
+  </opdex-card>
 </div>

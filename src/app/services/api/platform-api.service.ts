@@ -64,6 +64,10 @@ export class PlatformApiService extends RestApiService {
     return await this.get(`${this.api}/pools/${address}/transactions`);
   }
 
+  public async getPoolHistory(address: string): Promise<ApiResponse<any>> {
+    return await this.get(`${this.api}/pools/${address}/history`);
+  }
+
   //////////////
   // Markets
   //////////////
@@ -72,30 +76,67 @@ export class PlatformApiService extends RestApiService {
     return await this.get(`${this.api}/market`);
   }
 
+  //////////////
+  // Pools
+  //////////////
+
+  public async quoteAddLiquidity(payload: any): Promise<ApiResponse<any>> {
+    return await this.post(`${this.api}/quote/add-liquidity`, payload);
+  }
+
   public async getSwapQuote(payload: any): Promise<ApiResponse<any>> {
     return await this.post(`${this.api}/quote/swap`, payload);
   }
 
-  //////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
   // Wallet Transactions - Temporary Local ENV only
-  /////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
   public async swap(payload: any): Promise<ApiResponse<any>> {
     return await this.post(`${this.api}/build-transaction/local-broadcast/swap`, payload);
   }
 
+  // Create Liquidity Pool
+  public async createPool(payload: any): Promise<ApiResponse<any>> {
+    return await this.post(`${this.api}/build-transaction/local-broadcast/create-pool`, payload);
+  }
+
+  // Liquidity Providing
   public async addLiquidity(payload: any): Promise<ApiResponse<any>> {
-    return await this.post(`${this.api}/wallet-transactions/build/add-liquidity`, payload);
+    return await this.post(`${this.api}/build-transaction/local-broadcast/add-liquidity`, payload);
   }
 
   public async removeLiquidity(payload: any): Promise<ApiResponse<any>> {
-    return await this.post(`${this.api}/wallet-transactions/build/remove-liquidity`, payload);
+    return await this.post(`${this.api}/build-transaction/local-broadcast/remove-liquidity`, payload);
   }
 
-  public async createPool(payload: any): Promise<ApiResponse<any>> {
-    return await this.post(`${this.api}/wallet-transactions/build/create-pool`, payload);
-  }
-
+  // Allowance
   public async approveAllowance(payload: any): Promise<ApiResponse<any>> {
-    return await this.post(`${this.api}/wallet-transactions/build/approve-allowance`, payload);
+    return await this.post(`${this.api}/build-transaction/local-broadcast/approve-allowance`, payload);
+  }
+
+  // Mining
+  public async startMining(payload: any): Promise<ApiResponse<any>> {
+    return await this.post(`${this.api}/build-transaction/local-broadcast/start-mining`, payload);
+  }
+
+  public async stopMining(payload: any): Promise<ApiResponse<any>> {
+    return await this.post(`${this.api}/build-transaction/local-broadcast/stop-mining`, payload);
+  }
+
+  public async collectMiningRewards(payload: any): Promise<ApiResponse<any>> {
+    return await this.post(`${this.api}/build-transaction/local-broadcast/collect-mining-rewards`, payload);
+  }
+
+  // Staking
+  public async startStaking(payload: any): Promise<ApiResponse<any>> {
+    return await this.post(`${this.api}/build-transaction/local-broadcast/start-staking`, payload);
+  }
+
+  public async stopStaking(payload: any): Promise<ApiResponse<any>> {
+    return await this.post(`${this.api}/build-transaction/local-broadcast/stop-staking`, payload);
+  }
+
+  public async collectStakingRewards(payload: any): Promise<ApiResponse<any>> {
+    return await this.post(`${this.api}/build-transaction/local-broadcast/collect-staking-rewards`, payload);
   }
 }
