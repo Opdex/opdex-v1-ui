@@ -1,6 +1,7 @@
 import { PlatformApiService } from '../../services/api/platform-api.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'opdex-market',
@@ -36,7 +37,7 @@ export class MarketComponent implements OnInit {
   }
 
   private async getPools():Promise<void> {
-    const poolsResponse = await this._platformApiService.getPools();
+    const poolsResponse = await this._platformApiService.getPoolsByMarketAddress(environment.marketAddress);
     if (poolsResponse.hasError || poolsResponse.data?.length) {
       // handle
     }

@@ -1,25 +1,19 @@
 <div class="container">
   <h2>Tokens</h2>
 
-  <mat-divider></mat-divider>
-
-
-  <ng-container *ngIf="tokens">
-    <div class="row token-row" *ngFor="let token of tokens" (click)="selectToken(token)">
-      <div class="col-4">
-        {{token.name}}
+  <div *ngIf="tokens" class="mt-4 mb-4">
+    <div class="row token-row" *ngFor="let token of tokens; let i = index" (click)="selectToken(token)">
+      <div class="col flex-shrink">
+        <p>{{i + 1}}.</p>
       </div>
-
-      <div class="col-3">
-        {{token.symbol}}
-      </div>
-
-      <div class="col-5">
-        {{token.address | shortAddress:8}}
+      <div class="col">
+        <p class="title">{{token.name}} <small>({{token.symbol}})</small></p>
+        <p class="mb-0"><small>{{token.address}}</small></p>
       </div>
     </div>
-  </ng-container>
+  </div>
 
-  <mat-divider></mat-divider>
   <button mat-flat-button color="primary" class="mt-2 w-100">Add New Token</button>
+
+  <img src="/assets/defi1.png" class="defi" alt="DeFi blocks">
 </div>

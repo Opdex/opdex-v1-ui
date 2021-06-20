@@ -98,13 +98,13 @@
     <div class="row mb-5">
       <div class="col-12 col-md-6">
         <opdex-card class="p-0">
-          <opdex-line-chart [chartData]="ohlcPoints" title="Market Liquidity" *ngIf="ohlcPoints"></opdex-line-chart>
+          <opdex-line-chart [chartData]="ohlcPoints" title="Market Liquidity"></opdex-line-chart>
         </opdex-card>
       </div>
 
       <div class="col-12 col-md-6">
         <opdex-card>
-          <opdex-volume-chart [chartData]="ohlcPoints" *ngIf="ohlcPoints"></opdex-volume-chart>
+          <opdex-volume-chart [chartData]="ohlcPoints"></opdex-volume-chart>
         </opdex-card>
       </div>
     </div>

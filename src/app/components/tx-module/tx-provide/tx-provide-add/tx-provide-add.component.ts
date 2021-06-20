@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { environment } from '@environments/environment';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Subscription } from 'rxjs';
@@ -68,7 +69,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
       amountIn: parseFloat(value).toFixed(token === 'CRS' ? 8 : this.pool.token.decimals),
       tokenIn: token,
       pool: this.pool.address,
-      market: 'PUVKXiXNbvny8kVDnKAdfVZaUyvozMWKV4'
+      market: environment.marketAddress
     };
 
     const quote = await this._platformApi.quoteAddLiquidity(payload);
@@ -85,12 +86,12 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
       amountCrs: parseFloat(this.amountCrs.value).toFixed(8),
       amountSrc: parseFloat(this.amountSrc.value).toFixed(this.pool.token.decimals),
       tolerance: .001,
-      recipient: "PTsyKGQJ3eD9jnhHZKtvDmCMyGVMNTHay6",
+      recipient: environment.walletAddress,
       liquidityPool: this.pool.address,
-      market: "PUVKXiXNbvny8kVDnKAdfVZaUyvozMWKV4",
-      walletName: "cirrusdev",
-      walletAddress: "PTsyKGQJ3eD9jnhHZKtvDmCMyGVMNTHay6",
-      walletPassword: "password"
+      market: environment.marketAddress,
+      walletName: environment.walletName,
+      walletAddress: environment.walletAddress,
+      walletPassword: environment.walletPassword
     }
 
     const response = await this._platformApi.addLiquidity(payload);

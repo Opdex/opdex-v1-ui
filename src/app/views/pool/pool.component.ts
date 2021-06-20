@@ -18,6 +18,7 @@ export class PoolComponent implements OnInit {
   transactions: any[];
   liquidityHistory: any[] = [];
   volumeHistory: any[] = [];
+  walletBalance: any;
 
   constructor(
     private _route: ActivatedRoute,
@@ -36,10 +37,9 @@ export class PoolComponent implements OnInit {
         await Promise.all([
           this.getPool(),
           this.getPoolHistory(),
-          this.getPoolTransactions()
+          this.getPoolTransactions(),
+          this.getWalletSummary()
         ]);
-
-
       });
   }
 
@@ -58,6 +58,16 @@ export class PoolComponent implements OnInit {
     }
 
     this.pool = poolResponse.data;
+  }
+
+  private async getWalletSummary():Promise<void> {
+    const response = await this._platformApiService.getWalletSummaryForPool(this.poolAddress, 'PTsyKGQJ3eD9jnhHZKtvDmCMyGVMNTHay6');
+    if (response.hasError) {
+      //handle
+    }
+
+    this.walletBalance = response.data;
+    console.log(this.walletBalance);
   }
 
   private async getPoolHistory():Promise<void> {

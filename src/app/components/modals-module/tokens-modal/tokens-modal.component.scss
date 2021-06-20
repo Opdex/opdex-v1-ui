@@ -1,9 +1,29 @@
-.token-row {
-  padding: 5px 0px;
-  margin: 5px 0px;
+.container {
+  position: relative;
 
-  &:hover {
-    background: #242424;
-    cursor: pointer;
+  .defi {
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 100px;
+  }
+
+  .token-row {
+    padding: 10px 0px;
+    // margin: 10px 0px;
+    border-bottom: 1px solid #29292A;
+
+    &:hover {
+      background: #201d38;
+      cursor: pointer;
+    }
+
+    .title {
+      font-size: 22px;
+    }
+
+    .flex-shrink {
+      flex-grow: 0;
+    }
   }
 }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { ConnectWalletModalComponent } from '../../modals-module/connect-wallet-modal/connect-wallet-modal.component';
+import { ConnectWalletModalComponent } from '../../../modals-module/connect-wallet-modal/connect-wallet-modal.component';
 
 @Component({
   selector: 'opdex-sidebar',

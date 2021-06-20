@@ -7,11 +7,14 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { ISidenavMessage, SidenavView } from '@sharedModels/sidenav-view';
 import { Subscription } from 'rxjs';
 import { TransactionTypes } from '@sharedLookups/transaction-types.lookup';
+import { FadeAnimation } from '@sharedServices/animations/fade-animation';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'opdex-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  animations: [FadeAnimation]
 })
 export class AppComponent implements OnInit {
   @HostBinding('class') componentCssClass: string;
@@ -78,6 +81,10 @@ export class AppComponent implements OnInit {
 
   toggleSidenavAppearance() {
     this.sidenavMode = this.sidenavMode == 'over' ? 'side' : 'over';
+  }
+
+  prepareRoute(outlet: RouterOutlet) {
+    return outlet && outlet.activatedRouteData && outlet.activatedRouteData.animation;
   }
 
   ngOnDestroy() {

@@ -1,6 +1,6 @@
 <main [ngClass]="theme">
   <div class="background"></div>
-  <mat-sidenav-container (backdropClick)="closeSidenav()" *ngIf="!loading" class="w-100 h-100">
+  <mat-sidenav-container (backdropClick)="closeSidenav()" class="w-100 h-100">
     <mat-sidenav #sidenav (keydown.escape)="closeSidenav()" position="end" class="sidenav" [fixedInViewport]="true" [fixedTopGap]="0" [fixedBottomGap]="0" [mode]="sidenavMode">
       <div class="sidenav-container">
 
@@ -45,8 +45,12 @@
     <mat-sidenav-content>
       <opdex-sidebar></opdex-sidebar>
 
-      <div id="page-content" *ngIf="!loading">
+      <!-- <div id="page-content" *ngIf="!loading">
         <router-outlet></router-outlet>
+      </div> -->
+
+      <div id="page-content" [@fadeAnimation]="prepareRoute(outlet)" *ngIf="!loading">
+          <router-outlet #outlet="outlet"></router-outlet>
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>

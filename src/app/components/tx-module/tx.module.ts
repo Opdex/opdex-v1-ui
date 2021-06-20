@@ -32,6 +32,7 @@ import { TxAllowanceComponent } from './tx-allowance/tx-allowance.component';
 import { PoolPreviewComponent } from './shared/pool-preview/pool-preview.component';
 
 
+
 @NgModule({
   declarations: [
     TxSwapComponent,

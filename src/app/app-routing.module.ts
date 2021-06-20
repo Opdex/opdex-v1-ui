@@ -1,3 +1,5 @@
+import { VaultComponent } from './views/vault/vault.component';
+import { GovernanceComponent } from './views/governance/governance.component';
 import { HistoryComponent } from './views/history/history.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -11,14 +13,16 @@ import { WalletComponent } from './views/wallet/wallet.component';
 import { NotFoundComponent } from './views/not-found/not-found.component';
 
 const routes: Routes = [
-  { path: '', component: MarketComponent },
-  { path: 'pools', component: PoolsComponent },
-  { path: 'pools/:pool', component: PoolComponent },
-  { path: 'tokens', component: TokensComponent },
-  { path: 'tokens/:token', component: TokenComponent },
-  { path: 'wallet', component: WalletComponent },
-  { path: 'history', component: HistoryComponent },
-  { path: '**', component: NotFoundComponent },
+  { path: '', component: MarketComponent, data: { animation: 'MarketView'} },
+  { path: 'pools', component: PoolsComponent, data: { animation: 'PoolsView'} },
+  { path: 'pools/:pool', component: PoolComponent, data: { animation: 'PoolView'} },
+  { path: 'tokens', component: TokensComponent, data: { animation: 'TokensView'} },
+  { path: 'tokens/:token', component: TokenComponent, data: { animation: 'TokenView'} },
+  { path: 'wallet', component: WalletComponent, data: { animation: 'WalletView'} },
+  { path: 'history', component: HistoryComponent, data: { animation: 'HistoryView'} },
+  { path: 'governance', component: GovernanceComponent, data: { animation: 'GovernanceView'} },
+  { path: 'vault', component: VaultComponent, data: { animation: 'VaultView'} },
+  { path: '**', component: NotFoundComponent, data: { animation: 'NotFoundView'} },
 ];
 
 @NgModule({

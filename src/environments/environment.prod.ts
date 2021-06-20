@@ -1,5 +1,9 @@
 export const environment = {
   production: true,
   defaultTheme: 'light-mode',
-  api: ''
+  api: '',
+  marketAddress: '',
+  walletAddress: '',
+  walletName: '',
+  password: ''
 };

@@ -11,6 +11,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { QRCodeModule } from 'angularx-qrcode';
 
 import { ConnectWalletModalComponent } from './connect-wallet-modal/connect-wallet-modal.component';
 import { TxBoxSettingsModalComponent } from './tx-box-settings-modal/tx-box-settings-modal.component';
@@ -34,7 +36,9 @@ import { SignTxModalComponent } from './sign-tx-modal/sign-tx-modal.component';
     MatButtonModule,
     MatDialogModule,
     MatInputModule,
-    MatDividerModule
+    MatDividerModule,
+    MatCheckboxModule,
+    QRCodeModule
   ],
   exports: [
   ]

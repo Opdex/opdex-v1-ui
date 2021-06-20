@@ -22,7 +22,7 @@ export class TokensModalComponent implements OnInit {
       // handle
     }
 
-    this.tokens = tokensResponse.data.filter(t => !this.filter.includes(t.address));
+    this.tokens = tokensResponse.data.filter(t => !this.filter.includes(t.address) && t.symbol != 'OLPT');
   }
 
   selectToken(token: any): void {

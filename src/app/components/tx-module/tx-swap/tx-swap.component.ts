@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { debounce, debounceTime, take } from 'rxjs/operators';
 import { SignTxModalComponent } from 'src/app/components/modals-module/sign-tx-modal/sign-tx-modal.component';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'opdex-tx-swap',
@@ -128,19 +129,21 @@ export class TxSwapComponent implements OnDestroy{
       tokenOutAmount: !this.token0In ? this.token0AmountValue : this.token1AmountValue,
       tokenInExactAmount: this.token0In,
       tolerance: 0.1,
-      market: "PUVKXiXNbvny8kVDnKAdfVZaUyvozMWKV4",
-      recipient: "PTsyKGQJ3eD9jnhHZKtvDmCMyGVMNTHay6",
-      walletName: "cirrusdev",
-      walletAddress: "PTsyKGQJ3eD9jnhHZKtvDmCMyGVMNTHay6",
-      walletPassword: "password"
+      market: environment.marketAddress,
+      recipient: environment.walletAddress,
+      walletName: environment.walletName,
+      walletAddress: environment.walletAddress,
+      walletPassword: environment.walletPassword
     }
 
-    const response = await this._platformApi.swap(payload);
-    if (response.hasError) {
-      // handle
-    }
+    this.signTx();
 
-    this.txHash = response.data.txHash;
+    // const response = await this._platformApi.swap(payload);
+    // if (response.hasError) {
+    //   // handle
+    // }
+
+    // this.txHash = response.data.txHash;
   }
 
   switch() {
@@ -168,7 +171,7 @@ export class TxSwapComponent implements OnDestroy{
       tokenOut: !this.token0In ? this.token0.value : this.token1.value,
       tokenInAmount: this.token0In ? this.token0AmountValue : null,
       tokenOutAmount: !this.token0In ? this.token0AmountValue : null,
-      market: "PUVKXiXNbvny8kVDnKAdfVZaUyvozMWKV4"
+      market: environment.marketAddress
     };
 
     const response = await this._platformApi.getSwapQuote(payload);

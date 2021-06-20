@@ -4,6 +4,8 @@
     <div class="row mb-5">
       <div class="col">
         <h1 class="mb-3">{{pool.token.symbol}}-CRS</h1>
+        <p>{{pool.address}}</p>
+
         <mat-chip-list aria-label="Amenities">
           <mat-chip color="primary" selected>0.3% Fee</mat-chip>
           <mat-chip color="primary" selected>Nominated</mat-chip>
@@ -22,9 +24,9 @@
             <div class="col">
               <opdex-card>
                 <div class="d-flex justify-content-between align-items-center">
-                  <h4 class="mb-0">1 {{pool.token.symbol}} ($1)</h4>
+                  <h4 class="mb-0">1 {{pool.token.symbol}} (${{pool.token.summary.price.close | formatNumber: 2}})</h4>
                   <mat-icon>swap_horiz</mat-icon>
-                  <h4 class="mb-0">{{pool.summary.cost.crsPerSrc.close | formatNumber:4}} CRS</h4>
+                  <h4 class="mb-0">{{pool.summary.cost.crsPerSrc.close | formatNumber:4 }} CRS</h4>
                 </div>
               </opdex-card>
             </div>
@@ -159,12 +161,12 @@
               <div class="details">
                 <div class="mining">
                   <p class="sub-heading">CRS</p>
-                  <p class="value">49,592.0000</p>
+                  <p class="value">{{walletBalance?.crsBalance}}</p>
                 </div>
 
                 <div class="remaining">
                   <p class="sub-heading">{{pool.token.symbol}}</p>
-                  <p class="value">1234.0000</p>
+                  <p class="value">{{walletBalance?.srcBalance | formatNumber: 8}}</p>
                 </div>
               </div>
             </opdex-card>
@@ -183,7 +185,7 @@
               <div class="details">
                 <div class="mining">
                   <p class="sub-heading">Position</p>
-                  <p class="value">6564.273243 LPT</p>
+                  <p class="value">{{walletBalance?.providing | formatNumber: 8}} LPT</p>
                 </div>
 
                 <!-- <div class="remaining">
@@ -207,7 +209,7 @@
               <div class="details">
                 <div class="mining">
                   <p class="sub-heading">Position</p>
-                  <p class="value">592.237462 ODX</p>
+                  <p class="value">{{walletBalance?.staking | formatNumber: 8}} ODX</p>
                 </div>
 
                 <!-- <div class="remaining">
@@ -231,7 +233,7 @@
               <div class="details">
                 <div class="mining">
                   <p class="sub-heading">Position</p>
-                  <p class="value">6564.273243 LPT</p>
+                  <p class="value">{{walletBalance?.mining | formatNumber: 8}} LPT</p>
                 </div>
 
                 <!-- <div class="remaining">

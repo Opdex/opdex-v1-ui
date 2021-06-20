@@ -7,7 +7,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SidebarModule } from './components/sidebar-module/sidebar.module';
+import { SidebarModule } from './components/shared-module/sidebar-module/sidebar.module';
 import { TransactionModule } from './components/tx-module/tx.module';
 import { ChartsModule } from './components/charts-module/charts.module';
 import { TablesModule } from '@sharedComponents/tables-module/tables.module';
@@ -36,6 +36,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { LayoutModule } from '@angular/cdk/layout';
+import { GovernanceComponent } from './views/governance/governance.component';
+import { VaultComponent } from './views/vault/vault.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { LayoutModule } from '@angular/cdk/layout';
     TokensComponent,
     TokenComponent,
     WalletComponent,
-    HistoryComponent
+    HistoryComponent,
+    GovernanceComponent,
+    VaultComponent
   ],
   imports: [
     BrowserModule,

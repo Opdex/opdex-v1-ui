@@ -2,7 +2,7 @@
   <form [formGroup]="form" name="swap-form" id="swap-form">
     <div class="exactly swap-row">
       <div class="spend-receive-button">
-        <button mat-icon-button color="primary" type="button" class="small" (click)="toggleToken0In()"><mat-icon>{{token0In ? 'add' : 'remove'}}</mat-icon></button>
+        <button mat-icon-button color="primary" type="button" class="small" (click)="toggleToken0In()"><mat-icon>{{token0In ? 'remove' : 'add'}}</mat-icon></button>
       </div>
 
       <div class="amount">
@@ -22,7 +22,7 @@
 
     <div class="exactly swap-row">
       <div class="spend-receive-button">
-        <button mat-icon-button color="primary" type="button" class="small" (click)="toggleToken0In()"><mat-icon>{{!token0In ? 'add' : 'remove'}}</mat-icon></button>
+        <button mat-icon-button color="primary" type="button" class="small" (click)="toggleToken0In()"><mat-icon>{{!token0In ? 'remove' : 'add'}}</mat-icon></button>
       </div>
 
       <div class="amount">

@@ -1,3 +1,4 @@
+import { environment } from 'src/environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 
@@ -18,7 +19,7 @@ export class PoolsComponent implements OnInit {
   constructor(private _platformApiService: PlatformApiService) { }
 
   async ngOnInit(): Promise<void> {
-    const poolsResponse = await this._platformApiService.getPools();
+    const poolsResponse = await this._platformApiService.getPoolsByMarketAddress(environment.marketAddress);
     if (poolsResponse.hasError || poolsResponse.data?.length) {
       // handle
     }

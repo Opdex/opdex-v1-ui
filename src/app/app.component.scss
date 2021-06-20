@@ -18,9 +18,11 @@ opdex-sidebar {
 #page-content {
   height: 100%;
   margin-left: $sidebar-width;
-  flex: 1 1 auto;
+  display: flex;
+  flex: 1;
   padding: 10px 0;
   padding: 0 25px;
+  flex-direction: column;
 }
 
 .background {

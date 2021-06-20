@@ -26,3 +26,14 @@
     padding-bottom: 0px !important;
   }
 }
+
+.qrcode {
+  canvas {
+    margin: 30px auto;
+    display: block;
+  }
+}
+
+.mat-dialog-container {
+  overflow: initial !important;
+}

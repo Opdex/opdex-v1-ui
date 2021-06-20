@@ -1,7 +1,7 @@
-<div #chartContainer class="w-100" (resized)="onResized($event)">
+<div #chartContainer class="chart-container w-100" (resized)="onResized($event)">
   <div class="chart-legend">
     <h3 class="title">{{title}}</h3>
     <p class="value">{{value}}</p>
   </div>
-  <div id="chartdiv"></div>
+  <div id="chartdiv" [hidden]="loading"></div>
 </div>
