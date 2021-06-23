@@ -74,7 +74,7 @@ export class TxSwapComponent implements OnDestroy{
         sats: 100000000
       };
 
-      this.token1Details = this.data.pool.token;
+      this.token1Details = this.data.pool.srcToken;
       this.token1.setValue(this.token1Details.address);
     }
   }
@@ -129,11 +129,7 @@ export class TxSwapComponent implements OnDestroy{
       tokenOutAmount: !this.token0In ? this.token0AmountValue : this.token1AmountValue,
       tokenInExactAmount: this.token0In,
       tolerance: 0.1,
-      market: environment.marketAddress,
-      recipient: environment.walletAddress,
-      walletName: environment.walletName,
-      walletAddress: environment.walletAddress,
-      walletPassword: environment.walletPassword
+      recipient: environment.walletAddress
     }
 
     this.signTx();
@@ -170,8 +166,7 @@ export class TxSwapComponent implements OnDestroy{
       tokenIn: this.token0In ? this.token0.value : this.token1.value,
       tokenOut: !this.token0In ? this.token0.value : this.token1.value,
       tokenInAmount: this.token0In ? this.token0AmountValue : null,
-      tokenOutAmount: !this.token0In ? this.token0AmountValue : null,
-      market: environment.marketAddress
+      tokenOutAmount: !this.token0In ? this.token0AmountValue : null
     };
 
     const response = await this._platformApi.getSwapQuote(payload);

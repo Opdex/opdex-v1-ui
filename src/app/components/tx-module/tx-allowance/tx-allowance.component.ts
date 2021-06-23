@@ -54,11 +54,8 @@ export class TxAllowanceComponent extends TxBase implements OnInit {
   async submit() {
     const payload = {
       token: this.token,
-      amount: parseFloat(this.amount.value).toFixed(this.pool.token.decimals),
-      recipient: this.spender.value,
-      walletName: environment.walletName,
-      walletAddress: environment.walletAddress,
-      walletPassword: environment.walletPassword
+      amount: parseFloat(this.amount.value).toFixed(this.pool.srcToken.decimals),
+      recipient: this.spender.value
     }
 
     const response = await this._platformApi.approveAllowance(payload);

@@ -1,3 +1,4 @@
+import { environment } from '@environments/environment';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { SidenavService } from './services/sidenav.service';
 import { Component, HostBinding, OnInit, ViewChild } from '@angular/core';
@@ -34,7 +35,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    await this._api.auth('asdf', 'asdf');
+    await this._api.auth(environment.marketAddress, environment.walletAddress);
 
     this._theme.getTheme()
       .subscribe(theme => this.setTheme(theme));

@@ -3,7 +3,7 @@
 
     <div class="row mb-5">
       <div class="col">
-        <h1 class="mb-3">{{pool.token.symbol}}-CRS</h1>
+        <h1 class="mb-3">{{pool.srcToken.symbol}}-CRS</h1>
         <p>{{pool.address}}</p>
 
         <mat-chip-list aria-label="Amenities">
@@ -24,7 +24,7 @@
             <div class="col">
               <opdex-card>
                 <div class="d-flex justify-content-between align-items-center">
-                  <h4 class="mb-0">1 {{pool.token.symbol}} (${{pool.token.summary.price.close | formatNumber: 2}})</h4>
+                  <h4 class="mb-0">1 {{pool.srcToken.symbol}} (${{pool.srcToken.summary.price.close | formatNumber: 2}})</h4>
                   <mat-icon>swap_horiz</mat-icon>
                   <h4 class="mb-0">{{pool.summary.cost.crsPerSrc.close | formatNumber:4 }} CRS</h4>
                 </div>
@@ -34,9 +34,9 @@
             <div class="col">
               <opdex-card>
                 <div class="d-flex justify-content-between align-items-center">
-                  <h4 class="mb-0">1 CRS ($2)</h4>
+                  <h4 class="mb-0">1 CRS (${{pool.crsToken.summary.price.close | formatNumber: 2}})</h4>
                   <mat-icon>swap_horiz</mat-icon>
-                  <h4 class="mb-0">{{pool.summary.cost.srcPerCrs.close | formatNumber:4}} {{pool.token.symbol}}</h4>
+                  <h4 class="mb-0">{{pool.summary.cost.srcPerCrs.close | formatNumber:4}} {{pool.srcToken.symbol}}</h4>
                 </div>
               </opdex-card>
             </div>
@@ -54,7 +54,7 @@
               <opdex-card>
                 <div class="d-flex justify-content-between align-items-center">
                   <h4 class="mb-0">Pool Balance</h4>
-                  <h4 class="mb-0">{{pool.summary.reserves.src | formatNumber:4}} {{pool.token.symbol}}</h4>
+                  <h4 class="mb-0">{{pool.summary.reserves.src | formatNumber:4}} {{pool.srcToken.symbol}}</h4>
                 </div>
               </opdex-card>
             </div>
@@ -135,7 +135,7 @@
     <div class="row mb-5">
       <div class="col-12 col-md-6">
         <opdex-card class="p-0">
-          <opdex-line-chart [chartData]="liquidityHistory" title="{{pool.token.symbol}}-CRS Liquidity" *ngIf="liquidityHistory"></opdex-line-chart>
+          <opdex-line-chart [chartData]="liquidityHistory" title="{{pool.srcToken.symbol}}-CRS Liquidity" *ngIf="liquidityHistory"></opdex-line-chart>
         </opdex-card>
       </div>
 
@@ -165,7 +165,7 @@
                 </div>
 
                 <div class="remaining">
-                  <p class="sub-heading">{{pool.token.symbol}}</p>
+                  <p class="sub-heading">{{pool.srcToken.symbol}}</p>
                   <p class="value">{{walletBalance?.srcBalance | formatNumber: 8}}</p>
                 </div>
               </div>

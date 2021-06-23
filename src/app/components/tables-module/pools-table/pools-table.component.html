@@ -2,7 +2,7 @@
   <table mat-table [dataSource]="dataSource" matSort [trackBy]="trackBy" class="w-100">
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> <a href="javascript:void(0)" (click)="navigate(element.address)">{{element.token.symbol}}-CRS</a></td>
+      <td mat-cell *matCellDef="let element"> <a href="javascript:void(0)" (click)="navigate(element.address)">{{element.srcToken.symbol}}-CRS</a></td>
     </ng-container>
 
     <ng-container matColumnDef="liquidity">

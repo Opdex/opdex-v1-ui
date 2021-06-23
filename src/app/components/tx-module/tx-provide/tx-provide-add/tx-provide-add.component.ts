@@ -66,10 +66,9 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
 
   async quote(value: string, token: string): Promise<string> {
     const payload = {
-      amountIn: parseFloat(value).toFixed(token === 'CRS' ? 8 : this.pool.token.decimals),
+      amountIn: parseFloat(value).toFixed(token === 'CRS' ? 8 : this.pool.srcToken.decimals),
       tokenIn: token,
-      pool: this.pool.address,
-      market: environment.marketAddress
+      pool: this.pool.address
     };
 
     const quote = await this._platformApi.quoteAddLiquidity(payload);
@@ -84,14 +83,10 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   async submit() {
     const payload = {
       amountCrs: parseFloat(this.amountCrs.value).toFixed(8),
-      amountSrc: parseFloat(this.amountSrc.value).toFixed(this.pool.token.decimals),
+      amountSrc: parseFloat(this.amountSrc.value).toFixed(this.pool.srcToken.decimals),
       tolerance: .001,
       recipient: environment.walletAddress,
-      liquidityPool: this.pool.address,
-      market: environment.marketAddress,
-      walletName: environment.walletName,
-      walletAddress: environment.walletAddress,
-      walletPassword: environment.walletPassword
+      liquidityPool: this.pool.address
     }
 
     const response = await this._platformApi.addLiquidity(payload);

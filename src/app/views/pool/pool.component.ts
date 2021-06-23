@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SidenavService } from '@sharedServices/sidenav.service';
 import { SidenavView } from '@sharedModels/sidenav-view';
 import { timer } from 'rxjs';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'opdex-pool',
@@ -61,7 +62,7 @@ export class PoolComponent implements OnInit {
   }
 
   private async getWalletSummary():Promise<void> {
-    const response = await this._platformApiService.getWalletSummaryForPool(this.poolAddress, 'PTsyKGQJ3eD9jnhHZKtvDmCMyGVMNTHay6');
+    const response = await this._platformApiService.getWalletSummaryForPool(this.poolAddress, environment.walletAddress);
     if (response.hasError) {
       //handle
     }

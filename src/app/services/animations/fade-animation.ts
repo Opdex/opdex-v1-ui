@@ -16,7 +16,7 @@ export const FadeAnimation = trigger('fadeAnimation', [
     query(
       ':enter', [
         style({ opacity: 0 }),
-        animate('0.3s', style({ opacity: 1, marginTop: 0 }))
+        animate('0.2s', style({ opacity: 1, marginTop: 0 }))
       ], { optional: true }
     )
   ])

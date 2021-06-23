@@ -4,7 +4,7 @@
   </div>
 
   <opdex-card class="pool-summary" *ngIf="pool">
-    <h4>{{pool.token.symbol}}-CRS</h4>
+    <h4>{{pool.srcToken.symbol}}-CRS</h4>
     <small>{{pool.address}}</small>
 
     <button mat-icon-button class="exit tiny" (click)="clearPool()">
@@ -18,7 +18,7 @@
       </div>
 
       <div class="src">
-        <h5>{{pool.token.symbol}} Reserves</h5>
+        <h5>{{pool.srcToken.symbol}} Reserves</h5>
         <small>{{pool.summary.reserves.src | formatNumber:4}}</small>
       </div>
     </div>

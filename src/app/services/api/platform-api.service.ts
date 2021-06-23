@@ -56,8 +56,8 @@ export class PlatformApiService extends RestApiService {
     return await this.get(`${this.api}/pools/${address}`);
   }
 
-  public async getPoolsByMarketAddress(marketAddress: string): Promise<ApiResponse<any[]>> {
-    return await this.get(`${this.api}/pools/market/${marketAddress}`);
+  public async getPools(): Promise<ApiResponse<any[]>> {
+    return await this.get(`${this.api}/pools`);
   }
 
   public async getPoolTransactions(address: string): Promise<ApiResponse<any>> {
@@ -74,6 +74,10 @@ export class PlatformApiService extends RestApiService {
 
   public async getMarketOverview(): Promise<ApiResponse<any>> {
     return await this.get(`${this.api}/market`);
+  }
+
+  public async getMarketHistory(): Promise<ApiResponse<any>> {
+    return await this.get(`${this.api}/market/history`);
   }
 
   //////////////

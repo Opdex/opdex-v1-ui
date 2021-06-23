@@ -19,7 +19,7 @@ export class PoolsComponent implements OnInit {
   constructor(private _platformApiService: PlatformApiService) { }
 
   async ngOnInit(): Promise<void> {
-    const poolsResponse = await this._platformApiService.getPoolsByMarketAddress(environment.marketAddress);
+    const poolsResponse = await this._platformApiService.getPools();
     if (poolsResponse.hasError || poolsResponse.data?.length) {
       // handle
     }

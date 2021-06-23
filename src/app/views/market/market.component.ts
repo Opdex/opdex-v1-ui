@@ -9,19 +9,20 @@ import { environment } from '@environments/environment';
   styleUrls: ['./market.component.scss']
 })
 export class MarketComponent implements OnInit {
-  ohlcPoints: any[];
   theme$: Observable<string>;
   market: any;
+  marketHistory: any[];
+  liquidityHistory: any[];
+  volumeHistory: any[];
   pools: any[];
   tokens: any[];
 
   constructor(private _platformApiService: PlatformApiService) { }
 
   async ngOnInit(): Promise<void> {
-    setTimeout(() => this.ohlcPoints = [], 100)
-
     await Promise.all([
       this.getMarket(),
+      this.getMarketHistory(),
       this.getPools(),
       this.getTokens()
     ])
@@ -36,8 +37,38 @@ export class MarketComponent implements OnInit {
     this.market = marketResponse.data;
   }
 
+  private async getMarketHistory():Promise<void> {
+    const marketResponse = await this._platformApiService.getMarketHistory();
+    if (marketResponse.hasError || !marketResponse.data) {
+      // handle
+    }
+
+    let liquidityPoints = [];
+    let volumePoints = [];
+
+    this.marketHistory = marketResponse.data;
+
+    this.marketHistory.forEach(history => {
+      liquidityPoints.push({
+        time: Date.parse(history.startDate)/1000,
+        value: history.liquidity
+      });
+
+      volumePoints.push({
+        time: Date.parse(history.startDate)/1000,
+        value: history.volume
+      })
+    });
+
+    this.liquidityHistory = liquidityPoints;
+    this.volumeHistory = volumePoints;
+
+
+
+  }
+
   private async getPools():Promise<void> {
-    const poolsResponse = await this._platformApiService.getPoolsByMarketAddress(environment.marketAddress);
+    const poolsResponse = await this._platformApiService.getPools();
     if (poolsResponse.hasError || poolsResponse.data?.length) {
       // handle
     }
