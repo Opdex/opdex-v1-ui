@@ -32,16 +32,12 @@ export class TxMineCollectComponent extends TxBase implements OnChanges {
     this.pool = this.data?.pool;
   }
 
-  async submit() {
+  submit(): void {
     const payload = {
       liquidityPool: this.pool.address
     }
 
-    const response = await this._platformApi.collectMiningRewards(payload);
-    if (response.hasError) {
-      // handle
-    }
-
-    this.txHash = response.data.txHash;
+    this._platformApi.collectMiningRewards(payload)
+      .subscribe(response => this.txHash = response.txHash);
   }
 }

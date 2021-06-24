@@ -48,7 +48,7 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
     this.pool = this.data?.pool;
   }
 
-  async submit() {
+  submit() {
     const payload = {
       token: this.token.value,
       // Todo: This below is wrong, we need to look up the token by address
@@ -56,11 +56,7 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
       spender: this.spender.value
     }
 
-    const response = await this._platformApi.approveAllowance(payload);
-    if (response.hasError) {
-      // handle
-    }
-
-    this.txHash = response.data.txHash;
+    this._platformApi.approveAllowance(payload)
+      .subscribe(response => this.txHash = response.txHash);
   }
 }

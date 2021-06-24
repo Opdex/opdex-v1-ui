@@ -1,7 +1,7 @@
-import { PlatformApiService } from '../../services/api/platform-api.service';
+import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '@environments/environment';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-market',
@@ -28,60 +28,47 @@ export class MarketComponent implements OnInit {
     ])
   }
 
-  private async getMarket():Promise<void> {
-    const marketResponse = await this._platformApiService.getMarketOverview();
-    if (marketResponse.hasError || !marketResponse.data) {
-      // handle
-    }
-
-    this.market = marketResponse.data;
+  private getMarket(): void {
+    this._platformApiService.getMarketOverview()
+      .pipe(take(1))
+      .subscribe(market => this.market = market);
   }
 
-  private async getMarketHistory():Promise<void> {
-    const marketResponse = await this._platformApiService.getMarketHistory();
-    if (marketResponse.hasError || !marketResponse.data) {
-      // handle
-    }
+  private getMarketHistory(): void {
+    this._platformApiService.getMarketHistory()
+      .pipe(take(1))
+      .subscribe(marketHistory => {
+        this.marketHistory = marketHistory;
 
-    let liquidityPoints = [];
-    let volumePoints = [];
+        let liquidityPoints = [];
+        let volumePoints = [];
 
-    this.marketHistory = marketResponse.data;
+        this.marketHistory.forEach(history => {
+          liquidityPoints.push({
+            time: Date.parse(history.startDate)/1000,
+            value: history.liquidity
+          });
 
-    this.marketHistory.forEach(history => {
-      liquidityPoints.push({
-        time: Date.parse(history.startDate)/1000,
-        value: history.liquidity
+          volumePoints.push({
+            time: Date.parse(history.startDate)/1000,
+            value: history.volume
+          })
+        });
+
+        this.liquidityHistory = liquidityPoints;
+        this.volumeHistory = volumePoints;
       });
-
-      volumePoints.push({
-        time: Date.parse(history.startDate)/1000,
-        value: history.volume
-      })
-    });
-
-    this.liquidityHistory = liquidityPoints;
-    this.volumeHistory = volumePoints;
-
-
-
   }
 
-  private async getPools():Promise<void> {
-    const poolsResponse = await this._platformApiService.getPools();
-    if (poolsResponse.hasError || poolsResponse.data?.length) {
-      // handle
-    }
-
-    this.pools = poolsResponse.data;
+  private getPools(): void {
+    this._platformApiService.getPools()
+      .pipe(take(1))
+      .subscribe(pools => this.pools = pools);
   }
 
-  private async getTokens():Promise<void> {
-    const tokensResponse = await this._platformApiService.getTokens();
-    if (tokensResponse.hasError || tokensResponse.data?.length) {
-      // handle
-    }
-
-    this.tokens = tokensResponse.data;
+  private getTokens(): void {
+    this._platformApiService.getTokens()
+      .pipe(take(1))
+      .subscribe(tokens => this.tokens = tokens);
   }
 }

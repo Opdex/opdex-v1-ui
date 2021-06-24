@@ -1,4 +1,5 @@
-import { environment } from 'src/environments/environment';
+import { ILiquidityPoolSummaryResponse } from './../../models/responses/platform-api/Pools/liquidity-pool.interface';
+import { take } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 
@@ -8,7 +9,7 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
   styleUrls: ['./pools.component.scss']
 })
 export class PoolsComponent implements OnInit {
-  pools: any[];
+  pools: ILiquidityPoolSummaryResponse[];
 
   get poolsByVolume() {
     const pools = this.pools ? [...this.pools] : [];
@@ -18,14 +19,9 @@ export class PoolsComponent implements OnInit {
 
   constructor(private _platformApiService: PlatformApiService) { }
 
-  async ngOnInit(): Promise<void> {
-    const poolsResponse = await this._platformApiService.getPools();
-    if (poolsResponse.hasError || poolsResponse.data?.length) {
-      // handle
-    }
-
-    this.pools = poolsResponse.data;
-
-    console.log(this.pools);
+  ngOnInit(): void {
+    this._platformApiService.getPools()
+      .pipe(take(1))
+      .subscribe(pools => this.pools = pools);
   }
 }

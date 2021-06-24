@@ -32,7 +32,7 @@ export class TxProvideRemoveComponent extends TxBase {
     });
   }
 
-  async submit(): Promise<void> {
+  submit(): void {
     const payload = {
       liquidity: this.liquidity.value,
       amountCrsMin: "1.00",
@@ -43,12 +43,7 @@ export class TxProvideRemoveComponent extends TxBase {
 
     console.log(payload);
 
-    const response = await this._platformApi.removeLiquidity(payload);
-    if (response.hasError) {
-      // handle
-      console.log(response.error);
-    }
-
-    this.txHash = response.data.txHash;
+    this._platformApi.removeLiquidity(payload)
+      .subscribe(response => this.txHash = response.txHash);
   }
 }

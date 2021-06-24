@@ -14,7 +14,7 @@ export class TxStakeCollectComponent extends TxBase implements OnChanges {
   @Input() data;
   pool: ILiquidityPoolSummaryResponse;
   form: FormGroup;
-  txHash;
+  txHash: string;
 
   get liquidate(): FormControl {
     return this.form.get('liquidate') as FormControl;
@@ -36,18 +36,13 @@ export class TxStakeCollectComponent extends TxBase implements OnChanges {
     this.pool = this.data?.pool;
   }
 
-  async submit() {
+  submit(): void {
     const payload = {
       liquidityPool: this.pool.address,
       liquidate: this.liquidate.value
     };
 
-    const response = await this._platformApi.collectStakingRewards(payload);
-    if (response.hasError) {
-      // handle
-      console.log(response.error);
-    }
-
-    this.txHash = response.data.txHash;
+    this._platformApi.collectStakingRewards(payload)
+      .subscribe(response => this.txHash = response.txHash);
   }
 }

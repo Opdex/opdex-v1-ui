@@ -1,10 +1,8 @@
 import { JwtService } from './services/utility/jwt.service';
-import { WalletService } from '@sharedServices/wallet.service';
-import { ApiInterceptor } from './services/api/api-interceptor';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -86,15 +84,7 @@ import { jwtOptionsFactory } from '@sharedServices/utility/jwt.service';
       }
     })
   ],
-  providers: [
-    JwtService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ApiInterceptor,
-      multi: true,
-      deps: [WalletService]
-    }
-  ],
+  providers: [JwtService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

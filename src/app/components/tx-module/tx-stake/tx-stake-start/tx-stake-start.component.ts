@@ -37,17 +37,13 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
     this.pool = this.data?.pool;
   }
 
-  async submit() {
+  submit(): void {
     const payload = {
       liquidityPool: this.pool.address,
       amount: this.amount.value
     }
 
-    const response = await this._platformApi.startStaking(payload);
-    if (response.hasError) {
-      // handle
-    }
-
-    this.txHash = response.data.txHash;
+    this._platformApi.startStaking(payload)
+      .subscribe(response => this.txHash = response.txHash);
   }
 }

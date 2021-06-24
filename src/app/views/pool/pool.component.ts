@@ -1,3 +1,4 @@
+import { take } from 'rxjs/operators';
 import { PlatformApiService } from './../../services/api/platform-api.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -52,60 +53,52 @@ export class PoolComponent implements OnInit, OnDestroy {
     this._sidenav.openSidenav(view, data);
   }
 
-  private async getPool():Promise<void> {
-    const poolResponse = await this._platformApiService.getPool(this.poolAddress);
-    if (poolResponse.hasError) {
-      //handle
-    }
-
-    this.pool = poolResponse.data;
+  private getPool(): void {
+    this._platformApiService.getPool(this.poolAddress)
+      .pipe(take(1))
+      .subscribe(pool => this.pool = pool);
   }
 
-  private async getWalletSummary():Promise<void> {
-    const response = await this._platformApiService.getWalletSummaryForPool(this.poolAddress, environment.walletAddress);
-    if (response.hasError) {
-      //handle
-    }
-
-    this.walletBalance = response.data;
-    console.log(this.walletBalance);
-  }
-
-  private async getPoolHistory():Promise<void> {
-    const poolResponse = await this._platformApiService.getPoolHistory(this.poolAddress);
-    if (poolResponse.hasError) {
-      //handle
-    }
-
-    this.poolHistory = poolResponse.data;
-
-    let liquidityPoints = [];
-    let volumePoints = [];
-
-    this.poolHistory.snapshotHistory.forEach(history => {
-      console.log(history.startDate);
-      liquidityPoints.push({
-        time: Date.parse(history.startDate.toString())/1000,
-        value: history.reserves.usd
-      });
-
-      volumePoints.push({
-        time: Date.parse(history.startDate.toString())/1000,
-        value: history.volume.usd
+  private getWalletSummary(): void {
+    this._platformApiService.getWalletSummaryForPool(this.poolAddress, environment.walletAddress)
+      .pipe(take(1))
+      .subscribe(walletSummary => {
+        this.walletBalance = walletSummary;
+        console.log(walletSummary);
       })
-    });
-
-    this.liquidityHistory = liquidityPoints;
-    this.volumeHistory = volumePoints;
   }
 
-  private async getPoolTransactions():Promise<void> {
-    const transactionsResponse = await this._platformApiService.getPoolTransactions(this.poolAddress);
-    if (transactionsResponse.hasError) {
-      //handle
-    }
+  private getPoolHistory(): void {
+    this._platformApiService.getPoolHistory(this.poolAddress)
+      .pipe(take(1))
+      .subscribe(poolHistory => {
+        this.poolHistory = poolHistory;
 
-    this.transactions = transactionsResponse.data;
+        let liquidityPoints = [];
+        let volumePoints = [];
+
+        this.poolHistory.snapshotHistory.forEach(history => {
+          console.log(history.startDate);
+          liquidityPoints.push({
+            time: Date.parse(history.startDate.toString())/1000,
+            value: history.reserves.usd
+          });
+
+          volumePoints.push({
+            time: Date.parse(history.startDate.toString())/1000,
+            value: history.volume.usd
+          })
+        });
+
+        this.liquidityHistory = liquidityPoints;
+        this.volumeHistory = volumePoints;
+      });
+  }
+
+  private getPoolTransactions(): void {
+    this._platformApiService.getPoolTransactions(this.poolAddress)
+      .pipe(take(1))
+      .subscribe(transactions => this.transactions = transactions);
   }
 
   ngOnDestroy() {

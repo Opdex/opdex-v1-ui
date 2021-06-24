@@ -3,8 +3,8 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
-import { debounce, debounceTime, take } from 'rxjs/operators';
+import { Subscription, of, Observable } from 'rxjs';
+import { debounce, debounceTime, take, catchError, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { SignTxModalComponent } from 'src/app/components/modals-module/sign-tx-modal/sign-tx-modal.component';
 import { environment } from '@environments/environment';
 
@@ -59,8 +59,12 @@ export class TxSwapComponent implements OnDestroy{
     });
 
     this.exactInput$ = this.token0Amount.valueChanges
-      .pipe(debounceTime(300))
-      .subscribe((change: string) => this.updateExactAmount(change));
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        switchMap(() => this.quote())
+      )
+      .subscribe(value => this.form.get("token1Amount").setValue(value));
   }
 
   ngOnChanges() {
@@ -92,10 +96,6 @@ export class TxSwapComponent implements OnDestroy{
     this.token0In = !this.token0In;
   }
 
-  updateExactAmount(change: string): void {
-    this.quote();
-  }
-
   changeToken(tokenField: string): void {
     const ref = this._dialog.open(TokensModalComponent, {
       width: '600px',
@@ -121,7 +121,7 @@ export class TxSwapComponent implements OnDestroy{
     });
   }
 
-  async submit() {
+  submit() {
     const payload = {
       tokenIn: this.token0In ? this.token0.value : this.token1.value,
       tokenOut: !this.token0In ? this.token0.value : this.token1.value,
@@ -134,13 +134,8 @@ export class TxSwapComponent implements OnDestroy{
 
     // this.signTx();
 
-    const response = await this._platformApi.swap(payload);
-    if (response.hasError) {
-      // handle
-      console.log(response.error);
-    }
-
-    this.txHash = response.data.txHash;
+    this._platformApi.swap(payload)
+      .subscribe(response => this.txHash = response.txHash);
   }
 
   switch() {
@@ -162,7 +157,7 @@ export class TxSwapComponent implements OnDestroy{
     this.toggleToken0In();
   }
 
-  async quote() {
+  quote(): Observable<string> {
     const payload = {
       tokenIn: this.token0In ? this.token0.value : this.token1.value,
       tokenOut: !this.token0In ? this.token0.value : this.token1.value,
@@ -170,10 +165,7 @@ export class TxSwapComponent implements OnDestroy{
       tokenOutAmount: !this.token0In ? this.token0AmountValue : null
     };
 
-    const response = await this._platformApi.getSwapQuote(payload);
-
-    console.log(response.data);
-    this.form.get("token1Amount").setValue(response.data);
+    return this._platformApi.getSwapQuote(payload);
   }
 
   ngOnDestroy() {

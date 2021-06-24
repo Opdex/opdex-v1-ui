@@ -3,10 +3,11 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from '@environments/environment';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { ILiquidityPoolSummaryResponse, IToken } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
+import { Observable, throwError } from 'rxjs';
 import { Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-tx-provide-add',
@@ -43,45 +44,39 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
 
   ngOnInit(): void {
     this.subscription.add(
-      this.amountCrs.valueChanges.pipe(debounceTime(300))
-        .subscribe(async value => {
-          if (this.pool) {
-            const quote = await this.quote(value, 'CRS');
-            this.amountSrc.setValue(quote, { emitEvent: false });
-          }
-        }
-      )
-    );
+      this.amountCrs.valueChanges
+        .pipe(
+          debounceTime(400),
+          distinctUntilChanged(),
+          switchMap(value => this.quote$(value, this.pool?.token?.crs))
+        )
+        .subscribe(value => this.amountSrc.setValue(value, { emitEvent: false })));
 
     this.subscription.add(
-      this.amountSrc.valueChanges.pipe(debounceTime(300))
-        .subscribe(async value => {
-          if (this.pool) {
-            const quote = await this.quote(value, this.pool?.token?.src?.address);
-            this.amountCrs.setValue(quote, { emitEvent: false });
-          }
-        }
-      )
-    );
+      this.amountSrc.valueChanges
+        .pipe(
+          debounceTime(400),
+          distinctUntilChanged(),
+          switchMap(value => this.quote$(value, this.pool?.token?.src))
+        )
+        .subscribe(value => this.amountCrs.setValue(value, { emitEvent: false })));
   }
 
-  async quote(value: string, token: string): Promise<string> {
+  quote$(value: string, tokenIn: IToken): Observable<string> {
+    if (!tokenIn) {
+      throwError('Invalid token');
+    }
+
     const payload = {
-      amountIn: parseFloat(value).toFixed(token === 'CRS' ? 8 : this.pool.token.src.decimals),
-      tokenIn: token,
+      amountIn: parseFloat(value).toFixed(tokenIn.decimals),
+      tokenIn: tokenIn.address,
       pool: this.pool.address
     };
 
-    const quote = await this._platformApi.quoteAddLiquidity(payload);
-
-    if (quote.hasError) {
-      return '0.00';
-    }
-
-    return quote.data;
+    return this._platformApi.quoteAddLiquidity(payload);
   }
 
-  async submit() {
+  submit(): void {
     const payload = {
       amountCrs: parseFloat(this.amountCrs.value).toFixed(8),
       amountSrc: parseFloat(this.amountSrc.value).toFixed(this.pool.token.src.decimals),
@@ -90,12 +85,8 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
       liquidityPool: this.pool.address
     }
 
-    const response = await this._platformApi.addLiquidity(payload);
-    if (response.hasError) {
-      // handle
-    }
-
-    this.txHash = response.data;
+    this._platformApi.addLiquidity(payload)
+      .subscribe(response => this.txHash = response.txHash);
   }
 
   ngOnDestroy() {

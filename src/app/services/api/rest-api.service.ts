@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { ApiResponse } from '@sharedModels/responses/api-response';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from '@sharedServices/utility/error.service';
+import { throwError, Observable } from 'rxjs';
+import { catchError, retry } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -9,33 +10,60 @@ import { ErrorService } from '@sharedServices/utility/error.service';
 export class RestApiService {
   constructor(protected _http: HttpClient, protected _error: ErrorService) { }
 
-  protected async get(endpoint: string): Promise<ApiResponse<any>> {
-    return await this.executeCallAsync(() => this._http.get(endpoint), endpoint);
+  protected get<T>(endpoint: string, options: object = {}): Observable<T> {
+    return this._http.get<T>(endpoint, options)
+      .pipe(
+        retry(3),
+        catchError(this.handleError)
+      );
   }
 
-  protected async post(endpoint: string, body: any): Promise<ApiResponse<any>> {
-    return await this.executeCallAsync(() => this._http.post(endpoint, body), endpoint, body);
+  protected post<T>(endpoint: string, payload: any, options: object = {}): Observable<T> {
+    return this._http.post<T>(endpoint, payload, options)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
-  protected async put(endpoint: string, body: any): Promise<ApiResponse<any>> {
-    return await this.executeCallAsync(() => this._http.put(endpoint, body), endpoint, body);
+  protected put<T>(endpoint: string, payload: any, options: object = {}): Observable<T> {
+    return this._http.put<T>(endpoint, payload, options)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
-  protected async patch(endpoint: string, body: any): Promise<ApiResponse<any>> {
-    return await this.executeCallAsync(() => this._http.patch(endpoint, body), endpoint, body);
+  protected patch<T>(endpoint: string, payload: any, options: object = {}): Observable<T> {
+    return this._http.patch<T>(endpoint, payload, options)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
-  protected async detete(endpoint: string): Promise<ApiResponse<any>> {
-    return await this.executeCallAsync(() => this._http.delete(endpoint), endpoint);
+  protected delete<T>(endpoint: string, options: object = {}): Observable<T> {
+    return this._http.delete<T>(endpoint, options)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
-  private async executeCallAsync(method: Function, endpoint: string, body?: any) {
-    try {
-      const response = await method().toPromise();
-      return new ApiResponse<any>({ data: response });
-    } catch (error) {
-      this._error.logHttpError(error, endpoint, body);
-      return new ApiResponse<any>({ error });
+  private handleError(error: HttpErrorResponse) {
+    if (error.status === 0) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong.
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
+
+      this._error.logHttpError(error, error.url);
     }
+
+    // Return an observable with a user-facing error message.
+    return throwError(
+      'Something bad happened; please try again later.');
   }
 }
+
+

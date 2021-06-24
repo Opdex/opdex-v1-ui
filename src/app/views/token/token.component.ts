@@ -1,8 +1,7 @@
+import { take } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { ThemeService } from '@sharedServices/theme.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'opdex-token',
@@ -10,7 +9,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./token.component.scss']
 })
 export class TokenComponent implements OnInit {
-  ohlcPoints: any[];
+  ohlcPoints = [];
   tokenAddress: string;
   token: any;
 
@@ -21,18 +20,9 @@ export class TokenComponent implements OnInit {
     this.tokenAddress = this._route.snapshot.params.token;
   }
 
-  async ngOnInit(): Promise<void> {
-    setTimeout(() => this.ohlcPoints = [], 100);
-
-    await this.gettoken();
-  }
-
-  private async gettoken():Promise<void> {
-    const tokenResponse = await this._platformApiService.getToken(this.tokenAddress);
-    if (tokenResponse.hasError) {
-      //handle
-    }
-
-    this.token = tokenResponse.data;
+  ngOnInit(): void {
+    this._platformApiService.getToken(this.tokenAddress)
+      .pipe(take(1))
+      .subscribe(token => this.token = token);
   }
 }
