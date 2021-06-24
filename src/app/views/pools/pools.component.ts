@@ -13,7 +13,7 @@ export class PoolsComponent implements OnInit {
   get poolsByVolume() {
     const pools = this.pools ? [...this.pools] : [];
 
-    return pools.sort((a, b) => b.summary.volume.usd - a.summary.volume.usd);
+    return pools.sort((a, b) => b.volume.usd - a.volume.usd);
   }
 
   constructor(private _platformApiService: PlatformApiService) { }

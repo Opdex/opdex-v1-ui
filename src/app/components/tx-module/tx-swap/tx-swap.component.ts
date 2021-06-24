@@ -74,7 +74,7 @@ export class TxSwapComponent implements OnDestroy{
         sats: 100000000
       };
 
-      this.token1Details = this.data.pool.srcToken;
+      this.token1Details = this.data.pool.token.src;
       this.token1.setValue(this.token1Details.address);
     }
   }
@@ -132,14 +132,15 @@ export class TxSwapComponent implements OnDestroy{
       recipient: environment.walletAddress
     }
 
-    this.signTx();
+    // this.signTx();
 
-    // const response = await this._platformApi.swap(payload);
-    // if (response.hasError) {
-    //   // handle
-    // }
+    const response = await this._platformApi.swap(payload);
+    if (response.hasError) {
+      // handle
+      console.log(response.error);
+    }
 
-    // this.txHash = response.data.txHash;
+    this.txHash = response.data.txHash;
   }
 
   switch() {

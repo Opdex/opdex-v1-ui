@@ -1,5 +1,5 @@
 <div class="remove-liquidity">
-  <form [formGroup]="form" name="remove-liquidity-form" id="swap-form">
+  <form [formGroup]="form" name="remove-liquidity-form" id="remove-liquidity-form" (submit)="submit()">
     <div class="exactly swap-row">
       <div class="spend-receive-button">
         <button mat-icon-button color="primary" type="button" class="small" disabled><mat-icon>remove</mat-icon></button>
@@ -7,21 +7,26 @@
 
       <div class="amount">
         <mat-form-field appearance="outline" class="w-100" >
-          <input matInput type="text" [required]="true" [formControl]="amount" autocomplete="off" placeholder="0">
+          <input matInput type="text" [required]="true" [formControl]="liquidity" autocomplete="off" placeholder="0">
         </mat-form-field>
       </div>
     </div>
+
+    <div class="space-between"></div>
+
+    <!-- <div class="swap-info mt-1" *ngIf="form.controls.tokenIn.value > 0 && form.controls.to.value > 0">
+      <p class="mb-0">Slippage: .1%</p>
+      <p class="mb-0">Minimum Received: 12345</p>
+      <p class="mb-0">Price: 12345</p>
+      <p class="mb-0">Price Impact: 12345</p>
+      <p class="mb-0">Fee: .03%</p>
+    </div> -->
+
+    <div *ngIf="txHash">
+      <span style="font-size: 10px;">{{txHash}}</span>
+    </div>
+
+
+    <button mat-flat-button color="primary" class="mt-4 w-100">Continue</button>
   </form>
-
-  <div class="space-between"></div>
-
-  <!-- <div class="swap-info mt-1" *ngIf="form.controls.tokenIn.value > 0 && form.controls.to.value > 0">
-    <p class="mb-0">Slippage: .1%</p>
-    <p class="mb-0">Minimum Received: 12345</p>
-    <p class="mb-0">Price: 12345</p>
-    <p class="mb-0">Price Impact: 12345</p>
-    <p class="mb-0">Fee: .03%</p>
-  </div> -->
-
-  <button mat-flat-button color="primary" class="mt-4 w-100">Continue</button>
 </div>

@@ -1,21 +1,23 @@
+import { environment } from '@environments/environment';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
+import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 
 @Component({
   selector: 'opdex-tx-provide-remove',
   templateUrl: './tx-provide-remove.component.html',
   styleUrls: ['./tx-provide-remove.component.scss']
 })
-export class TxProvideRemoveComponent extends TxBase implements OnInit {
-  @Input() pool: any;
-
+export class TxProvideRemoveComponent extends TxBase {
+  @Input() pool: ILiquidityPoolSummaryResponse;
+  txHash: string;
   form: FormGroup;
 
-  get amount(): FormControl {
-    return this.form.get('amount') as FormControl;
+  get liquidity(): FormControl {
+    return this.form.get('liquidity') as FormControl;
   }
 
   constructor(
@@ -26,31 +28,27 @@ export class TxProvideRemoveComponent extends TxBase implements OnInit {
     super(_dialog);
 
     this.form = this._fb.group({
-      amount: ['', [Validators.required, Validators.min(.00000001)]]
+      liquidity: ['', [Validators.required, Validators.min(.00000001)]]
     });
   }
 
-  ngOnInit(): void { }
+  async submit(): Promise<void> {
+    const payload = {
+      liquidity: this.liquidity.value,
+      amountCrsMin: "1.00",
+      amountSrcMin: "1.00",
+      liquidityPool: this.pool.address,
+      recipient: environment.walletAddress
+    };
 
-  // async submit(): Promise<void> {
-  //   var payload = {
-  //     token: this.token1.value,
-  //     amountCrsDesired: Math.floor(this.token0Amount.value * 100_000_000),
-  //     amountSrcDesired: Math.floor(this.token1Amount.value * this.token1Details.sats),
-  //     amountCrsMin: 1,
-  //     amountSrcMin: 1,
-  //     to: 'PVTCoqP2FkWAiC158K7YUapo8UAgdRePrY'
-  //   };
+    console.log(payload);
 
-  //   console.log(payload);
+    const response = await this._platformApi.removeLiquidity(payload);
+    if (response.hasError) {
+      // handle
+      console.log(response.error);
+    }
 
-  //   const response = await this._platformApi.addLiquidity(payload);
-  //   if (response.hasError) {
-  //     // handle
-  //     console.log(response.error);
-  //   }
-
-  //   this.txHash = response.data.txHash;
-  //   console.log(response.data);
-  // }
+    this.txHash = response.data.txHash;
+  }
 }

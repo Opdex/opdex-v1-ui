@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
+import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 
 @Component({
@@ -9,11 +10,14 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
   templateUrl: './tx-stake-collect.component.html',
   styleUrls: ['./tx-stake-collect.component.scss']
 })
-export class TxStakeCollectComponent extends TxBase implements OnInit {
+export class TxStakeCollectComponent extends TxBase implements OnChanges {
+  @Input() data;
+  pool: ILiquidityPoolSummaryResponse;
   form: FormGroup;
+  txHash;
 
-  get pool(): FormControl {
-    return this.form.get('pool') as FormControl;
+  get liquidate(): FormControl {
+    return this.form.get('liquidate') as FormControl;
   }
 
   constructor(
@@ -24,10 +28,26 @@ export class TxStakeCollectComponent extends TxBase implements OnInit {
     super(_dialog);
 
     this.form = this._fb.group({
-      pool: ['', [Validators.required]],
       liquidate: [false, [Validators.required]]
     });
   }
 
-  ngOnInit(): void { }
+  ngOnChanges(): void {
+    this.pool = this.data?.pool;
+  }
+
+  async submit() {
+    const payload = {
+      liquidityPool: this.pool.address,
+      liquidate: this.liquidate.value
+    };
+
+    const response = await this._platformApi.collectStakingRewards(payload);
+    if (response.hasError) {
+      // handle
+      console.log(response.error);
+    }
+
+    this.txHash = response.data.txHash;
+  }
 }

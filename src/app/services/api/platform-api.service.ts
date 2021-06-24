@@ -37,6 +37,14 @@ export class PlatformApiService extends RestApiService {
   }
 
   //////////////
+  // Indexer
+  //////////////
+
+  public async processLatestBlocks(): Promise<ApiResponse<any>> {
+    return await this.post(`${this.api}/index/process-latest-blocks`, {});
+  }
+
+  //////////////
   // Token
   //////////////
 

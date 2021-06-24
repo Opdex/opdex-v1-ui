@@ -1,5 +1,5 @@
 <div class="add-liquidity">
-  <form [formGroup]="form" name="add-liquidity-form" id="swap-form" (ngSubmit)="submit()">
+  <form [formGroup]="form" name="add-liquidity-form" id="swap-form" (submit)="submit()">
     <div class="exactly swap-row">
       <div class="spend-receive-button">
         <button mat-icon-button color="primary" type="button" class="small" disabled><mat-icon>add</mat-icon></button>
@@ -28,7 +28,7 @@
       </div>
 
       <div class="token">
-        <button mat-stroked-button color="primary" type="button" disabled>{{pool.srcToken.symbol}}</button>
+        <button mat-stroked-button color="primary" type="button" disabled>{{pool.token.src.symbol}}</button>
       </div>
     </div>
 

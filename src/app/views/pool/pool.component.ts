@@ -1,25 +1,26 @@
 import { PlatformApiService } from './../../services/api/platform-api.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SidenavService } from '@sharedServices/sidenav.service';
 import { SidenavView } from '@sharedModels/sidenav-view';
-import { timer } from 'rxjs';
+import { timer, Subscription } from 'rxjs';
 import { environment } from '@environments/environment';
+import { ILiquidityPoolSnapshotHistoryResponse, ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 
 @Component({
   selector: 'opdex-pool',
   templateUrl: './pool.component.html',
   styleUrls: ['./pool.component.scss']
 })
-export class PoolComponent implements OnInit {
-  ohlcPoints: any[];
+export class PoolComponent implements OnInit, OnDestroy {
   poolAddress: string;
-  pool: any;
-  poolHistory: any[];
+  pool: ILiquidityPoolSummaryResponse;
+  poolHistory: ILiquidityPoolSnapshotHistoryResponse;
   transactions: any[];
   liquidityHistory: any[] = [];
   volumeHistory: any[] = [];
   walletBalance: any;
+  subscription = new Subscription();
 
   constructor(
     private _route: ActivatedRoute,
@@ -30,18 +31,17 @@ export class PoolComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    setTimeout(() => this.ohlcPoints = [], 100);
-
-    // 30 seconds refresh view
-    timer(0, 30000)
-      .subscribe(async () => {
-        await Promise.all([
-          this.getPool(),
-          this.getPoolHistory(),
-          this.getPoolTransactions(),
-          this.getWalletSummary()
-        ]);
-      });
+    // 10 seconds refresh view
+    this.subscription.add(
+      timer(0, 10000)
+        .subscribe(async () => {
+          await Promise.all([
+            this.getPool(),
+            this.getPoolHistory(),
+            this.getPoolTransactions(),
+            this.getWalletSummary()
+          ]);
+        }));
   }
 
   openTransactionSidebar(view: SidenavView) {
@@ -82,14 +82,15 @@ export class PoolComponent implements OnInit {
     let liquidityPoints = [];
     let volumePoints = [];
 
-    this.poolHistory.forEach(history => {
+    this.poolHistory.snapshotHistory.forEach(history => {
+      console.log(history.startDate);
       liquidityPoints.push({
-        time: Date.parse(history.startDate)/1000,
+        time: Date.parse(history.startDate.toString())/1000,
         value: history.reserves.usd
       });
 
       volumePoints.push({
-        time: Date.parse(history.startDate)/1000,
+        time: Date.parse(history.startDate.toString())/1000,
         value: history.volume.usd
       })
     });
@@ -105,5 +106,9 @@ export class PoolComponent implements OnInit {
     }
 
     this.transactions = transactionsResponse.data;
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

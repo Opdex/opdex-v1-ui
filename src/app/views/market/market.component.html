@@ -26,24 +26,7 @@
             <div class="col">
               <opdex-card>
                 <h4 class="stat-header">
-                  Total Volume (24hr)
-                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
-                </h4>
-
-                <div class="stat">
-                  <p class="stat-value">
-                    ${{market.summary.volume | formatNumber}}
-                  </p>
-
-                  <!-- <opdex-change-indicator [value]="4.25"></opdex-change-indicator> -->
-                </div>
-              </opdex-card>
-            </div>
-
-            <div class="col">
-              <opdex-card>
-                <h4 class="stat-header">
-                  Total Liquidity
+                  Liquidity
                   <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
                 </h4>
 
@@ -52,7 +35,7 @@
                     ${{market.summary.liquidity | formatNumber}}
                   </p>
 
-                  <opdex-change-indicator [value]="-10.12"></opdex-change-indicator>
+                  <opdex-change-indicator [value]="market.summary.liquidityDailyChange"></opdex-change-indicator>
                 </div>
               </opdex-card>
             </div>
@@ -66,10 +49,25 @@
 
                 <div class="stat">
                   <p class="stat-value">
-                    ${{market.summary.staking.weight | formatNumber}}
+                    {{market.summary.staking.weight | formatNumber:0}} <small>ODX</small>
                   </p>
 
-                  <opdex-change-indicator [value]="4.25"></opdex-change-indicator>
+                  <opdex-change-indicator [value]="market.summary.staking.weightDailyChange"></opdex-change-indicator>
+                </div>
+              </opdex-card>
+            </div>
+
+            <div class="col">
+              <opdex-card>
+                <h4 class="stat-header">
+                  Volume (24hr)
+                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
+                </h4>
+
+                <div class="stat">
+                  <p class="stat-value">
+                    ${{market.summary.volume | formatNumber}}
+                  </p>
                 </div>
               </opdex-card>
             </div>
@@ -83,10 +81,8 @@
 
                 <div class="stat">
                   <p class="stat-value">
-                    ${{market.summary.rewards.usd | formatNumber}}
+                    ${{market.summary.rewards.totalUsd | formatNumber}}
                   </p>
-
-                  <!-- <opdex-change-indicator [value]="4.25"></opdex-change-indicator> -->
                 </div>
               </opdex-card>
             </div>

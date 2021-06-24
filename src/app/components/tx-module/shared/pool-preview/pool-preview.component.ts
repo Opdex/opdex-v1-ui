@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 
 @Component({
   selector: 'opdex-pool-preview',
@@ -6,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./pool-preview.component.scss']
 })
 export class PoolPreviewComponent {
-  @Input() pool: any;
+  @Input() pool: ILiquidityPoolSummaryResponse;
 
   clearPool() {
     this.pool = null;

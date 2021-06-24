@@ -23,7 +23,8 @@
 
         <div class="row">
           <div class="col-3" *ngFor="let pool of pools">
-            <opdex-mining-card [pool]="pool" *ngIf="pool.miningEnabled"></opdex-mining-card>
+            <!-- *ngIf="pool.miningEnabled" -->
+            <opdex-mining-card [pool]="pool"></opdex-mining-card>
           </div>
         </div>
       </div>

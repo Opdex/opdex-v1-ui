@@ -3,6 +3,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from '@environments/environment';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
+import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -13,7 +14,7 @@ import { debounceTime } from 'rxjs/operators';
   styleUrls: ['./tx-provide-add.component.scss']
 })
 export class TxProvideAddComponent extends TxBase implements OnInit {
-  @Input() pool: any;
+  @Input() pool: ILiquidityPoolSummaryResponse;
   txHash: string;
   subscription = new Subscription();
 
@@ -56,7 +57,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
       this.amountSrc.valueChanges.pipe(debounceTime(300))
         .subscribe(async value => {
           if (this.pool) {
-            const quote = await this.quote(value, this.pool?.token?.address);
+            const quote = await this.quote(value, this.pool?.token?.src?.address);
             this.amountCrs.setValue(quote, { emitEvent: false });
           }
         }
@@ -66,7 +67,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
 
   async quote(value: string, token: string): Promise<string> {
     const payload = {
-      amountIn: parseFloat(value).toFixed(token === 'CRS' ? 8 : this.pool.srcToken.decimals),
+      amountIn: parseFloat(value).toFixed(token === 'CRS' ? 8 : this.pool.token.src.decimals),
       tokenIn: token,
       pool: this.pool.address
     };
@@ -83,7 +84,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   async submit() {
     const payload = {
       amountCrs: parseFloat(this.amountCrs.value).toFixed(8),
-      amountSrc: parseFloat(this.amountSrc.value).toFixed(this.pool.srcToken.decimals),
+      amountSrc: parseFloat(this.amountSrc.value).toFixed(this.pool.token.src.decimals),
       tolerance: .001,
       recipient: environment.walletAddress,
       liquidityPool: this.pool.address

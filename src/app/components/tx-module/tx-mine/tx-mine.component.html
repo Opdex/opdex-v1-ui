@@ -10,6 +10,6 @@
   <opdex-card *ngIf="pool">
     <opdex-tx-mine-start *ngIf="group.value == 1"></opdex-tx-mine-start>
     <opdex-tx-mine-stop *ngIf="group.value == 2"></opdex-tx-mine-stop>
-    <opdex-tx-mine-collect *ngIf="group.value == 3"></opdex-tx-mine-collect>
+    <opdex-tx-mine-collect [data]="data" *ngIf="group.value == 3"></opdex-tx-mine-collect>
   </opdex-card>
 </div>

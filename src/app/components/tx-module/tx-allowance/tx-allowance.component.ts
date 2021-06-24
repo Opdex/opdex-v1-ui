@@ -1,9 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { OnChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { environment } from '@environments/environment';
+import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { Subscription } from 'rxjs';
 import { TxBase } from '../tx-base.component';
 
 @Component({
@@ -11,11 +11,10 @@ import { TxBase } from '../tx-base.component';
   templateUrl: './tx-allowance.component.html',
   styleUrls: ['./tx-allowance.component.scss']
 })
-export class TxAllowanceComponent extends TxBase implements OnInit {
+export class TxAllowanceComponent extends TxBase implements OnChanges {
   @Input() data: any;
-  pool: any;
+  pool: ILiquidityPoolSummaryResponse;
   txHash: string;
-  subscription = new Subscription();
 
   form: FormGroup;
 
@@ -45,17 +44,16 @@ export class TxAllowanceComponent extends TxBase implements OnInit {
     });
   }
 
-  ngOnInit(): void { }
-
   ngOnChanges() {
     this.pool = this.data?.pool;
   }
 
   async submit() {
     const payload = {
-      token: this.token,
-      amount: parseFloat(this.amount.value).toFixed(this.pool.srcToken.decimals),
-      recipient: this.spender.value
+      token: this.token.value,
+      // Todo: This below is wrong, we need to look up the token by address
+      amount: parseFloat(this.amount.value).toFixed(this.pool.token.lp.decimals),
+      spender: this.spender.value
     }
 
     const response = await this._platformApi.approveAllowance(payload);
@@ -63,10 +61,6 @@ export class TxAllowanceComponent extends TxBase implements OnInit {
       // handle
     }
 
-    this.txHash = response.data;
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.txHash = response.data.txHash;
   }
 }

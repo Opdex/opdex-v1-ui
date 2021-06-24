@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { SidenavView } from '@sharedModels/sidenav-view';
 import { SidenavService } from '@sharedServices/sidenav.service';
 
@@ -8,7 +9,7 @@ import { SidenavService } from '@sharedServices/sidenav.service';
   styleUrls: ['./liquidity-pool-card.component.scss']
 })
 export class LiquidityPoolCardComponent implements OnInit {
-  @Input() pool: any;
+  @Input() pool: ILiquidityPoolSummaryResponse;
 
   constructor(private _sidebar: SidenavService) { }
 

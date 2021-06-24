@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 
 @Component({
   selector: 'opdex-tx-stake',
@@ -7,7 +8,7 @@ import { Component, Input } from '@angular/core';
 })
 export class TxStakeComponent {
   @Input() data: any;
-  pool: any;
+  pool: ILiquidityPoolSummaryResponse;
 
   ngOnChanges() {
     this.pool = this.data?.pool;

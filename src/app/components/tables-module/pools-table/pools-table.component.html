@@ -2,32 +2,32 @@
   <table mat-table [dataSource]="dataSource" matSort [trackBy]="trackBy" class="w-100">
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> <a href="javascript:void(0)" (click)="navigate(element.address)">{{element.srcToken.symbol}}-CRS</a></td>
+      <td mat-cell *matCellDef="let element"> <a href="javascript:void(0)" (click)="navigate(element.address)">{{element.token.src.symbol}}-CRS</a></td>
     </ng-container>
 
     <ng-container matColumnDef="liquidity">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Liquidity </th>
-      <td mat-cell *matCellDef="let element"> ${{element.summary.reserves.usd | formatNumber}}</td>
+      <td mat-cell *matCellDef="let element"> ${{element.reserves.usd | formatNumber}}</td>
     </ng-container>
 
     <ng-container matColumnDef="stakingWeight">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Staking Weight </th>
-      <td mat-cell *matCellDef="let element"> {{element.summary.staking.weight | formatNumber:4}} ODX</td>
+      <td mat-cell *matCellDef="let element"> {{element.staking?.weight | formatNumber:0}} <small>ODX</small></td>
     </ng-container>
 
     <ng-container matColumnDef="volumeDaily">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Volume (24hrs) </th>
-      <td mat-cell *matCellDef="let element"> ${{element.summary.volume.usd | formatNumber}} </td>
+      <td mat-cell *matCellDef="let element"> ${{element.volume.usd | formatNumber}} </td>
     </ng-container>
 
     <ng-container matColumnDef="providerRewards">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Provider Rewards </th>
-      <td mat-cell *matCellDef="let element"> ${{element.summary.rewards.providerUsd | formatNumber}} </td>
+      <td mat-cell *matCellDef="let element"> ${{element.rewards.providerUsd | formatNumber}} </td>
     </ng-container>
 
     <ng-container matColumnDef="stakerRewards">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Staker Rewards </th>
-      <td mat-cell *matCellDef="let element"> ${{element.summary.rewards.marketUsd | formatNumber}} </td>
+      <td mat-cell *matCellDef="let element"> ${{element.rewards.marketUsd | formatNumber}} </td>
     </ng-container>
 
     <ng-container matColumnDef="liquidityHistory">

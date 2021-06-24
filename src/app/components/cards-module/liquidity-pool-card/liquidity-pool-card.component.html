@@ -1,23 +1,24 @@
 <opdex-card class="liquidity-pool">
   <div class="d-flex justify-content-between align-items-center">
-    <h3 class="d-inline mb-0"><a href="javascript:void(0)" [routerLink]="['/pools', pool.address]">{{pool.srcToken.symbol}}-CRS</a></h3>
+    <h3 class="d-inline mb-0"><a href="javascript:void(0)" [routerLink]="['/pools', pool.address]">{{pool.token.src.symbol}}-CRS</a></h3>
     <div>
       <button mat-icon-button class="swap small mr-2" (click)="swap()" title="Swap"><mat-icon>swap_horiz</mat-icon></button>
       <button mat-icon-button class="provide small mr-2" (click)="provide()" title="Provide"><mat-icon>add</mat-icon></button>
-      <button mat-icon-button class="stake small mr-2" (click)="stake()" title="Stake" *ngIf="pool.stakingEnabled"><mat-icon>star</mat-icon></button>
-      <button mat-icon-button class="mine small" (click)="mine()" title="Mine" *ngIf="pool.miningEnabled"><mat-icon>whatshot</mat-icon></button>
+      <button mat-icon-button class="stake small mr-2" (click)="stake()" title="Stake" *ngIf="pool.staking?.isActive"><mat-icon>star</mat-icon></button>
+      <!--*ngIf="pool?.miningEnabled"-->
+      <button mat-icon-button class="mine small" (click)="mine()" title="Mine"><mat-icon>whatshot</mat-icon></button>
     </div>
   </div>
 
   <div class="details">
     <div class="mining">
       <p class="sub-heading">Volume</p>
-      <p class="value">${{pool.summary.volume.usd | formatNumber}}</p>
+      <p class="value">${{pool.volume.usd | formatNumber}}</p>
     </div>
 
     <div class="remaining">
       <p class="sub-heading">Liquidity</p>
-      <p class="value">${{pool.summary.reserves.usd | formatNumber}}</p>
+      <p class="value">${{pool.reserves.usd | formatNumber}}</p>
     </div>
   </div>
 </opdex-card>

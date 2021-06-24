@@ -6,7 +6,7 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { ThemeService } from './services/theme.service';
 import { MatSidenav } from '@angular/material/sidenav';
 import { ISidenavMessage, SidenavView } from '@sharedModels/sidenav-view';
-import { Subscription } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 import { TransactionTypes } from '@sharedLookups/transaction-types.lookup';
 import { FadeAnimation } from '@sharedServices/animations/fade-animation';
 import { RouterOutlet } from '@angular/router';
@@ -41,6 +41,11 @@ export class AppComponent implements OnInit {
       .subscribe(theme => this.setTheme(theme));
 
       this.listenToSidenav();
+
+      this.subscription.add(
+        timer(0, 10000).subscribe(async () => {
+          await this._api.processLatestBlocks();
+        }));
 
       this.loading = false;
   }
