@@ -27,13 +27,8 @@ export class PlatformApiService extends RestApiService {
   // Auth
   //////////////
 
-  public async auth(market: string, wallet: string): Promise<void> {
-    const response = await this.post(`${this.api}/auth/authorize?wallet=${wallet}&market=${market}`, {});
-    if (response.hasError) {
-      // handle
-    }
-
-    this._wallet.setToken(response.data);
+  public async auth(market: string, wallet: string): Promise<any> {
+    return await this.post(`${this.api}/auth/authorize?wallet=${wallet}&market=${market}`, {});
   }
 
   //////////////

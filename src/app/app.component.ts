@@ -1,3 +1,4 @@
+import { JwtService } from './services/utility/jwt.service';
 import { environment } from '@environments/environment';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { SidenavService } from './services/sidenav.service';
@@ -10,6 +11,7 @@ import { Subscription, timer } from 'rxjs';
 import { TransactionTypes } from '@sharedLookups/transaction-types.lookup';
 import { FadeAnimation } from '@sharedServices/animations/fade-animation';
 import { RouterOutlet } from '@angular/router';
+import { WalletService } from '@sharedServices/wallet.service';
 
 @Component({
   selector: 'opdex-root',
@@ -31,14 +33,15 @@ export class AppComponent implements OnInit {
     public overlayContainer: OverlayContainer,
     private _theme: ThemeService,
     private _sidenav: SidenavService,
-    private _api: PlatformApiService
+    private _api: PlatformApiService,
+    private _wallet: WalletService
   ) {}
 
   async ngOnInit(): Promise<void> {
-    await this._api.auth(environment.marketAddress, environment.walletAddress);
+    const tokenResponse = await this._api.auth(environment.marketAddress, environment.walletAddress);
+    this._wallet.setToken(tokenResponse.data);
 
-    this._theme.getTheme()
-      .subscribe(theme => this.setTheme(theme));
+    this._theme.getTheme().subscribe(theme => this.setTheme(theme));
 
       this.listenToSidenav();
 

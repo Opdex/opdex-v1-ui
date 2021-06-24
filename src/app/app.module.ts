@@ -1,3 +1,4 @@
+import { JwtService } from './services/utility/jwt.service';
 import { WalletService } from '@sharedServices/wallet.service';
 import { ApiInterceptor } from './services/api/api-interceptor';
 import { BrowserModule } from '@angular/platform-browser';
@@ -38,6 +39,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { LayoutModule } from '@angular/cdk/layout';
 import { GovernanceComponent } from './views/governance/governance.component';
 import { VaultComponent } from './views/vault/vault.component';
+import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
+import { jwtOptionsFactory } from '@sharedServices/utility/jwt.service';
 
 @NgModule({
   declarations: [
@@ -74,9 +77,17 @@ import { VaultComponent } from './views/vault/vault.component';
     MatSidenavModule,
     MatChipsModule,
     MatMenuModule,
-    LayoutModule
+    LayoutModule,
+    JwtModule.forRoot({
+      jwtOptionsProvider: {
+        provide: JWT_OPTIONS,
+        useFactory: jwtOptionsFactory,
+        deps: [JwtService]
+      }
+    })
   ],
   providers: [
+    JwtService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ApiInterceptor,
