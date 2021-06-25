@@ -1,15 +1,46 @@
-<div class="vault">
-  <div class="container mt-5">
+<div class="vault mt-5">
+  <div class="container">
     <div class="row">
       <div class="col">
-        <h1>Vault</h1>
+        <h1 class="page-title">Vault</h1>
+      </div>
+    </div>
+
+    <div class="row mb-5">
+      <div class="col">
+        <opdex-card>
+          <h3>Received Tokens</h3>
+          <h4 class="mb-0">100,000,000 ODX</h4>
+        </opdex-card>
+      </div>
+
+      <div class="col">
+        <opdex-card>
+          <h3>Unassigned Tokens</h3>
+          <h4 class="mb-0">50,000,000 ODX</h4>
+        </opdex-card>
+      </div>
+
+      <div class="col">
+        <opdex-card>
+          <h3>Collected Tokens</h3>
+          <h4 class="mb-0">0 ODX</h4>
+        </opdex-card>
+      </div>
+
+      <div class="col">
+        <opdex-card>
+          <h3>Maximum Received</h3>
+          <h4 class="mb-0">250,000,000 ODX</h4>
+        </opdex-card>
       </div>
     </div>
 
     <div class="row">
       <div class="col">
         <opdex-card>
-          Content
+          <h2>Vault Certificates</h2>
+          <opdex-vault-certificates-table></opdex-vault-certificates-table>
         </opdex-card>
       </div>
     </div>

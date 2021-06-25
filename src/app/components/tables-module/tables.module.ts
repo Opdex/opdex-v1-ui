@@ -13,12 +13,14 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { TransactionsTableComponent } from './transactions-table/transactions-table.component';
+import { VaultCertificatesTableComponent } from './vault-certificates-table/vault-certificates-table.component';
 
 @NgModule({
   declarations: [
     PoolsTableComponent,
     TokensTableComponent,
-    TransactionsTableComponent
+    TransactionsTableComponent,
+    VaultCertificatesTableComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +36,8 @@ import { TransactionsTableComponent } from './transactions-table/transactions-ta
   exports: [
     PoolsTableComponent,
     TokensTableComponent,
-    TransactionsTableComponent
+    TransactionsTableComponent,
+    VaultCertificatesTableComponent
   ]
 })
 export class TablesModule { }
