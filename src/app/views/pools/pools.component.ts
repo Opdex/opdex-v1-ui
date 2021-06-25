@@ -1,5 +1,5 @@
 import { ILiquidityPoolSummaryResponse } from './../../models/responses/platform-api/Pools/liquidity-pool.interface';
-import { take } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 
@@ -10,18 +10,18 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 })
 export class PoolsComponent implements OnInit {
   pools: ILiquidityPoolSummaryResponse[];
-
-  get poolsByVolume() {
-    const pools = this.pools ? [...this.pools] : [];
-
-    return pools.sort((a, b) => b.volume.usd - a.volume.usd);
-  }
+  poolsByVolume: ILiquidityPoolSummaryResponse[];
 
   constructor(private _platformApiService: PlatformApiService) { }
 
   ngOnInit(): void {
     this._platformApiService.getPools()
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        tap(pools => {
+          this.poolsByVolume = pools.sort((a, b) => b.volume.usd - a.volume.usd);
+        })
+      )
       .subscribe(pools => this.pools = pools);
   }
 }
