@@ -1,7 +1,9 @@
+import { UserContextService } from '../../../services/user-context.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { SidenavView } from '@sharedModels/sidenav-view';
 import { SidenavService } from '@sharedServices/sidenav.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'opdex-liquidity-pool-card',
@@ -10,8 +12,11 @@ import { SidenavService } from '@sharedServices/sidenav.service';
 })
 export class LiquidityPoolCardComponent implements OnInit {
   @Input() pool: ILiquidityPoolSummaryResponse;
+  context$: Observable<any>;
 
-  constructor(private _sidebar: SidenavService) { }
+  constructor(private _sidebar: SidenavService, private _context: UserContextService) {
+    this.context$ = this._context.getUserContext$();
+  }
 
   ngOnInit(): void { }
 

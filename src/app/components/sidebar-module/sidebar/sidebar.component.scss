@@ -120,3 +120,21 @@ aside {
     }
   }
 }
+
+.wallet-indicator {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: .2em solid #1b192f;
+  position: absolute;
+  left: 25px;
+  top: 10px;
+
+  &.invalid {
+    background: #F2435B;
+  }
+
+  &.valid {
+    background: #00EB93;
+  }
+}

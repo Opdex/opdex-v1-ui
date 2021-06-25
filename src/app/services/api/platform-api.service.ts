@@ -25,7 +25,12 @@ export class PlatformApiService extends RestApiService {
   //////////////
 
   public auth(market: string, wallet: string): Observable<string> {
-    return this.post(`${this.api}/auth/authorize?wallet=${wallet}&market=${market}`, {}, { responseType: 'text' });
+    let walletParam = '&wallet='
+    if (wallet) {
+      walletParam = `${walletParam}${wallet}`;
+    }
+
+    return this.post(`${this.api}/auth/authorize?market=${market}${walletParam}`, {}, { responseType: 'text' });
   }
 
   //////////////

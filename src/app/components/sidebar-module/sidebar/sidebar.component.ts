@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { UserContextService } from '@sharedServices/user-context.service';
 import { Observable } from 'rxjs';
-import { ConnectWalletModalComponent } from '../../../modals-module/connect-wallet-modal/connect-wallet-modal.component';
+import { ConnectWalletModalComponent } from '../../modals-module/connect-wallet-modal/connect-wallet-modal.component';
 
 @Component({
   selector: 'opdex-sidebar',
@@ -9,9 +10,14 @@ import { ConnectWalletModalComponent } from '../../../modals-module/connect-wall
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent {
-  theme$: Observable<string>;
+  userContext$: Observable<any>;
 
-  constructor(private _dialog: MatDialog) { }
+  constructor(
+    private _dialog: MatDialog,
+    private _context: UserContextService
+  ) {
+    this.userContext$ = this._context.getUserContext$();
+  }
 
   openConnectWalletModal(): void {
     this._dialog.open(ConnectWalletModalComponent, {

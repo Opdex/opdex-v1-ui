@@ -1,3 +1,4 @@
+import { AuthComponent } from './views/auth/auth.component';
 import { VaultComponent } from './views/vault/vault.component';
 import { GovernanceComponent } from './views/governance/governance.component';
 import { HistoryComponent } from './views/history/history.component';
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'history', component: HistoryComponent, data: { animation: 'HistoryView'} },
   { path: 'governance', component: GovernanceComponent, data: { animation: 'GovernanceView'} },
   { path: 'vault', component: VaultComponent, data: { animation: 'VaultView'} },
+  { path: 'auth', component: AuthComponent, data: { animation: 'AuthView'} },
   { path: '**', component: NotFoundComponent, data: { animation: 'NotFoundView'} },
 ];
 

@@ -1,0 +1,31 @@
+#auth {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+
+  opdex-card {
+    width: 100%;
+    max-width: 500px;
+
+    h1 {
+      text-align: center;
+      padding: 20px 0px;
+      margin: 0px auto 40px;
+      border-bottom: 3px solid #1ca7dc;
+      max-width: 300px;
+    }
+
+    .light {
+      color: #979797;
+    }
+
+    .defi {
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 100px;
+    }
+  }
+}

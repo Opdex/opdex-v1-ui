@@ -111,7 +111,8 @@
 
         <div class="row">
           <ng-container *ngFor="let pool of pools">
-            <div class="col-3" *ngIf="pool.miningEnabled">
+            <!-- *ngIf="pool.miningEnabled" -->
+            <div class="col-3">
               <opdex-mining-card [pool]="pool"></opdex-mining-card>
             </div>
           </ng-container>

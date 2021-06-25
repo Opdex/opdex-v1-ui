@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from '@environments/environment';
-import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
+import { TxBase } from '@sharedComponents/tx-module/tx-swap/tx-base.component';
 import { ILiquidityPoolSummaryResponse, IToken } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, throwError } from 'rxjs';

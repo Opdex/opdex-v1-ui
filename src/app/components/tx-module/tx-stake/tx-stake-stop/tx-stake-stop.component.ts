@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
+import { TxBase } from '@sharedComponents/tx-module/tx-swap/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 
 @Component({

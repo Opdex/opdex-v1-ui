@@ -32,13 +32,21 @@
 
         <mat-divider class="mb-3"></mat-divider>
 
-        <ng-container [ngSwitch]="message?.view">
+        <ng-container *ngIf="context$ | async as context">
+          <div class="connect-wallet mb-4" *ngIf="!context?.wallet">
+            <opdex-card>
+              <button mat-flat-button color="primary" class="w-100" routerLink="/auth">Connect Wallet</button>
+            </opdex-card>
+          </div>
+        </ng-container>
+
+        <div [ngSwitch]="message?.view">
           <opdex-tx-swap *ngSwitchCase="1" [data]="message?.data"></opdex-tx-swap>
           <opdex-tx-provide *ngSwitchCase="2" [data]="message?.data"></opdex-tx-provide>
           <opdex-tx-stake *ngSwitchCase="3" [data]="message?.data"></opdex-tx-stake>
           <opdex-tx-mine *ngSwitchCase="4" [data]="message?.data"></opdex-tx-mine>
           <opdex-tx-allowance *ngSwitchCase="5" [data]="message?.data"></opdex-tx-allowance>
-        </ng-container>
+        </div>
       </div>
     </mat-sidenav>
 

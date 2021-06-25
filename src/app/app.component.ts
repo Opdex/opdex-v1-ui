@@ -6,12 +6,12 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { ThemeService } from './services/theme.service';
 import { MatSidenav } from '@angular/material/sidenav';
 import { ISidenavMessage, SidenavView } from '@sharedModels/sidenav-view';
-import { Subscription, timer } from 'rxjs';
+import { Observable, Subscription, timer } from 'rxjs';
 import { TransactionTypes } from '@sharedLookups/transaction-types.lookup';
 import { FadeAnimation } from '@sharedServices/animations/fade-animation';
 import { RouterOutlet } from '@angular/router';
-import { WalletService } from '@sharedServices/wallet.service';
-import { switchMap, take } from 'rxjs/operators';
+import { UserContextService } from '@sharedServices/user-context.service';
+import { skip, switchMap, take, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-root',
@@ -28,22 +28,27 @@ export class AppComponent implements OnInit {
   loading = true;
   subscription = new Subscription();
   transactionTypes = [...TransactionTypes];
+  context$: Observable<any>;
 
   constructor(
     public overlayContainer: OverlayContainer,
     private _theme: ThemeService,
     private _sidenav: SidenavService,
     private _api: PlatformApiService,
-    private _wallet: WalletService
-  ) {}
+    private _context: UserContextService
+  ) {
+    this.context$ = this._context.getUserContext$();
+  }
 
   ngOnInit(): void {
-    this._api.auth(environment.marketAddress, environment.walletAddress)
-      .pipe(take(1))
-      .subscribe(token => {
-        this._wallet.setToken(token);
-        this.loading = false;
-      });
+    const context = this._context.getUserContext();
+
+    this.subscription.add(
+      this._api.auth(environment.marketAddress, context?.wallet)
+        .subscribe(jwt => {
+          this._context.setToken(jwt);
+          this.loading = false;
+        }));
 
     this._theme.getTheme()
       .subscribe(theme => this.setTheme(theme));

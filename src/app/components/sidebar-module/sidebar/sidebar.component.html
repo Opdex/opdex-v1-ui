@@ -5,10 +5,10 @@
       <p class="opdex">OPDEX</p>
     </div>
 
-    <ul class="sidebar-nav">
+    <ul class="sidebar-nav" *ngIf="userContext$ | async as context">
       <li>
         <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <mat-icon>show_chart</mat-icon> Market
+          <mat-icon>trending_up</mat-icon> Market
         </a>
       </li>
       <li>
@@ -21,11 +21,11 @@
           <mat-icon>toll</mat-icon> Tokens
         </a>
       </li>
-      <li>
+      <!-- <li *ngIf="connected">
         <a mat-button routerLink="/history" routerLinkActive="active">
           <mat-icon>history</mat-icon> History
         </a>
-      </li>
+      </li> -->
       <li>
         <a mat-button routerLink="/governance" routerLinkActive="active">
           <mat-icon>gavel</mat-icon> Governance
@@ -33,11 +33,12 @@
       </li>
       <li>
         <a mat-button routerLink="/vault" routerLinkActive="active">
-          <mat-icon>account_balance</mat-icon> Vault
+          <mat-icon>schedule</mat-icon> Vault
         </a>
       </li>
       <li>
-        <a mat-button routerLink="/wallet" routerLinkActive="active">
+        <a mat-button routerLink="/{{ !context?.wallet ? 'auth' : 'wallet'}}" routerLinkActive="active">
+          <span class="wallet-indicator {{context?.wallet ? 'valid' : 'invalid'}}"></span>
           <mat-icon>account_balance_wallet</mat-icon> Wallet
         </a>
       </li>
