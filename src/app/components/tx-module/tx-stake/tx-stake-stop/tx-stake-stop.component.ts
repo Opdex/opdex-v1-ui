@@ -1,20 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-swap/tx-base.component';
+import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-tx-stake-stop',
   templateUrl: './tx-stake-stop.component.html',
   styleUrls: ['./tx-stake-stop.component.scss']
 })
-export class TxStakeStopComponent extends TxBase implements OnInit {
+export class TxStakeStopComponent extends TxBase implements OnChanges {
+  @Input() data;
   form: FormGroup;
-
-  get pool(): FormControl {
-    return this.form.get('pool') as FormControl;
-  }
+  pool: ILiquidityPoolSummaryResponse;
+  txHash: string;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -32,11 +33,24 @@ export class TxStakeStopComponent extends TxBase implements OnInit {
     super(_dialog);
 
     this.form = this._fb.group({
-      pool: ['', [Validators.required, Validators.min(.00000001)]],
-      amount: ['0', [Validators.required, Validators.min(.00000001)]],
+      amount: ['', [Validators.required, Validators.min(.00000001)]],
       liquidate: [false, [Validators.required]]
     });
   }
 
-  ngOnInit(): void { }
+  ngOnChanges(): void {
+    this.pool = this.data?.pool;
+  }
+
+  submit(): void {
+    const payload = {
+      liquidityPool: this.pool.address,
+      amount: this.amount.value,
+      liquidate: this.liquidate.value
+    }
+
+    this._platformApi.stopStaking(payload)
+      .pipe(take(1))
+      .subscribe(response => this.txHash = response.txHash);
+  }
 }

@@ -149,6 +149,16 @@ export class PlatformApiService extends RestApiService {
     return this.post<any>(`${this.api}/build-transaction/local-broadcast/collect-staking-rewards`, payload);
   }
 
+  // Reward Mining Pools
+  public rewardMiningPools(payload: any): Observable<any> {
+    return this.post<any>(`${this.api}/build-transaction/local-broadcast/reward-mining-pools`, payload);
+  }
+
+  // Distribute tokens
+  public distributeTokens(payload: any): Observable<any> {
+    return this.post<any>(`${this.api}/build-transaction/local-broadcast/distribute-odx`, payload);
+  }
+
   // Balances
 
   public getWalletSummaryForPool(pool: string, wallet: string): Observable<any> {

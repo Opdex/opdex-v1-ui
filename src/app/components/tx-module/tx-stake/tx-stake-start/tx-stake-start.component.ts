@@ -1,10 +1,10 @@
-import { trimTrailingNulls } from '@angular/compiler/src/render3/view/util';
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-swap/tx-base.component';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-tx-stake-start',
@@ -29,7 +29,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
     super(_dialog);
 
     this.form = this._fb.group({
-      amount: ['0', [Validators.required, Validators.min(.00000001)]]
+      amount: ['', [Validators.required, Validators.min(.00000001)]]
     });
   }
 
@@ -44,6 +44,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
     }
 
     this._platformApi.startStaking(payload)
+      .pipe(take(1))
       .subscribe(response => this.txHash = response.txHash);
   }
 }

@@ -65,7 +65,6 @@ export class JwtService {
 }
 
 export function jwtOptionsFactory(jwtService: JwtService) {
-  console.log('hit')
   return {
     tokenGetter: () => jwtService.getToken(),
     allowedDomains: environment.allowedJwtDomains

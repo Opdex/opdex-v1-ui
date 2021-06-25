@@ -1,6 +1,7 @@
 export interface ILiquidityPoolSummaryResponse extends ILiquidityPoolSummary {
   address: string;
   token: ITokenGroup;
+  mining: IMiningPool;
 }
 
 export interface ILiquidityPoolSnapshotHistoryResponse {
@@ -81,4 +82,13 @@ export interface IStaking {
 export interface ICost {
   crsPerSrc: IOhlc;
   srcPerCrs: IOhlc;
+}
+
+export interface IMiningPool {
+  address: string;
+  rewardPerBlock: string;
+  miningPeriodEndBlock: number;
+  rewardPerLpToken: string;
+  tokensMining: string;
+  isActive: boolean;
 }

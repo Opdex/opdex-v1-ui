@@ -16,10 +16,10 @@ export class MiningCardComponent implements OnInit {
   ngOnInit(): void { }
 
   startMining() {
-    this._sidebar.openSidenav(SidenavView.mine, {pool: this.pool});
+    this._sidebar.openSidenav(SidenavView.mine, {pool: this.pool, child: 'start'});
   }
 
   stopMining() {
-    this._sidebar.openSidenav(SidenavView.mine, {pool: this.pool});
+    this._sidebar.openSidenav(SidenavView.mine, {pool: this.pool, child: 'stop'});
   }
 }

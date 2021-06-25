@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-swap/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-tx-provide-remove',
@@ -44,6 +45,7 @@ export class TxProvideRemoveComponent extends TxBase {
     console.log(payload);
 
     this._platformApi.removeLiquidity(payload)
+      .pipe(take(1))
       .subscribe(response => this.txHash = response.txHash);
   }
 }

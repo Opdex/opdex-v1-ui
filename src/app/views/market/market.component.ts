@@ -1,3 +1,4 @@
+import { ILiquidityPoolSummaryResponse } from './../../models/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -14,7 +15,7 @@ export class MarketComponent implements OnInit {
   marketHistory: any[];
   liquidityHistory: any[];
   volumeHistory: any[];
-  pools: any[];
+  pools: ILiquidityPoolSummaryResponse[];
   tokens: any[];
 
   constructor(private _platformApiService: PlatformApiService) { }

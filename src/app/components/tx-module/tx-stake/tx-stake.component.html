@@ -1,8 +1,6 @@
 <div class="staking">
-  <mat-button-toggle-group aria-label="Transaction Type" class="w-100 mb-3" value="1" #group="matButtonToggleGroup">
-    <mat-button-toggle value="1" class="w-100">Start</mat-button-toggle>
-    <mat-button-toggle value="2" class="w-100">Stop</mat-button-toggle>
-    <mat-button-toggle value="3" class="w-100">Collect</mat-button-toggle>
+  <mat-button-toggle-group aria-label="Transaction Type" class="w-100 mb-3" [value]="child" #group="matButtonToggleGroup">
+    <mat-button-toggle [value]="option.value" class="w-100" *ngFor="let option of txOptions">{{option.action}}</mat-button-toggle>
   </mat-button-toggle-group>
 
   <opdex-pool-preview [pool]="pool"></opdex-pool-preview>
@@ -14,7 +12,7 @@
 
   <opdex-card *ngIf="pool">
     <opdex-tx-stake-start [data]="data" *ngIf="group.value == 1"></opdex-tx-stake-start>
-    <opdex-tx-stake-stop *ngIf="group.value == 2"></opdex-tx-stake-stop>
+    <opdex-tx-stake-stop [data]="data" *ngIf="group.value == 2"></opdex-tx-stake-stop>
     <opdex-tx-stake-collect [data]="data" *ngIf="group.value == 3"></opdex-tx-stake-collect>
   </opdex-card>
 </div>

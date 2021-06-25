@@ -25,7 +25,6 @@ export class UserContextService {
 
     const data = this.getUserContext();
 
-    console.log(data);
     this.userContext$.next(data);
   }
 

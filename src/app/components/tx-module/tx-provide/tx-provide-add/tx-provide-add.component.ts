@@ -7,7 +7,7 @@ import { ILiquidityPoolSummaryResponse, IToken } from '@sharedModels/responses/p
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, throwError } from 'rxjs';
 import { Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, take } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-tx-provide-add',
@@ -86,6 +86,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     }
 
     this._platformApi.addLiquidity(payload)
+      .pipe(take(1))
       .subscribe(response => this.txHash = response.txHash);
   }
 

@@ -1,9 +1,10 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-swap/tx-base.component';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-tx-stake-collect',
@@ -43,6 +44,7 @@ export class TxStakeCollectComponent extends TxBase implements OnChanges {
     };
 
     this._platformApi.collectStakingRewards(payload)
+      .pipe(take(1))
       .subscribe(response => this.txHash = response.txHash);
   }
 }

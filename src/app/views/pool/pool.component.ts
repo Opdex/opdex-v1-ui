@@ -45,9 +45,10 @@ export class PoolComponent implements OnInit, OnDestroy {
         }));
   }
 
-  openTransactionSidebar(view: SidenavView) {
+  openTransactionSidebar(view: SidenavView, childView: string = null) {
     const data = {
-      pool: this.pool
+      pool: this.pool,
+      child: childView
     }
 
     this._sidenav.openSidenav(view, data);
@@ -78,7 +79,6 @@ export class PoolComponent implements OnInit, OnDestroy {
         let volumePoints = [];
 
         this.poolHistory.snapshotHistory.forEach(history => {
-          console.log(history.startDate);
           liquidityPoints.push({
             time: Date.parse(history.startDate.toString())/1000,
             value: history.reserves.usd

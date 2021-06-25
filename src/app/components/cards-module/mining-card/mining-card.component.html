@@ -10,12 +10,12 @@
   <div class="details">
     <div class="mining">
       <p class="sub-heading">Mining</p>
-      <p class="value">$49,592</p>
+      <p class="value">{{ pool.mining?.tokensMining | formatNumber: 0}} <small>LPT</small></p>
     </div>
 
     <div class="remaining">
-      <p class="sub-heading">Remaining</p>
-      <p class="value">1234 ODX</p>
+      <p class="sub-heading">Reward per Block</p>
+      <p class="value">{{ pool.mining?.rewardPerBlock | formatNumber: 0}} <small>ODX</small></p>
     </div>
   </div>
 </opdex-card>

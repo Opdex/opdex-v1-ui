@@ -4,6 +4,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
+import { take } from 'rxjs/operators';
 import { TxBase } from '../tx-swap/tx-base.component';
 
 @Component({
@@ -57,6 +58,7 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
     }
 
     this._platformApi.approveAllowance(payload)
+      .pipe(take(1))
       .subscribe(response => this.txHash = response.txHash);
   }
 }
