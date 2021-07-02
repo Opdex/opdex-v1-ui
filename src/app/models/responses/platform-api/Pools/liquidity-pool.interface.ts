@@ -2,6 +2,7 @@ export interface ILiquidityPoolSummaryResponse extends ILiquidityPoolSummary {
   address: string;
   token: ITokenGroup;
   mining: IMiningPool;
+  snapshotHistory?: ILiquidityPoolSnapshot[];
 }
 
 export interface ILiquidityPoolSnapshotHistoryResponse {
@@ -9,7 +10,7 @@ export interface ILiquidityPoolSnapshotHistoryResponse {
   snapshotHistory: ILiquidityPoolSnapshot[];
 }
 
-interface ILiquidityPoolSummary {
+export interface ILiquidityPoolSummary {
   transactionCount: number;
   reserves: IReserves;
   rewards: IRewards;
@@ -18,7 +19,7 @@ interface ILiquidityPoolSummary {
   cost: ICost;
 }
 
-interface ILiquidityPoolSnapshot extends ILiquidityPoolSummary {
+export interface ILiquidityPoolSnapshot extends ILiquidityPoolSummary {
   startDate: Date;
   endDate: Date;
 }

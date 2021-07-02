@@ -35,12 +35,12 @@
 
     <ng-container matColumnDef="change">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Change (24hr) </th>
-      <td mat-cell *matCellDef="let element"> <opdex-change-indicator [value]="12.4"></opdex-change-indicator> </td>
+      <td mat-cell *matCellDef="let element"> <opdex-change-indicator [value]="element.change"></opdex-change-indicator> </td>
     </ng-container>
 
     <ng-container matColumnDef="price7d">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Price (7d) </th>
-      <td mat-cell *matCellDef="let element"> <opdex-line-change></opdex-line-change> </td>
+      <td mat-cell *matCellDef="let element"> <opdex-line-change [chartData]="element.price7d" *ngIf="element.price7d"></opdex-line-change> </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

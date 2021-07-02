@@ -13,6 +13,7 @@ export class TokensTableComponent implements OnChanges, AfterViewInit {
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
   @Input() tokens: any[];
+  @Input() pageSize: number;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -29,9 +30,10 @@ export class TokensTableComponent implements OnChanges, AfterViewInit {
       return {
         name: t.name,
         symbol: t.symbol,
-        price: t.summary?.price?.close || 0.25,
-        change: '-0.2%',
-        address: t.address
+        price: t.summary?.price?.close,
+        change: t.summary?.dailyPriceChange,
+        address: t.address,
+        price7d: t.snapshotHistory
       }
     });
   }

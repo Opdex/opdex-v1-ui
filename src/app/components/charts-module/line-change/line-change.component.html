@@ -1,3 +1,3 @@
-<div [hidden]="loading" #chartPreview class="w-100">
-  <div id="{{id}}" class="chart"></div>
+<div #chartPreview class="w-100">
+  <div [attr.id]="id" [hidden]="loading" class="chart"></div>
 </div>

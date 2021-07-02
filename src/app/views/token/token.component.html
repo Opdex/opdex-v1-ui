@@ -1,4 +1,4 @@
-<div id="token">
+<div id="token" class="mt-5">
   <div class="container pt-3" *ngIf="token">
     <div class="row mb-4">
       <div class="col-12">
@@ -9,24 +9,32 @@
             <div class="col-3">
               <opdex-card>
                 <h4 class="stat-header">
-                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Cirrus (CRS)
+                  Price
+                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
                 </h4>
-                <p class="stat-value">
-                  $1.25
-                </p>
+
+                <div class="stat">
+                  <p class="stat-value">
+                    ${{token.summary.price.close | formatNumber:2}}
+                  </p>
+
+                  <opdex-change-indicator [value]="token.summary.dailyPriceChange"></opdex-change-indicator>
+                </div>
               </opdex-card>
             </div>
 
             <div class="col-3">
               <opdex-card>
                 <h4 class="stat-header">
-                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Volume
+                  Total Supply
+                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
                 </h4>
-                <p class="stat-value">
-                  $109,733,139
-                </p>
+
+                <div class="stat">
+                  <p class="stat-value">
+                    {{token.totalSupply | formatNumber:token.decimals}}
+                  </p>
+                </div>
               </opdex-card>
             </div>
 
@@ -61,7 +69,7 @@
     <div class="row mb-4">
       <div class="col-12 col-md-8">
         <opdex-card class="p-0">
-          <opdex-line-chart [chartData]="ohlcPoints" *ngIf="ohlcPoints"></opdex-line-chart>
+          <opdex-line-chart [chartData]="priceHistory" title="{{token.symbol}} USD" *ngIf="priceHistory"></opdex-line-chart>
         </opdex-card>
       </div>
 
@@ -72,8 +80,10 @@
 
     <div class="row mb-4">
       <div class="col-12 mb-4">
-        <h2>Recent Transactions</h2>
-        <opdex-transactions-table></opdex-transactions-table>
+        <opdex-card>
+          <h2>Recent Transactions</h2>
+          <opdex-transactions-table></opdex-transactions-table>
+        </opdex-card>
       </div>
     </div>
   </div>

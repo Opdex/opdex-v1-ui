@@ -26,6 +26,8 @@ export class PoolsTableComponent implements OnChanges, AfterViewInit {
     if (!this.pools?.length) return;
 
     this.dataSource.data = [...this.pools.filter(pool => pool != null)];
+
+    console.log(this.pools)
   }
 
   ngAfterViewInit() {

@@ -1,18 +1,26 @@
 .stats {
-  display: flex;
-  flex-direction: column;
-
   .stat-header {
     display: flex;
+    vertical-align: middle;
     font-weight: 400;
     margin-bottom: 5px;
-    vertical-align: middle;
   }
 
-  .stat-value {
-    font-size: 1.5em;
+  .stat {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+
+    .stat-value {
+      font-size: 24px;
+      margin-bottom: 0px;
+      line-height: 30px;
+    }
   }
 }
+
 
 .light-mode {
   .stats {

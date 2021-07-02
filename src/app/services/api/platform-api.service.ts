@@ -49,6 +49,10 @@ export class PlatformApiService extends RestApiService {
     return this.get<any>(`${this.api}/tokens/${address}`);
   }
 
+  public getTokenHistory(address: string): Observable<any> {
+    return this.get<any>(`${this.api}/tokens/${address}/history?timeSpan=1Y&candleSpan=Hourly`);
+  }
+
   public getTokens(): Observable<any[]> {
     return this.get<any[]>(`${this.api}/tokens`);
   }
@@ -70,7 +74,7 @@ export class PlatformApiService extends RestApiService {
   }
 
   public getPoolHistory(address: string): Observable<ILiquidityPoolSnapshotHistoryResponse> {
-    return this.get<ILiquidityPoolSnapshotHistoryResponse>(`${this.api}/pools/${address}/history`);
+    return this.get<ILiquidityPoolSnapshotHistoryResponse>(`${this.api}/pools/${address}/history?timeSpan=1Y&candleSpan=Hourly`);
   }
 
   //////////////
