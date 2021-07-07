@@ -52,6 +52,7 @@ export interface ITokenSnapshot {
   price: IOhlc;
   startDate: Date;
   endDate: Date;
+  dailyPriceChange?: number;
 }
 
 export interface IReserves {

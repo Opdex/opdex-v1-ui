@@ -62,7 +62,7 @@ export class TxSwapComponent implements OnDestroy{
       .pipe(
         debounceTime(400),
         distinctUntilChanged(),
-        switchMap(() => this.quote())
+        switchMap((value) => this.quote(value))
       )
       .subscribe(value => this.form.get("token1Amount").setValue(value));
   }
@@ -83,11 +83,11 @@ export class TxSwapComponent implements OnDestroy{
     }
   }
 
-  signTx(): void {
+  signTx(data: any): void {
     this._dialog.open(SignTxModalComponent, {
       width: '600px',
       position: { top: '200px' },
-      data:  {},
+      data:  data,
       panelClass: ''
     });
   }
@@ -132,10 +132,7 @@ export class TxSwapComponent implements OnDestroy{
       recipient: environment.walletAddress
     }
 
-    // this.signTx();
-
-    this._platformApi.swap(payload)
-      .subscribe(response => this.txHash = response.txHash);
+    this.signTx({ payload, transactionType: 'swap'});
   }
 
   switch() {
@@ -157,7 +154,11 @@ export class TxSwapComponent implements OnDestroy{
     this.toggleToken0In();
   }
 
-  quote(): Observable<string> {
+  quote(value: string): Observable<string> {
+    if (!value || value === '0') {
+      return of('0');
+    }
+
     const payload = {
       tokenIn: this.token0In ? this.token0.value : this.token1.value,
       tokenOut: !this.token0In ? this.token0.value : this.token1.value,

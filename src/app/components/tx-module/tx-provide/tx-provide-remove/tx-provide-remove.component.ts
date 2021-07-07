@@ -42,10 +42,6 @@ export class TxProvideRemoveComponent extends TxBase {
       recipient: environment.walletAddress
     };
 
-    console.log(payload);
-
-    this._platformApi.removeLiquidity(payload)
-      .pipe(take(1))
-      .subscribe(response => this.txHash = response.txHash);
+    this.signTx(payload, 'remove-liquidity');
   }
 }

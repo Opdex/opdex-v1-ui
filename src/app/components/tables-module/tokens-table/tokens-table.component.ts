@@ -14,6 +14,8 @@ export class TokensTableComponent implements OnChanges, AfterViewInit {
   dataSource: MatTableDataSource<any>;
   @Input() tokens: any[];
   @Input() pageSize: number;
+  @Input() smallPageSize: boolean = false;
+  pageSizeOptions: number[];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -24,6 +26,8 @@ export class TokensTableComponent implements OnChanges, AfterViewInit {
   }
 
   ngOnChanges() {
+    this.pageSizeOptions = this.smallPageSize ? [5, 10, 25] : [10, 25, 50];
+
     if (!this.tokens?.length) return;
 
     this.dataSource.data = this.tokens.map(t => {

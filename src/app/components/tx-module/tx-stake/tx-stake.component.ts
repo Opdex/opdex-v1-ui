@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { SidenavView } from '@sharedModels/sidenav-view';
 
 @Component({
   selector: 'opdex-tx-stake',
@@ -9,6 +10,7 @@ import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-
 export class TxStakeComponent {
   @Input() data: any;
   pool: ILiquidityPoolSummaryResponse;
+  view = SidenavView.stake;
   child: number = 1;
   txOptions = [
     { action: 'Start', value: 1 },

@@ -1,3 +1,4 @@
+import { SidenavView } from './../../../models/sidenav-view';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, Input, OnChanges } from '@angular/core';
 import { ConnectWalletModalComponent } from 'src/app/components/modals-module/connect-wallet-modal/connect-wallet-modal.component';
@@ -12,6 +13,7 @@ export class TxMineComponent implements OnChanges {
   @Input() data: any;
   pool: ILiquidityPoolSummaryResponse;
   child: number = 1;
+  view = SidenavView.mine;
   txOptions = [
     { action: 'Start', value: 1 },
     { action: 'Stop', value: 2 },

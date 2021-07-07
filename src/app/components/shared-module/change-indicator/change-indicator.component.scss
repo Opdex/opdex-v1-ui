@@ -4,6 +4,42 @@
   flex-direction: row;
   align-items: center;
 
+  &.s {
+    .mat-icon {
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+    }
+
+    .change {
+      font-size: 18px;
+    }
+  }
+
+  &.m {
+    .mat-icon {
+      width: 25px;
+      height: 25px;
+      font-size: 25px;
+    }
+
+    .change {
+      font-size: 20px;
+    }
+  }
+
+  &.l {
+    .mat-icon {
+      width: 30px;
+      height: 30px;
+      font-size: 30px;
+    }
+
+    .change {
+      font-size: 24px;
+    }
+  }
+
   &.positive {
     color: #00EB93;
   }
@@ -14,13 +50,9 @@
 
   .mat-icon {
     margin-right: 10px;
-    width: 30px;
-    height: 30px;
-    font-size: 30px;
   }
 
   .change {
-    font-size: 24px;
     margin: 0;
   }
 }

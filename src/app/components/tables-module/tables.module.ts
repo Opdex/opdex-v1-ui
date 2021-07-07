@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { SharedPipesModule } from './../../pipes/shared-pipes.module';
 import { SharedModule } from '@sharedComponents/shared-module/shared.module';
 import { ChartsModule } from './../charts-module/charts.module';
@@ -12,6 +13,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { MatButtonModule } from '@angular/material/button';
 import { TransactionsTableComponent } from './transactions-table/transactions-table.component';
 import { VaultCertificatesTableComponent } from './vault-certificates-table/vault-certificates-table.component';
 
@@ -28,6 +30,8 @@ import { VaultCertificatesTableComponent } from './vault-certificates-table/vaul
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
+    MatButtonModule,
+    MatIconModule,
     CardsModule,
     ChartsModule,
     SharedModule,

@@ -43,8 +43,6 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
       amount: this.amount.value
     }
 
-    this._platformApi.startStaking(payload)
-      .pipe(take(1))
-      .subscribe(response => this.txHash = response.txHash);
+    this.signTx(payload, 'start-staking');
   }
 }

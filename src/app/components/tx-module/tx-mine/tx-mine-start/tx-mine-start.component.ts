@@ -43,8 +43,6 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
       amount: this.amount.value
     }
 
-    this._platformApi.startMining(payload)
-      .pipe(take(1))
-      .subscribe(response => this.txHash = response.txHash);
+    this.signTx(payload, 'start-mining');
   }
 }

@@ -44,8 +44,6 @@ export class TxMineStopComponent extends TxBase implements OnChanges {
       amount: this.amount.value
     }
 
-    this._platformApi.stopMining(payload)
-      .pipe(take(1))
-      .subscribe(response => this.txHash = response.txHash);
+    this.signTx(payload, 'stop-mining');
   }
 }

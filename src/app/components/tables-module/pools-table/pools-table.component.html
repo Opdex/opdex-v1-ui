@@ -7,12 +7,18 @@
 
     <ng-container matColumnDef="liquidity">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Liquidity </th>
-      <td mat-cell *matCellDef="let element"> ${{element.reserves.usd | formatNumber}}</td>
+      <td mat-cell *matCellDef="let element">
+        ${{element.reserves.usd | formatNumber}}
+        <opdex-change-indicator [value]="element.reserves.usdDailyChange" size="s" class="percentChange"></opdex-change-indicator>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="stakingWeight">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Staking Weight </th>
-      <td mat-cell *matCellDef="let element"> {{element.staking?.weight | formatNumber:0}} <small>ODX</small></td>
+      <td mat-cell *matCellDef="let element">
+        {{element.staking?.weight | formatNumber:0}} <small>ODX</small>
+        <opdex-change-indicator [value]="element.staking?.weightDailyChange" size="s" class="percentChange" *ngIf="element.staking?.weightDailyChange != null"></opdex-change-indicator>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="volumeDaily">
@@ -30,14 +36,30 @@
       <td mat-cell *matCellDef="let element"> ${{element.rewards.marketUsd | formatNumber}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="liquidityHistory">
+    <!-- <ng-container matColumnDef="liquidityHistory">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Liquidity (7d) </th>
-      <td mat-cell *matCellDef="let element"><opdex-line-change [chartData]="element.snapshotHistory" *ngIf="element.snapshotHistory"></opdex-line-change></td>
+      <td mat-cell *matCellDef="let element">
+        <opdex-line-change [chartData]="element.snapshotHistory" *ngIf="element.snapshotHistory"></opdex-line-change>
+      </td>
+    </ng-container> -->
+
+    <ng-container matColumnDef="options">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
+      <td mat-cell *matCellDef="let element">
+        <!-- <button mat-icon-button color="primary">
+          <mat-icon>more_vert</mat-icon>
+        </button> -->
+
+        <button mat-icon-button class="swap small mr-3" (click)="swap(element)" title="Swap"><mat-icon>swap_horiz</mat-icon></button>
+        <button mat-icon-button class="provide small mr-3" (click)="provide(element)" title="Provide"><mat-icon>add</mat-icon></button>
+        <button mat-icon-button class="stake small mr-3" (click)="stake(element)" title="Stake" *ngIf="element.staking?.isActive"><mat-icon>star</mat-icon></button>
+        <button mat-icon-button class="mine small" (click)="mine(element)" title="Mine" *ngIf="element.mining?.isActive"><mat-icon>whatshot</mat-icon></button>
+      </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 25]" [length]="dataSource?.data?.length"></mat-paginator>
+  <mat-paginator [pageSizeOptions]="pageSizeOptions" [length]="dataSource?.data?.length"></mat-paginator>
 </div>

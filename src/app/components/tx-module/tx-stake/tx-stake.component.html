@@ -3,12 +3,7 @@
     <mat-button-toggle [value]="option.value" class="w-100" *ngFor="let option of txOptions">{{option.action}}</mat-button-toggle>
   </mat-button-toggle-group>
 
-  <opdex-pool-preview [pool]="pool"></opdex-pool-preview>
-
-  <div class="position d-flex justify-content-between align-items-center mt-3 mb-3">
-    <span>Available Balance:</span>
-    <span>53,565.9237 ODX</span>
-  </div>
+  <opdex-pool-preview [pool]="pool" [view]="view"></opdex-pool-preview>
 
   <opdex-card *ngIf="pool">
     <opdex-tx-stake-start [data]="data" *ngIf="group.value == 1"></opdex-tx-stake-start>

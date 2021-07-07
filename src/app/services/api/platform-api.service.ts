@@ -5,6 +5,7 @@ import { RestApiService } from './rest-api.service';
 import { ErrorService } from '@sharedServices/utility/error.service';
 import { Observable } from 'rxjs';
 import { ILiquidityPoolSnapshotHistoryResponse, ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { LiquidityPoolsSearchQuery } from '@sharedModels/liquidity-pool-filter';
 
 @Injectable({
   providedIn: 'root'
@@ -65,8 +66,8 @@ export class PlatformApiService extends RestApiService {
     return this.get<any>(`${this.api}/pools/${address}`);
   }
 
-  public getPools(): Observable<ILiquidityPoolSummaryResponse[]> {
-    return this.get<any[]>(`${this.api}/pools`);
+  public getPools(query?: LiquidityPoolsSearchQuery): Observable<ILiquidityPoolSummaryResponse[]> {
+    return this.get<any[]>(`${this.api}/pools${query?.getQuery() || ''}`);
   }
 
   public getPoolTransactions(address: string): Observable<any[]> {

@@ -5,8 +5,7 @@
       <button mat-icon-button class="swap small mr-2" (click)="swap()" title="Swap"><mat-icon>swap_horiz</mat-icon></button>
       <button mat-icon-button class="provide small mr-2" (click)="provide()" title="Provide"><mat-icon>add</mat-icon></button>
       <button mat-icon-button class="stake small mr-2" (click)="stake()" title="Stake" *ngIf="pool.staking?.isActive"><mat-icon>star</mat-icon></button>
-      <!--*ngIf="pool?.miningEnabled"-->
-      <button mat-icon-button class="mine small" (click)="mine()" title="Mine"><mat-icon>whatshot</mat-icon></button>
+      <button mat-icon-button class="mine small" (click)="mine()" title="Mine" *ngIf="pool.mining?.isActive"><mat-icon>whatshot</mat-icon></button>
     </div>
   </div>
 

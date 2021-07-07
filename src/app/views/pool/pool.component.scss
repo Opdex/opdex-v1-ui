@@ -35,6 +35,26 @@
   }
 }
 
+h1 {
+  display: inline-block;
+
+  a {
+    // text-decoration: none;
+    color: #fff;
+  }
+}
+
+.mat-chip {
+  // color: #1b192f !important;
+
+  &.purple {
+    background-color: #9c45ee !important;
+  }
+
+  &.red {
+    background-color: #f7556b !important;
+  }
+}
 
 
 .mining-pool {
@@ -81,4 +101,14 @@
       margin-bottom: 0px;
     }
   }
+}
+
+.green {
+  color: #00EB93;
+  font-weight: 400;
+}
+
+.red {
+  color: #F2435B;
+  font-weight: 400;
 }

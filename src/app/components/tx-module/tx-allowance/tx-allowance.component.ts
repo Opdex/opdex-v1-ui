@@ -57,8 +57,6 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
       spender: this.spender.value
     }
 
-    this._platformApi.approveAllowance(payload)
-      .pipe(take(1))
-      .subscribe(response => this.txHash = response.txHash);
+    this.signTx(payload, 'approve');
   }
 }

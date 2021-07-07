@@ -49,8 +49,6 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
       liquidate: this.liquidate.value
     }
 
-    this._platformApi.stopStaking(payload)
-      .pipe(take(1))
-      .subscribe(response => this.txHash = response.txHash);
+    this.signTx(payload, 'stop-staking');
   }
 }

@@ -3,6 +3,7 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
+import { LiquidityPoolsSearchQuery } from '@sharedModels/liquidity-pool-filter';
 
 @Component({
   selector: 'opdex-market',
@@ -17,6 +18,7 @@ export class MarketComponent implements OnInit {
   volumeHistory: any[];
   pools: ILiquidityPoolSummaryResponse[];
   tokens: any[];
+  miningPools$: Observable<ILiquidityPoolSummaryResponse[]>
 
   constructor(private _platformApiService: PlatformApiService) { }
 
@@ -27,6 +29,8 @@ export class MarketComponent implements OnInit {
       this.getPools(),
       this.getTokens()
     ])
+
+    this.miningPools$ = this._platformApiService.getPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 4, {mining: true}));
   }
 
   private getMarket(): void {
@@ -63,19 +67,7 @@ export class MarketComponent implements OnInit {
 
   private getPools(): void {
     this._platformApiService.getPools()
-      .pipe(
-        take(1),
-        switchMap((pools: ILiquidityPoolSummaryResponse[]) => {
-          const poolArray$: Observable<ILiquidityPoolSummaryResponse>[] = [];
-
-          pools.forEach(pool => {
-            const pool$: Observable<any> = this.getPoolHistory(pool);
-            poolArray$.push(pool$);
-          });
-
-          return forkJoin(poolArray$);
-        })
-      )
+      .pipe(take(1))
       .subscribe(pools => {
         this.pools = pools;
       });
@@ -99,26 +91,6 @@ export class MarketComponent implements OnInit {
     .subscribe(tokens => {
       this.tokens = tokens;
     });
-  }
-
-  private getPoolHistory(pool: ILiquidityPoolSummaryResponse): Observable<ILiquidityPoolSummaryResponse> {
-    return this._platformApiService.getPoolHistory(pool.address)
-      .pipe(
-        take(1),
-        map((poolHistory: ILiquidityPoolSnapshotHistoryResponse) => {
-          let liquidityPoints: any[] = [];
-
-          poolHistory.snapshotHistory.forEach(history => {
-            liquidityPoints.push({
-              time: Date.parse(history.startDate.toString())/1000,
-              value: history.reserves.usd
-            });
-          });
-
-          pool.snapshotHistory = liquidityPoints;
-
-          return pool;
-        }));
   }
 
   private getTokenHistory(token: any): Observable<any> {

@@ -38,8 +38,6 @@ export class TxMineCollectComponent extends TxBase implements OnChanges {
       liquidityPool: this.pool.address
     }
 
-    this._platformApi.collectMiningRewards(payload)
-      .pipe(take(1))
-      .subscribe(response => this.txHash = response.txHash);
+    this.signTx(payload, 'collect-mining-rewards');
   }
 }

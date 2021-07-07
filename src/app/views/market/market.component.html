@@ -6,7 +6,7 @@
 
         <div class="stats">
           <div class="row">
-            <div class="col">
+            <div class="col-12 col-md-6 col-xl">
               <opdex-card>
                 <h4 class="stat-header">
                   Cirrus (CRS)
@@ -15,7 +15,7 @@
 
                 <div class="stat">
                   <p class="stat-value">
-                    ${{market.crsToken.summary.price.close | formatNumber}}
+                    ${{market.crsToken.summary.price.close | formatNumber:2}}
                   </p>
 
                   <opdex-change-indicator [value]="market.crsToken.summary.dailyPriceChange"></opdex-change-indicator>
@@ -23,7 +23,7 @@
               </opdex-card>
             </div>
 
-            <div class="col">
+            <div class="col-12 col-md-6 col-xl">
               <opdex-card>
                 <h4 class="stat-header">
                   Liquidity
@@ -32,7 +32,7 @@
 
                 <div class="stat">
                   <p class="stat-value">
-                    ${{market.summary.liquidity | formatNumber}}
+                    ${{market.summary.liquidity | formatNumber:2}}
                   </p>
 
                   <opdex-change-indicator [value]="market.summary.liquidityDailyChange"></opdex-change-indicator>
@@ -40,7 +40,7 @@
               </opdex-card>
             </div>
 
-            <div class="col">
+            <div class="col-12 col-md-6 col-xl">
               <opdex-card>
                 <h4 class="stat-header">
                   Staking Weight
@@ -57,7 +57,7 @@
               </opdex-card>
             </div>
 
-            <div class="col">
+            <div class="col-12 col-md-6 col-xl">
               <opdex-card>
                 <h4 class="stat-header">
                   Volume (24hr)
@@ -66,13 +66,13 @@
 
                 <div class="stat">
                   <p class="stat-value">
-                    ${{market.summary.volume | formatNumber}}
+                    ${{market.summary.volume | formatNumber:2}}
                   </p>
                 </div>
               </opdex-card>
             </div>
 
-            <div class="col">
+            <div class="col-12 col-md-6 col-xl">
               <opdex-card>
                 <h4 class="stat-header">
                   Rewards (24hr)
@@ -92,32 +92,34 @@
     </div>
 
     <div class="row mb-5">
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-xl-6">
         <opdex-card class="p-0">
           <opdex-line-chart [chartData]="liquidityHistory" title="Market Liquidity" *ngIf="liquidityHistory"></opdex-line-chart>
         </opdex-card>
       </div>
 
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-xl-6">
         <opdex-card>
           <opdex-volume-chart [chartData]="volumeHistory" title="Market Volume" *ngIf="volumeHistory"></opdex-volume-chart>
         </opdex-card>
       </div>
     </div>
 
-    <div class="row mb-5">
-      <div class="col-12">
-        <h2 class="mb-3 text-shadow">Liquidity Mining</h2>
+    <ng-container *ngIf="miningPools$ | async as miningPools">
+      <div class="row mb-5" *ngIf="miningPools.length">
+        <div class="col-12">
+          <h2 class="mb-3 text-shadow">Liquidity Mining</h2>
 
-        <div class="row">
-          <ng-container *ngFor="let pool of pools">
-            <div class="col-3" *ngIf="pool.mining?.isActive">
-              <opdex-mining-card [pool]="pool"></opdex-mining-card>
-            </div>
-          </ng-container>
+          <div class="row">
+            <ng-container *ngFor="let pool of miningPools">
+              <div class="col-12 col-xl-3">
+                <opdex-mining-card [pool]="pool"></opdex-mining-card>
+              </div>
+            </ng-container>
+          </div>
         </div>
       </div>
-    </div>
+    </ng-container>
 
     <div class="row mb-5">
       <div class="col-12">
@@ -132,7 +134,7 @@
       <div class="col-12">
         <opdex-card>
           <h2>Top Tokens</h2>
-          <opdex-tokens-table [tokens]="tokens"></opdex-tokens-table>
+          <opdex-tokens-table [tokens]="tokens" [smallPageSize]="true"></opdex-tokens-table>
         </opdex-card>
       </div>
     </div>

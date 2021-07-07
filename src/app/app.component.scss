@@ -29,9 +29,10 @@ opdex-sidebar {
   width: 100%;
   height: 100%;
   background-image: url('/assets/dashboard@2x.png');
-  background-size: cover;
+  background-size: 110%;
   background-attachment: fixed;
   position: fixed;
+  background-position: bottom center;
 }
 
 .sidenav {

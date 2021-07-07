@@ -1,44 +1,106 @@
 <div class="review-tx-modal">
   <h2 class="mb-5 mt-3">Review Transaction</h2>
 
-  <div class="d-flex justify-content-between align-items-center mb-5">
-    <div>
-      <span class="amount amount-out">+10.45698473</span>
-      <span class="token">xBTC</span>
-      <br>
-      <span class="usd">($345.32)</span>
+  <div class="swap-transaction" *ngIf="data.transactionType === 'swap'">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+      <div>
+        <span class="amount amount-out">+{{data.payload.tokenOutAmount}}</span>
+        <span class="token">xBTC</span>
+        <br>
+        <span class="usd">($345.32)</span>
+      </div>
+
+      <div>
+        <mat-icon>swap_horiz</mat-icon>
+      </div>
+
+      <div>
+        <span class="amount amount-in">-{{data.payload.tokenInAmount}}</span>
+        <span class="token">ODX</span>
+        <br>
+        <span class="usd align-right">($345.32)</span>
+      </div>
     </div>
 
-    <div>
-      <mat-icon>swap_horiz</mat-icon>
+    <div class="d-flex justify-content-between d-flex">
+      <p class="light">Estimated Transaction Fee</p>
+      <p>$1.30</p>
     </div>
 
-    <div>
-      <span class="amount amount-in">-20.72345823</span>
-      <span class="token">ODX</span>
-      <br>
-      <span class="usd align-right">($345.32)</span>
+    <div class="d-flex justify-content-between d-flex">
+      <p class="light">Tolerance</p>
+      <p>0.5%</p>
+    </div>
+
+    <div class="d-flex justify-content-between d-flex">
+      <p class="light">Deadline</p>
+      <p>03/25/22 4:30PM UTC</p>
     </div>
   </div>
 
-  <div class="d-flex justify-content-between d-flex">
-    <p class="light">Estimated Transaction Fee</p>
-    <p>$1.30</p>
+  <div class="add-liquidity-transaction" *ngIf="data.transactionType === 'add-liquidity'">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+      <div>
+        <span class="amount amount-in">-{{data.payload.amountCrs}}</span>
+        <span class="token">CRS</span>
+        <br>
+        <span class="usd">($345.32)</span>
+      </div>
+
+      <div>
+        <span class="amount amount-in">-{{data.payload.amountSrc}}</span>
+        <span class="token">wBTC</span>
+        <br>
+        <span class="usd align-right">($345.32)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="remove-liquidity-transaction" *ngIf="data.transactionType === 'remove-liquidity'">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+      <div>
+        <span class="amount amount-in">-{{data.payload.liquidity}}</span>
+        <span class="token">OLPT</span>
+        <br>
+        <span class="usd">($345.32)</span>
+      </div>
+
+      <div>
+        <span class="amount amount-out">+{{data.payload.amountCrsMin}}</span>
+        <span class="token">CRS <small class="light">(Min)</small></span>
+        <br>
+        <span class="usd">($345.32)</span>
+      </div>
+
+      <div>
+        <span class="amount amount-out">+{{data.payload.amountSrcMin}}</span>
+        <span class="token">wBTC <small class="light">(Min)</small></span>
+        <br>
+        <span class="usd align-right">($345.32)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="approve-transaction" *ngIf="data.transactionType === 'approve'">
+    <div class="d-flex justify-content-between d-flex">
+      <p class="light">Amount</p>
+      <p>{{data.payload.amount}}</p>
+    </div>
+
+    <div class="d-flex justify-content-between d-flex">
+      <p class="light">Token</p>
+      <p>{{data.payload.token}}</p>
+    </div>
+
+    <div class="d-flex justify-content-between d-flex">
+      <p class="light">Spender</p>
+      <p>{{data.payload.spender}}</p>
+    </div>
   </div>
 
   <div class="d-flex justify-content-between d-flex">
     <p class="light">Estimated Gas Cost</p>
     <p>0.01 CRS ($0.20)</p>
-  </div>
-
-  <div class="d-flex justify-content-between d-flex">
-    <p class="light">Tolerance</p>
-    <p>0.5%</p>
-  </div>
-
-  <div class="d-flex justify-content-between d-flex">
-    <p class="light">Deadline</p>
-    <p>03/25/22 4:30PM UTC</p>
   </div>
 
   <mat-checkbox
@@ -57,7 +119,11 @@
 
     <p class="text-center light">Scan with Stratis Wallet</p>
 
-    <button mat-flat-button color="primary" class="w-100 mt-3">Local Submit</button>
+    <button mat-flat-button color="primary" class="w-100 mt-3" (click)="submit()" [disabled]="submitting">{{!submitting ? 'Local Submit' : 'Submitting'}}</button>
+
+    <mat-progress-bar mode="indeterminate" *ngIf="submitting" class="mt-3"></mat-progress-bar>
+
+    <small *ngIf="txHash" class="mt-3">{{txHash}}</small>
   </ng-container>
 
   <img src="/assets/defi1.png" class="defi" alt="DeFi blocks">

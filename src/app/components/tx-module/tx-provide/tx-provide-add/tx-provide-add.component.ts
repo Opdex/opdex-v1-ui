@@ -85,9 +85,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
       liquidityPool: this.pool.address
     }
 
-    this._platformApi.addLiquidity(payload)
-      .pipe(take(1))
-      .subscribe(response => this.txHash = response.txHash);
+    this.signTx(payload, 'add-liquidity');
   }
 
   ngOnDestroy() {

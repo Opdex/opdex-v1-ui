@@ -11,15 +11,46 @@
       <mat-icon>close</mat-icon>
     </button>
 
-    <div class="reserves">
-      <div class="crs">
-        <h5>CRS Reserves</h5>
-        <small>{{pool.reserves.crs | formatNumber:4}}</small>
+    <div class="pool-details-section" *ngIf="showReserves">
+      <p class="title">Reserves</p>
+
+      <div class="detail">
+        <h5>CRS</h5>
+        <small>(${{pool.token.crs.summary.price.close | formatNumber: 2}})</small>
+        <small>{{pool.reserves.crs | formatNumber:4}} CRS</small>
       </div>
 
-      <div class="src">
-        <h5>{{pool.token.src.symbol}} Reserves</h5>
-        <small>{{pool.reserves.src | formatNumber:4}}</small>
+      <div class="detail">
+        <h5>{{pool.token.src.symbol}}</h5>
+        <small>(${{pool.token.src.summary.price.close | formatNumber: 2}})</small>
+        <small>{{pool.reserves.src | formatNumber:4}} {{pool.token.src.symbol}}</small>
+      </div>
+
+      <hr class="w-100">
+
+      <div class="detail">
+        <h5>Total</h5>
+        <small>${{pool.reserves.usd | formatNumber:2}} USD</small>
+      </div>
+    </div>
+
+    <div class="pool-details-section" *ngIf="pool.token?.staking && showStaking">
+      <p class="title">Staking</p>
+
+      <div class="detail">
+        <h5>{{pool.token.staking.symbol}}</h5>
+        <small>(${{pool.token.staking.summary.price.close | formatNumber: 2}})</small>
+        <small>{{pool.staking.weight | formatNumber:4}} ODX</small>
+      </div>
+    </div>
+
+    <div class="pool-details-section" *ngIf="pool.mining?.tokensMining && showMining">
+      <p class="title">Mining</p>
+
+      <div class="detail">
+        <h5>{{pool.token.lp.symbol}}</h5>
+        <small>(${{pool.token.lp.summary.price.close | formatNumber: 2}})</small>
+        <small>{{pool.mining?.tokensMining | formatNumber:4}} {{pool.token.lp.symbol}}</small>
       </div>
     </div>
   </opdex-card>

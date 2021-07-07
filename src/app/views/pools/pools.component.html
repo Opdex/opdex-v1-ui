@@ -4,32 +4,35 @@
       <div class="col-12">
         <h1 class="page-title">Liquidity Pools</h1>
 
-        <div class="row">
-          <div class="col-12">
-            <h3>Top Volume</h3>
-          </div>
+        <ng-container *ngIf="poolsByVolume$ | async as poolsByVolume">
+          <div class="row" *ngIf="poolsByVolume.length">
+            <div class="col-12">
+              <h3>Top Volume</h3>
+            </div>
 
-          <div class="col-3" *ngFor="let pool of poolsByVolume; let i = index">
-            <opdex-liquidity-pool-card [pool]="pool" *ngIf="i < 4"></opdex-liquidity-pool-card>
+            <div class="col-xs-12 col-xl-3" *ngFor="let pool of poolsByVolume">
+              <opdex-liquidity-pool-card [pool]="pool"></opdex-liquidity-pool-card>
+            </div>
           </div>
-        </div>
+        </ng-container>
       </div>
     </div>
 
+    <ng-container *ngIf="poolsMining$ | async as poolsMining">
+      <div class="row mb-5" *ngIf="poolsMining.length">
+        <div class="col-12">
+          <h3>Liquidity Mining</h3>
 
-    <div class="row mb-5">
-      <div class="col-12">
-        <h3>Liquidity Mining</h3>
-
-        <div class="row">
-          <div class="col-3" *ngFor="let pool of pools">
-            <opdex-mining-card [pool]="pool" *ngIf="pool.mining?.isActive"></opdex-mining-card>
+          <div class="row">
+            <div class="col-3" *ngFor="let pool of poolsMining">
+              <opdex-mining-card [pool]="pool"></opdex-mining-card>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ng-container>
 
-    <div class="row">
+    <div class="row" *ngIf="pools$ | async as pools">
       <div class="col-12">
         <opdex-card>
           <h3>Liquidity Pools</h3>

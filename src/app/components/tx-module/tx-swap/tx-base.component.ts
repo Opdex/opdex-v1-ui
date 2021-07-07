@@ -4,11 +4,11 @@ import { SignTxModalComponent } from "@sharedComponents/modals-module/sign-tx-mo
 export abstract class TxBase {
   constructor(protected _dialog: MatDialog) {}
 
-  signTx(): void {
+  signTx(payload: any, transactionType: string): void {
     this._dialog.open(SignTxModalComponent, {
       width: '600px',
       position: { top: '200px' },
-      data:  {},
+      data:  { payload, transactionType},
       panelClass: ''
     });
   }

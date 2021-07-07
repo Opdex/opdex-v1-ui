@@ -27,6 +27,6 @@
     </div>
 
 
-    <button mat-flat-button color="primary" class="mt-4 w-100">Continue</button>
+    <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid">Continue</button>
   </form>
 </div>
