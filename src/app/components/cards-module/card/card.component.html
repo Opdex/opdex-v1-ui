@@ -1,5 +1,5 @@
 <mat-card [ngClass]="{'h-100': fullHeight}" class="card">
-  <div class="foreground">
+  <div class="foreground" [ngClass]="{'warn': warn}">
     <ng-content></ng-content>
   </div>
 </mat-card>

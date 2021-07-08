@@ -34,7 +34,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
 
     this.form = this._fb.group({
       amount: ['', [Validators.required, Validators.min(.00000001)]],
-      liquidate: [false, [Validators.required]]
+      liquidate: [false]
     });
   }
 

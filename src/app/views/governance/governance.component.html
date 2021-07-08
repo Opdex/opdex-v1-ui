@@ -1,37 +1,59 @@
-<div class="vault">
+<div class="governance" *ngIf="governance$ | async as governance">
   <div class="container mt-5">
     <div class="row mb-3">
       <div class="col-4">
-        <h1 class="page-title mb-3">ODX Governance</h1>
-        <p>kvjfdigh87ahgiuaebrgiaj4qih4w3infassk</p>
-        <button mat-flat-button color="primary">Distribute Mining Rewards</button>
+        <h1 class="page-title mb-3">{{governance.minedToken.symbol}} Governance</h1>
+        <p>{{governance.address}}</p>
       </div>
     </div>
 
     <div class="row mb-5">
       <div class="col-3">
-        <opdex-card>
-          <h4>Nomination Period Duration</h4>
-          <p class="mb-0" style="font-weight: 400;">150,000 Blocks</p>
-        </opdex-card>
-      </div>
-      <div class="col-3">
-        <opdex-card>
-          <h4>Nomination Period End</h4>
-          <p class="mb-0" style="font-weight: 400;">3/25/2022 14:22:23 UTC</p>
-        </opdex-card>
-      </div>
-      <div class="col-3">
-        <opdex-card>
-          <h4>Nomination Reward</h4>
-          <p class="mb-0" style="font-weight: 400;">6,250,000.0000 ODX</p>
+        <opdex-card [fullHeight]="true">
+          <div class="d-flex flex-column justify-content-between h-100">
+            <h4>Nomination Period End <span class="badge {{governance.remainingNominationPeriodBlocks > 0 ? 'success' : 'warn'}}">{{governance.remainingNominationPeriodBlocks > 0 ? 'Ongoing' : 'Paused'}}</span></h4>
+            <p class="mb-0" style="font-weight: 400; font-size: 20px;" *ngIf="governance.remainingNominationPeriodBlocks > 0">
+              Block #{{governance.nominationPeriodEndBlock | formatNumber:0}}
+              <small class="light float-right">~3/25/22 4:22pm (GMT)</small>
+            </p>
+            <button mat-flat-button color="primary" class="w-100 mt-2" *ngIf="governance.remainingNominationPeriodBlocks === 0" [disabled]="submitting" (click)="distribute()">Distribute Rewards</button>
+          </div>
         </opdex-card>
       </div>
 
       <div class="col-3">
-        <opdex-card>
-          <h4>Nomination Reward Reset</h4>
-          <p class="mb-0" style="font-weight: 400;">+10 Nomination Periods</p>
+        <opdex-card [fullHeight]="true">
+          <div class="d-flex flex-column justify-content-between h-100">
+            <h4>Nomination Period Duration</h4>
+            <p class="mb-0" style="font-weight: 400; font-size: 20px;">
+              {{governance.nominationDuration | formatNumber:0}} Blocks
+              <small class="light float-right">~{{secondsToDhms(governance.nominationDuration * 16)}}</small>
+            </p>
+          </div>
+        </opdex-card>
+      </div>
+
+      <div class="col-3">
+        <opdex-card [fullHeight]="true">
+          <div class="d-flex flex-column justify-content-between h-100">
+            <h4>Nomination Rewards</h4>
+            <p class="mb-0" style="font-weight: 400; font-size: 20px;">
+              {{governance.totalRewardPerPeriod | formatNumber: 0}} ODX
+              <small class="light float-right">{{governance.miningPoolReward | formatNumber:0}} per Pool</small>
+            </p>
+          </div>
+        </opdex-card>
+      </div>
+
+      <div class="col-3">
+        <opdex-card [fullHeight]="true">
+          <div class="d-flex flex-column justify-content-between h-100">
+            <h4>Nomination Reward Reset</h4>
+            <p class="mb-0" style="font-weight: 400; font-size: 20px;">
+              +{{governance.nominationPeriodsUntilReset}} Nomination Periods
+              <small class="light float-right">~{{((governance.nominationPeriodsUntilReset * governance.nominationDuration) + governance.remainingNominationPeriodBlocks) | formatNumber: 0}} Blocks</small>
+            </p>
+          </div>
         </opdex-card>
       </div>
     </div>
@@ -54,7 +76,7 @@
     <ng-container *ngIf="miningPools$ | async as miningPools">
       <div class="row mb-5" *ngIf="miningPools.length">
         <div class="col-12">
-          <h3>Active Liquidity Mining</h3>
+          <h3 class="text-shadow">Active Liquidity Mining</h3>
 
           <div class="row">
             <div class="col-3" *ngFor="let pool of miningPools">

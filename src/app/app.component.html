@@ -40,6 +40,11 @@
           </div>
         </ng-container>
 
+        <opdex-card [warn]="true" class="mb-4 d-block">
+          <h4>Test Warning</h4>
+          <p class="mb-0">One day this will say something important to protect the user from making a mistake.</p>
+        </opdex-card>
+
         <div [ngSwitch]="message?.view">
           <opdex-tx-swap *ngSwitchCase="1" [data]="message?.data"></opdex-tx-swap>
           <opdex-tx-provide *ngSwitchCase="2" [data]="message?.data"></opdex-tx-provide>

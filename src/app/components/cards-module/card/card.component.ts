@@ -7,4 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 export class CardComponent {
   @Input() fullHeight: boolean = false;
+  @Input() warn: boolean = false;
 }

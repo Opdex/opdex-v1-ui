@@ -1,6 +1,14 @@
 <div id="overview" class="mt-5">
   <div class="container" *ngIf="market">
     <div class="row mb-5">
+      <div class="col">
+        <opdex-card [warn]="true">
+          <h4>Market Data and Opdex Analytics</h4>
+          <p class="mb-0">All data represented is based on Opdex's best effort to ingest dynamic blockchain transactions and output analytical data. This data may have inaccuracies and is not to be taken as financial advice.</p>
+        </opdex-card>
+      </div>
+    </div>
+    <div class="row mb-5">
       <div class="col-12">
         <h1 class="page-title">Market Overview</h1>
 

@@ -79,6 +79,18 @@ export class PlatformApiService extends RestApiService {
   }
 
   //////////////
+  // Governances
+  //////////////
+
+  public getGovernance(address: string): Observable<any> {
+    return this.get<any>(`${this.api}/governances/${address}`);
+  }
+
+  public rewardMiningPools(address: string): Observable<any> {
+    return this.post<any>(`${this.api}/governances/${address}/reward-mining-pools`, {});
+  }
+
+  //////////////
   // Markets
   //////////////
 
@@ -152,11 +164,6 @@ export class PlatformApiService extends RestApiService {
 
   public collectStakingRewards(payload: any): Observable<any> {
     return this.post<any>(`${this.api}/build-transaction/local-broadcast/collect-staking-rewards`, payload);
-  }
-
-  // Reward Mining Pools
-  public rewardMiningPools(payload: any): Observable<any> {
-    return this.post<any>(`${this.api}/build-transaction/local-broadcast/reward-mining-pools`, payload);
   }
 
   // Distribute tokens

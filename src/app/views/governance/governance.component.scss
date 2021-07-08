@@ -1,0 +1,17 @@
+.badge {
+  margin-left: 10px;
+  float: right;
+  font-size: 14px;
+  padding: 2px 10px;
+  border-radius: 4px;
+
+  &.warn {
+    background: #F2435B;
+    color: white;
+  }
+
+  &.success {
+    background: #00EB93;
+    color: #1b192f;
+  }
+}

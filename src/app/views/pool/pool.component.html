@@ -1,6 +1,13 @@
 <div id="pool" class="mt-5">
   <div class="container pt-3" *ngIf="pool">
-
+    <div class="row mb-4">
+      <div class="col">
+        <opdex-card [warn]="true">
+          <h4>Liquidity Pool Warning</h4>
+          <p class="mb-0">Anybody can publicly create a liquidity pool between Cirrus token (CRS) and any SRC token. Validate the chosen liquidity pool and SRC token by the SRC token's address.</p>
+        </opdex-card>
+      </div>
+    </div>
     <div class="row mb-4">
       <div class="col-5">
         <opdex-card>
@@ -12,7 +19,7 @@
               <p class="mb-0">{{pool.token.src.name}} - Cirrus</p>
             </div>
 
-            <div class="ml-4 ">
+            <div class="ml-4 d-flex flex-column h-100">
               <mat-chip-list aria-label="Amenities" class="float-right">
                 <mat-chip color="primary" selected>0.3% Fee</mat-chip>
                 <mat-chip color="primary" selected class="purple"><mat-icon class="mr-2">star</mat-icon> Nominated</mat-chip>
@@ -76,46 +83,6 @@
     <div class="row mb-5">
       <div class="col-12">
         <div class="stats">
-          <!-- <div class="row mb-4">
-            <div class="col">
-              <opdex-card>
-                <div class="d-flex justify-content-between align-items-center">
-                  <h4 class="mb-0">1 {{pool.token.src.symbol}} (${{pool.token.src.summary.price.close | formatNumber: 2}})</h4>
-                  <mat-icon>swap_horiz</mat-icon>
-                  <h4 class="mb-0">{{pool.cost.crsPerSrc.close | formatNumber:4 }} CRS</h4>
-                </div>
-              </opdex-card>
-            </div>
-
-            <div class="col">
-              <opdex-card>
-                <div class="d-flex justify-content-between align-items-center">
-                  <h4 class="mb-0">1 CRS (${{pool.token.crs.summary.price.close | formatNumber: 2}})</h4>
-                  <mat-icon>swap_horiz</mat-icon>
-                  <h4 class="mb-0">{{pool.cost.srcPerCrs.close | formatNumber:4}} {{pool.token.src.symbol}}</h4>
-                </div>
-              </opdex-card>
-            </div>
-
-            <div class="col">
-              <opdex-card>
-                <div class="d-flex justify-content-between align-items-center">
-                  <h4 class="mb-0">Pool Balance</h4>
-                    <h4 class="mb-0">{{pool.reserves.crs | formatNumber:4}} CRS</h4>
-                </div>
-              </opdex-card>
-            </div>
-
-            <div class="col">
-              <opdex-card>
-                <div class="d-flex justify-content-between align-items-center">
-                  <h4 class="mb-0">Pool Balance</h4>
-                  <h4 class="mb-0">{{pool.reserves.src | formatNumber:4}} {{pool.token.src.symbol}}</h4>
-                </div>
-              </opdex-card>
-            </div>
-          </div> -->
-
           <div class="row">
             <div class="col">
               <opdex-card>
