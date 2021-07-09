@@ -5,8 +5,5 @@ export const environment = {
   defaultTheme: 'dark-mode',
   api: `http://${api}`,
   marketAddress: 'PUVKXiXNbvny8kVDnKAdfVZaUyvozMWKV4',
-  walletAddress: null,
-  walletName: null,
-  walletPassword: null,
   allowedJwtDomains: [api]
 };

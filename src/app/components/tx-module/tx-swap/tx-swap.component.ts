@@ -1,3 +1,4 @@
+import { UserContextService } from './../../../services/user-context.service';
 import { TokensModalComponent } from '../../modals-module/tokens-modal/tokens-modal.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, Input, OnDestroy } from '@angular/core';
@@ -21,6 +22,7 @@ export class TxSwapComponent implements OnDestroy{
   txHash: string;
   token0Details: any;
   token1Details: any;
+  context: any;
 
   get token0Amount(): FormControl {
     return this.form.get('token0Amount') as FormControl;
@@ -49,8 +51,11 @@ export class TxSwapComponent implements OnDestroy{
   constructor(
     private _fb: FormBuilder,
     private _dialog: MatDialog,
-    private _platformApi: PlatformApiService
+    private _platformApi: PlatformApiService,
+    private _userContext: UserContextService
   ) {
+    this.context = _userContext.getUserContext();
+
     this.form = this._fb.group({
       token0Amount: [null, [Validators.required, Validators.min(.00000001)]],
       token0: ['CRS', [Validators.required]],
@@ -129,7 +134,7 @@ export class TxSwapComponent implements OnDestroy{
       tokenOutAmount: !this.token0In ? this.token0AmountValue : this.token1AmountValue,
       tokenInExactAmount: this.token0In,
       tolerance: 0.1,
-      recipient: environment.walletAddress
+      recipient: this.context.wallet
     }
 
     this.signTx({ payload, transactionType: 'swap'});

@@ -5,9 +5,5 @@ export const environment = {
   defaultTheme: 'dark-mode',
   api: `http://${api}`,
   marketAddress: 'PUVKXiXNbvny8kVDnKAdfVZaUyvozMWKV4',
-  // walletAddress: 'PTsyKGQJ3eD9jnhHZKtvDmCMyGVMNTHay6',
-  walletAddress: null,
-  walletName: 'cirrusdev',
-  walletPassword: 'password',
   allowedJwtDomains: [api]
 };

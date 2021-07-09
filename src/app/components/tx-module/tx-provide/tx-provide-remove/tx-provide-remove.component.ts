@@ -1,3 +1,4 @@
+import { UserContextService } from './../../../../services/user-context.service';
 import { environment } from '@environments/environment';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -16,6 +17,7 @@ export class TxProvideRemoveComponent extends TxBase {
   @Input() pool: ILiquidityPoolSummaryResponse;
   txHash: string;
   form: FormGroup;
+  context: any;
 
   get liquidity(): FormControl {
     return this.form.get('liquidity') as FormControl;
@@ -24,9 +26,10 @@ export class TxProvideRemoveComponent extends TxBase {
   constructor(
     private _fb: FormBuilder,
     protected _dialog: MatDialog,
-    private _platformApi: PlatformApiService
+    private _platformApi: PlatformApiService,
+    protected _userContext: UserContextService
   ) {
-    super(_dialog);
+    super(_userContext, _dialog);
 
     this.form = this._fb.group({
       liquidity: ['', [Validators.required, Validators.min(.00000001)]]
@@ -39,7 +42,7 @@ export class TxProvideRemoveComponent extends TxBase {
       amountCrsMin: "1.00",
       amountSrcMin: "1.00",
       liquidityPool: this.pool.address,
-      recipient: environment.walletAddress
+      recipient: this.context.wallet
     };
 
     this.signTx(payload, 'remove-liquidity');

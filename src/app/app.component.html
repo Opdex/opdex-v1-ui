@@ -56,7 +56,9 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <opdex-sidebar *ngIf="context?.wallet"></opdex-sidebar>
+      <ng-container *ngIf="context$ | async as context">
+        <opdex-sidebar *ngIf="context.wallet"></opdex-sidebar>
+      </ng-container>
 
       <div id="page-content" [@fadeAnimation]="prepareRoute(outlet)">
         <router-outlet #outlet="outlet"></router-outlet>

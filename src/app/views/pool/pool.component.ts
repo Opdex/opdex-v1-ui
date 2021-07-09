@@ -1,3 +1,4 @@
+import { UserContextService } from './../../services/user-context.service';
 import { take } from 'rxjs/operators';
 import { PlatformApiService } from './../../services/api/platform-api.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -26,6 +27,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   constructor(
     private _route: ActivatedRoute,
     private _platformApiService: PlatformApiService,
+    private _userContext: UserContextService,
     private _sidenav: SidenavService
   ) {
     this.poolAddress = this._route.snapshot.params.pool;
@@ -61,12 +63,14 @@ export class PoolComponent implements OnInit, OnDestroy {
   }
 
   private getWalletSummary(): void {
-    this._platformApiService.getWalletSummaryForPool(this.poolAddress, environment.walletAddress)
-      .pipe(take(1))
-      .subscribe(walletSummary => {
-        this.walletBalance = walletSummary;
-        console.log(walletSummary);
-      })
+    const context = this._userContext.getUserContext();
+    if (context.wallet) {
+      this._platformApiService.getWalletSummaryForPool(this.poolAddress, context.wallet)
+        .pipe(take(1))
+        .subscribe(walletSummary => {
+          this.walletBalance = walletSummary;
+        })
+    }
   }
 
   private getPoolHistory(): void {

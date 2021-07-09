@@ -5,6 +5,7 @@ import { environment } from '@environments/environment';
 import { TxBase } from '@sharedComponents/tx-module/tx-swap/tx-base.component';
 import { ILiquidityPoolSummaryResponse, IToken } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
+import { UserContextService } from '@sharedServices/user-context.service';
 import { Observable, throwError } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, take } from 'rxjs/operators';
@@ -32,9 +33,10 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   constructor(
     private _fb: FormBuilder,
     protected _dialog: MatDialog,
-    private _platformApi: PlatformApiService
+    private _platformApi: PlatformApiService,
+    protected _userContext: UserContextService
   ) {
-    super(_dialog);
+    super(_userContext, _dialog);
 
     this.form = this._fb.group({
       amountCrs: ['', [Validators.required]],
@@ -81,7 +83,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
       amountCrs: parseFloat(this.amountCrs.value).toFixed(8),
       amountSrc: parseFloat(this.amountSrc.value).toFixed(this.pool.token.src.decimals),
       tolerance: .001,
-      recipient: environment.walletAddress,
+      recipient: this.context.walletAddress,
       liquidityPool: this.pool.address
     }
 

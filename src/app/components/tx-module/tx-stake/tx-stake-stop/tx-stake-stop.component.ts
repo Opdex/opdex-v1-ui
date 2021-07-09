@@ -1,3 +1,4 @@
+import { UserContextService } from './../../../../services/user-context.service';
 import { Component, Input, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -28,9 +29,10 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
   constructor(
     private _fb: FormBuilder,
     protected _dialog: MatDialog,
-    private _platformApi: PlatformApiService
+    private _platformApi: PlatformApiService,
+    protected _userContext: UserContextService
   ) {
-    super(_dialog);
+    super(_userContext, _dialog);
 
     this.form = this._fb.group({
       amount: ['', [Validators.required, Validators.min(.00000001)]],
