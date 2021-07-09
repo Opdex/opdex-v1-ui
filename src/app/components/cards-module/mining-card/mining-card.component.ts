@@ -1,5 +1,5 @@
-import { SidenavService } from './../../../services/sidenav.service';
-import { Component, Input, OnInit } from '@angular/core';
+import { SidenavService } from '@sharedServices/sidenav.service';
+import { Component, Input } from '@angular/core';
 import { SidenavView } from '@sharedModels/sidenav-view';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 
@@ -8,12 +8,10 @@ import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-
   templateUrl: './mining-card.component.html',
   styleUrls: ['./mining-card.component.scss']
 })
-export class MiningCardComponent implements OnInit {
+export class MiningCardComponent {
   @Input() pool: ILiquidityPoolSummaryResponse;
 
   constructor(private _sidebar: SidenavService) { }
-
-  ngOnInit(): void { }
 
   startMining() {
     this._sidebar.openSidenav(SidenavView.mine, {pool: this.pool, child: 'start'});

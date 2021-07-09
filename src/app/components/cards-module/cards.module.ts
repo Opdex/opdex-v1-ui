@@ -11,12 +11,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { CardComponent } from './card/card.component';
 import { MiningCardComponent } from './mining-card/mining-card.component';
 import { LiquidityPoolCardComponent } from './liquidity-pool-card/liquidity-pool-card.component';
+import { StakingPoolCardComponent } from './staking-pool-card/staking-pool-card.component';
 
 @NgModule({
   declarations: [
     CardComponent,
     MiningCardComponent,
-    LiquidityPoolCardComponent
+    LiquidityPoolCardComponent,
+    StakingPoolCardComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +31,8 @@ import { LiquidityPoolCardComponent } from './liquidity-pool-card/liquidity-pool
   exports: [
     CardComponent,
     MiningCardComponent,
-    LiquidityPoolCardComponent
+    LiquidityPoolCardComponent,
+    StakingPoolCardComponent
   ]
 })
 export class CardsModule { }

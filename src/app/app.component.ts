@@ -25,10 +25,10 @@ export class AppComponent implements OnInit {
   message: ISidenavMessage;
   sidenavMode: 'over' | 'side' = 'side';
   theme: string;
-  loading = true;
   subscription = new Subscription();
   transactionTypes = [...TransactionTypes];
   context$: Observable<any>;
+  context: any;
 
   constructor(
     public overlayContainer: OverlayContainer,
@@ -41,17 +41,13 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const context = this._context.getUserContext();
+    this.context = this._context.getUserContext();
 
     this.subscription.add(
-      this._api.auth(environment.marketAddress, context?.wallet)
-        .subscribe(jwt => {
-          this._context.setToken(jwt);
-          this.loading = false;
-        }));
+      this._api.auth(environment.marketAddress, this.context?.wallet)
+        .subscribe(jwt => this._context.setToken(jwt)));
 
-    this._theme.getTheme()
-      .subscribe(theme => this.setTheme(theme));
+    this._theme.getTheme().subscribe(theme => this.setTheme(theme));
 
     this.listenToSidenav();
 

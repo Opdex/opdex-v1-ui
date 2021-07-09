@@ -11,12 +11,12 @@
       <div class="col-3">
         <opdex-card [fullHeight]="true">
           <div class="d-flex flex-column justify-content-between h-100">
-            <h4>Nomination Period End <span class="badge {{governance.remainingNominationPeriodBlocks > 0 ? 'success' : 'warn'}}">{{governance.remainingNominationPeriodBlocks > 0 ? 'Ongoing' : 'Paused'}}</span></h4>
-            <p class="mb-0" style="font-weight: 400; font-size: 20px;" *ngIf="governance.remainingNominationPeriodBlocks > 0">
-              Block #{{governance.nominationPeriodEndBlock | formatNumber:0}}
-              <small class="light float-right">~3/25/22 4:22pm (GMT)</small>
+            <h4>Nomination Period End <span class="badge {{governance.periodRemainingBlocks > 0 ? 'success' : 'warn'}}">{{governance.periodRemainingBlocks > 0 ? 'Ongoing' : 'Paused'}}</span></h4>
+            <p class="mb-0" style="font-weight: 400; font-size: 20px;" *ngIf="governance.periodRemainingBlocks > 0">
+              Block #{{governance.periodEndBlock | formatNumber:0}}
+              <small class="light float-right">~{{nominationPeriodEndDate | date:'MM/d/YY h:mm a z':'GMT'}}</small>
             </p>
-            <button mat-flat-button color="primary" class="w-100 mt-2" *ngIf="governance.remainingNominationPeriodBlocks === 0" [disabled]="submitting" (click)="distribute()">Distribute Rewards</button>
+            <button mat-flat-button color="primary" class="w-100 mt-2" *ngIf="governance.periodRemainingBlocks === 0" [disabled]="submitting" (click)="distribute()">Distribute Rewards</button>
           </div>
         </opdex-card>
       </div>
@@ -26,8 +26,8 @@
           <div class="d-flex flex-column justify-content-between h-100">
             <h4>Nomination Period Duration</h4>
             <p class="mb-0" style="font-weight: 400; font-size: 20px;">
-              {{governance.nominationDuration | formatNumber:0}} Blocks
-              <small class="light float-right">~{{secondsToDhms(governance.nominationDuration * 16)}}</small>
+              {{governance.periodBlockDuration | formatNumber:0}} Blocks
+              <small class="light float-right">~{{secondsToDhms(governance.periodBlockDuration * 16)}}</small>
             </p>
           </div>
         </opdex-card>
@@ -38,8 +38,8 @@
           <div class="d-flex flex-column justify-content-between h-100">
             <h4>Nomination Rewards</h4>
             <p class="mb-0" style="font-weight: 400; font-size: 20px;">
-              {{governance.totalRewardPerPeriod | formatNumber: 0}} ODX
-              <small class="light float-right">{{governance.miningPoolReward | formatNumber:0}} per Pool</small>
+              {{governance.totalRewardsPerPeriod | formatNumber: 0}} ODX
+              <small class="light float-right">{{governance.miningPoolRewardPerPeriod | formatNumber:0}} per Pool</small>
             </p>
           </div>
         </opdex-card>
@@ -50,8 +50,8 @@
           <div class="d-flex flex-column justify-content-between h-100">
             <h4>Nomination Reward Reset</h4>
             <p class="mb-0" style="font-weight: 400; font-size: 20px;">
-              +{{governance.nominationPeriodsUntilReset}} Nomination Periods
-              <small class="light float-right">~{{((governance.nominationPeriodsUntilReset * governance.nominationDuration) + governance.remainingNominationPeriodBlocks) | formatNumber: 0}} Blocks</small>
+              {{governance.periodsUntilRewardReset}} Nomination Periods
+              <small class="light float-right">~{{((governance.periodsUntilRewardReset * governance.periodBlockDuration) + governance.periodRemainingBlocks) | formatNumber: 0}} Blocks</small>
             </p>
           </div>
         </opdex-card>
@@ -65,7 +65,7 @@
 
           <div class="row">
             <div class="col-3" *ngFor="let pool of nominatedPools">
-              <opdex-liquidity-pool-card [pool]="pool"></opdex-liquidity-pool-card>
+              <opdex-staking-pool-card [pool]="pool"></opdex-staking-pool-card>
             </div>
           </div>
         </div>

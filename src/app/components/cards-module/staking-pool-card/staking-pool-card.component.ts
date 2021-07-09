@@ -1,16 +1,16 @@
 import { UserContextService } from '@sharedServices/user-context.service';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { SidenavView } from '@sharedModels/sidenav-view';
 import { SidenavService } from '@sharedServices/sidenav.service';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'opdex-liquidity-pool-card',
-  templateUrl: './liquidity-pool-card.component.html',
-  styleUrls: ['./liquidity-pool-card.component.scss']
+  selector: 'opdex-staking-pool-card',
+  templateUrl: './staking-pool-card.component.html',
+  styleUrls: ['./staking-pool-card.component.scss']
 })
-export class LiquidityPoolCardComponent {
+export class StakingPoolCardComponent {
   @Input() pool: ILiquidityPoolSummaryResponse;
   context$: Observable<any>;
 
