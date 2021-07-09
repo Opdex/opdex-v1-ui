@@ -50,11 +50,6 @@ export class AppComponent implements OnInit {
     this._theme.getTheme().subscribe(theme => this.setTheme(theme));
 
     this.listenToSidenav();
-
-    this.subscription.add(
-      timer(0, 10000)
-        .pipe(switchMap(() => this._api.processLatestBlocks()))
-        .subscribe());
   }
 
   private listenToSidenav(): void {

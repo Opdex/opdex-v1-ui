@@ -35,14 +35,6 @@ export class PlatformApiService extends RestApiService {
   }
 
   //////////////
-  // Indexer
-  //////////////
-
-  public processLatestBlocks(): Observable<any> {
-    return this.post(`${this.api}/index/process-latest-blocks`, {});
-  }
-
-  //////////////
   // Tokens
   //////////////
 

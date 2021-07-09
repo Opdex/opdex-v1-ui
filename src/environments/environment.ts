@@ -4,6 +4,6 @@ export const environment = {
   production: false,
   defaultTheme: 'dark-mode',
   api: `http://${api}`,
-  marketAddress: 'PUVKXiXNbvny8kVDnKAdfVZaUyvozMWKV4',
+  marketAddress: 'PGbdqSqwcyBJPt2UAb9WauPmu8z4rc78eT',
   allowedJwtDomains: [api]
 };

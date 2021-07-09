@@ -22,7 +22,7 @@ export class GovernanceComponent implements OnInit {
   constructor(private _platformApiService: PlatformApiService) { }
 
   ngOnInit(): void {
-    this.governance$ = this._platformApiService.getGovernance('PCYpioJXY4xBtf7h5nVBisKxZsqvCf5Bia').pipe(tap((rsp: IGovernanceResponseModel) => {
+    this.governance$ = this._platformApiService.getGovernance('PPTf46AvGyenAJHW9DNtNCbbLQt1bbf3hT').pipe(tap((rsp: IGovernanceResponseModel) => {
       this.governance = rsp;
       const nominationRemainingSeconds = rsp.periodRemainingBlocks * 16;
       let date = new Date();
