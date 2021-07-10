@@ -1,4 +1,8 @@
 <div class="remove-liquidity">
+  <ng-container *ngIf="allowance$ | async as allowance">
+    <opdex-allowance-validation [allowance]="allowance"></opdex-allowance-validation>
+  </ng-container>
+
   <form [formGroup]="form" name="remove-liquidity-form" id="remove-liquidity-form" (submit)="submit()">
     <div class="exactly swap-row">
       <div class="spend-receive-button">

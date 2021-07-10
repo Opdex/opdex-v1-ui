@@ -176,6 +176,10 @@ export class PlatformApiService extends RestApiService {
   public getWalletSummaryForPool(pool: string, wallet: string): Observable<any> {
     return this.get<any>(`${this.api}/wallet/summary/pool/${pool}?walletAddress=${wallet}`);
   }
+
+  public getApprovedAllowance(owner: string, spender: string, token: string): Observable<any> {
+    return this.get<any>(`${this.api}/wallet/${owner}/allowance/approved?token=${token}&spender=${spender}`);
+  }
 }
 
 

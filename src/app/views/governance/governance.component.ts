@@ -46,7 +46,7 @@ export class GovernanceComponent implements OnInit {
     var hDisplay = h > 0 ? h + "h " : "";
     var mDisplay = m > 0 ? m + "m " : "";
     var sDisplay = s > 0 ? s + "s" : "";
-    console.log(dDisplay + hDisplay + mDisplay + sDisplay);
+
     return dDisplay + hDisplay + mDisplay + sDisplay;
   }
 

@@ -47,14 +47,21 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
   }
 
   ngOnChanges() {
+    console.log(this.data)
     this.pool = this.data?.pool;
+
+    this.form.patchValue({
+      token: this.data?.token,
+      spender: this.data?.spender,
+      amount: this.data?.amount
+    });
   }
 
   submit() {
     const payload = {
       token: this.token.value,
       // Todo: This below is wrong, we need to look up the token by address
-      amount: parseFloat(this.amount.value).toFixed(this.pool.token.lp.decimals),
+      amount: parseFloat(this.amount.value).toFixed(8),
       spender: this.spender.value
     }
 

@@ -30,6 +30,7 @@ import { TxProvideAddComponent } from './tx-provide/tx-provide-add/tx-provide-ad
 import { TxProvideRemoveComponent } from './tx-provide/tx-provide-remove/tx-provide-remove.component';
 import { TxAllowanceComponent } from './tx-allowance/tx-allowance.component';
 import { PoolPreviewComponent } from './shared/pool-preview/pool-preview.component';
+import { AllowanceValidationComponent } from './shared/allowance-validation/allowance-validation.component';
 
 
 
@@ -49,6 +50,7 @@ import { PoolPreviewComponent } from './shared/pool-preview/pool-preview.compone
     TxProvideRemoveComponent,
     TxAllowanceComponent,
     PoolPreviewComponent,
+    AllowanceValidationComponent,
   ],
   imports: [
     CommonModule,

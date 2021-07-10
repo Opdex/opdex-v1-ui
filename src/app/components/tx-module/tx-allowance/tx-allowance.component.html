@@ -1,6 +1,6 @@
 <opdex-card class="allowance">
   <form [formGroup]="form" name="allowance-form" id="swap-form" (submit)="submit()">
-    <div class="exactly swap-row" *ngIf="!data?.token">
+    <div class="exactly swap-row">
       <mat-form-field appearance="outline" class="w-100" >
         <mat-label>Token</mat-label>
         <input matInput type="text" [required]="true" [formControl]="token" autocomplete="off">

@@ -3,6 +3,13 @@
   background: rgba(27,25,47, .85) !important;
   margin-bottom: 30px;
 
+  &.hidden {
+    transition: all .1s ease-out;
+    opacity: 0;
+    margin: 0;
+    height: 0px;
+  }
+
   .foreground {
     padding: 25px;
     background: rgba(27,25,47, .9);
@@ -12,6 +19,15 @@
     &.warn {
       background: rgba(245, 25, 55, 0.4);
       border: 1px solid #ff7789;
+    }
+
+    &.success {
+      background: rgb(43 255 0 / 23%);
+      border: 1px solid #77ff82;
+    }
+
+    &.thin {
+      padding: 10px;
     }
   }
 

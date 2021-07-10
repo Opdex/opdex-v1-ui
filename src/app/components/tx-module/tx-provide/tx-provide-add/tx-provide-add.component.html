@@ -1,4 +1,8 @@
 <div class="add-liquidity">
+  <ng-container *ngIf="allowance">
+    <opdex-allowance-validation [allowance]="allowance"></opdex-allowance-validation>
+  </ng-container>
+
   <form [formGroup]="form" name="add-liquidity-form" id="swap-form" (submit)="submit()">
     <div class="exactly swap-row">
       <div class="spend-receive-button">
@@ -46,6 +50,6 @@
       <span style="font-size: 10px;">{{txHash}}</span>
     </div>
 
-    <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid">Continue</button>
+    <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid || !allowance?.valueApproved">Continue</button>
   </form>
 </div>

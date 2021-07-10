@@ -1,3 +1,4 @@
+import { SidenavService } from '@sharedServices/sidenav.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,7 +9,9 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/user-context.service';
 import { Observable, throwError } from 'rxjs';
 import { Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap, take } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, switchMap, take, tap, catchError } from 'rxjs/operators';
+import { TransactionView } from '@sharedModels/transaction-view';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'opdex-tx-provide-add',
@@ -19,6 +22,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   @Input() pool: ILiquidityPoolSummaryResponse;
   txHash: string;
   subscription = new Subscription();
+  allowance: any;
 
   form: FormGroup;
 
@@ -50,18 +54,46 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
         .pipe(
           debounceTime(400),
           distinctUntilChanged(),
-          switchMap(value => this.quote$(value, this.pool?.token?.crs))
+          switchMap(amount => this.quote$(amount, this.pool?.token?.crs)),
+          switchMap(amount => this.getAllowance$(amount))
         )
-        .subscribe(value => this.amountSrc.setValue(value, { emitEvent: false })));
+        .subscribe(allowance => {
+          if (allowance.amount > 0) {
+            this.amountSrc.setValue(allowance.amount, { emitEvent: false })
+          }
+        }));
 
     this.subscription.add(
       this.amountSrc.valueChanges
         .pipe(
           debounceTime(400),
           distinctUntilChanged(),
-          switchMap(value => this.quote$(value, this.pool?.token?.src))
+          switchMap(amount => this.quote$(amount, this.pool?.token?.src)),
+          switchMap(amount => this.getAllowance$(amount))
         )
-        .subscribe(value => this.amountCrs.setValue(value, { emitEvent: false })));
+        .subscribe(allowance => {
+          if (allowance.amount > 0) {
+            this.amountCrs.setValue(allowance.amount, { emitEvent: false })
+          }
+        }));
+  }
+
+  getAllowance$(amount: string):Observable<any> {
+    // Todo: shouldn't be hard coded
+    const router = 'PHh7jEgXCjrd48CNhN4UgYE5WeyERrpFYr';
+    const token = this.pool?.token?.src?.address;
+
+    return this._platformApi.getApprovedAllowance(this.context.wallet, router, token)
+      .pipe(
+        map(allowances => {
+          // todo: set;
+          return { spender: router, token, amount, allowances, valueApproved: parseFloat(amount) <= parseFloat(allowances[0]?.allowance) }
+        }),
+        tap(rsp => {
+          this.allowance = rsp;
+          console.log(rsp);
+        })
+      );
   }
 
   quote$(value: string, tokenIn: IToken): Observable<string> {
@@ -75,7 +107,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
       pool: this.pool.address
     };
 
-    return this._platformApi.quoteAddLiquidity(payload);
+    return this._platformApi.quoteAddLiquidity(payload).pipe(catchError(() => of('0.00')));
   }
 
   submit(): void {
@@ -83,7 +115,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
       amountCrs: parseFloat(this.amountCrs.value).toFixed(8),
       amountSrc: parseFloat(this.amountSrc.value).toFixed(this.pool.token.src.decimals),
       tolerance: .001,
-      recipient: this.context.walletAddress,
+      recipient: this.context.wallet,
       liquidityPool: this.pool.address
     }
 

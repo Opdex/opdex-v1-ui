@@ -5,7 +5,7 @@ import { Component, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription, of, Observable } from 'rxjs';
-import { debounce, debounceTime, take, catchError, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { debounce, debounceTime, take, catchError, distinctUntilChanged, switchMap, tap, map } from 'rxjs/operators';
 import { SignTxModalComponent } from 'src/app/components/modals-module/sign-tx-modal/sign-tx-modal.component';
 import { environment } from '@environments/environment';
 
@@ -23,6 +23,8 @@ export class TxSwapComponent implements OnDestroy{
   token0Details: any;
   token1Details: any;
   context: any;
+  allowance: any;
+  valueApproved: boolean;
 
   get token0Amount(): FormControl {
     return this.form.get('token0Amount') as FormControl;
@@ -171,7 +173,24 @@ export class TxSwapComponent implements OnDestroy{
       tokenOutAmount: !this.token0In ? this.token0AmountValue : null
     };
 
-    return this._platformApi.getSwapQuote(payload);
+    return this._platformApi.getSwapQuote(payload).pipe(
+      switchMap((amount: string) => {
+        const spender = this.data?.pool?.address;
+        const token = payload.tokenIn;
+
+        if (payload.tokenIn === 'CRS') {
+          return of(amount);
+        }
+
+        return this._platformApi.getApprovedAllowance(this.context.wallet, spender, token)
+          .pipe(map(allowances => {
+            this.valueApproved = parseFloat(amount) <= parseFloat(allowances[0]?.allowance);
+            this.allowance = { spender, token, amount, allowances, valueApproved: this.valueApproved }
+
+            return amount;
+          }));
+      })
+    );
   }
 
   ngOnDestroy() {
