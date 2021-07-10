@@ -1,4 +1,4 @@
-import { SidenavView } from './../../../models/sidenav-view';
+import { TransactionView } from '../../../models/transaction-view';
 import { Component, Input, OnChanges } from '@angular/core';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 
@@ -11,7 +11,7 @@ export class TxProvideComponent implements OnChanges {
   @Input() data: any;
   pool: ILiquidityPoolSummaryResponse;
   child: number = 1;
-  view = SidenavView.pool;
+  view = TransactionView.provide;
   txOptions = [
     { action: 'Add', value: 1 },
     { action: 'Remove', value: 2 }

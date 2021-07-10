@@ -1,3 +1,4 @@
+import { SharedModule } from './../shared-module/shared.module';
 import { SharedPipesModule } from './../../pipes/shared-pipes.module';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
@@ -12,13 +13,15 @@ import { CardComponent } from './card/card.component';
 import { MiningCardComponent } from './mining-card/mining-card.component';
 import { LiquidityPoolCardComponent } from './liquidity-pool-card/liquidity-pool-card.component';
 import { StakingPoolCardComponent } from './staking-pool-card/staking-pool-card.component';
+import { StatCardComponent } from './stat-card/stat-card.component';
 
 @NgModule({
   declarations: [
     CardComponent,
     MiningCardComponent,
     LiquidityPoolCardComponent,
-    StakingPoolCardComponent
+    StakingPoolCardComponent,
+    StatCardComponent
   ],
   imports: [
     CommonModule,
@@ -26,13 +29,15 @@ import { StakingPoolCardComponent } from './staking-pool-card/staking-pool-card.
     MatCardModule,
     MatIconModule,
     MatButtonModule,
-    SharedPipesModule
+    SharedPipesModule,
+    SharedModule
   ],
   exports: [
     CardComponent,
     MiningCardComponent,
     LiquidityPoolCardComponent,
-    StakingPoolCardComponent
+    StakingPoolCardComponent,
+    StatCardComponent
   ]
 })
 export class CardsModule { }

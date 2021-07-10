@@ -1,6 +1,6 @@
 <div id="pool" class="mt-5">
   <div class="container pt-3" *ngIf="pool">
-    <div class="row mb-4">
+    <div class="row">
       <div class="col">
         <opdex-card [warn]="true">
           <h4>Liquidity Pool Warning</h4>
@@ -8,8 +8,9 @@
         </opdex-card>
       </div>
     </div>
-    <div class="row mb-4">
-      <div class="col-5">
+
+    <div class="row">
+      <div class="col-12 col-xl-5">
         <opdex-card>
           <div class="d-flex align-items-center justify-content-between">
             <div>
@@ -32,7 +33,7 @@
         </opdex-card>
       </div>
 
-      <div class="col">
+      <div class="col-12 col-xl">
         <opdex-card [fullHeight]="true">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="mb-0">
@@ -61,7 +62,7 @@
         </opdex-card>
       </div>
 
-      <div class="col">
+      <div class="col-12 col-xl">
         <opdex-card [fullHeight]="true">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="mb-0 align-items-center d-flex">
@@ -80,190 +81,132 @@
       </div>
     </div>
 
-    <div class="row mb-5">
-      <div class="col-12">
-        <div class="stats">
-          <div class="row">
-            <div class="col">
-              <opdex-card>
-                <h4 class="stat-header">
-                  Liquidity
-                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
-                </h4>
+    <div class="row">
+      <div class="col-12 col-md-6 col-xl-3">
+        <opdex-stat-card title="Liquidity" value="${{pool.reserves.usd | formatNumber}}" [change]="pool.reserves.usdDailyChange"></opdex-stat-card>
+      </div>
 
-                <div class="stat">
-                  <p class="stat-value">
-                    ${{pool.reserves.usd | formatNumber}}
-                  </p>
+      <div class="col-12 col-md-6 col-xl-3">
+        <opdex-stat-card title="Staking Weight" value="${{pool.staking?.weight | formatNumber:0 }} {{pool.token.staking?.symbol}}" [change]="pool.staking?.weightDailyChange || 0"></opdex-stat-card>
+      </div>
 
-                  <opdex-change-indicator [value]="pool.reserves.usdDailyChange"></opdex-change-indicator>
-                </div>
-              </opdex-card>
-            </div>
+      <div class="col-12 col-md-6 col-xl-3">
+        <opdex-stat-card title="Volume" [daily]="true" value="${{pool.volume.usd | formatNumber}}"></opdex-stat-card>
+      </div>
 
-            <div class="col">
-              <opdex-card>
-                <h4 class="stat-header">
-                  Staking Weight
-                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
-                </h4>
-
-                <div class="stat">
-                  <p class="stat-value">
-                    {{pool.staking?.weight | formatNumber:0}} <small>ODX</small>
-                  </p>
-
-                  <opdex-change-indicator [value]="pool.staking?.weightDailyChange"></opdex-change-indicator>
-                </div>
-              </opdex-card>
-            </div>
-
-            <div class="col">
-              <opdex-card>
-                <h4 class="stat-header">
-                  Volume <small class="ml-2">(24hr)</small>
-                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
-                </h4>
-
-                <div class="stat">
-                  <p class="stat-value">
-                    ${{pool.volume.usd | formatNumber}}
-                  </p>
-                </div>
-              </opdex-card>
-            </div>
-
-            <div class="col">
-              <opdex-card>
-                <h4 class="stat-header">
-                  Rewards <small class="ml-2">(24hr)</small>
-                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
-                </h4>
-
-                <div class="stat">
-                  <p class="stat-value">
-                    ${{pool.rewards.totalUsd | formatNumber}}
-                  </p>
-                </div>
-              </opdex-card>
-            </div>
-          </div>
-        </div>
+      <div class="col-12 col-md-6 col-xl-3">
+        <opdex-stat-card title="Rewards" [daily]="true" value="${{pool.rewards.totalUsd | formatNumber}}"></opdex-stat-card>
       </div>
     </div>
 
-    <div class="row mb-5">
-      <div class="col-12 col-md-6">
-        <opdex-card class="p-0">
+    <div class="row">
+      <div class="col-12 col-xl-6">
+        <opdex-card>
           <opdex-line-chart [chartData]="liquidityHistory" title="{{pool.token.src.symbol}}-CRS Liquidity" *ngIf="liquidityHistory"></opdex-line-chart>
         </opdex-card>
       </div>
 
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-xl-6">
         <opdex-card>
           <opdex-volume-chart [chartData]="volumeHistory" *ngIf="volumeHistory"></opdex-volume-chart>
         </opdex-card>
       </div>
     </div>
 
-    <div class="row mb-5">
-      <div class="col-12">
-        <div class="row">
-          <div class="col-3">
-            <opdex-card class="mining-pool">
-              <div class="d-flex justify-content-between align-items-center">
-                <h3 class="d-inline mb-0">Balances</h3>
-                <div>
-                  <button mat-icon-button class="swap small" (click)="openTransactionSidebar(1)"><mat-icon>swap_horiz</mat-icon></button>
-                </div>
-              </div>
-
-              <div class="details">
-                <div class="mining">
-                  <p class="sub-heading">CRS</p>
-                  <p class="value">{{walletBalance?.crsBalance}}</p>
-                </div>
-
-                <div class="remaining">
-                  <p class="sub-heading">{{pool.token.src.symbol}}</p>
-                  <p class="value">{{walletBalance?.srcBalance | formatNumber: 8}}</p>
-                </div>
-              </div>
-            </opdex-card>
+    <div class="row">
+      <div class="col-12 col-md-6 col-xl-3">
+        <opdex-card class="mining-pool">
+          <div class="d-flex justify-content-between align-items-center">
+            <h3 class="d-inline mb-0">Balances</h3>
+            <div>
+              <button mat-icon-button class="swap small" (click)="openTransactionSidebar(1)"><mat-icon>swap_horiz</mat-icon></button>
+            </div>
           </div>
 
-          <div class="col-3">
-            <opdex-card class="mining-pool">
-              <div class="d-flex justify-content-between align-items-center">
-                <h3 class="d-inline mb-0">Providing</h3>
-                <div>
-                  <button mat-icon-button class="remove small mr-2" (click)="openTransactionSidebar(2, 'remove')"><mat-icon>remove</mat-icon></button>
-                  <button mat-icon-button class="add small" (click)="openTransactionSidebar(2, 'add')"><mat-icon>add</mat-icon></button>
-                </div>
-              </div>
+          <div class="details">
+            <div class="mining">
+              <p class="sub-heading">CRS</p>
+              <p class="value">{{walletBalance?.crsBalance}}</p>
+            </div>
 
-              <div class="details">
-                <div class="mining">
-                  <p class="sub-heading">Position</p>
-                  <p class="value">{{walletBalance?.providing | formatNumber: 8}} LPT</p>
-                </div>
+            <div class="remaining">
+              <p class="sub-heading">{{pool.token.src.symbol}}</p>
+              <p class="value">{{walletBalance?.srcBalance | formatNumber: 8}}</p>
+            </div>
+          </div>
+        </opdex-card>
+      </div>
 
-                <!-- <div class="remaining">
-                  <p class="sub-heading">Rewards</p>
-                  <p class="value">1234 CRS/234 ODX</p>
-                </div> -->
-              </div>
-            </opdex-card>
+      <div class="col-12 col-md-6 col-xl-3">
+        <opdex-card class="mining-pool">
+          <div class="d-flex justify-content-between align-items-center">
+            <h3 class="d-inline mb-0">Providing</h3>
+            <div>
+              <button mat-icon-button class="remove small mr-2" (click)="openTransactionSidebar(2, 'remove')"><mat-icon>remove</mat-icon></button>
+              <button mat-icon-button class="add small" (click)="openTransactionSidebar(2, 'add')"><mat-icon>add</mat-icon></button>
+            </div>
           </div>
 
-          <div class="col-3" *ngIf="pool.staking?.isActive">
-            <opdex-card class="mining-pool">
-              <div class="d-flex justify-content-between align-items-center">
-                <h3 class="d-inline mb-0">Staking</h3>
-                <div>
-                  <button mat-icon-button class="remove small mr-2" (click)="openTransactionSidebar(3, 'stop')"><mat-icon>remove</mat-icon></button>
-                  <button mat-icon-button class="add small" (click)="openTransactionSidebar(3, 'start')"><mat-icon>add</mat-icon></button>
-                </div>
-              </div>
+          <div class="details">
+            <div class="mining">
+              <p class="sub-heading">Position</p>
+              <p class="value">{{walletBalance?.providing | formatNumber: 8}} LPT</p>
+            </div>
 
-              <div class="details">
-                <div class="mining">
-                  <p class="sub-heading">Position</p>
-                  <p class="value">{{walletBalance?.staking | formatNumber: 8}} ODX</p>
-                </div>
+            <!-- <div class="remaining">
+              <p class="sub-heading">Rewards</p>
+              <p class="value">1234 CRS/234 ODX</p>
+            </div> -->
+          </div>
+        </opdex-card>
+      </div>
 
-                <!-- <div class="remaining">
-                  <p class="sub-heading">Rewards</p>
-                  <p class="value">1234 LPT</p>
-                </div> -->
-              </div>
-            </opdex-card>
+      <div class="col-12 col-md-6 col-xl-3" *ngIf="pool.staking?.isActive">
+        <opdex-card class="mining-pool">
+          <div class="d-flex justify-content-between align-items-center">
+            <h3 class="d-inline mb-0">Staking</h3>
+            <div>
+              <button mat-icon-button class="remove small mr-2" (click)="openTransactionSidebar(3, 'stop')"><mat-icon>remove</mat-icon></button>
+              <button mat-icon-button class="add small" (click)="openTransactionSidebar(3, 'start')"><mat-icon>add</mat-icon></button>
+            </div>
           </div>
 
-          <div class="col-3">
-            <opdex-card class="mining-pool" *ngIf="pool.mining">
-              <div class="d-flex justify-content-between align-items-center">
-                <h3 class="d-inline mb-0">Mining</h3>
-                <div>
-                  <button mat-icon-button class="remove small mr-2" (click)="openTransactionSidebar(4, 'stop')"><mat-icon>remove</mat-icon></button>
-                  <button mat-icon-button class="add small" (click)="openTransactionSidebar(4, 'start')"><mat-icon>add</mat-icon></button>
-                </div>
-              </div>
+          <div class="details">
+            <div class="mining">
+              <p class="sub-heading">Position</p>
+              <p class="value">{{walletBalance?.staking | formatNumber: 8}} ODX</p>
+            </div>
 
-              <div class="details">
-                <div class="mining">
-                  <p class="sub-heading">Position</p>
-                  <p class="value">{{walletBalance?.mining | formatNumber: 8}} LPT</p>
-                </div>
-
-                <!-- <div class="remaining">
-                  <p class="sub-heading">Rewards</p>
-                  <p class="value">1234 ODX</p>
-                </div> -->
-              </div>
-            </opdex-card>
+            <!-- <div class="remaining">
+              <p class="sub-heading">Rewards</p>
+              <p class="value">1234 LPT</p>
+            </div> -->
           </div>
-        </div>
+        </opdex-card>
+      </div>
+
+      <div class="col-12 col-md-6 col-xl-3">
+        <opdex-card class="mining-pool" *ngIf="pool.mining">
+          <div class="d-flex justify-content-between align-items-center">
+            <h3 class="d-inline mb-0">Mining</h3>
+            <div>
+              <button mat-icon-button class="remove small mr-2" (click)="openTransactionSidebar(4, 'stop')"><mat-icon>remove</mat-icon></button>
+              <button mat-icon-button class="add small" (click)="openTransactionSidebar(4, 'start')"><mat-icon>add</mat-icon></button>
+            </div>
+          </div>
+
+          <div class="details">
+            <div class="mining">
+              <p class="sub-heading">Position</p>
+              <p class="value">{{walletBalance?.mining | formatNumber: 8}} LPT</p>
+            </div>
+
+            <!-- <div class="remaining">
+              <p class="sub-heading">Rewards</p>
+              <p class="value">1234 ODX</p>
+            </div> -->
+          </div>
+        </opdex-card>
       </div>
     </div>
 

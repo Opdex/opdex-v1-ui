@@ -5,7 +5,7 @@ import { RestApiService } from './rest-api.service';
 import { ErrorService } from '@sharedServices/utility/error.service';
 import { Observable } from 'rxjs';
 import { ILiquidityPoolSnapshotHistoryResponse, ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
-import { LiquidityPoolsSearchQuery } from '@sharedModels/liquidity-pool-filter';
+import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +32,14 @@ export class PlatformApiService extends RestApiService {
     }
 
     return this.post(`${this.api}/auth/authorize?market=${market}${walletParam}`, {}, { responseType: 'text' });
+  }
+
+  //////////////
+  // Indexer
+  //////////////
+
+  public getLatestSyncedBlock(): Observable<any> {
+    return this.get<any>(`${this.api}/index/latest-block`);
   }
 
   //////////////

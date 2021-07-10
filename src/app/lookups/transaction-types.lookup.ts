@@ -1,29 +1,29 @@
-import { SidenavView } from "@sharedModels/sidenav-view";
+import { TransactionView } from "@sharedModels/transaction-view";
 
 export const TransactionTypes = [
   {
     id: 1,
     title: 'Swap',
-    view: SidenavView.swap
+    view: TransactionView.swap
   },
   {
     id: 2,
     title: 'Provide',
-    view: SidenavView.pool
+    view: TransactionView.provide
   },
   {
     id: 3,
     title: 'Stake',
-    view: SidenavView.stake
+    view: TransactionView.stake
   },
   {
     id: 4,
     title: 'Mine',
-    view: SidenavView.mine
+    view: TransactionView.mine
   },
   {
     id: 5,
     title: 'Allowance',
-    view: SidenavView.allowance
+    view: TransactionView.allowance
   },
 ]

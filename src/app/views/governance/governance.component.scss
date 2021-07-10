@@ -1,3 +1,5 @@
+@import 'src/scss/colors';
+
 .badge {
   margin-left: 10px;
   float: right;
@@ -6,12 +8,12 @@
   border-radius: 4px;
 
   &.warn {
-    background: #F2435B;
+    background: $red-primary;
     color: white;
   }
 
   &.success {
-    background: #00EB93;
-    color: #1b192f;
+    background: $green-primary;
+    color: $dark-primary;
   }
 }

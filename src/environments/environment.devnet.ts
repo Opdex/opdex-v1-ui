@@ -1,3 +1,5 @@
+import { Network } from "@sharedModels/networks";
+
 const api = 'dev-api.opdex.com';
 
 export const environment = {
@@ -5,5 +7,6 @@ export const environment = {
   defaultTheme: 'dark-mode',
   api: `https://${api}`,
   marketAddress: '',
-  allowedJwtDomains: [api]
+  allowedJwtDomains: [api],
+  network: Network.Devnet
 };

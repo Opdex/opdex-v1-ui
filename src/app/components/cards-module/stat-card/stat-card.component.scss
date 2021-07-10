@@ -1,0 +1,22 @@
+.stat-card {
+  .stat-header {
+    display: flex;
+    vertical-align: middle;
+    font-weight: 400;
+    margin-bottom: 5px;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+
+    .stat-value {
+      font-size: 24px;
+      margin-bottom: 0px;
+      line-height: 30px;
+    }
+  }
+}

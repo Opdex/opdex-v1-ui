@@ -1,11 +1,11 @@
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { environment } from '@environments/environment';
-import { take } from 'rxjs/operators';
+import { take, catchError } from 'rxjs/operators';
 import { UserContextService } from '@sharedServices/user-context.service';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 
 @Component({
   selector: 'opdex-auth',
@@ -33,12 +33,13 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._context.getUserContext$()
-      .subscribe(context => {
-        if (context?.wallet) {
-          this._router.navigateByUrl('/');
-        }
-      })
+    this.subscription.add(
+      this._context.getUserContext$()
+        .subscribe(context => {
+          if (context?.wallet) {
+            this._router.navigateByUrl('/');
+          }
+        }));
   }
 
   submit(): void {
@@ -46,7 +47,8 @@ export class AuthComponent implements OnInit, OnDestroy {
 
     this._api.auth(environment.marketAddress, this.publicKey.value)
       .pipe(take(1))
-      .subscribe(token => {
+      .pipe(catchError(() => of()))
+      .subscribe((token: string) => {
         this._context.setToken(token);
         this.loading = false;
       });

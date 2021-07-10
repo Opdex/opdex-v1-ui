@@ -4,10 +4,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { ILiquidityPoolsSearchFilter, LiquidityPoolsSearchQuery } from '@sharedModels/liquidity-pool-filter';
+import { ILiquidityPoolsSearchFilter, LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
 import { Observable } from 'rxjs';
 import { SidenavService } from '@sharedServices/sidenav.service';
-import { SidenavView } from '@sharedModels/sidenav-view';
+import { TransactionView } from '@sharedModels/transaction-view';
 
 @Component({
   selector: 'opdex-pools-table',
@@ -72,18 +72,18 @@ export class PoolsTableComponent implements OnChanges, AfterViewInit {
   // }
 
   provide(pool: any) {
-    this._sidebar.openSidenav(SidenavView.pool, {pool: pool});
+    this._sidebar.openSidenav(TransactionView.provide, {pool: pool});
   }
 
   swap(pool: any) {
-    this._sidebar.openSidenav(SidenavView.swap, {pool: pool});
+    this._sidebar.openSidenav(TransactionView.swap, {pool: pool});
   }
 
   stake(pool: any) {
-    this._sidebar.openSidenav(SidenavView.stake, {pool: pool});
+    this._sidebar.openSidenav(TransactionView.stake, {pool: pool});
   }
 
   mine(pool: any) {
-    this._sidebar.openSidenav(SidenavView.mine, {pool: pool});
+    this._sidebar.openSidenav(TransactionView.mine, {pool: pool});
   }
 }

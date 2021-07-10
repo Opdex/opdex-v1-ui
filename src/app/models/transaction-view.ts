@@ -1,7 +1,7 @@
-export enum SidenavView {
+export enum TransactionView {
   none = 0,
   swap = 1,
-  pool = 2,
+  provide = 2,
   stake = 3,
   mine = 4,
   allowance = 5
@@ -9,6 +9,6 @@ export enum SidenavView {
 
 export interface ISidenavMessage {
   status: boolean;
-  view: SidenavView;
+  view: TransactionView;
   data?: any;
 }

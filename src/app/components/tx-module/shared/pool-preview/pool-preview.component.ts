@@ -1,4 +1,4 @@
-import { SidenavView } from './../../../../models/sidenav-view';
+import { TransactionView } from '@sharedModels/transaction-view';
 import { Component, Input } from '@angular/core';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 
@@ -9,18 +9,18 @@ import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-
 })
 export class PoolPreviewComponent {
   @Input() pool: ILiquidityPoolSummaryResponse;
-  @Input() view: SidenavView;
+  @Input() view: TransactionView;
 
   get showStaking() {
-    return this.view === SidenavView.stake;
+    return this.view === TransactionView.stake;
   }
 
   get showMining() {
-    return this.view === SidenavView.mine;
+    return this.view === TransactionView.mine;
   }
 
   get showReserves() {
-    return this.view === SidenavView.swap || this.view === SidenavView.pool;
+    return this.view === TransactionView.swap || this.view === TransactionView.provide;
   }
 
   clearPool() {

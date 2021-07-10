@@ -5,7 +5,7 @@ import { Component, HostBinding, OnInit, ViewChild } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { ThemeService } from './services/theme.service';
 import { MatSidenav } from '@angular/material/sidenav';
-import { ISidenavMessage, SidenavView } from '@sharedModels/sidenav-view';
+import { ISidenavMessage, TransactionView } from '@sharedModels/transaction-view';
 import { Observable, Subscription, timer } from 'rxjs';
 import { TransactionTypes } from '@sharedLookups/transaction-types.lookup';
 import { FadeAnimation } from '@sharedServices/animations/fade-animation';
@@ -28,7 +28,9 @@ export class AppComponent implements OnInit {
   subscription = new Subscription();
   transactionTypes = [...TransactionTypes];
   context$: Observable<any>;
+  latestSyncedBlock$: Observable<any>;
   context: any;
+  network: string;
 
   constructor(
     public overlayContainer: OverlayContainer,
@@ -38,6 +40,8 @@ export class AppComponent implements OnInit {
     private _context: UserContextService
   ) {
     this.context$ = this._context.getUserContext$();
+    this.latestSyncedBlock$ = this._api.getLatestSyncedBlock();
+    this.network = environment.network;
   }
 
   ngOnInit(): void {
@@ -74,7 +78,7 @@ export class AppComponent implements OnInit {
     this.theme = theme;
   }
 
-  setSidenavView(view: SidenavView) {
+  setTransactionView(view: TransactionView) {
     const existingData = this.message.data;
     this.message = {
       view: view,

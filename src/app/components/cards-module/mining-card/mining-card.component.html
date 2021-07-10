@@ -1,19 +1,27 @@
-<opdex-card class="mining-pool" *ngIf="pool">
-  <div class="d-flex justify-content-between align-items-center">
-    <h3 class="d-inline mb-0"><a href="javascript:void(0)" [routerLink]="['/pools', pool.address]">{{pool.token.src.symbol}}/CRS</a></h3>
-    <div>
-      <button mat-icon-button class="remove small mr-2" (click)="stopMining()"><mat-icon>remove</mat-icon></button>
-      <button mat-icon-button class="add small" (click)="startMining()"><mat-icon>add</mat-icon></button>
+<opdex-card class="pool-card" *ngIf="pool">
+  <div class="top-details">
+    <h3 class="title">
+      <a href="javascript:void(0)" [routerLink]="['/pools', pool.address]">{{pool.token.src.symbol}}/CRS</a>
+    </h3>
+
+    <div class="button-group">
+      <button mat-icon-button class="remove small" (click)="stopMining()">
+        <mat-icon>remove</mat-icon>
+      </button>
+
+      <button mat-icon-button class="add small" (click)="startMining()">
+        <mat-icon>add</mat-icon>
+      </button>
     </div>
   </div>
 
-  <div class="details">
-    <div class="mining">
+  <div class="bottom-details">
+    <div class="left">
       <p class="sub-heading">Mining</p>
       <p class="value">{{ pool.mining?.tokensMining | formatNumber: 0}} <small>LPT</small></p>
     </div>
 
-    <div class="remaining">
+    <div class="right">
       <p class="sub-heading">Reward per Block</p>
       <p class="value">{{ pool.mining?.rewardPerBlock | formatNumber: 0}} <small>ODX</small></p>
     </div>

@@ -3,7 +3,7 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
-import { LiquidityPoolsSearchQuery } from '@sharedModels/liquidity-pool-filter';
+import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
 
 @Component({
   selector: 'opdex-market',

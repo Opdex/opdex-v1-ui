@@ -21,7 +21,7 @@
           </button>
           <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
             <ng-container *ngFor="let transactionType of transactionTypes">
-              <button mat-menu-item *ngIf="message?.view !== transactionType.view" (click)="setSidenavView(transactionType.view)" style="width: 125px;">{{transactionType.title}}</button>
+              <button mat-menu-item *ngIf="message?.view !== transactionType.view" (click)="setTransactionView(transactionType.view)" style="width: 125px;">{{transactionType.title}}</button>
             </ng-container>
           </mat-menu>
 
@@ -57,11 +57,27 @@
 
     <mat-sidenav-content>
       <ng-container *ngIf="context$ | async as context">
-        <opdex-sidebar *ngIf="context.wallet"></opdex-sidebar>
+        <opdex-side-nav *ngIf="context.wallet"></opdex-side-nav>
       </ng-container>
 
+
+
       <div id="page-content" [@fadeAnimation]="prepareRoute(outlet)">
-        <router-outlet #outlet="outlet"></router-outlet>
+        <div class="banner">
+          <div class="env light">
+            <mat-icon *ngIf="network == 'Devnet'">warning</mat-icon>
+            <p class="mb-0 ml-2">{{network}}</p>
+          </div>
+
+          <div class="block" *ngIf="latestSyncedBlock$ | async as block">
+            <span class="light">Latest Synced Block:</span>
+            <p class="mb-0 ml-2">{{block.height | formatNumber:0}}</p>
+          </div>
+        </div>
+
+        <div class="page-content-container">
+          <router-outlet #outlet="outlet"></router-outlet>
+        </div>
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>

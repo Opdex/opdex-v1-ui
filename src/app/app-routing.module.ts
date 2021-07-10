@@ -1,7 +1,6 @@
 import { AuthComponent } from './views/auth/auth.component';
 import { VaultComponent } from './views/vault/vault.component';
 import { GovernanceComponent } from './views/governance/governance.component';
-import { HistoryComponent } from './views/history/history.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -21,7 +20,6 @@ const routes: Routes = [
   { path: 'tokens', component: TokensComponent, data: { animation: 'TokensView'}, canActivate: [AuthGuard], canActivateChild: [AuthGuard] },
   { path: 'tokens/:token', component: TokenComponent, data: { animation: 'TokenView'}, canActivate: [AuthGuard], canActivateChild: [AuthGuard] },
   { path: 'wallet', component: WalletComponent, data: { animation: 'WalletView'}, canActivate: [AuthGuard], canActivateChild: [AuthGuard] },
-  { path: 'history', component: HistoryComponent, data: { animation: 'HistoryView'}, canActivate: [AuthGuard], canActivateChild: [AuthGuard] },
   { path: 'governance', component: GovernanceComponent, data: { animation: 'GovernanceView'}, canActivate: [AuthGuard], canActivateChild: [AuthGuard] },
   { path: 'vault', component: VaultComponent, data: { animation: 'VaultView'}, canActivate: [AuthGuard], canActivateChild: [AuthGuard] },
   { path: 'auth', component: AuthComponent, data: { animation: 'AuthView'} },

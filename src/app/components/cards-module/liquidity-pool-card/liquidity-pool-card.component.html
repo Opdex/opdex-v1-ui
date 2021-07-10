@@ -1,6 +1,9 @@
-<opdex-card class="liquidity-pool">
-  <div class="d-flex justify-content-between align-items-center">
-    <h3 class="d-inline mb-0"><a href="javascript:void(0)" [routerLink]="['/pools', pool.address]">{{pool.token.src.symbol}}-CRS</a></h3>
+<opdex-card class="pool-card">
+  <div class="top-details">
+    <h3 class="title">
+      <a href="javascript:void(0)" [routerLink]="['/pools', pool.address]">{{pool.token.src.symbol}}-CRS</a>
+    </h3>
+
     <div class="button-group">
       <button mat-icon-button class="swap small" (click)="swap()" title="Swap"><mat-icon>swap_horiz</mat-icon></button>
       <button mat-icon-button class="provide small" (click)="provide()" title="Provide"><mat-icon>add</mat-icon></button>
@@ -9,13 +12,13 @@
     </div>
   </div>
 
-  <div class="details">
-    <div class="mining">
+  <div class="bottom-details">
+    <div class="left">
       <p class="sub-heading">Volume</p>
       <p class="value">${{pool.volume.usd | formatNumber}}</p>
     </div>
 
-    <div class="remaining">
+    <div class="right">
       <p class="sub-heading">Liquidity</p>
       <p class="value">${{pool.reserves.usd | formatNumber}}</p>
     </div>

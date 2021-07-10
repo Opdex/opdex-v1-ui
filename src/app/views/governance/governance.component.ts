@@ -1,6 +1,6 @@
 import { take, tap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
-import { LiquidityPoolsSearchQuery } from '@sharedModels/liquidity-pool-filter';
+import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable } from 'rxjs';

@@ -1,6 +1,6 @@
 <div id="overview" class="mt-5">
   <div class="container" *ngIf="market">
-    <div class="row mb-5">
+    <div class="row">
       <div class="col">
         <opdex-card [warn]="true">
           <h4>Market Data and Opdex Analytics</h4>
@@ -8,7 +8,8 @@
         </opdex-card>
       </div>
     </div>
-    <div class="row mb-5">
+
+    <div class="row">
       <div class="col-12">
         <h1 class="page-title">Market Overview</h1>
 
@@ -99,7 +100,7 @@
       </div>
     </div>
 
-    <div class="row mb-5">
+    <div class="row">
       <div class="col-12 col-xl-6">
         <opdex-card class="p-0">
           <opdex-line-chart [chartData]="liquidityHistory" title="Market Liquidity" *ngIf="liquidityHistory"></opdex-line-chart>
@@ -114,7 +115,7 @@
     </div>
 
     <ng-container *ngIf="miningPools$ | async as miningPools">
-      <div class="row mb-5" *ngIf="miningPools.length">
+      <div class="row" *ngIf="miningPools.length">
         <div class="col-12">
           <h2 class="mb-3 text-shadow">Liquidity Mining</h2>
 
@@ -129,7 +130,7 @@
       </div>
     </ng-container>
 
-    <div class="row mb-5">
+    <div class="row">
       <div class="col-12">
         <opdex-card>
           <h2>Top Pools</h2>
@@ -138,7 +139,7 @@
       </div>
     </div>
 
-    <div class="row mb-5">
+    <div class="row">
       <div class="col-12">
         <opdex-card>
           <h2>Top Tokens</h2>

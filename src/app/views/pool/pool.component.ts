@@ -1,12 +1,11 @@
-import { UserContextService } from './../../services/user-context.service';
+import { UserContextService } from '@sharedServices/user-context.service';
 import { take } from 'rxjs/operators';
-import { PlatformApiService } from './../../services/api/platform-api.service';
+import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SidenavService } from '@sharedServices/sidenav.service';
-import { SidenavView } from '@sharedModels/sidenav-view';
+import { TransactionView } from '@sharedModels/transaction-view';
 import { timer, Subscription } from 'rxjs';
-import { environment } from '@environments/environment';
 import { ILiquidityPoolSnapshotHistoryResponse, ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 
 @Component({
@@ -47,7 +46,7 @@ export class PoolComponent implements OnInit, OnDestroy {
         }));
   }
 
-  openTransactionSidebar(view: SidenavView, childView: string = null) {
+  openTransactionSidebar(view: TransactionView, childView: string = null) {
     const data = {
       pool: this.pool,
       child: childView

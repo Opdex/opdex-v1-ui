@@ -1,7 +1,7 @@
 import { UserContextService } from '@sharedServices/user-context.service';
 import { Component, Input } from '@angular/core';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
-import { SidenavView } from '@sharedModels/sidenav-view';
+import { TransactionView } from '@sharedModels/transaction-view';
 import { SidenavService } from '@sharedServices/sidenav.service';
 import { Observable } from 'rxjs';
 
@@ -19,18 +19,18 @@ export class StakingPoolCardComponent {
   }
 
   provide() {
-    this._sidebar.openSidenav(SidenavView.pool, {pool: this.pool});
+    this._sidebar.openSidenav(TransactionView.provide, {pool: this.pool});
   }
 
   swap() {
-    this._sidebar.openSidenav(SidenavView.swap, {pool: this.pool});
+    this._sidebar.openSidenav(TransactionView.swap, {pool: this.pool});
   }
 
   stake() {
-    this._sidebar.openSidenav(SidenavView.stake, {pool: this.pool});
+    this._sidebar.openSidenav(TransactionView.stake, {pool: this.pool});
   }
 
   mine() {
-    this._sidebar.openSidenav(SidenavView.mine, {pool: this.pool});
+    this._sidebar.openSidenav(TransactionView.mine, {pool: this.pool});
   }
 }

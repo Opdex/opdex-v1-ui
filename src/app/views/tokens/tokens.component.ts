@@ -9,29 +9,22 @@ import { take, map, switchMap } from 'rxjs/operators';
   styleUrls: ['./tokens.component.scss']
 })
 export class TokensComponent {
-  tokens: any;
+  tokens$: Observable<any>;
 
   constructor(private _platformApiService: PlatformApiService) {
-    this._platformApiService.getTokens()
+    this.tokens$ = this._platformApiService.getTokens()
     .pipe(
-      take(1),
       switchMap((tokens: any[]) => {
         const poolArray$: Observable<any>[] = [];
 
-        tokens.forEach(token => {
-          const pool$: Observable<any> = this.getTokenHistory(token);
-          poolArray$.push(pool$);
-        });
+        tokens.forEach(token => poolArray$.push(this.getTokenHistory$(token)));
 
         return forkJoin(poolArray$);
       })
-    )
-    .subscribe(tokens => {
-      this.tokens = tokens;
-    });
+    );
   }
 
-  private getTokenHistory(token: any): Observable<any> {
+  private getTokenHistory$(token: any): Observable<any> {
     return this._platformApiService.getTokenHistory(token.address)
       .pipe(
         take(1),

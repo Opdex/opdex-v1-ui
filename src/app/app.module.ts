@@ -8,7 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SidebarModule } from './components/sidebar-module/sidebar.module';
+import { NavigationModule } from './components/navigation-module/navigation.module';
 import { TransactionModule } from './components/tx-module/tx.module';
 import { ChartsModule } from './components/charts-module/charts.module';
 import { TablesModule } from '@sharedComponents/tables-module/tables.module';
@@ -33,7 +33,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { WalletComponent } from './views/wallet/wallet.component';
-import { HistoryComponent } from './views/history/history.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatChipsModule } from '@angular/material/chips';
@@ -56,7 +55,6 @@ import { QRCodeModule } from 'angularx-qrcode';
     TokensComponent,
     TokenComponent,
     WalletComponent,
-    HistoryComponent,
     GovernanceComponent,
     VaultComponent,
     AuthComponent
@@ -67,7 +65,7 @@ import { QRCodeModule } from 'angularx-qrcode';
     HttpClientModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    SidebarModule,
+    NavigationModule,
     TransactionModule,
     ChartsModule,
     TablesModule,

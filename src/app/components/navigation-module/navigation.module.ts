@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { SidebarComponent } from './sidebar/sidebar.component';
+import { SideNavComponent } from './side-nav/side-nav.component';
 
 // Material Imports
 import { MatIconModule } from '@angular/material/icon';
@@ -12,7 +12,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
-    SidebarComponent
+    SideNavComponent
   ],
   imports: [
     CommonModule,
@@ -23,7 +23,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatDialogModule
   ],
   exports: [
-    SidebarComponent
+    SideNavComponent
   ]
 })
-export class SidebarModule { }
+export class NavigationModule { }
