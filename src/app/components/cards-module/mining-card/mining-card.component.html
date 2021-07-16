@@ -5,11 +5,15 @@
     </h3>
 
     <div class="button-group">
-      <button mat-icon-button class="remove small" (click)="stopMining()">
+      <button mat-icon-button class="collect small" (click)="collect()" matTooltip="Collect Mined {{pool.token.staking.symbol}}">
+        <mat-icon>local_play</mat-icon>
+      </button>
+
+      <button mat-icon-button class="remove small" (click)="stopMining()" matTooltip="Stop Mining {{pool.token.staking.symbol}}">
         <mat-icon>remove</mat-icon>
       </button>
 
-      <button mat-icon-button class="add small" (click)="startMining()">
+      <button mat-icon-button class="add small" (click)="startMining()" matTooltip="Start Mining {{pool.token.staking.symbol}}">
         <mat-icon>add</mat-icon>
       </button>
     </div>

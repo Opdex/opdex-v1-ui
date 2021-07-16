@@ -1,3 +1,5 @@
+import { Router } from '@angular/router';
+import { JwtService } from './../utility/jwt.service';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
@@ -6,6 +8,7 @@ import { ErrorService } from '@sharedServices/utility/error.service';
 import { Observable } from 'rxjs';
 import { ILiquidityPoolSnapshotHistoryResponse, ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
+import { TransactionRequest } from '@sharedModels/requests/transactions-filter';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +18,11 @@ export class PlatformApiService extends RestApiService {
 
   constructor(
     protected _http: HttpClient,
-    protected _error: ErrorService
+    protected _error: ErrorService,
+    protected _jwt: JwtService,
+    protected _router: Router,
   ) {
-    super(_http, _error);
+    super(_http, _error, _jwt, _router);
     this.api = environment.api;
   }
 
@@ -110,8 +115,16 @@ export class PlatformApiService extends RestApiService {
     return this.post<any>(`${this.api}/quote/add-liquidity`, payload);
   }
 
-  public getSwapQuote(payload: any): Observable<any> {
-    return this.post<any>(`${this.api}/quote/swap`, payload);
+  public getSwapQuote(payload: any): Observable<string> {
+    return this.post<string>(`${this.api}/quote/swap`, payload, { responseType: 'text' });
+  }
+
+  ////////////////////////////
+  // Transactions
+  ////////////////////////////
+
+  public getTransactions(request: TransactionRequest): Observable<any> {
+    return this.get<any>(`${this.api}/transactions${request.buildQueryString()}`);
   }
 
   ////////////////////////////////////////////////////////

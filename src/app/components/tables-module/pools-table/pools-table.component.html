@@ -51,8 +51,8 @@
         </button> -->
 
         <button mat-icon-button class="swap small mr-3" (click)="swap(element)" title="Swap"><mat-icon>swap_horiz</mat-icon></button>
-        <button mat-icon-button class="provide small mr-3" (click)="provide(element)" title="Provide"><mat-icon>add</mat-icon></button>
-        <button mat-icon-button class="stake small mr-3" (click)="stake(element)" title="Stake" *ngIf="element.staking?.isActive"><mat-icon>star</mat-icon></button>
+        <button mat-icon-button class="provide small mr-3" (click)="provide(element)" title="Provide"><mat-icon>control_point_duplicate</mat-icon></button>
+        <button mat-icon-button class="stake small mr-3" (click)="stake(element)" title="Stake" *ngIf="element.staking?.isActive"><mat-icon>verified_user</mat-icon></button>
         <button mat-icon-button class="mine small" (click)="mine(element)" title="Mine" *ngIf="element.mining?.isActive"><mat-icon>whatshot</mat-icon></button>
       </td>
     </ng-container>

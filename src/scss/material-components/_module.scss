@@ -3,20 +3,6 @@
 @import 'table';
 @import 'button';
 
-.light-mode {
-  // input {
-  //   background: #fff;
-  //   border: 1px solid #f4f4f4;
-  // }
-}
-
-.dark-mode {
-  // input {
-  //   background: #1B192F;
-  //   color: #fff;
-  //   border: 1px solid #363636;
-  // }
-}
 
 .mat-form-field {
   &:not(.mat-paginator-page-size-select) {
@@ -25,9 +11,28 @@
 }
 
 .mat-form-field-infix {
-  border-top-width : .3em;
-  width: 100% !important;
+  border-top: 1.2em solid transparent;
+
+  .mat-form-field-appearance-legacy .mat-form-field-label {
+    top: 1.2em;
+  }
+
+  .mat-form-field-label-wrapper {
+    top: -1.2em;
+    padding-top: 1.2em;
+
+    mat-label {
+      font-size: 1.4em !important;
+      font-weight: 400 !important;
+    }
+
+    .mat-placeholder-required {
+      display: none;
+    }
+  }
 }
+
+
 
 .dark-mode  {
   .mat-drawer-container {
@@ -54,13 +59,17 @@
   }
 }
 
-
 .mat-drawer-backdrop {
   opacity: 0 !important;
 }
 
-
-.mat-form-field-appearance-outline .mat-form-field-infix {
-  padding: 10px 0px !important;
-  border-radius: 8px !important;
+.mat-tooltip {
+  font-size: 16px !important;
+  max-width: 400px !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  overflow: visible !important;
+  text-overflow: wrap !important;
+  background: #1e1d2d !important;
+  border: 1px solid #292929;
 }

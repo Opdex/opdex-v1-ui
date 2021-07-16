@@ -1,0 +1,46 @@
+#mobile-nav {
+  height: 60px;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  background: #19192f;
+  z-index: 999;
+  background-color: #1e1d2d;
+  border-top: 1px solid #292929;
+
+  a.active {
+    color: #1ca7dc;
+  }
+
+  .wallet-indicator {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: .2em solid #1b192f;
+    position: absolute;
+    left: 23px;
+    top: 4px;
+
+    &.invalid {
+      background: #F2435B;
+    }
+
+    &.valid {
+      background: #00EB93;
+    }
+  }
+}
+
+@media (min-width: 320px) { }
+
+@media (min-width: 576px) { }
+
+@media (min-width: 768px) {
+  #mobile-nav {
+    display: none;
+  }
+}
+
+@media (min-width: 992px) { }
+
+@media (min-width: 1200px) { }

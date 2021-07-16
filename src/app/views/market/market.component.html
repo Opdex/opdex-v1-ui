@@ -41,7 +41,7 @@
 
                 <div class="stat">
                   <p class="stat-value">
-                    ${{market.summary.liquidity | formatNumber:2}}
+                    ${{market.summary.liquidity | formatNumber:0}}
                   </p>
 
                   <opdex-change-indicator [value]="market.summary.liquidityDailyChange"></opdex-change-indicator>
@@ -75,7 +75,7 @@
 
                 <div class="stat">
                   <p class="stat-value">
-                    ${{market.summary.volume | formatNumber:2}}
+                    ${{market.summary.volume | formatNumber:0}}
                   </p>
                 </div>
               </opdex-card>

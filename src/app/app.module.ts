@@ -38,6 +38,9 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { LayoutModule } from '@angular/cdk/layout';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatTabsModule} from '@angular/material/tabs';
+import {ClipboardModule} from '@angular/cdk/clipboard';
 import { GovernanceComponent } from './views/governance/governance.component';
 import { VaultComponent } from './views/vault/vault.component';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
@@ -77,8 +80,11 @@ import { QRCodeModule } from 'angularx-qrcode';
     MatDividerModule,
     MatButtonModule,
     MatButtonToggleModule,
+    MatTooltipModule,
     MatIconModule,
     MatSidenavModule,
+    MatTabsModule,
+    ClipboardModule,
     MatChipsModule,
     MatMenuModule,
     LayoutModule,

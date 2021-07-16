@@ -1,12 +1,13 @@
 import { UserContextService } from '@sharedServices/user-context.service';
-import { take } from 'rxjs/operators';
+import { take, tap, switchMap } from 'rxjs/operators';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SidenavService } from '@sharedServices/sidenav.service';
 import { TransactionView } from '@sharedModels/transaction-view';
-import { timer, Subscription } from 'rxjs';
+import { timer, Subscription, Observable } from 'rxjs';
 import { ILiquidityPoolSnapshotHistoryResponse, ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { ITransactionsRequest, TransactionRequest } from '@sharedModels/requests/transactions-filter';
 
 @Component({
   selector: 'opdex-pool',
@@ -22,6 +23,8 @@ export class PoolComponent implements OnInit, OnDestroy {
   volumeHistory: any[] = [];
   walletBalance: any;
   subscription = new Subscription();
+  copied: boolean;
+
 
   constructor(
     private _route: ActivatedRoute,
@@ -40,7 +43,6 @@ export class PoolComponent implements OnInit, OnDestroy {
           await Promise.all([
             this.getPool(),
             this.getPoolHistory(),
-            this.getPoolTransactions(),
             this.getWalletSummary()
           ]);
         }));
@@ -57,8 +59,14 @@ export class PoolComponent implements OnInit, OnDestroy {
 
   private getPool(): void {
     this._platformApiService.getPool(this.poolAddress)
-      .pipe(take(1))
-      .subscribe(pool => this.pool = pool);
+      .pipe(
+        take(1),
+        tap(pool => this.pool = pool),
+        switchMap((pool) => {
+          return this.getPoolTransactions(pool)
+        })
+      )
+      .subscribe();
   }
 
   private getWalletSummary(): void {
@@ -98,10 +106,30 @@ export class PoolComponent implements OnInit, OnDestroy {
       });
   }
 
-  private getPoolTransactions(): void {
-    this._platformApiService.getPoolTransactions(this.poolAddress)
-      .pipe(take(1))
-      .subscribe(transactions => this.transactions = transactions);
+  private getPoolTransactions(pool: ILiquidityPoolSummaryResponse): Observable<any> {
+    var contracts = [pool.address, pool.token.src.address];
+
+    if (pool?.mining?.address) contracts.push(pool.mining.address);
+
+    var transactionRequest = {
+      limit: 100,
+      direction: "DESC",
+      contracts: contracts
+    };
+
+    return this._platformApiService.getTransactions(new TransactionRequest(transactionRequest))
+      .pipe(
+        take(1),
+        tap(transactions => this.transactions = transactions.transactionDtos)
+      );
+  }
+
+  copyHandler($event) {
+    this.copied = true;
+
+    setTimeout(() => {
+      this.copied = false;
+    }, 1000);
   }
 
   ngOnDestroy() {

@@ -9,6 +9,15 @@ export class CoinNotationPipe implements PipeTransform {
 
   transform(value: number, decimals: number = 8, fixed?: boolean): number | string {
     let temp;
+
+    if (typeof value === 'string') {
+      let bigint = BigInt(value);
+      var satsPerToken = this._tokenService.getSats(decimals);
+      temp = bigint / BigInt(satsPerToken);
+      return fixed ? temp.toFixed(decimals) : this.numberWithCommas(temp);
+    }
+
+
     if (typeof value === 'number') {
       var satsPerToken = this._tokenService.getSats(decimals);
       temp = value / satsPerToken;

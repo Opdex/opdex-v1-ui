@@ -3,8 +3,16 @@
     <h1>Connect Wallet</h1>
 
     <form [formGroup]="form" name="auth-form" id="auth-form" (submit)="submit()">
-      <mat-form-field appearance="outline" class="w-100">
+      <!-- <mat-form-field appearance="outline" class="w-100">
         <mat-label>Public Key</mat-label>
+        <input matInput type="text" [required]="true" [formControl]="publicKey" autocomplete="off" placeholder="">
+
+      </mat-form-field> -->
+
+      <mat-form-field floatLabel="always">
+        <mat-label>Public Key</mat-label>
+        <button mat-icon-button matPrefix type="button" disabled><mat-icon>link</mat-icon></button>
+
         <input matInput type="text" [required]="true" [formControl]="publicKey" autocomplete="off" placeholder="">
         <mat-hint>Do NOT enter a private key!</mat-hint>
       </mat-form-field>

@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
   @HostBinding('class') componentCssClass: string;
   @ViewChild('sidenav') sidenav: MatSidenav;
   message: ISidenavMessage;
-  sidenavMode: 'over' | 'side' = 'side';
+  sidenavMode: 'over' | 'side' = 'over';
   theme: string;
   subscription = new Subscription();
   transactionTypes = [...TransactionTypes];

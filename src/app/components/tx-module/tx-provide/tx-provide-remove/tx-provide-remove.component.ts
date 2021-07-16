@@ -44,12 +44,12 @@ export class TxProvideRemoveComponent extends TxBase {
   getAllowance$(amount: string):Observable<any> {
     // Todo: shouldn't be hard coded
     const router = 'PHh7jEgXCjrd48CNhN4UgYE5WeyERrpFYr';
-    const token = this.pool?.token?.src?.address;
+    const token = this.pool?.token?.lp?.address;
 
     return this._platformApi.getApprovedAllowance(this.context.wallet, router, token)
       .pipe(
         map(allowances => {
-          return { spender: router, token, amount, allowances, valueApproved: parseFloat(amount) <= parseFloat(allowances[0]?.allowance) }
+          return { spender: router, token, amount, allowances, valueApproved: BigInt(amount.replace('.', '')) <= BigInt(allowances[0]?.allowance.replace('.', '')) }
         })
       );
   }

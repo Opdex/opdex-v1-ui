@@ -31,7 +31,7 @@ export class TxSwapComponent implements OnDestroy{
   }
 
   get token0AmountValue(): string {
-    return parseFloat(this.token0Amount.value).toFixed(this.token0Details.decimals);
+    return this.token0Amount.value;
   }
 
   get token0(): FormControl {
@@ -43,7 +43,7 @@ export class TxSwapComponent implements OnDestroy{
   }
 
   get token1AmountValue(): string {
-    return parseFloat(this.token1Amount.value).toFixed(this.token1Details.decimals);
+    return this.token1Amount.value;
   }
 
   get token1(): FormControl {
@@ -59,9 +59,9 @@ export class TxSwapComponent implements OnDestroy{
     this.context = _userContext.getUserContext();
 
     this.form = this._fb.group({
-      token0Amount: [null, [Validators.required, Validators.min(.00000001)]],
+      token0Amount: ['', [Validators.required]],
       token0: ['CRS', [Validators.required]],
-      token1Amount: [null, [Validators.required, Validators.min(.00000001)]],
+      token1Amount: ['', [Validators.required]],
       token1: [null, [Validators.required]]
     });
 
@@ -162,7 +162,7 @@ export class TxSwapComponent implements OnDestroy{
   }
 
   quote(value: string): Observable<string> {
-    if (!value || value === '0') {
+    if (!value || value === '0' || !value.includes('.')) {
       return of('0');
     }
 

@@ -1,13 +1,13 @@
 <div id="pools" class="mt-5">
   <div class="container">
-    <div class="row mb-5">
+    <div class="row">
       <div class="col-12">
         <h1 class="page-title">Liquidity Pools</h1>
 
         <ng-container *ngIf="poolsByVolume$ | async as poolsByVolume">
           <div class="row" *ngIf="poolsByVolume.length">
             <div class="col-12">
-              <h3>Top Volume</h3>
+              <h3 class="text-shadow">Top Volume</h3>
             </div>
 
             <div class="col-xs-12 col-xl-3" *ngFor="let pool of poolsByVolume">
@@ -19,12 +19,12 @@
     </div>
 
     <ng-container *ngIf="poolsMining$ | async as poolsMining">
-      <div class="row mb-5" *ngIf="poolsMining.length">
+      <div class="row" *ngIf="poolsMining.length">
         <div class="col-12">
-          <h3>Liquidity Mining</h3>
+          <h3 class="text-shadow">Liquidity Mining</h3>
 
           <div class="row">
-            <div class="col-3" *ngFor="let pool of poolsMining">
+            <div class="col-xs-12 col-xl-3" *ngFor="let pool of poolsMining">
               <opdex-mining-card [pool]="pool"></opdex-mining-card>
             </div>
           </div>
@@ -35,7 +35,7 @@
     <div class="row" *ngIf="pools$ | async as pools">
       <div class="col-12">
         <opdex-card>
-          <h3>Liquidity Pools</h3>
+          <h3 class="text-shadow">Liquidity Pools</h3>
           <opdex-pools-table [pools]="pools"></opdex-pools-table>
         </opdex-card>
       </div>

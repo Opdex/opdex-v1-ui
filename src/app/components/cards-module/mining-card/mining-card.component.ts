@@ -20,4 +20,8 @@ export class MiningCardComponent {
   stopMining() {
     this._sidebar.openSidenav(TransactionView.mine, {pool: this.pool, child: 'stop'});
   }
+
+  collect() {
+    this._sidebar.openSidenav(TransactionView.mine, {pool: this.pool, child: 'collect'});
+  }
 }

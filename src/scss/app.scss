@@ -22,9 +22,9 @@
 // Gray: #7C7C7C
 
 .mat-drawer {
-  .mat-form-field-wrapper {
-    padding-bottom: 0px !important;
-  }
+  // .mat-form-field-wrapper {
+  //   padding-bottom: 0px !important;
+  // }
 }
 
 .qrcode {
@@ -55,4 +55,8 @@ h1.page-title {
 
 .float-right {
   float: right;
+}
+
+.text-align-right {
+  text-align: right;
 }

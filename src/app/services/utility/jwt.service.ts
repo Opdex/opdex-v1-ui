@@ -48,6 +48,13 @@ export class JwtService {
   }
 
   /**
+   * @summary removes the current JWT from local storage
+   */
+   public removeToken(): void {
+    this._storage.removeLocalStorage(this.storageKey);
+  }
+
+  /**
    * @summary sets the current JWT to local storage
    * @returns JWT string
    */

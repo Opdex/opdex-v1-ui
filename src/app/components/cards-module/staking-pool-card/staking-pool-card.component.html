@@ -5,10 +5,10 @@
     </h3>
 
     <div class="button-group">
-      <button mat-icon-button class="swap small" (click)="swap()" title="Swap"><mat-icon>swap_horiz</mat-icon></button>
-      <button mat-icon-button class="provide small" (click)="provide()" title="Provide"><mat-icon>add</mat-icon></button>
-      <button mat-icon-button class="stake small" (click)="stake()" title="Stake" *ngIf="pool.staking?.isActive"><mat-icon>star</mat-icon></button>
-      <button mat-icon-button class="mine small" (click)="mine()" title="Mine" *ngIf="pool.mining?.isActive"><mat-icon>whatshot</mat-icon></button>
+      <button mat-icon-button class="swap small" (click)="swap()" matTooltip="Swap Tokens"><mat-icon>swap_horiz</mat-icon></button>
+      <button mat-icon-button class="provide small" (click)="provide()" matTooltip="Provide Liquidity"><mat-icon>control_point_duplicate</mat-icon></button>
+      <button mat-icon-button class="stake small" (click)="stake()" matTooltip="Stake {{pool.token?.staking?.symbol}}" *ngIf="pool.staking?.isActive"><mat-icon>verified_user</mat-icon></button>
+      <button mat-icon-button class="mine small" (click)="mine()" matTooltip="Mine {{pool.token?.staking?.symbol}}" *ngIf="pool.mining?.isActive"><mat-icon>whatshot</mat-icon></button>
     </div>
   </div>
 
@@ -20,7 +20,7 @@
 
     <div class="right">
       <p class="sub-heading">Liquidity</p>
-      <p class="value">${{pool.reserves.usd | formatNumber}}</p>
+      <p class="value">${{pool.reserves.usd | formatNumber:0}}</p>
     </div>
   </div>
 </opdex-card>

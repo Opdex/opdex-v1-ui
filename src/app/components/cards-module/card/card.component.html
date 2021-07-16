@@ -1,4 +1,4 @@
-<mat-card [ngClass]="{'h-100': fullHeight}" class="card" [ngClass]="{'hidden': closable && closed}">
+<mat-card class="card" [ngClass]="{'hidden': closable && closed, 'h-100': fullHeight}">
   <div class="foreground" [ngClass]="{'warn': warn, 'success': success, 'thin': thin}">
     <ng-container *ngIf="closable">
       <button mat-icon-button class="tiny" style="position: absolute; top: 10px; right: 10px;" (click)="close()"><mat-icon>close</mat-icon></button>

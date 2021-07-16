@@ -9,10 +9,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MobileNavComponent } from './mobile-nav/mobile-nav.component';
 
 @NgModule({
   declarations: [
-    SideNavComponent
+    SideNavComponent,
+    MobileNavComponent
   ],
   imports: [
     CommonModule,
@@ -23,7 +25,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatDialogModule
   ],
   exports: [
-    SideNavComponent
+    SideNavComponent,
+    MobileNavComponent
   ]
 })
 export class NavigationModule { }
