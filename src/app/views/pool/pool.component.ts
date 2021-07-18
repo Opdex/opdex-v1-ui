@@ -1,13 +1,13 @@
 import { UserContextService } from '@sharedServices/user-context.service';
-import { take, tap, switchMap } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SidenavService } from '@sharedServices/sidenav.service';
 import { TransactionView } from '@sharedModels/transaction-view';
-import { timer, Subscription, Observable } from 'rxjs';
+import { timer, Subscription } from 'rxjs';
 import { ILiquidityPoolSnapshotHistoryResponse, ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
-import { ITransactionsRequest, TransactionRequest } from '@sharedModels/requests/transactions-filter';
+import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
 
 @Component({
   selector: 'opdex-pool',
@@ -20,10 +20,31 @@ export class PoolComponent implements OnInit, OnDestroy {
   poolHistory: ILiquidityPoolSnapshotHistoryResponse;
   transactions: any[];
   liquidityHistory: any[] = [];
+  stakingHistory: any[] = [];
   volumeHistory: any[] = [];
   walletBalance: any;
   subscription = new Subscription();
   copied: boolean;
+  transactionsRequest: ITransactionsRequest;
+  chartData: any[];
+  chartOptions = [
+    {
+      type: 'line',
+      category: 'Liquidity',
+      prefix: '$'
+    },
+    {
+      type: 'bar',
+      category: 'Volume',
+      prefix: '$'
+    },
+    {
+      type: 'line',
+      category: 'Staking Weight',
+      suffix: 'ODX'
+    }
+  ]
+  selectedChart = this.chartOptions[0];
 
 
   constructor(
@@ -62,8 +83,19 @@ export class PoolComponent implements OnInit, OnDestroy {
       .pipe(
         take(1),
         tap(pool => this.pool = pool),
-        switchMap((pool) => {
-          return this.getPoolTransactions(pool)
+        tap((pool) => {
+          const miningGovernance = 'PPTf46AvGyenAJHW9DNtNCbbLQt1bbf3hT';
+
+          var contracts = [pool.address, pool.token.src.address, miningGovernance];
+
+          if (pool?.mining?.address) contracts.push(pool.mining.address);
+
+          this.transactionsRequest = {
+            limit: 25,
+            direction: "DESC",
+            contracts: contracts,
+            events: ['SwapEvent', 'ProvideEvent', 'StakeEvent', 'CollectStakingRewardsEvent', 'MineEvent', 'CollectMiningRewardsEvent', 'EnableMiningEvent', 'NominationEvent', ]
+          };
         })
       )
       .subscribe();
@@ -88,40 +120,33 @@ export class PoolComponent implements OnInit, OnDestroy {
 
         let liquidityPoints = [];
         let volumePoints = [];
+        let stakingPoints = [];
 
         this.poolHistory.snapshotHistory.forEach(history => {
+          const time = Date.parse(history.startDate.toString())/1000;
+
           liquidityPoints.push({
-            time: Date.parse(history.startDate.toString())/1000,
+            time,
             value: history.reserves.usd
           });
 
           volumePoints.push({
-            time: Date.parse(history.startDate.toString())/1000,
+            time,
             value: history.volume.usd
-          })
+          });
+
+          stakingPoints.push({
+            time,
+            value: parseFloat(history.staking.weight.split('.')[0])
+          });
         });
 
         this.liquidityHistory = liquidityPoints;
         this.volumeHistory = volumePoints;
+        this.stakingHistory = stakingPoints;
+
+        this.handleChartTypeChange(this.selectedChart.category);
       });
-  }
-
-  private getPoolTransactions(pool: ILiquidityPoolSummaryResponse): Observable<any> {
-    var contracts = [pool.address, pool.token.src.address];
-
-    if (pool?.mining?.address) contracts.push(pool.mining.address);
-
-    var transactionRequest = {
-      limit: 100,
-      direction: "DESC",
-      contracts: contracts
-    };
-
-    return this._platformApiService.getTransactions(new TransactionRequest(transactionRequest))
-      .pipe(
-        take(1),
-        tap(transactions => this.transactions = transactions.transactionDtos)
-      );
   }
 
   copyHandler($event) {
@@ -130,6 +155,22 @@ export class PoolComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.copied = false;
     }, 1000);
+  }
+
+  handleChartTypeChange($event) {
+    this.selectedChart = this.chartOptions.find(options => options.category === $event);
+
+    if ($event === 'Liquidity') {
+      this.chartData = this.liquidityHistory;
+    }
+
+    if ($event === 'Volume') {
+      this.chartData = this.volumeHistory;
+    }
+
+    if ($event === 'Staking Weight') {
+      this.chartData = this.stakingHistory;
+    }
   }
 
   ngOnDestroy() {

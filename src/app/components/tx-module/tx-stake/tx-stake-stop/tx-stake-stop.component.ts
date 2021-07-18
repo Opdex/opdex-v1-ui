@@ -2,7 +2,7 @@ import { UserContextService } from './../../../../services/user-context.service'
 import { Component, Input, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { TxBase } from '@sharedComponents/tx-module/tx-swap/tx-base.component';
+import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { take } from 'rxjs/operators';

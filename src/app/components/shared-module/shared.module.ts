@@ -7,7 +7,6 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { ChangeIndicatorComponent } from './change-indicator/change-indicator.component';
 
-
 @NgModule({
   declarations: [
     ChangeIndicatorComponent

@@ -1,6 +1,13 @@
 <div #chartContainer class="chart-container w-100" (resized)="onResized($event)">
   <div class="chart-legend">
-    <h3 class="title">{{title}}</h3>
+    <a mat-button [matMenuTriggerFor]="menu" color="primary" class="p-0 mb-2" style="border-bottom: 2px solid #1ca7dc;">
+      <h3 class="title d-inline" >{{title}}</h3> <mat-icon class="ml-2">arrow_drop_down</mat-icon>
+    </a>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="switchChartType(option.category)" *ngFor="let option of chartOptions">{{option.category}}</button>
+    </mat-menu>
+
     <p class="value">{{value}}</p>
   </div>
   <div id="chartdiv" [hidden]="loading"></div>

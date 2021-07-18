@@ -101,16 +101,23 @@
     </div>
 
     <div class="row">
-      <div class="col-12 col-xl-6">
+      <div class="col-12 col-xl-8">
         <opdex-card class="p-0">
-          <opdex-line-chart [chartData]="liquidityHistory" title="Market Liquidity" *ngIf="liquidityHistory"></opdex-line-chart>
+          <opdex-line-chart
+            [chartData]="chartData"
+            [chartOptions]="chartOptions"
+            [selectedChart]="selectedChart"
+            title="{{selectedChart.category}}"
+            *ngIf="chartData"
+            (onTypeChange)="handleChartTypeChange($event)"></opdex-line-chart>
         </opdex-card>
       </div>
 
-      <div class="col-12 col-xl-6">
-        <opdex-card>
+      <div class="col-12 col-xl-4">
+        <opdex-tx-feed [transactionRequest]="transactionRequest"></opdex-tx-feed>
+        <!-- <opdex-card>
           <opdex-volume-chart [chartData]="volumeHistory" title="Market Volume" *ngIf="volumeHistory"></opdex-volume-chart>
-        </opdex-card>
+        </opdex-card> -->
       </div>
     </div>
 

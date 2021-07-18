@@ -1,0 +1,15 @@
+<ng-container *ngIf="pool$ | async as pool">
+  <p class="mb-0" *ngIf="event.subEventType === 'RemoveLiquidity'">
+    Removed
+    <strong>{{event.amountCrs | formatNumber:8}}</strong> {{pool.token.crs.symbol}} and
+    <strong>{{event.amountSrc | formatNumber:pool.token.src.decimals }}</strong> {{pool.token.src.symbol}} of liquidity burning
+    <strong>{{event.amountLpt | formatNumber:pool.token.lp.decimals }}</strong> {{pool.token.lp.symbol}}.
+  </p>
+
+  <p class="mb-0" *ngIf="event.subEventType === 'AddLiquidity'">
+    Provided
+    <strong>{{event.amountCrs | formatNumber:8}}</strong> {{pool.token.crs.symbol}} and
+    <strong>{{event.amountSrc | formatNumber:pool.token.src.decimals }}</strong> {{pool.token.src.symbol}} of liquidity for
+    <strong>{{event.amountLpt | formatNumber:pool.token.lp.decimals }}</strong> {{pool.token.lp.symbol}}.
+  </p>
+</ng-container>

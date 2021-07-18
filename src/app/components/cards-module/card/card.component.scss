@@ -11,7 +11,7 @@
   }
 
   .foreground {
-    padding: 25px;
+    padding: 15px;
     background: rgba(27,25,47, .9);
     background: radial-gradient(circle, rgba(46, 102, 122, 0.1) 0%, rgba(27,25,47, .9) 80%);
     border: 1px solid #292929;
@@ -27,7 +27,7 @@
     }
 
     &.thin {
-      padding: 10px;
+      padding: 15px;
     }
   }
 
@@ -39,3 +39,20 @@
     }
   }
 }
+
+
+@media (min-width: 320px) { }
+
+@media (min-width: 576px) { }
+
+@media (min-width: 768px) {
+  .card {
+    .foreground {
+      padding: 25px;
+    }
+  }
+}
+
+@media (min-width: 992px) { }
+
+@media (min-width: 1200px) { }

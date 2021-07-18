@@ -1,3 +1,6 @@
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -14,7 +17,10 @@ import { AngularResizedEventModule } from 'angular-resize-event';
   ],
   imports: [
     CommonModule,
-    AngularResizedEventModule
+    AngularResizedEventModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatIconModule
   ],
   exports: [
     LineChartComponent,

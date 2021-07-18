@@ -3,7 +3,7 @@ import { environment } from '@environments/environment';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { TxBase } from '@sharedComponents/tx-module/tx-swap/tx-base.component';
+import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { take, switchMap, map, tap } from 'rxjs/operators';
@@ -49,7 +49,11 @@ export class TxProvideRemoveComponent extends TxBase {
     return this._platformApi.getApprovedAllowance(this.context.wallet, router, token)
       .pipe(
         map(allowances => {
-          return { spender: router, token, amount, allowances, valueApproved: BigInt(amount.replace('.', '')) <= BigInt(allowances[0]?.allowance.replace('.', '')) }
+          let valueApproved = false;
+
+          if (allowances.length) valueApproved = BigInt(amount.replace('.', '')) <= BigInt(allowances[0]?.allowance.replace('.', ''));
+
+          return { spender: router, token, amount, allowances, valueApproved }
         })
       );
   }

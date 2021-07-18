@@ -1,3 +1,4 @@
+import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
 import { switchMap, take, tap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -16,6 +17,7 @@ export class TokenComponent implements OnInit {
   subscription = new Subscription();
   tokenHistory: any;
   priceHistory: any[] = [];
+  transactionRequest: ITransactionsRequest;
 
   constructor(
     private _route: ActivatedRoute,
@@ -35,7 +37,22 @@ export class TokenComponent implements OnInit {
 
   private getToken(): Observable<any> {
     return this._platformApiService.getToken(this.tokenAddress)
-      .pipe(take(1), tap(token => this.token = token));
+      .pipe(
+        take(1),
+        tap(token => {
+          this.token = token;
+          this.transactionRequest = {
+            limit: 25,
+            events: this.token.address === 'CRS'
+                          ? ['SwapEvent', 'ProvideEvent']
+                          : ['TransferEvent', 'ApprovalEvent', 'DistributionEvent', 'SwapEvent', 'ProvideEvent', 'MineEvent'],
+            contracts: this.token.address === 'CRS'
+                          ? []
+                          : [this.token.address],
+            direction: 'DESC'
+          }
+        })
+      );
   }
 
   private getTokenHistory(): Observable<any> {

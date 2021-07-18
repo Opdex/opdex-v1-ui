@@ -1,4 +1,5 @@
-import { Component, ElementRef, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 import { ResizedEvent } from 'angular-resize-event';
 import { createChart, ISeriesApi, IChartApi, LineWidth, DeepPartial, MouseEventParams } from 'lightweight-charts';
 
@@ -13,13 +14,18 @@ export class LineChartComponent implements OnInit, OnChanges {
   @Input() chartData: any;
   value: string;
   lineSeries: ISeriesApi<'Area'>;
+  volumeSeries: ISeriesApi<'Histogram'>;
   chart: IChartApi;
   loading = true;
+  chartType: any;
+  @Input() selectedChart: any;
+  @Input() chartOptions: any[];
+  @Output() onTypeChange = new EventEmitter<string>();
 
   ngOnChanges() {
     this.ngOnInit();
 
-    if (this.chartData) {
+    if (this.chartData && this.chartOptions) {
       if (!this.lineSeries) {
         this.lineSeries = this.chart.addAreaSeries({
           lineColor: 'rgba(71, 188, 235, .7)',
@@ -31,7 +37,29 @@ export class LineChartComponent implements OnInit, OnChanges {
         });
       }
 
-      this.lineSeries.setData(this.chartData);
+      if (!this.volumeSeries) {
+        this.volumeSeries = this.chart.addHistogramSeries({
+          priceFormat: {
+            type: 'volume',
+          },
+          color: 'rgba(71, 188, 235, .8)',
+          lastValueVisible: false,
+          priceScaleId: '',
+          base: 0,
+          scaleMargins: {
+            top: 0.2,
+            bottom: 0,
+          },
+        });
+      }
+
+      if (this.chartOptions && this.selectedChart.type === 'line') {
+        this.lineSeries.setData(this.chartData);
+        this.volumeSeries.setData([])
+      } else if (this.chartOptions && this.selectedChart.type === 'bar') {
+        this.volumeSeries.setData(this.chartData);
+        this.lineSeries.setData([]);
+      }
 
       this.applyChartOptions();
 
@@ -56,6 +84,10 @@ export class LineChartComponent implements OnInit, OnChanges {
     }
   }
 
+  switchChartType(value: string) {
+    this.onTypeChange.emit(value);
+  }
+
   crosshairMovedHandler(param: MouseEventParams): void {
     if ( param === undefined || param.time === undefined || param.point.x < 0 || param.point.y < 0) {
       this.setLastBarText();
@@ -65,7 +97,7 @@ export class LineChartComponent implements OnInit, OnChanges {
   }
 
   onResized(event: ResizedEvent) {
-    this.chart.resize(event.newWidth, 350);
+    this.chart.resize(event.newWidth, 400);
     this.chart.timeScale().fitContent();
   }
 
@@ -88,7 +120,10 @@ export class LineChartComponent implements OnInit, OnChanges {
         break;
       }
     }
-    return '$'+(num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
+
+    let prefix = this.selectedChart.prefix || '';
+    let suffix = this.selectedChart.suffix || '';
+    return prefix+(num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol+ ' ' +suffix;
   }
 
   private setLastBarText() {

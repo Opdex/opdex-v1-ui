@@ -133,33 +133,18 @@ h1 {
   font-weight: 400;
 }
 
-.tx-details {
-  p {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    margin-bottom: 0;
+.transaction {
+  padding: 20px 0;
+  border-bottom: 1px solid #292929;
+
+  &:last-of-type {
+    border: 0px;
+    padding-bottom: 0px;
   }
 }
 
-.tx-events {
-  margin-bottom: 10px;
-
+.tx-event {
   p {
     margin-bottom: 0px;
-  }
-
-  .tx-event {
-    // border-bottom: 1px solid #444444;
-    // padding: 10px 0px;
-
-    &:last-of-type {
-      border: 0px;
-      padding-bottom: 0px;
-    }
-
-    &:first-of-type {
-      padding-top: 0px;
-    }
   }
 }

@@ -1,0 +1,11 @@
+<p class="mb-0" *ngIf="token$ | async as token; else loading">
+  Approved
+  <strong>{{event.amount | formatNumber:token.decimals}}</strong>
+  {{token.symbol}} allowance to {{event.spender | shortAddress:4}}.
+</p>
+
+<ng-template #loading>
+  Approved
+  <strong>##.########</strong>
+  xYZT allowance to ABcd...eFGh.
+</ng-template>

@@ -9,6 +9,8 @@ import { Observable } from 'rxjs';
 import { ILiquidityPoolSnapshotHistoryResponse, ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
 import { TransactionRequest } from '@sharedModels/requests/transactions-filter';
+import { ITransactionResponse } from '@sharedModels/responses/platform-api/Transactions/transaction-response';
+import { ITransactionsResponse } from '@sharedModels/responses/platform-api/Transactions/transactions-response';
 
 @Injectable({
   providedIn: 'root'
@@ -123,7 +125,7 @@ export class PlatformApiService extends RestApiService {
   // Transactions
   ////////////////////////////
 
-  public getTransactions(request: TransactionRequest): Observable<any> {
+  public getTransactions(request: TransactionRequest): Observable<ITransactionsResponse> {
     return this.get<any>(`${this.api}/transactions${request.buildQueryString()}`);
   }
 

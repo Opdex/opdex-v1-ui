@@ -46,6 +46,8 @@ import { VaultComponent } from './views/vault/vault.component';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { jwtOptionsFactory } from '@sharedServices/utility/jwt.service';
 import { QRCodeModule } from 'angularx-qrcode';
+import { TimeagoModule } from 'ngx-timeago';
+
 
 
 @NgModule({

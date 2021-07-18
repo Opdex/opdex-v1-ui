@@ -1,5 +1,5 @@
 <div id="pool" class="mt-5">
-  <div class="container pt-3" *ngIf="pool">
+  <div class="container" *ngIf="pool">
     <div class="row">
       <div class="col">
         <opdex-card [warn]="true" [closable]="true">
@@ -95,7 +95,7 @@
       </div>
 
       <div class="col-12 col-md-6 col-xl-3">
-        <opdex-stat-card title="Staking Weight" value="${{pool.staking?.weight | formatNumber:0 }} {{pool.token.staking?.symbol}}" [change]="pool.staking?.weightDailyChange || 0"></opdex-stat-card>
+        <opdex-stat-card title="Staking Weight" value="{{pool.staking?.weight | formatNumber:0 }} {{pool.token.staking?.symbol}}" [change]="pool.staking?.weightDailyChange || 0"></opdex-stat-card>
       </div>
 
       <div class="col-12 col-md-6 col-xl-3">
@@ -108,221 +108,255 @@
     </div>
 
     <div class="row">
-      <div class="col-12 col-xl-6">
-        <opdex-card>
-          <opdex-line-chart [chartData]="liquidityHistory" title="{{pool.token.src.symbol}}-CRS Liquidity" *ngIf="liquidityHistory"></opdex-line-chart>
-        </opdex-card>
+      <div class="col-12 col-xl-8">
+        <div class="row">
+          <div class="col">
+            <opdex-card>
+              <opdex-line-chart
+                [chartData]="chartData"
+                [chartOptions]="chartOptions"
+                [selectedChart]="selectedChart"
+                title="{{selectedChart.category}}"
+                *ngIf="chartData"
+                (onTypeChange)="handleChartTypeChange($event)"></opdex-line-chart>
+            </opdex-card>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-md-6 col-xl-6">
+            <opdex-card class="mining-pool">
+              <div class="d-flex justify-content-between align-items-center">
+                <h3 class="d-inline mb-0">Balances</h3>
+                <div>
+                  <button mat-icon-button class="swap small" (click)="openTransactionSidebar(1)"><mat-icon>swap_horiz</mat-icon></button>
+                </div>
+              </div>
+
+              <div class="details">
+                <div class="mining">
+                  <p class="sub-heading">CRS</p>
+                  <p class="value">{{walletBalance?.crsBalance}}</p>
+                </div>
+
+                <div class="remaining">
+                  <p class="sub-heading">{{pool.token.src.symbol}}</p>
+                  <p class="value">{{walletBalance?.srcBalance | formatNumber: 8}}</p>
+                </div>
+              </div>
+            </opdex-card>
+          </div>
+
+          <div class="col-12 col-md-6 col-xl-6">
+            <opdex-card class="mining-pool">
+              <div class="d-flex justify-content-between align-items-center">
+                <h3 class="d-inline mb-0">Providing</h3>
+                <div>
+                  <button mat-icon-button class="remove small mr-2" (click)="openTransactionSidebar(2, 'remove')"><mat-icon>remove</mat-icon></button>
+                  <button mat-icon-button class="add small" (click)="openTransactionSidebar(2, 'add')"><mat-icon>control_point_duplicate</mat-icon></button>
+                </div>
+              </div>
+
+              <div class="details">
+                <div class="mining">
+                  <p class="sub-heading">Position</p>
+                  <p class="value">{{walletBalance?.providing | formatNumber: 8}} LPT</p>
+                </div>
+
+                <!-- <div class="remaining">
+                  <p class="sub-heading">Rewards</p>
+                  <p class="value">1234 CRS/234 ODX</p>
+                </div> -->
+              </div>
+            </opdex-card>
+          </div>
+
+          <div class="col-12 col-md-6 col-xl-6" *ngIf="pool.staking?.isActive">
+            <opdex-card class="mining-pool">
+              <div class="d-flex justify-content-between align-items-center">
+                <h3 class="d-inline mb-0">Staking</h3>
+                <div>
+                  <button mat-icon-button class="collect small mr-2" (click)="openTransactionSidebar(3, 'collect')" matTooltip="Collect Staking Rewards"><mat-icon>local_play</mat-icon></button>
+                  <button mat-icon-button class="remove small mr-2" (click)="openTransactionSidebar(3, 'stop')"><mat-icon>remove</mat-icon></button>
+                  <button mat-icon-button class="add small" (click)="openTransactionSidebar(3, 'start')"><mat-icon>add</mat-icon></button>
+                </div>
+              </div>
+
+              <div class="details">
+                <div class="mining">
+                  <p class="sub-heading">Position</p>
+                  <p class="value">{{walletBalance?.staking | formatNumber: 8}} ODX</p>
+                </div>
+
+                <!-- <div class="remaining">
+                  <p class="sub-heading">Rewards</p>
+                  <p class="value">1234 LPT</p>
+                </div> -->
+              </div>
+            </opdex-card>
+          </div>
+
+          <div class="col-12 col-md-6 col-xl-6">
+            <opdex-card class="mining-pool" *ngIf="pool.mining">
+              <div class="d-flex justify-content-between align-items-center">
+                <h3 class="d-inline mb-0">Mining</h3>
+                <div>
+                  <button mat-icon-button class="collect small mr-2" (click)="openTransactionSidebar(4, 'collect')" matTooltip="Collect Mined {{pool.token.staking?.symbol}}"><mat-icon>local_play</mat-icon></button>
+                  <button mat-icon-button class="remove small mr-2" (click)="openTransactionSidebar(4, 'stop')"><mat-icon>remove</mat-icon></button>
+                  <button mat-icon-button class="add small" (click)="openTransactionSidebar(4, 'start')"><mat-icon>add</mat-icon></button>
+                </div>
+              </div>
+
+              <div class="details">
+                <div class="mining">
+                  <p class="sub-heading">Position</p>
+                  <p class="value">{{walletBalance?.mining | formatNumber: 8}} LPT</p>
+                </div>
+
+                <!-- <div class="remaining">
+                  <p class="sub-heading">Rewards</p>
+                  <p class="value">1234 ODX</p>
+                </div> -->
+              </div>
+            </opdex-card>
+          </div>
+        </div>
       </div>
 
-      <div class="col-12 col-xl-6">
-        <opdex-card>
-          <opdex-volume-chart [chartData]="volumeHistory" *ngIf="volumeHistory"></opdex-volume-chart>
-        </opdex-card>
-      </div>
-    </div>
+      <div class="col-12 col-xl-4" >
+        <opdex-tx-feed [transactionRequest]="transactionsRequest" size="l"></opdex-tx-feed>
 
-    <div class="row">
-      <div class="col-12 col-md-6 col-xl-3">
-        <opdex-card class="mining-pool">
-          <div class="d-flex justify-content-between align-items-center">
-            <h3 class="d-inline mb-0">Balances</h3>
-            <div>
-              <button mat-icon-button class="swap small" (click)="openTransactionSidebar(1)"><mat-icon>swap_horiz</mat-icon></button>
-            </div>
-          </div>
-
-          <div class="details">
-            <div class="mining">
-              <p class="sub-heading">CRS</p>
-              <p class="value">{{walletBalance?.crsBalance}}</p>
-            </div>
-
-            <div class="remaining">
-              <p class="sub-heading">{{pool.token.src.symbol}}</p>
-              <p class="value">{{walletBalance?.srcBalance | formatNumber: 8}}</p>
-            </div>
-          </div>
-        </opdex-card>
-      </div>
-
-      <div class="col-12 col-md-6 col-xl-3">
-        <opdex-card class="mining-pool">
-          <div class="d-flex justify-content-between align-items-center">
-            <h3 class="d-inline mb-0">Providing</h3>
-            <div>
-              <button mat-icon-button class="remove small mr-2" (click)="openTransactionSidebar(2, 'remove')"><mat-icon>remove</mat-icon></button>
-              <button mat-icon-button class="add small" (click)="openTransactionSidebar(2, 'add')"><mat-icon>control_point_duplicate</mat-icon></button>
-            </div>
-          </div>
-
-          <div class="details">
-            <div class="mining">
-              <p class="sub-heading">Position</p>
-              <p class="value">{{walletBalance?.providing | formatNumber: 8}} LPT</p>
-            </div>
-
-            <!-- <div class="remaining">
-              <p class="sub-heading">Rewards</p>
-              <p class="value">1234 CRS/234 ODX</p>
-            </div> -->
-          </div>
-        </opdex-card>
-      </div>
-
-      <div class="col-12 col-md-6 col-xl-3" *ngIf="pool.staking?.isActive">
-        <opdex-card class="mining-pool">
-          <div class="d-flex justify-content-between align-items-center">
-            <h3 class="d-inline mb-0">Staking</h3>
-            <div>
-              <button mat-icon-button class="collect small mr-2" (click)="openTransactionSidebar(3, 'collect')" matTooltip="Collect Staking Rewards"><mat-icon>local_play</mat-icon></button>
-              <button mat-icon-button class="remove small mr-2" (click)="openTransactionSidebar(3, 'stop')"><mat-icon>remove</mat-icon></button>
-              <button mat-icon-button class="add small" (click)="openTransactionSidebar(3, 'start')"><mat-icon>add</mat-icon></button>
-            </div>
-          </div>
-
-          <div class="details">
-            <div class="mining">
-              <p class="sub-heading">Position</p>
-              <p class="value">{{walletBalance?.staking | formatNumber: 8}} ODX</p>
-            </div>
-
-            <!-- <div class="remaining">
-              <p class="sub-heading">Rewards</p>
-              <p class="value">1234 LPT</p>
-            </div> -->
-          </div>
-        </opdex-card>
-      </div>
-
-      <div class="col-12 col-md-6 col-xl-3">
-        <opdex-card class="mining-pool" *ngIf="pool.mining">
-          <div class="d-flex justify-content-between align-items-center">
-            <h3 class="d-inline mb-0">Mining</h3>
-            <div>
-              <button mat-icon-button class="collect small mr-2" (click)="openTransactionSidebar(4, 'collect')" matTooltip="Collect Mined {{pool.token.staking?.symbol}}"><mat-icon>local_play</mat-icon></button>
-              <button mat-icon-button class="remove small mr-2" (click)="openTransactionSidebar(4, 'stop')"><mat-icon>remove</mat-icon></button>
-              <button mat-icon-button class="add small" (click)="openTransactionSidebar(4, 'start')"><mat-icon>add</mat-icon></button>
-            </div>
-          </div>
-
-          <div class="details">
-            <div class="mining">
-              <p class="sub-heading">Position</p>
-              <p class="value">{{walletBalance?.mining | formatNumber: 8}} LPT</p>
-            </div>
-
-            <!-- <div class="remaining">
-              <p class="sub-heading">Rewards</p>
-              <p class="value">1234 ODX</p>
-            </div> -->
-          </div>
-        </opdex-card>
-      </div>
-    </div>
-
-    <div class="row mb-5">
-      <div class="col-4">
-        <!-- <opdex-card> -->
+        <!-- <opdex-card [fullHeight]="true">
           <h3 class="text-shadow">Recent Transactions</h3>
-          <!-- <opdex-transactions-table></opdex-transactions-table> -->
-          <opdex-card *ngFor="let tx of transactions">
-            <div class="tx-events">
-              <ng-container *ngFor="let event of tx.logs; let i = index">
-                <div class="tx-event" *ngIf="event.logType == 'EnableMiningLog' && event.contract === pool.mining.address">
-                  <div class="enable-mining">
-                    <p class="mb-0">Enabled liquidity mining for {{event.amount | coinNotation:8}} {{pool.token.staking.symbol}} ending on block #{{event.miningPeriodEndBlock | formatNumber:0}}.</p>
-                  </div>
+          <div class="feed-container" style="height: 700px; overflow-y: scroll; overflow-x:hidden;">
+            <div class="transaction" *ngFor="let tx of transactions; trackBy: transactionsTrackBy">
+              <div class="d-flex flex-direction-column">
+                <div class="pr-2">
+                  <button
+                    class="tiny"
+                    mat-icon-button
+                    color="primary"
+                    [matTooltip]="tx.hash"
+                    [cdkCopyToClipboard]="tx.hash"
+                    (cdkCopyToClipboardCopied)="copyHandler($event)">
+                    <mat-icon>{{copied ? 'check_circle' : 'receipt'}}</mat-icon>
+                  </button>
                 </div>
 
-                <div class="tx-event" *ngIf="event.logType == 'StakeLog'">
-                  <div class="staking row align-items-center">
-                    <p>
-                      {{event.eventType == 1 ? 'Started' : 'Stopped'}} staking {{event.amount | coinNotation:pool.token.lp.decimals}} OLPT.
-                    </p>
-                  </div>
-                </div>
+                <div class="pl-2">
+                  <small class="d-block light mb-1">{{tx?.block?.medianTime | timeago}}</small>
+                  <ng-container *ngFor="let event of tx.events; let i = index; trackBy: transactionLogsTrackBy;">
 
-                <div class="tx-event" *ngIf="event.logType == 'MintLog'">
-                  <div class="mint-log">
-                    <p>
-                      Provided
-                      <span class="red">{{event.amountCrs | coinNotation:8}}</span> {{pool.token.crs.symbol}} and
-                      <span class="red">{{event.amountSrc | coinNotation:pool.token.src.decimals }}</span> {{pool.token.src.symbol}} of liquidity for
-                      <span class="green">{{event.amountLpt | coinNotation:pool.token.lp.decimals}}</span> {{pool.token.lp.symbol}}.
-                    </p>
-                  </div>
-                </div>
-
-                <div class="tx-event" *ngIf="event.logType == 'BurnLog'">
-                  <div class="burn-log row align-items-center">
-                    <p>
-                      Removed
-                      <span class="green">{{event.amountCrs | coinNotation:8}}</span> {{pool.token.crs.symbol}} and
-                      <span class="green">{{event.amountSrc | coinNotation:pool.token.src.decimals }}</span> {{pool.token.src.symbol}} of liquidity burning
-                      <span class="red">{{event.amountLpt | coinNotation:pool.token.lp.decimals}}</span> {{pool.token.lp.symbol}}.
-                    </p>
-                  </div>
-                </div>
-
-                <div class="tx-event" *ngIf="event.logType == 'SwapLog'">
-                  <div class="swap-log row align-items-center">
-                    <div class="col-4 d-flex align-items-center">
-                      <p class="mb-0" style="font-size: 18px;">Swap</p>
+                    <div class="tx-event" *ngIf="event.eventType == 'NominationEvent' && event.stakingPool === pool.address">
+                      <div class="enable-mining">
+                        <p>Nominated the {{pool.token.src.symbol}}/CRS liquidity pool for mining with a total staking weight of <strong>{{event.weight | formatNumber:0}}</strong> {{pool.token.staking.symbol}} tokens.</p>
+                      </div>
                     </div>
 
-                    <div class="col-4">
-                      <h5 class="mb-0">Sold</h5>
-                      <p class="mb-0 "><span class="red">-{{(event.amountCrsIn == 0 ? event.amountSrcIn : event.amountCrsIn) }}</span> {{event.amountCrsIn == 0 ? pool.token.src.symbol : 'CRS' }}</p>
+                    <div class="tx-event" *ngIf="event.eventType == 'RewardMiningPoolEvent' && event.stakingPool === pool.address">
+                      <div class="enable-mining">
+                        <p>Activated governance distribution rewarding nominated liquidity pools with <strong>{{event.amount | formatNumber:0}}</strong> {{pool.token.staking.symbol}} to be mined.</p>
+                      </div>
                     </div>
 
-                    <div class="col-4">
-                      <h5 class="mb-0">Bought</h5>
-                      {{event.amountSrcOut }}
-                      <p class="mb-0"><span class="green">+{{(event.amountCrsOut == 0 ? event.amountSrcOut : event.amountCrsOut) }}</span> {{event.amountCrsOut == 0 ? pool.token.src.symbol : 'CRS' }}</p>
+                    <div class="tx-event" *ngIf="event.eventType == 'EnableMiningEvent' && event.contract === pool.mining.address">
+                      <div class="enable-mining">
+                        <p>Enabled liquidity mining for <strong>{{event.amount | formatNumber:0}}</strong> {{pool.token.staking.symbol}} ending on block <strong>#{{event.miningPeriodEndBlock | formatNumber:0}}</strong>.</p>
+                      </div>
                     </div>
-                  </div>
+
+                    <div class="tx-event" *ngIf="event.eventType == 'TransferEvent'">
+                      <div class="transfer">
+                        <p>
+                          Transferred
+                          <strong>{{event.amount | formatNumber:pool.token.src.decimals}}</strong>
+                          {{pool.token.staking.symbol}} to {{event.to | shortAddress:4}}.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="tx-event" *ngIf="event.eventType == 'ApprovalEvent'">
+                      <div class="approval">
+                        <p>
+                          Approved
+                          <strong>{{event.amount | formatNumber:pool.token.src.decimals}}</strong>
+                          {{pool.token.staking.symbol}} allowance to {{event.spender | shortAddress:4}}.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="tx-event" *ngIf="event.eventType == 'StakeEvent'">
+                      <div class="staking">
+                        <p>
+                          {{event.subEventType === 'StartStaking' ? 'Started' : 'Stopped'}} staking
+                          <strong>{{event.amount | formatNumber:pool.token.staking.decimals}}</strong>
+                          {{pool.token.staking.symbol}}.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="tx-event" *ngIf="event.eventType == 'ProvideEvent'">
+                      <div class="burn-log" *ngIf="event.subEventType === 'RemoveLiquidity'">
+                        <p>
+                          Removed
+                          <strong>{{event.amountCrs | formatNumber:8}}</strong> {{pool.token.crs.symbol}} and
+                          <strong>{{event.amountSrc | formatNumber:pool.token.src.decimals }}</strong> {{pool.token.src.symbol}} of liquidity burning
+                          <strong>{{event.amountLpt | formatNumber:pool.token.lp.decimals }}</strong> {{pool.token.lp.symbol}}.
+                        </p>
+                      </div>
+
+                      <div class="mint-log" *ngIf="event.subEventType === 'AddLiquidity'">
+                        <p>
+                          Provided
+                          <strong>{{event.amountCrs | formatNumber:8}}</strong> {{pool.token.crs.symbol}} and
+                          <strong>{{event.amountSrc | formatNumber:pool.token.src.decimals }}</strong> {{pool.token.src.symbol}} of liquidity for
+                          <strong>{{event.amountLpt | formatNumber:pool.token.lp.decimals }}</strong> {{pool.token.lp.symbol}}.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="tx-event" *ngIf="event.eventType == 'SwapEvent'">
+                      <div class="swap-log">
+                        <p>
+                          Swapped <strong>{{(event.amountCrsIn == 0 ? event.amountSrcIn : event.amountCrsIn) }}</strong> {{event.amountCrsIn == 0 ? pool.token.src.symbol : 'CRS' }}
+                          for <strong>{{(event.amountCrsOut == 0 ? event.amountSrcOut : event.amountCrsOut) }}</strong> {{event.amountCrsOut == 0 ? pool.token.src.symbol : 'CRS' }}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="tx-event" *ngIf="event.eventType == 'MineEvent'">
+                      <div class="mine-log">
+                        <p>
+                          {{event.subEventType === 'StartMining' ? 'Started' : 'Stopped'}} mining with
+                          <strong>{{event.amount | formatNumber:pool.token.lp.decimals}}</strong>
+                          {{pool.token.lp.symbol}}.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="tx-event" *ngIf="event.eventType == 'CollectStakingRewardsEvent'">
+                      <div class="collect-staking-rewards-log">
+                        <p>
+                          Collected <strong>{{event.reward | formatNumber:pool.token.lp.decimals}}</strong> {{pool.token.lp.symbol}} staking rewards.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="tx-event" *ngIf="event.eventType == 'CollectMiningRewardsEvent'">
+                      <div class="collect-mining-rewards-log">
+                        <p>
+                          Collected <strong>{{event.amount | formatNumber:pool.token.staking.decimals}}</strong> {{pool.token.staking.symbol}} mining rewards.
+                        </p>
+                      </div>
+                    </div>
+                  </ng-container>
                 </div>
-
-                <div class="tx-event" *ngIf="event.logType == 'MineLog'">
-                  <div class="mine-log">
-                    <p>
-                      {{event.eventType == 1 ? 'Started' : 'Stopped'}} mining with {{event.amount | coinNotation:pool.token.lp.decimals}} OLPT.
-                    </p>
-                  </div>
-                </div>
-              </ng-container>
-
-            </div>
-
-            <div class="row tx-details">
-              <div class="col">
-                <button
-                  class="tiny"
-                  mat-icon-button
-                  color="primary"
-                  [matTooltip]="tx.hash"
-                  [cdkCopyToClipboard]="tx.hash"
-                  (cdkCopyToClipboardCopied)="copyHandler($event)">
-                  <mat-icon>{{copied ? 'check_circle' : 'receipt'}}</mat-icon>
-                </button>
-
-                <button
-                  mat-icon-button
-                  class="tiny"
-                  color="primary"
-                  [matTooltip]="tx.from"
-                  [cdkCopyToClipboard]="tx.from"
-                  (cdkCopyToClipboardCopied)="copyHandler($event)">
-                  <mat-icon>{{copied ? 'check_circle' : 'account_balance_wallet'}}</mat-icon>
-                </button>
               </div>
-
-              <div class="col text-align-right">
-                <p class="light">Block # {{tx.blockHeight}}</p>
-              </div>
             </div>
-          </opdex-card>
-        <!-- </opdex-card> -->
+          </div>
+        </opdex-card> -->
+
+
       </div>
     </div>
   </div>

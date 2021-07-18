@@ -8,20 +8,21 @@ export class CoinNotationPipe implements PipeTransform {
   constructor(private _tokenService: TokenService) { }
 
   transform(value: number, decimals: number = 8, fixed?: boolean): number | string {
-    let temp;
+    let temp: number;
 
     if (typeof value === 'string') {
       let bigint = BigInt(value);
       var satsPerToken = this._tokenService.getSats(decimals);
-      temp = bigint / BigInt(satsPerToken);
-      return fixed ? temp.toFixed(decimals) : this.numberWithCommas(temp);
+      temp = parseFloat((bigint / BigInt(satsPerToken)).toString());
+
+      return fixed ? temp.toFixed(decimals) || 0 : this.numberWithCommas(temp);
     }
 
 
     if (typeof value === 'number') {
       var satsPerToken = this._tokenService.getSats(decimals);
       temp = value / satsPerToken;
-      return fixed ? temp.toFixed(decimals) : this.numberWithCommas(temp);
+      return fixed ? temp?.toFixed(decimals) || 0 : this.numberWithCommas(temp);
     }
 
     return 0;

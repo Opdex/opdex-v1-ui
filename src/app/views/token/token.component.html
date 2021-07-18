@@ -2,9 +2,10 @@
   <div class="container pt-3" *ngIf="token">
     <div class="row mb-4">
       <div class="col-12">
-        <h1 class="page-title">{{token.name}} {{token.symbol}}</h1>
+        <h1 class="page-title mb-3">{{token.name}} {{token.symbol}}</h1>
+        <p class="text-shadow">{{token.address}}</p>
 
-        <div class="stats">
+        <div class="stats mt-4">
           <div class="row">
             <div class="col-3">
               <opdex-card>
@@ -66,7 +67,7 @@
       </div>
     </div>
 
-    <div class="row mb-4">
+    <div class="row mb-4" >
       <div class="col-12 col-md-8">
         <opdex-card class="p-0">
           <opdex-line-chart [chartData]="priceHistory" title="{{token.symbol}} USD" *ngIf="priceHistory"></opdex-line-chart>
@@ -74,11 +75,12 @@
       </div>
 
       <div class="col-12 col-md-4">
-        <!-- <opdex-card></opdex-card> -->
+        <opdex-tx-feed [transactionRequest]="transactionRequest"></opdex-tx-feed>
+
       </div>
     </div>
 
-    <div class="row mb-4">
+    <!-- <div class="row mb-4">
       <div class="col-12 mb-4">
         <opdex-card>
           <h2>Recent Transactions</h2>
@@ -86,5 +88,5 @@
         </opdex-card>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>

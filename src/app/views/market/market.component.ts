@@ -1,3 +1,4 @@
+import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
 import { ILiquidityPoolSummaryResponse, ILiquidityPoolSnapshotHistoryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, OnInit } from '@angular/core';
@@ -15,10 +16,31 @@ export class MarketComponent implements OnInit {
   market: any;
   marketHistory: any[];
   liquidityHistory: any[];
+  stakingHistory: any[];
   volumeHistory: any[];
   pools: ILiquidityPoolSummaryResponse[];
   tokens: any[];
   miningPools$: Observable<ILiquidityPoolSummaryResponse[]>
+  transactionRequest: ITransactionsRequest;
+  chartData: any[];
+  chartOptions = [
+    {
+      type: 'line',
+      category: 'Liquidity',
+      prefix: '$'
+    },
+    {
+      type: 'bar',
+      category: 'Volume',
+      prefix: '$'
+    },
+    {
+      type: 'line',
+      category: 'Staking Weight',
+      suffix: 'ODX'
+    }
+  ]
+  selectedChart = this.chartOptions[0];
 
   constructor(private _platformApiService: PlatformApiService) { }
 
@@ -47,21 +69,32 @@ export class MarketComponent implements OnInit {
 
         let liquidityPoints = [];
         let volumePoints = [];
+        let stakingPoints = [];
 
         this.marketHistory.forEach(history => {
+          const time = Date.parse(history.startDate.toString())/1000;
+
           liquidityPoints.push({
-            time: Date.parse(history.startDate)/1000,
+            time,
             value: history.liquidity
           });
 
           volumePoints.push({
-            time: Date.parse(history.startDate)/1000,
+            time,
             value: history.volume
-          })
+          });
+
+          stakingPoints.push({
+            time,
+            value: parseFloat(history.staking.weight.split('.')[0])
+          });
         });
 
         this.liquidityHistory = liquidityPoints;
         this.volumeHistory = volumePoints;
+        this.stakingHistory = stakingPoints;
+
+        this.handleChartTypeChange(this.selectedChart.category);
       });
   }
 
@@ -70,6 +103,28 @@ export class MarketComponent implements OnInit {
       .pipe(take(1))
       .subscribe(pools => {
         this.pools = pools;
+
+        this.transactionRequest = {
+          limit: 25,
+          events: ['DistributionEvent', 'SwapEvent', 'ProvideEvent', 'MineEvent', 'CollectStakingRewardsEvent', 'CollectMiningRewardsEvent', 'NominationEvent'],
+          direction: 'DESC'
+        }
+
+        if (!this.transactionRequest?.contracts?.length) return;
+
+        pools.forEach(pool => {
+          if (!this.transactionRequest.contracts.includes(pool.address)) {
+            this.transactionRequest.contracts.push(pool.address);
+          }
+
+          if (pool.mining?.address && !this.transactionRequest.contracts.includes(pool.mining.address)) {
+            this.transactionRequest.contracts.push(pool.mining.address);
+          }
+
+          if (pool.token?.staking?.address && !this.transactionRequest.contracts.includes(pool.token.staking.address)) {
+            this.transactionRequest.contracts.push(pool.token.staking.address);
+          }
+        });
       });
   }
 
@@ -78,14 +133,14 @@ export class MarketComponent implements OnInit {
     .pipe(
       take(1),
       switchMap((tokens: any[]) => {
-        const poolArray$: Observable<any>[] = [];
+        const tokens$: Observable<any>[] = [];
 
         tokens.forEach(token => {
-          const pool$: Observable<any> = this.getTokenHistory(token);
-          poolArray$.push(pool$);
+          const tokenWithHistory$: Observable<any> = this.getTokenHistory(token);
+          tokens$.push(tokenWithHistory$);
         });
 
-        return forkJoin(poolArray$);
+        return forkJoin(tokens$);
       })
     )
     .subscribe(tokens => {
@@ -111,5 +166,21 @@ export class MarketComponent implements OnInit {
 
           return token;
         }));
+  }
+
+  handleChartTypeChange($event) {
+    this.selectedChart = this.chartOptions.find(options => options.category === $event);
+
+    if ($event === 'Liquidity') {
+      this.chartData = this.liquidityHistory;
+    }
+
+    if ($event === 'Volume') {
+      this.chartData = this.volumeHistory;
+    }
+
+    if ($event === 'Staking Weight') {
+      this.chartData = this.stakingHistory;
+    }
   }
 }

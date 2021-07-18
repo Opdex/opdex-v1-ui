@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/user-context.service';
-import { TxBase } from '../tx-swap/tx-base.component';
+import { TxBase } from '../tx-base.component';
 
 @Component({
   selector: 'opdex-tx-allowance',

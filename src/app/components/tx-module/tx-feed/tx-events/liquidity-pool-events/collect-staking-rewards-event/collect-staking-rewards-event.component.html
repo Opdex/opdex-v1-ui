@@ -1,0 +1,7 @@
+<p class="mb-0" *ngIf="pool$ | async as pool">
+  Collected
+  <strong>
+    {{event.reward | formatNumber:pool.token.lp.decimals}}
+  </strong>
+  {{pool.token.lp.symbol}} staking rewards.
+</p>

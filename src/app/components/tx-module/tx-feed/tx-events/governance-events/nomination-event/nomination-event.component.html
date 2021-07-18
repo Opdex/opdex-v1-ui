@@ -1,0 +1,5 @@
+<p class="mb-0" *ngIf="pool$ | async as pool">
+  Nominated the <a href="javascript:void(0)" routerLink="/pools/{{pool.address}}">{{pool.token.src.symbol}}/CRS liquidity pool</a> for liquidity mining with a total staking weight of
+  <strong>{{event.weight | formatNumber:0}}</strong>
+  {{pool.token.staking.symbol}} tokens.
+</p>

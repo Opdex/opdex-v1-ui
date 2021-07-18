@@ -1,0 +1,10 @@
+<p class="mb-0" *ngIf="pool$ | async as pool; else loading;">
+  Swapped
+  <strong>{{(event.amountCrsIn === '0.00000000' ? event.amountSrcIn : event.amountCrsIn) }}</strong>
+  {{event.amountCrsIn === '0.00000000' ? pool.token.src.symbol : 'CRS' }}
+  for
+  <strong>{{(event.amountCrsOut === '0.00000000' ? event.amountSrcOut : event.amountCrsOut) }}</strong>
+  {{event.amountCrsOut === '0.00000000' ? pool.token.src.symbol : 'CRS' }}
+</p>
+
+<ng-template #loading>Swapped <strong>0.00000000</strong> xYZT for <strong>0.00000000</strong> xABT</ng-template>
