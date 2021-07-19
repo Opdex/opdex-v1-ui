@@ -27,7 +27,8 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "web.config"
             ],
             "styles": [
               "src/scss/app.scss"
@@ -151,7 +152,8 @@
             "karmaConfig": "karma.conf.js",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "web.config"
             ],
             "styles": [
               "src/scss/app.scss"
