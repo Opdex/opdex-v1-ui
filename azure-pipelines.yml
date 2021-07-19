@@ -8,7 +8,7 @@ pool:
 variables:
   location: 'Central US'
   azureSubscription: 'sub-opdex-dev'
-  ARTIFACT_NAME: platform-api
+  ARTIFACT_NAME: platform-ui
   artifactName: ReleaseArtifact
   releaseTemplate: 'azure-pipelines.release.yml'
 
@@ -48,7 +48,7 @@ stages:
       - task: PublishBuildArtifacts@1
         inputs:
           PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-          ArtifactName: 'drop'
+          ArtifactName: '$(ARTIFACT_NAME)'
           publishLocation: 'Container'
 
       # - task: PublishBuildArtifacts@1
