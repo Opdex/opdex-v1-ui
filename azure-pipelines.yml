@@ -36,12 +36,6 @@ stages:
           npm run build-devnet
         displayName: 'npm install and build'
 
-        # Does this syntax run on Azure DevOps?
-      - name: Build
-        run: |
-          npm install
-          npm run build-devnet
- 
       - task: ArchiveFiles@2
         displayName: 'Archive files'
         inputs:
