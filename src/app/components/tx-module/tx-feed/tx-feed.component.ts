@@ -44,8 +44,8 @@ export class TxFeedComponent implements OnChanges {
           filteredTransactions
             .map(transaction => {
 
-              if (this.transactionRequest.events?.length) {
-                transaction.events = transaction.events.filter(event => this.transactionRequest.events.includes(event.eventType));
+              if (this.transactionRequest.eventTypes?.length) {
+                transaction.events = transaction.events.filter(event => this.transactionRequest.eventTypes.includes(event.eventType));
               }
 
                 // We don't care of the log wasn't from our whitelist of contracts

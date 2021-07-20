@@ -43,7 +43,7 @@ export class TokenComponent implements OnInit {
           this.token = token;
           this.transactionRequest = {
             limit: 25,
-            events: this.token.address === 'CRS'
+            eventTypes: this.token.address === 'CRS'
                           ? ['SwapEvent', 'ProvideEvent']
                           : ['TransferEvent', 'ApprovalEvent', 'DistributionEvent', 'SwapEvent', 'ProvideEvent', 'MineEvent'],
             contracts: this.token.address === 'CRS'

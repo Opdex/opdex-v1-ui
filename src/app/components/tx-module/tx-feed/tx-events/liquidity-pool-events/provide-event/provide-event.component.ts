@@ -20,7 +20,6 @@ export class ProvideEventComponent extends TxEventBaseComponent {
   }
 
   ngOnChanges() {
-    console.log(this.txEvent)
     this.event = this.txEvent as IProvideEventResponse;
     this.pool$ = this.getLiquidityPool$(this.event.contract);
   }

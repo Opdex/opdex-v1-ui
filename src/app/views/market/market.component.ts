@@ -1,5 +1,5 @@
 import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
-import { ILiquidityPoolSummaryResponse, ILiquidityPoolSnapshotHistoryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
@@ -106,7 +106,7 @@ export class MarketComponent implements OnInit {
 
         this.transactionRequest = {
           limit: 25,
-          events: ['DistributionEvent', 'SwapEvent', 'ProvideEvent', 'MineEvent', 'CollectStakingRewardsEvent', 'CollectMiningRewardsEvent', 'NominationEvent'],
+          eventTypes: ['DistributionEvent', 'SwapEvent', 'ProvideEvent', 'MineEvent', 'CollectStakingRewardsEvent', 'CollectMiningRewardsEvent', 'NominationEvent'],
           direction: 'DESC'
         }
 

@@ -1,6 +1,6 @@
 export interface ITransactionsRequest {
   contracts?: string[];
-  events?: string[];
+  eventTypes?: string[];
   wallet?: string;
   limit?: number;
   direction?: string;
@@ -10,7 +10,7 @@ export interface ITransactionsRequest {
 
 export class TransactionRequest implements ITransactionsRequest {
   contracts?: string[];
-  events?: string[];
+  eventTypes?: string[];
   wallet?: string;
   next?: string;
   previous?: string;
@@ -26,7 +26,7 @@ export class TransactionRequest implements ITransactionsRequest {
     };
 
     this.contracts = request.contracts;
-    this.events = request.events;
+    this.eventTypes = request.eventTypes;
     this.wallet = request.wallet;
     this.next = request.next;
     this.previous = request.previous;
@@ -44,8 +44,8 @@ export class TransactionRequest implements ITransactionsRequest {
       this.contracts.forEach(contract => query = this.addToQuery(query, "contracts", contract));
     }
 
-    if (this.events?.length > 0) {
-      this.events.forEach(event => query = this.addToQuery(query, "events", event));
+    if (this.eventTypes?.length > 0) {
+      this.eventTypes.forEach(event => query = this.addToQuery(query, "eventTypes", event));
     }
 
     query = this.addToQuery(query, "wallet", this.wallet);
