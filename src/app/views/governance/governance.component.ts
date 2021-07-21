@@ -5,6 +5,7 @@ import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable } from 'rxjs';
 import { IGovernanceResponseModel } from '@sharedModels/responses/platform-api/Governances/governance.interface';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'opdex-governance',
@@ -22,7 +23,7 @@ export class GovernanceComponent implements OnInit {
   constructor(private _platformApiService: PlatformApiService) { }
 
   ngOnInit(): void {
-    this.governance$ = this._platformApiService.getGovernance('PPTf46AvGyenAJHW9DNtNCbbLQt1bbf3hT').pipe(tap((rsp: IGovernanceResponseModel) => {
+    this.governance$ = this._platformApiService.getGovernance(environment.governanceAddress).pipe(tap((rsp: IGovernanceResponseModel) => {
       this.governance = rsp;
       const nominationRemainingSeconds = rsp.periodRemainingBlocks * 16;
       let date = new Date();

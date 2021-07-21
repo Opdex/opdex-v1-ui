@@ -16,7 +16,7 @@
               Block #{{governance.periodEndBlock | formatNumber:0}}
               <small class="light float-right">~{{nominationPeriodEndDate | date:'MM/d/YY h:mm a z':'GMT'}}</small>
             </p>
-            <button mat-flat-button color="primary" class="w-100 mt-2" *ngIf="governance.periodRemainingBlocks === 0" [disabled]="submitting" (click)="distribute()">Distribute Rewards</button>
+            <!-- <button mat-flat-button color="primary" class="w-100 mt-2" *ngIf="governance.periodRemainingBlocks === 0" [disabled]="submitting" (click)="distribute()">Distribute Rewards</button> -->
           </div>
         </opdex-card>
       </div>

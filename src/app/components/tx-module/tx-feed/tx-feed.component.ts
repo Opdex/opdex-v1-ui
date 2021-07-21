@@ -28,9 +28,9 @@ export class TxFeedComponent implements OnChanges {
   constructor(private _platformApi: PlatformApiService) { }
 
   ngOnChanges(): void {
-    if (this.transactionRequest && !this.transactions$) {
-      this.transactions$ = this.getTransactions();
-    }
+    // if (this.transactionRequest && !this.transactions$) {
+    //   this.transactions$ = this.getTransactions();
+    // }
   }
 
   getTransactions(): Observable<ITransactionResponse[]> {

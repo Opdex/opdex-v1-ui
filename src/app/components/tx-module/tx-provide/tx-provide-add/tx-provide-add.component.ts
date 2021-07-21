@@ -80,7 +80,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
 
   getAllowance$(amount: string):Observable<any> {
     // Todo: shouldn't be hard coded
-    const router = 'PHh7jEgXCjrd48CNhN4UgYE5WeyERrpFYr';
+    const router = environment.routerAddress;
     const token = this.pool?.token?.src?.address;
 
     return this._platformApi.getApprovedAllowance(this.context.wallet, router, token)

@@ -1,3 +1,4 @@
+import { environment } from '@environments/environment';
 import { UserContextService } from '@sharedServices/user-context.service';
 import { take, tap } from 'rxjs/operators';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -84,7 +85,7 @@ export class PoolComponent implements OnInit, OnDestroy {
         take(1),
         tap(pool => this.pool = pool),
         tap((pool) => {
-          const miningGovernance = 'PPTf46AvGyenAJHW9DNtNCbbLQt1bbf3hT';
+          const miningGovernance = environment.governanceAddress;
 
           var contracts = [pool.address, pool.token.src.address, miningGovernance];
 

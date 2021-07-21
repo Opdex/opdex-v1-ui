@@ -43,7 +43,7 @@ export class TxProvideRemoveComponent extends TxBase {
 
   getAllowance$(amount: string):Observable<any> {
     // Todo: shouldn't be hard coded
-    const router = 'PHh7jEgXCjrd48CNhN4UgYE5WeyERrpFYr';
+    const router = environment.routerAddress;
     const token = this.pool?.token?.lp?.address;
 
     return this._platformApi.getApprovedAllowance(this.context.wallet, router, token)
