@@ -23,6 +23,7 @@
         <p class="text-center light">Scan with Stratis Wallet</p>
 
         <button mat-flat-button color="primary" class="w-100 mt-4">Continue</button>
+        <p class="error mt-3 bold" *ngIf="error">Invalid key.</p>
       </div>
     </form>
 
