@@ -1,1 +1,17 @@
-<p class="mb-0">distribution-event works!</p>
+<p class="mb-0" *ngIf="token$ | async as token; else loading">
+  Distributed
+  <strong>{{event.governanceAmount | formatNumber:0}}</strong>
+  {{token.symbol}} to the the governance contract
+  and
+  <strong>{{event.vaultAmount | formatNumber:0}}</strong>
+  {{token.symbol}} to the vault contract.
+</p>
+
+<ng-template #loading>
+  Distributed
+  <strong>##.########</strong>
+  ODX to the the governance contract
+  and
+  <strong>##.########</strong>
+  ODX to the vault contract.
+</ng-template>

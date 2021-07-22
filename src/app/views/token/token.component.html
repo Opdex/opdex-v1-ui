@@ -70,7 +70,15 @@
     <div class="row mb-4" >
       <div class="col-12 col-md-8">
         <opdex-card class="p-0">
-          <opdex-line-chart [chartData]="priceHistory" title="{{token.symbol}} USD" *ngIf="priceHistory"></opdex-line-chart>
+          <!-- <opdex-line-chart [chartData]="priceHistory" title="{{token.symbol}} USD" *ngIf="priceHistory"></opdex-line-chart> -->
+
+          <opdex-line-chart
+                [chartData]="chartData"
+                [chartOptions]="chartOptions"
+                [selectedChart]="selectedChart"
+                title="{{selectedChart.category}}"
+                *ngIf="chartData"
+                (onTypeChange)="handleChartTypeChange($event)"></opdex-line-chart>
         </opdex-card>
       </div>
 

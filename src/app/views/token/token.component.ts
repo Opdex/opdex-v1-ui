@@ -17,6 +17,15 @@ export class TokenComponent implements OnInit {
   subscription = new Subscription();
   tokenHistory: any;
   priceHistory: any[] = [];
+  chartData: any[];
+  chartOptions = [
+    {
+      type: 'line',
+      category: 'USD Price',
+      prefix: '$'
+    }
+  ]
+  selectedChart = this.chartOptions[0];
   transactionRequest: ITransactionsRequest;
 
   constructor(
@@ -72,8 +81,18 @@ export class TokenComponent implements OnInit {
           });
 
           this.priceHistory = priceHistory;
+
+          this.handleChartTypeChange(this.selectedChart.category);
         })
       );
+  }
+
+  handleChartTypeChange($event) {
+    this.selectedChart = this.chartOptions.find(options => options.category === $event);
+
+    if ($event === 'USD Price') {
+      this.chartData = this.priceHistory;
+    }
   }
 
   ngOnDestroy() {

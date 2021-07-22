@@ -112,7 +112,7 @@ export interface IApprovalEventResponse extends ITransactionEventResponse {
 
 export interface IDistributionEventResponse extends ITransactionEventResponse {
   vaultAmount: string;
-  miningAmount: string;
+  governanceAmount: string;
   periodIndex: number;
 }
 

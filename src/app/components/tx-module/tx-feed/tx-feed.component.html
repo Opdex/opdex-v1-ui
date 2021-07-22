@@ -28,6 +28,10 @@
               <p>Activated governance distribution rewarding nominated liquidity pools with <strong>{{event.amount | formatNumber:0}}</strong> {{pool.token.staking.symbol}} to be mined.</p>
             </div> -->
 
+           <div class="distribution-event tx-event" *ngIf="event.eventType == 'DistributionEvent'">
+              <opdex-distribution-event [txEvent]="event"></opdex-distribution-event>
+            </div>
+
             <div class="enable-mining tx-event" *ngIf="event.eventType == 'EnableMiningEvent'">
               <opdex-enable-mining-event [txEvent]="event"></opdex-enable-mining-event>
             </div>
