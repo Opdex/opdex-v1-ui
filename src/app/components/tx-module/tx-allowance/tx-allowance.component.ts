@@ -1,3 +1,4 @@
+import { take } from 'rxjs/operators';
 import { OnChanges } from '@angular/core';
 import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -58,13 +59,16 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
   }
 
   submit() {
-    const payload = {
-      token: this.token.value,
-      // Todo: This below is wrong, we need to look up the token by address
-      amount: parseFloat(this.amount.value).toFixed(8),
-      spender: this.spender.value
-    }
+    this._platformApi.getToken(this.token.value)
+      .pipe(take(1))
+      .subscribe(response => {
+        const payload = {
+          token: this.token.value,
+          amount: parseFloat(this.amount.value).toFixed(response.decimals),
+          spender: this.spender.value
+        }
 
-    this.signTx(payload, 'approve');
+        this.signTx(payload, 'approve');
+      });
   }
 }
