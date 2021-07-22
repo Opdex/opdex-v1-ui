@@ -7,7 +7,7 @@
   </p>
 
   <p class="mb-0" *ngIf="event.subEventType === 'AddLiquidity'">
-    Provided
+    Added
     <strong>{{event.amountCrs | formatNumber:8}}</strong> {{pool.token.crs.symbol}} and
     <strong>{{event.amountSrc | formatNumber:pool.token.src.decimals }}</strong> {{pool.token.src.symbol}} of liquidity for
     <strong>{{event.amountLpt | formatNumber:pool.token.lp.decimals }}</strong> {{pool.token.lp.symbol}}.

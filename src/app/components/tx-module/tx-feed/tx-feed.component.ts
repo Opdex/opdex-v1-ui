@@ -1,12 +1,10 @@
-import { ILiquidityPoolSummaryResponse } from './../../../models/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { ITransactionsRequest, TransactionRequest } from '@sharedModels/requests/transactions-filter';
-import { INominationEventResponse, ISwapEventResponse, ITransactionResponse } from '@sharedModels/responses/platform-api/Transactions/transaction-response';
+import { ITransactionResponse, ITransferEventResponse } from '@sharedModels/responses/platform-api/Transactions/transaction-response';
 import { ITransactionsResponse } from '@sharedModels/responses/platform-api/Transactions/transactions-response';
-import { map, switchMap, take, tap } from 'rxjs/operators';
-import { forkJoin, Observable, of } from 'rxjs';
-import { IToken } from '@sharedModels/responses/platform-api/token.interface';
+import { map, take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'opdex-tx-feed',
@@ -19,11 +17,6 @@ export class TxFeedComponent implements OnChanges {
   transactions: ITransactionsResponse;
   copied: boolean;
   transactions$: Observable<ITransactionResponse[]>;
-
-  // Get transactions w/ filter
-  // using filter, further unwanted events
-  // Use cache/API request event meta data (token/pool details)
-  // Combine/reorder events (enableMining/rewardMiningPool, srcToSrc, stopStake/collect/nomination, stopMine/collect)
 
   constructor(private _platformApi: PlatformApiService) { }
 
@@ -44,14 +37,23 @@ export class TxFeedComponent implements OnChanges {
           filteredTransactions
             .map(transaction => {
 
+              // Filter event types if provided
               if (this.transactionRequest.eventTypes?.length) {
                 transaction.events = transaction.events.filter(event => this.transactionRequest.eventTypes.includes(event.eventType));
               }
 
-                // We don't care of the log wasn't from our whitelist of contracts
-                // .filter(log => this.transactionRequest.contracts.includes(log.contract))
-                // Don't care if it's a nomination log for another liquidity pool
-                // .filter(log => !(log.eventType === 'NominationEvent' && !this.transactionRequest.contracts.includes((<INominationEventResponse>log).stakingPool)))
+              // If the wallet is specified, hide transfer events in the transaction that do not involve the wallet address (e.g. contract to contract transfers)
+              const wallet = this.transactionRequest.wallet;
+              if (wallet?.length > 0) {
+                transaction.events = transaction.events.filter(event => {
+                  if (event.eventType === 'TransferEvent') {
+                    const transferEvent = <ITransferEventResponse>event;
+                    return transferEvent.from === wallet || transferEvent.to === wallet;
+                  }
+
+                  return true;
+                });
+              }
 
               return transaction;
             });
