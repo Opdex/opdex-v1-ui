@@ -1,12 +1,12 @@
-import { UserContextService } from './../../../../services/user-context.service';
+import { UserContextService } from '@sharedServices/user-context.service';
 import { environment } from '@environments/environment';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
-import { take, switchMap, map, tap } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -42,7 +42,6 @@ export class TxProvideRemoveComponent extends TxBase {
   }
 
   getAllowance$(amount: string):Observable<any> {
-    // Todo: shouldn't be hard coded
     const router = environment.routerAddress;
     const token = this.pool?.token?.lp?.address;
 
@@ -51,7 +50,10 @@ export class TxProvideRemoveComponent extends TxBase {
         map(allowances => {
           let valueApproved = false;
 
-          if (allowances.length) valueApproved = BigInt(amount.replace('.', '')) <= BigInt(allowances[0]?.allowance.replace('.', ''));
+          const amountBigInt = BigInt(amount.toString().replace('.', ''));
+          const allowanceBigInt = BigInt(allowances[0]?.allowance?.replace('.', '') || "0");
+
+          if (allowances.length) valueApproved = amountBigInt <= allowanceBigInt;
 
           return { spender: router, token, amount, allowances, valueApproved }
         })
@@ -61,8 +63,8 @@ export class TxProvideRemoveComponent extends TxBase {
   submit(): void {
     const payload = {
       liquidity: this.liquidity.value,
-      amountCrsMin: "1.00",
-      amountSrcMin: "1.00",
+      amountCrsMin: '0.00000001',
+      amountSrcMin: '0.00000001',
       liquidityPool: this.pool.address,
       recipient: this.context.wallet
     };

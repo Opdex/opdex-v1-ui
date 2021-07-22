@@ -1,13 +1,12 @@
-import { UserContextService } from './../../../services/user-context.service';
+import { UserContextService } from '@sharedServices/user-context.service';
 import { TokensModalComponent } from '../../modals-module/tokens-modal/tokens-modal.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription, of, Observable } from 'rxjs';
-import { debounce, debounceTime, take, catchError, distinctUntilChanged, switchMap, tap, map } from 'rxjs/operators';
+import { debounceTime, take, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
 import { SignTxModalComponent } from 'src/app/components/modals-module/sign-tx-modal/sign-tx-modal.component';
-import { environment } from '@environments/environment';
 
 @Component({
   selector: 'opdex-tx-swap',
@@ -143,6 +142,9 @@ export class TxSwapComponent implements OnDestroy{
   }
 
   switch() {
+    // Intentionally killing this process for now, it's bugged.
+    return ;
+
     const token0Amount = this.token0Amount.value;
     const token0 = this.token0.value;
     const token1Amount = this.token1Amount.value;
@@ -184,7 +186,10 @@ export class TxSwapComponent implements OnDestroy{
 
         return this._platformApi.getApprovedAllowance(this.context.wallet, spender, token)
           .pipe(map(allowances => {
-            this.valueApproved = parseFloat(amount) <= parseFloat(allowances[0]?.allowance);
+            const amountBigInt = BigInt(amount.toString().replace('.', ''));
+            const allowanceBigInt = BigInt(allowances[0]?.allowance?.replace('.', '') || "0");
+
+            this.valueApproved = amountBigInt <= allowanceBigInt;
             this.allowance = { spender, token, amount, allowances, valueApproved: this.valueApproved }
 
             return amount;

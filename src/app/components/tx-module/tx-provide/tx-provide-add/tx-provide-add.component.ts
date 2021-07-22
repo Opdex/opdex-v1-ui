@@ -1,4 +1,3 @@
-import { SidenavService } from '@sharedServices/sidenav.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,7 +9,6 @@ import { UserContextService } from '@sharedServices/user-context.service';
 import { Observable, throwError } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, switchMap, take, tap, catchError } from 'rxjs/operators';
-import { TransactionView } from '@sharedModels/transaction-view';
 import { of } from 'rxjs';
 
 @Component({
@@ -79,15 +77,16 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   }
 
   getAllowance$(amount: string):Observable<any> {
-    // Todo: shouldn't be hard coded
     const router = environment.routerAddress;
     const token = this.pool?.token?.src?.address;
 
     return this._platformApi.getApprovedAllowance(this.context.wallet, router, token)
       .pipe(
         map(allowances => {
-          // todo: set;
-          return { spender: router, token, amount, allowances, valueApproved: parseFloat(amount) <= parseFloat(allowances[0]?.allowance) }
+          const amountBigInt = BigInt(amount.toString().replace('.', ''));
+          const allowanceBigInt = BigInt(allowances[0]?.allowance?.replace('.', '') || "0");
+
+          return { spender: router, token, amount, allowances, valueApproved: amountBigInt <= allowanceBigInt }
         }),
         tap(rsp => {
           this.allowance = rsp;

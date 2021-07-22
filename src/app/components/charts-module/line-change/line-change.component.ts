@@ -27,7 +27,7 @@ export class LineChangeComponent implements OnChanges, OnInit {
 
   ngOnInit() {
     setTimeout(() => {
-      if (this.chartData) {
+      if (this.chartData?.length > 0) {
         if (!this.lineSeries) {
           const chart = createChart(this.id, {
             width: 150,

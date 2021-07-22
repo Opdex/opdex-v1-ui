@@ -45,7 +45,10 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
           const token = this.data?.pool?.token?.staking?.address;
 
           return this._platformApi.getApprovedAllowance(this.context.wallet, spender, token).pipe(map(allowances => {
-            return { spender, token, amount, allowances, valueApproved: parseFloat(amount) <= parseFloat(allowances[0]?.allowance) }
+            const amountBigInt = BigInt(amount.toString().replace('.', ''));
+            const allowanceBigInt = BigInt(allowances[0]?.allowance?.replace('.', '') || "0");
+
+            return { spender, token, amount, allowances, valueApproved: amountBigInt <= allowanceBigInt }
           }));
         }),
         tap(rsp => {
