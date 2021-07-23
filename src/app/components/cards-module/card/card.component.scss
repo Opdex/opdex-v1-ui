@@ -12,8 +12,8 @@
 
   .foreground {
     padding: 15px;
-    background: rgba(27,25,47, .9);
-    background: radial-gradient(circle, rgba(46, 102, 122, 0.1) 0%, rgba(27,25,47, .9) 80%);
+    background: rgba(27, 25, 51, 0.9);
+    background: radial-gradient(circle, rgba(27, 25, 51, 0.7), rgba(27,25,47, .9) 100%);
     border: 1px solid #292929;
 
     &.warn {
