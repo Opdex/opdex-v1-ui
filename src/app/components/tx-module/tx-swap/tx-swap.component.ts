@@ -184,10 +184,12 @@ export class TxSwapComponent implements OnDestroy{
           return of(amount);
         }
 
+        const tokenDecimals = payload.tokenIn == this.token0Details.address ? this.token0Details.decimals : this.token1Details.decimals;
+
         return this._platformApi
             .getAllowance(this.context.wallet, spender, token)
             .pipe(
-              map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount)),
+              map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, tokenDecimals)),
               map((rsp: AllowanceValidation) => rsp.requestToSpend)
             );
       })

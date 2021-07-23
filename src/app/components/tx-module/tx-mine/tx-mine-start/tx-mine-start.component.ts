@@ -46,7 +46,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
 
           return this._platformApi
             .getAllowance(this.context.wallet, spender, token)
-            .pipe(map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount)));
+            .pipe(map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, 8)));
         })
       );
   }

@@ -65,12 +65,11 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
         .pipe(
           debounceTime(400),
           distinctUntilChanged(),
-          switchMap(amount => this.quote$(amount, this.pool?.token?.src)),
-          switchMap(amount => this.getAllowance$(amount))
+          switchMap(requestAmount => this.getAllowance$(requestAmount)),
+          switchMap((allowance: AllowanceValidation) => this.quote$(allowance.requestToSpend, this.pool?.token?.src)),
+          tap((quoteAmount: string) => this.amountCrs.setValue(quoteAmount, { emitEvent: false })),
         )
-        .subscribe(allowance => {
-          this.amountCrs.setValue(allowance.requestToSpend, { emitEvent: false })
-        }));
+        .subscribe());
   }
 
   getAllowance$(amount: string):Observable<AllowanceValidation> {
@@ -80,7 +79,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     return this._platformApi
       .getAllowance(this.context.wallet, spender, token)
       .pipe(
-        map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount)),
+        map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, this.pool.token.src.decimals)),
         tap((rsp: AllowanceValidation) => this.allowance = rsp)
       );
   }
