@@ -58,7 +58,7 @@ export class PlatformApiService extends RestApiService {
     return this.get<any>(`${this.api}/tokens/${address}`);
   }
 
-  public getTokenHistory(address: string, timeSpan: string = '1y', candleSpan: string = 'Hourly'): Observable<any> {
+  public getTokenHistory(address: string, timeSpan: string = '1Y', candleSpan: string = 'Hourly'): Observable<any> {
     return this.get<any>(`${this.api}/tokens/${address}/history?timeSpan=${timeSpan}&candleSpan=${candleSpan}`);
   }
 

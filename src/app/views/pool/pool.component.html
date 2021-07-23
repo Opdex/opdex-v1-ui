@@ -90,20 +90,24 @@
     </div>
 
     <div class="row">
-      <div class="col-12 col-md-6 col-xl-3">
+      <div class="col-12 col-md-6 col-xl">
         <opdex-stat-card title="Liquidity" value="${{pool.reserves.usd | formatNumber}}" [change]="pool.reserves.usdDailyChange"></opdex-stat-card>
       </div>
 
-      <div class="col-12 col-md-6 col-xl-3">
+      <div class="col-12 col-md-6 col-xl">
         <opdex-stat-card title="Staking Weight" value="{{pool.staking?.weight | formatNumber:0 }} {{pool.token.staking?.symbol}}" [change]="pool.staking?.weightDailyChange || 0"></opdex-stat-card>
       </div>
 
-      <div class="col-12 col-md-6 col-xl-3">
+      <div class="col-12 col-md-6 col-xl">
         <opdex-stat-card title="Volume" [daily]="true" value="${{pool.volume.usd | formatNumber}}"></opdex-stat-card>
       </div>
 
-      <div class="col-12 col-md-6 col-xl-3">
+      <div class="col-12 col-md-6 col-xl">
         <opdex-stat-card title="Rewards" [daily]="true" value="${{pool.rewards.totalUsd | formatNumber}}"></opdex-stat-card>
+      </div>
+
+      <div class="col-12 col-md-6 col-xl" *ngIf="pool.mining != null && (pool.mining?.isActive || pool.mining?.tokensMining !== '0.00000000')">
+        <opdex-stat-card title="Liquidity Mining" value="{{pool.mining.tokensMining | formatNumber:0}} {{pool.token.lp.symbol}}"></opdex-stat-card>
       </div>
     </div>
 

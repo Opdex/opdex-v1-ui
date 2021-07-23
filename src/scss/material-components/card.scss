@@ -2,7 +2,7 @@
   background: rgba(38, 37, 56, 0.6) !important; //#27253A
   padding: 0px !important;
   border-radius: 10px !important;
-  // height: 100%;
+  box-shadow: 0px 2px 4px rgba(0,0,0,0.3) !important;
 
   .background {
     border-radius: 10px !important;
@@ -10,6 +10,5 @@
 
   .foreground {
     border-radius: 10px !important;
-    // height: 100%;
   }
 }

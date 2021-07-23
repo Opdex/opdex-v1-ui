@@ -106,7 +106,7 @@ export class MarketComponent implements OnInit {
 
         this.transactionRequest = {
           limit: 25,
-          eventTypes: ['DistributionEvent', 'SwapEvent', 'ProvideEvent', 'MineEvent', 'CollectStakingRewardsEvent', 'CollectMiningRewardsEvent', 'NominationEvent'],
+          eventTypes: ['CreateLiquidityPoolEvent', 'DistributionEvent', 'SwapEvent', 'ProvideEvent', 'MineEvent', 'CollectStakingRewardsEvent', 'CollectMiningRewardsEvent', 'NominationEvent'],
           direction: 'DESC'
         }
 
