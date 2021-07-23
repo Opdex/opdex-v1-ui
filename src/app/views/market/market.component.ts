@@ -149,7 +149,7 @@ export class MarketComponent implements OnInit {
   }
 
   private getTokenHistory(token: any): Observable<any> {
-    return this._platformApiService.getTokenHistory(token.address)
+    return this._platformApiService.getTokenHistory(token.address, "1W")
       .pipe(
         take(1),
         map((tokenHistory: any) => {
