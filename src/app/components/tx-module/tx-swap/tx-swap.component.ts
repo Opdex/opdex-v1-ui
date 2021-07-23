@@ -5,8 +5,9 @@ import { Component, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription, of, Observable } from 'rxjs';
-import { debounceTime, take, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
+import { debounceTime, take, distinctUntilChanged, switchMap, map, tap } from 'rxjs/operators';
 import { SignTxModalComponent } from 'src/app/components/modals-module/sign-tx-modal/sign-tx-modal.component';
+import { AllowanceValidation } from '@sharedModels/allowance-validation';
 
 @Component({
   selector: 'opdex-tx-swap',
@@ -22,8 +23,7 @@ export class TxSwapComponent implements OnDestroy{
   token0Details: any;
   token1Details: any;
   context: any;
-  allowance: any;
-  valueApproved: boolean;
+  allowance: AllowanceValidation;
 
   get token0Amount(): FormControl {
     return this.form.get('token0Amount') as FormControl;
@@ -184,16 +184,12 @@ export class TxSwapComponent implements OnDestroy{
           return of(amount);
         }
 
-        return this._platformApi.getApprovedAllowance(this.context.wallet, spender, token)
-          .pipe(map(allowances => {
-            const amountBigInt = BigInt(amount.toString().replace('.', ''));
-            const allowanceBigInt = BigInt(allowances[0]?.allowance?.replace('.', '') || "0");
-
-            this.valueApproved = amountBigInt <= allowanceBigInt;
-            this.allowance = { spender, token, amount, allowances, valueApproved: this.valueApproved }
-
-            return amount;
-          }));
+        return this._platformApi
+            .getAllowance(this.context.wallet, spender, token)
+            .pipe(
+              map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount)),
+              map((rsp: AllowanceValidation) => rsp.requestToSpend)
+            );
       })
     );
   }

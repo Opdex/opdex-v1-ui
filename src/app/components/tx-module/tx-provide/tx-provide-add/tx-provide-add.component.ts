@@ -10,6 +10,7 @@ import { Observable, throwError } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, switchMap, take, tap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { AllowanceValidation } from '@sharedModels/allowance-validation';
 
 @Component({
   selector: 'opdex-tx-provide-add',
@@ -20,7 +21,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   @Input() pool: ILiquidityPoolSummaryResponse;
   txHash: string;
   subscription = new Subscription();
-  allowance: any;
+  allowance: AllowanceValidation;
 
   form: FormGroup;
 
@@ -56,9 +57,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
           switchMap(amount => this.getAllowance$(amount))
         )
         .subscribe(allowance => {
-          if (allowance.amount > 0) {
-            this.amountSrc.setValue(allowance.amount, { emitEvent: false })
-          }
+          this.amountSrc.setValue(allowance.requestToSpend, { emitEvent: false })
         }));
 
     this.subscription.add(
@@ -70,28 +69,19 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
           switchMap(amount => this.getAllowance$(amount))
         )
         .subscribe(allowance => {
-          if (allowance.amount > 0) {
-            this.amountCrs.setValue(allowance.amount, { emitEvent: false })
-          }
+          this.amountCrs.setValue(allowance.requestToSpend, { emitEvent: false })
         }));
   }
 
-  getAllowance$(amount: string):Observable<any> {
-    const router = environment.routerAddress;
+  getAllowance$(amount: string):Observable<AllowanceValidation> {
+    const spender = environment.routerAddress;
     const token = this.pool?.token?.src?.address;
 
-    return this._platformApi.getApprovedAllowance(this.context.wallet, router, token)
+    return this._platformApi
+      .getAllowance(this.context.wallet, spender, token)
       .pipe(
-        map(allowances => {
-          const amountBigInt = BigInt(amount.toString().replace('.', ''));
-          const allowanceBigInt = BigInt(allowances[0]?.allowance?.replace('.', '') || "0");
-
-          return { spender: router, token, amount, allowances, valueApproved: amountBigInt <= allowanceBigInt }
-        }),
-        tap(rsp => {
-          this.allowance = rsp;
-          console.log(rsp);
-        })
+        map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount)),
+        tap((rsp: AllowanceValidation) => this.allowance = rsp)
       );
   }
 

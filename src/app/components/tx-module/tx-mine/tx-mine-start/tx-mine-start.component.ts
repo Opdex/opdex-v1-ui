@@ -1,14 +1,13 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { AllowanceValidation } from './../../../../models/allowance-validation';
+import { Component, Input, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
-import { TransactionView } from '@sharedModels/transaction-view';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { SidenavService } from '@sharedServices/sidenav.service';
 import { UserContextService } from '@sharedServices/user-context.service';
 import { Observable } from 'rxjs';
-import { debounceTime, map, switchMap, take, tap } from 'rxjs/operators';
+import { debounceTime, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-tx-mine-start',
@@ -20,8 +19,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
   form: FormGroup;
   pool: ILiquidityPoolSummaryResponse;
   txHash: string;
-  allowance$: Observable<any>;
-  valueApproved: boolean;
+  allowance$: Observable<AllowanceValidation>;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -46,16 +44,9 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
           const spender = this.data?.pool?.mining?.address;
           const token = this.data?.pool?.token?.lp?.address;
 
-          return this._platformApi.getApprovedAllowance(this.context.wallet, spender, token).pipe(map(allowances => {
-            const amountBigInt = BigInt(amount.toString().replace('.', ''));
-            const allowanceBigInt = BigInt(allowances[0]?.allowance?.replace('.', '') || "0");
-
-            return { spender, token, amount, allowances, valueApproved: amountBigInt <= allowanceBigInt }
-          }));
-        }),
-        tap(rsp => {
-          this.valueApproved = rsp.valueApproved;
-          console.log(rsp);
+          return this._platformApi
+            .getAllowance(this.context.wallet, spender, token)
+            .pipe(map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount)));
         })
       );
   }

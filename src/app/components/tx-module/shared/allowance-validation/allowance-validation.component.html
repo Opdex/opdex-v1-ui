@@ -1,13 +1,13 @@
 <ng-container *ngIf="allowance">
-  <opdex-card [warn]="true" *ngIf="!allowance.valueApproved">
+  <opdex-card [warn]="true" *ngIf="!allowance.isApproved">
     <h4>Insufficient Allowance</h4>
 
-    <p class="mb-3">In order to stake {{allowance.value}} ODX, the liquidity pool must have an approved allowance of at least that much.</p>
+    <p class="mb-3">In order to stake {{allowance.requestToSpend}} ODX, the liquidity pool must have an approved allowance of at least that much.</p>
 
-    <button mat-raised-button class="white w-100" (click)="approveAllowance(allowance.amount, allowance.spender, allowance.token)">Begin Approval</button>
+    <button mat-raised-button class="white w-100" (click)="approveAllowance(allowance.requestToSpend, allowance.spender, allowance.token)">Begin Approval</button>
     <button mat-stroked-button class="mt-2 w-100">Stake Anyways</button>
   </opdex-card>
-  <opdex-card [success]="true" [thin]="true" *ngIf="allowance.valueApproved">
+  <opdex-card [success]="true" [thin]="true" *ngIf="allowance.isApproved">
     <p class="mb-0 d-flex align-items-middle" style="line-height: 24px;"><mat-icon class="mr-2" style="line-height: unset;">check_circle</mat-icon> Allowance</p>
   </opdex-card>
 </ng-container>

@@ -8,6 +8,7 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { switchMap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { AllowanceValidation } from '@sharedModels/allowance-validation';
 
 @Component({
   selector: 'opdex-tx-provide-remove',
@@ -19,7 +20,7 @@ export class TxProvideRemoveComponent extends TxBase {
   txHash: string;
   form: FormGroup;
   context: any;
-  allowance$: Observable<any>;
+  allowance$: Observable<AllowanceValidation>;
 
   get liquidity(): FormControl {
     return this.form.get('liquidity') as FormControl;
@@ -42,22 +43,12 @@ export class TxProvideRemoveComponent extends TxBase {
   }
 
   getAllowance$(amount: string):Observable<any> {
-    const router = environment.routerAddress;
+    const spender = environment.routerAddress;
     const token = this.pool?.token?.lp?.address;
 
-    return this._platformApi.getApprovedAllowance(this.context.wallet, router, token)
-      .pipe(
-        map(allowances => {
-          let valueApproved = false;
-
-          const amountBigInt = BigInt(amount.toString().replace('.', ''));
-          const allowanceBigInt = BigInt(allowances[0]?.allowance?.replace('.', '') || "0");
-
-          if (allowances.length) valueApproved = amountBigInt <= allowanceBigInt;
-
-          return { spender: router, token, amount, allowances, valueApproved }
-        })
-      );
+    return this._platformApi
+      .getAllowance(this.context.wallet, spender, token)
+      .pipe(map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount)));
   }
 
   submit(): void {

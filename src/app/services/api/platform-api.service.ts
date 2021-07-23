@@ -11,6 +11,7 @@ import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool
 import { TransactionRequest } from '@sharedModels/requests/transactions-filter';
 import { ITransactionResponse } from '@sharedModels/responses/platform-api/Transactions/transaction-response';
 import { ITransactionsResponse } from '@sharedModels/responses/platform-api/Transactions/transactions-response';
+import { IAddressAllowanceResponse } from '@sharedModels/responses/platform-api/Addresses/address-allowance.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -194,6 +195,10 @@ export class PlatformApiService extends RestApiService {
 
   public getApprovedAllowance(owner: string, spender: string, token: string): Observable<any> {
     return this.get<any>(`${this.api}/wallet/${owner}/allowance/approved?token=${token}&spender=${spender}`);
+  }
+
+  public getAllowance(owner: string, spender: string, token: string): Observable<IAddressAllowanceResponse> {
+    return this.get<any>(`${this.api}/wallet/${owner}/allowance/${token}/approved/${spender}`);
   }
 }
 
