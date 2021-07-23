@@ -67,7 +67,9 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
           distinctUntilChanged(),
           switchMap(requestAmount => this.getAllowance$(requestAmount)),
           switchMap((allowance: AllowanceValidation) => this.quote$(allowance.requestToSpend, this.pool?.token?.src)),
-          tap((quoteAmount: string) => this.amountCrs.setValue(quoteAmount, { emitEvent: false })),
+          tap((quoteAmount: string) => {
+            if (quoteAmount != '0.00') this.amountCrs.setValue(quoteAmount, { emitEvent: false })
+          }),
         )
         .subscribe());
   }
