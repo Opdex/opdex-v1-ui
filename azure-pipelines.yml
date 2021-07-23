@@ -23,7 +23,7 @@ stages:
     variables:
       SOLUTION: 'Opdex.sln'
       BUILD_CONFIGURATION: 'Release'
-    
+
     steps:
 
       - task: NodeTool@0
@@ -53,13 +53,14 @@ stages:
 
       # - task: PublishBuildArtifacts@1
       #   inputs:
-      #     pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+      #     pathtoPublish: '$(Build.ArtifactStagingDirectory)'
       #     artifactName: '$(ARTIFACT_NAME)'
       #   displayName: Share
 
 - stage: DEV
   displayName: 'Release to devnet (Azure)'
   dependsOn: CI
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop')) # Don't run deployment for PRs against the branch.
   jobs:
   - template: ${{ variables.releaseTemplate }}
     parameters:
