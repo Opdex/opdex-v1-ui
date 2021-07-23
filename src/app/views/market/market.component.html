@@ -16,6 +16,21 @@
         <div class="stats">
           <div class="row">
             <div class="col-12 col-md-6 col-xl">
+              <opdex-stat-card title="Cirrus (CRS)" value="${{market.crsToken.summary.price.close | formatNumber:2}}" [change]="market.crsToken.summary.dailyPriceChange"></opdex-stat-card>
+            </div>
+            <div class="col-12 col-md-6 col-xl">
+              <opdex-stat-card title="Liquidity" value="${{market.summary.liquidity | formatNumber:0}}" [change]="market.summary.liquidityDailyChange"></opdex-stat-card>
+            </div>
+            <div class="col-12 col-md-6 col-xl">
+              <opdex-stat-card title="Staking Weight" value="{{market.summary.staking.weight | formatNumber:0}} {{market.stakingToken.symbol}}" [change]="market.summary.staking.weightDailyChange"></opdex-stat-card>
+            </div>
+            <div class="col-12 col-md-6 col-xl">
+              <opdex-stat-card title="Volume" [daily]="true" value="${{market.summary.volume | formatNumber:0}}"></opdex-stat-card>
+            </div>
+            <div class="col-12 col-md-6 col-xl">
+              <opdex-stat-card title="Rewards" [daily]="true" value="${{market.summary.rewards.totalUsd | formatNumber}}"></opdex-stat-card>
+            </div>
+            <!-- <div class="col-12 col-md-6 col-xl">
               <opdex-card>
                 <h4 class="stat-header">
                   Cirrus (CRS)
@@ -30,43 +45,8 @@
                   <opdex-change-indicator [value]="market.crsToken.summary.dailyPriceChange"></opdex-change-indicator>
                 </div>
               </opdex-card>
-            </div>
-
-            <div class="col-12 col-md-6 col-xl">
-              <opdex-card>
-                <h4 class="stat-header">
-                  Liquidity
-                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
-                </h4>
-
-                <div class="stat">
-                  <p class="stat-value">
-                    ${{market.summary.liquidity | formatNumber:0}}
-                  </p>
-
-                  <opdex-change-indicator [value]="market.summary.liquidityDailyChange"></opdex-change-indicator>
-                </div>
-              </opdex-card>
-            </div>
-
-            <div class="col-12 col-md-6 col-xl">
-              <opdex-card>
-                <h4 class="stat-header">
-                  Staking Weight
-                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
-                </h4>
-
-                <div class="stat">
-                  <p class="stat-value">
-                    {{market.summary.staking.weight | formatNumber:0}} <small>ODX</small>
-                  </p>
-
-                  <opdex-change-indicator [value]="market.summary.staking.weightDailyChange"></opdex-change-indicator>
-                </div>
-              </opdex-card>
-            </div>
-
-            <div class="col-12 col-md-6 col-xl">
+            </div> -->
+            <!-- <div class="col-12 col-md-6 col-xl">
               <opdex-card>
                 <h4 class="stat-header">
                   Volume (24hr)
@@ -79,9 +59,9 @@
                   </p>
                 </div>
               </opdex-card>
-            </div>
+            </div> -->
 
-            <div class="col-12 col-md-6 col-xl">
+            <!-- <div class="col-12 col-md-6 col-xl">
               <opdex-card>
                 <h4 class="stat-header">
                   Rewards (24hr)
@@ -94,7 +74,7 @@
                   </p>
                 </div>
               </opdex-card>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
