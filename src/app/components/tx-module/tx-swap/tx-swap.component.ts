@@ -5,9 +5,10 @@ import { Component, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription, of, Observable } from 'rxjs';
-import { debounceTime, take, distinctUntilChanged, switchMap, map, tap } from 'rxjs/operators';
+import { debounceTime, take, distinctUntilChanged, switchMap, map, tap, catchError } from 'rxjs/operators';
 import { SignTxModalComponent } from 'src/app/components/modals-module/sign-tx-modal/sign-tx-modal.component';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'opdex-tx-swap',
@@ -16,37 +17,30 @@ import { AllowanceValidation } from '@sharedModels/allowance-validation';
 })
 export class TxSwapComponent implements OnDestroy{
   @Input() data: any;
-  token0In = true;
+  tokenInExact = true;
   form: FormGroup;
-  exactInput$: Subscription;
+  tokenInChanges$: Subscription;
+  tokenOutChanges$: Subscription;
   txHash: string;
-  token0Details: any;
-  token1Details: any;
+  tokenInDetails: any;
+  tokenOutDetails: any;
   context: any;
   allowance: AllowanceValidation;
 
-  get token0Amount(): FormControl {
-    return this.form.get('token0Amount') as FormControl;
+  get tokenInAmount(): FormControl {
+    return this.form.get('tokenInAmount') as FormControl;
   }
 
-  get token0AmountValue(): string {
-    return this.token0Amount.value;
+  get tokenIn(): FormControl {
+    return this.form.get('tokenIn') as FormControl;
   }
 
-  get token0(): FormControl {
-    return this.form.get('token0') as FormControl;
+  get tokenOutAmount(): FormControl {
+    return this.form.get('tokenOutAmount') as FormControl;
   }
 
-  get token1Amount(): FormControl {
-    return this.form.get('token1Amount') as FormControl;
-  }
-
-  get token1AmountValue(): string {
-    return this.token1Amount.value;
-  }
-
-  get token1(): FormControl {
-    return this.form.get('token1') as FormControl;
+  get tokenOut(): FormControl {
+    return this.form.get('tokenOut') as FormControl;
   }
 
   constructor(
@@ -55,28 +49,40 @@ export class TxSwapComponent implements OnDestroy{
     private _platformApi: PlatformApiService,
     private _userContext: UserContextService
   ) {
-    this.context = _userContext.getUserContext();
+    this.context = this._userContext.getUserContext();
 
     this.form = this._fb.group({
-      token0Amount: ['', [Validators.required]],
-      token0: ['CRS', [Validators.required]],
-      token1Amount: ['', [Validators.required]],
-      token1: [null, [Validators.required]]
+      tokenInAmount: ['', [Validators.required]],
+      tokenIn: ['CRS', [Validators.required]],
+      tokenOutAmount: ['', [Validators.required]],
+      tokenOut: [null, [Validators.required]]
     });
 
-    this.exactInput$ = this.token0Amount.valueChanges
+    this.tokenInChanges$ = this.tokenInAmount.valueChanges
       .pipe(
         debounceTime(400),
         distinctUntilChanged(),
-        switchMap((value) => this.quote(value))
-      )
-      .subscribe(value => this.form.get("token1Amount").setValue(value));
+        tap((value: string) => this.tokenInExact = true),
+        switchMap((value) => this.quote(value)),
+        tap((value: string) => this.tokenOutAmount.setValue(value, { emitEvent: false })),
+        switchMap(() => this.validateAllowance())
+      ).subscribe();
+
+    this.tokenOutChanges$ = this.tokenOutAmount.valueChanges
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        tap((value: string) => this.tokenInExact = false),
+        switchMap((value: string) => this.quote(value)),
+        tap((value: string) => this.tokenInAmount.setValue(value, { emitEvent: false })),
+        switchMap(() => this.validateAllowance())
+      ).subscribe();
   }
 
   ngOnChanges() {
     console.log(this.data);
     if (this.data?.pool) {
-      this.token0Details = {
+      this.tokenInDetails = {
         name: "Cirrus",
         symbol: 'CRS',
         address: 'CRS',
@@ -84,8 +90,8 @@ export class TxSwapComponent implements OnDestroy{
         sats: 100000000
       };
 
-      this.token1Details = this.data.pool.token.src;
-      this.token1.setValue(this.token1Details.address);
+      this.tokenOutDetails = this.data.pool.token.src;
+      this.tokenOut.setValue(this.tokenOutDetails.address);
     }
   }
 
@@ -96,10 +102,6 @@ export class TxSwapComponent implements OnDestroy{
       data:  data,
       panelClass: ''
     });
-  }
-
-  toggleToken0In(): void {
-    this.token0In = !this.token0In;
   }
 
   changeToken(tokenField: string): void {
@@ -115,13 +117,27 @@ export class TxSwapComponent implements OnDestroy{
 
     ref.afterClosed().pipe(take(1)).subscribe(rsp => {
       if (rsp != null) {
-        const field = this.form.get(tokenField);
-        field.setValue(rsp.address);
-
-        if (tokenField === 'token0') {
-          this.token0Details = rsp;
+        // Todo: trim or pad token values based on the new selected tokens decimals
+        if (tokenField === 'tokenIn') {
+          this.tokenIn.setValue(rsp.address);
+          this.tokenInDetails = rsp;
+          this.tokenInExact = true;
+          this.quote(this.tokenInAmount.value)
+            .pipe(
+              tap((quote: string) => this.tokenOutAmount.setValue(quote, { emitEvent: false })),
+              switchMap(() => this.validateAllowance()),
+              take(1)
+            ).subscribe();
         } else {
-          this.token1Details = rsp;
+          this.tokenOut.setValue(rsp.address);
+          this.tokenOutDetails = rsp;
+          this.tokenInExact = false;
+          this.quote(this.tokenOutAmount.value)
+            .pipe(
+              tap((quote: string) => this.tokenInAmount.setValue(quote, { emitEvent: false })),
+              switchMap(() => this.validateAllowance()),
+              take(1)
+            ).subscribe();
         }
       }
     });
@@ -129,11 +145,11 @@ export class TxSwapComponent implements OnDestroy{
 
   submit() {
     const payload = {
-      tokenIn: this.token0In ? this.token0.value : this.token1.value,
-      tokenOut: !this.token0In ? this.token0.value : this.token1.value,
-      tokenInAmount: this.token0In ? this.token0AmountValue : this.token1AmountValue,
-      tokenOutAmount: !this.token0In ? this.token0AmountValue : this.token1AmountValue,
-      tokenInExactAmount: this.token0In,
+      tokenIn: this.tokenIn.value,
+      tokenOut: this.tokenOut.value,
+      tokenInAmount: this.tokenInAmount.value,
+      tokenOutAmount: this.tokenOutAmount.value,
+      tokenInExactAmount: this.tokenInExact,
       tolerance: 0.1,
       recipient: this.context.wallet
     }
@@ -142,61 +158,72 @@ export class TxSwapComponent implements OnDestroy{
   }
 
   switch() {
-    // Intentionally killing this process for now, it's bugged.
-    return ;
+    const tokenInAmount = this.tokenInAmount.value;
+    const tokenIn = this.tokenIn.value;
+    const tokenOutAmount = this.tokenOutAmount.value;
+    const tokenOut = this.tokenOut.value;
+    const tokenInDetails = this.tokenInDetails;
+    const tokenOutDetails = this.tokenOutDetails;
 
-    const token0Amount = this.token0Amount.value;
-    const token0 = this.token0.value;
-    const token1Amount = this.token1Amount.value;
-    const token1 = this.token1.value;
-    const token0Details = this.token0Details;
-    const token1Details = this.token1Details;
+    this.tokenInDetails = tokenOutDetails;
+    this.tokenOutDetails = tokenInDetails;
 
-    this.token0Amount.setValue(token1Amount);
-    this.token1Amount.setValue(token0Amount);
-    this.token0.setValue(token1);
-    this.token1.setValue(token0);
+    this.tokenIn.setValue(tokenOut, { emitEvent: false });
+    this.tokenOut.setValue(tokenIn, { emitEvent: false });
 
-    this.token0Details = token1Details;
-    this.token1Details = token0Details;
-
-    this.toggleToken0In();
+    if (this.tokenInExact) {
+      this.tokenInExact = false;
+      this.tokenOutAmount.setValue(tokenInAmount, { emitEvent: false });
+      this.quote(tokenInAmount)
+        .pipe(
+          tap((quote: string) => this.tokenInAmount.setValue(quote, { emitEvent: false })),
+          switchMap(() => this.validateAllowance()),
+          take(1)
+        ).subscribe();
+    } else {
+      this.tokenInExact = true;
+      this.tokenInAmount.setValue(tokenOutAmount, { emitEvent: false });
+      this.quote(tokenOutAmount)
+        .pipe(
+          tap((quote: string) => this.tokenOutAmount.setValue(quote, { emitEvent: false })),
+          switchMap(() => this.validateAllowance()),
+          take(1)
+        ).subscribe();
+    }
   }
 
   quote(value: string): Observable<string> {
-    if (!value || value === '0' || !value.includes('.')) {
-      return of('0');
+    if (!value || value.replace('0', '') === '.' || !value.includes('.')) {
+      return of('0.00');
     }
 
     const payload = {
-      tokenIn: this.token0In ? this.token0.value : this.token1.value,
-      tokenOut: !this.token0In ? this.token0.value : this.token1.value,
-      tokenInAmount: this.token0In ? this.token0AmountValue : null,
-      tokenOutAmount: !this.token0In ? this.token0AmountValue : null
+      tokenIn: this.tokenIn.value,
+      tokenOut: this.tokenOut.value,
+      tokenInAmount: this.tokenInExact ? value : null,
+      tokenOutAmount: !this.tokenInExact ? value : null
     };
 
-    return this._platformApi.getSwapQuote(payload).pipe(
-      switchMap((amount: string) => {
-        const spender = this.data?.pool?.address;
-        const token = payload.tokenIn;
+    return this._platformApi.getSwapQuote(payload)
+      .pipe(catchError(() => of('0.00')));
+  }
 
-        if (payload.tokenIn === 'CRS') {
-          return of(amount);
-        }
+  validateAllowance(): Observable<AllowanceValidation> {
+    const spender = environment.routerAddress;
 
-        const tokenDecimals = payload.tokenIn == this.token0Details.address ? this.token0Details.decimals : this.token1Details.decimals;
+    if (this.tokenIn.value === 'CRS') {
+      return of(null);
+    }
 
-        return this._platformApi
-            .getAllowance(this.context.wallet, spender, token)
-            .pipe(
-              map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, tokenDecimals)),
-              map((rsp: AllowanceValidation) => rsp.requestToSpend)
-            );
-      })
-    );
+    return this._platformApi.getAllowance(this.context.wallet, spender, this.tokenIn.value)
+      .pipe(
+        map(allowanceResponse => new AllowanceValidation(allowanceResponse, this.tokenInAmount.value, this.tokenInDetails.decimals)),
+        tap((rsp: AllowanceValidation) => this.allowance = rsp)
+      );
   }
 
   ngOnDestroy() {
-    if (this.exactInput$) this.exactInput$.unsubscribe();
+    if (this.tokenInChanges$) this.tokenInChanges$.unsubscribe();
+    if (this.tokenOutChanges$) this.tokenOutChanges$.unsubscribe();
   }
 }
