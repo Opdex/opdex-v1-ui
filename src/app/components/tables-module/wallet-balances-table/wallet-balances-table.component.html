@@ -1,8 +1,11 @@
 <div class="table-container">
   <table mat-table [dataSource]="dataSource" matSort [trackBy]="trackBy" class="w-100">
-    <ng-container matColumnDef="name" >
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> <a href="javascript:void(0)" (click)="navigate(element.address)">{{element.name}} <small>{{element.symbol }}</small></a> </td>
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Token </th>
+      <td mat-cell *matCellDef="let element" class="token-identity">
+        <a href="javascript:void(0)" (click)="navigate(element.address)">{{element.symbol}}</a>
+        <small class="ml-2">{{element.name}}</small>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="balance">
@@ -13,10 +16,23 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>  </th>
       <td mat-cell *matCellDef="let element">
-        <button mat-icon-button class="swap small mr-3" (click)="swap(element)" title="Swap"><mat-icon>swap_horiz</mat-icon></button>
-        <button mat-icon-button class="provide small mr-3" (click)="provide(element)" title="Provide"><mat-icon>control_point_duplicate</mat-icon></button>
-        <button mat-icon-button class="stake small mr-3" (click)="stake(element)" title="Stake" *ngIf="element.symbol === 'ODX'"><mat-icon>verified_user</mat-icon></button>
-        <button mat-icon-button class="mine small" (click)="mine(element)" title="Mine" *ngIf="element.symbol === 'OLPT'"><mat-icon>whatshot</mat-icon></button>
+        <div class="float-right">
+          <div class="d-inline-block mr-3" style="width: 28px;">
+            <button mat-icon-button class="swap small" (click)="swap(element)" title="Swap"><mat-icon>swap_horiz</mat-icon></button>
+          </div>
+
+          <div class="d-inline-block mr-3" style="width: 28px;">
+            <button mat-icon-button class="provide small" (click)="provide(element)" title="Provide"><mat-icon>control_point_duplicate</mat-icon></button>
+          </div>
+
+          <div class="d-inline-block mr-3" style="width: 28px;">
+            <button mat-icon-button class="stake small" (click)="stake(element)" title="Stake" *ngIf="element.symbol === 'ODX'"><mat-icon>verified_user</mat-icon></button>
+          </div>
+
+          <div class="d-inline-block mr-3" style="width: 28px;">
+            <button mat-icon-button class="mine small" (click)="mine(element)" title="Mine" *ngIf="element.symbol === 'OLPT'"><mat-icon>whatshot</mat-icon></button>
+          </div>
+        </div>
       </td>
     </ng-container>
 

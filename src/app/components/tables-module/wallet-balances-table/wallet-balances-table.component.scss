@@ -21,3 +21,17 @@
   color: #1b192f;
   font-weight: 500;
 }
+
+a {
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.token-identity {
+  max-width: 175px !important;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 175px !important;
+  padding-right: 30px;
+}
