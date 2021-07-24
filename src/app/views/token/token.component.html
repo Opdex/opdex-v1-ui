@@ -7,60 +7,17 @@
 
         <div class="stats mt-4">
           <div class="row">
-            <div class="col-3">
-              <opdex-card>
-                <h4 class="stat-header">
-                  Price
-                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
-                </h4>
-
-                <div class="stat">
-                  <p class="stat-value">
-                    ${{token.summary.price.close | formatNumber:2}}
-                  </p>
-
-                  <opdex-change-indicator [value]="token.summary.dailyPriceChange"></opdex-change-indicator>
-                </div>
-              </opdex-card>
+            <!-- <div class="col-12 col-md-6 col-xl">
+              <opdex-stat-card title="Price" value="${{token.summary.price.close | formatNumber:2}}" [change]="token.summary.dailyPriceChange"></opdex-stat-card>
             </div>
-
-            <div class="col-3">
-              <opdex-card>
-                <h4 class="stat-header">
-                  Total Supply
-                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
-                </h4>
-
-                <div class="stat">
-                  <p class="stat-value">
-                    {{token.totalSupply | formatNumber:token.decimals}}
-                  </p>
-                </div>
-              </opdex-card>
+            <div class="col-12 col-md-6 col-xl">
+              <opdex-stat-card title="Total Supply" value="{{token.totalSupply | formatNumber:token.decimals}}"></opdex-stat-card>
+            </div> -->
+            <!-- <div class="col-12 col-md-6 col-xl">
+              <opdex-stat-card title="Liquidity" value="$1,754,342,353"></opdex-stat-card>
             </div>
-
-            <!-- <div class="col-3">
-              <opdex-card>
-                <h4 class="stat-header">
-                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Liquidity
-                </h4>
-                <p class="stat-value">
-                  $1,754,342,353
-                </p>
-              </opdex-card>
-            </div>
-
-            <div class="col-3">
-              <opdex-card>
-                <h4 class="stat-header">
-                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Fees
-                </h4>
-                <p class="stat-value">
-                  $329,199.41
-                </p>
-              </opdex-card>
+            <div class="col-12 col-md-6 col-xl">
+              <opdex-stat-card title="Fees" value="$329,199.41"></opdex-stat-card>
             </div> -->
           </div>
         </div>

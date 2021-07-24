@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
+import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
 
 @Component({
   selector: 'opdex-market',
@@ -39,7 +40,9 @@ export class MarketComponent implements OnInit {
       category: 'Staking Weight',
       suffix: 'ODX'
     }
-  ]
+  ];
+  statCards: [StatCardInfo];
+
   selectedChart = this.chartOptions[0];
 
   constructor(private _platformApiService: PlatformApiService) { }
@@ -58,7 +61,22 @@ export class MarketComponent implements OnInit {
   private getMarket(): void {
     this._platformApiService.getMarketOverview()
       .pipe(take(1))
-      .subscribe(market => this.market = market);
+      .subscribe((market) => {
+        this.market = market;
+        this.statCards = [
+          {
+            title: 'Cirrus (CRS)', 
+            value: this.market.crsToken.summary.price.close,
+            symbol: '$',
+            formatNumber: 2, 
+            change: this.market.crsToken.summary.dailyPriceChange,
+            helpInfo: {
+              title: 'Cirrus (CRS) Help',
+              paragraph: 'This modal is providing help for Cirrus (CRS)'
+            }
+          }
+        ];
+      });
   }
 
   private getMarketHistory(): void {

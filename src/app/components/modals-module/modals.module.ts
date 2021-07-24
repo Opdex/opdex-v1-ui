@@ -19,13 +19,15 @@ import { ConnectWalletModalComponent } from './connect-wallet-modal/connect-wall
 import { TxBoxSettingsModalComponent } from './tx-box-settings-modal/tx-box-settings-modal.component';
 import { TokensModalComponent } from './tokens-modal/tokens-modal.component';
 import { SignTxModalComponent } from './sign-tx-modal/sign-tx-modal.component';
+import { HelpModalComponent } from './help-modal/help-modal.component';
 
 @NgModule({
   declarations: [
     ConnectWalletModalComponent,
     TxBoxSettingsModalComponent,
     SignTxModalComponent,
-    TokensModalComponent
+    TokensModalComponent,
+    HelpModalComponent
   ],
   imports: [
     CommonModule,
@@ -43,6 +45,7 @@ import { SignTxModalComponent } from './sign-tx-modal/sign-tx-modal.component';
     QRCodeModule
   ],
   exports: [
+    HelpModalComponent
   ]
 })
 export class ModalsModule { }
