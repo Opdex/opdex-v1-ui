@@ -55,9 +55,7 @@
         <opdex-side-nav *ngIf="context.wallet"></opdex-side-nav>
       </ng-container>
 
-
-
-      <div id="page-content" [@fadeAnimation]="prepareRoute(outlet)">
+      <div id="page-content" [@fadeAnimation]="prepareRoute(outlet)" [ngClass]="{'no-sidebar': !context?.wallet}">
         <ng-container *ngIf="context$ | async as context">
           <div class="banner" *ngIf="context.wallet">
             <div class="env light">

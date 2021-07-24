@@ -8,12 +8,11 @@
   opdex-card {
     width: 100%;
     max-width: 500px;
+    margin-bottom: 0px !important;
 
     h1 {
       text-align: center;
-      padding: 20px 0px;
-      margin: 0px auto 40px;
-      border-bottom: 3px solid #1ca7dc;
+      margin: 0px auto 30px;
       max-width: 300px;
     }
 
@@ -27,5 +26,12 @@
       right: -40px;
       width: 100px;
     }
+  }
+
+  .logo {
+    width: 150px;
+    height: 150px;
+    margin: 0px auto 15px;
+    display: block;
   }
 }
