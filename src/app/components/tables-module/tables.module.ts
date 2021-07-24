@@ -16,13 +16,15 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { TransactionsTableComponent } from './transactions-table/transactions-table.component';
 import { VaultCertificatesTableComponent } from './vault-certificates-table/vault-certificates-table.component';
+import { WalletBalancesTableComponent } from './wallet-balances-table/wallet-balances-table.component';
 
 @NgModule({
   declarations: [
     PoolsTableComponent,
     TokensTableComponent,
     TransactionsTableComponent,
-    VaultCertificatesTableComponent
+    VaultCertificatesTableComponent,
+    WalletBalancesTableComponent
   ],
   imports: [
     CommonModule,
@@ -41,7 +43,8 @@ import { VaultCertificatesTableComponent } from './vault-certificates-table/vaul
     PoolsTableComponent,
     TokensTableComponent,
     TransactionsTableComponent,
-    VaultCertificatesTableComponent
+    VaultCertificatesTableComponent,
+    WalletBalancesTableComponent
   ]
 })
 export class TablesModule { }

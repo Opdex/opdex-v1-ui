@@ -24,9 +24,9 @@
 
     <div class="row">
       <div class="col-12 col-xl-8">
-        <opdex-card>
+        <opdex-card *ngIf="walletBalances$ | async as walletBalances" >
           <h2>Balances</h2>
-          <opdex-tokens-table></opdex-tokens-table>
+          <opdex-wallet-balances-table [tokens]="walletBalances"></opdex-wallet-balances-table>
         </opdex-card>
       </div>
 
