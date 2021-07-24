@@ -39,6 +39,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { LayoutModule } from '@angular/cdk/layout';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import {MatTabsModule} from '@angular/material/tabs';
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import { GovernanceComponent } from './views/governance/governance.component';
@@ -80,6 +81,7 @@ import { TimeagoModule } from 'ngx-timeago';
     SharedModule,
     MatCardModule,
     MatDividerModule,
+    MatProgressBarModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatTooltipModule,

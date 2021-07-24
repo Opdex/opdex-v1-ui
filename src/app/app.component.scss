@@ -90,6 +90,10 @@ opdex-side-nav {
   #page-content {
     margin-left: $sidebar-width;
 
+    &.no-sidebar,.loaded {
+      margin-left: 0px;
+    }
+
     .page-content-container {
       padding: 0 25px;
     }

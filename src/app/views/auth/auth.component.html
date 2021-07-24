@@ -1,5 +1,7 @@
 <section id="auth">
   <opdex-card>
+    <img src="/assets/logo-light-blue.png" alt="Opdex Logo" class="logo">
+
     <h1>Connect Wallet</h1>
 
     <form [formGroup]="form" name="auth-form" id="auth-form" (submit)="submit()">
@@ -8,7 +10,7 @@
         <button mat-icon-button matPrefix type="button" disabled><mat-icon>link</mat-icon></button>
 
         <input matInput type="text" [required]="true" [formControl]="publicKey" autocomplete="off" placeholder="">
-        <mat-hint>Do NOT enter a private key!</mat-hint>
+        <mat-hint>Enter your public wallet address to continue</mat-hint>
       </mat-form-field>
 
       <div class="authenticate" *ngIf="publicKey.value">
@@ -16,8 +18,13 @@
 
         <p class="text-center light">Scan with Stratis Wallet</p>
 
-        <button mat-flat-button color="primary" class="w-100 mt-4">Continue</button>
-        <p class="error mt-3 bold" *ngIf="error">Invalid key.</p>
+        <mat-divider></mat-divider>
+
+        <button mat-flat-button color="primary" class="w-100 mt-4" [disabled]="submitting">Devnet Continue</button>
+
+        <mat-progress-bar mode="indeterminate" *ngIf="submitting" class="mt-3"></mat-progress-bar>
+
+        <p class="error mt-3 bold mb-0" *ngIf="error">Invalid public key</p>
       </div>
     </form>
 
