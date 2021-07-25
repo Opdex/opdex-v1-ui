@@ -14,5 +14,9 @@
   </p>
 </ng-container>
 
-<ng-template #loading>{{event.subEventType === 'AddLiquidity' ? 'Added' : 'Removed'}} <strong>0.00000000</strong> xYZT and <strong>0.00000000</strong> xABT
-  of liquidity {{event.subEventType === 'AddLiquidity' ? 'for' : 'burning'}} <strong>0.00000000</strong> LPT</ng-template>
+<ng-template #loading>
+  {{event.subEventType === 'AddLiquidity' ? 'Added' : 'Removed'}}
+  <strong>{{event.amountCrs | formatNumber:8}}</strong> CRS and
+  <strong>{{event.amountSrc | formatNumber:8 }}</strong> SRC
+  of liquidity {{event.subEventType === 'AddLiquidity' ? 'for' : 'burning'}}
+  <strong>{{event.amountLpt | formatNumber:8 }}</strong> LPT</ng-template>

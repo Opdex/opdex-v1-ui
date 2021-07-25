@@ -1,3 +1,4 @@
+import { IAddressBalanceResponse } from '@sharedModels/responses/platform-api/Addresses/address_balance.interface';
 import { Router } from '@angular/router';
 import { JwtService } from './../utility/jwt.service';
 import { Injectable } from '@angular/core';
@@ -9,7 +10,6 @@ import { Observable } from 'rxjs';
 import { ILiquidityPoolSnapshotHistoryResponse, ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
 import { TransactionRequest } from '@sharedModels/requests/transactions-filter';
-import { ITransactionResponse } from '@sharedModels/responses/platform-api/Transactions/transaction-response';
 import { ITransactionsResponse } from '@sharedModels/responses/platform-api/Transactions/transactions-response';
 import { IAddressAllowanceResponse } from '@sharedModels/responses/platform-api/Addresses/address-allowance.interface';
 
@@ -199,6 +199,10 @@ export class PlatformApiService extends RestApiService {
 
   public getAllowance(owner: string, spender: string, token: string): Observable<IAddressAllowanceResponse> {
     return this.get<any>(`${this.api}/wallet/${owner}/allowance/${token}/approved/${spender}`);
+  }
+
+  public getBalance(owner: string, token: string): Observable<IAddressBalanceResponse> {
+    return this.get<any>(`${this.api}/wallet/${owner}/balance/${token}`);
   }
 }
 

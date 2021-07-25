@@ -7,4 +7,7 @@
   {{event.amountCrsOut === '0.00000000' ? pool.token.src.symbol : 'CRS' }}
 </p>
 
-<ng-template #loading>Swapped <strong>0.00000000</strong> xYZT for <strong>0.00000000</strong> xABT</ng-template>
+<ng-template #loading>
+  Swapped <strong>{{(event.amountCrsIn === '0.00000000' ? event.amountSrcIn : event.amountCrsIn) }}</strong> xYZT for
+  <strong>{{(event.amountCrsOut === '0.00000000' ? event.amountSrcOut : event.amountCrsOut) }}</strong> xABT
+</ng-template>

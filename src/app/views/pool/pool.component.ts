@@ -1,14 +1,15 @@
 import { environment } from '@environments/environment';
 import { UserContextService } from '@sharedServices/user-context.service';
-import { take, tap } from 'rxjs/operators';
+import { take, tap, switchMap, catchError } from 'rxjs/operators';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SidenavService } from '@sharedServices/sidenav.service';
 import { TransactionView } from '@sharedModels/transaction-view';
-import { timer, Subscription } from 'rxjs';
+import { timer, Subscription, Observable, of } from 'rxjs';
 import { ILiquidityPoolSnapshotHistoryResponse, ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
+import { IAddressBalanceResponse } from '@sharedModels/responses/platform-api/Addresses/address_balance.interface';
 
 @Component({
   selector: 'opdex-pool',
@@ -19,6 +20,8 @@ export class PoolComponent implements OnInit, OnDestroy {
   poolAddress: string;
   pool: ILiquidityPoolSummaryResponse;
   poolHistory: ILiquidityPoolSnapshotHistoryResponse;
+  crsBalance: IAddressBalanceResponse;
+  srcBalance$: Observable<IAddressBalanceResponse>;
   transactions: any[];
   liquidityHistory: any[] = [];
   stakingHistory: any[] = [];
@@ -58,9 +61,20 @@ export class PoolComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
+    const context = this._userContext.getUserContext();
+
     // 10 seconds refresh view
     this.subscription.add(
-      timer(0, 10000)
+      timer(0, 30000)
+        .pipe(
+          switchMap(() => {
+            if (context.wallet) {
+              return this._platformApiService.getBalance(context.wallet, 'CRS')
+                .pipe(tap((rsp: IAddressBalanceResponse) => this.crsBalance = rsp), catchError(() => of(null)));
+            }
+            return of();
+          })
+        )
         .subscribe(async () => {
           await Promise.all([
             this.getPool(),
@@ -92,7 +106,7 @@ export class PoolComponent implements OnInit, OnDestroy {
           if (pool?.mining?.address) contracts.push(pool.mining.address);
 
           this.transactionsRequest = {
-            limit: 25,
+            limit: 10,
             direction: "DESC",
             contracts: contracts,
             eventTypes: ['SwapEvent', 'ProvideEvent', 'StakeEvent', 'CollectStakingRewardsEvent', 'MineEvent', 'CollectMiningRewardsEvent', 'EnableMiningEvent', 'NominationEvent', ]
