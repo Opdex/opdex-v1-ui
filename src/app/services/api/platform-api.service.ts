@@ -54,7 +54,7 @@ export class PlatformApiService extends RestApiService {
   // Tokens
   //////////////
 
-  public getToken(address: string): Observable<any> {
+  public getToken(address: string, ): Observable<any> {
     return this.get<any>(`${this.api}/tokens/${address}`);
   }
 
@@ -62,8 +62,8 @@ export class PlatformApiService extends RestApiService {
     return this.get<any>(`${this.api}/tokens/${address}/history?timeSpan=${timeSpan}&candleSpan=${candleSpan}`);
   }
 
-  public getTokens(): Observable<any[]> {
-    return this.get<any[]>(`${this.api}/tokens`);
+  public getTokens(limit: number = 10, includeLpt: boolean = false): Observable<any[]> {
+    return this.get<any[]>(`${this.api}/tokens?take=${limit}&lpToken=${includeLpt}`);
   }
 
   //////////////
