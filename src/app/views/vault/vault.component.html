@@ -6,18 +6,9 @@
       </div>
     </div>
     <div class="row mb-5">
-      <!-- <div class="col">
-        <opdex-stat-card title="Locked Tokens" value="100,000,000 ODX"></opdex-stat-card>
+      <div *ngFor="let statCard of statCards" class="col-12 col-md-6 col-xl">
+        <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
       </div>
-      <div class="col">
-        <opdex-stat-card title="Unassigned Tokens" value="50,000,000 ODX"></opdex-stat-card>
-      </div> -->
-      <!-- <div class="col">
-        <opdex-stat-card title="Collected Tokens" value="0 ODX"></opdex-stat-card>
-      </div>
-      <div class="col">
-        <opdex-stat-card title="Maximum Received" value="250,000,000 ODX"></opdex-stat-card>
-      </div> -->
     </div>
     <div class="row">
       <div class="col">

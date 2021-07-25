@@ -9,6 +9,7 @@ import { TransactionView } from '@sharedModels/transaction-view';
 import { timer, Subscription } from 'rxjs';
 import { ILiquidityPoolSnapshotHistoryResponse, ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
+import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
 
 @Component({
   selector: 'opdex-pool',
@@ -46,7 +47,7 @@ export class PoolComponent implements OnInit, OnDestroy {
     }
   ]
   selectedChart = this.chartOptions[0];
-
+  statCards: StatCardInfo[];
 
   constructor(
     private _route: ActivatedRoute,
@@ -97,9 +98,58 @@ export class PoolComponent implements OnInit, OnDestroy {
             contracts: contracts,
             eventTypes: ['SwapEvent', 'ProvideEvent', 'StakeEvent', 'CollectStakingRewardsEvent', 'MineEvent', 'CollectMiningRewardsEvent', 'EnableMiningEvent', 'NominationEvent', ]
           };
+          if (this.pool){
+            this.setPoolStatCards();
+          }
         })
       )
       .subscribe();
+  }
+
+  private setPoolStatCards(): void {
+    this.statCards = [
+      {
+        title: 'Liquidity', 
+        value: this.pool.reserves.usd.toString(),
+        preSymbol: '$',
+        change: this.pool.reserves.usdDailyChange,
+        helpInfo: {
+          title: 'Liquidity Help',
+          paragraph: 'This modal is providing help for Liquidity'
+        }
+      },
+      {
+        title: 'Staking Weight', 
+        value: this.pool.staking?.weight,
+        postSymbol: this.pool.token.staking?.symbol,
+        change: this.pool.staking?.weightDailyChange || 0,
+        formatNumber: 0, 
+        helpInfo: {
+          title: 'Staking Weight Help',
+          paragraph: 'This modal is providing help for Staking Weight.'
+        }
+      },
+      {
+        title: 'Volume', 
+        value: this.pool.volume.usd.toString(),
+        preSymbol: '$',
+        daily: true,
+        helpInfo: {
+          title: 'Volume Help',
+          paragraph: 'This modal is providing help for Volume'
+        }
+      },
+      {
+        title: 'Rewards', 
+        value: this.pool.rewards.totalUsd.toString(),
+        daily: true,
+        preSymbol: '$',
+        helpInfo: {
+          title: 'Rewards Help',
+          paragraph: 'This modal is providing help for Rewards'
+        }
+      }
+    ];
   }
 
   private getWalletSummary(): void {

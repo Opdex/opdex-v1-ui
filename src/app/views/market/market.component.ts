@@ -41,7 +41,7 @@ export class MarketComponent implements OnInit {
       suffix: 'ODX'
     }
   ];
-  statCards: [StatCardInfo];
+  statCards: StatCardInfo[];
 
   selectedChart = this.chartOptions[0];
 
@@ -63,20 +63,65 @@ export class MarketComponent implements OnInit {
       .pipe(take(1))
       .subscribe((market) => {
         this.market = market;
-        this.statCards = [
-          {
-            title: 'Cirrus (CRS)', 
-            value: this.market.crsToken.summary.price.close,
-            symbol: '$',
-            formatNumber: 2, 
-            change: this.market.crsToken.summary.dailyPriceChange,
-            helpInfo: {
-              title: 'Cirrus (CRS) Help',
-              paragraph: 'This modal is providing help for Cirrus (CRS)'
-            }
-          }
-        ];
+        this.setMarketStatCards();
       });
+  }
+
+  private setMarketStatCards(): void {
+    this.statCards = [
+      {
+        title: 'Cirrus (CRS)', 
+        value: this.market.crsToken.summary.price.close,
+        preSymbol: '$',
+        formatNumber: 2, 
+        change: this.market.crsToken.summary.dailyPriceChange,
+        helpInfo: {
+          title: 'Cirrus (CRS) Help',
+          paragraph: 'This modal is providing help for Cirrus (CRS)'
+        }
+      },
+      {
+        title: 'Liquidity', 
+        value: this.market.summary.liquidity,
+        preSymbol: '$',
+        change: this.market.summary.liquidityDailyChange,
+        helpInfo: {
+          title: 'Liquidity Help',
+          paragraph: 'This modal is providing help for Liquidity'
+        }
+      },
+      {
+        title: 'Staking Weight', 
+        value: this.market.summary.staking.weight,
+        postSymbol: this.market.stakingToken.symbol,
+        change: this.market.summary.staking.weightDailyChange,
+        formatNumber: 0, 
+        helpInfo: {
+          title: 'Staking Weight Help',
+          paragraph: 'This modal is providing help for Staking Weight.'
+        }
+      },
+      {
+        title: 'Volume', 
+        value: this.market.summary.volume,
+        preSymbol: '$',
+        daily: true,
+        helpInfo: {
+          title: 'Volume Help',
+          paragraph: 'This modal is providing help for Volume'
+        }
+      },
+      {
+        title: 'Rewards', 
+        value: this.market.summary.rewards.totalUsd,
+        daily: true,
+        preSymbol: '$',
+        helpInfo: {
+          title: 'Rewards Help',
+          paragraph: 'This modal is providing help for Rewards'
+        }
+      }
+    ];
   }
 
   private getMarketHistory(): void {

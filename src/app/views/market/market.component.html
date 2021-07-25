@@ -15,21 +15,9 @@
 
         <div class="stats">
           <div class="row">
-            <div class="col-12 col-md-6 col-xl-3">
-              <opdex-stat-card [statInfo]="statCards[0]"></opdex-stat-card>
+            <div *ngFor="let statCard of statCards" class="col-12 col-md-6 col-xl">
+              <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
             </div>
-            <!-- <div class="col-12 col-md-6 col-xl">
-              <opdex-stat-card title="Liquidity" value="${{market.summary.liquidity | formatNumber:0}}" [change]="market.summary.liquidityDailyChange"></opdex-stat-card>
-            </div>
-            <div class="col-12 col-md-6 col-xl">
-              <opdex-stat-card title="Staking Weight" value="{{market.summary.staking.weight | formatNumber:0}} {{market.stakingToken.symbol}}" [change]="market.summary.staking.weightDailyChange"></opdex-stat-card>
-            </div>
-            <div class="col-12 col-md-6 col-xl">
-              <opdex-stat-card title="Volume" [daily]="true" value="${{market.summary.volume | formatNumber:0}}"></opdex-stat-card>
-            </div>
-            <div class="col-12 col-md-6 col-xl">
-              <opdex-stat-card title="Rewards" [daily]="true" value="${{market.summary.rewards.totalUsd | formatNumber}}"></opdex-stat-card>
-            </div> -->
           </div>
         </div>
       </div>

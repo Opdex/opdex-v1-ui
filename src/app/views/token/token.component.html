@@ -7,18 +7,9 @@
 
         <div class="stats mt-4">
           <div class="row">
-            <!-- <div class="col-12 col-md-6 col-xl">
-              <opdex-stat-card title="Price" value="${{token.summary.price.close | formatNumber:2}}" [change]="token.summary.dailyPriceChange"></opdex-stat-card>
+            <div *ngFor="let statCard of statCards" class="col-12 col-md-6 col-xl">
+              <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
             </div>
-            <div class="col-12 col-md-6 col-xl">
-              <opdex-stat-card title="Total Supply" value="{{token.totalSupply | formatNumber:token.decimals}}"></opdex-stat-card>
-            </div> -->
-            <!-- <div class="col-12 col-md-6 col-xl">
-              <opdex-stat-card title="Liquidity" value="$1,754,342,353"></opdex-stat-card>
-            </div>
-            <div class="col-12 col-md-6 col-xl">
-              <opdex-stat-card title="Fees" value="$329,199.41"></opdex-stat-card>
-            </div> -->
           </div>
         </div>
       </div>

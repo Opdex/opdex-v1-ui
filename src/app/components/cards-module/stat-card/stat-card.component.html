@@ -7,10 +7,10 @@
 
     <div class="stat">
       <p class="stat-value">
-        {{statInfo.symbol}}{{statInfo.value | formatNumber: statInfo.formatNumber}}
+        {{statInfo.preSymbol}}{{statInfo.value | formatNumber: statInfo.formatNumber}} {{statInfo.postSymbol}}
       </p>
 
-      <opdex-change-indicator [value]="statInfo.change" *ngIf="statInfo.change !== null"></opdex-change-indicator>
+      <opdex-change-indicator [value]="statInfo.change" *ngIf="statInfo.change !== null && statInfo.change !== undefined"></opdex-change-indicator>
     </div>
   </opdex-card>
 </div>
