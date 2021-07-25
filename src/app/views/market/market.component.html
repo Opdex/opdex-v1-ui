@@ -101,7 +101,7 @@
     </div>
 
     <div class="row">
-      <div class="col-12 col-xl-8">
+      <div class="col-12 col-lg-8">
         <opdex-card class="p-0">
           <opdex-line-chart
             [chartData]="chartData"
@@ -113,7 +113,7 @@
         </opdex-card>
       </div>
 
-      <div class="col-12 col-xl-4">
+      <div class="col-12 col-lg-4">
         <opdex-tx-feed [transactionRequest]="transactionRequest"></opdex-tx-feed>
         <!-- <opdex-card>
           <opdex-volume-chart [chartData]="volumeHistory" title="Market Volume" *ngIf="volumeHistory"></opdex-volume-chart>
@@ -128,7 +128,7 @@
 
           <div class="row">
             <ng-container *ngFor="let pool of miningPools">
-              <div class="col-12 col-xl-3">
+              <div class="col-12 col-md-6 col-xl-3">
                 <opdex-mining-card [pool]="pool"></opdex-mining-card>
               </div>
             </ng-container>

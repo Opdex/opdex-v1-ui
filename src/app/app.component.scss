@@ -24,6 +24,7 @@ opdex-side-nav {
   display: flex;
   flex: 1;
   flex-direction: column;
+  margin-bottom: 60px;
 }
 
 .background {
@@ -31,9 +32,7 @@ opdex-side-nav {
   height: 100%;
   background-image: url('/assets/bg.png');
   background-size: cover;
-  background-attachment: fixed;
   position: fixed;
-  background-position: center 80%;
 }
 
 .sidenav {
@@ -89,6 +88,7 @@ opdex-side-nav {
 
   #page-content {
     margin-left: $sidebar-width;
+    margin-bottom: auto;
 
     &.no-sidebar,.loaded {
       margin-left: 0px;

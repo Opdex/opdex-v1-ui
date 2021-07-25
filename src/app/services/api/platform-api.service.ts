@@ -197,6 +197,10 @@ export class PlatformApiService extends RestApiService {
     return this.get<any>(`${this.api}/wallet/${owner}/allowance/approved?token=${token}&spender=${spender}`);
   }
 
+  public getWalletBalances(wallet: string) {
+    return this.get<any>(`${this.api}/wallet/${wallet}/balance?limit=${10}&direction=ASC&includeLpTokens=false`);
+  }
+
   public getAllowance(owner: string, spender: string, token: string): Observable<IAddressAllowanceResponse> {
     return this.get<any>(`${this.api}/wallet/${owner}/allowance/${token}/approved/${spender}`);
   }
