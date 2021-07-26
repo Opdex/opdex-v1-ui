@@ -19,15 +19,12 @@ export class HelpIconComponent implements OnDestroy {
 
   openHelp(): void {
     const dialogRef = this.dialog.open(HelpModalComponent, {
-      width: '250px',
+      width: '500px',
       data: this.info
     });
 
     this.helpIconSubscription.add(
-      dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was closed');
-        console.log(result);
-      })
+      dialogRef.afterClosed().subscribe(result => {})
     );
   }
 
