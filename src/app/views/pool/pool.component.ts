@@ -1,14 +1,15 @@
 import { environment } from '@environments/environment';
 import { UserContextService } from '@sharedServices/user-context.service';
-import { take, tap } from 'rxjs/operators';
+import { take, tap, switchMap, catchError } from 'rxjs/operators';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SidenavService } from '@sharedServices/sidenav.service';
 import { TransactionView } from '@sharedModels/transaction-view';
-import { timer, Subscription } from 'rxjs';
+import { timer, Subscription, Observable, of, zip } from 'rxjs';
 import { ILiquidityPoolSnapshotHistoryResponse, ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
+import { IAddressBalanceResponse } from '@sharedModels/responses/platform-api/Addresses/address_balance.interface';
 
 @Component({
   selector: 'opdex-pool',
@@ -19,6 +20,8 @@ export class PoolComponent implements OnInit, OnDestroy {
   poolAddress: string;
   pool: ILiquidityPoolSummaryResponse;
   poolHistory: ILiquidityPoolSnapshotHistoryResponse;
+  crsBalance: IAddressBalanceResponse;
+  srcBalance$: Observable<IAddressBalanceResponse>;
   transactions: any[];
   liquidityHistory: any[] = [];
   stakingHistory: any[] = [];
@@ -58,16 +61,13 @@ export class PoolComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    // 10 seconds refresh view
+    // 30 seconds refresh view
     this.subscription.add(
-      timer(0, 10000)
-        .subscribe(async () => {
-          await Promise.all([
-            this.getPool(),
-            this.getPoolHistory(),
-            this.getWalletSummary()
-          ]);
-        }));
+      timer(0, 30000)
+        .pipe(
+          // RXJS implementation of Promise.All, fire all requests at the same time
+          switchMap(() => zip(this.getPool(), this.getPoolHistory(), this.getCrsBalance(), this.getWalletSummary()))
+        ).subscribe());
   }
 
   openTransactionSidebar(view: TransactionView, childView: string = null) {
@@ -79,8 +79,8 @@ export class PoolComponent implements OnInit, OnDestroy {
     this._sidenav.openSidenav(view, data);
   }
 
-  private getPool(): void {
-    this._platformApiService.getPool(this.poolAddress)
+  private getPool(): Observable<ILiquidityPoolSummaryResponse> {
+    return this._platformApiService.getPool(this.poolAddress)
       .pipe(
         take(1),
         tap(pool => this.pool = pool),
@@ -89,65 +89,76 @@ export class PoolComponent implements OnInit, OnDestroy {
 
           var contracts = [pool.address, pool.token.src.address, miningGovernance];
 
-          if (pool?.mining?.address) contracts.push(pool.mining.address);
+          if (pool?.mining?.address)
+            contracts.push(pool.mining.address);
 
           this.transactionsRequest = {
-            limit: 25,
+            limit: 10,
             direction: "DESC",
             contracts: contracts,
-            eventTypes: ['SwapEvent', 'ProvideEvent', 'StakeEvent', 'CollectStakingRewardsEvent', 'MineEvent', 'CollectMiningRewardsEvent', 'EnableMiningEvent', 'NominationEvent', ]
+            eventTypes: ['SwapEvent', 'ProvideEvent', 'StakeEvent', 'CollectStakingRewardsEvent', 'MineEvent', 'CollectMiningRewardsEvent', 'EnableMiningEvent', 'NominationEvent',]
           };
         })
-      )
-      .subscribe();
+      );
   }
 
-  private getWalletSummary(): void {
+  private getCrsBalance(): Observable<IAddressBalanceResponse> {
     const context = this._userContext.getUserContext();
+
     if (context.wallet) {
-      this._platformApiService.getWalletSummaryForPool(this.poolAddress, context.wallet)
-        .pipe(take(1))
-        .subscribe(walletSummary => {
-          this.walletBalance = walletSummary;
-        })
+      return this._platformApiService.getBalance(context.wallet, 'CRS')
+        .pipe(tap((rsp: IAddressBalanceResponse) => this.crsBalance = rsp), catchError(() => of(null)));
     }
+
+    return of();
   }
 
-  private getPoolHistory(): void {
-    this._platformApiService.getPoolHistory(this.poolAddress)
-      .pipe(take(1))
-      .subscribe(poolHistory => {
-        this.poolHistory = poolHistory;
+  private getWalletSummary(): Observable<any> {
+    const context = this._userContext.getUserContext();
 
-        let liquidityPoints = [];
-        let volumePoints = [];
-        let stakingPoints = [];
+    if (context.wallet) {
+      return this._platformApiService.getWalletSummaryForPool(this.poolAddress, context.wallet)
+        .pipe(take(1), tap(walletSummary => this.walletBalance = walletSummary));
+    }
 
-        this.poolHistory.snapshotHistory.forEach(history => {
-          const time = Date.parse(history.startDate.toString())/1000;
+    return of();
+  }
 
-          liquidityPoints.push({
-            time,
-            value: history.reserves.usd
+  private getPoolHistory(): Observable<ILiquidityPoolSnapshotHistoryResponse> {
+    return this._platformApiService.getPoolHistory(this.poolAddress)
+      .pipe(take(1),
+        tap((poolHistory: ILiquidityPoolSnapshotHistoryResponse) => {
+          this.poolHistory = poolHistory;
+
+          let liquidityPoints = [];
+          let volumePoints = [];
+          let stakingPoints = [];
+
+          this.poolHistory.snapshotHistory.forEach(history => {
+            const time = Date.parse(history.startDate.toString()) / 1000;
+
+            liquidityPoints.push({
+              time,
+              value: history.reserves.usd
+            });
+
+            volumePoints.push({
+              time,
+              value: history.volume.usd
+            });
+
+            stakingPoints.push({
+              time,
+              value: parseFloat(history.staking.weight.split('.')[0])
+            });
           });
 
-          volumePoints.push({
-            time,
-            value: history.volume.usd
-          });
+          this.liquidityHistory = liquidityPoints;
+          this.volumeHistory = volumePoints;
+          this.stakingHistory = stakingPoints;
 
-          stakingPoints.push({
-            time,
-            value: parseFloat(history.staking.weight.split('.')[0])
-          });
-        });
-
-        this.liquidityHistory = liquidityPoints;
-        this.volumeHistory = volumePoints;
-        this.stakingHistory = stakingPoints;
-
-        this.handleChartTypeChange(this.selectedChart.category);
-      });
+          this.handleChartTypeChange(this.selectedChart.category);
+        }));
   }
 
   copyHandler($event) {
