@@ -39,7 +39,8 @@ export class AppComponent implements OnInit {
     private _api: PlatformApiService,
     private _context: UserContextService
   ) {
-    this.context$ = this._context.getUserContext$();
+    this.context$ = this._context.getUserContext$()
+      .pipe(tap(context => this.context = context));
     this.latestSyncedBlock$ = this._api.getLatestSyncedBlock();
     this.network = environment.network;
   }
@@ -47,9 +48,11 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.context = this._context.getUserContext();
 
-    this.subscription.add(
-      this._api.auth(environment.marketAddress, this.context?.wallet)
-        .subscribe(jwt => this._context.setToken(jwt)));
+    if (this.context?.wallet) {
+      this.subscription.add(
+        this._api.auth(environment.marketAddress, this.context?.wallet)
+          .subscribe(jwt => this._context.setToken(jwt)));
+    }
 
     this._theme.getTheme().subscribe(theme => this.setTheme(theme));
 

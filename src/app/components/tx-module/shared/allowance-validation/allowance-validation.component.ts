@@ -1,3 +1,4 @@
+import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { SidenavService } from '@sharedServices/sidenav.service';
 import { Component, Input } from '@angular/core';
 import { TransactionView } from '@sharedModels/transaction-view';
@@ -8,7 +9,7 @@ import { TransactionView } from '@sharedModels/transaction-view';
   styleUrls: ['./allowance-validation.component.scss']
 })
 export class AllowanceValidationComponent {
-  @Input() allowance: any;
+  @Input() allowance: AllowanceValidation;
 
   constructor(private _sidenav: SidenavService) { }
 

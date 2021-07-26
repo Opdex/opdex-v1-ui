@@ -41,7 +41,7 @@
         </opdex-card>
       </div>
 
-      <div class="col-12 col-xl">
+      <div class="col-12 col-md-6 col-xl">
         <opdex-card [fullHeight]="true">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="mb-0">
@@ -70,7 +70,7 @@
         </opdex-card>
       </div>
 
-      <div class="col-12 col-xl">
+      <div class="col-12 col-md-6 col-xl">
         <opdex-card [fullHeight]="true">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="mb-0 align-items-center d-flex">
@@ -90,8 +90,20 @@
     </div>
 
     <div class="row">
-      <div *ngFor="let statCard of statCards" class="col-12 col-md-6 col-xl">
-        <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
+      <div *ngFor="let statCard of statCards" class="col-12 col-md-6 col-lg">
+        <opdex-stat-card *ngIf="statCard.title !== 'Liquidity Mining'" [statInfo]="statCard"></opdex-stat-card>
+      </div>
+      <div class="col-12 col-md-6 col-xl" *ngIf="pool.mining != null && (pool.mining?.isActive || pool.mining?.tokensMining !== '0.00000000')">
+        <opdex-stat-card [statInfo]="{
+          title: 'Liquidity Mining', 
+          value: this.pool.mining?.tokensMining,
+          formatNumber: 0, 
+          postSymbol: this.pool.token.lp.symbol,
+          helpInfo: {
+            title: 'Liquidity Mining Help',
+            paragraph: 'This modal is providing help for Liquidity Mining'
+          }
+        }"></opdex-stat-card>
       </div>
     </div>
 

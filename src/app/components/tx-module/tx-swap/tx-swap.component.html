@@ -9,13 +9,13 @@
         <mat-icon matPrefix>remove</mat-icon>
       </button>
 
-      <input matInput type="text" [formControl]="token0Amount" placeholder="0.00" autocomplete="off">
+      <input matInput type="text" [formControl]="tokenInAmount" placeholder="0.00" autocomplete="off">
 
-      <button mat-button matSuffix (click)="changeToken('token0')">
-        {{token0Details?.symbol || 'CRS'}}
+      <button mat-button matSuffix (click)="changeToken('tokenIn')">
+        {{tokenInDetails?.symbol || 'CRS'}}
       </button>
 
-      <mat-hint *ngIf="token0Amount.value">$100.00</mat-hint>
+      <mat-hint *ngIf="tokenInAmount.value">$100.00</mat-hint>
     </mat-form-field>
 
     <div class="switch">
@@ -29,19 +29,19 @@
         <mat-icon matPrefix>add</mat-icon>
       </button>
 
-      <input matInput type="text" [value]="token1Amount?.value" placeholder="0.00" autocomplete="off">
+      <input matInput type="text" [formControl]="tokenOutAmount" placeholder="0.00" autocomplete="off">
 
-      <button mat-button matSuffix (click)="changeToken('token1')">
-        {{token1Details?.symbol || 'Select Token'}}
+      <button mat-button matSuffix (click)="changeToken('tokenOut')">
+        {{tokenOutDetails?.symbol || 'Select Token'}}
       </button>
 
-      <mat-hint *ngIf="token1Amount.value">$100.00 <span class="mr-2">(2.95%)</span></mat-hint>
+      <mat-hint *ngIf="tokenOutAmount.value">$100.00 <span class="mr-2">(2.95%)</span></mat-hint>
     </mat-form-field>
   </form>
 
   <div class="space-between"></div>
 
-  <!-- <div class="swap-info mt-1" *ngIf="form.controls.token0.value > 0 && form.controls.to.value > 0">
+  <!-- <div class="swap-info mt-1" *ngIf="form.controls.tokenIn.value > 0 && form.controls.to.value > 0">
     <p class="mb-0">Slippage: .1%</p>
     <p class="mb-0">Minimum Received: 12345</p>
     <p class="mb-0">Price: 12345</p>

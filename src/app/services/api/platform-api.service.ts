@@ -11,6 +11,7 @@ import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool
 import { TransactionRequest } from '@sharedModels/requests/transactions-filter';
 import { ITransactionResponse } from '@sharedModels/responses/platform-api/Transactions/transaction-response';
 import { ITransactionsResponse } from '@sharedModels/responses/platform-api/Transactions/transactions-response';
+import { IAddressAllowanceResponse } from '@sharedModels/responses/platform-api/Addresses/address-allowance.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -57,8 +58,8 @@ export class PlatformApiService extends RestApiService {
     return this.get<any>(`${this.api}/tokens/${address}`);
   }
 
-  public getTokenHistory(address: string): Observable<any> {
-    return this.get<any>(`${this.api}/tokens/${address}/history?timeSpan=1Y&candleSpan=Hourly`);
+  public getTokenHistory(address: string, timeSpan: string = '1Y', candleSpan: string = 'Hourly'): Observable<any> {
+    return this.get<any>(`${this.api}/tokens/${address}/history?timeSpan=${timeSpan}&candleSpan=${candleSpan}`);
   }
 
   public getTokens(): Observable<any[]> {
@@ -194,6 +195,14 @@ export class PlatformApiService extends RestApiService {
 
   public getApprovedAllowance(owner: string, spender: string, token: string): Observable<any> {
     return this.get<any>(`${this.api}/wallet/${owner}/allowance/approved?token=${token}&spender=${spender}`);
+  }
+
+  public getWalletBalances(wallet: string) {
+    return this.get<any>(`${this.api}/wallet/${wallet}/balance?limit=${10}&direction=ASC&includeLpTokens=false`);
+  }
+
+  public getAllowance(owner: string, spender: string, token: string): Observable<IAddressAllowanceResponse> {
+    return this.get<any>(`${this.api}/wallet/${owner}/allowance/${token}/approved/${spender}`);
   }
 }
 
