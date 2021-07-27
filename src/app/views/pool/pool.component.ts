@@ -26,6 +26,8 @@ export class PoolComponent implements OnInit, OnDestroy {
   liquidityHistory: any[] = [];
   stakingHistory: any[] = [];
   volumeHistory: any[] = [];
+  crsPerSrcHistory: any[] = [];
+  srcPerCrsHistory: any[] = [];
   walletBalance: any;
   subscription = new Subscription();
   copied: boolean;
@@ -35,17 +37,32 @@ export class PoolComponent implements OnInit, OnDestroy {
     {
       type: 'line',
       category: 'Liquidity',
-      prefix: '$'
+      prefix: '$',
+      decimals: 2
     },
     {
       type: 'bar',
       category: 'Volume',
-      prefix: '$'
+      prefix: '$',
+      decimals: 2
     },
     {
       type: 'line',
       category: 'Staking Weight',
-      suffix: 'ODX'
+      suffix: 'ODX',
+      decimals: 2
+    },
+    {
+      type: 'candle',
+      category: 'SRC/CRS Cost',
+      suffix: 'SRC',
+      decimals: 8
+    },
+    {
+      type: 'candle',
+      category: 'CRS/SRC Cost',
+      suffix: 'CRS',
+      decimals: 8
     }
   ]
   selectedChart = this.chartOptions[0];
@@ -66,7 +83,21 @@ export class PoolComponent implements OnInit, OnDestroy {
       timer(0, 30000)
         .pipe(
           // RXJS implementation of Promise.All, fire all requests at the same time
-          switchMap(() => zip(this.getPool(), this.getPoolHistory(), this.getCrsBalance(), this.getWalletSummary()))
+          switchMap(() => zip(this.getPool(), this.getPoolHistory(), this.getCrsBalance(), this.getWalletSummary())),
+          tap(() => {
+            this.chartOptions.map(o => {
+              if (o.suffix === 'SRC') {
+                o.suffix = this.pool.token.src.symbol;
+                o.decimals = this.pool.token.src.decimals
+              }
+
+              if (o.category.includes('SRC')) {
+                o.category = o.category.replace('SRC', this.pool.token.src.symbol);
+              }
+
+              return o;
+            });
+          })
         ).subscribe());
   }
 
@@ -133,6 +164,8 @@ export class PoolComponent implements OnInit, OnDestroy {
           let liquidityPoints = [];
           let volumePoints = [];
           let stakingPoints = [];
+          let crsPerSrcHistory = [];
+          let srcPerCrsHistory = [];
 
           this.poolHistory.snapshotHistory.forEach(history => {
             const time = Date.parse(history.startDate.toString()) / 1000;
@@ -151,11 +184,29 @@ export class PoolComponent implements OnInit, OnDestroy {
               time,
               value: parseFloat(history.staking.weight.split('.')[0])
             });
+
+            crsPerSrcHistory.push({
+              time,
+              open: history.cost.crsPerSrc.open,
+              high: history.cost.crsPerSrc.high,
+              low: history.cost.crsPerSrc.low,
+              close: history.cost.crsPerSrc.close,
+            });
+
+            srcPerCrsHistory.push({
+              time,
+              open: history.cost.srcPerCrs.open,
+              high: history.cost.srcPerCrs.high,
+              low: history.cost.srcPerCrs.low,
+              close: history.cost.srcPerCrs.close,
+            })
           });
 
           this.liquidityHistory = liquidityPoints;
           this.volumeHistory = volumePoints;
           this.stakingHistory = stakingPoints;
+          this.crsPerSrcHistory = crsPerSrcHistory;
+          this.srcPerCrsHistory = srcPerCrsHistory;
 
           this.handleChartTypeChange(this.selectedChart.category);
         }));
@@ -174,14 +225,14 @@ export class PoolComponent implements OnInit, OnDestroy {
 
     if ($event === 'Liquidity') {
       this.chartData = this.liquidityHistory;
-    }
-
-    if ($event === 'Volume') {
+    } else if ($event === 'Volume') {
       this.chartData = this.volumeHistory;
-    }
-
-    if ($event === 'Staking Weight') {
+    } else if ($event === 'Staking Weight') {
       this.chartData = this.stakingHistory;
+    } else if ($event === `CRS/${this.pool.token.src.symbol} Cost`) {
+      this.chartData = this.crsPerSrcHistory;
+    } else if ($event === `${this.pool.token.src.symbol}/CRS Cost`) {
+      this.chartData = this.srcPerCrsHistory;
     }
   }
 
