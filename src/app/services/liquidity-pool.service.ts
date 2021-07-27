@@ -5,7 +5,7 @@ import { Observable, race } from 'rxjs';
 import { tap, switchMap, skipWhile } from 'rxjs/operators';
 import { LiquidityPoolCache } from './cache/liquidity-pool-cache.service';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class LiquidityPoolService {
   cache$: Observable<Record<string, ILiquidityPoolSummaryResponse>>;
 

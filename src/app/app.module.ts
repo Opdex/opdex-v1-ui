@@ -1,6 +1,3 @@
-import { LiquidityPoolCache } from './services/cache/liquidity-pool-cache.service';
-import { LiquidityPoolService } from './services/liquidity-pool.service';
-import { TokenCache } from './services/cache/token-cache.service';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { JwtService } from './services/utility/jwt.service';
@@ -41,18 +38,15 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { LayoutModule } from '@angular/cdk/layout';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import {MatTabsModule} from '@angular/material/tabs';
-import {ClipboardModule} from '@angular/cdk/clipboard';
+import { MatTabsModule } from '@angular/material/tabs';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { GovernanceComponent } from './views/governance/governance.component';
 import { VaultComponent } from './views/vault/vault.component';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { jwtOptionsFactory } from '@sharedServices/utility/jwt.service';
 import { QRCodeModule } from 'angularx-qrcode';
-import { TokenService } from '@sharedServices/token.service';
-
-
 
 @NgModule({
   declarations: [
@@ -106,7 +100,7 @@ import { TokenService } from '@sharedServices/token.service';
       }
     })
   ],
-  providers: [JwtService, LiquidityPoolService, LiquidityPoolCache],
+  providers: [JwtService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

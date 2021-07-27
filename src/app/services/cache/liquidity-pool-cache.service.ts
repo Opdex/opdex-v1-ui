@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class LiquidityPoolCache {
   private cache: Record<string, BehaviorSubject<ILiquidityPoolSummaryResponse>> = {};
 
