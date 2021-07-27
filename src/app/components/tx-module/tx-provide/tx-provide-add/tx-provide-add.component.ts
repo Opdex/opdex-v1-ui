@@ -3,7 +3,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from '@environments/environment';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { ILiquidityPoolSummaryResponse, IToken } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/user-context.service';
 import { Observable, throwError } from 'rxjs';
@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, switchMap, take, tap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
+import { IToken } from '@sharedModels/responses/platform-api/token.interface';
 
 @Component({
   selector: 'opdex-tx-provide-add',

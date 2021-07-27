@@ -1,3 +1,4 @@
+import { TokenService } from '@sharedServices/token.service';
 import { take } from 'rxjs/operators';
 import { OnChanges } from '@angular/core';
 import { Component, Input } from '@angular/core';
@@ -35,7 +36,7 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
   constructor(
     private _fb: FormBuilder,
     protected _dialog: MatDialog,
-    private _platformApi: PlatformApiService,
+    private _tokenService: TokenService,
     protected _userContext: UserContextService
   ) {
     super(_userContext, _dialog);
@@ -59,7 +60,7 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
   }
 
   submit() {
-    this._platformApi.getToken(this.token.value)
+    this._tokenService.getToken(this.token.value)
       .pipe(take(1))
       .subscribe(response => {
         const payload = {

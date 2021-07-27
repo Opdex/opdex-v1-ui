@@ -1,4 +1,4 @@
-import { IToken } from "../Pools/liquidity-pool.interface";
+import { IToken } from "../token.interface";
 
 export interface IGovernanceResponseModel {
   address: string;

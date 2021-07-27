@@ -1,3 +1,6 @@
+import { LiquidityPoolCache } from './services/cache/liquidity-pool-cache.service';
+import { LiquidityPoolService } from './services/liquidity-pool.service';
+import { TokenCache } from './services/cache/token-cache.service';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { JwtService } from './services/utility/jwt.service';
@@ -47,7 +50,7 @@ import { VaultComponent } from './views/vault/vault.component';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { jwtOptionsFactory } from '@sharedServices/utility/jwt.service';
 import { QRCodeModule } from 'angularx-qrcode';
-import { TimeagoModule } from 'ngx-timeago';
+import { TokenService } from '@sharedServices/token.service';
 
 
 
@@ -103,7 +106,7 @@ import { TimeagoModule } from 'ngx-timeago';
       }
     })
   ],
-  providers: [JwtService],
+  providers: [JwtService, LiquidityPoolService, LiquidityPoolCache],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { ITransactionEventResponse, IMineEventResponse } from '@sharedModels/responses/platform-api/Transactions/transaction-response';
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
+import { LiquidityPoolService } from '@sharedServices/liquidity-pool.service';
+import { TokenService } from '@sharedServices/token.service';
 import { Observable } from 'rxjs';
 import { TxEventBaseComponent } from '../../tx-event-base.component';
 
@@ -15,8 +16,8 @@ export class MineEventComponent extends TxEventBaseComponent {
   event: IMineEventResponse;
   pool$: Observable<ILiquidityPoolSummaryResponse>;
 
-  constructor(protected _platformApi: PlatformApiService) {
-    super(_platformApi);
+  constructor(protected _liquidityPoolService: LiquidityPoolService, protected _tokenService: TokenService) {
+    super(_liquidityPoolService, _tokenService);
   }
 
   ngOnChanges() {

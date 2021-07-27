@@ -1,3 +1,4 @@
+import { shareReplay, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { JwtService } from './../utility/jwt.service';
 import { Injectable } from '@angular/core';
@@ -9,9 +10,9 @@ import { Observable } from 'rxjs';
 import { ILiquidityPoolSnapshotHistoryResponse, ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
 import { TransactionRequest } from '@sharedModels/requests/transactions-filter';
-import { ITransactionResponse } from '@sharedModels/responses/platform-api/Transactions/transaction-response';
 import { ITransactionsResponse } from '@sharedModels/responses/platform-api/Transactions/transactions-response';
 import { IAddressAllowanceResponse } from '@sharedModels/responses/platform-api/Addresses/address-allowance.interface';
+import { IToken } from '@sharedModels/responses/platform-api/token.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -54,8 +55,8 @@ export class PlatformApiService extends RestApiService {
   // Tokens
   //////////////
 
-  public getToken(address: string): Observable<any> {
-    return this.get<any>(`${this.api}/tokens/${address}`);
+  public getToken(address: string): Observable<IToken> {
+    return this.get<IToken>(`${this.api}/tokens/${address}`);
   }
 
   public getTokenHistory(address: string, timeSpan: string = '1Y', candleSpan: string = 'Hourly'): Observable<any> {
