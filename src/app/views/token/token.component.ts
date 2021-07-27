@@ -17,11 +17,17 @@ export class TokenComponent implements OnInit {
   subscription = new Subscription();
   tokenHistory: any;
   priceHistory: any[] = [];
+  candleHistory: any[] = [];
   chartData: any[];
   chartOptions = [
     {
       type: 'line',
       category: 'USD Price',
+      prefix: '$'
+    },
+    {
+      type: 'candle',
+      category: 'OHLC USD',
       prefix: '$'
     }
   ]
@@ -72,15 +78,26 @@ export class TokenComponent implements OnInit {
           this.tokenHistory = tokenHistory;
 
           let priceHistory = [];
+          let candleHistory = [];
 
           this.tokenHistory.snapshotHistory.forEach(history => {
             priceHistory.push({
               time: Date.parse(history.startDate.toString())/1000,
               value: history.price.close
             });
+
+            candleHistory.push({
+              time: Date.parse(history.startDate.toString())/1000,
+              open: history.price.open,
+              high: history.price.high,
+              low: history.price.low,
+              close: history.price.close,
+            });
           });
 
           this.priceHistory = priceHistory;
+          this.candleHistory = candleHistory;
+
 
           this.handleChartTypeChange(this.selectedChart.category);
         })
@@ -92,6 +109,8 @@ export class TokenComponent implements OnInit {
 
     if ($event === 'USD Price') {
       this.chartData = this.priceHistory;
+    } else if ($event === 'OHLC USD') {
+      this.chartData = this.candleHistory;
     }
   }
 

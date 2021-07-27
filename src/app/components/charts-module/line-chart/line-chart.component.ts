@@ -1,4 +1,3 @@
-import { FormGroup, FormControl } from '@angular/forms';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 import { ResizedEvent } from 'angular-resize-event';
 import { createChart, ISeriesApi, IChartApi, LineWidth, DeepPartial, MouseEventParams } from 'lightweight-charts';
@@ -12,9 +11,10 @@ export class LineChartComponent implements OnInit, OnChanges {
   @ViewChild('chartContainer') container: ElementRef;
   @Input() title: string;
   @Input() chartData: any;
-  value: string;
+  value: string = '';
   lineSeries: ISeriesApi<'Area'>;
   volumeSeries: ISeriesApi<'Histogram'>;
+  candleSeries: ISeriesApi<'Candlestick'>;
   chart: IChartApi;
   loading = true;
   chartType: any;
@@ -33,54 +33,72 @@ export class LineChartComponent implements OnInit, OnChanges {
           topColor: 'transparent',
           bottomColor: 'transparent',
           priceLineVisible: false,
-          lastValueVisible: false
+          lastValueVisible: false,
+          priceFormat: {
+            type: 'custom',
+            minMove: 0.00000001,
+            formatter: price => this.nFormatter(price, this.selectedChart.decimals > 8 ? 8 : this.selectedChart.decimals)
+          },
+          scaleMargins : {
+            top: 1,
+            bottom: 99
+          }
         });
       }
 
       if (!this.volumeSeries) {
         this.volumeSeries = this.chart.addHistogramSeries({
           priceFormat: {
-            type: 'volume',
+            type: 'custom',
+            minMove: 0.00000001,
+            formatter: price => this.nFormatter(price,  this.selectedChart.decimals > 8 ? 8 : this.selectedChart.decimals)
           },
           color: 'rgba(71, 188, 235, .8)',
           lastValueVisible: false,
-          priceScaleId: '',
           base: 0,
-          scaleMargins: {
-            top: 0.2,
-            bottom: 0,
-          },
+        });
+      }
+
+      if (!this.candleSeries) {
+        this.candleSeries = this.chart.addCandlestickSeries({
+          lastValueVisible: false,
+          priceLineVisible: false,
+          priceFormat: {
+            type: 'custom',
+            minMove: 0.00000001,
+            formatter: price => this.nFormatter(price,  this.selectedChart.decimals > 8 ? 8 : this.selectedChart.decimals)
+          }
         });
       }
 
       if (this.chartOptions && this.selectedChart.type === 'line') {
         this.lineSeries.setData(this.chartData);
         this.volumeSeries.setData([])
+        this.candleSeries.setData([])
       } else if (this.chartOptions && this.selectedChart.type === 'bar') {
         this.volumeSeries.setData(this.chartData);
         this.lineSeries.setData([]);
+        this.candleSeries.setData([])
+      } else if (this.chartOptions && this.selectedChart.type === 'candle') {
+        this.candleSeries.setData(this.chartData);
+        this.lineSeries.setData([]);
+        this.volumeSeries.setData([]);
       }
 
       this.applyChartOptions();
 
       if (this.loading) {
         this.chart.timeScale().fitContent()
-        this.loading = false;
         this.setLastBarText();
         this.chart.subscribeCrosshairMove(params => this.crosshairMovedHandler(params));
+        this.loading = false;
       }
     }
   }
 
   ngOnInit(): void {
     if (!this.chart) {
-      this.chart = createChart('chartdiv', {
-        localization: {
-          priceFormatter: (price: number) => {
-            return this.nFormatter(price, 2);
-          }
-        },
-      });
+      this.chart = createChart('chartdiv');
     }
   }
 
@@ -89,10 +107,14 @@ export class LineChartComponent implements OnInit, OnChanges {
   }
 
   crosshairMovedHandler(param: MouseEventParams): void {
-    if ( param === undefined || param.time === undefined || param.point.x < 0 || param.point.y < 0) {
+    if (param === undefined || param.time === undefined || param.point.x < 0 || param.point.y < 0) {
       this.setLastBarText();
     } else {
-      this.value = this.nFormatter(param.seriesPrices.values().next().value, 2);
+      const data = param.seriesPrices.values().next().value;
+      const value = data?.close !== undefined ? data.close : data;
+      const decimals = this.selectedChart.decimals > 8 ? 8 : this.selectedChart.decimals
+
+      this.value = this.nFormatter(value,  decimals);
     }
   }
 
@@ -128,7 +150,11 @@ export class LineChartComponent implements OnInit, OnChanges {
 
   private setLastBarText() {
     if (this.chartData && this.chartData.length > 0) {
-      this.value = this.nFormatter(this.chartData[this.chartData.length - 1].value, 2);
+      const data = this.chartData[this.chartData.length - 1]
+      const value = data?.close !== undefined ? data.close : data.value;
+      const decimals = this.selectedChart.decimals > 8 ? 8 : this.selectedChart.decimals;
+
+      this.value = this.nFormatter(value,  decimals);
     }
   }
 
@@ -167,7 +193,7 @@ export class LineChartComponent implements OnInit, OnChanges {
         axisPressedMouseMove: false,
         mouseWheel: false,
         pinch: false
-      },
+      }
     });
   }
 
