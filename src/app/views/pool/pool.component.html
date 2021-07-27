@@ -91,19 +91,7 @@
 
     <div class="row">
       <div *ngFor="let statCard of statCards" class="col-12 col-md-6 col-lg">
-        <opdex-stat-card *ngIf="statCard.title !== 'Liquidity Mining'" [statInfo]="statCard"></opdex-stat-card>
-      </div>
-      <div class="col-12 col-md-6 col-xl" *ngIf="pool.mining != null && (pool.mining?.isActive || pool.mining?.tokensMining !== '0.00000000')">
-        <opdex-stat-card [statInfo]="{
-          title: 'Liquidity Mining', 
-          value: this.pool.mining?.tokensMining,
-          formatNumber: 0, 
-          postSymbol: this.pool.token.lp.symbol,
-          helpInfo: {
-            title: 'Liquidity Mining Help',
-            paragraph: 'This modal is providing help for Liquidity Mining'
-          }
-        }"></opdex-stat-card>
+        <opdex-stat-card *ngIf="statCard.show" [statInfo]="statCard"></opdex-stat-card>
       </div>
     </div>
 

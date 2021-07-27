@@ -72,9 +72,10 @@ export class MarketComponent implements OnInit {
       {
         title: 'Cirrus (CRS)', 
         value: this.market.crsToken.summary.price.close,
-        preSymbol: '$',
+        prefix: '$',
         formatNumber: 2, 
         change: this.market.crsToken.summary.dailyPriceChange,
+        show: true,
         helpInfo: {
           title: 'Cirrus (CRS) Help',
           paragraph: 'This modal is providing help for Cirrus (CRS)'
@@ -83,8 +84,9 @@ export class MarketComponent implements OnInit {
       {
         title: 'Liquidity', 
         value: this.market.summary.liquidity,
-        preSymbol: '$',
+        prefix: '$',
         change: this.market.summary.liquidityDailyChange,
+        show: true,
         helpInfo: {
           title: 'Liquidity Help',
           paragraph: 'This modal is providing help for Liquidity'
@@ -93,9 +95,10 @@ export class MarketComponent implements OnInit {
       {
         title: 'Staking Weight', 
         value: this.market.summary.staking.weight,
-        postSymbol: this.market.stakingToken.symbol,
+        suffix: this.market.stakingToken.symbol,
         change: this.market.summary.staking.weightDailyChange,
         formatNumber: 0, 
+        show: true,
         helpInfo: {
           title: 'Staking Weight Help',
           paragraph: 'This modal is providing help for Staking Weight.'
@@ -104,8 +107,9 @@ export class MarketComponent implements OnInit {
       {
         title: 'Volume', 
         value: this.market.summary.volume,
-        preSymbol: '$',
+        prefix: '$',
         daily: true,
+        show: true,
         helpInfo: {
           title: 'Volume Help',
           paragraph: 'This modal is providing help for Volume'
@@ -115,7 +119,8 @@ export class MarketComponent implements OnInit {
         title: 'Rewards', 
         value: this.market.summary.rewards.totalUsd,
         daily: true,
-        preSymbol: '$',
+        prefix: '$',
+        show: true,
         helpInfo: {
           title: 'Rewards Help',
           paragraph: 'This modal is providing help for Rewards'

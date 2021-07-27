@@ -12,7 +12,7 @@ export class VaultComponent {
       title: 'Locked Tokens', 
       value: '1000000',
       formatNumber: 0,
-      postSymbol: 'ODX',
+      suffix: 'ODX',
       helpInfo: {
         title: 'Locked Tokens Help',
         paragraph: 'This modal is providing help for Locked Tokens.'
@@ -22,7 +22,7 @@ export class VaultComponent {
       title: 'Unassigned Tokens', 
       value: '500000',
       formatNumber: 0,
-      postSymbol: 'ODX',
+      suffix: 'ODX',
       helpInfo: {
         title: 'Unassigned Tokens Help',
         paragraph: 'This modal is providing help for Unassigned Tokens.'
@@ -32,7 +32,7 @@ export class VaultComponent {
       title: 'Collected Tokens', 
       value: '0',
       formatNumber: 0,
-      postSymbol: 'ODX',
+      suffix: 'ODX',
       helpInfo: {
         title: 'Price Collected Tokens',
         paragraph: 'This modal is providing help for Collected Tokens.'
@@ -41,7 +41,7 @@ export class VaultComponent {
     {
       title: 'Maximum Tokens', 
       value: '2500000',
-      postSymbol: 'ODX',
+      suffix: 'ODX',
       formatNumber: 0,
       helpInfo: {
         title: 'Price Help',

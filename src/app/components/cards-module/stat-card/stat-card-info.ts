@@ -4,9 +4,10 @@ export class StatCardInfo {
     daily?: boolean;
     title: string;
     value: string;
-    preSymbol?: string;
-    postSymbol?: string;
+    prefix?: string;
+    suffix?: string;
     formatNumber?: number;
     change?: number = null;
     helpInfo?: HelpInfo;
+    show?: boolean;
 }

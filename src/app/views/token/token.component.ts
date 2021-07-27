@@ -75,8 +75,9 @@ export class TokenComponent implements OnInit {
         title: 'Price', 
         value: this.token.summary.price.close,
         change: this.token.summary.dailyPriceChange,
-        preSymbol: '$',
+        prefix: '$',
         formatNumber: 2, 
+        show: true,
         helpInfo: {
           title: 'Price Help',
           paragraph: 'This modal is providing help for Price.'
@@ -87,6 +88,7 @@ export class TokenComponent implements OnInit {
         value: this.token.totalSupply,
         formatNumber: this.token.decimals,
         daily: true,
+        show: true,
         helpInfo: {
           title: 'Total Supply Help',
           paragraph: 'This modal is providing help for Total Supply'
@@ -95,7 +97,8 @@ export class TokenComponent implements OnInit {
       {
         title: 'Liquidity', 
         value: '1,754,342,353',
-        preSymbol: '$',
+        prefix: '$',
+        show: true,
         helpInfo: {
           title: 'Liquidity Help',
           paragraph: 'This modal is providing help for Liquidity'
@@ -104,7 +107,8 @@ export class TokenComponent implements OnInit {
       {
         title: 'Fees', 
         value: '329,199.41',
-        preSymbol: '$',
+        prefix: '$',
+        show: true,
         helpInfo: {
           title: 'Fees Help',
           paragraph: 'This modal is providing help for Fees'

@@ -7,7 +7,7 @@
 
     <div class="stat">
       <p class="stat-value">
-        {{statInfo.preSymbol}}{{statInfo.value | formatNumber: statInfo.formatNumber}} {{statInfo.postSymbol}}
+        {{statInfo.prefix}}{{statInfo.value | formatNumber: statInfo.formatNumber}} {{statInfo.suffix}}
       </p>
 
       <opdex-change-indicator [value]="statInfo.change" *ngIf="statInfo.change !== null && statInfo.change !== undefined"></opdex-change-indicator>

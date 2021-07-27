@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './help-icon.component.html',
   styleUrls: ['./help-icon.component.scss']
 })
-export class HelpIconComponent implements OnDestroy {
+export class HelpIconComponent {
 
   @Input() info: HelpInfo = { paragraph: 'Paragraph explaining the statistic', title: 'Help Title' };
 
@@ -18,17 +18,9 @@ export class HelpIconComponent implements OnDestroy {
   helpIconSubscription: Subscription = new Subscription();
 
   openHelp(): void {
-    const dialogRef = this.dialog.open(HelpModalComponent, {
+    this.dialog.open(HelpModalComponent, {
       width: '500px',
       data: this.info
     });
-
-    this.helpIconSubscription.add(
-      dialogRef.afterClosed().subscribe(result => {})
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.helpIconSubscription.unsubscribe();
   }
 }

@@ -111,8 +111,9 @@ export class PoolComponent implements OnInit, OnDestroy {
       {
         title: 'Liquidity', 
         value: this.pool.reserves.usd.toString(),
-        preSymbol: '$',
+        prefix: '$',
         change: this.pool.reserves.usdDailyChange,
+        show: true,
         helpInfo: {
           title: 'Liquidity Help',
           paragraph: 'This modal is providing help for Liquidity'
@@ -121,9 +122,10 @@ export class PoolComponent implements OnInit, OnDestroy {
       {
         title: 'Staking Weight', 
         value: this.pool.staking?.weight,
-        postSymbol: this.pool.token.staking?.symbol,
+        suffix: this.pool.token.staking?.symbol,
         change: this.pool.staking?.weightDailyChange || 0,
         formatNumber: 0, 
+        show: true,
         helpInfo: {
           title: 'Staking Weight Help',
           paragraph: 'This modal is providing help for Staking Weight.'
@@ -132,8 +134,9 @@ export class PoolComponent implements OnInit, OnDestroy {
       {
         title: 'Volume', 
         value: this.pool.volume.usd.toString(),
-        preSymbol: '$',
+        prefix: '$',
         daily: true,
+        show: true,
         helpInfo: {
           title: 'Volume Help',
           paragraph: 'This modal is providing help for Volume'
@@ -143,10 +146,22 @@ export class PoolComponent implements OnInit, OnDestroy {
         title: 'Rewards', 
         value: this.pool.rewards.totalUsd.toString(),
         daily: true,
-        preSymbol: '$',
+        prefix: '$',
+        show: true,
         helpInfo: {
           title: 'Rewards Help',
           paragraph: 'This modal is providing help for Rewards'
+        }
+      },
+      {
+        title: 'Liquidity Mining', 
+        value: this.pool.mining?.tokensMining,
+        formatNumber: 0, 
+        suffix: this.pool.token.lp.symbol,
+        show: this.pool.mining != null && (this.pool.mining?.isActive || this.pool.mining?.tokensMining !== '0.00000000'),
+        helpInfo: {
+          title: 'Liquidity Mining Help',
+          paragraph: 'This modal is providing help for Liquidity Mining'
         }
       }
     ];
