@@ -18,15 +18,15 @@
             <div class="d-flex flex-row justify-content-between">
               <h1 class="page-title mb-0 d-flex align-items-center justify-content-center">
                 <a href="javascript:void(0)" routerLink="/tokens/{{pool.token.src.address}}">{{pool.token.src.symbol}}</a>
-
-                <button mat-icon-button
+                <opdex-copy-button></opdex-copy-button>
+                <!-- <button mat-icon-button
                   class="token-divider-button"
                   color="primary"
                   [matTooltip]="pool.address"
                   [cdkCopyToClipboard]="pool.address"
                   (cdkCopyToClipboardCopied)="copyHandler($event)">
                   <mat-icon>{{copied ? 'check_circle' : 'link'}}</mat-icon>
-                </button>
+                </button> -->
 
                 <a href="javascript:void(0)" routerLink="/tokens/CRS">CRS</a>
               </h1>

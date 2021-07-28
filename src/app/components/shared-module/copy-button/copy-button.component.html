@@ -1,0 +1,8 @@
+<button mat-icon-button
+    [class]="size"
+    color="primary"
+    [matTooltip]="tooltip"
+    [cdkCopyToClipboard]="address"
+    (cdkCopyToClipboardCopied)="copyHandler($event)">
+    <mat-icon>link</mat-icon>
+</button>

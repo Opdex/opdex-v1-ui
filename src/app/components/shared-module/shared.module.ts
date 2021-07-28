@@ -6,18 +6,27 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 
 import { ChangeIndicatorComponent } from './change-indicator/change-indicator.component';
+import { CopyButtonComponent } from './copy-button/copy-button.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
-    ChangeIndicatorComponent
+    ChangeIndicatorComponent,
+    CopyButtonComponent
   ],
   imports: [
     CommonModule,
     MatCardModule,
-    MatIconModule
+    MatIconModule,
+    MatTooltipModule,
+    ClipboardModule,
+    MatButtonModule
   ],
   exports: [
-    ChangeIndicatorComponent
+    ChangeIndicatorComponent,
+    CopyButtonComponent
   ]
 })
 export class SharedModule { }
