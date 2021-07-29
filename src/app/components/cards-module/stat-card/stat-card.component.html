@@ -2,7 +2,7 @@
   <opdex-card>
     <h4 class="stat-header">
       {{statInfo.title}} <small class="ml-2" *ngIf="statInfo.daily">(24hr)</small>
-      <opdex-help-icon *ngIf="statInfo.helpInfo" [info]="statInfo.helpInfo"></opdex-help-icon>
+      <opdex-help-button *ngIf="statInfo.helpInfo" [info]="statInfo.helpInfo"></opdex-help-button>
     </h4>
 
     <div class="stat">

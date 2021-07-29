@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HelpIconComponent } from './help-icon.component';
+import { HelpButtonComponent } from './help-button.component';
 
-describe('HelpIconComponent', () => {
-  let component: HelpIconComponent;
-  let fixture: ComponentFixture<HelpIconComponent>;
+describe('HelpButtonComponent', () => {
+  let component: HelpButtonComponent;
+  let fixture: ComponentFixture<HelpButtonComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HelpIconComponent ]
+      declarations: [ HelpButtonComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HelpIconComponent);
+    fixture = TestBed.createComponent(HelpButtonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

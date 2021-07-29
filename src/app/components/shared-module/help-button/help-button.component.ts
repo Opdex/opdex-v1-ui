@@ -5,11 +5,11 @@ import { HelpModalComponent } from '@sharedComponents/modals-module/help-modal/h
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'opdex-help-icon',
-  templateUrl: './help-icon.component.html',
-  styleUrls: ['./help-icon.component.scss']
+  selector: 'opdex-help-button',
+  templateUrl: './help-button.component.html',
+  styleUrls: ['./help-button.component.scss']
 })
-export class HelpIconComponent {
+export class HelpButtonComponent {
 
   @Input() info: HelpInfo = { paragraph: 'Paragraph explaining the statistic', title: 'Help Title' };
 

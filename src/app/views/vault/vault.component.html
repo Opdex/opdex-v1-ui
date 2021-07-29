@@ -6,9 +6,11 @@
       </div>
     </div>
     <div class="row mb-5">
-      <div *ngFor="let statCard of statCards" class="col-12 col-md-6 col-xl">
-        <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
-      </div>
+      <ng-container *ngFor="let statCard of statCards">
+        <div *ngIf="statCard.show" class="col-12 col-md-6 col-lg">
+            <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
+        </div>
+      </ng-container>
     </div>
     <div class="row">
       <div class="col">
