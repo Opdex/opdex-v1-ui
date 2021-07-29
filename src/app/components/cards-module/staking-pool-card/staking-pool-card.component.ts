@@ -1,8 +1,8 @@
-import { UserContextService } from '@sharedServices/user-context.service';
+import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Component, Input } from '@angular/core';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { TransactionView } from '@sharedModels/transaction-view';
-import { SidenavService } from '@sharedServices/sidenav.service';
+import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { Observable } from 'rxjs';
 
 @Component({

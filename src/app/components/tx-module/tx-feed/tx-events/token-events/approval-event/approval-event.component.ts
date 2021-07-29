@@ -1,10 +1,10 @@
+import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { IToken } from '@sharedModels/responses/platform-api/token.interface';
 import { Component, Input } from '@angular/core';
 import { ITransactionEventResponse, IApprovalEventResponse } from '@sharedModels/responses/platform-api/Transactions/transaction-response';
 import { Observable } from 'rxjs';
 import { TxEventBaseComponent } from '../../tx-event-base.component';
-import { TokenService } from '@sharedServices/token.service';
-import { LiquidityPoolService } from '@sharedServices/liquidity-pool.service';
+import { TokensService } from '@sharedServices/platform/tokens.service';
 
 @Component({
   selector: 'opdex-approval-event',
@@ -16,8 +16,8 @@ export class ApprovalEventComponent extends TxEventBaseComponent {
   event: IApprovalEventResponse;
   token$: Observable<IToken>;
 
-  constructor(protected _liquidityPoolService: LiquidityPoolService, protected _tokenService: TokenService) {
-    super(_liquidityPoolService, _tokenService);
+  constructor(protected _liquidityPoolsService: LiquidityPoolsService, protected _tokensService: TokensService) {
+    super(_liquidityPoolsService, _tokensService);
   }
 
   ngOnChanges() {

@@ -1,11 +1,11 @@
-import { LiquidityPoolService } from '@sharedServices/liquidity-pool.service';
+import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { environment } from '@environments/environment';
-import { UserContextService } from '@sharedServices/user-context.service';
+import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SidenavService } from '@sharedServices/sidenav.service';
+import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { Subscription, interval, Observable, of } from 'rxjs';
 import { ILiquidityPoolSnapshotHistoryResponse, ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
@@ -53,14 +53,14 @@ export class PoolComponent implements OnInit, OnDestroy {
     private _platformApiService: PlatformApiService,
     private _userContext: UserContextService,
     private _sidenav: SidenavService,
-    private _liquidityPoolService: LiquidityPoolService
+    private _liquidityPoolsService: LiquidityPoolsService
   ) {
     this.poolAddress = this._route.snapshot.params.pool;
   }
 
   async ngOnInit(): Promise<void> {
     this.subscription.add(interval(30000)
-      .pipe(tap(_ => this._liquidityPoolService.refreshPool(this.poolAddress)))
+      .pipe(tap(_ => this._liquidityPoolsService.refreshPool(this.poolAddress)))
       .subscribe());
 
     this.subscription.add(this.getLiquidityPool()
@@ -80,7 +80,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   }
 
   private getLiquidityPool(): Observable<ILiquidityPoolSummaryResponse> {
-    return this._liquidityPoolService.getLiquidityPool(this.poolAddress)
+    return this._liquidityPoolsService.getLiquidityPool(this.poolAddress)
       .pipe(
         tap(pool => this.pool = pool),
         tap((pool) => {

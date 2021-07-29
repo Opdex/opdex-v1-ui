@@ -2,10 +2,10 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IToken } from '@sharedModels/responses/platform-api/token.interface';
-import { CacheService } from './cache.service';
+import { CacheService } from '../utility/cache.service';
 
 @Injectable({providedIn: 'root'})
-export class TokenService extends CacheService {
+export class TokensService extends CacheService {
 
   constructor(private _platformApi: PlatformApiService) {
     super();

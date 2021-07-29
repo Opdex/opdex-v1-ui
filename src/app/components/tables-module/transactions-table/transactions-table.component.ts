@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { ThemeService } from '@sharedServices/theme.service';
+import { ThemeService } from '@sharedServices/utility/theme.service';
 import { Observable } from 'rxjs';
 
 @Component({

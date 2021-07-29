@@ -1,11 +1,11 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { TokenService } from '@sharedServices/token.service';
+import { TokensService } from '@sharedServices/platform/tokens.service';
 
 @Pipe({
   name: 'coinNotation'
 })
 export class CoinNotationPipe implements PipeTransform {
-  constructor(private _tokenService: TokenService) { }
+  constructor(private _tokenService: TokensService) { }
 
   transform(value: number, decimals: number = 8, fixed?: boolean): number | string {
     let temp: number;

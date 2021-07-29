@@ -1,6 +1,6 @@
-import { TokenService } from '@sharedServices/token.service';
+import { TokensService } from '@sharedServices/platform/tokens.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { UserContextService } from '@sharedServices/user-context.service';
+import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
@@ -20,7 +20,7 @@ export class WalletComponent implements OnInit {
   constructor(
     private _context: UserContextService,
     private _platform: PlatformApiService,
-    private _tokenService: TokenService
+    private _tokensService: TokensService
   ) {
     this.wallet = this._context.getUserContext().wallet;
     this.walletBalances$ = this._platform.getWalletBalances(this.wallet)
@@ -30,7 +30,7 @@ export class WalletComponent implements OnInit {
 
           response.balances.forEach(balance => {
             const tokenDetails$: Observable<IToken> =
-              this._tokenService.getToken(balance.token)
+              this._tokensService.getToken(balance.token)
                 .pipe(
                   take(1),
                   map(token => {

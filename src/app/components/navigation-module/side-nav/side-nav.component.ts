@@ -1,4 +1,4 @@
-import { UserContextService } from '@sharedServices/user-context.service';
+import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 

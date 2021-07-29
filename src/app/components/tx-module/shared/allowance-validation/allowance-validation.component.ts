@@ -1,5 +1,5 @@
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
-import { SidenavService } from '@sharedServices/sidenav.service';
+import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { Component, Input } from '@angular/core';
 import { TransactionView } from '@sharedModels/transaction-view';
 

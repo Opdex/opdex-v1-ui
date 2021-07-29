@@ -2,10 +2,10 @@ import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CacheService } from './cache.service';
+import { CacheService } from '../utility/cache.service';
 
 @Injectable({providedIn: 'root'})
-export class LiquidityPoolService extends CacheService {
+export class LiquidityPoolsService extends CacheService {
 
   constructor(private _platformApi: PlatformApiService) {
     super();

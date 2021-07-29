@@ -4,8 +4,8 @@ import { ICollectStakingRewardsEventResponse } from '@sharedModels/responses/pla
 import { TxEventBaseComponent } from '../../tx-event-base.component';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { Observable } from 'rxjs';
-import { TokenService } from '@sharedServices/token.service';
-import { LiquidityPoolService } from '@sharedServices/liquidity-pool.service';
+import { TokensService } from '@sharedServices/platform/tokens.service';
+import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 
 @Component({
   selector: 'opdex-collect-staking-rewards-event',
@@ -17,8 +17,8 @@ export class CollectStakingRewardsEventComponent extends TxEventBaseComponent {
   event: ICollectStakingRewardsEventResponse;
   pool$: Observable<ILiquidityPoolSummaryResponse>;
 
-  constructor(protected _liquidityPoolService: LiquidityPoolService, protected _tokenService: TokenService) {
-    super(_liquidityPoolService, _tokenService);
+  constructor(protected _liquidityPoolsService: LiquidityPoolsService, protected _tokensService: TokensService) {
+    super(_liquidityPoolsService, _tokensService);
   }
 
   ngOnChanges() {

@@ -1,9 +1,10 @@
+import { MarketsService } from './../../services/platform/markets.service';
 import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, OnInit } from '@angular/core';
-import { forkJoin, Observable } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { forkJoin, interval, Observable, Subscription, zip } from 'rxjs';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
 
 @Component({
@@ -12,6 +13,7 @@ import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool
   styleUrls: ['./market.component.scss']
 })
 export class MarketComponent implements OnInit {
+  subscription = new Subscription();
   theme$: Observable<string>;
   market: any;
   marketHistory: any[];
@@ -42,70 +44,74 @@ export class MarketComponent implements OnInit {
   ]
   selectedChart = this.chartOptions[0];
 
-  constructor(private _platformApiService: PlatformApiService) { }
+  constructor(private _platformApiService: PlatformApiService, private _marketsService: MarketsService) { }
 
   async ngOnInit(): Promise<void> {
-    await Promise.all([
-      this.getMarket(),
-      this.getMarketHistory(),
-      this.getPools(),
-      this.getTokens()
-    ])
+    this.subscription.add(interval(30000)
+      .pipe(tap(_ => this._marketsService.refreshMarket()))
+      .subscribe());
+
+    const combo = [this.getMarketHistory(), this.getPools(), this.getTokens()];
+
+    this.subscription.add(this.getMarket()
+      .pipe(switchMap(() => zip(...combo)))
+      .subscribe());
 
     this.miningPools$ = this._platformApiService.getPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 4, {mining: true}));
   }
 
-  private getMarket(): void {
-    this._platformApiService.getMarketOverview()
-      .pipe(take(1))
-      .subscribe(market => this.market = market);
+  private getMarket(): Observable<any> {
+    return this._marketsService.getMarket()
+      .pipe(tap(market => this.market = market));
   }
 
-  private getMarketHistory(): void {
-    this._platformApiService.getMarketHistory()
-      .pipe(take(1))
-      .subscribe(marketHistory => {
-        this.marketHistory = marketHistory;
+  private getMarketHistory(): Observable<void> {
+    return this._platformApiService.getMarketHistory()
+      .pipe(
+        take(1),
+        map(marketHistory => {
+          this.marketHistory = marketHistory;
 
-        let liquidityPoints = [];
-        let volumePoints = [];
-        let stakingPoints = [];
+          let liquidityPoints = [];
+          let volumePoints = [];
+          let stakingPoints = [];
 
-        this.marketHistory.forEach(history => {
-          const time = Date.parse(history.startDate.toString())/1000;
+          this.marketHistory.forEach(history => {
+            const time = Date.parse(history.startDate.toString()) / 1000;
 
-          liquidityPoints.push({
-            time,
-            value: history.liquidity
+            liquidityPoints.push({
+              time,
+              value: history.liquidity
+            });
+
+            volumePoints.push({
+              time,
+              value: history.volume
+            });
+
+            stakingPoints.push({
+              time,
+              value: parseFloat(history.staking.weight.split('.')[0])
+            });
           });
 
-          volumePoints.push({
-            time,
-            value: history.volume
-          });
+          this.liquidityHistory = liquidityPoints;
+          this.volumeHistory = volumePoints;
+          this.stakingHistory = stakingPoints;
 
-          stakingPoints.push({
-            time,
-            value: parseFloat(history.staking.weight.split('.')[0])
-          });
-        });
-
-        this.liquidityHistory = liquidityPoints;
-        this.volumeHistory = volumePoints;
-        this.stakingHistory = stakingPoints;
-
-        this.handleChartTypeChange(this.selectedChart.category);
-      });
+          this.handleChartTypeChange(this.selectedChart.category);
+        }));
   }
 
-  private getPools(): void {
-    this._platformApiService.getPools()
-      .pipe(take(1))
-      .subscribe(pools => {
+  private getPools(): Observable<void> {
+    return this._platformApiService.getPools()
+      .pipe(
+        take(1),
+        map(pools => {
         this.pools = pools;
 
         this.transactionRequest = {
-          limit: 25,
+          limit: 10,
           eventTypes: ['CreateLiquidityPoolEvent', 'DistributionEvent', 'SwapEvent', 'ProvideEvent', 'MineEvent', 'CollectStakingRewardsEvent', 'CollectMiningRewardsEvent', 'NominationEvent'],
           direction: 'DESC'
         }
@@ -125,11 +131,11 @@ export class MarketComponent implements OnInit {
             this.transactionRequest.contracts.push(pool.token.staking.address);
           }
         });
-      });
+      }));
   }
 
-  private getTokens(): void {
-    this._platformApiService.getTokens()
+  private getTokens(): Observable<any[]> {
+    return this._platformApiService.getTokens()
     .pipe(
       take(1),
       switchMap((tokens: any[]) => {
@@ -141,11 +147,9 @@ export class MarketComponent implements OnInit {
         });
 
         return forkJoin(tokens$);
-      })
-    )
-    .subscribe(tokens => {
-      this.tokens = tokens;
-    });
+      }),
+      tap(tokens => this.tokens = tokens)
+    );
   }
 
   private getTokenHistory(token: any): Observable<any> {
