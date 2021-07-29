@@ -1,10 +1,11 @@
+import { TokensService } from '@sharedServices/platform/tokens.service';
 import { MarketsService } from '@sharedServices/platform/markets.service';
 import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, interval, Observable, Subscription, zip } from 'rxjs';
-import { map, switchMap, take, tap } from 'rxjs/operators';
+import { delay, map, switchMap, take, tap } from 'rxjs/operators';
 import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
 
 @Component({
@@ -44,11 +45,14 @@ export class MarketComponent implements OnInit {
   ]
   selectedChart = this.chartOptions[0];
 
-  constructor(private _platformApiService: PlatformApiService, private _marketsService: MarketsService) { }
+  constructor(private _platformApiService: PlatformApiService, private _marketsService: MarketsService, private _tokensService: TokensService) { }
 
   async ngOnInit(): Promise<void> {
-    this.subscription.add(interval(30000)
-      .pipe(tap(_ => this._marketsService.refreshMarket()))
+    this.subscription.add(interval(5000)
+      .pipe(tap(_ => {
+        this._marketsService.refreshMarket();
+        this._marketsService.refreshMarketHistory();
+      }))
       .subscribe());
 
     const combo = [this.getMarketHistory(), this.getPools(), this.getTokens()];
@@ -66,9 +70,10 @@ export class MarketComponent implements OnInit {
   }
 
   private getMarketHistory(): Observable<void> {
-    return this._platformApiService.getMarketHistory()
+    return this._marketsService.getMarketHistory()
       .pipe(
         take(1),
+        delay(10),
         map(marketHistory => {
           this.marketHistory = marketHistory;
 
@@ -135,13 +140,17 @@ export class MarketComponent implements OnInit {
   }
 
   private getTokens(): Observable<any[]> {
-    return this._platformApiService.getTokens(5, false)
+    return this._platformApiService.getTokens(10, false)
       .pipe(
         take(1),
         switchMap((tokens: any[]) => {
           const tokens$: Observable<any>[] = [];
 
           tokens.forEach(token => {
+            if (this.tokens) {
+              this._tokensService.refreshTokenHistory(token.address, '1W', 'Hourly');
+            }
+
             const tokenWithHistory$: Observable<any> = this.getTokenHistory(token);
             tokens$.push(tokenWithHistory$);
           });
@@ -153,7 +162,7 @@ export class MarketComponent implements OnInit {
   }
 
   private getTokenHistory(token: any): Observable<any> {
-    return this._platformApiService.getTokenHistory(token.address, "1W", "Hourly")
+    return this._tokensService.getTokenHistory(token.address, "1W", "Hourly")
       .pipe(
         take(1),
         map((tokenHistory: any) => {
@@ -186,5 +195,9 @@ export class MarketComponent implements OnInit {
     if ($event === 'Staking Weight') {
       this.chartData = this.stakingHistory;
     }
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

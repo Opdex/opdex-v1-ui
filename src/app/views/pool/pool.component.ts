@@ -9,8 +9,8 @@ import { PlatformApiService } from "@sharedServices/api/platform-api.service";
 import { LiquidityPoolsService } from "@sharedServices/platform/liquidity-pools.service";
 import { SidenavService } from "@sharedServices/utility/sidenav.service";
 import { UserContextService } from "@sharedServices/utility/user-context.service";
-import { Observable, Subscription, interval, zip, of } from "rxjs";
-import { tap, switchMap, catchError, take, map } from "rxjs/operators";
+import { Observable, Subscription, zip, of, timer, interval } from "rxjs";
+import { tap, switchMap, catchError, take, map, delay } from "rxjs/operators";
 
 @Component({
   selector: 'opdex-pool',
@@ -80,28 +80,17 @@ export class PoolComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.subscription.add(interval(30000)
-      .pipe(tap(_ => this._liquidityPoolsService.refreshPool(this.poolAddress)))
+      .pipe(
+        tap(_ => {
+          this._liquidityPoolsService.refreshPool(this.poolAddress);
+          this._liquidityPoolsService.refreshPoolHistory(this.poolAddress);
+        }))
       .subscribe());
 
-    const combo = [this.getPoolHistory(), this.getWalletSummary(), this.getCrsBalance()]
+    const combo = [this.getPoolHistory(), this.getWalletSummary(), this.getCrsBalance()];
 
     this.subscription.add(this.getLiquidityPool()
-      .pipe(
-        switchMap(() => zip(...combo)),
-        tap(() => {
-          this.chartOptions.map(o => {
-            if (o.suffix === 'SRC') {
-              o.suffix = this.pool.token.src.symbol;
-              o.decimals = this.pool.token.src.decimals
-            }
-
-            if (o.category.includes('SRC')) {
-              o.category = o.category.replace('SRC', this.pool.token.src.symbol);
-            }
-
-            return o;
-          });
-        }))
+      .pipe(switchMap(() => zip(...combo)))
       .subscribe());
   }
 
@@ -141,7 +130,7 @@ export class PoolComponent implements OnInit, OnDestroy {
 
     if (context.wallet) {
       return this._platformApiService.getBalance(context.wallet, 'CRS')
-        .pipe(tap((rsp: IAddressBalanceResponse) => this.crsBalance = rsp), catchError(() => of(null)));
+        .pipe(take(1), tap((rsp: IAddressBalanceResponse) => this.crsBalance = rsp), catchError(() => of(null)));
     }
 
     return of(null);
@@ -158,10 +147,26 @@ export class PoolComponent implements OnInit, OnDestroy {
     return of(null);
   }
 
-  private getPoolHistory(): Observable<void> {
-    return this._platformApiService.getPoolHistory(this.poolAddress)
-      .pipe(take(1),
-        map((poolHistory: ILiquidityPoolSnapshotHistoryResponse) => {
+  private getPoolHistory(): Observable<ILiquidityPoolSnapshotHistoryResponse> {
+    return this._liquidityPoolsService.getLiquidityPoolHistory(this.poolAddress)
+      .pipe(
+        take(1),
+        delay(10),
+        tap(() => {
+          this.chartOptions.map(o => {
+            if (o.suffix === 'SRC') {
+              o.suffix = this.pool.token.src.symbol;
+              o.decimals = this.pool.token.src.decimals
+            }
+
+            if (o.category.includes('SRC')) {
+              o.category = o.category.replace('SRC', this.pool.token.src.symbol);
+            }
+
+            return o;
+          });
+        }),
+        tap((poolHistory: ILiquidityPoolSnapshotHistoryResponse) => {
           this.poolHistory = poolHistory;
 
           let liquidityPoints = [];

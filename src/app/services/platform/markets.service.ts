@@ -16,7 +16,15 @@ export class MarketsService extends CacheService {
     return this.getItem(this.marketAddress, this._platformApi.getMarketOverview());
   }
 
+  getMarketHistory(): Observable<any> {
+    return this.getItem(`${this.marketAddress}-history`, this._platformApi.getMarketHistory());
+  }
+
   refreshMarket(): void {
     this.refreshItem(this.marketAddress);
+  }
+
+  refreshMarketHistory(): void {
+    this.refreshItem(`${this.marketAddress}-history`);
   }
 }

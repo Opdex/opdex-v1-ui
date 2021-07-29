@@ -15,8 +15,16 @@ export class TokensService extends CacheService {
     return this.getItem(address, this._platformApi.getToken(address));
   }
 
+  getTokenHistory(address: string, timeSpan: string = "1Y", candleSpan: string = "Hourly"): Observable<any> {
+    return this.getItem(`${address}-history-${timeSpan}-${candleSpan}`, this._platformApi.getTokenHistory(address, timeSpan, candleSpan));
+  }
+
   refreshToken(address: string): void {
     this.refreshItem(address);
+  }
+
+  refreshTokenHistory(address: string, timeSpan: string = "1Y", candleSpan: string = "Hourly"): void {
+    this.refreshItem(`${address}-history-${timeSpan}-${candleSpan}`);
   }
 
   getTokens() { }

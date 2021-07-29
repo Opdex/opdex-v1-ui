@@ -1,6 +1,6 @@
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
-import { switchMap, take, tap } from 'rxjs/operators';
+import { delay, switchMap, take, tap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -45,7 +45,10 @@ export class TokenComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscription.add(interval(30000)
-      .pipe(tap(_ => this._tokensService.refreshToken(this.tokenAddress)))
+      .pipe(tap(_ => {
+        this._tokensService.refreshToken(this.tokenAddress);
+        this._tokensService.refreshTokenHistory(this.tokenAddress);
+      }))
       .subscribe());
 
     this.subscription.add(this.getToken()
@@ -73,9 +76,10 @@ export class TokenComponent implements OnInit {
   }
 
   private getTokenHistory(): Observable<any> {
-    return this._platformApiService.getTokenHistory(this.tokenAddress)
+    return this._tokensService.getTokenHistory(this.tokenAddress)
       .pipe(
         take(1),
+        delay(10),
         tap(tokenHistory => {
           this.tokenHistory = tokenHistory;
 
