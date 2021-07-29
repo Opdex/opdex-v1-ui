@@ -1,5 +1,5 @@
 import { BehaviorSubject } from 'rxjs';
-import { JwtService } from './utility/jwt.service';
+import { JwtService } from './jwt.service';
 import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })

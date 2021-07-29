@@ -8,8 +8,8 @@
         <div class="stats mt-4">
           <div class="row">
             <ng-container *ngFor="let statCard of statCards">
-              <div *ngIf="statCard.show" class="col-12 col-md-6 col-lg">
-                  <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
+              <div *ngIf="statCard.show" class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
               </div>
             </ng-container>
           </div>
@@ -34,7 +34,6 @@
 
       <div class="col-12 col-md-4">
         <opdex-tx-feed [transactionRequest]="transactionRequest"></opdex-tx-feed>
-
       </div>
     </div>
 

@@ -71,6 +71,8 @@ export class LineChartComponent implements OnInit, OnChanges {
         });
       }
 
+      this.applyChartOptions();
+
       if (this.chartOptions && this.selectedChart.type === 'line') {
         this.lineSeries.setData(this.chartData);
         this.volumeSeries.setData([])
@@ -84,8 +86,6 @@ export class LineChartComponent implements OnInit, OnChanges {
         this.lineSeries.setData([]);
         this.volumeSeries.setData([]);
       }
-
-      this.applyChartOptions();
 
       if (this.loading) {
         this.chart.timeScale().fitContent()

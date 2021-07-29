@@ -1,4 +1,4 @@
-import { UserContextService } from '@sharedServices/user-context.service';
+import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { TokensModalComponent } from '../../modals-module/tokens-modal/tokens-modal.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, Input, OnDestroy } from '@angular/core';

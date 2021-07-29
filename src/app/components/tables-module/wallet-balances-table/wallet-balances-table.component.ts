@@ -4,7 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TransactionView } from '@sharedModels/transaction-view';
-import { SidenavService } from '@sharedServices/sidenav.service';
+import { SidenavService } from '@sharedServices/utility/sidenav.service';
 
 @Component({
   selector: 'opdex-wallet-balances-table',

@@ -6,7 +6,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { ILiquidityPoolsSearchFilter, LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
 import { Observable } from 'rxjs';
-import { SidenavService } from '@sharedServices/sidenav.service';
+import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { TransactionView } from '@sharedModels/transaction-view';
 
 @Component({
