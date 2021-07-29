@@ -6,4 +6,4 @@
   {{pool.token.lp.symbol}} staking rewards.
 </p>
 
-<ng-template #loading>Collected <strong>0.00000000</strong> LPT staking rewards.</ng-template>
+<ng-template #loading>Collected <strong>{{event.reward | formatNumber:8}}</strong> LPT staking rewards.</ng-template>
