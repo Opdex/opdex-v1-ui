@@ -1,12 +1,13 @@
+import { LiquidityPoolService } from '@sharedServices/liquidity-pool.service';
 import { environment } from '@environments/environment';
 import { UserContextService } from '@sharedServices/user-context.service';
-import { take, tap } from 'rxjs/operators';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SidenavService } from '@sharedServices/sidenav.service';
 import { TransactionView } from '@sharedModels/transaction-view';
-import { timer, Subscription } from 'rxjs';
+import { Subscription, interval, Observable, of } from 'rxjs';
 import { ILiquidityPoolSnapshotHistoryResponse, ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
 
@@ -47,27 +48,26 @@ export class PoolComponent implements OnInit, OnDestroy {
   ]
   selectedChart = this.chartOptions[0];
 
-
   constructor(
     private _route: ActivatedRoute,
     private _platformApiService: PlatformApiService,
     private _userContext: UserContextService,
-    private _sidenav: SidenavService
+    private _sidenav: SidenavService,
+    private _liquidityPoolService: LiquidityPoolService
   ) {
     this.poolAddress = this._route.snapshot.params.pool;
   }
 
   async ngOnInit(): Promise<void> {
-    // 10 seconds refresh view
-    this.subscription.add(
-      timer(0, 10000)
-        .subscribe(async () => {
-          await Promise.all([
-            this.getPool(),
-            this.getPoolHistory(),
-            this.getWalletSummary()
-          ]);
-        }));
+    this.subscription.add(interval(30000)
+      .pipe(tap(_ => this._liquidityPoolService.refreshPool(this.poolAddress)))
+      .subscribe());
+
+    this.subscription.add(this.getLiquidityPool()
+      .pipe(
+        switchMap(() => this.getPoolHistory()),
+        switchMap(() => this.getWalletSummary()))
+      .subscribe());
   }
 
   openTransactionSidebar(view: TransactionView, childView: string = null) {
@@ -79,10 +79,9 @@ export class PoolComponent implements OnInit, OnDestroy {
     this._sidenav.openSidenav(view, data);
   }
 
-  private getPool(): void {
-    this._platformApiService.getPool(this.poolAddress)
+  private getLiquidityPool(): Observable<ILiquidityPoolSummaryResponse> {
+    return this._liquidityPoolService.getLiquidityPool(this.poolAddress)
       .pipe(
-        take(1),
         tap(pool => this.pool = pool),
         tap((pool) => {
           const miningGovernance = environment.governanceAddress;
@@ -98,25 +97,25 @@ export class PoolComponent implements OnInit, OnDestroy {
             eventTypes: ['SwapEvent', 'ProvideEvent', 'StakeEvent', 'CollectStakingRewardsEvent', 'MineEvent', 'CollectMiningRewardsEvent', 'EnableMiningEvent', 'NominationEvent', ]
           };
         })
-      )
-      .subscribe();
+      );
   }
 
-  private getWalletSummary(): void {
+  private getWalletSummary(): Observable<void> {
     const context = this._userContext.getUserContext();
     if (context.wallet) {
-      this._platformApiService.getWalletSummaryForPool(this.poolAddress, context.wallet)
-        .pipe(take(1))
-        .subscribe(walletSummary => {
-          this.walletBalance = walletSummary;
-        })
+      return this._platformApiService.getWalletSummaryForPool(this.poolAddress, context.wallet)
+        .pipe(take(1), tap(walletSummary => this.walletBalance = walletSummary));
     }
+
+    return of();
   }
 
-  private getPoolHistory(): void {
-    this._platformApiService.getPoolHistory(this.poolAddress)
-      .pipe(take(1))
-      .subscribe(poolHistory => {
+  private getPoolHistory(): Observable<void> {
+    return this._platformApiService.getPoolHistory(this.poolAddress)
+      .pipe(
+      take(1),
+      map(poolHistory => {
+        console.log('hit')
         this.poolHistory = poolHistory;
 
         let liquidityPoints = [];
@@ -147,7 +146,9 @@ export class PoolComponent implements OnInit, OnDestroy {
         this.stakingHistory = stakingPoints;
 
         this.handleChartTypeChange(this.selectedChart.category);
-      });
+
+        return;
+      }));
   }
 
   copyHandler($event) {

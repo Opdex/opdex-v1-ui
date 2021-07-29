@@ -4,7 +4,7 @@ import { switchMap, take, tap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { Observable, Subscription, timer } from 'rxjs';
+import { Observable, Subscription, interval } from 'rxjs';
 
 @Component({
   selector: 'opdex-token',
@@ -38,16 +38,17 @@ export class TokenComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // 10 seconds refresh view
-    this.subscription.add(
-      timer(0, 10000)
-        .pipe(switchMap(() => this.getToken()))
-        .pipe(switchMap(() => this.getTokenHistory()))
-        .subscribe());
+    this.subscription.add(interval(30000)
+      .pipe(tap(_ => this._tokenService.refreshToken(this.tokenAddress)))
+      .subscribe());
+
+    this.subscription.add(this.getToken()
+      .pipe(switchMap(() => this.getTokenHistory()))
+      .subscribe());
   }
 
   private getToken(): Observable<any> {
-    return this._tokenService.getToken(this.tokenAddress, true)
+    return this._tokenService.getToken(this.tokenAddress)
       .pipe(
         tap(token => {
           this.token = token;
