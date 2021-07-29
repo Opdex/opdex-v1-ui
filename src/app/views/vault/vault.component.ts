@@ -1,5 +1,4 @@
 import { TokensService } from '@sharedServices/platform/tokens.service';
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { VaultsService } from './../../services/platform/vaults.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
@@ -16,8 +15,7 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   constructor(
     private _vaultsService: VaultsService,
-    private _tokensService: TokensService,
-    private _platformApi: PlatformApiService,
+    private _tokensService: TokensService
   ) { }
 
   ngOnInit(): void {
