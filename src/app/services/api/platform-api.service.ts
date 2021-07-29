@@ -1,4 +1,4 @@
-import { shareReplay, tap } from 'rxjs/operators';
+import { IAddressBalanceResponse } from '@sharedModels/responses/platform-api/Addresses/address_balance.interface';
 import { Router } from '@angular/router';
 import { JwtService } from './../utility/jwt.service';
 import { Injectable } from '@angular/core';
@@ -63,8 +63,8 @@ export class PlatformApiService extends RestApiService {
     return this.get<any>(`${this.api}/tokens/${address}/history?timeSpan=${timeSpan}&candleSpan=${candleSpan}`);
   }
 
-  public getTokens(): Observable<any[]> {
-    return this.get<any[]>(`${this.api}/tokens`);
+  public getTokens(limit: number = 10, includeLpt: boolean = false): Observable<any[]> {
+    return this.get<any[]>(`${this.api}/tokens?take=${limit}&lpToken=${includeLpt}`);
   }
 
   //////////////
@@ -204,6 +204,10 @@ export class PlatformApiService extends RestApiService {
 
   public getAllowance(owner: string, spender: string, token: string): Observable<IAddressAllowanceResponse> {
     return this.get<any>(`${this.api}/wallet/${owner}/allowance/${token}/approved/${spender}`);
+  }
+
+  public getBalance(owner: string, token: string): Observable<IAddressBalanceResponse> {
+    return this.get<any>(`${this.api}/wallet/${owner}/balance/${token}`);
   }
 }
 

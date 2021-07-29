@@ -4,4 +4,4 @@
   {{pool.token.staking.symbol}}.
 </p>
 
-<ng-template #loading>{{event.subEventType === 'StartStaking' ? 'Started' : 'Stopped'}} staking <strong>0.00000000</strong> ODX</ng-template>
+<ng-template #loading>{{event.subEventType === 'StartStaking' ? 'Started' : 'Stopped'}} staking <strong>{{event.amount | formatNumber:8}}</strong> ODX</ng-template>

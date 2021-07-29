@@ -9,9 +9,9 @@
 
 <ng-template #loading>
   Distributed
-  <strong>##.########</strong>
+  <strong>{{event.governanceAmount | formatNumber:0}}</strong>
   ODX to the the governance contract
   and
-  <strong>##.########</strong>
+  <strong>{{event.vaultAmount | formatNumber:0}}</strong>
   ODX to the vault contract.
 </ng-template>

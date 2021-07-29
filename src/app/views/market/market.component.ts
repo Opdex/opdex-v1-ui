@@ -1,4 +1,4 @@
-import { MarketsService } from './../../services/platform/markets.service';
+import { MarketsService } from '@sharedServices/platform/markets.service';
 import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -135,25 +135,25 @@ export class MarketComponent implements OnInit {
   }
 
   private getTokens(): Observable<any[]> {
-    return this._platformApiService.getTokens()
-    .pipe(
-      take(1),
-      switchMap((tokens: any[]) => {
-        const tokens$: Observable<any>[] = [];
+    return this._platformApiService.getTokens(5, false)
+      .pipe(
+        take(1),
+        switchMap((tokens: any[]) => {
+          const tokens$: Observable<any>[] = [];
 
-        tokens.forEach(token => {
-          const tokenWithHistory$: Observable<any> = this.getTokenHistory(token);
-          tokens$.push(tokenWithHistory$);
-        });
+          tokens.forEach(token => {
+            const tokenWithHistory$: Observable<any> = this.getTokenHistory(token);
+            tokens$.push(tokenWithHistory$);
+          });
 
-        return forkJoin(tokens$);
-      }),
-      tap(tokens => this.tokens = tokens)
-    );
+          return forkJoin(tokens$);
+        }),
+        tap(tokens => this.tokens = tokens)
+      );
   }
 
   private getTokenHistory(token: any): Observable<any> {
-    return this._platformApiService.getTokenHistory(token.address, "1W")
+    return this._platformApiService.getTokenHistory(token.address, "1W", "Hourly")
       .pipe(
         take(1),
         map((tokenHistory: any) => {

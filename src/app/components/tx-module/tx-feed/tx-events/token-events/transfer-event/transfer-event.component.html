@@ -4,4 +4,4 @@
   {{token.symbol}} to {{event.to | shortAddress:4}}.
 </p>
 
-<ng-template #loading>Transferred <strong>##.########</strong>xYZT to ABcd...eFGh.</ng-template>
+<ng-template #loading>Transferred <strong>{{event.amount | formatNumber:8}}</strong>xYZT to ABcd...eFGh.</ng-template>
