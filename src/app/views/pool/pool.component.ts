@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { environment } from "@environments/environment";
+import { StatCardInfo } from "@sharedComponents/cards-module/stat-card/stat-card-info";
 import { ITransactionsRequest } from "@sharedModels/requests/transactions-filter";
 import { IAddressBalanceResponse } from "@sharedModels/responses/platform-api/Addresses/address_balance.interface";
 import { ILiquidityPoolSummaryResponse, ILiquidityPoolSnapshotHistoryResponse } from "@sharedModels/responses/platform-api/Pools/liquidity-pool.interface";
@@ -9,7 +10,7 @@ import { PlatformApiService } from "@sharedServices/api/platform-api.service";
 import { LiquidityPoolsService } from "@sharedServices/platform/liquidity-pools.service";
 import { SidenavService } from "@sharedServices/utility/sidenav.service";
 import { UserContextService } from "@sharedServices/utility/user-context.service";
-import { Observable, Subscription, zip, of, timer, interval } from "rxjs";
+import { Observable, Subscription, zip, of, interval } from "rxjs";
 import { tap, switchMap, catchError, take, map, delay } from "rxjs/operators";
 
 @Component({
@@ -67,6 +68,7 @@ export class PoolComponent implements OnInit, OnDestroy {
     }
   ]
   selectedChart = this.chartOptions[0];
+  statCards: StatCardInfo[];
 
   constructor(
     private _route: ActivatedRoute,
@@ -121,11 +123,75 @@ export class PoolComponent implements OnInit, OnDestroy {
             contracts: contracts,
             eventTypes: ['SwapEvent', 'ProvideEvent', 'StakeEvent', 'CollectStakingRewardsEvent', 'MineEvent', 'CollectMiningRewardsEvent', 'EnableMiningEvent', 'NominationEvent',]
           };
+          if (this.pool){
+            this.setPoolStatCards();
+          }
         })
       );
   }
 
-  private getCrsBalance(): Observable<void> {
+  private setPoolStatCards(): void {
+    this.statCards = [
+      {
+        title: 'Liquidity',
+        value: this.pool.reserves.usd.toString(),
+        prefix: '$',
+        change: this.pool.reserves.usdDailyChange,
+        show: true,
+        helpInfo: {
+          title: 'Liquidity Help',
+          paragraph: 'This modal is providing help for Liquidity'
+        }
+      },
+      {
+        title: 'Staking Weight',
+        value: this.pool.staking?.weight,
+        suffix: this.pool.token.staking?.symbol,
+        change: this.pool.staking?.weightDailyChange || 0,
+        formatNumber: 0,
+        show: true,
+        helpInfo: {
+          title: 'Staking Weight Help',
+          paragraph: 'This modal is providing help for Staking Weight.'
+        }
+      },
+      {
+        title: 'Volume',
+        value: this.pool.volume.usd.toString(),
+        prefix: '$',
+        daily: true,
+        show: true,
+        helpInfo: {
+          title: 'Volume Help',
+          paragraph: 'This modal is providing help for Volume'
+        }
+      },
+      {
+        title: 'Rewards',
+        value: this.pool.rewards.totalUsd.toString(),
+        daily: true,
+        prefix: '$',
+        show: true,
+        helpInfo: {
+          title: 'Rewards Help',
+          paragraph: 'This modal is providing help for Rewards'
+        }
+      },
+      {
+        title: 'Liquidity Mining',
+        value: this.pool.mining?.tokensMining,
+        formatNumber: 0,
+        suffix: this.pool.token.lp.symbol,
+        show: this.pool.mining != null && (this.pool.mining?.isActive || this.pool.mining?.tokensMining !== '0.00000000'),
+        helpInfo: {
+          title: 'Liquidity Mining Help',
+          paragraph: 'This modal is providing help for Liquidity Mining'
+        }
+      }
+    ];
+  }
+
+  private getCrsBalance(): Observable<IAddressBalanceResponse> {
     const context = this._userContext.getUserContext();
 
     if (context.wallet) {

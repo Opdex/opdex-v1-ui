@@ -15,6 +15,7 @@ import { MiningCardComponent } from './mining-card/mining-card.component';
 import { LiquidityPoolCardComponent } from './liquidity-pool-card/liquidity-pool-card.component';
 import { StakingPoolCardComponent } from './staking-pool-card/staking-pool-card.component';
 import { StatCardComponent } from './stat-card/stat-card.component';
+import { ModalsModule } from '@sharedComponents/modals-module/modals.module';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { StatCardComponent } from './stat-card/stat-card.component';
     MatButtonModule,
     MatTooltipModule,
     SharedPipesModule,
-    SharedModule
+    SharedModule,
+    ModalsModule
   ],
   exports: [
     CardComponent,

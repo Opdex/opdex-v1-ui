@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, Subscription, interval } from 'rxjs';
+import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
 
 @Component({
   selector: 'opdex-token',
@@ -34,6 +35,7 @@ export class TokenComponent implements OnInit {
   ]
   selectedChart = this.chartOptions[0];
   transactionRequest: ITransactionsRequest;
+  statCards: StatCardInfo[];
 
   constructor(
     private _route: ActivatedRoute,
@@ -71,8 +73,39 @@ export class TokenComponent implements OnInit {
                           : [this.token.address],
             direction: 'DESC'
           }
+          if (this.token){
+            this.setTokenStatCards();
+          }
         })
       );
+  }
+
+  private setTokenStatCards(): void {
+    this.statCards = [
+      {
+        title: 'Price',
+        value: this.token.summary.price.close,
+        change: this.token.summary.dailyPriceChange,
+        prefix: '$',
+        formatNumber: 2,
+        show: true,
+        helpInfo: {
+          title: 'Price Help',
+          paragraph: 'This modal is providing help for Price.'
+        }
+      },
+      {
+        title: 'Total Supply',
+        value: this.token.totalSupply,
+        formatNumber: this.token.decimals,
+        daily: true,
+        show: true,
+        helpInfo: {
+          title: 'Total Supply Help',
+          paragraph: 'This modal is providing help for Total Supply'
+        }
+      }
+    ];
   }
 
   private getTokenHistory(): Observable<any> {

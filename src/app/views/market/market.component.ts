@@ -1,5 +1,4 @@
 import { TokensService } from '@sharedServices/platform/tokens.service';
-import { MarketsService } from '@sharedServices/platform/markets.service';
 import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -7,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
 import { forkJoin, interval, Observable, Subscription, zip } from 'rxjs';
 import { delay, map, switchMap, take, tap } from 'rxjs/operators';
 import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
+import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
+import { MarketsService } from '@sharedServices/platform/markets.service';
 
 @Component({
   selector: 'opdex-market',
@@ -42,7 +43,8 @@ export class MarketComponent implements OnInit {
       category: 'Staking Weight',
       suffix: 'ODX'
     }
-  ]
+  ];
+  statCards: StatCardInfo[];
   selectedChart = this.chartOptions[0];
 
   constructor(private _platformApiService: PlatformApiService, private _marketsService: MarketsService, private _tokensService: TokensService) { }
@@ -66,7 +68,72 @@ export class MarketComponent implements OnInit {
 
   private getMarket(): Observable<any> {
     return this._marketsService.getMarket()
-      .pipe(tap(market => this.market = market));
+      .pipe(tap(market => {
+        this.market = market;
+        this.setMarketStatCards();
+      }));
+  }
+
+  private setMarketStatCards(): void {
+    this.statCards = [
+      {
+        title: 'Cirrus (CRS)',
+        value: this.market.crsToken.summary.price.close,
+        prefix: '$',
+        formatNumber: 2,
+        change: this.market.crsToken.summary.dailyPriceChange,
+        show: true,
+        helpInfo: {
+          title: 'Cirrus (CRS) Help',
+          paragraph: 'This modal is providing help for Cirrus (CRS)'
+        }
+      },
+      {
+        title: 'Liquidity',
+        value: this.market.summary.liquidity,
+        prefix: '$',
+        change: this.market.summary.liquidityDailyChange,
+        show: true,
+        helpInfo: {
+          title: 'Liquidity Help',
+          paragraph: 'This modal is providing help for Liquidity'
+        }
+      },
+      {
+        title: 'Staking Weight',
+        value: this.market.summary.staking.weight,
+        suffix: this.market.stakingToken.symbol,
+        change: this.market.summary.staking.weightDailyChange,
+        formatNumber: 0,
+        show: true,
+        helpInfo: {
+          title: 'Staking Weight Help',
+          paragraph: 'This modal is providing help for Staking Weight.'
+        }
+      },
+      {
+        title: 'Volume',
+        value: this.market.summary.volume,
+        prefix: '$',
+        daily: true,
+        show: true,
+        helpInfo: {
+          title: 'Volume Help',
+          paragraph: 'This modal is providing help for Volume'
+        }
+      },
+      {
+        title: 'Rewards',
+        value: this.market.summary.rewards.totalUsd,
+        daily: true,
+        prefix: '$',
+        show: true,
+        helpInfo: {
+          title: 'Rewards Help',
+          paragraph: 'This modal is providing help for Rewards'
+        }
+      }
+    ];
   }
 
   private getMarketHistory(): Observable<void> {
