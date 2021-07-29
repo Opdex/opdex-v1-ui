@@ -5,37 +5,13 @@
         <h1 class="page-title">Vault</h1>
       </div>
     </div>
-
     <div class="row mb-5">
-      <div class="col">
-        <opdex-card>
-          <h3>Locked Tokens</h3>
-          <h4 class="mb-0">100,000,000 ODX</h4>
-        </opdex-card>
-      </div>
-
-      <div class="col">
-        <opdex-card>
-          <h3>Unassigned Tokens</h3>
-          <h4 class="mb-0">50,000,000 ODX</h4>
-        </opdex-card>
-      </div>
-
-      <div class="col">
-        <opdex-card>
-          <!-- <h3>Collected Tokens</h3>
-          <h4 class="mb-0">0 ODX</h4> -->
-        </opdex-card>
-      </div>
-
-      <div class="col">
-        <opdex-card>
-          <!-- <h3>Maximum Received</h3>
-          <h4 class="mb-0">250,000,000 ODX</h4> -->
-        </opdex-card>
-      </div>
+      <ng-container *ngFor="let statCard of statCards">
+        <div *ngIf="statCard.show" class="col-12 col-md-6 col-lg">
+            <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
+        </div>
+      </ng-container>
     </div>
-
     <div class="row">
       <div class="col">
         <opdex-card>

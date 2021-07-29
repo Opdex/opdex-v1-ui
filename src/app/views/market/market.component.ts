@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
+import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
 
 @Component({
   selector: 'opdex-market',
@@ -39,7 +40,9 @@ export class MarketComponent implements OnInit {
       category: 'Staking Weight',
       suffix: 'ODX'
     }
-  ]
+  ];
+  statCards: StatCardInfo[];
+
   selectedChart = this.chartOptions[0];
 
   constructor(private _platformApiService: PlatformApiService) { }
@@ -58,7 +61,72 @@ export class MarketComponent implements OnInit {
   private getMarket(): void {
     this._platformApiService.getMarketOverview()
       .pipe(take(1))
-      .subscribe(market => this.market = market);
+      .subscribe((market) => {
+        this.market = market;
+        this.setMarketStatCards();
+      });
+  }
+
+  private setMarketStatCards(): void {
+    this.statCards = [
+      {
+        title: 'Cirrus (CRS)', 
+        value: this.market.crsToken.summary.price.close,
+        prefix: '$',
+        formatNumber: 2, 
+        change: this.market.crsToken.summary.dailyPriceChange,
+        show: true,
+        helpInfo: {
+          title: 'Cirrus (CRS) Help',
+          paragraph: 'This modal is providing help for Cirrus (CRS)'
+        }
+      },
+      {
+        title: 'Liquidity', 
+        value: this.market.summary.liquidity,
+        prefix: '$',
+        change: this.market.summary.liquidityDailyChange,
+        show: true,
+        helpInfo: {
+          title: 'Liquidity Help',
+          paragraph: 'This modal is providing help for Liquidity'
+        }
+      },
+      {
+        title: 'Staking Weight', 
+        value: this.market.summary.staking.weight,
+        suffix: this.market.stakingToken.symbol,
+        change: this.market.summary.staking.weightDailyChange,
+        formatNumber: 0, 
+        show: true,
+        helpInfo: {
+          title: 'Staking Weight Help',
+          paragraph: 'This modal is providing help for Staking Weight.'
+        }
+      },
+      {
+        title: 'Volume', 
+        value: this.market.summary.volume,
+        prefix: '$',
+        daily: true,
+        show: true,
+        helpInfo: {
+          title: 'Volume Help',
+          paragraph: 'This modal is providing help for Volume'
+        }
+      },
+      {
+        title: 'Rewards', 
+        value: this.market.summary.rewards.totalUsd,
+        daily: true,
+        prefix: '$',
+        show: true,
+        helpInfo: {
+          title: 'Rewards Help',
+          paragraph: 'This modal is providing help for Rewards'
+        }
+      }
+    ];
   }
 
   private getMarketHistory(): void {

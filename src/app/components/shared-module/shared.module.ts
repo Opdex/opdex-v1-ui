@@ -6,18 +6,23 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 
 import { ChangeIndicatorComponent } from './change-indicator/change-indicator.component';
+import { HelpButtonComponent } from './help-button/help-button.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
-    ChangeIndicatorComponent
+    ChangeIndicatorComponent,
+    HelpButtonComponent
   ],
   imports: [
     CommonModule,
     MatCardModule,
-    MatIconModule
+    MatIconModule, 
+    MatButtonModule
   ],
   exports: [
-    ChangeIndicatorComponent
+    ChangeIndicatorComponent,
+    HelpButtonComponent
   ]
 })
 export class SharedModule { }

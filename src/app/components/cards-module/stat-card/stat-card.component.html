@@ -1,19 +1,16 @@
 <div class="stat-card">
   <opdex-card>
     <h4 class="stat-header">
-      {{title}} <small class="ml-2" *ngIf="daily">(24hr)</small>
-
-      <button mat-icon-button color="primary" class="tiny ml-1">
-        <mat-icon>help</mat-icon>
-      </button>
+      {{statInfo.title}} <small class="ml-2" *ngIf="statInfo.daily">(24hr)</small>
+      <opdex-help-button *ngIf="statInfo.helpInfo" [info]="statInfo.helpInfo"></opdex-help-button>
     </h4>
 
     <div class="stat">
       <p class="stat-value">
-        {{value}}
+        {{statInfo.prefix}}{{statInfo.value | formatNumber: statInfo.formatNumber}} {{statInfo.suffix}}
       </p>
 
-      <opdex-change-indicator [value]="change" *ngIf="change !== null"></opdex-change-indicator>
+      <opdex-change-indicator [value]="statInfo.change" *ngIf="statInfo.change !== null && statInfo.change !== undefined"></opdex-change-indicator>
     </div>
   </opdex-card>
 </div>
