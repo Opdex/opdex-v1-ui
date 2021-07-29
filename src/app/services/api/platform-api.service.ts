@@ -99,6 +99,15 @@ export class PlatformApiService extends RestApiService {
     return this.post<any>(`${this.api}/governances/${address}/reward-mining-pools`, {});
   }
 
+
+  //////////////
+  // Vaults
+  //////////////
+
+  public getVault(address: string): Observable<any> {
+    return this.get<any>(`${this.api}/vault/${address}`);
+  }
+
   //////////////
   // Markets
   //////////////

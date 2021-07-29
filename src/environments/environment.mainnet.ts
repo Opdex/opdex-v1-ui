@@ -9,6 +9,7 @@ export const environment = {
   marketAddress: '',
   routerAddress: '',
   governanceAddress: '',
+  vaultAddress: '',
   allowedJwtDomains: [api],
   network: Network.Mainnet
 };
