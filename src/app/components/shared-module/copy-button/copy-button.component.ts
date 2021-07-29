@@ -8,16 +8,23 @@ import { Component, Input, OnInit } from '@angular/core';
 export class CopyButtonComponent implements OnInit {
 
   @Input() tooltip: string;
-  @Input() address: string;
-  @Input() size: string; 
+  @Input() value: any;
+  @Input() size: string; // Should use the enum for icon sizes, icon-sizes.ts
+  @Input() icon: string; 
+
+  copied = false;
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  copyHandler(event: boolean): void {
-    console.log(event);
+  copyHandler($event) {
+    this.copied = true;
+
+    setTimeout(() => {
+      this.copied = false;
+    }, 1000);
   }
 
 }

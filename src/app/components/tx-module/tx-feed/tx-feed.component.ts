@@ -5,6 +5,7 @@ import { ITransactionResponse, ITransferEventResponse } from '@sharedModels/resp
 import { ITransactionsResponse } from '@sharedModels/responses/platform-api/Transactions/transactions-response';
 import { map, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-tx-feed',
@@ -17,6 +18,7 @@ export class TxFeedComponent implements OnChanges {
   transactions: ITransactionsResponse;
   copied: boolean;
   transactions$: Observable<ITransactionResponse[]>;
+  iconSize = IconSizes;
 
   constructor(private _platformApi: PlatformApiService) { }
 

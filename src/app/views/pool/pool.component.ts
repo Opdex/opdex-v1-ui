@@ -212,14 +212,6 @@ export class PoolComponent implements OnInit, OnDestroy {
         }));
   }
 
-  copyHandler($event) {
-    this.copied = true;
-
-    setTimeout(() => {
-      this.copied = false;
-    }, 1000);
-  }
-
   handleChartTypeChange($event) {
     this.selectedChart = this.chartOptions.find(options => options.category === $event);
 

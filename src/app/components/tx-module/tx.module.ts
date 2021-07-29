@@ -59,6 +59,7 @@ import { RewardMiningPoolEventComponent } from './tx-feed/tx-events/governance-e
 import { NominationEventComponent } from './tx-feed/tx-events/governance-events/nomination-event/nomination-event.component';
 import { ChangeDeployerOwnerEventComponent } from './tx-feed/tx-events/deployer-events/change-deployer-owner-event/change-deployer-owner-event.component';
 import { CreateMarketEventComponent } from './tx-feed/tx-events/deployer-events/create-market-event/create-market-event.component';
+import { SharedModule } from '@sharedComponents/shared-module/shared.module';
 
 
 @NgModule({
@@ -119,6 +120,7 @@ import { CreateMarketEventComponent } from './tx-feed/tx-events/deployer-events/
     MatTooltipModule,
     SharedPipesModule,
     ClipboardModule,
+    SharedModule
   ],
   exports: [
     TxSwapComponent,

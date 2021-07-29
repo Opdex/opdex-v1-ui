@@ -1,8 +1,8 @@
 <button mat-icon-button
-    [class]="size"
+    [class]="'copy-button d-flex ' + size"
     color="primary"
     [matTooltip]="tooltip"
-    [cdkCopyToClipboard]="address"
+    [cdkCopyToClipboard]="value"
     (cdkCopyToClipboardCopied)="copyHandler($event)">
-    <mat-icon>link</mat-icon>
+    <mat-icon>{{copied ? 'check_circle' : icon}}</mat-icon>
 </button>

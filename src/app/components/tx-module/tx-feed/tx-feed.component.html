@@ -5,15 +5,7 @@
     <div class="transaction" *ngFor="let tx of transactions; trackBy: transactionsTrackBy">
       <div class="d-flex flex-direction-column">
         <div class="pr-2">
-          <button
-            class="tiny"
-            mat-icon-button
-            color="primary"
-            [matTooltip]="tx.hash"
-            [cdkCopyToClipboard]="tx.hash"
-            (cdkCopyToClipboardCopied)="copyHandler($event)">
-            <mat-icon>{{copied ? 'check_circle' : 'receipt'}}</mat-icon>
-          </button>
+          <opdex-copy-button [tooltip]="tx.hash" [value]="tx.hash" icon="receipt" [size]="iconSize[iconSize.tiny]"></opdex-copy-button>
         </div>
 
         <div class="pl-2">
