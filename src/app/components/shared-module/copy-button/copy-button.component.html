@@ -1,6 +1,6 @@
 <button mat-icon-button
-    [class]="'copy-button d-flex ' + size"
-    color="primary"
+    class="copy-button d-flex"
+    [ngClass]="size"
     [matTooltip]="tooltip"
     [cdkCopyToClipboard]="value"
     (cdkCopyToClipboardCopied)="copyHandler($event)">

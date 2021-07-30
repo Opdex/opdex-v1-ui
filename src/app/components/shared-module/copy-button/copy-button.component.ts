@@ -1,11 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-copy-button',
   templateUrl: './copy-button.component.html',
   styleUrls: ['./copy-button.component.scss']
 })
-export class CopyButtonComponent implements OnInit {
+export class CopyButtonComponent {
 
   @Input() tooltip: string;
   @Input() value: any;
@@ -15,9 +16,6 @@ export class CopyButtonComponent implements OnInit {
   copied = false;
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
   copyHandler($event) {
     this.copied = true;
