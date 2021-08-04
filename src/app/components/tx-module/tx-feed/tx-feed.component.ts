@@ -18,7 +18,7 @@ export class TxFeedComponent implements OnChanges {
   transactions: ITransactionsResponse;
   copied: boolean;
   transactions$: Observable<ITransactionResponse[]>;
-  iconSize = IconSizes;
+  iconSizes = IconSizes;
 
   constructor(private _platformApi: PlatformApiService) { }
 

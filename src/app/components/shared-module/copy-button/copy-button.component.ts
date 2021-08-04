@@ -10,8 +10,8 @@ export class CopyButtonComponent {
 
   @Input() tooltip: string;
   @Input() value: any;
-  @Input() size: string; // Should use the enum for icon sizes, icon-sizes.ts
-  @Input() icon: string; 
+  @Input() size: IconSizes;
+  @Input() icon: string;
 
   copied = false;
 

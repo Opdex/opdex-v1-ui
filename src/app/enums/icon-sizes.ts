@@ -1,4 +1,4 @@
 export enum IconSizes {
-    'tiny',
-    'small'
+    tiny = 'tiny',
+    small = 'small'
 }
