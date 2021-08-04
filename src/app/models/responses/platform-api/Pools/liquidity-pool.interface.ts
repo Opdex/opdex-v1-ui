@@ -1,3 +1,5 @@
+import { ITokenGroup } from "../token.interface";
+
 export interface ILiquidityPoolSummaryResponse extends ILiquidityPoolSummary {
   address: string;
   token: ITokenGroup;
@@ -24,37 +26,12 @@ export interface ILiquidityPoolSnapshot extends ILiquidityPoolSummary {
   endDate: Date;
 }
 
-export interface ITokenGroup {
-  crs: IToken;
-  src: IToken;
-  lp: IToken;
-  staking?: IToken;
-}
-
-export interface IToken {
-  address: string;
-  name: string;
-  symbol: string;
-  decimals: number;
-  sats: number;
-  totalSupply: string;
-  summary: ITokenSnapshot;
-}
-
 export interface IOhlc {
   open: string | number;
   high: string | number;
   low: string | number;
   close: string | number;
 }
-
-export interface ITokenSnapshot {
-  price: IOhlc;
-  startDate: Date;
-  endDate: Date;
-  dailyPriceChange?: number;
-}
-
 export interface IReserves {
   crs: string;
   src: string;

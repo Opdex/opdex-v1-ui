@@ -28,11 +28,10 @@ opdex-side-nav {
 }
 
 .background {
-  width: 100%;
-  height: 100%;
   background-image: url('/assets/bg.png');
   background-size: cover;
-  position: fixed;
+  background-attachment: fixed;
+  background-position: center;
 }
 
 .sidenav {

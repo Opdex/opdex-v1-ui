@@ -1,6 +1,6 @@
 import { CanActivate, CanActivateChild, CanLoad, Router, ActivatedRouteSnapshot, UrlSegment } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { UserContextService } from '@sharedServices/user-context.service';
+import { UserContextService } from '@sharedServices/utility/user-context.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {

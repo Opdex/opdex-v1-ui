@@ -1,5 +1,4 @@
-<main [ngClass]="theme">
-  <div class="background"></div>
+<main class="background" [ngClass]="theme">
   <mat-sidenav-container (backdropClick)="closeSidenav()" class="w-100 h-100">
     <mat-sidenav #sidenav (keydown.escape)="closeSidenav()" position="end" class="sidenav" [fixedInViewport]="true" [fixedTopGap]="0" [fixedBottomGap]="0" [mode]="sidenavMode">
       <div class="sidenav-container">
@@ -55,27 +54,30 @@
         <opdex-side-nav *ngIf="context.wallet"></opdex-side-nav>
       </ng-container>
 
-      <div id="page-content" [@fadeAnimation]="prepareRoute(outlet)" [ngClass]="{'no-sidebar': !context?.wallet}">
-        <ng-container *ngIf="context$ | async as context">
-          <div class="banner" *ngIf="context.wallet">
-            <div class="env light">
-              <mat-icon *ngIf="network == 'Devnet'">warning</mat-icon>
-              <p class="mb-0 ml-2">{{network}}</p>
-            </div>
+      <div class="animation-container" style="display: block;" [@fadeAnimation]="prepareRoute(outlet)">
+        <div id="page-content" [ngClass]="{'no-sidebar': !context?.wallet}">
+          <ng-container *ngIf="context$ | async as context">
+            <div class="banner" *ngIf="context.wallet">
+              <div class="env light">
+                <mat-icon *ngIf="network == 'Devnet'">warning</mat-icon>
+                <p class="mb-0 ml-2">{{network}}</p>
+              </div>
 
-            <div class="block" *ngIf="latestSyncedBlock$ | async as block">
-              <span class="light">Latest Synced Block:</span>
-              <p class="mb-0 ml-2">{{block.height | formatNumber:0}}</p>
+              <div class="block" *ngIf="latestSyncedBlock$ | async as block">
+                <span class="light">Latest Synced Block:</span>
+                <p class="mb-0 ml-2">{{block.height | formatNumber:0}}</p>
+              </div>
             </div>
+          </ng-container>
+
+          <div class="page-content-container">
+            <router-outlet #outlet="outlet"></router-outlet>
           </div>
-        </ng-container>
 
-        <div class="page-content-container">
-          <router-outlet #outlet="outlet"></router-outlet>
+          <opdex-mobile-nav></opdex-mobile-nav>
         </div>
-
-        <opdex-mobile-nav></opdex-mobile-nav>
       </div>
+
     </mat-sidenav-content>
   </mat-sidenav-container>
 </main>

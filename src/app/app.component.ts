@@ -1,16 +1,16 @@
 import { environment } from '@environments/environment';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { SidenavService } from './services/sidenav.service';
+import { SidenavService } from './services/utility/sidenav.service';
 import { Component, HostBinding, OnInit, ViewChild } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { ThemeService } from './services/theme.service';
+import { ThemeService } from './services/utility/theme.service';
 import { MatSidenav } from '@angular/material/sidenav';
 import { ISidenavMessage, TransactionView } from '@sharedModels/transaction-view';
 import { Observable, Subscription, timer } from 'rxjs';
 import { TransactionTypes } from '@sharedLookups/transaction-types.lookup';
 import { FadeAnimation } from '@sharedServices/animations/fade-animation';
 import { RouterOutlet } from '@angular/router';
-import { UserContextService } from '@sharedServices/user-context.service';
+import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { skip, switchMap, take, tap } from 'rxjs/operators';
 
 @Component({

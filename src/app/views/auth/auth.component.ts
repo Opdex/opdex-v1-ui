@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { environment } from '@environments/environment';
 import { take, catchError } from 'rxjs/operators';
-import { UserContextService } from '@sharedServices/user-context.service';
+import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Router } from '@angular/router';
 import { of, Subscription } from 'rxjs';
 

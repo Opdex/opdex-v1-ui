@@ -1,3 +1,4 @@
+import { TokensService } from '@sharedServices/platform/tokens.service';
 import { take } from 'rxjs/operators';
 import { OnChanges } from '@angular/core';
 import { Component, Input } from '@angular/core';
@@ -5,7 +6,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { UserContextService } from '@sharedServices/user-context.service';
+import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { TxBase } from '../tx-base.component';
 
 @Component({
@@ -35,7 +36,7 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
   constructor(
     private _fb: FormBuilder,
     protected _dialog: MatDialog,
-    private _platformApi: PlatformApiService,
+    private _tokensService: TokensService,
     protected _userContext: UserContextService
   ) {
     super(_userContext, _dialog);
@@ -59,7 +60,7 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
   }
 
   submit() {
-    this._platformApi.getToken(this.token.value)
+    this._tokensService.getToken(this.token.value)
       .pipe(take(1))
       .subscribe(response => {
         const payload = {

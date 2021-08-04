@@ -1,6 +1,6 @@
 import { MatDialog } from "@angular/material/dialog";
 import { SignTxModalComponent } from "@sharedComponents/modals-module/sign-tx-modal/sign-tx-modal.component";
-import { UserContextService } from "@sharedServices/user-context.service";
+import { UserContextService } from "@sharedServices/utility/user-context.service";
 
 export abstract class TxBase {
   context: any;

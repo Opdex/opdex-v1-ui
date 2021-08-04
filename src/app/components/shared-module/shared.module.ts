@@ -14,11 +14,13 @@ import { MatButtonModule } from '@angular/material/button';
 // Opdex Component Imports
 import { ChangeIndicatorComponent } from './change-indicator/change-indicator.component';
 import { CopyButtonComponent } from './copy-button/copy-button.component';
+import { HelpButtonComponent } from './help-button/help-button.component';
 
 @NgModule({
   declarations: [
     ChangeIndicatorComponent,
-    CopyButtonComponent
+    CopyButtonComponent,
+    HelpButtonComponent
   ],
   imports: [
     CommonModule,
@@ -30,7 +32,11 @@ import { CopyButtonComponent } from './copy-button/copy-button.component';
   ],
   exports: [
     ChangeIndicatorComponent,
-    CopyButtonComponent
+    CopyButtonComponent,
+    MatIconModule,
+    MatButtonModule,
+    ChangeIndicatorComponent,
+    HelpButtonComponent
   ]
 })
 export class SharedModule { }

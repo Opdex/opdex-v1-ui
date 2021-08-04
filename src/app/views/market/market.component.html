@@ -15,86 +15,11 @@
 
         <div class="stats">
           <div class="row">
-            <div class="col-12 col-md-6 col-xl">
-              <opdex-card>
-                <h4 class="stat-header">
-                  Cirrus (CRS)
-                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
-                </h4>
-
-                <div class="stat">
-                  <p class="stat-value">
-                    ${{market.crsToken.summary.price.close | formatNumber:2}}
-                  </p>
-
-                  <opdex-change-indicator [value]="market.crsToken.summary.dailyPriceChange"></opdex-change-indicator>
-                </div>
-              </opdex-card>
-            </div>
-
-            <div class="col-12 col-md-6 col-xl">
-              <opdex-card>
-                <h4 class="stat-header">
-                  Liquidity
-                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
-                </h4>
-
-                <div class="stat">
-                  <p class="stat-value">
-                    ${{market.summary.liquidity | formatNumber:0}}
-                  </p>
-
-                  <opdex-change-indicator [value]="market.summary.liquidityDailyChange"></opdex-change-indicator>
-                </div>
-              </opdex-card>
-            </div>
-
-            <div class="col-12 col-md-6 col-xl">
-              <opdex-card>
-                <h4 class="stat-header">
-                  Staking Weight
-                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
-                </h4>
-
-                <div class="stat">
-                  <p class="stat-value">
-                    {{market.summary.staking.weight | formatNumber:0}} <small>ODX</small>
-                  </p>
-
-                  <opdex-change-indicator [value]="market.summary.staking.weightDailyChange"></opdex-change-indicator>
-                </div>
-              </opdex-card>
-            </div>
-
-            <div class="col-12 col-md-6 col-xl">
-              <opdex-card>
-                <h4 class="stat-header">
-                  Volume (24hr)
-                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
-                </h4>
-
-                <div class="stat">
-                  <p class="stat-value">
-                    ${{market.summary.volume | formatNumber:0}}
-                  </p>
-                </div>
-              </opdex-card>
-            </div>
-
-            <div class="col-12 col-md-6 col-xl">
-              <opdex-card>
-                <h4 class="stat-header">
-                  Rewards (24hr)
-                  <button mat-icon-button color="primary" class="tiny ml-1"><mat-icon>help</mat-icon></button>
-                </h4>
-
-                <div class="stat">
-                  <p class="stat-value">
-                    ${{market.summary.rewards.totalUsd | formatNumber}}
-                  </p>
-                </div>
-              </opdex-card>
-            </div>
+            <ng-container *ngFor="let statCard of statCards">
+              <div *ngIf="statCard.show" class="col-12 col-md-6 col-lg">
+                  <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
+              </div>
+          </ng-container>
           </div>
         </div>
       </div>
@@ -150,7 +75,7 @@
       <div class="col-12">
         <opdex-card>
           <h2>Top Tokens</h2>
-          <opdex-tokens-table [tokens]="tokens" [smallPageSize]="true"></opdex-tokens-table>
+          <opdex-tokens-table [tokens]="tokens"></opdex-tokens-table>
         </opdex-card>
       </div>
     </div>

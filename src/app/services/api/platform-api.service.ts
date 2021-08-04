@@ -12,6 +12,7 @@ import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool
 import { TransactionRequest } from '@sharedModels/requests/transactions-filter';
 import { ITransactionsResponse } from '@sharedModels/responses/platform-api/Transactions/transactions-response';
 import { IAddressAllowanceResponse } from '@sharedModels/responses/platform-api/Addresses/address-allowance.interface';
+import { IToken } from '@sharedModels/responses/platform-api/token.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -54,8 +55,8 @@ export class PlatformApiService extends RestApiService {
   // Tokens
   //////////////
 
-  public getToken(address: string, ): Observable<any> {
-    return this.get<any>(`${this.api}/tokens/${address}`);
+  public getToken(address: string): Observable<IToken> {
+    return this.get<IToken>(`${this.api}/tokens/${address}`);
   }
 
   public getTokenHistory(address: string, timeSpan: string = '1Y', candleSpan: string = 'Hourly'): Observable<any> {
@@ -96,6 +97,15 @@ export class PlatformApiService extends RestApiService {
 
   public rewardMiningPools(address: string): Observable<any> {
     return this.post<any>(`${this.api}/governances/${address}/reward-mining-pools`, {});
+  }
+
+
+  //////////////
+  // Vaults
+  //////////////
+
+  public getVault(address: string): Observable<any> {
+    return this.get<any>(`${this.api}/vault/${address}`);
   }
 
   //////////////
