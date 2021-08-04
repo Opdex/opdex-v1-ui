@@ -60,6 +60,7 @@ import { NominationEventComponent } from './tx-feed/tx-events/governance-events/
 import { ChangeDeployerOwnerEventComponent } from './tx-feed/tx-events/deployer-events/change-deployer-owner-event/change-deployer-owner-event.component';
 import { CreateMarketEventComponent } from './tx-feed/tx-events/deployer-events/create-market-event/create-market-event.component';
 import { SharedModule } from '@sharedComponents/shared-module/shared.module';
+import { ControlsModule } from '@sharedComponents/controls-module/controls.module';
 
 
 @NgModule({
@@ -120,7 +121,8 @@ import { SharedModule } from '@sharedComponents/shared-module/shared.module';
     MatTooltipModule,
     SharedPipesModule,
     ClipboardModule,
-    SharedModule
+    SharedModule,
+    ControlsModule
   ],
   exports: [
     TxSwapComponent,

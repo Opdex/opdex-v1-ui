@@ -1,0 +1,7 @@
+@import '../colors.scss';
+
+.mat-slider-track-fill,
+  .mat-slider-thumb,
+  .mat-slider-thumb-label {
+  background-color: $blue-primary !important;
+}
