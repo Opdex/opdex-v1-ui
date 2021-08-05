@@ -8,15 +8,16 @@ import { CommonModule } from '@angular/common';
 
 import { PoolsTableComponent } from './pools-table/pools-table.component';
 import { TokensTableComponent } from './tokens-table/tokens-table.component';
+import { TransactionsTableComponent } from './transactions-table/transactions-table.component';
+import { VaultCertificatesTableComponent } from './vault-certificates-table/vault-certificates-table.component';
+import { WalletBalancesTableComponent } from './wallet-balances-table/wallet-balances-table.component';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
-import { TransactionsTableComponent } from './transactions-table/transactions-table.component';
-import { VaultCertificatesTableComponent } from './vault-certificates-table/vault-certificates-table.component';
-import { WalletBalancesTableComponent } from './wallet-balances-table/wallet-balances-table.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { WalletBalancesTableComponent } from './wallet-balances-table/wallet-bal
     MatSortModule,
     MatButtonModule,
     MatIconModule,
+    MatCheckboxModule,
     CardsModule,
     ChartsModule,
     SharedModule,

@@ -32,7 +32,7 @@ export class TxFeedComponent implements OnChanges {
         take(1),
         // Filter transactions
         map((transactionsResponse: ITransactionsResponse) => {
-          let filteredTransactions = transactionsResponse.transactions;
+          let filteredTransactions = transactionsResponse.results;
 
           filteredTransactions
             .map(transaction => {
@@ -59,13 +59,13 @@ export class TxFeedComponent implements OnChanges {
             });
 
           // Only transactions that have events
-          transactionsResponse.transactions = filteredTransactions.filter(tx => tx.events.length >= 1);
+          transactionsResponse.results = filteredTransactions.filter(tx => tx.events.length >= 1);
 
           // Set next/previous pages
           this.transactionRequest.next = transactionsResponse.paging.next;
           this.transactionRequest.previous = transactionsResponse.paging.previous;
 
-          return transactionsResponse.transactions;
+          return transactionsResponse.results;
         }),
         // Reorder tx and tx events final results
         map((transactions: ITransactionResponse[]) => {

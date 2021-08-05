@@ -28,7 +28,7 @@ export class WalletComponent implements OnInit {
         switchMap(response => {
           const balances$: Observable<IToken>[] = [];
 
-          response.balances.forEach(balance => {
+          response.results.forEach(balance => {
             const tokenDetails$: Observable<IToken> =
               this._tokensService.getToken(balance.token)
                 .pipe(

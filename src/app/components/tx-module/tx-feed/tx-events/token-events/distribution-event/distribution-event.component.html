@@ -1,17 +1,21 @@
 <p class="mb-0" *ngIf="token$ | async as token; else loading">
   Distributed
-  <strong>{{event.governanceAmount | formatNumber:0}}</strong>
-  {{token.symbol}} to the the governance contract
-  and
-  <strong>{{event.vaultAmount | formatNumber:0}}</strong>
-  {{token.symbol}} to the vault contract.
+  <strong>{{event.governanceAmount | formatNumber:0}} </strong>
+  <a routerLink="/tokens/{{token.address}}">{{token.symbol}}</a> to the
+  <a routerLink="/governance">governance</a> contract<ng-container *ngIf="event.vaultAmount == '0.00000000'; else vaultDetails">.</ng-container>
+
+  <ng-template #vaultDetails>
+    and
+    <strong>{{event.vaultAmount | formatNumber:0}} </strong>
+    <a routerLink="/tokens/{{token.address}}">{{token.symbol}}</a> to the <a routerLink="/vault">vault</a> contract.
+  </ng-template>
 </p>
 
 <ng-template #loading>
   Distributed
   <strong>{{event.governanceAmount | formatNumber:0}}</strong>
-  ODX to the the governance contract
+  XYZ to the the governance contract
   and
   <strong>{{event.vaultAmount | formatNumber:0}}</strong>
-  ODX to the vault contract.
+  XYZ to the vault contract.
 </ng-template>

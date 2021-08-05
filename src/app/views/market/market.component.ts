@@ -31,17 +31,20 @@ export class MarketComponent implements OnInit {
     {
       type: 'line',
       category: 'Liquidity',
-      prefix: '$'
+      prefix: '$',
+      decimals: 3
     },
     {
       type: 'bar',
       category: 'Volume',
-      prefix: '$'
+      prefix: '$',
+      decimals: 3
     },
     {
       type: 'line',
       category: 'Staking Weight',
-      suffix: 'ODX'
+      suffix: 'ODX',
+      decimals: 0
     }
   ];
   statCards: StatCardInfo[];
@@ -184,7 +187,7 @@ export class MarketComponent implements OnInit {
 
         this.transactionRequest = {
           limit: 10,
-          eventTypes: ['CreateLiquidityPoolEvent', 'DistributionEvent', 'SwapEvent', 'ProvideEvent', 'MineEvent', 'CollectStakingRewardsEvent', 'CollectMiningRewardsEvent', 'NominationEvent'],
+          eventTypes: ['CreateLiquidityPoolEvent', 'DistributionEvent', 'SwapEvent', 'AddLiquidityEvent', 'RemoveLiquidityEvent', 'StartStakingEvent', 'StopStakingEvent', 'StartMiningEvent', 'StopMiningEvent', 'CollectStakingRewardsEvent', 'CollectMiningRewardsEvent', 'NominationEvent'],
           direction: 'DESC'
         }
 

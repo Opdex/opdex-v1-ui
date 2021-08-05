@@ -1,0 +1,7 @@
+<p class="mb-0" *ngIf="pool$ | async as pool; else loading;">
+  Started staking
+  <strong>{{event.amount | formatNumber:pool.token.staking.decimals}}</strong>
+  {{pool.token.staking.symbol}}.
+</p>
+
+<ng-template #loading>Started staking <strong>{{event.amount | formatNumber:8}}</strong> ODX</ng-template>

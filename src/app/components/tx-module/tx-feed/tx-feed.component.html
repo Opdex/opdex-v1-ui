@@ -20,53 +20,28 @@
           <small class="d-block light mb-1">{{tx?.block?.medianTime | timeago}}</small>
 
           <ng-container *ngFor="let event of tx.events; trackBy: transactionLogsTrackBy;">
-            <div class="tx-event enable-mining" *ngIf="event.eventType == 'NominationEvent'">
-              <opdex-nomination-event [txEvent]="event"></opdex-nomination-event>
+
+            <div class="tx-event" [ngSwitch]="event.eventType">
+              <opdex-nomination-event [txEvent]="event" *ngSwitchCase="'NominationEvent'"></opdex-nomination-event>
+              <opdex-distribution-event [txEvent]="event" *ngSwitchCase="'DistributionEvent'"></opdex-distribution-event>
+              <opdex-enable-mining-event [txEvent]="event" *ngSwitchCase="'EnableMiningEvent'"></opdex-enable-mining-event>
+              <opdex-transfer-event [txEvent]="event" *ngSwitchCase="'TransferEvent'"></opdex-transfer-event>
+              <opdex-approval-event [txEvent]="event" *ngSwitchCase="'ApprovalEvent'"></opdex-approval-event>
+              <opdex-start-staking-event [txEvent]="event" *ngSwitchCase="'StartStakingEvent'"></opdex-start-staking-event>
+              <opdex-stop-staking-event [txEvent]="event" *ngSwitchCase="'StopStakingEvent'"></opdex-stop-staking-event>
+              <opdex-add-liquidity-event [txEvent]="event" *ngSwitchCase="'AddLiquidityEvent'"></opdex-add-liquidity-event>
+              <opdex-swap-event [txEvent]="event" *ngSwitchCase="'SwapEvent'"></opdex-swap-event>
+              <opdex-remove-liquidity-event [txEvent]="event" *ngSwitchCase="'RemoveLiquidityEvent'"></opdex-remove-liquidity-event>
+              <opdex-stop-mining-event [txEvent]="event" *ngSwitchCase="'StopMiningEvent'"></opdex-stop-mining-event>
+              <opdex-start-mining-event [txEvent]="event" *ngSwitchCase="'StartMiningEvent'"></opdex-start-mining-event>
+              <opdex-collect-staking-rewards-event [txEvent]="event" *ngSwitchCase="'CollectStakingRewardsEvent'"></opdex-collect-staking-rewards-event>
+              <opdex-collect-mining-rewards-event [txEvent]="event" *ngSwitchCase="'CollectMiningRewardsEvent'"></opdex-collect-mining-rewards-event>
+              <div *ngSwitchDefault>Uh oh, looks like we can't identify this transaction's summary.</div>
             </div>
 
             <!-- <div class="enable-mining tx-event" *ngIf="event.eventType == 'RewardMiningPoolEvent' && event.stakingPool === pool.address">
               <p>Activated governance distribution rewarding nominated liquidity pools with <strong>{{event.amount | formatNumber:0}}</strong> {{pool.token.staking.symbol}} to be mined.</p>
             </div> -->
-
-           <div class="distribution-event tx-event" *ngIf="event.eventType == 'DistributionEvent'">
-              <opdex-distribution-event [txEvent]="event"></opdex-distribution-event>
-            </div>
-
-            <div class="enable-mining tx-event" *ngIf="event.eventType == 'EnableMiningEvent'">
-              <opdex-enable-mining-event [txEvent]="event"></opdex-enable-mining-event>
-            </div>
-
-            <div class="transfer tx-event" *ngIf="event.eventType == 'TransferEvent'">
-              <opdex-transfer-event [txEvent]="event"></opdex-transfer-event>
-            </div>
-
-            <div class="approval tx-event" *ngIf="event.eventType == 'ApprovalEvent'">
-              <opdex-approval-event [txEvent]="event"></opdex-approval-event>
-            </div>
-
-            <div class="staking tx-event" *ngIf="event.eventType == 'StakeEvent'">
-              <opdex-stake-event [txEvent]="event"></opdex-stake-event>
-            </div>
-
-            <div class="provide-event tx-event" *ngIf="event.eventType == 'ProvideEvent'">
-              <opdex-provide-event [txEvent]="event"></opdex-provide-event>
-            </div>
-
-            <div class="swap-log tx-event" *ngIf="event.eventType == 'SwapEvent'">
-              <opdex-swap-event [txEvent]="event"></opdex-swap-event>
-            </div>
-
-            <div class="mine-log tx-event" *ngIf="event.eventType == 'MineEvent'">
-              <opdex-mine-event [txEvent]="event"></opdex-mine-event>
-            </div>
-
-            <div class="collect-staking-rewards-log tx-event" *ngIf="event.eventType == 'CollectStakingRewardsEvent'">
-              <opdex-collect-staking-rewards-event [txEvent]="event"></opdex-collect-staking-rewards-event>
-            </div>
-
-            <div class="collect-mining-rewards-log tx-event" *ngIf="event.eventType == 'CollectMiningRewardsEvent'">
-              <opdex-collect-mining-rewards-event [txEvent]="event"></opdex-collect-mining-rewards-event>
-            </div>
           </ng-container>
         </div>
       </div>

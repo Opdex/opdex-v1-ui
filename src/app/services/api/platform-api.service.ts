@@ -13,6 +13,7 @@ import { TransactionRequest } from '@sharedModels/requests/transactions-filter';
 import { ITransactionsResponse } from '@sharedModels/responses/platform-api/Transactions/transactions-response';
 import { IAddressAllowanceResponse } from '@sharedModels/responses/platform-api/Addresses/address-allowance.interface';
 import { IToken } from '@sharedModels/responses/platform-api/token.interface';
+import { IVaultCertificatesResponse } from '@sharedModels/responses/platform-api/Vaults/vault.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -105,7 +106,11 @@ export class PlatformApiService extends RestApiService {
   //////////////
 
   public getVault(address: string): Observable<any> {
-    return this.get<any>(`${this.api}/vault/${address}`);
+    return this.get<any>(`${this.api}/vaults/${address}`);
+  }
+
+  public getVaultCertificates(address: string): Observable<IVaultCertificatesResponse> {
+    return this.get<IVaultCertificatesResponse>(`${this.api}/vaults/${address}/certificates`);
   }
 
   //////////////

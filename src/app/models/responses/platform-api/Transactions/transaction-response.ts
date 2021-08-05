@@ -61,22 +61,29 @@ export interface ISwapEventResponse extends ITransactionEventResponse {
   to: string;
 }
 
-export interface IProvideEventResponse extends ITransactionEventResponse {
+interface IProvideEventResponse extends ITransactionEventResponse {
   amountCrs: string;
   amountSrc: string;
   amountLpt: string;
-  subEventType: string;
+  TotalSupply: string;
 }
 
-export interface IStakeEventResponse extends ITransactionEventResponse {
+export interface IAddLiquidityEventResponse extends IProvideEventResponse { }
+export interface IRemoveLiquidityEventResponse extends IProvideEventResponse { }
+
+interface IStakeEventResponse extends ITransactionEventResponse {
   staker: string;
   amount: string;
-  subEventType: string;
+  stakerBalance: string;
+  totalStaked: string;
 }
+
+export interface IStartStakingEventResponse extends IStakeEventResponse { }
+export interface IStopStakingEventResponse extends IStakeEventResponse { }
 
 export interface ICollectStakingRewardsEventResponse extends ITransactionEventResponse {
   staker: string;
-  reward: string;
+  amount: string;
 }
 
 // Mining Pool Events
@@ -86,11 +93,15 @@ export interface IEnableMiningEventResponse extends ITransactionEventResponse {
   miningPeriodEndBlock: number;
 }
 
-export interface IMineEventResponse extends ITransactionEventResponse {
+interface IMineEventResponse extends ITransactionEventResponse {
   miner: string;
   amount: string;
-  subEventType: string;
+  minerBalance: string;
+  totalSupply: string;
 }
+
+export interface IStartMiningEventResponse extends IMineEventResponse { }
+export interface IStopMiningEventResponse extends IMineEventResponse { }
 
 export interface ICollectMiningRewardsEventResponse extends ITransactionEventResponse {
   miner: string;
@@ -114,6 +125,7 @@ export interface IDistributionEventResponse extends ITransactionEventResponse {
   vaultAmount: string;
   governanceAmount: string;
   periodIndex: number;
+  totalSupply: string;
 }
 
 // Governance Events

@@ -40,13 +40,13 @@ export class PoolComponent implements OnInit, OnDestroy {
       type: 'line',
       category: 'Liquidity',
       prefix: '$',
-      decimals: 2
+      decimals: 3
     },
     {
       type: 'bar',
       category: 'Volume',
       prefix: '$',
-      decimals: 2
+      decimals: 3
     },
     {
       type: 'line',
@@ -121,7 +121,7 @@ export class PoolComponent implements OnInit, OnDestroy {
             limit: 10,
             direction: "DESC",
             contracts: contracts,
-            eventTypes: ['SwapEvent', 'ProvideEvent', 'StakeEvent', 'CollectStakingRewardsEvent', 'MineEvent', 'CollectMiningRewardsEvent', 'EnableMiningEvent', 'NominationEvent',]
+            eventTypes: ['SwapEvent', 'StartStakingEvent', 'StopStakingEvent', 'CollectStakingRewardsEvent', 'StartMiningEvent', 'StopMiningEvent', 'AddLiquidityEvent', 'RemoveLiquidityEvent', 'CollectMiningRewardsEvent', 'EnableMiningEvent', 'NominationEvent',]
           };
           if (this.pool){
             this.setPoolStatCards();
