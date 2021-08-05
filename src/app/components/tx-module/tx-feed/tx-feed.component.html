@@ -5,7 +5,7 @@
     <div class="transaction" *ngFor="let tx of transactions; trackBy: transactionsTrackBy">
       <div class="d-flex flex-direction-column">
         <div class="pr-2">
-          <opdex-copy-button [tooltip]="tx.hash" [value]="tx.hash" icon="receipt" [size]="iconSizes.tiny"></opdex-copy-button>
+          <opdex-copy-button [tooltip]="tx.hash" [value]="tx.hash" icon="receipt" [size]="iconSizes.tiny" color="primary"></opdex-copy-button>
         </div>
 
         <div class="pl-2">
@@ -28,6 +28,7 @@
               <opdex-start-mining-event [txEvent]="event" *ngSwitchCase="'StartMiningEvent'"></opdex-start-mining-event>
               <opdex-collect-staking-rewards-event [txEvent]="event" *ngSwitchCase="'CollectStakingRewardsEvent'"></opdex-collect-staking-rewards-event>
               <opdex-collect-mining-rewards-event [txEvent]="event" *ngSwitchCase="'CollectMiningRewardsEvent'"></opdex-collect-mining-rewards-event>
+              <opdex-create-liquidity-pool-event [txEvent]="event" *ngSwitchCase="'CreateLiquidityPoolEvent'"></opdex-create-liquidity-pool-event>
               <div *ngSwitchDefault>Uh oh, looks like we can't identify this transaction's summary.</div>
             </div>
 

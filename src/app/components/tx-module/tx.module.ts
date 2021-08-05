@@ -45,9 +45,9 @@ import { EnableMiningEventComponent } from './tx-feed/tx-events/mining-pool-even
 import { TransferEventComponent } from './tx-feed/tx-events/token-events/transfer-event/transfer-event.component';
 import { DistributionEventComponent } from './tx-feed/tx-events/token-events/distribution-event/distribution-event.component';
 import { ApprovalEventComponent } from './tx-feed/tx-events/token-events/approval-event/approval-event.component';
-import { RedeemVaulCertificateEventComponent } from './tx-feed/tx-events/vault-events/redeem-vaul-certificate-event/redeem-vaul-certificate-event.component';
-import { RevokeVaulCertificateEventComponent } from './tx-feed/tx-events/vault-events/revoke-vaul-certificate-event/revoke-vaul-certificate-event.component';
-import { CreateVaulCertificateEventComponent } from './tx-feed/tx-events/vault-events/create-vaul-certificate-event/create-vaul-certificate-event.component';
+import { RedeemVaultCertificateEventComponent } from './tx-feed/tx-events/vault-events/redeem-vault-certificate-event/redeem-vault-certificate-event.component';
+import { RevokeVaultCertificateEventComponent } from './tx-feed/tx-events/vault-events/revoke-vault-certificate-event/revoke-vault-certificate-event.component';
+import { CreateVaultCertificateEventComponent } from './tx-feed/tx-events/vault-events/create-vault-certificate-event/create-vault-certificate-event.component';
 import { CreateLiquidityPoolEventComponent } from './tx-feed/tx-events/market-events/create-liquidity-pool-event/create-liquidity-pool-event.component';
 import { ChangeMarketPermissionEventComponent } from './tx-feed/tx-events/market-events/change-market-permission-event/change-market-permission-event.component';
 import { RewardMiningPoolEventComponent } from './tx-feed/tx-events/governance-events/reward-mining-pool-event/reward-mining-pool-event.component';
@@ -93,9 +93,9 @@ import { SharedModule } from '@sharedComponents/shared-module/shared.module';
     TransferEventComponent,
     DistributionEventComponent,
     ApprovalEventComponent,
-    RedeemVaulCertificateEventComponent,
-    RevokeVaulCertificateEventComponent,
-    CreateVaulCertificateEventComponent,
+    RedeemVaultCertificateEventComponent,
+    RevokeVaultCertificateEventComponent,
+    CreateVaultCertificateEventComponent,
     CreateLiquidityPoolEventComponent,
     ChangeMarketPermissionEventComponent,
     RewardMiningPoolEventComponent,

@@ -112,10 +112,9 @@ export class PoolComponent implements OnInit, OnDestroy {
         map((pool) => {
           const miningGovernance = environment.governanceAddress;
 
-          var contracts = [pool.address, pool.token.src.address, miningGovernance];
+          var contracts = [pool.address, pool.token.src.address];
 
-          if (pool?.mining?.address)
-            contracts.push(pool.mining.address);
+          if (pool?.mining?.address) contracts.push(pool.mining.address);
 
           this.transactionsRequest = {
             limit: 10,
@@ -202,6 +201,7 @@ export class PoolComponent implements OnInit, OnDestroy {
     return of(null);
   }
 
+  // Rip out, instead separate calls to get staking, mining, liquidity, and src token amounts
   private getWalletSummary(): Observable<void> {
     const context = this._userContext.getUserContext();
 

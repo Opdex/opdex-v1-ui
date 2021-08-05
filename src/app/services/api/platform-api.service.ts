@@ -208,10 +208,6 @@ export class PlatformApiService extends RestApiService {
     return this.get<any>(`${this.api}/wallet/summary/pool/${pool}?walletAddress=${wallet}`);
   }
 
-  public getApprovedAllowance(owner: string, spender: string, token: string): Observable<any> {
-    return this.get<any>(`${this.api}/wallet/${owner}/allowance/approved?token=${token}&spender=${spender}`);
-  }
-
   public getWalletBalances(wallet: string) {
     return this.get<any>(`${this.api}/wallet/${wallet}/balance?limit=${10}&direction=ASC&includeLpTokens=false`);
   }
@@ -222,6 +218,14 @@ export class PlatformApiService extends RestApiService {
 
   public getBalance(owner: string, token: string): Observable<IAddressBalanceResponse> {
     return this.get<any>(`${this.api}/wallet/${owner}/balance/${token}`);
+  }
+
+  public getStakingPosition(owner: string, liquidityPool: string): Observable<IAddressBalanceResponse> {
+    return this.get<any>(`${this.api}/wallet/${owner}/staking/${liquidityPool}`);
+  }
+
+  public getMiningPosition(owner: string, miningPool: string): Observable<IAddressBalanceResponse> {
+    return this.get<any>(`${this.api}/wallet/${owner}/mining/${miningPool}`);
   }
 }
 

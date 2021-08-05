@@ -2,8 +2,10 @@
   <div class="container mt-5">
     <div class="row mb-3">
       <div class="col-4">
-        <h1 class="page-title mb-3">{{governance.minedToken.symbol}} Governance</h1>
-        <p class="text-shadow">{{governance.address}}</p>
+        <h1 class="page-title mb-3">
+          <opdex-copy-button [tooltip]="governance?.address" [value]="governance?.address" icon="link"></opdex-copy-button>
+          <span>{{governance.minedToken.symbol}} Governance</span>
+        </h1>
       </div>
     </div>
 
