@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DateSliderComponent } from './date-slider.component';
+import { DeadlineSliderComponent } from './deadline-slider.component';
 
-describe('SliderComponent', () => {
-  let component: DateSliderComponent;
-  let fixture: ComponentFixture<DateSliderComponent>;
+describe('DeadlineSliderComponent', () => {
+  let component: DeadlineSliderComponent;
+  let fixture: ComponentFixture<DeadlineSliderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DateSliderComponent ]
+      declarations: [ DeadlineSliderComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DateSliderComponent);
+    fixture = TestBed.createComponent(DeadlineSliderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

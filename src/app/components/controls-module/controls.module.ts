@@ -6,18 +6,18 @@ import { CommonModule } from '@angular/common';
 import { MatSliderModule } from '@angular/material/slider';
 
 // Opdex Component Imports
-import { DateSliderComponent } from './date-slider/date-slider.component';
+import { DeadlineSliderComponent } from './deadline-slider/deadline-slider.component';
 
 @NgModule({
   declarations: [
-    DateSliderComponent
+    DeadlineSliderComponent
   ],
   imports: [
     CommonModule,
     MatSliderModule
   ],
   exports: [
-    DateSliderComponent
+    DeadlineSliderComponent
   ]
 })
 export class ControlsModule { }
