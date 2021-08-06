@@ -41,7 +41,7 @@ export class AppComponent implements OnInit {
   ) {
     this.context$ = this._context.getUserContext$()
       .pipe(tap(context => this.context = context));
-    this.latestSyncedBlock$ = this._api.getLatestSyncedBlock();
+    this.latestSyncedBlock$ = timer(0,8000).pipe(switchMap(_ => this._api.getLatestSyncedBlock()));
     this.network = environment.network;
   }
 

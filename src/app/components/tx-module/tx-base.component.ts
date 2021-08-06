@@ -15,7 +15,7 @@ export abstract class TxBase {
   signTx(payload: any, transactionType: string): void {
     this._dialog.open(SignTxModalComponent, {
       width: '600px',
-      position: { top: '200px' },
+      // position: { top: '200px' },
       data:  { payload, transactionType},
       panelClass: ''
     });

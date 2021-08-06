@@ -41,9 +41,12 @@ export class TxMineStopComponent extends TxBase implements OnChanges {
   }
 
   submit(): void {
+    let amount = this.amount.value.replace(',', '');
+    if (!amount.includes('.')) amount = `${amount}.00`;
+
     const payload = {
       liquidityPool: this.pool.address,
-      amount: this.amount.value
+      amount: amount
     }
 
     this.signTx(payload, 'stop-mining');

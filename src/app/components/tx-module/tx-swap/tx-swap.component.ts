@@ -98,7 +98,7 @@ export class TxSwapComponent implements OnDestroy{
   signTx(data: any): void {
     this._dialog.open(SignTxModalComponent, {
       width: '600px',
-      position: { top: '200px' },
+      // position: { top: '200px' },
       data:  data,
       panelClass: ''
     });

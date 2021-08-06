@@ -9,7 +9,15 @@
     right: 10px;
   }
 
+
   h4 {
+    display: flex;
+    letter-spacing: .05em;
+    font-weight: 500;
+    align-items: center;
+  }
+
+  .blue {
     color: #1ca7dc;
   }
 

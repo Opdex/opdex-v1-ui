@@ -4,8 +4,10 @@
   </div>
 
   <opdex-card class="pool-summary" *ngIf="pool">
-    <h4>{{pool.token.src.symbol}}-CRS</h4>
-    <small>{{pool.address}}</small>
+    <h4>
+      <opdex-copy-button [tooltip]="pool?.address" [value]="pool?.address" icon="link"></opdex-copy-button>
+      <a class="blue" routerLink="/pools/{{pool?.address}}">{{pool.token.src.symbol}}-CRS</a>
+    </h4>
 
     <button mat-icon-button class="exit tiny" (click)="clearPool()">
       <mat-icon>close</mat-icon>

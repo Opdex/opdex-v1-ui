@@ -20,8 +20,8 @@ export class AllowanceValidation implements IAddressAllowanceResponse {
   }
 
   private validate(tokenDecimals) :boolean {
-    // Sometimes javascript considers the request to spend string a number, call toString
-    const spendRequest = this.requestToSpend.toString();
+    // Sometimes javascript considers the request to spend string a number, call toString and get rid of any commas
+    const spendRequest = this.requestToSpend.toString().replace(',', '');
 
     // Get the index of the decimal
     const spendRequestDecimalIndex = spendRequest.indexOf('.');

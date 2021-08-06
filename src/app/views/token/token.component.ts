@@ -25,12 +25,14 @@ export class TokenComponent implements OnInit {
     {
       type: 'line',
       category: 'USD Price',
-      prefix: '$'
+      prefix: '$',
+      decimals: 3
     },
     {
       type: 'candle',
       category: 'OHLC USD',
-      prefix: '$'
+      prefix: '$',
+      decimals: 3
     }
   ]
   selectedChart = this.chartOptions[0];
@@ -66,8 +68,8 @@ export class TokenComponent implements OnInit {
           this.transactionRequest = {
             limit: 25,
             eventTypes: this.token.address === 'CRS'
-                          ? ['SwapEvent', 'ProvideEvent']
-                          : ['TransferEvent', 'ApprovalEvent', 'DistributionEvent', 'SwapEvent', 'ProvideEvent', 'MineEvent'],
+                          ? ['SwapEvent', 'AddLiquidityEvent', 'RemoveLiquidityEvent']
+                          : ['TransferEvent', 'ApprovalEvent', 'DistributionEvent', 'SwapEvent', 'AddLiquidityEvent', 'RemoveLiquidityEvent', 'StartMiningEvent', 'StopMiningEvent'],
             contracts: this.token.address === 'CRS'
                           ? []
                           : [this.token.address],

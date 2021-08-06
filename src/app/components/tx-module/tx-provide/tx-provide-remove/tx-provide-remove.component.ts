@@ -43,6 +43,8 @@ export class TxProvideRemoveComponent extends TxBase {
   }
 
   getAllowance$(amount: string):Observable<any> {
+    amount = amount.toString().replace(',', '');
+
     const spender = environment.routerAddress;
     const token = this.pool?.token?.lp?.address;
 
@@ -52,8 +54,11 @@ export class TxProvideRemoveComponent extends TxBase {
   }
 
   submit(): void {
+    let liquidity = this.liquidity.value.replace(',', '');
+    if (!liquidity.includes('.')) liquidity = `${liquidity}.00`;
+
     const payload = {
-      liquidity: this.liquidity.value,
+      liquidity: liquidity,
       amountCrsMin: '0.00000001',
       amountSrcMin: '0.00000001',
       liquidityPool: this.pool.address,

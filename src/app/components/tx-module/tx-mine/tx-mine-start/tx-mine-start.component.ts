@@ -41,6 +41,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
       .pipe(
         debounceTime(300),
         switchMap((amount: string) => {
+          amount = amount.replace(',', '');
           const spender = this.data?.pool?.mining?.address;
           const token = this.data?.pool?.token?.lp?.address;
 
@@ -58,7 +59,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
   submit(): void {
     const payload = {
       liquidityPool: this.pool.address,
-      amount: this.amount.value
+      amount: this.amount.value.replace(',', '')
     }
 
     this.signTx(payload, 'start-mining');

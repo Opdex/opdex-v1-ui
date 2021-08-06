@@ -13,6 +13,7 @@ import { TransactionRequest } from '@sharedModels/requests/transactions-filter';
 import { ITransactionsResponse } from '@sharedModels/responses/platform-api/Transactions/transactions-response';
 import { IAddressAllowanceResponse } from '@sharedModels/responses/platform-api/Addresses/address-allowance.interface';
 import { IToken } from '@sharedModels/responses/platform-api/token.interface';
+import { IVaultCertificatesResponse } from '@sharedModels/responses/platform-api/Vaults/vault.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -105,7 +106,11 @@ export class PlatformApiService extends RestApiService {
   //////////////
 
   public getVault(address: string): Observable<any> {
-    return this.get<any>(`${this.api}/vault/${address}`);
+    return this.get<any>(`${this.api}/vaults/${address}`);
+  }
+
+  public getVaultCertificates(address: string): Observable<IVaultCertificatesResponse> {
+    return this.get<IVaultCertificatesResponse>(`${this.api}/vaults/${address}/certificates`);
   }
 
   //////////////
@@ -203,10 +208,6 @@ export class PlatformApiService extends RestApiService {
     return this.get<any>(`${this.api}/wallet/summary/pool/${pool}?walletAddress=${wallet}`);
   }
 
-  public getApprovedAllowance(owner: string, spender: string, token: string): Observable<any> {
-    return this.get<any>(`${this.api}/wallet/${owner}/allowance/approved?token=${token}&spender=${spender}`);
-  }
-
   public getWalletBalances(wallet: string) {
     return this.get<any>(`${this.api}/wallet/${wallet}/balance?limit=${10}&direction=ASC&includeLpTokens=false`);
   }
@@ -217,6 +218,14 @@ export class PlatformApiService extends RestApiService {
 
   public getBalance(owner: string, token: string): Observable<IAddressBalanceResponse> {
     return this.get<any>(`${this.api}/wallet/${owner}/balance/${token}`);
+  }
+
+  public getStakingPosition(owner: string, liquidityPool: string): Observable<IAddressBalanceResponse> {
+    return this.get<any>(`${this.api}/wallet/${owner}/staking/${liquidityPool}`);
+  }
+
+  public getMiningPosition(owner: string, miningPool: string): Observable<IAddressBalanceResponse> {
+    return this.get<any>(`${this.api}/wallet/${owner}/mining/${miningPool}`);
   }
 }
 

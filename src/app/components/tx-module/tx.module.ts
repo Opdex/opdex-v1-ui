@@ -37,28 +37,34 @@ import { AllowanceValidationComponent } from './shared/allowance-validation/allo
 
 // Feed
 import { TxFeedComponent } from '../tx-module/tx-feed/tx-feed.component';
-import { ProvideEventComponent } from './tx-feed/tx-events/liquidity-pool-events/provide-event/provide-event.component';
 import { SwapEventComponent } from './tx-feed/tx-events/liquidity-pool-events/swap-event/swap-event.component';
-import { StakeEventComponent } from './tx-feed/tx-events/liquidity-pool-events/stake-event/stake-event.component';
 import { CollectStakingRewardsEventComponent } from './tx-feed/tx-events/liquidity-pool-events/collect-staking-rewards-event/collect-staking-rewards-event.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CollectMiningRewardsEventComponent } from './tx-feed/tx-events/mining-pool-events/collect-mining-rewards-event/collect-mining-rewards-event.component';
-import { MineEventComponent } from './tx-feed/tx-events/mining-pool-events/mine-event/mine-event.component';
 import { EnableMiningEventComponent } from './tx-feed/tx-events/mining-pool-events/enable-mining-event/enable-mining-event.component';
 import { TransferEventComponent } from './tx-feed/tx-events/token-events/transfer-event/transfer-event.component';
 import { DistributionEventComponent } from './tx-feed/tx-events/token-events/distribution-event/distribution-event.component';
 import { ApprovalEventComponent } from './tx-feed/tx-events/token-events/approval-event/approval-event.component';
-import { ChangeVaultOwnerEventComponent } from './tx-feed/tx-events/vault-events/change-vault-owner-event/change-vault-owner-event.component';
-import { RedeemVaulCertificateEventComponent } from './tx-feed/tx-events/vault-events/redeem-vaul-certificate-event/redeem-vaul-certificate-event.component';
-import { RevokeVaulCertificateEventComponent } from './tx-feed/tx-events/vault-events/revoke-vaul-certificate-event/revoke-vaul-certificate-event.component';
-import { CreateVaulCertificateEventComponent } from './tx-feed/tx-events/vault-events/create-vaul-certificate-event/create-vaul-certificate-event.component';
-import { ChangeMarketOwnerEventComponent } from './tx-feed/tx-events/market-events/change-market-owner-event/change-market-owner-event.component';
+import { RedeemVaultCertificateEventComponent } from './tx-feed/tx-events/vault-events/redeem-vault-certificate-event/redeem-vault-certificate-event.component';
+import { RevokeVaultCertificateEventComponent } from './tx-feed/tx-events/vault-events/revoke-vault-certificate-event/revoke-vault-certificate-event.component';
+import { CreateVaultCertificateEventComponent } from './tx-feed/tx-events/vault-events/create-vault-certificate-event/create-vault-certificate-event.component';
 import { CreateLiquidityPoolEventComponent } from './tx-feed/tx-events/market-events/create-liquidity-pool-event/create-liquidity-pool-event.component';
 import { ChangeMarketPermissionEventComponent } from './tx-feed/tx-events/market-events/change-market-permission-event/change-market-permission-event.component';
 import { RewardMiningPoolEventComponent } from './tx-feed/tx-events/governance-events/reward-mining-pool-event/reward-mining-pool-event.component';
 import { NominationEventComponent } from './tx-feed/tx-events/governance-events/nomination-event/nomination-event.component';
-import { ChangeDeployerOwnerEventComponent } from './tx-feed/tx-events/deployer-events/change-deployer-owner-event/change-deployer-owner-event.component';
 import { CreateMarketEventComponent } from './tx-feed/tx-events/deployer-events/create-market-event/create-market-event.component';
+import { StartStakingEventComponent } from './tx-feed/tx-events/liquidity-pool-events/start-staking-event/start-staking-event.component';
+import { StopStakingEventComponent } from './tx-feed/tx-events/liquidity-pool-events/stop-staking-event/stop-staking-event.component';
+import { StopMiningEventComponent } from './tx-feed/tx-events/mining-pool-events/stop-mining-event/stop-mining-event.component';
+import { StartMiningEventComponent } from './tx-feed/tx-events/mining-pool-events/start-mining-event/start-mining-event.component';
+import { AddLiquidityEventComponent } from './tx-feed/tx-events/liquidity-pool-events/add-liquidity-event/add-liquidity-event.component';
+import { RemoveLiquidityEventComponent } from './tx-feed/tx-events/liquidity-pool-events/remove-liquidity-event/remove-liquidity-event.component';
+import { SetPendingDeployerOwnerEventComponent } from './tx-feed/tx-events/deployer-events/set-pending-deployer-owner-event/set-pending-deployer-owner-event.component';
+import { ClaimPendingDeployerOwnerEventComponent } from './tx-feed/tx-events/deployer-events/claim-pending-deployer-owner-event/claim-pending-deployer-owner-event.component';
+import { SetPendingMarketOwnerEventComponent } from './tx-feed/tx-events/market-events/set-pending-market-owner-event/set-pending-market-owner-event.component';
+import { ClaimPendingMarketOwnerEventComponent } from './tx-feed/tx-events/market-events/claim-pending-market-owner-event/claim-pending-market-owner-event.component';
+import { ClaimPendingVaultOwnerEventComponent } from './tx-feed/tx-events/vault-events/claim-pending-vault-owner-event/claim-pending-vault-owner-event.component';
+import { SetPendingVaultOwnerEventComponent } from './tx-feed/tx-events/vault-events/set-pending-vault-owner-event/set-pending-vault-owner-event.component';
 import { SharedModule } from '@sharedComponents/shared-module/shared.module';
 
 
@@ -80,27 +86,33 @@ import { SharedModule } from '@sharedComponents/shared-module/shared.module';
     PoolPreviewComponent,
     AllowanceValidationComponent,
     TxFeedComponent,
-    ProvideEventComponent,
     SwapEventComponent,
-    StakeEventComponent,
     CollectStakingRewardsEventComponent,
     CollectMiningRewardsEventComponent,
-    MineEventComponent,
     EnableMiningEventComponent,
     TransferEventComponent,
     DistributionEventComponent,
     ApprovalEventComponent,
-    ChangeVaultOwnerEventComponent,
-    RedeemVaulCertificateEventComponent,
-    RevokeVaulCertificateEventComponent,
-    CreateVaulCertificateEventComponent,
-    ChangeMarketOwnerEventComponent,
+    RedeemVaultCertificateEventComponent,
+    RevokeVaultCertificateEventComponent,
+    CreateVaultCertificateEventComponent,
     CreateLiquidityPoolEventComponent,
     ChangeMarketPermissionEventComponent,
     RewardMiningPoolEventComponent,
     NominationEventComponent,
-    ChangeDeployerOwnerEventComponent,
-    CreateMarketEventComponent
+    CreateMarketEventComponent,
+    StartStakingEventComponent,
+    StopStakingEventComponent,
+    StopMiningEventComponent,
+    StartMiningEventComponent,
+    AddLiquidityEventComponent,
+    RemoveLiquidityEventComponent,
+    SetPendingDeployerOwnerEventComponent,
+    ClaimPendingDeployerOwnerEventComponent,
+    SetPendingMarketOwnerEventComponent,
+    ClaimPendingMarketOwnerEventComponent,
+    ClaimPendingVaultOwnerEventComponent,
+    SetPendingVaultOwnerEventComponent
   ],
   imports: [
     CommonModule,
