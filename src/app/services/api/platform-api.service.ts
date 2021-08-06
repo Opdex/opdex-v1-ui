@@ -73,19 +73,19 @@ export class PlatformApiService extends RestApiService {
   //////////////
 
   public getPool(address: string): Observable<ILiquidityPoolSummaryResponse> {
-    return this.get<any>(`${this.api}/pools/${address}`);
+    return this.get<any>(`${this.api}/liquidity-pools/${address}`);
   }
 
   public getPools(query?: LiquidityPoolsSearchQuery): Observable<ILiquidityPoolSummaryResponse[]> {
-    return this.get<any[]>(`${this.api}/pools${query?.getQuery() || ''}`);
+    return this.get<any[]>(`${this.api}/liquidity-pools${query?.getQuery() || ''}`);
   }
 
   public getPoolTransactions(address: string): Observable<any[]> {
-    return this.get<any>(`${this.api}/pools/${address}/transactions`);
+    return this.get<any>(`${this.api}/liquidity-pools/${address}/transactions`);
   }
 
   public getPoolHistory(address: string): Observable<ILiquidityPoolSnapshotHistoryResponse> {
-    return this.get<ILiquidityPoolSnapshotHistoryResponse>(`${this.api}/pools/${address}/history?timeSpan=1Y&candleSpan=Hourly`);
+    return this.get<ILiquidityPoolSnapshotHistoryResponse>(`${this.api}/liquidity-pools/${address}/history?timeSpan=1Y&candleSpan=Hourly`);
   }
 
   //////////////
@@ -118,11 +118,11 @@ export class PlatformApiService extends RestApiService {
   //////////////
 
   public getMarketOverview(): Observable<any> {
-    return this.get<any>(`${this.api}/market`);
+    return this.get<any>(`${this.api}/markets`);
   }
 
   public getMarketHistory(): Observable<any> {
-    return this.get<any>(`${this.api}/market/history`);
+    return this.get<any>(`${this.api}/markets/history`);
   }
 
   //////////////
