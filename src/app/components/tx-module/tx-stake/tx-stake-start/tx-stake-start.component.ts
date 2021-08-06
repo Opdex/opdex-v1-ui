@@ -56,7 +56,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
   }
 
   submit(): void {
-    let amount = this.amount.value.replace(/,/g, '');
+    let amount = this.amount.value.toString().replace(/,/g, '');
     if (!amount.includes('.')) amount = `${amount}.00`;
 
     const payload = {

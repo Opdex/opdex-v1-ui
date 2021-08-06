@@ -8,6 +8,7 @@ import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { TxBase } from '../tx-base.component';
+import { IToken } from '@sharedModels/responses/platform-api/token.interface';
 
 @Component({
   selector: 'opdex-tx-allowance',
@@ -49,7 +50,6 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
   }
 
   ngOnChanges() {
-    console.log(this.data)
     this.pool = this.data?.pool;
 
     this.form.patchValue({
@@ -62,10 +62,14 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
   submit() {
     this._tokensService.getToken(this.token.value)
       .pipe(take(1))
-      .subscribe(response => {
+      .subscribe((token: IToken) => {
+        // was using token above to get decimals and use .toFixed, Todo: Implement padEnd instead.
+        let amount = this.amount.value.toString().replace(/,/g, '');
+        if (!amount.includes('.')) amount = `${amount}.00`;
+
         const payload = {
           token: this.token.value,
-          amount: parseFloat(this.amount.value).toFixed(response.decimals),
+          amount: amount,
           spender: this.spender.value
         }
 

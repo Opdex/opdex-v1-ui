@@ -107,10 +107,10 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   }
 
   submit(): void {
-    let crsValue = this.amountCrs.value.replace(/,/g, '');
+    let crsValue = this.amountCrs.value.toString().replace(/,/g, '');
     if (!crsValue.includes('.')) crsValue = `${crsValue}.00`;
 
-    let srcValue = this.amountSrc.value.replace(/,/g, '');
+    let srcValue = this.amountSrc.value.toString().replace(/,/g, '');
     if (!srcValue.includes('.')) srcValue = `${srcValue}.00`;
 
     const payload = {

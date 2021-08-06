@@ -52,7 +52,7 @@ export class TxProvideRemoveComponent extends TxBase {
   }
 
   submit(): void {
-    let liquidity = this.liquidity.value.replace(/,/g, '');
+    let liquidity = this.liquidity.value.toString().replace(/,/g, '');
     if (!liquidity.includes('.')) liquidity = `${liquidity}.00`;
 
     const payload = {
