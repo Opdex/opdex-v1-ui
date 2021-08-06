@@ -76,8 +76,6 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   }
 
   getAllowance$(amount: string):Observable<AllowanceValidation> {
-    amount = amount.toString().replace(',', '');
-
     const spender = environment.routerAddress;
     const token = this.pool?.token?.src?.address;
 
@@ -94,9 +92,9 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
       throwError('Invalid token');
     }
 
-    if (this.pool.reserves.crs === '0.00000000') return of('');
+    if (!this.pool.reserves?.crs || this.pool.reserves.crs === '0.00000000') return of('');
 
-    value = value.replace(',', '');
+    value = value.replace(/,/g, '');
     if (!value.includes('.')) value = `${value}.00`;
 
     const payload = {
@@ -109,10 +107,10 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   }
 
   submit(): void {
-    let crsValue = this.amountCrs.value.replace(',', '');
+    let crsValue = this.amountCrs.value.replace(/,/g, '');
     if (!crsValue.includes('.')) crsValue = `${crsValue}.00`;
 
-    let srcValue = this.amountCrs.value.replace(',', '');
+    let srcValue = this.amountSrc.value.replace(/,/g, '');
     if (!srcValue.includes('.')) srcValue = `${srcValue}.00`;
 
     const payload = {

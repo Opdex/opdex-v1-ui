@@ -21,7 +21,7 @@ export class AllowanceValidation implements IAddressAllowanceResponse {
 
   private validate(tokenDecimals) :boolean {
     // Sometimes javascript considers the request to spend string a number, call toString and get rid of any commas
-    const spendRequest = this.requestToSpend.toString().replace(',', '');
+    const spendRequest = this.requestToSpend.toString().replace(/,/g, '');
 
     // Get the index of the decimal
     const spendRequestDecimalIndex = spendRequest.indexOf('.');
@@ -33,8 +33,7 @@ export class AllowanceValidation implements IAddressAllowanceResponse {
 
     // Need to pad the end with 0's
     if (spendRequestZerosToPad >= 0) {
-      // Create a big integer, replacing the decimal place and subtracting -1 from the end because of the removed decimal.
-      requestBigInt = BigInt(spendRequest.replace('.', '').padEnd(this.requestToSpend.length + spendRequestZerosToPad - 1, "0"));
+      requestBigInt = BigInt(spendRequest.replace('.', '').padEnd(spendRequest.length + spendRequestZerosToPad, '0'));
     } else { // Need to cut the end
       requestBigInt = BigInt(spendRequest.replace('.', '').slice(0, spendRequestZerosToPad));
     }

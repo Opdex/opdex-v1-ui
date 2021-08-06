@@ -41,7 +41,7 @@ export class TxMineStopComponent extends TxBase implements OnChanges {
   }
 
   submit(): void {
-    let amount = this.amount.value.replace(',', '');
+    let amount = this.amount.value.replace(/,/g, '');
     if (!amount.includes('.')) amount = `${amount}.00`;
 
     const payload = {

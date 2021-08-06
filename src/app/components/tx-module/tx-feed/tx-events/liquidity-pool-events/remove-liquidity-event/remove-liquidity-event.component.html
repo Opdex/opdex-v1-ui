@@ -1,8 +1,8 @@
 <p class="mb-0" *ngIf="pool$ | async as pool; else loading">
   Removed
-  <strong>{{event.amountCrs | formatNumber:8}} </strong> <a routerLink="tokens/{{pool.token.crs.address}}">{{pool.token.crs.symbol}}</a> and
-  <strong>{{event.amountSrc | formatNumber:pool.token.src.decimals }} </strong> <a routerLink="tokens/{{pool.token.src.address}}">{{pool.token.src.symbol}}</a> of liquidity burning
-  <strong>{{event.amountLpt | formatNumber:pool.token.lp.decimals }} </strong> <a routerLink="tokens/{{pool.token.lp.address}}">{{pool.token.lp.symbol}}</a>.
+  <strong>{{event.amountCrs | formatNumber:8}} </strong> <a routerLink="/tokens/{{pool.token.crs.address}}">{{pool.token.crs.symbol}}</a> and
+  <strong>{{event.amountSrc | formatNumber:pool.token.src.decimals }} </strong> <a routerLink="/tokens/{{pool.token.src.address}}">{{pool.token.src.symbol}}</a> of liquidity burning
+  <strong>{{event.amountLpt | formatNumber:pool.token.lp.decimals }} </strong> <a routerLink="/tokens/{{pool.token.lp.address}}">{{pool.token.lp.symbol}}</a>.
 </p>
 
 <ng-template #loading>

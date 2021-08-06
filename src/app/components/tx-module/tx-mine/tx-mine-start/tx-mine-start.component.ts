@@ -1,4 +1,4 @@
-import { AllowanceValidation } from './../../../../models/allowance-validation';
+import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { Component, Input, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -41,7 +41,6 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
       .pipe(
         debounceTime(300),
         switchMap((amount: string) => {
-          amount = amount.replace(',', '');
           const spender = this.data?.pool?.mining?.address;
           const token = this.data?.pool?.token?.lp?.address;
 
@@ -57,9 +56,12 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
   }
 
   submit(): void {
+    let amount = this.amount.value.replace(/,/g, '');
+    if (!amount.includes('.')) amount = `${amount}.00`;
+
     const payload = {
       liquidityPool: this.pool.address,
-      amount: this.amount.value.replace(',', '')
+      amount: amount
     }
 
     this.signTx(payload, 'start-mining');
