@@ -33,7 +33,8 @@ export class AllowanceValidation implements IAddressAllowanceResponse {
 
     // Need to pad the end with 0's
     if (spendRequestZerosToPad >= 0) {
-      requestBigInt = BigInt(spendRequest.replace('.', '').padEnd(spendRequest.length + spendRequestZerosToPad, '0'));
+      // - 1 at the end because we're remove the decimal and padding
+      requestBigInt = BigInt(spendRequest.replace('.', '').padEnd(spendRequest.length + spendRequestZerosToPad - 1, '0'));
     } else { // Need to cut the end
       requestBigInt = BigInt(spendRequest.replace('.', '').slice(0, spendRequestZerosToPad));
     }
