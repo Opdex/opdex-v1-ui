@@ -1,4 +1,4 @@
-<main class="background" [ngClass]="theme">
+<main [ngClass]="theme">
   <mat-sidenav-container (backdropClick)="closeSidenav()" class="w-100 h-100">
     <mat-sidenav #sidenav (keydown.escape)="closeSidenav()" position="end" class="sidenav" [fixedInViewport]="true" [fixedTopGap]="0" [fixedBottomGap]="0" [mode]="sidenavMode">
       <div class="sidenav-container">

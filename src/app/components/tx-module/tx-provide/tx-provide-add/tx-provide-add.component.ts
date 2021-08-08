@@ -66,10 +66,10 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
         .pipe(
           debounceTime(400),
           distinctUntilChanged(),
-          switchMap(requestAmount => this.getAllowance$(requestAmount)),
+          switchMap((requestAmount: string) => this.getAllowance$(requestAmount)),
           switchMap((allowance: AllowanceValidation) => this.quote$(allowance.requestToSpend, this.pool?.token?.src)),
           tap((quoteAmount: string) => {
-            if (quoteAmount != '0.00') this.amountCrs.setValue(quoteAmount, { emitEvent: false })
+            if (quoteAmount != '') this.amountCrs.setValue(quoteAmount, { emitEvent: false })
           }),
         )
         .subscribe());
@@ -92,20 +92,31 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
       throwError('Invalid token');
     }
 
+    if (!this.pool.reserves?.crs || this.pool.reserves.crs === '0.00000000') return of('');
+
+    value = value.replace(/,/g, '');
+    if (!value.includes('.')) value = `${value}.00`;
+
     const payload = {
-      amountIn: parseFloat(value).toFixed(tokenIn.decimals),
+      amountIn: value,
       tokenIn: tokenIn.address,
       pool: this.pool.address
     };
 
-    return this._platformApi.quoteAddLiquidity(payload).pipe(catchError(() => of('0.00')));
+    return this._platformApi.quoteAddLiquidity(payload).pipe(catchError(() => of('')));
   }
 
   submit(): void {
+    let crsValue = this.amountCrs.value.toString().replace(/,/g, '');
+    if (!crsValue.includes('.')) crsValue = `${crsValue}.00`;
+
+    let srcValue = this.amountSrc.value.toString().replace(/,/g, '');
+    if (!srcValue.includes('.')) srcValue = `${srcValue}.00`;
+
     const payload = {
-      amountCrs: parseFloat(this.amountCrs.value).toFixed(8),
-      amountSrc: parseFloat(this.amountSrc.value).toFixed(this.pool.token.src.decimals),
-      tolerance: .001,
+      amountCrs: crsValue,
+      amountSrc: srcValue,
+      tolerance: .01,
       recipient: this.context.wallet,
       liquidityPool: this.pool.address
     }

@@ -16,8 +16,13 @@
     <ng-container matColumnDef="stakingWeight">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Staking Weight </th>
       <td mat-cell *matCellDef="let element">
-        {{element.staking?.weight | formatNumber:0}} <small>ODX</small>
-        <opdex-change-indicator [value]="element.staking?.weightDailyChange" size="s" class="percentChange" *ngIf="element.staking?.weightDailyChange != null"></opdex-change-indicator>
+        <ng-container *ngIf="element.staking; else stakingDisabled">
+          {{element.staking?.weight | formatNumber:0}} <small>ODX</small>
+          <opdex-change-indicator [value]="element.staking?.weightDailyChange" size="s" class="percentChange" *ngIf="element.staking?.weightDailyChange != null"></opdex-change-indicator>
+        </ng-container>
+        <ng-template #stakingDisabled>
+          <span class="disabled-badge">Disabled</span>
+        </ng-template>
       </td>
     </ng-container>
 
@@ -50,10 +55,10 @@
           <mat-icon>more_vert</mat-icon>
         </button> -->
 
-        <button mat-icon-button class="swap small mr-3" (click)="swap(element)" title="Swap"><mat-icon>swap_horiz</mat-icon></button>
-        <button mat-icon-button class="provide small mr-3" (click)="provide(element)" title="Provide"><mat-icon>control_point_duplicate</mat-icon></button>
-        <button mat-icon-button class="stake small mr-3" (click)="stake(element)" title="Stake" *ngIf="element.staking?.isActive"><mat-icon>verified_user</mat-icon></button>
-        <button mat-icon-button class="mine small" (click)="mine(element)" title="Mine" *ngIf="element.mining?.isActive"><mat-icon>whatshot</mat-icon></button>
+        <button mat-icon-button class="swap small mr-3" (click)="swap(element)" matTooltip="Swap Tokens"><mat-icon>swap_horiz</mat-icon></button>
+        <button mat-icon-button class="provide small mr-3" (click)="provide(element)" matTooltip="Provide Liquidity"><mat-icon>control_point_duplicate</mat-icon></button>
+        <button mat-icon-button class="stake small mr-3" (click)="stake(element)" title="Stake" *ngIf="element.staking?.isActive" matTooltip="Stake {{element.token.staking?.symbol}}"><mat-icon>verified_user</mat-icon></button>
+        <button mat-icon-button class="mine small" (click)="mine(element)" title="Mine" *ngIf="element.mining?.isActive" matTooltip="Mine {{element.token.staking?.symbol}}"><mat-icon>whatshot</mat-icon></button>
       </td>
     </ng-container>
 

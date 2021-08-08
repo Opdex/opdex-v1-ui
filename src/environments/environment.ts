@@ -7,10 +7,10 @@ export const environment = {
   production: false,
   defaultTheme: 'dark-mode',
   api: api.includes('localhost') ? `http://${api}` : `https://${api}`,
-  marketAddress: 'PAXxsvwuwGrJg1XnNCA8Swtpynzj2G8Eca',
-  routerAddress: 'PGaYTPL76WjDamtaPvb9k1RVpvTiVcrrkb',
-  governanceAddress: 'PDj15HacV6osNfDd5CCU25CMhworu8BjRW',
-  vaultAddress: 'PP7G84rAQVHSwE1fUFykPpBKZ5ZTv3CCHL',
+  marketAddress: 'PWbQLxNnYdyUBLmeEL3ET1WdNx7dvbH8mi',
+  routerAddress: 'PMsinMXrr2uNEL5AQD1LpiYTRFiRTA8uZU',
+  governanceAddress: 'PGjqKaFDepLNSdakWknucPFB7uXLQGjeCH',
+  vaultAddress: 'PHLh9aUdSBS7zke28vnsE4UiVznecFqy9y',
   allowedJwtDomains: [api],
   network: Network.Devnet
 };

@@ -1,9 +1,12 @@
+import { environment } from '@environments/environment';
+import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { VaultsService } from './../../services/platform/vaults.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
 import { tap, switchMap } from 'rxjs/operators';
+import { IVaultCertificate } from '@sharedModels/responses/platform-api/Vaults/vault.interface';
 @Component({
   selector: 'opdex-vault',
   templateUrl: './vault.component.html',
@@ -12,6 +15,7 @@ import { tap, switchMap } from 'rxjs/operators';
 export class VaultComponent implements OnInit, OnDestroy {
   subscription: Subscription = new Subscription();
   vault: any;
+  certificates: IVaultCertificate[];
   statCards: StatCardInfo[] = [
     {
       title: 'Locked Tokens',
@@ -39,7 +43,8 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   constructor(
     private _vaultsService: VaultsService,
-    private _tokensService: TokensService
+    private _tokensService: TokensService,
+    private _platformApi: PlatformApiService
   ) { }
 
   ngOnInit(): void {
@@ -64,6 +69,10 @@ export class VaultComponent implements OnInit, OnDestroy {
           this.statCards[1].suffix = vaultTokenSymbol;
         }))
       .subscribe());
+
+      this.subscription.add(
+        this._platformApi.getVaultCertificates(environment.vaultAddress)
+          .subscribe(certificates => this.certificates = certificates.results));
   }
 
   ngOnDestroy() {

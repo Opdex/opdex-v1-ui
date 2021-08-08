@@ -188,6 +188,11 @@ html, body { height: 100%; }
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-image: url('/assets/bg.png');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-color: #181629;
 }
 
 main {
@@ -200,14 +205,14 @@ main {
     flex: 1;
   }
 
-  &.light-mode {
-    background: #f5f5f5;
-  }
+  // &.light-mode {
+  //   background: #f5f5f5;
+  // }
 
-  &.dark-mode {
-    // background: #1b192f;
-    background: #181629;
-  }
+  // &.dark-mode {
+  //   // background: #1b192f;
+  //   background: #181629;
+  // }
 }
 
 .cdk-overlay-container {

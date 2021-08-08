@@ -1,4 +1,4 @@
-<div class="change-indicator {{value >= 0 ? 'positive' : 'negative'}} {{size}}">
-  <mat-icon *ngIf="value !== 0">{{value > 0 ? 'trending_up' : 'trending_down'}}</mat-icon>
-  <p class="change">{{value > 0 ? '+' : ''}}{{value}}%</p>
+<div class="change-indicator {{value >= 0 ? 'positive' : 'negative'}} {{size}}" *ngIf="value !== 0">
+  <mat-icon>{{value > 0 ? 'arrow_upward' : 'arrow_downward'}}</mat-icon>
+  <p class="change">{{value > 0 ? value : value * -1}}%</p>
 </div>

@@ -1,9 +1,9 @@
-import { take, tap } from 'rxjs/operators';
+import { switchMap, take, tap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { Observable } from 'rxjs';
+import { Observable, timer } from 'rxjs';
 import { IGovernanceResponseModel } from '@sharedModels/responses/platform-api/Governances/governance.interface';
 import { environment } from '@environments/environment';
 
@@ -23,17 +23,23 @@ export class GovernanceComponent implements OnInit {
   constructor(private _platformApiService: PlatformApiService) { }
 
   ngOnInit(): void {
-    this.governance$ = this._platformApiService.getGovernance(environment.governanceAddress).pipe(tap((rsp: IGovernanceResponseModel) => {
-      this.governance = rsp;
-      const nominationRemainingSeconds = rsp.periodRemainingBlocks * 16;
-      let date = new Date();
-      date.setSeconds(date.getSeconds() + nominationRemainingSeconds);
-      this.nominationPeriodEndDate = date.toISOString();
+    this.governance$ = timer(0, 20000).pipe(switchMap(_ => {
+       return this._platformApiService.getGovernance(environment.governanceAddress).pipe(tap((rsp: IGovernanceResponseModel) => {
+        this.governance = rsp;
+        const nominationRemainingSeconds = rsp.periodRemainingBlocks * 16;
+        let date = new Date();
+        date.setSeconds(date.getSeconds() + nominationRemainingSeconds);
+        this.nominationPeriodEndDate = date.toISOString();
+      }));
     }));
 
-    this.nominatedPools$ = this._platformApiService.getPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 4, {nominated: true}));
+    this.nominatedPools$ = timer(0, 20000).pipe(switchMap(_ => {
+      return this._platformApiService.getPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 4, {nominated: true}));
+    }));
 
-    this.miningPools$ = this._platformApiService.getPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 4, {mining: true}));
+    this.miningPools$ = timer(0, 20000).pipe(switchMap(_ => {
+      return this._platformApiService.getPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 4, {mining: true}));
+    }));
   }
 
   secondsToDhms(seconds) {

@@ -7,7 +7,7 @@ import { IconSizes } from 'src/app/enums/icon-sizes';
   styleUrls: ['./copy-button.component.scss']
 })
 export class CopyButtonComponent {
-
+  @Input() color: string;
   @Input() tooltip: string;
   @Input() value: any;
   @Input() size: IconSizes;
@@ -15,14 +15,8 @@ export class CopyButtonComponent {
 
   copied = false;
 
-  constructor() { }
-
-  copyHandler($event) {
+  copyHandler() {
     this.copied = true;
-
-    setTimeout(() => {
-      this.copied = false;
-    }, 1000);
+    setTimeout(() => this.copied = false, 1000);
   }
-
 }

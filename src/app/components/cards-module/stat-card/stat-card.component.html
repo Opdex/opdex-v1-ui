@@ -10,7 +10,7 @@
         {{statInfo.prefix}}{{statInfo.value | formatNumber: statInfo.formatNumber}} {{statInfo.suffix}}
       </p>
 
-      <opdex-change-indicator [value]="statInfo.change" *ngIf="statInfo.change !== null && statInfo.change !== undefined"></opdex-change-indicator>
+      <opdex-change-indicator [value]="statInfo.change" size="m" *ngIf="statInfo.change !== null && statInfo.change !== undefined"></opdex-change-indicator>
     </div>
   </opdex-card>
 </div>

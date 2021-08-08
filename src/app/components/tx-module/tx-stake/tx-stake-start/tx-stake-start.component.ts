@@ -56,9 +56,12 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
   }
 
   submit(): void {
+    let amount = this.amount.value.toString().replace(/,/g, '');
+    if (!amount.includes('.')) amount = `${amount}.00`;
+
     const payload = {
       liquidityPool: this.pool.address,
-      amount: this.amount.value
+      amount: amount
     }
 
     this.signTx(payload, 'start-staking');
