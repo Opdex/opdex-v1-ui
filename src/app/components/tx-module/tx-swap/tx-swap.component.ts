@@ -43,6 +43,10 @@ export class TxSwapComponent implements OnDestroy{
     return this.form.get('tokenOut') as FormControl;
   }
 
+  get deadline(): FormControl {
+    return this.form.get('deadline') as FormControl;
+  }
+
   constructor(
     private _fb: FormBuilder,
     private _dialog: MatDialog,
@@ -55,7 +59,8 @@ export class TxSwapComponent implements OnDestroy{
       tokenInAmount: ['', [Validators.required]],
       tokenIn: ['CRS', [Validators.required]],
       tokenOutAmount: ['', [Validators.required]],
-      tokenOut: [null, [Validators.required]]
+      tokenOut: [null, [Validators.required]],
+      deadline: [new Date(), [Validators.required]]
     });
 
     this.tokenInChanges$ = this.tokenInAmount.valueChanges
@@ -147,6 +152,7 @@ export class TxSwapComponent implements OnDestroy{
     const payload = {
       tokenIn: this.tokenIn.value,
       tokenOut: this.tokenOut.value,
+      deadline: this.deadline.value,
       tokenInAmount: this.tokenInAmount.value,
       tokenOutAmount: this.tokenOutAmount.value,
       tokenInExactAmount: this.tokenInExact,

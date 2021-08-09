@@ -5,7 +5,18 @@
 </div>
 <div class="row">
   <div class="col">
-    {{value}}
-    <mat-slider [id]="'dateSlider'+label" min="1" max="5" step="0.5" value="1.5"></mat-slider>
+  {{default}} min.
+  <mat-slider [id]="'dateSlider'+label"
+    step="1"
+    min="1"
+    max="120"
+    (change)="setValue($event)"
+    [value]="default"
+    aria-label="minutes"></mat-slider>
+  </div>
+</div>
+<div class="row mb-3">
+  <div class="col">
+    {{value | date:'MM/dd/YY h:mm a z':'GMT'}}
   </div>
 </div>

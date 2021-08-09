@@ -42,6 +42,7 @@
       <span style="font-size: 10px;">{{txHash}}</span>
     </div>
 
+    <opdex-deadline-slider label="Deadline" [default]="20" [formControl]="deadline"></opdex-deadline-slider>
     <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid">Continue</button>
   </form>
 </div>
