@@ -34,6 +34,10 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     return this.form.get('amountSrc') as FormControl;
   }
 
+  get deadline(): FormControl {
+    return this.form.get('deadline') as FormControl;
+  }
+
   constructor(
     private _fb: FormBuilder,
     protected _dialog: MatDialog,
@@ -44,7 +48,8 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
 
     this.form = this._fb.group({
       amountCrs: ['', [Validators.required]],
-      amountSrc: ['', [Validators.required]]
+      amountSrc: ['', [Validators.required]],
+      deadline: [new Date(), [Validators.required]]
     });
   }
 
@@ -116,6 +121,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     const payload = {
       amountCrs: crsValue,
       amountSrc: srcValue,
+      deadline: this.deadline.value.toISOString(),
       tolerance: .01,
       recipient: this.context.wallet,
       liquidityPool: this.pool.address

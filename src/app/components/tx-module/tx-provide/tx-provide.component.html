@@ -4,7 +4,6 @@
   </mat-button-toggle-group>
 
   <opdex-pool-preview [pool]="pool" [view]="view"></opdex-pool-preview>
-
   <opdex-card *ngIf="pool">
     <opdex-tx-provide-add *ngIf="group.value == 1" [pool]="pool"></opdex-tx-provide-add>
     <opdex-tx-provide-remove *ngIf="group.value == 2" [pool]="pool"></opdex-tx-provide-remove>

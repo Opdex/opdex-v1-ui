@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="col">
+    <label [for]="'dateSlider'+label">{{label}}</label>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+  {{default}} min.
+  <mat-slider [id]="'dateSlider'+label"
+    step="1"
+    min="1"
+    max="120"
+    (change)="setValue($event)"
+    [value]="default"
+    aria-label="minutes"></mat-slider>
+  </div>
+</div>
+<div class="row mb-3">
+  <div class="col">
+    {{value | date:'MM/dd/YY h:mm a z':'GMT'}}
+  </div>
+</div>

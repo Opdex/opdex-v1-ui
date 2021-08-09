@@ -66,6 +66,7 @@ import { ClaimPendingMarketOwnerEventComponent } from './tx-feed/tx-events/marke
 import { ClaimPendingVaultOwnerEventComponent } from './tx-feed/tx-events/vault-events/claim-pending-vault-owner-event/claim-pending-vault-owner-event.component';
 import { SetPendingVaultOwnerEventComponent } from './tx-feed/tx-events/vault-events/set-pending-vault-owner-event/set-pending-vault-owner-event.component';
 import { SharedModule } from '@sharedComponents/shared-module/shared.module';
+import { ControlsModule } from '@sharedComponents/controls-module/controls.module';
 
 
 @NgModule({
@@ -132,7 +133,8 @@ import { SharedModule } from '@sharedComponents/shared-module/shared.module';
     MatTooltipModule,
     SharedPipesModule,
     ClipboardModule,
-    SharedModule
+    SharedModule,
+    ControlsModule
   ],
   exports: [
     TxSwapComponent,
