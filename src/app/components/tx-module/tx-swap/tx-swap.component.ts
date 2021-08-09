@@ -152,7 +152,7 @@ export class TxSwapComponent implements OnDestroy{
     const payload = {
       tokenIn: this.tokenIn.value,
       tokenOut: this.tokenOut.value,
-      deadline: this.deadline.value,
+      deadline: this.deadline.value.toISOString(),
       tokenInAmount: this.tokenInAmount.value,
       tokenOutAmount: this.tokenOutAmount.value,
       tokenInExactAmount: this.tokenInExact,

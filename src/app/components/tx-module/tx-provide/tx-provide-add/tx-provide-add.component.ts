@@ -121,7 +121,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     const payload = {
       amountCrs: crsValue,
       amountSrc: srcValue,
-      deadline: this.deadline.value,
+      deadline: this.deadline.value.toISOString(),
       tolerance: .01,
       recipient: this.context.wallet,
       liquidityPool: this.pool.address
