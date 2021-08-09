@@ -1,0 +1,212 @@
+<div id="pool" class="mt-5">
+  <div class="container" *ngIf="pool">
+    <div class="row">
+      <div class="col">
+        <opdex-card [warn]="true" [closable]="true">
+          <h4>Liquidity Pool Warning</h4>
+          <p class="mb-0">Anybody can publicly create a liquidity pool between Cirrus token (CRS) and any SRC token. Validate the chosen liquidity pool and SRC token by the SRC token's address.</p>
+        </opdex-card>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-xl-5">
+        <opdex-card>
+          <div class="d-flex flex-column">
+            <p class="mb-2 light">{{pool.token.src.name}} - Cirrus</p>
+
+            <div class="d-flex flex-row justify-content-between">
+              <h1 class="page-title mb-0 d-flex align-items-center justify-content-center">
+                <a href="javascript:void(0)" routerLink="/tokens/{{pool.token.src.address}}">{{pool.token.src.symbol}}</a>
+                <opdex-copy-button [tooltip]="pool.address" [value]="pool.address" icon="link"></opdex-copy-button>
+                <a href="javascript:void(0)" routerLink="/tokens/CRS">CRS</a>
+              </h1>
+
+              <div class="chip-group">
+                <div class="chip blue">0.3% Fee</div>
+                <div class="chip purple"><mat-icon class="mr-2">star</mat-icon> Nominated</div>
+                <div class="chip red" *ngIf="pool.mining?.isActive"><mat-icon class="mr-2">whatshot</mat-icon> Mining</div>
+              </div>
+            </div>
+          </div>
+        </opdex-card>
+      </div>
+
+      <div class="col-12 col-md-6 col-xl">
+        <opdex-card [fullHeight]="true">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0">
+              {{pool.token.src.symbol}}
+              <span class="ml-2 {{pool.token.src.summary.dailyPriceChange < 0 ? 'red' : 'green'}}">${{pool.token.src.summary.price.close | formatNumber: 2}}</span>
+            </h4>
+            <mat-icon>swap_horiz</mat-icon>
+            <h4 class="mb-0">
+              <span style="font-weight: 400;">{{pool.cost.crsPerSrc.close | formatNumber:8 }}</span>
+              CRS
+            </h4>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">CRS
+              <span class="ml-2 {{pool.token.crs.summary.dailyPriceChange < 0 ? 'red' : 'green'}}">
+                ${{pool.token.crs.summary.price.close | formatNumber: 2}}
+              </span>
+            </h4>
+            <mat-icon>swap_horiz</mat-icon>
+            <h4 class="mb-0">
+              <span style="font-weight: 400;">{{pool.cost.srcPerCrs.close | formatNumber:pool.token.src.decimals > 8 ? 8 : pool.token.src.decimals}}</span>
+              {{pool.token.src.symbol}}
+            </h4>
+          </div>
+        </opdex-card>
+      </div>
+
+      <div class="col-12 col-md-6 col-xl">
+        <opdex-card [fullHeight]="true">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0 align-items-center d-flex">
+              <mat-icon class="mr-3">lock</mat-icon>
+              {{pool.token.src.symbol}}</h4>
+            <h4 class="mb-0" style="font-weight: 400;">{{pool.reserves.src | formatNumber:pool.token.src.decimals > 8 ? 8 : pool.token.src.decimals}}</h4>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0 align-items-center d-flex">
+              <mat-icon class="mr-3">lock</mat-icon>
+              CRS
+            </h4>
+            <h4 class="mb-0" style="font-weight: 400;">{{pool.reserves.crs | formatNumber:8}}</h4>
+          </div>
+        </opdex-card>
+      </div>
+    </div>
+
+    <div class="row">
+      <ng-container *ngFor="let statCard of statCards">
+        <div *ngIf="statCard.show" class="col-12 col-md-6 col-lg">
+            <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-xl-8">
+        <div class="row">
+          <div class="col">
+            <opdex-card>
+              <opdex-line-chart
+                [chartData]="chartData"
+                [chartOptions]="chartOptions"
+                [selectedChart]="selectedChart"
+                title="{{selectedChart.category}}"
+                *ngIf="chartData"
+                (onTypeChange)="handleChartTypeChange($event)"></opdex-line-chart>
+            </opdex-card>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-md-6 col-xl-6">
+            <opdex-card class="mining-pool">
+              <div class="d-flex justify-content-between align-items-center">
+                <h3 class="d-inline mb-0">Balances</h3>
+                <div>
+                  <button mat-icon-button class="swap small" (click)="openTransactionSidebar(1)"><mat-icon>swap_horiz</mat-icon></button>
+                </div>
+              </div>
+
+              <div class="details">
+                <div class="mining">
+                  <p class="sub-heading">CRS</p>
+                  <p class="value">{{crsBalance?.balance | formatNumber:8}}</p>
+                </div>
+
+                <div class="remaining">
+                  <p class="sub-heading">{{pool.token.src.symbol}}</p>
+                  <p class="value">{{walletBalance?.srcBalance | formatNumber: 8}}</p>
+                </div>
+              </div>
+            </opdex-card>
+          </div>
+
+          <div class="col-12 col-md-6 col-xl-6">
+            <opdex-card class="mining-pool">
+              <div class="d-flex justify-content-between align-items-center">
+                <h3 class="d-inline mb-0">Providing</h3>
+                <div>
+                  <button mat-icon-button class="remove small mr-2" (click)="openTransactionSidebar(2, 'remove')"><mat-icon>remove</mat-icon></button>
+                  <button mat-icon-button class="add small" (click)="openTransactionSidebar(2, 'add')"><mat-icon>control_point_duplicate</mat-icon></button>
+                </div>
+              </div>
+
+              <div class="details">
+                <div class="mining">
+                  <p class="sub-heading">Position</p>
+                  <p class="value">{{walletBalance?.providing | formatNumber: 8}} LPT</p>
+                </div>
+
+                <!-- <div class="remaining">
+                  <p class="sub-heading">Rewards</p>
+                  <p class="value">1234 CRS/234 ODX</p>
+                </div> -->
+              </div>
+            </opdex-card>
+          </div>
+
+          <div class="col-12 col-md-6 col-xl-6" *ngIf="pool.staking?.isActive">
+            <opdex-card class="mining-pool">
+              <div class="d-flex justify-content-between align-items-center">
+                <h3 class="d-inline mb-0">Staking</h3>
+                <div>
+                  <button mat-icon-button class="collect small mr-2" (click)="openTransactionSidebar(3, 'collect')" matTooltip="Collect Staking Rewards"><mat-icon>local_play</mat-icon></button>
+                  <button mat-icon-button class="remove small mr-2" (click)="openTransactionSidebar(3, 'stop')"><mat-icon>remove</mat-icon></button>
+                  <button mat-icon-button class="add small" (click)="openTransactionSidebar(3, 'start')"><mat-icon>add</mat-icon></button>
+                </div>
+              </div>
+
+              <div class="details">
+                <div class="mining">
+                  <p class="sub-heading">Position</p>
+                  <p class="value">{{walletBalance?.staking | formatNumber: 8}} ODX</p>
+                </div>
+
+                <!-- <div class="remaining">
+                  <p class="sub-heading">Rewards</p>
+                  <p class="value">1234 LPT</p>
+                </div> -->
+              </div>
+            </opdex-card>
+          </div>
+
+          <div class="col-12 col-md-6 col-xl-6">
+            <opdex-card class="mining-pool" *ngIf="pool.mining">
+              <div class="d-flex justify-content-between align-items-center">
+                <h3 class="d-inline mb-0">Mining</h3>
+                <div>
+                  <button mat-icon-button class="collect small mr-2" (click)="openTransactionSidebar(4, 'collect')" matTooltip="Collect Mined {{pool.token.staking?.symbol}}"><mat-icon>local_play</mat-icon></button>
+                  <button mat-icon-button class="remove small mr-2" (click)="openTransactionSidebar(4, 'stop')"><mat-icon>remove</mat-icon></button>
+                  <button mat-icon-button class="add small" (click)="openTransactionSidebar(4, 'start')"><mat-icon>add</mat-icon></button>
+                </div>
+              </div>
+
+              <div class="details">
+                <div class="mining">
+                  <p class="sub-heading">Position</p>
+                  <p class="value">{{walletBalance?.mining | formatNumber: 8}} LPT</p>
+                </div>
+
+                <!-- <div class="remaining">
+                  <p class="sub-heading">Rewards</p>
+                  <p class="value">1234 ODX</p>
+                </div> -->
+              </div>
+            </opdex-card>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-4" >
+        <opdex-tx-feed [transactionRequest]="transactionsRequest" size="l"></opdex-tx-feed>
+      </div>
+    </div>
+  </div>
+</div>

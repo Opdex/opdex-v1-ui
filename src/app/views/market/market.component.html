@@ -1,0 +1,88 @@
+<div id="overview" class="mt-5">
+  <div class="container" *ngIf="market">
+    <div class="row">
+      <div class="col">
+        <!-- <opdex-card [warn]="true" [closable]="true">
+          <h4>Market Data and Opdex Analytics</h4>
+          <p class="mb-0">All data represented is based on Opdex's best effort to ingest dynamic blockchain transactions and output analytical data. This data may have inaccuracies and is not to be taken as financial advice.</p>
+        </opdex-card> -->
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <h1 class="page-title mb-3">
+          <opdex-copy-button [tooltip]="market?.address" [value]="market?.address" icon="link"></opdex-copy-button>
+          <span>Market Overview</span>
+        </h1>
+
+        <div class="stats">
+          <div class="row">
+            <ng-container *ngFor="let statCard of statCards">
+              <div *ngIf="statCard.show" class="col-12 col-md-6 col-lg">
+                  <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
+              </div>
+          </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-lg-8">
+        <opdex-card class="p-0">
+          <opdex-line-chart
+            [chartData]="chartData"
+            [chartOptions]="chartOptions"
+            [selectedChart]="selectedChart"
+            title="{{selectedChart.category}}"
+            *ngIf="chartData"
+            (onTypeChange)="handleChartTypeChange($event)"></opdex-line-chart>
+        </opdex-card>
+      </div>
+
+      <div class="col-12 col-lg-4">
+        <opdex-tx-feed [transactionRequest]="transactionRequest"></opdex-tx-feed>
+        <!-- <opdex-card>
+          <opdex-volume-chart [chartData]="volumeHistory" title="Market Volume" *ngIf="volumeHistory"></opdex-volume-chart>
+        </opdex-card> -->
+      </div>
+    </div>
+
+    <ng-container *ngIf="miningPools$ | async as miningPools">
+      <div class="row" *ngIf="miningPools.length">
+        <div class="col-12">
+          <h2 class="mb-3 text-shadow">Liquidity Mining</h2>
+
+          <div class="row">
+            <ng-container *ngFor="let pool of miningPools">
+              <div class="col-12 col-md-6 col-xl-3">
+                <opdex-mining-card [pool]="pool"></opdex-mining-card>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="row">
+      <div class="col-12">
+        <opdex-card>
+          <h2>Top Pools</h2>
+          <opdex-pools-table [pools]="pools"></opdex-pools-table>
+        </opdex-card>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <opdex-card>
+          <h2>Top Tokens</h2>
+          <opdex-tokens-table [tokens]="tokens"></opdex-tokens-table>
+        </opdex-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+

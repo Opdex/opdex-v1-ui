@@ -1,28 +1,46 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
+import { forkJoin, Observable } from 'rxjs';
+import { take, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-tokens',
   templateUrl: './tokens.component.html',
   styleUrls: ['./tokens.component.scss']
 })
-export class TokensComponent implements OnInit {
-  tokens: any[];
+export class TokensComponent {
+  tokens$: Observable<any>;
 
-  constructor(
-    private _platformApiService: PlatformApiService
-  ) {
+  constructor(private _platformApiService: PlatformApiService) {
+    this.tokens$ = this._platformApiService.getTokens()
+    .pipe(
+      switchMap((tokens: any[]) => {
+        const poolArray$: Observable<any>[] = [];
 
+        tokens.forEach(token => poolArray$.push(this.getTokenHistory$(token)));
+
+        return forkJoin(poolArray$);
+      })
+    );
   }
 
-  async ngOnInit(): Promise<void> {
-    const tokensResponse = await this._platformApiService.getTokens();
-    if (tokensResponse.hasError || tokensResponse.data?.length) {
-      // handle
-    }
+  private getTokenHistory$(token: any): Observable<any> {
+    return this._platformApiService.getTokenHistory(token.address, "1W")
+      .pipe(
+        take(1),
+        map((tokenHistory: any) => {
+          let liquidityPoints: any[] = [];
 
-    this.tokens = tokensResponse.data;
+          tokenHistory.snapshotHistory.forEach(history => {
+            liquidityPoints.push({
+              time: Date.parse(history.startDate.toString())/1000,
+              value: history.price.close
+            });
+          });
 
-    console.log(this.tokens);
+          token.snapshotHistory = liquidityPoints;
+
+          return token;
+        }));
   }
 }

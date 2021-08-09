@@ -1,0 +1,47 @@
+.stats {
+  .stat-header {
+    display: flex;
+    vertical-align: middle;
+    font-weight: 400;
+    margin-bottom: 5px;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+
+    .stat-value {
+      font-size: 24px;
+      margin-bottom: 0px;
+      line-height: 30px;
+    }
+  }
+}
+
+.light-mode {
+  .stats {
+    .stat-header {
+      color: #575757 !important;
+    }
+  }
+}
+
+.dark-mode {
+  .stat-header {
+    color: #bebebe;
+  }
+}
+
+h1 {
+  display: flex;
+  letter-spacing: .05em;
+  font-weight: 500;
+  align-items: center;
+
+  a {
+    color: #fff;
+  }
+}

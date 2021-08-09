@@ -1,6 +1,11 @@
+import { TokensService } from '@sharedServices/platform/tokens.service';
+import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
+import { delay, switchMap, take, tap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
-import { ThemeService } from '@sharedServices/theme.service';
-import { Observable } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { PlatformApiService } from '@sharedServices/api/platform-api.service';
+import { Observable, Subscription, interval } from 'rxjs';
+import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
 
 @Component({
   selector: 'opdex-token',
@@ -8,64 +13,149 @@ import { Observable } from 'rxjs';
   styleUrls: ['./token.component.scss']
 })
 export class TokenComponent implements OnInit {
-  chartType: string = 'Area';
-  ohlcPoints: any[];
-  theme$: Observable<string>;
+  ohlcPoints = [];
+  tokenAddress: string;
+  token: any;
+  subscription = new Subscription();
+  tokenHistory: any;
+  priceHistory: any[] = [];
+  candleHistory: any[] = [];
+  chartData: any[];
+  chartOptions = [
+    {
+      type: 'line',
+      category: 'USD Price',
+      prefix: '$',
+      decimals: 3
+    },
+    {
+      type: 'candle',
+      category: 'OHLC USD',
+      prefix: '$',
+      decimals: 3
+    }
+  ]
+  selectedChart = this.chartOptions[0];
+  transactionRequest: ITransactionsRequest;
+  statCards: StatCardInfo[];
 
-  constructor(private _themeService: ThemeService) {
-    this.theme$ = this._themeService.getTheme();
+  constructor(
+    private _route: ActivatedRoute,
+    private _platformApiService: PlatformApiService,
+    private _tokensService: TokensService,
+  ) {
+    this.tokenAddress = this._route.snapshot.params.token;
   }
 
   ngOnInit(): void {
-    setTimeout(() => {
-      this.ohlcPoints = [
-        {
-          open: 1,
-          high: 3,
-          low: 0,
-          close: 2,
-          time: this.dateToChartTime(new Date(2020, 12, 11))
-        },
-        {
-          open: 2,
-          high: 3,
-          low: 0,
-          close: 3,
-          time: this.dateToChartTime(new Date(2020, 12, 12))
-        },
-        {
-          open: 3,
-          high: 3,
-          low: 0,
-          close: 4,
-          time: this.dateToChartTime(new Date(2020, 12, 13))
-        },
-        {
-          open: 3,
-          high: 3,
-          low: 0,
-          close: 3,
-          time: this.dateToChartTime(new Date(2020, 12, 14))
-        },
-        {
-          open: 3,
-          high: 6,
-          low: 0,
-          close: 6,
-          time: this.dateToChartTime(new Date(2020, 12, 15))
-        },
-        {
-          open: 6,
-          high: 6,
-          low: 0,
-          close: 5,
-          time: this.dateToChartTime(new Date(2020, 12, 16))
-        }
-      ];
-    }, 100)
+    this.subscription.add(interval(30000)
+      .pipe(tap(_ => {
+        this._tokensService.refreshToken(this.tokenAddress);
+        this._tokensService.refreshTokenHistory(this.tokenAddress);
+      }))
+      .subscribe());
+
+    this.subscription.add(this.getToken()
+      .pipe(switchMap(() => this.getTokenHistory()))
+      .subscribe());
   }
 
-  dateToChartTime(date:Date) {
-    return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), 0) / 1000;
-  };
+  private getToken(): Observable<any> {
+    return this._tokensService.getToken(this.tokenAddress)
+      .pipe(
+        tap(token => {
+          this.token = token;
+          this.transactionRequest = {
+            limit: 25,
+            eventTypes: this.token.address === 'CRS'
+                          ? ['SwapEvent', 'AddLiquidityEvent', 'RemoveLiquidityEvent']
+                          : ['TransferEvent', 'ApprovalEvent', 'DistributionEvent', 'SwapEvent', 'AddLiquidityEvent', 'RemoveLiquidityEvent', 'StartMiningEvent', 'StopMiningEvent'],
+            contracts: this.token.address === 'CRS'
+                          ? []
+                          : [this.token.address],
+            direction: 'DESC'
+          }
+          if (this.token){
+            this.setTokenStatCards();
+          }
+        })
+      );
+  }
+
+  private setTokenStatCards(): void {
+    this.statCards = [
+      {
+        title: 'Price',
+        value: this.token.summary.price.close,
+        change: this.token.summary.dailyPriceChange,
+        prefix: '$',
+        formatNumber: 2,
+        show: true,
+        helpInfo: {
+          title: 'Price Help',
+          paragraph: 'This modal is providing help for Price.'
+        }
+      },
+      {
+        title: 'Total Supply',
+        value: this.token.totalSupply,
+        formatNumber: this.token.decimals,
+        daily: true,
+        show: true,
+        helpInfo: {
+          title: 'Total Supply Help',
+          paragraph: 'This modal is providing help for Total Supply'
+        }
+      }
+    ];
+  }
+
+  private getTokenHistory(): Observable<any> {
+    return this._tokensService.getTokenHistory(this.tokenAddress)
+      .pipe(
+        take(1),
+        delay(10),
+        tap(tokenHistory => {
+          this.tokenHistory = tokenHistory;
+
+          let priceHistory = [];
+          let candleHistory = [];
+
+          this.tokenHistory.snapshotHistory.forEach(history => {
+            priceHistory.push({
+              time: Date.parse(history.startDate.toString())/1000,
+              value: history.price.close
+            });
+
+            candleHistory.push({
+              time: Date.parse(history.startDate.toString())/1000,
+              open: history.price.open,
+              high: history.price.high,
+              low: history.price.low,
+              close: history.price.close,
+            });
+          });
+
+          this.priceHistory = priceHistory;
+          this.candleHistory = candleHistory;
+
+
+          this.handleChartTypeChange(this.selectedChart.category);
+        })
+      );
+  }
+
+  handleChartTypeChange($event) {
+    this.selectedChart = this.chartOptions.find(options => options.category === $event);
+
+    if ($event === 'USD Price') {
+      this.chartData = this.priceHistory;
+    } else if ($event === 'OHLC USD') {
+      this.chartData = this.candleHistory;
+    }
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 }

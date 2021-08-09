@@ -1,0 +1,38 @@
+<div id="wallet" class="mt-5">
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-12">
+        <h1 class="page-title mb-3">Wallet</h1>
+        <p class="text-shadow">{{wallet}}</p>
+      </div>
+    </div>
+
+    <!-- <div class="row mb-5">
+      <div class="col-6">
+        <opdex-card>
+          <h2>Box</h2>
+          <br><br><br><br><br>
+        </opdex-card>
+      </div>
+      <div class="col-6">
+        <opdex-card>
+          <h2>Box</h2>
+          <br><br><br><br><br>
+        </opdex-card>
+      </div>
+    </div> -->
+
+    <div class="row">
+      <div class="col-12 col-xl-8">
+        <opdex-card *ngIf="walletBalances$ | async as walletBalances" >
+          <h2>Balances</h2>
+          <opdex-wallet-balances-table [tokens]="walletBalances"></opdex-wallet-balances-table>
+        </opdex-card>
+      </div>
+
+      <div class="col-12 col-xl-4">
+        <opdex-tx-feed [transactionRequest]="transactionsRequest" size="l"></opdex-tx-feed>
+      </div>
+    </div>
+  </div>
+</div>

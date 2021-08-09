@@ -1,0 +1,58 @@
+.change-indicator {
+  display: inline-block;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &.s {
+    .mat-icon {
+      width: 18px;
+      height: 18px;
+      font-size: 18px;
+    }
+
+    .change {
+      font-size: 18px;
+    }
+  }
+
+  &.m {
+    .mat-icon {
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+    }
+
+    .change {
+      font-size: 20px;
+    }
+  }
+
+  &.l {
+    .mat-icon {
+      width: 24px;
+      height: 24px;
+      font-size: 24px;
+    }
+
+    .change {
+      font-size: 24px;
+    }
+  }
+
+  &.positive {
+    color: #00EB93;
+  }
+
+  &.negative {
+    color: #F2435B;
+  }
+
+  .mat-icon {
+    margin-right: 3px;
+  }
+
+  .change {
+    margin: 0;
+  }
+}

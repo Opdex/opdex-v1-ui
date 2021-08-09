@@ -20,3 +20,43 @@
 // Dark Blue 2: #1B192F
 // Dark Blue 3: #171244
 // Gray: #7C7C7C
+
+.mat-drawer {
+  // .mat-form-field-wrapper {
+  //   padding-bottom: 0px !important;
+  // }
+}
+
+.qrcode {
+  canvas {
+    margin: 30px auto;
+    display: block;
+  }
+}
+
+.mat-dialog-container {
+  overflow: initial !important;
+}
+
+h1.page-title {
+  font-size: 2.4em;
+  margin-bottom: 30px;
+  text-shadow: 1px 1px 1px black;
+}
+
+
+.text-shadow {
+  text-shadow: 1px 1px 1px black;
+}
+
+.light {
+  color: #979797;
+}
+
+.float-right {
+  float: right;
+}
+
+.text-align-right {
+  text-align: right;
+}

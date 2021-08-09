@@ -1,0 +1,11 @@
+.switch {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+  margin: 15px 0;
+
+  button {
+    margin-bottom: 10px;
+  }
+}

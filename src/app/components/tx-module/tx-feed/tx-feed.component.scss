@@ -1,0 +1,39 @@
+.feed-container {
+  position: relative;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  &.large {
+    max-height: 720px;
+  }
+
+  &.medium {
+    max-height: 560px;
+  }
+
+  &.small {
+    max-height: 350px;
+  }
+
+  .transaction {
+    padding: 20px 0;
+    border-bottom: 1px solid #292929;
+    // opacity: 1;
+    // transition: opacity .2s ease-in;
+    min-height: 75px;
+
+    &:last-of-type {
+      border: 0px;
+      padding-bottom: 0px;
+    }
+
+    .tx-event {
+      p {
+        margin-bottom: 0px;
+      }
+      min-height: 30px;
+
+    }
+  }
+}

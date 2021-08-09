@@ -1,43 +1,41 @@
-<mat-card *ngIf="theme$ | async as theme" [ngClass]="theme" class="pb-0">
-  <div class="table-container">
-    <table mat-table [dataSource]="dataSource" matSort [trackBy]="trackBy" class="w-100">
-      <ng-container matColumnDef="action" >
-        <th mat-header-cell *matHeaderCellDef> Name </th>
-        <td mat-cell *matCellDef="let element"> <a href="javascript:void(0)" (click)="navigate(element.name)">{{element.action}}</a> </td>
-      </ng-container>
+<div class="table-container">
+  <table mat-table [dataSource]="dataSource" matSort [trackBy]="trackBy" class="w-100">
+    <ng-container matColumnDef="action" >
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let element"> <a href="javascript:void(0)" (click)="navigate(element.name)">{{element.action}}</a> </td>
+    </ng-container>
 
-      <ng-container matColumnDef="value" >
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Value </th>
-        <td mat-cell *matCellDef="let element"> {{element.value }}</td>
-      </ng-container>
+    <ng-container matColumnDef="value" >
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Value </th>
+      <td mat-cell *matCellDef="let element"> {{element.value }}</td>
+    </ng-container>
 
-      <ng-container matColumnDef="amount0">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
-        <td mat-cell *matCellDef="let element"> {{element.amount0}} </td>
-      </ng-container>
+    <ng-container matColumnDef="amount0">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
+      <td mat-cell *matCellDef="let element"> {{element.amount0}} </td>
+    </ng-container>
 
-      <ng-container matColumnDef="amount1">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
-        <td mat-cell *matCellDef="let element"> {{element.amount1}} </td>
-      </ng-container>
+    <ng-container matColumnDef="amount1">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
+      <td mat-cell *matCellDef="let element"> {{element.amount1}} </td>
+    </ng-container>
 
-      <ng-container matColumnDef="wallet">
-        <th mat-header-cell *matHeaderCellDef> Wallet </th>
-        <td mat-cell *matCellDef="let element"> {{element.wallet}} </td>
-      </ng-container>
+    <ng-container matColumnDef="wallet">
+      <th mat-header-cell *matHeaderCellDef> Wallet </th>
+      <td mat-cell *matCellDef="let element"> {{element.wallet | shortAddress:8}} </td>
+    </ng-container>
 
-      <ng-container matColumnDef="time">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Time </th>
-        <td mat-cell *matCellDef="let element">
-          {{element.time | date}}
-        </td>
-      </ng-container>
+    <ng-container matColumnDef="time">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Time </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.time | date}}
+      </td>
+    </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
 
-    <!-- <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons [length]="dataSource?.data?.length || 0" (page)="getNext($event)" [pageSize]="filterOptions.itemsPerPage" [pageIndex]="filterOptions.pageNo"></mat-paginator> -->
-    <mat-paginator [pageSizeOptions]="[10, 20]" [length]="dataSource?.data?.length"></mat-paginator>
-  </div>
-</mat-card>
+  <!-- <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons [length]="dataSource?.data?.length || 0" (page)="getNext($event)" [pageSize]="filterOptions.itemsPerPage" [pageIndex]="filterOptions.pageNo"></mat-paginator> -->
+  <mat-paginator [pageSizeOptions]="[10, 20]" [length]="dataSource?.data?.length"></mat-paginator>
+</div>

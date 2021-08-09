@@ -23,7 +23,6 @@ export class ErrorService {
     this._log.error(endpoint);
 
     if (body && !environment.production) {
-      if (body.password) body.password = '';
       this._log.error(JSON.stringify(body));
     }
 

@@ -1,19 +1,18 @@
 #chartdiv {
   width: 100%;
-  min-height: 350px;
+  min-height: 400px;
 }
 
 .chart-legend {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 0px;
+  left: 0px;
   z-index: 999;
   padding: 10px;
 
-  .title {
-    margin: 0;
-    font-size: 1.3em;
-    line-height: 1.4em;
+  h3 {
+    font-size: 24px;
+    margin-bottom: 0px;
   }
 
   .value {
@@ -21,9 +20,8 @@
     font-size: 1.6em;
     line-height: 1.7em;
   }
+}
 
-  .other-text {
-    margin: 0;
-    font-size: 1em;
-  }
+.chart-container {
+  height: 400px;
 }

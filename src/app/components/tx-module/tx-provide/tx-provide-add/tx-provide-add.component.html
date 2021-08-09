@@ -1,0 +1,48 @@
+<div class="add-liquidity">
+  <ng-container *ngIf="allowance">
+    <opdex-allowance-validation [allowance]="allowance"></opdex-allowance-validation>
+  </ng-container>
+
+  <form [formGroup]="form" name="add-liquidity-form" id="swap-form" (submit)="submit()">
+    <mat-form-field floatLabel="always" class="mb-3">
+      <mat-label>Add CRS</mat-label>
+
+      <button mat-icon-button matPrefix disabled>
+        <mat-icon matPrefix>add</mat-icon>
+      </button>
+
+      <input matInput type="text" [required]="true" [formControl]="amountCrs" autocomplete="off" placeholder="0.00">
+
+      <button mat-button matSuffix type="button" disabled>CRS</button>
+    </mat-form-field>
+
+    <mat-form-field floatLabel="always">
+      <mat-label>Add {{pool.token.src.symbol}}</mat-label>
+
+      <button mat-icon-button matPrefix disabled>
+        <mat-icon matPrefix>add</mat-icon>
+      </button>
+
+      <input matInput type="text" [required]="true" [formControl]="amountSrc" autocomplete="off" placeholder="0.00">
+
+      <button mat-button matSuffix type="button" disabled>{{pool.token.src.symbol}}</button>
+    </mat-form-field>
+
+    <div class="space-between"></div>
+
+    <!-- <div class="swap-info mt-1" *ngIf="form.controls.tokenIn.value > 0 && form.controls.to.value > 0">
+      <p class="mb-0">Slippage: .1%</p>
+      <p class="mb-0">Minimum Received: 12345</p>
+      <p class="mb-0">Price: 12345</p>
+      <p class="mb-0">Price Impact: 12345</p>
+      <p class="mb-0">Fee: .03%</p>
+    </div> -->
+
+    <div *ngIf="txHash">
+      <span style="font-size: 10px;">{{txHash}}</span>
+    </div>
+
+    <opdex-deadline-slider label="Deadline" [default]="20" [formControl]="deadline"></opdex-deadline-slider>
+    <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid">Continue</button>
+  </form>
+</div>

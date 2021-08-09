@@ -1,7 +1,92 @@
 <main [ngClass]="theme">
-  <opdex-sidebar></opdex-sidebar>
+  <mat-sidenav-container (backdropClick)="closeSidenav()" class="w-100 h-100">
+    <mat-sidenav #sidenav (keydown.escape)="closeSidenav()" position="end" class="sidenav" [fixedInViewport]="true" [fixedTopGap]="0" [fixedBottomGap]="0" [mode]="sidenavMode">
+      <div class="sidenav-container">
 
-  <div id="page-content">
-    <router-outlet></router-outlet>
-  </div>
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <button mat-icon-button color="primary" class="small" (click)="toggleSidenavAppearance()">
+            <mat-icon>{{sidenavMode == 'over' ? 'unfold_more' : 'unfold_less' }}</mat-icon>
+          </button>
+
+          <button mat-button class="d-flex" color="primary" [matMenuTriggerFor]="beforeMenu" style="width: 125px; text-align: left;">
+            <div class="menu-content d-flex justify-content-between align-items-center">
+              <ng-container *ngFor="let transactionType of transactionTypes">
+                <span *ngIf="message?.view === transactionType.view">{{transactionType.title}}</span>
+              </ng-container>
+
+              <mat-icon>keyboard_arrow_down</mat-icon>
+            </div>
+
+          </button>
+          <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
+            <ng-container *ngFor="let transactionType of transactionTypes">
+              <button mat-menu-item *ngIf="message?.view !== transactionType.view" (click)="setTransactionView(transactionType.view)" style="width: 125px;">{{transactionType.title}}</button>
+            </ng-container>
+          </mat-menu>
+
+          <button mat-icon-button color="primary" (click)="closeSidenav()" class="small" aria-label="Close Sidenav">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+
+        <mat-divider class="mb-3"></mat-divider>
+
+        <ng-container *ngIf="context$ | async as context">
+          <div class="connect-wallet mb-4" *ngIf="!context?.wallet">
+            <opdex-card>
+              <button mat-flat-button color="primary" class="w-100" routerLink="/auth">Connect Wallet</button>
+            </opdex-card>
+          </div>
+        </ng-container>
+
+        <div [ngSwitch]="message?.view">
+          <opdex-tx-swap *ngSwitchCase="1" [data]="message?.data"></opdex-tx-swap>
+          <opdex-tx-provide *ngSwitchCase="2" [data]="message?.data"></opdex-tx-provide>
+          <opdex-tx-stake *ngSwitchCase="3" [data]="message?.data"></opdex-tx-stake>
+          <opdex-tx-mine *ngSwitchCase="4" [data]="message?.data"></opdex-tx-mine>
+          <opdex-tx-allowance *ngSwitchCase="5" [data]="message?.data"></opdex-tx-allowance>
+        </div>
+      </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <ng-container *ngIf="context$ | async as context">
+        <opdex-side-nav *ngIf="context.wallet"></opdex-side-nav>
+      </ng-container>
+
+      <div class="animation-container" style="display: block;" [@fadeAnimation]="prepareRoute(outlet)">
+        <div id="page-content" [ngClass]="{'no-sidebar': !context?.wallet}">
+          <ng-container *ngIf="context$ | async as context">
+            <div class="banner" *ngIf="context.wallet">
+              <div class="env light">
+                <mat-icon *ngIf="network == 'Devnet'">warning</mat-icon>
+                <p class="mb-0 ml-2">{{network}}</p>
+              </div>
+
+              <div class="block" *ngIf="latestSyncedBlock$ | async as block">
+                <span class="light">Latest Synced Block:</span>
+                <p class="mb-0 ml-2">{{block.height | formatNumber:0}}</p>
+              </div>
+            </div>
+          </ng-container>
+
+          <div class="page-content-container">
+            <router-outlet #outlet="outlet"></router-outlet>
+          </div>
+
+          <opdex-mobile-nav></opdex-mobile-nav>
+        </div>
+      </div>
+
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </main>
+
+
+
+
+
+
+
+
+

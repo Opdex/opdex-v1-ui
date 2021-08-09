@@ -1,0 +1,46 @@
+<aside id="side-nav">
+  <div class="foreground">
+    <div class="logo" routerLink="/">
+      <img src="/assets/logo-light-blue.png" alt="Opdex Logo">
+      <p class="opdex">OPDEX</p>
+    </div>
+
+    <ul class="sidebar-nav" *ngIf="userContext$ | async as context">
+      <li>
+        <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <mat-icon>trending_up</mat-icon> Market
+        </a>
+      </li>
+      <li>
+        <a mat-button routerLink="/pools" routerLinkActive="active">
+          <mat-icon>bubble_chart</mat-icon> Pools
+        </a>
+      </li>
+      <li>
+        <a mat-button routerLink="/tokens" routerLinkActive="active">
+          <mat-icon>toll</mat-icon> Tokens
+        </a>
+      </li>
+      <li>
+        <a mat-button routerLink="/governance" routerLinkActive="active">
+          <mat-icon>gavel</mat-icon> Governance
+        </a>
+      </li>
+      <li>
+        <a mat-button routerLink="/vault" routerLinkActive="active">
+          <mat-icon>lock</mat-icon> Vault
+        </a>
+      </li>
+      <li>
+        <a mat-button routerLink="/{{ !context?.wallet ? 'auth' : 'wallet'}}" routerLinkActive="active">
+          <span class="wallet-indicator {{context?.wallet ? 'valid' : 'invalid'}}"></span>
+          <mat-icon>account_balance_wallet</mat-icon> Wallet
+        </a>
+      </li>
+    </ul>
+
+    <div class="space-between"></div>
+
+    <img class="defi-blocks" src="assets/defi2@2x.png">
+  </div>
+</aside>

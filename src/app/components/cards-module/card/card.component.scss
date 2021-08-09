@@ -1,0 +1,58 @@
+
+.card {
+  background: rgba(27,25,47, .85) !important;
+  margin-bottom: 30px;
+
+  &.hidden {
+    transition: all .1s ease-out;
+    opacity: 0;
+    margin: 0;
+    height: 0px;
+  }
+
+  .foreground {
+    padding: 15px;
+    background: rgba(27, 25, 51, 0.9);
+    background: radial-gradient(circle, rgba(27, 25, 51, 0.7), rgba(27,25,47, .9) 100%);
+    border: 1px solid #292929;
+
+    &.warn {
+      background: rgba(245, 25, 55, 0.4);
+      border: 1px solid #ff7789;
+    }
+
+    &.success {
+      background: rgb(43 255 0 / 23%);
+      border: 1px solid #77ff82;
+    }
+
+    &.thin {
+      padding: 15px;
+    }
+  }
+
+  &.h-100 {
+    height: calc(100% - 30px) !important;
+
+    .foreground {
+      height: 100%;
+    }
+  }
+}
+
+
+@media (min-width: 320px) { }
+
+@media (min-width: 576px) { }
+
+@media (min-width: 768px) {
+  .card {
+    .foreground {
+      padding: 25px;
+    }
+  }
+}
+
+@media (min-width: 992px) { }
+
+@media (min-width: 1200px) { }

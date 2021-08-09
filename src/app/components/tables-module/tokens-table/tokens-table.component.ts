@@ -1,80 +1,56 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { ThemeService } from '@sharedServices/theme.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'opdex-tokens-table',
   templateUrl: './tokens-table.component.html',
   styleUrls: ['./tokens-table.component.scss']
 })
-export class TokensTableComponent implements OnInit {
-  theme$: Observable<string>;
+export class TokensTableComponent implements OnChanges, AfterViewInit {
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
+  @Input() tokens: any[];
+  @Input() pageSize: number;
+  @Input() smallPageSize: boolean = false;
+  pageSizeOptions: number[];
 
-  constructor(private _themeService: ThemeService, private _router: Router) {
-    this.theme$ = this._themeService.getTheme();
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  constructor(private _router: Router) {
     this.dataSource = new MatTableDataSource<any>();
-    this.displayedColumns = ['name', 'symbol', 'liquidity', 'volumeDaily', 'price', 'change'];
+    this.displayedColumns = ['name', 'address', 'symbol', 'price', 'change', 'price7d'];
   }
 
-  ngOnInit(): void {
-    this.dataSource.data = [
-      {
-        name: 'MediConnect',
-        symbol: 'MEDI',
-        volumeDaily: '$187,432',
-        liquidity: '$1,232,662',
-        price: '$0.02',
-        change: '-0.2%',
-        address: 'asdlkfjasdf'
-      },
-      {
-        name: 'Gluon',
-        symbol: 'GLUON',
-        volumeDaily: '$187,432',
-        liquidity: '$1,232,662',
-        price: '$0.02',
-        change: '-0.2%',
-        address: 'asdlkfjasdf'
-      },
-      {
-        name: 'Ether (Wrapped)',
-        symbol: 'WETH',
-        volumeDaily: '$187,432',
-        liquidity: '$1,232,662',
-        price: '$0.02',
-        change: '-0.2%',
-        address: 'asdlkfjasdf'
-      },
-      {
-        name: 'Bitcoin (Wrapped)',
-        symbol: 'WBTC',
-        volumeDaily: '$187,432',
-        liquidity: '$1,232,662',
-        price: '$0.02',
-        change: '-0.2%',
-        address: 'asdlkfjasdf'
-      },
-      {
-        name: 'USDT (Wrapped)',
-        symbol: 'WUSDT',
-        volumeDaily: '$187,432',
-        liquidity: '$1,232,662',
-        price: '$0.02',
-        change: '-0.2%',
-        address: 'asdlkfjasdf'
+  ngOnChanges() {
+    this.pageSizeOptions = this.smallPageSize ? [5, 10, 25] : [10, 25, 50];
+
+    if (!this.tokens?.length) return;
+
+    this.dataSource.data = this.tokens.map(t => {
+      return {
+        name: t.name,
+        symbol: t.symbol,
+        price: t.summary?.price?.close,
+        change: t.summary?.dailyPriceChange,
+        address: t.address,
+        price7d: t.snapshotHistory
       }
-    ]
+    });
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
   navigate(name: string) {
     this._router.navigateByUrl(`/tokens/${name}`);
   }
 
-  trackBy(index: number, pair: any) {
-    return pair.name + pair.address
+  trackBy(index: number, pool: any) {
+    return pool.name + pool.address
   }
 }

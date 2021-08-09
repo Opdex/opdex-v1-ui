@@ -1,0 +1,7 @@
+<p class="mb-0" *ngIf="pool$ | async as pool; else loading;">
+  Created
+  <a [routerLink]="['/pools', pool.address]">{{pool.token.src.symbol}}/CRS</a>
+  liquidity pool.
+</p>
+
+<ng-template #loading>Created XYZ/CRS liquidity pool.</ng-template>

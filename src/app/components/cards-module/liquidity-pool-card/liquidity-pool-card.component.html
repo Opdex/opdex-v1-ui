@@ -1,0 +1,26 @@
+<opdex-card class="pool-card">
+  <div class="top-details">
+    <h3 class="title">
+      <a href="javascript:void(0)" [routerLink]="['/pools', pool.address]">{{pool.token.src.symbol}}-CRS</a>
+    </h3>
+
+    <div class="button-group">
+      <button mat-icon-button class="swap small" (click)="swap()" matTooltip="Swap Tokens"><mat-icon>swap_horiz</mat-icon></button>
+      <button mat-icon-button class="provide small" (click)="provide()" matTooltip="Provide Liquidity"><mat-icon>control_point_duplicate</mat-icon></button>
+      <button mat-icon-button class="stake small" (click)="stake()" *ngIf="pool.staking?.isActive" matTooltip="Stake {{pool.token.staking?.symbol}}"><mat-icon>verified_user</mat-icon></button>
+      <button mat-icon-button class="mine small" (click)="mine()" *ngIf="pool.mining?.isActive" matTooltip="Mine {{pool.token.staking?.symbol}}"><mat-icon>whatshot</mat-icon></button>
+    </div>
+  </div>
+
+  <div class="bottom-details">
+    <div class="left">
+      <p class="sub-heading">Volume</p>
+      <p class="value">${{pool.volume.usd | formatNumber}}</p>
+    </div>
+
+    <div class="right">
+      <p class="sub-heading">Liquidity</p>
+      <p class="value">${{pool.reserves.usd | formatNumber:0}}</p>
+    </div>
+  </div>
+</opdex-card>

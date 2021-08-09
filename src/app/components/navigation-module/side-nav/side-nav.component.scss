@@ -1,0 +1,139 @@
+aside {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #292929;
+  background: rgba(27,25,47, .7) !important;
+  height: 100%;
+
+  &:hover {
+    .defi-blocks {
+      transition: .35s ease-in;
+      position: fixed;
+      left: 220px;
+    }
+  }
+
+
+  .foreground {
+    padding: 10px;
+    height: 100%;
+    background: rgba(27,25,47, .9);
+    background: radial-gradient(circle, rgba(46, 102, 122, 0.1) 0%, rgba(27,25,47, .9) 80%);
+  }
+
+
+  .mat-button {
+    width: 100%;
+    text-align: left;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    img {
+      width: 78px;
+      margin-right: 15px;
+    }
+
+    p {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 0px;
+    }
+  }
+
+  .sidebar-nav {
+    padding-left: 0;
+    list-style-type: none;
+
+    li {
+      margin: 10px 0;
+      width: 100%;
+
+      a {
+        &.active, &:hover {
+          color: #1ca7dc;
+        }
+      }
+
+      .mat-icon {
+        font-size: 32px;
+        height: 32px;
+        width: 32px;
+        margin: 10px 30px 10px 10px;
+      }
+    }
+  }
+
+  .defi-blocks {
+    position: fixed;
+    left: 20px;
+    width: 100px;
+    bottom: 25px;
+    z-index: 9999;
+    transition: .35s ease-in;
+  }
+
+  .connection-theme-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 10px;
+
+    .theme-selection {
+      display: flex;
+      flex-direction: row;
+
+      .theme-divider {
+        color: #777;
+        font-size: 1.4em;
+        margin: 0px 3px 0px 6px;
+      }
+
+      .inactive {
+        color: #777;
+      }
+    }
+
+    .connection {
+      .connection-badge {
+        width: 6px;
+        height: 6px;
+        background: green;
+        border-radius: 50%;
+        display: inline-block;
+      }
+    }
+  }
+}
+
+.wallet-indicator {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: .2em solid #1b192f;
+  position: absolute;
+  left: 25px;
+  top: 10px;
+
+  &.invalid {
+    background: #F2435B;
+  }
+
+  &.valid {
+    background: #00EB93;
+  }
+}

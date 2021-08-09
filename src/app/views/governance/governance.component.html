@@ -1,0 +1,92 @@
+<div class="governance" *ngIf="governance$ | async as governance">
+  <div class="container mt-5">
+    <div class="row mb-3">
+      <div class="col-4">
+        <h1 class="page-title mb-3">
+          <opdex-copy-button [tooltip]="governance?.address" [value]="governance?.address" icon="link"></opdex-copy-button>
+          <span>{{governance.minedToken.symbol}} Governance</span>
+        </h1>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-md-6 col-xl-3">
+        <opdex-card [fullHeight]="true">
+          <div class="d-flex flex-column justify-content-between h-100">
+            <h4>Nomination Period End <span class="badge {{governance.periodRemainingBlocks > 0 ? 'success' : 'warn'}}">{{governance.periodRemainingBlocks > 0 ? 'Ongoing' : 'Paused'}}</span></h4>
+            <p class="mb-0" style="font-weight: 400; font-size: 20px;" *ngIf="governance.periodRemainingBlocks > 0">
+              Block #{{governance.periodEndBlock | formatNumber:0}}
+              <small class="light float-right">~{{nominationPeriodEndDate | date:'MM/d/YY h:mm a z':'GMT'}}</small>
+            </p>
+            <button mat-flat-button color="primary" class="w-100 mt-2" *ngIf="governance.periodRemainingBlocks === 0" [disabled]="submitting" (click)="distribute()">Distribute Rewards</button>
+          </div>
+        </opdex-card>
+      </div>
+
+      <div class="col-12 col-md-6 col-xl-3">
+        <opdex-card [fullHeight]="true">
+          <div class="d-flex flex-column justify-content-between h-100">
+            <h4>Nomination Period Duration</h4>
+            <p class="mb-0" style="font-weight: 400; font-size: 20px;">
+              {{governance.periodBlockDuration | formatNumber:0}} Blocks
+              <small class="light float-right">~{{secondsToDhms(governance.periodBlockDuration * 16)}}</small>
+            </p>
+          </div>
+        </opdex-card>
+      </div>
+
+      <div class="col-12 col-md-6 col-xl-3">
+        <opdex-card [fullHeight]="true">
+          <div class="d-flex flex-column justify-content-between h-100">
+            <h4>Nomination Rewards</h4>
+            <p class="mb-0" style="font-weight: 400; font-size: 20px;">
+              {{governance.totalRewardsPerPeriod | formatNumber: 0}} ODX
+              <small class="light float-right">{{governance.miningPoolRewardPerPeriod | formatNumber:0}} per Pool</small>
+            </p>
+          </div>
+        </opdex-card>
+      </div>
+
+      <div class="col-12 col-md-6 col-xl-3">
+        <opdex-card [fullHeight]="true">
+          <div class="d-flex flex-column justify-content-between h-100">
+            <h4>Nomination Reward Reset</h4>
+            <p class="mb-0" style="font-weight: 400; font-size: 20px;">
+              {{governance.periodsUntilRewardReset}} Nomination Periods
+              <small class="light float-right">~{{((governance.periodsUntilRewardReset * governance.periodBlockDuration) + governance.periodRemainingBlocks) | formatNumber: 0}} Blocks</small>
+            </p>
+          </div>
+        </opdex-card>
+      </div>
+    </div>
+
+    <ng-container *ngIf="nominatedPools$ | async as nominatedPools">
+      <div class="row" *ngIf="nominatedPools.length">
+        <div class="col-12">
+          <h3 class="text-shadow">Nominated Liquidity Pools</h3>
+
+          <div class="row">
+            <div class="col-12 col-md-6 col-xl-3" *ngFor="let pool of nominatedPools">
+              <opdex-staking-pool-card [pool]="pool"></opdex-staking-pool-card>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+
+    <ng-container *ngIf="miningPools$ | async as miningPools">
+      <div class="row" *ngIf="miningPools.length">
+        <div class="col-12">
+          <h3 class="text-shadow">Active Liquidity Mining</h3>
+
+          <div class="row">
+            <div class="col-12 col-md-6 col-xl-3" *ngFor="let pool of miningPools">
+              <opdex-mining-card [pool]="pool"></opdex-mining-card>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

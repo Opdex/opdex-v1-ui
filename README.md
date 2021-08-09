@@ -17,5 +17,5 @@ ng serve
 ## Build
 
 ```shell
-ng build --prod
+ng build -c 
 ```

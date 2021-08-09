@@ -1,80 +1,52 @@
-<div id="token" *ngIf="theme$ | async as theme">
-  <div class="container pt-3">
+<div id="token" class="mt-5">
+  <div class="container pt-3" *ngIf="token">
     <div class="row mb-4">
       <div class="col-12">
-        <h1>MediConnect (MEDI)</h1>
+        <p class="mb-2 light">{{token.name}}</p>
+        <h1 class="page-title mb-3">
+          <opdex-copy-button [tooltip]="token.address" [value]="token.address" icon="link"></opdex-copy-button>
+          <span>{{token.symbol}}</span>
+        </h1>
 
-        <div class="stats">
+        <div class="stats mt-4">
           <div class="row">
-            <div class="col-3">
-              <mat-card>
-                <h4 class="stat-header">
-                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Cirrus (CRS)
-                </h4>
-                <p class="stat-value">
-                  $1.25
-                </p>
-              </mat-card>
-            </div>
-
-            <div class="col-3">
-              <mat-card>
-                <h4 class="stat-header">
-                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Volume
-                </h4>
-                <p class="stat-value">
-                  $109,733,139
-                </p>
-              </mat-card>
-            </div>
-
-            <div class="col-3">
-              <mat-card>
-                <h4 class="stat-header">
-                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Liquidity
-                </h4>
-                <p class="stat-value">
-                  $1,754,342,353
-                </p>
-              </mat-card>
-            </div>
-
-            <div class="col-3">
-              <mat-card>
-                <h4 class="stat-header">
-                  <button mat-icon-button color="primary" class="tiny mr-1"><mat-icon>help</mat-icon></button>
-                  Fees
-                </h4>
-                <p class="stat-value">
-                  $329,199.41
-                </p>
-              </mat-card>
-            </div>
+            <ng-container *ngFor="let statCard of statCards">
+              <div *ngIf="statCard.show" class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
+              </div>
+            </ng-container>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="row mb-4">
+    <div class="row mb-4" >
       <div class="col-12 col-md-8">
-        <mat-card class="p-0">
-          <opdex-line-chart [theme]="theme" [chartData]="ohlcPoints" [type]="chartType" *ngIf="ohlcPoints"></opdex-line-chart>
-        </mat-card>
+        <opdex-card class="p-0">
+          <!-- <opdex-line-chart [chartData]="priceHistory" title="{{token.symbol}} USD" *ngIf="priceHistory"></opdex-line-chart> -->
+
+          <opdex-line-chart
+                [chartData]="chartData"
+                [chartOptions]="chartOptions"
+                [selectedChart]="selectedChart"
+                title="{{selectedChart.category}}"
+                *ngIf="chartData"
+                (onTypeChange)="handleChartTypeChange($event)"></opdex-line-chart>
+        </opdex-card>
       </div>
 
       <div class="col-12 col-md-4">
-        <opdex-tx-box></opdex-tx-box>
+        <opdex-tx-feed [transactionRequest]="transactionRequest"></opdex-tx-feed>
       </div>
     </div>
 
-    <div class="row mb-4">
+    <!-- <div class="row mb-4">
       <div class="col-12 mb-4">
-        <h2>Recent Transactions</h2>
-        <opdex-transactions-table></opdex-transactions-table>
+        <opdex-card>
+          <h2>Recent Transactions</h2>
+          <opdex-transactions-table></opdex-transactions-table>
+        </opdex-card>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>

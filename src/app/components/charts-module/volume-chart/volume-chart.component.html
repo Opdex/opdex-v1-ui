@@ -1,0 +1,7 @@
+<div class="chart-container" #volumeChart class="w-100" (resized)="onResized($event)">
+  <div class="chart-legend">
+    <h3 class="title">Volume</h3>
+    <p class="value">{{value}}</p>
+  </div>
+  <div id="volumeChart" [hidden]="loading"></div>
+</div>

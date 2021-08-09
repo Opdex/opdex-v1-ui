@@ -1,0 +1,42 @@
+a {
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.provide {
+  background: #12ee9d;
+  color: #1b192f;
+  font-weight: 500;
+}
+
+.mine {
+  background: #f7556b;
+  color: #1b192f;
+  font-weight: 500;
+}
+
+.stake {
+  background: #9c45ee;
+  color: #1b192f;
+  font-weight: 500;
+}
+
+.swap {
+  background: #1da7dc;
+  color: #1b192f;
+  font-weight: 500;
+}
+
+.percentChange {
+  display: inline-block;
+  float: right;
+  margin-right: 50px;
+  font-size: 18px !important;
+}
+
+.disabled-badge {
+  font-size: 14px;
+  background: #f7556b;
+  padding: 4px 8px;
+  border-radius: 4px
+}

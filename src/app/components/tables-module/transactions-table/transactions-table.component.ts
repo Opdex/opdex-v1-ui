@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { ThemeService } from '@sharedServices/theme.service';
+import { ThemeService } from '@sharedServices/utility/theme.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -10,12 +10,10 @@ import { Observable } from 'rxjs';
   styleUrls: ['./transactions-table.component.scss']
 })
 export class TransactionsTableComponent implements OnInit {
-  theme$: Observable<string>;
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
 
-  constructor(private _themeService: ThemeService, private _router: Router) {
-    this.theme$ = this._themeService.getTheme();
+  constructor(private _router: Router) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['action', 'value', 'amount0', 'amount1', 'wallet', 'time'];
   }
@@ -23,27 +21,27 @@ export class TransactionsTableComponent implements OnInit {
   ngOnInit(): void {
     this.dataSource.data = [
       {
-        action: 'Swap MEDI for CRS',
+        action: 'Swap xBTC for CRS',
         value: '$562.29',
-        amount0: '187,432 MEDI',
+        amount0: '187,432 xBTC',
         amount1: '1,232,662 CRS',
-        wallet: 'asdlkfjasdf',
+        wallet: 'PG5bGZgPJ4XCfGnDAQ5Di73CFu8YN4fHgB',
         time: new Date()
       },
       {
-        action: 'Swap CRS for MEDI',
+        action: 'Swap CRS for xBTC',
         value: '$562.29',
         amount0: '187,432 CRS',
-        amount1: '1,232,662 MEDI',
-        wallet: 'asdlkfjasdf',
+        amount1: '1,232,662 xBTC',
+        wallet: 'PG5bGZgPJ4XCfGnDAQ5Di73CFu8YN4fHgB',
         time: new Date()
       },
       {
-        action: 'Remove CRS and MEDI',
+        action: 'Remove CRS and xBTC',
         value: '$562.29',
         amount0: '187,432 CRS',
-        amount1: '1,232,662 MEDI',
-        wallet: 'asdlkfjasdf',
+        amount1: '1,232,662 xBTC',
+        wallet: 'PG5bGZgPJ4XCfGnDAQ5Di73CFu8YN4fHgB',
         time: new Date()
       }
     ]
@@ -53,7 +51,7 @@ export class TransactionsTableComponent implements OnInit {
     // this._router.navigateByUrl(`/tokens/${name}`);
   }
 
-  trackBy(index: number, pair: any) {
-    return pair.name + pair.address
+  trackBy(index: number, pool: any) {
+    return pool.name + pool.address
   }
 }

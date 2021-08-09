@@ -1,0 +1,10 @@
+<div class="collect-mining-rewards">
+  <form [formGroup]="form" name="collect-mining-rewards-form" id="collect-mining-rewards-form" (submit)="submit()">
+
+    <div *ngIf="txHash">
+      <small>{{txHash}}</small>
+    </div>
+
+    <button mat-flat-button color="primary" class="w-100">Continue</button>
+  </form>
+</div>

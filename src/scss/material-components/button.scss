@@ -41,4 +41,21 @@ button {
       }
     }
   }
+
+  .mat-button-wrapper {
+    flex: 1!important;
+  }
+
+  &.white {
+    background-color: white !important;
+    background: white !important;
+    color: #1b192f !important;
+  }
+}
+
+
+.mat-button-toggle-label-content {
+  line-height: 32px !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
 }

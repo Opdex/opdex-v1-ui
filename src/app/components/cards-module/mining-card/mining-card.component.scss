@@ -1,0 +1,5 @@
+@import '../cards.module';
+
+.pool-card {
+  @extend %pool-card;
+}

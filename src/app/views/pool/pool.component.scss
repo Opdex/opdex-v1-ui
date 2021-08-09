@@ -1,0 +1,142 @@
+.light-mode {
+  .stats {
+    .stat-header {
+      color: #575757 !important;
+    }
+  }
+}
+
+.dark-mode {
+  .stat-header {
+    color: #bebebe;
+  }
+}
+
+h1 {
+  display: inline-block;
+  letter-spacing: .05em;
+  font-weight: 500;
+
+  a {
+    // text-decoration: none;
+    color: #fff;
+  }
+}
+
+.chip-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  max-width: 400px;
+
+  .chip {
+    padding: 7px 13px;
+    border-radius: 20px;
+    font-size: 18px;
+    line-height: 18px;
+    color: #fff !important;
+    align-items: center;
+    display: flex;
+
+    mat-icon {
+      line-height: 20px;
+      height: 20px !important;
+      width: 20px !important;
+    }
+
+    &.purple {
+      background-color: #9c45ee !important;
+    }
+
+    &.red {
+      background-color: #f7556b !important;
+    }
+
+    &.blue {
+      background-color: #1ca7dc !important;
+    }
+  }
+}
+
+
+.mining-pool {
+  h3 {
+    font-weight: 500;
+  }
+
+  .swap {
+    background: #1da7dc;
+    color: #1b192f;
+    font-weight: 500;
+  }
+
+  .add {
+    background: #00EB93;
+    color: #1b192f;
+    font-weight: 500;
+  }
+
+  .collect {
+    background: #1ca7dc;
+    color: #1b192f;
+    font-weight: 500;
+  }
+
+  .remove {
+    background: #F2435B;
+    color: #1b192f;
+    font-weight: 500;
+  }
+
+  .details {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .sub-heading {
+      color: #ccc;
+      font-weight: 400 !important;
+      font-size: 16px !important;
+    }
+
+    .remaining {
+      p {
+        text-align: right;
+      }
+    }
+
+    .value {
+      font-size: 20px;
+      margin-bottom: 0px;
+    }
+  }
+}
+
+.green {
+  color: #00EB93;
+  font-weight: 400;
+}
+
+.red {
+  color: #F2435B;
+  font-weight: 400;
+}
+
+.transaction {
+  padding: 20px 0;
+  border-bottom: 1px solid #292929;
+
+  &:last-of-type {
+    border: 0px;
+    padding-bottom: 0px;
+  }
+}
+
+.tx-event {
+  p {
+    margin-bottom: 0px;
+  }
+}

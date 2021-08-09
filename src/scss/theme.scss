@@ -11,19 +11,19 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
 
 $fontConfig: (
-  display-4: mat-typography-level(112px, 112px, 300, 'Roboto', -0.0134em),
+  display-4: mat-typography-level(112px, 112px, 400, 'Roboto', -0.0134em),
   display-3: mat-typography-level(56px, 56px, 400, 'Roboto', -0.0089em),
   display-2: mat-typography-level(45px, 48px, 400, 'Roboto', 0.0000em),
   display-1: mat-typography-level(34px, 40px, 400, 'Roboto', 0.0074em),
   headline: mat-typography-level(28px, 32px, 400, 'Roboto', 0.0000em),
-  title: mat-typography-level(20px, 32px, 500, 'Roboto', 0.0075em),
-  subheading-2: mat-typography-level(16px, 28px, 400, 'Roboto', 0.0094em),
-  subheading-1: mat-typography-level(15px, 24px, 500, 'Roboto', 0.0067em),
-  body-2: mat-typography-level(12px, 24px, 500, 'Roboto', 0.0179em),
-  body-1: mat-typography-level(12px, 20px, 400, 'Roboto', 0.0179em),
-  button: mat-typography-level(12px, 14px, 500, 'Roboto', 0.0893em),
-  caption: mat-typography-level(10px, 20px, 400, 'Roboto', 0.0333em),
-  input: mat-typography-level(12px, 1.125, 400, 'Roboto', 0px)
+  title: mat-typography-level(34px, 32px, 500, 'Roboto', 0.0075em),
+  subheading-2: mat-typography-level(24px, 28px, 400, 'Roboto', 0.0094em),
+  subheading-1: mat-typography-level(20px, 24px, 500, 'Roboto', 0.0067em),
+  body-2: mat-typography-level(16px, 24px, 500, 'Roboto', 0.0179em),
+  body-1: mat-typography-level(16px, 20px, 300, 'Roboto', 0.0179em),
+  button: mat-typography-level(16px, 16px, 400, 'Roboto', 0.0893em),
+  caption: mat-typography-level(14px, 20px, 300, 'Roboto', 0.0333em),
+  input: mat-typography-level(15px, 1.125, 300, 'Roboto', 0px)
 );
 
 // Foreground Elements
@@ -111,7 +111,7 @@ $mat-light-theme-background: (
 );
 
 // Dark bg
-$dark-background:     #100f1d;
+$dark-background:     #1B192F;
 $dark-bg-lighter-5:   lighten($dark-background, 5%);
 $dark-bg-lighter-10:  lighten($dark-background, 10%);
 $dark-bg-lighter-20:  lighten($dark-background, 20%);
@@ -184,14 +184,15 @@ $theme-warn: mat-palette($mat-warn, main, lighter, darker);
 $theme: mat-light-theme($theme-primary, $theme-accent, $theme-warn);
 $altTheme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
 
-
-
-
-
 html, body { height: 100%; }
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-image: url('/assets/bg.png');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-color: #181629;
 }
 
 main {
@@ -203,6 +204,15 @@ main {
   .main-route-container {
     flex: 1;
   }
+
+  // &.light-mode {
+  //   background: #f5f5f5;
+  // }
+
+  // &.dark-mode {
+  //   // background: #1b192f;
+  //   background: #181629;
+  // }
 }
 
 .cdk-overlay-container {
@@ -218,10 +228,6 @@ main {
   $primary: map-get($theme, primary);
   $primaryDarkerColor: mat-color($primary, darker);
 
-  background: #f5f5f5;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #f9fdff, #f1f1f1, #f9fdff);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right,  #f9fdff, #f1f1f1, #f9fdff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
   a {
     color: $primaryDarkerColor;
   }
@@ -229,10 +235,6 @@ main {
 
 .dark-mode {
   @include angular-material-theme($altTheme);
-
-  background: #090911;  /* fallback for old browsers */
-  // background: -webkit-linear-gradient(to right, #0c0d0e, #0e0f13, #0c0d0e);  /* Chrome 10-25, Safari 5.1-6 */
-  // background: linear-gradient(to right,  #0c0d0e, #0e0f13, #0c0d0e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
   color: #fff;
 
