@@ -53,7 +53,7 @@ export class MarketComponent implements OnInit {
   constructor(private _platformApiService: PlatformApiService, private _marketsService: MarketsService, private _tokensService: TokensService) { }
 
   async ngOnInit(): Promise<void> {
-    this.subscription.add(interval(5000)
+    this.subscription.add(interval(30000)
       .pipe(tap(_ => {
         this._marketsService.refreshMarket();
         this._marketsService.refreshMarketHistory();
