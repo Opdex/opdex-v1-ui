@@ -16,7 +16,7 @@
       <button mat-button matSuffix type="button" disabled>CRS</button>
     </mat-form-field>
 
-    <mat-form-field floatLabel="always">
+    <mat-form-field floatLabel="always" class="mb-3">
       <mat-label>Add {{pool.token.src.symbol}}</mat-label>
 
       <button mat-icon-button matPrefix disabled>
@@ -27,6 +27,8 @@
 
       <button mat-button matSuffix type="button" disabled>{{pool.token.src.symbol}}</button>
     </mat-form-field>
+
+    <opdex-deadline-slider label="Deadline" [default]="20" [formControl]="deadline"></opdex-deadline-slider>
 
     <div class="space-between"></div>
 
@@ -42,7 +44,6 @@
       <span style="font-size: 10px;">{{txHash}}</span>
     </div>
 
-    <opdex-deadline-slider label="Deadline" [default]="20" [formControl]="deadline"></opdex-deadline-slider>
     <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid">Continue</button>
   </form>
 </div>
