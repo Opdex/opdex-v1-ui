@@ -37,11 +37,11 @@
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="mb-0">
               {{pool.token.src.symbol}}
-              <span class="ml-2 {{pool.token.src.summary.dailyPriceChange < 0 ? 'red' : 'green'}}">${{pool.token.src.summary.price.close | formatNumber: 2}}</span>
+              <span class="ml-2 {{pool.token.src.summary.dailyPriceChange < 0 ? 'red' : 'green'}}">${{pool.token.src.summary.price.close | shortNumber}}</span>
             </h5>
             <mat-icon>swap_horiz</mat-icon>
             <h5 class="mb-0">
-              <span style="font-weight: 400;">{{pool.cost.crsPerSrc.close | formatNumber:4 }}</span>
+              <span style="font-weight: 400;">{{pool.cost.crsPerSrc.close | shortNumber }}</span>
               CRS
             </h5>
           </div>
@@ -49,12 +49,12 @@
           <div class="d-flex justify-content-between align-items-center">
             <h5 class="mb-0">CRS
               <span class="ml-2 {{pool.token.crs.summary.dailyPriceChange < 0 ? 'red' : 'green'}}">
-                ${{pool.token.crs.summary.price.close | formatNumber: 2}}
+                ${{pool.token.crs.summary.price.close | shortNumber}}
               </span>
             </h5>
             <mat-icon>swap_horiz</mat-icon>
             <h5 class="mb-0">
-              <span style="font-weight: 400;">{{pool.cost.srcPerCrs.close | formatNumber:pool.token.src.decimals > 4 ? 4 : pool.token.src.decimals}}</span>
+              <span style="font-weight: 400;">{{pool.cost.srcPerCrs.close | shortNumber}}</span>
               {{pool.token.src.symbol}}
             </h5>
           </div>
@@ -67,14 +67,14 @@
             <h5 class="mb-0 align-items-center d-flex">
               <mat-icon class="mr-3">lock</mat-icon>
               {{pool.token.src.symbol}}</h5>
-            <h5 class="mb-0" style="font-weight: 400;">{{pool.reserves.src | formatNumber:pool.token.src.decimals > 8 ? 8 : pool.token.src.decimals}}</h5>
+            <h5 class="mb-0" style="font-weight: 400;">{{pool.reserves.src | shortNumber}}</h5>
           </div>
           <div class="d-flex justify-content-between align-items-center">
             <h5 class="mb-0 align-items-center d-flex">
               <mat-icon class="mr-3">lock</mat-icon>
               CRS
             </h5>
-            <h5 class="mb-0" style="font-weight: 400;">{{pool.reserves.crs | formatNumber:8}}</h5>
+            <h5 class="mb-0" style="font-weight: 400;">{{pool.reserves.crs | shortNumber}}</h5>
           </div>
         </opdex-card>
       </div>
@@ -117,12 +117,12 @@
               <div class="details">
                 <div class="mining">
                   <p class="sub-heading">CRS</p>
-                  <p class="value">{{crsBalance?.balance | formatNumber:8}}</p>
+                  <p class="value">{{crsBalance?.balance | shortNumber}}</p>
                 </div>
 
                 <div class="remaining">
                   <p class="sub-heading">{{pool.token.src.symbol}}</p>
-                  <p class="value">{{walletBalance?.srcBalance | formatNumber: 8}}</p>
+                  <p class="value">{{walletBalance?.srcBalance | shortNumber}}</p>
                 </div>
               </div>
             </opdex-card>
@@ -141,7 +141,7 @@
               <div class="details">
                 <div class="mining">
                   <p class="sub-heading">Position</p>
-                  <p class="value">{{walletBalance?.providing | formatNumber: 4}} LPT</p>
+                  <p class="value">{{walletBalance?.providing | shortNumber}} LPT</p>
                 </div>
 
                 <!-- <div class="remaining">
@@ -166,7 +166,7 @@
               <div class="details">
                 <div class="mining">
                   <p class="sub-heading">Position</p>
-                  <p class="value">{{walletBalance?.staking | formatNumber: 4}} ODX</p>
+                  <p class="value">{{walletBalance?.staking | shortNumber}} ODX</p>
                 </div>
 
                 <!-- <div class="remaining">
@@ -191,7 +191,7 @@
               <div class="details">
                 <div class="mining">
                   <p class="sub-heading">Position</p>
-                  <p class="value">{{walletBalance?.mining | formatNumber: 4}} LPT</p>
+                  <p class="value">{{walletBalance?.mining | shortNumber}} LPT</p>
                 </div>
 
                 <!-- <div class="remaining">

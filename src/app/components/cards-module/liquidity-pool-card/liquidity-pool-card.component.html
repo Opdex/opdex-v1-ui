@@ -27,12 +27,12 @@
   <div class="bottom-details">
     <div class="left">
       <p class="sub-heading">Volume</p>
-      <p class="value">${{pool.volume.usd | formatNumber}}</p>
+      <p class="value">${{pool.volume.usd | shortNumber}}</p>
     </div>
 
     <div class="right">
       <p class="sub-heading">Liquidity</p>
-      <p class="value">${{pool.reserves.usd | formatNumber:0}}</p>
+      <p class="value">${{pool.reserves.usd | shortNumber}}</p>
     </div>
   </div>
 </opdex-card>

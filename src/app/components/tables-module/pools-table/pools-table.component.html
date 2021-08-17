@@ -8,7 +8,7 @@
     <ng-container matColumnDef="liquidity">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Liquidity </th>
       <td mat-cell *matCellDef="let element">
-        ${{element.reserves.usd | formatNumber}}
+        ${{element.reserves.usd | shortNumber}}
         <opdex-change-indicator [value]="element.reserves.usdDailyChange" size="s" class="percentChange"></opdex-change-indicator>
       </td>
     </ng-container>
@@ -17,7 +17,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Staking Weight </th>
       <td mat-cell *matCellDef="let element">
         <ng-container *ngIf="element.staking; else stakingDisabled">
-          {{element.staking?.weight | formatNumber:0}} <small>ODX</small>
+          {{element.staking?.weight | shortNumber}} <small>ODX</small>
           <opdex-change-indicator [value]="element.staking?.weightDailyChange" size="s" class="percentChange" *ngIf="element.staking?.weightDailyChange != null"></opdex-change-indicator>
         </ng-container>
         <ng-template #stakingDisabled>
@@ -28,17 +28,17 @@
 
     <ng-container matColumnDef="volumeDaily">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Volume (24hrs) </th>
-      <td mat-cell *matCellDef="let element"> ${{element.volume.usd | formatNumber}} </td>
+      <td mat-cell *matCellDef="let element"> ${{element.volume.usd | shortNumber}} </td>
     </ng-container>
 
     <ng-container matColumnDef="providerRewards">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Provider Rewards </th>
-      <td mat-cell *matCellDef="let element"> ${{element.rewards.providerUsd | formatNumber}} </td>
+      <td mat-cell *matCellDef="let element"> ${{element.rewards.providerUsd | shortNumber}} </td>
     </ng-container>
 
     <ng-container matColumnDef="stakerRewards">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Staker Rewards </th>
-      <td mat-cell *matCellDef="let element"> ${{element.rewards.marketUsd | formatNumber}} </td>
+      <td mat-cell *matCellDef="let element"> ${{element.rewards.marketUsd | shortNumber}} </td>
     </ng-container>
 
     <!-- <ng-container matColumnDef="liquidityHistory">

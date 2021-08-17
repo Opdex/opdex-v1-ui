@@ -27,12 +27,12 @@
   <div class="bottom-details">
     <div class="left">
       <p class="sub-heading">Staking</p>
-      <p class="value">{{pool.staking.weight | formatNumber:0}} {{pool.token.staking.symbol}}</p>
+      <p class="value">{{pool.staking.weight | shortNumber}} {{pool.token.staking.symbol}}</p>
     </div>
 
     <div class="right">
       <p class="sub-heading">Liquidity</p>
-      <p class="value">${{pool.reserves.usd | formatNumber:0}}</p>
+      <p class="value">${{pool.reserves.usd | shortNumber}}</p>
     </div>
   </div>
 </opdex-card>

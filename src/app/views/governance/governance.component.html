@@ -48,8 +48,8 @@
           <div class="d-flex flex-column justify-content-between h-100">
             <h4>Rewards</h4>
             <h5 class="mb-0">
-              {{governance.totalRewardsPerPeriod | formatNumber: 0}} ODX
-              <small class="light float-right">{{governance.miningPoolRewardPerPeriod | formatNumber:0}} each</small>
+              {{governance.totalRewardsPerPeriod | shortNumber}} ODX
+              <small class="light float-right">{{governance.miningPoolRewardPerPeriod | shortNumber}} each</small>
             </h5>
           </div>
         </opdex-card>

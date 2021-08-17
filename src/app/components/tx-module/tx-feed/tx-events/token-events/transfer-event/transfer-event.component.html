@@ -1,7 +1,7 @@
 <p class="mb-0" *ngIf="token$ | async as token; else loading;">
   Transferred
-  <strong>{{event.amount | formatNumber:token.decimals}} </strong>
+  <strong>{{event.amount | shortNumber}} </strong>
   <a routerLink="/tokens/{{token.address}}">{{token.symbol}}</a> to {{event.to | shortAddress:4}}.
 </p>
 
-<ng-template #loading>Transferred <strong>{{event.amount | formatNumber:8}}</strong>xYZT to ABcd...eFGh.</ng-template>
+<ng-template #loading>Transferred <strong>{{event.amount | shortNumber}}</strong>xYZT to ABcd...eFGh.</ng-template>
