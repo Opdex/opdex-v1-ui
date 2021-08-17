@@ -36,3 +36,9 @@
     display: block;
   }
 }
+
+@media(max-width: 767px) {
+  .defi {
+    display: none !important;
+  }
+}

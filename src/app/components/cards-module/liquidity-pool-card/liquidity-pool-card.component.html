@@ -4,12 +4,24 @@
       <a href="javascript:void(0)" [routerLink]="['/pools', pool.address]">{{pool.token.src.symbol}}-CRS</a>
     </h3>
 
-    <div class="button-group">
-      <button mat-icon-button class="swap small" (click)="swap()" matTooltip="Swap Tokens"><mat-icon>swap_horiz</mat-icon></button>
-      <button mat-icon-button class="provide small" (click)="provide()" matTooltip="Provide Liquidity"><mat-icon>control_point_duplicate</mat-icon></button>
-      <button mat-icon-button class="stake small" (click)="stake()" *ngIf="pool.staking?.isActive" matTooltip="Stake {{pool.token.staking?.symbol}}"><mat-icon>verified_user</mat-icon></button>
-      <button mat-icon-button class="mine small" (click)="mine()" *ngIf="pool.mining?.isActive" matTooltip="Mine {{pool.token.staking?.symbol}}"><mat-icon>whatshot</mat-icon></button>
-    </div>
+    <button mat-icon-button color="primary" class="small" [matMenuTriggerFor]="beforeMenu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
+      <button mat-menu-item class="small" (click)="swap()">
+        <mat-icon class="swap">swap_horiz</mat-icon> Swap {{pool.token.src?.symbol}}
+      </button>
+      <button mat-menu-item class="small" (click)="provide()">
+        <mat-icon class="provide">control_point_duplicate</mat-icon> Provide {{pool.token.src?.symbol}}
+      </button>
+      <button mat-menu-item class="small" (click)="stake()" *ngIf="pool.staking?.isActive">
+        <mat-icon class="stake">verified_user</mat-icon> Stake {{pool.token.staking?.symbol}}
+      </button>
+      <button mat-menu-item class="small" (click)="mine()" *ngIf="pool.mining?.isActive">
+        <mat-icon class="mine">whatshot</mat-icon> Mine {{pool.token.staking?.symbol}}
+      </button>
+    </mat-menu>
   </div>
 
   <div class="bottom-details">

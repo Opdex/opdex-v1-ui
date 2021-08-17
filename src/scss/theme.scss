@@ -8,23 +8,7 @@
 // have to load a single css file for Angular Material in your app.
 
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
-
-$fontConfig: (
-  display-4: mat-typography-level(112px, 112px, 400, 'Roboto', -0.0134em),
-  display-3: mat-typography-level(56px, 56px, 400, 'Roboto', -0.0089em),
-  display-2: mat-typography-level(45px, 48px, 400, 'Roboto', 0.0000em),
-  display-1: mat-typography-level(34px, 40px, 400, 'Roboto', 0.0074em),
-  headline: mat-typography-level(28px, 32px, 400, 'Roboto', 0.0000em),
-  title: mat-typography-level(34px, 32px, 500, 'Roboto', 0.0075em),
-  subheading-2: mat-typography-level(24px, 28px, 400, 'Roboto', 0.0094em),
-  subheading-1: mat-typography-level(20px, 24px, 500, 'Roboto', 0.0067em),
-  body-2: mat-typography-level(16px, 24px, 500, 'Roboto', 0.0179em),
-  body-1: mat-typography-level(16px, 20px, 300, 'Roboto', 0.0179em),
-  button: mat-typography-level(16px, 16px, 400, 'Roboto', 0.0893em),
-  caption: mat-typography-level(14px, 20px, 300, 'Roboto', 0.0333em),
-  input: mat-typography-level(15px, 1.125, 300, 'Roboto', 0px)
-);
+@import 'font';
 
 // Foreground Elements
 
@@ -137,9 +121,6 @@ $mat-dark-theme-background: (
   disabled-list-option:     $dark-bg-lighter-10,
 );
 
-// Compute font config
-@include mat-core($fontConfig);
-
 // Theme Config
 
 $mat-primary: (
@@ -188,16 +169,24 @@ html, body { height: 100%; }
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #181629;
+}
+
+.background {
   background-image: url('/assets/blur-bg.png');
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
-  background-color: #181629;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 100vw;
 }
 
 @media(max-width: 767px) {
   body {
-    background-size: contain !important;
+    background-image: none;
   }
 }
 
@@ -254,4 +243,26 @@ main {
 
 .error {
   color: mat-color($theme-warn) !important;
+}
+
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #383750;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

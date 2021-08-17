@@ -1,4 +1,4 @@
-<div id="pool" class="mt-5">
+<div id="pool" class="page-container">
   <div class="container" *ngIf="pool">
     <div class="row">
       <div class="col">
@@ -35,28 +35,28 @@
       <div class="col-12 col-md-6 col-xl">
         <opdex-card [fullHeight]="true">
           <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">
+            <h5 class="mb-0">
               {{pool.token.src.symbol}}
               <span class="ml-2 {{pool.token.src.summary.dailyPriceChange < 0 ? 'red' : 'green'}}">${{pool.token.src.summary.price.close | formatNumber: 2}}</span>
-            </h4>
+            </h5>
             <mat-icon>swap_horiz</mat-icon>
-            <h4 class="mb-0">
-              <span style="font-weight: 400;">{{pool.cost.crsPerSrc.close | formatNumber:8 }}</span>
+            <h5 class="mb-0">
+              <span style="font-weight: 400;">{{pool.cost.crsPerSrc.close | formatNumber:4 }}</span>
               CRS
-            </h4>
+            </h5>
           </div>
 
           <div class="d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">CRS
+            <h5 class="mb-0">CRS
               <span class="ml-2 {{pool.token.crs.summary.dailyPriceChange < 0 ? 'red' : 'green'}}">
                 ${{pool.token.crs.summary.price.close | formatNumber: 2}}
               </span>
-            </h4>
+            </h5>
             <mat-icon>swap_horiz</mat-icon>
-            <h4 class="mb-0">
-              <span style="font-weight: 400;">{{pool.cost.srcPerCrs.close | formatNumber:pool.token.src.decimals > 8 ? 8 : pool.token.src.decimals}}</span>
+            <h5 class="mb-0">
+              <span style="font-weight: 400;">{{pool.cost.srcPerCrs.close | formatNumber:pool.token.src.decimals > 4 ? 4 : pool.token.src.decimals}}</span>
               {{pool.token.src.symbol}}
-            </h4>
+            </h5>
           </div>
         </opdex-card>
       </div>
@@ -64,25 +64,25 @@
       <div class="col-12 col-md-6 col-xl">
         <opdex-card [fullHeight]="true">
           <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0 align-items-center d-flex">
+            <h5 class="mb-0 align-items-center d-flex">
               <mat-icon class="mr-3">lock</mat-icon>
-              {{pool.token.src.symbol}}</h4>
-            <h4 class="mb-0" style="font-weight: 400;">{{pool.reserves.src | formatNumber:pool.token.src.decimals > 8 ? 8 : pool.token.src.decimals}}</h4>
+              {{pool.token.src.symbol}}</h5>
+            <h5 class="mb-0" style="font-weight: 400;">{{pool.reserves.src | formatNumber:pool.token.src.decimals > 8 ? 8 : pool.token.src.decimals}}</h5>
           </div>
           <div class="d-flex justify-content-between align-items-center">
-            <h4 class="mb-0 align-items-center d-flex">
+            <h5 class="mb-0 align-items-center d-flex">
               <mat-icon class="mr-3">lock</mat-icon>
               CRS
-            </h4>
-            <h4 class="mb-0" style="font-weight: 400;">{{pool.reserves.crs | formatNumber:8}}</h4>
+            </h5>
+            <h5 class="mb-0" style="font-weight: 400;">{{pool.reserves.crs | formatNumber:8}}</h5>
           </div>
         </opdex-card>
       </div>
     </div>
 
-    <div class="row">
+    <div class="scrollable-row">
       <ng-container *ngFor="let statCard of statCards">
-        <div *ngIf="statCard.show" class="col-12 col-md-6 col-lg">
+        <div *ngIf="statCard.show" class="scrollable-card">
             <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
         </div>
       </ng-container>
@@ -141,7 +141,7 @@
               <div class="details">
                 <div class="mining">
                   <p class="sub-heading">Position</p>
-                  <p class="value">{{walletBalance?.providing | formatNumber: 8}} LPT</p>
+                  <p class="value">{{walletBalance?.providing | formatNumber: 4}} LPT</p>
                 </div>
 
                 <!-- <div class="remaining">
@@ -166,7 +166,7 @@
               <div class="details">
                 <div class="mining">
                   <p class="sub-heading">Position</p>
-                  <p class="value">{{walletBalance?.staking | formatNumber: 8}} ODX</p>
+                  <p class="value">{{walletBalance?.staking | formatNumber: 4}} ODX</p>
                 </div>
 
                 <!-- <div class="remaining">
@@ -191,7 +191,7 @@
               <div class="details">
                 <div class="mining">
                   <p class="sub-heading">Position</p>
-                  <p class="value">{{walletBalance?.mining | formatNumber: 8}} LPT</p>
+                  <p class="value">{{walletBalance?.mining | formatNumber: 4}} LPT</p>
                 </div>
 
                 <!-- <div class="remaining">

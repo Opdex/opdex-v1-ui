@@ -1,4 +1,4 @@
-<div id="overview" class="mt-5">
+<div id="overview" class="page-container">
   <div class="container" *ngIf="market">
     <div class="row">
       <div class="col">
@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row mb-3">
       <div class="col-12 col-lg-8">
         <opdex-card class="p-0">
           <opdex-line-chart
@@ -52,7 +52,10 @@
     <ng-container *ngIf="miningPools$ | async as miningPools">
       <div class="row" *ngIf="miningPools.length">
         <div class="col-12">
-          <h2 class="mb-3 text-shadow">Liquidity Mining</h2>
+          <h2 class="mb-3 text-shadow d-flex align-items-center">
+            <mat-icon class="mr-2 mine">whatshot</mat-icon>
+            Liquidity Mining
+          </h2>
 
           <div class="scrollable-row">
             <ng-container *ngFor="let pool of miningPools">
@@ -65,7 +68,7 @@
       </div>
     </ng-container>
 
-    <div class="row">
+    <div class="row mb-3">
       <div class="col-12">
         <opdex-card>
           <h2>Top Pools</h2>

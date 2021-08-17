@@ -1,3 +1,4 @@
+import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { SharedPipesModule } from './../../pipes/shared-pipes.module';
 import { SharedModule } from '@sharedComponents/shared-module/shared.module';
@@ -38,6 +39,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatIconModule,
     MatCheckboxModule,
     MatTooltipModule,
+    MatMenuModule,
     CardsModule,
     ChartsModule,
     SharedModule,
