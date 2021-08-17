@@ -14,6 +14,8 @@ import { ITransactionsResponse } from '@sharedModels/responses/platform-api/Tran
 import { IAddressAllowanceResponse } from '@sharedModels/responses/platform-api/Addresses/address-allowance.interface';
 import { IToken } from '@sharedModels/responses/platform-api/token.interface';
 import { IVaultCertificatesResponse } from '@sharedModels/responses/platform-api/Vaults/vault.interface';
+import { IMiningQuote } from '@sharedModels/requests/mining-quote';
+import { ITransactionQuoteResponse } from '@sharedModels/responses/platform-api/Transactions/transaction-quote-response';
 
 @Injectable({
   providedIn: 'root'
@@ -31,9 +33,9 @@ export class PlatformApiService extends RestApiService {
     this.api = environment.api;
   }
 
-  //////////////
+  ////////////////////////////
   // Auth
-  //////////////
+  ////////////////////////////
 
   public auth(market: string, wallet: string): Observable<string> {
     let walletParam = '&wallet='
@@ -44,17 +46,17 @@ export class PlatformApiService extends RestApiService {
     return this.post(`${this.api}/auth/authorize?market=${market}${walletParam}`, {}, { responseType: 'text' });
   }
 
-  //////////////
+  ////////////////////////////
   // Indexer
-  //////////////
+  ////////////////////////////
 
   public getLatestSyncedBlock(): Observable<any> {
     return this.get<any>(`${this.api}/index/latest-block`);
   }
 
-  //////////////
+  ////////////////////////////
   // Tokens
-  //////////////
+  ////////////////////////////
 
   public getToken(address: string): Observable<IToken> {
     return this.get<IToken>(`${this.api}/tokens/${address}`);
@@ -68,9 +70,9 @@ export class PlatformApiService extends RestApiService {
     return this.get<any[]>(`${this.api}/tokens?take=${limit}&lpToken=${includeLpt}`);
   }
 
-  //////////////
-  // Pools
-  //////////////
+  ////////////////////////////
+  // Liquidity Pools
+  ////////////////////////////
 
   public getPool(address: string): Observable<ILiquidityPoolSummaryResponse> {
     return this.get<any>(`${this.api}/liquidity-pools/${address}`);
@@ -80,17 +82,37 @@ export class PlatformApiService extends RestApiService {
     return this.get<any[]>(`${this.api}/liquidity-pools${query?.getQuery() || ''}`);
   }
 
-  public getPoolTransactions(address: string): Observable<any[]> {
-    return this.get<any>(`${this.api}/liquidity-pools/${address}/transactions`);
-  }
-
   public getPoolHistory(address: string): Observable<ILiquidityPoolSnapshotHistoryResponse> {
     return this.get<ILiquidityPoolSnapshotHistoryResponse>(`${this.api}/liquidity-pools/${address}/history?timeSpan=1Y&candleSpan=Hourly`);
   }
 
-  //////////////
+  ////////////////////////////
+  // Liquidity Pools
+  ////////////////////////////
+  public getMiningPools(query?: any): Observable<any[]> {
+    return this.get<any[]>(`${this.api}/mining-pools${query?.getQuery() || ''}`);
+  }
+
+  public getMiningPool(address: string): Observable<any> {
+    return this.get<any>(`${this.api}/mining-pools/${address}`);
+  }
+
+  public startMiningQuote(address: string, payload: IMiningQuote): Observable<ITransactionQuoteResponse> {
+    return this.post<ITransactionQuoteResponse>(`${this.api}/mining-pools/${address}/start`, payload);
+  }
+
+  public stopMiningQuote(address: string, payload: IMiningQuote): Observable<ITransactionQuoteResponse> {
+    return this.post<ITransactionQuoteResponse>(`${this.api}/mining-pools/${address}/stop`, payload);
+  }
+
+  public collectMiningRewardsQuote(address: string): Observable<ITransactionQuoteResponse> {
+    return this.post<ITransactionQuoteResponse>(`${this.api}/mining-pools/${address}/collect`, {});
+  }
+
+
+  ////////////////////////////
   // Governances
-  //////////////
+  ////////////////////////////
 
   public getGovernance(address: string): Observable<any> {
     return this.get<any>(`${this.api}/governances/${address}`);
@@ -101,9 +123,9 @@ export class PlatformApiService extends RestApiService {
   }
 
 
-  //////////////
+  ////////////////////////////
   // Vaults
-  //////////////
+  ////////////////////////////
 
   public getVault(address: string): Observable<any> {
     return this.get<any>(`${this.api}/vaults/${address}`);
@@ -113,9 +135,9 @@ export class PlatformApiService extends RestApiService {
     return this.get<IVaultCertificatesResponse>(`${this.api}/vaults/${address}/certificates`);
   }
 
-  //////////////
+  ////////////////////////////
   // Markets
-  //////////////
+  ////////////////////////////
 
   public getMarketOverview(): Observable<any> {
     return this.get<any>(`${this.api}/markets`);
@@ -125,9 +147,9 @@ export class PlatformApiService extends RestApiService {
     return this.get<any>(`${this.api}/markets/history`);
   }
 
-  //////////////
-  // Pools
-  //////////////
+  ////////////////////////////
+  // Liquidity Pools
+  ////////////////////////////
 
   public quoteAddLiquidity(payload: any): Observable<any> {
     return this.post<any>(`${this.api}/quote/add-liquidity`, payload);
@@ -148,6 +170,15 @@ export class PlatformApiService extends RestApiService {
   ////////////////////////////////////////////////////////
   // Wallet Transactions - Temporary Local ENV only
   ////////////////////////////////////////////////////////
+  public broadcastQuote(payload: any): Observable<any> {
+    return this.post<any>(`${this.api}/transactions/broadcast-quote`, payload);
+  }
+
+  public replayQuote(payload: any): Observable<any> {
+    return this.post<any>(`${this.api}/transactions/replay-quote`, payload);
+  }
+
+
   public swap(payload: any): Observable<any> {
     return this.post<any>(`${this.api}/build-transaction/local-broadcast/swap`, payload);
   }

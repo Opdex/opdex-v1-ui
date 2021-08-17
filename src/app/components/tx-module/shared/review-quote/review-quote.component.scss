@@ -1,0 +1,47 @@
+.review-tx-modal {
+  padding-top: 15px;
+
+  .light {
+    color: #979797;
+  }
+
+  .token {
+    font-size: 18px;
+    line-height: 1em;
+    margin-left: 10px;
+  }
+
+  .amount {
+    font-size: 18px;
+    line-height: 1em;
+
+    &.amount-in {
+      color: #f7556b;
+    }
+
+    &.amount-out {
+      color: #12ee9d;
+    }
+  }
+
+  .usd {
+    font-size: 18px;
+    color: #1da7dc;
+
+    &.align-right {
+      text-align: right;
+    }
+  }
+
+  .mat-icon {
+    font-size: 32px;
+  }
+}
+
+.tx-event {
+  min-height: 30px;
+
+  p {
+    margin-bottom: 0px;
+  }
+}

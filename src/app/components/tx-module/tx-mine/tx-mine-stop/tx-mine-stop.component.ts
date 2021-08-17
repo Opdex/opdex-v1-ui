@@ -1,3 +1,4 @@
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { take } from 'rxjs/operators';
 import { OnChanges } from '@angular/core';
 import { Component, Input, OnInit } from '@angular/core';
@@ -27,9 +28,10 @@ export class TxMineStopComponent extends TxBase implements OnChanges {
     private _fb: FormBuilder,
     protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
-    protected _userContext: UserContextService
+    protected _userContext: UserContextService,
+    protected _bottomSheet: MatBottomSheet
   ) {
-    super(_userContext, _dialog);
+    super(_userContext, _dialog, _bottomSheet);
 
     this.form = this._fb.group({
       amount: ['', [Validators.required, Validators.min(.00000001)]]
@@ -45,10 +47,10 @@ export class TxMineStopComponent extends TxBase implements OnChanges {
     if (!amount.includes('.')) amount = `${amount}.00`;
 
     const payload = {
-      liquidityPool: this.pool.address,
+      miningPool: this.pool.mining?.address,
       amount: amount
     }
 
-    this.signTx(payload, 'stop-mining');
+    this.quoteTransaction(payload, 'stop-mining');
   }
 }

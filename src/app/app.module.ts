@@ -16,6 +16,7 @@ import { ModalsModule } from '@sharedComponents/modals-module/modals.module';
 import { SharedPipesModule } from './pipes/shared-pipes.module';
 import { CardsModule } from '@sharedComponents/cards-module/cards.module';
 import { SharedModule } from '@sharedComponents/shared-module/shared.module';
+import { MatBottomSheetModule, MAT_BOTTOM_SHEET_DEFAULT_OPTIONS } from '@angular/material/bottom-sheet';
 
 
 import { PoolsComponent } from './views/pools/pools.component';
@@ -84,6 +85,7 @@ import { QRCodeModule } from 'angularx-qrcode';
     MatTooltipModule,
     MatIconModule,
     MatSidenavModule,
+    MatBottomSheetModule,
     MatTabsModule,
     ClipboardModule,
     MatChipsModule,
@@ -100,7 +102,9 @@ import { QRCodeModule } from 'angularx-qrcode';
       }
     })
   ],
-  providers: [JwtService],
+  providers: [JwtService,
+    {provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

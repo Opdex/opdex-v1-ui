@@ -9,6 +9,7 @@ import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-
 import { switchMap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'opdex-tx-provide-remove',
@@ -30,9 +31,10 @@ export class TxProvideRemoveComponent extends TxBase {
     private _fb: FormBuilder,
     protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
-    protected _userContext: UserContextService
+    protected _userContext: UserContextService,
+    protected _bottomSheet: MatBottomSheet
   ) {
-    super(_userContext, _dialog);
+    super(_userContext, _dialog, _bottomSheet);
 
     this.form = this._fb.group({
       liquidity: ['', [Validators.required, Validators.min(.00000001)]]

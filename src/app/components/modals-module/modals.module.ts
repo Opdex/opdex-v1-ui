@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { QRCodeModule } from 'angularx-qrcode';
 
 import { ConnectWalletModalComponent } from './connect-wallet-modal/connect-wallet-modal.component';
@@ -42,6 +43,7 @@ import { HelpModalComponent } from './help-modal/help-modal.component';
     MatDividerModule,
     MatCheckboxModule,
     MatProgressBarModule,
+    MatBottomSheetModule,
     QRCodeModule
   ],
   exports: [

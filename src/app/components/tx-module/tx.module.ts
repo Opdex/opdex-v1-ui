@@ -18,6 +18,10 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { QRCodeModule } from 'angularx-qrcode';
+
 
 import { TxSwapComponent } from './tx-swap/tx-swap.component';
 import { TxProvideComponent } from './tx-provide/tx-provide.component';
@@ -67,6 +71,7 @@ import { ClaimPendingVaultOwnerEventComponent } from './tx-feed/tx-events/vault-
 import { SetPendingVaultOwnerEventComponent } from './tx-feed/tx-events/vault-events/set-pending-vault-owner-event/set-pending-vault-owner-event.component';
 import { SharedModule } from '@sharedComponents/shared-module/shared.module';
 import { ControlsModule } from '@sharedComponents/controls-module/controls.module';
+import { ReviewQuoteComponent } from './shared/review-quote/review-quote.component';
 
 
 @NgModule({
@@ -113,7 +118,8 @@ import { ControlsModule } from '@sharedComponents/controls-module/controls.modul
     SetPendingMarketOwnerEventComponent,
     ClaimPendingMarketOwnerEventComponent,
     ClaimPendingVaultOwnerEventComponent,
-    SetPendingVaultOwnerEventComponent
+    SetPendingVaultOwnerEventComponent,
+    ReviewQuoteComponent
   ],
   imports: [
     CommonModule,
@@ -131,6 +137,9 @@ import { ControlsModule } from '@sharedComponents/controls-module/controls.modul
     MatButtonToggleModule,
     MatCheckboxModule,
     MatTooltipModule,
+    MatBottomSheetModule,
+    MatProgressBarModule,
+    QRCodeModule,
     SharedPipesModule,
     ClipboardModule,
     SharedModule,
