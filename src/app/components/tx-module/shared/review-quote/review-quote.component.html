@@ -121,7 +121,7 @@
     <mat-divider></mat-divider>
 
     <ng-container *ngIf="quote?.events?.length">
-      <h4 class="mt-2 mb-3" style="font-size: 20px; font-weight: 400;">Quoted Events</h4>
+      <h4 class="mt-2 mb-3">Quoted Events</h4>
 
       <ng-container *ngFor="let event of quote?.events; trackBy: transactionLogsTrackBy;">
         <div class="tx-event" [ngSwitch]="event.eventType">
@@ -146,7 +146,7 @@
     </ng-container>
 
     <div class="mt-2" *ngIf="quote?.error">
-      <h4 class="mb-2" style="font-size: 20px; font-weight: 400;">Quoted Errors</h4>
+      <h4 class="mb-2">Quoted Errors</h4>
       <p class="error" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">{{quote.error}}</p>
     </div>
 

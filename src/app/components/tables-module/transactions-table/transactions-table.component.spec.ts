@@ -1,25 +1,25 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+// import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TransactionsTableComponent } from './transactions-table.component';
+// import { TransactionsTableComponent } from './transactions-table.component';
 
-describe('TransactionsTableComponent', () => {
-  let component: TransactionsTableComponent;
-  let fixture: ComponentFixture<TransactionsTableComponent>;
+// describe('TransactionsTableComponent', () => {
+//   let component: TransactionsTableComponent;
+//   let fixture: ComponentFixture<TransactionsTableComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ TransactionsTableComponent ]
-    })
-    .compileComponents();
-  });
+//   beforeEach(async () => {
+//     await TestBed.configureTestingModule({
+//       declarations: [ TransactionsTableComponent ]
+//     })
+//     .compileComponents();
+//   });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(TransactionsTableComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+//   beforeEach(() => {
+//     fixture = TestBed.createComponent(TransactionsTableComponent);
+//     component = fixture.componentInstance;
+//     fixture.detectChanges();
+//   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+//   it('should create', () => {
+//     expect(component).toBeTruthy();
+//   });
+// });

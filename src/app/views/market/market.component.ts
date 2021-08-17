@@ -64,7 +64,7 @@ export class MarketComponent implements OnInit {
 
     // Todo: take(1) stops taking after 1, but without it, _I think_ is mem leak
     this.subscription.add(this.getMarket()
-      .pipe(switchMap(() => zip(...combo), take(1)))
+      .pipe(switchMap(() => zip(...combo)), take(1))
       .subscribe());
 
     this.miningPools$ = this._platformApiService.getPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 4, {mining: true}));
@@ -84,7 +84,6 @@ export class MarketComponent implements OnInit {
         title: 'Cirrus (CRS)',
         value: this.market.crsToken.summary.price.close,
         prefix: '$',
-        formatNumber: 2,
         change: this.market.crsToken.summary.dailyPriceChange,
         show: true,
         helpInfo: {
@@ -108,7 +107,6 @@ export class MarketComponent implements OnInit {
         value: this.market.summary.staking.weight,
         suffix: this.market.stakingToken.symbol,
         change: this.market.summary.staking.weightDailyChange,
-        formatNumber: 0,
         show: true,
         helpInfo: {
           title: 'Staking Weight Help',

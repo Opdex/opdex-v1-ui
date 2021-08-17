@@ -15,7 +15,6 @@
 h1 {
   display: inline-block;
   letter-spacing: .05em;
-  font-weight: 500;
 
   a {
     // text-decoration: none;
@@ -26,19 +25,26 @@ h1 {
 .chip-group {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
   flex: 1;
   max-width: 400px;
+  white-space: nowrap;
+  justify-content: flex-end;
 
   .chip {
-    padding: 7px 13px;
+    padding: 5px 15px;
     border-radius: 20px;
-    font-size: 18px;
-    line-height: 18px;
+    margin-right: 5px;
     color: #fff !important;
     align-items: center;
     display: flex;
+    font-size: 1em;
+    font-weight: 400;
+
+
+    &:last-of-type {
+      margin-right: 0px;
+    }
 
     mat-icon {
       line-height: 20px;
@@ -109,7 +115,6 @@ h1 {
     }
 
     .value {
-      font-size: 20px;
       margin-bottom: 0px;
     }
   }

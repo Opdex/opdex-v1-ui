@@ -1,25 +1,25 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+// import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateLiquidityPoolEventComponent } from './create-liquidity-pool-event.component';
+// import { CreateLiquidityPoolEventComponent } from './create-liquidity-pool-event.component';
 
-describe('CreateLiquidityPoolEventComponent', () => {
-  let component: CreateLiquidityPoolEventComponent;
-  let fixture: ComponentFixture<CreateLiquidityPoolEventComponent>;
+// describe('CreateLiquidityPoolEventComponent', () => {
+//   let component: CreateLiquidityPoolEventComponent;
+//   let fixture: ComponentFixture<CreateLiquidityPoolEventComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ CreateLiquidityPoolEventComponent ]
-    })
-    .compileComponents();
-  });
+//   beforeEach(async () => {
+//     await TestBed.configureTestingModule({
+//       declarations: [ CreateLiquidityPoolEventComponent ]
+//     })
+//     .compileComponents();
+//   });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(CreateLiquidityPoolEventComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+//   beforeEach(() => {
+//     fixture = TestBed.createComponent(CreateLiquidityPoolEventComponent);
+//     component = fixture.componentInstance;
+//     fixture.detectChanges();
+//   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+//   it('should create', () => {
+//     expect(component).toBeTruthy();
+//   });
+// });

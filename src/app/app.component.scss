@@ -48,10 +48,10 @@ opdex-side-nav {
   vertical-align: middle;
   background-color: #1e1d2d;
   justify-content: space-between;
-  padding: 15px;
+  padding: 10px 15px;
   border-bottom: 1px solid #292929;
-  font-size: 16px;
   flex-direction: row;
+  font-size: .9em;
 
   .env {
     font-weight: 600;
@@ -62,6 +62,9 @@ opdex-side-nav {
 
   mat-icon {
     line-height: unset !important;
+    font-size: 1em;
+    width: 1em;
+    height: 1em;
   }
 
   p {

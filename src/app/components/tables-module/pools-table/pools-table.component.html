@@ -8,7 +8,7 @@
     <ng-container matColumnDef="liquidity">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Liquidity </th>
       <td mat-cell *matCellDef="let element">
-        ${{element.reserves.usd | formatNumber}}
+        ${{element.reserves.usd | shortNumber}}
         <opdex-change-indicator [value]="element.reserves.usdDailyChange" size="s" class="percentChange"></opdex-change-indicator>
       </td>
     </ng-container>
@@ -17,7 +17,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Staking Weight </th>
       <td mat-cell *matCellDef="let element">
         <ng-container *ngIf="element.staking; else stakingDisabled">
-          {{element.staking?.weight | formatNumber:0}} <small>ODX</small>
+          {{element.staking?.weight | shortNumber}} <small>ODX</small>
           <opdex-change-indicator [value]="element.staking?.weightDailyChange" size="s" class="percentChange" *ngIf="element.staking?.weightDailyChange != null"></opdex-change-indicator>
         </ng-container>
         <ng-template #stakingDisabled>
@@ -28,17 +28,17 @@
 
     <ng-container matColumnDef="volumeDaily">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Volume (24hrs) </th>
-      <td mat-cell *matCellDef="let element"> ${{element.volume.usd | formatNumber}} </td>
+      <td mat-cell *matCellDef="let element"> ${{element.volume.usd | shortNumber}} </td>
     </ng-container>
 
     <ng-container matColumnDef="providerRewards">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Provider Rewards </th>
-      <td mat-cell *matCellDef="let element"> ${{element.rewards.providerUsd | formatNumber}} </td>
+      <td mat-cell *matCellDef="let element"> ${{element.rewards.providerUsd | shortNumber}} </td>
     </ng-container>
 
     <ng-container matColumnDef="stakerRewards">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Staker Rewards </th>
-      <td mat-cell *matCellDef="let element"> ${{element.rewards.marketUsd | formatNumber}} </td>
+      <td mat-cell *matCellDef="let element"> ${{element.rewards.marketUsd | shortNumber}} </td>
     </ng-container>
 
     <!-- <ng-container matColumnDef="liquidityHistory">
@@ -51,14 +51,24 @@
     <ng-container matColumnDef="options">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
       <td mat-cell *matCellDef="let element">
-        <!-- <button mat-icon-button color="primary">
+        <button mat-icon-button color="primary" class="small float-right" [matMenuTriggerFor]="beforeMenu">
           <mat-icon>more_vert</mat-icon>
-        </button> -->
+        </button>
 
-        <button mat-icon-button class="swap small mr-3" (click)="swap(element)" matTooltip="Swap Tokens"><mat-icon>swap_horiz</mat-icon></button>
-        <button mat-icon-button class="provide small mr-3" (click)="provide(element)" matTooltip="Provide Liquidity"><mat-icon>control_point_duplicate</mat-icon></button>
-        <button mat-icon-button class="stake small mr-3" (click)="stake(element)" title="Stake" *ngIf="element.staking?.isActive" matTooltip="Stake {{element.token.staking?.symbol}}"><mat-icon>verified_user</mat-icon></button>
-        <button mat-icon-button class="mine small" (click)="mine(element)" title="Mine" *ngIf="element.mining?.isActive" matTooltip="Mine {{element.token.staking?.symbol}}"><mat-icon>whatshot</mat-icon></button>
+        <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
+          <button mat-menu-item class="small" (click)="swap(element)">
+            <mat-icon class="swap">swap_horiz</mat-icon> Swap {{element.token.src?.symbol}}
+          </button>
+          <button mat-menu-item class="small" (click)="provide(element)">
+            <mat-icon class="provide">control_point_duplicate</mat-icon> Provide {{element.token.src?.symbol}}
+          </button>
+          <button mat-menu-item class="small" (click)="stake(element)" *ngIf="element.staking?.isActive">
+            <mat-icon class="stake">verified_user</mat-icon> Stake {{element.token.staking?.symbol}}
+          </button>
+          <button mat-menu-item class="small" (click)="mine(element)" *ngIf="element.mining?.isActive">
+            <mat-icon class="mine">whatshot</mat-icon> Mine {{element.token.staking?.symbol}}
+          </button>
+        </mat-menu>
       </td>
     </ng-container>
 

@@ -10,7 +10,7 @@
 
     <ng-container matColumnDef="balance">
       <th mat-header-cell *matHeaderCellDef> Balance </th>
-      <td mat-cell *matCellDef="let element"> {{element.balance | formatNumber:element.decimals}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.balance | shortNumber}} </td>
     </ng-container>
 
     <ng-container matColumnDef="actions">

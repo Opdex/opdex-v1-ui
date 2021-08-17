@@ -148,7 +148,6 @@ export class PoolComponent implements OnInit, OnDestroy {
         value: this.pool.staking?.weight,
         suffix: this.pool.token.staking?.symbol,
         change: this.pool.staking?.weightDailyChange || 0,
-        formatNumber: 0,
         show: true,
         helpInfo: {
           title: 'Staking Weight Help',
@@ -180,7 +179,6 @@ export class PoolComponent implements OnInit, OnDestroy {
       {
         title: 'Liquidity Mining',
         value: this.pool.mining?.tokensMining,
-        formatNumber: 0,
         suffix: this.pool.token.lp.symbol,
         show: this.pool.mining != null && (this.pool.mining?.isActive || this.pool.mining?.tokensMining !== '0.00000000'),
         helpInfo: {
