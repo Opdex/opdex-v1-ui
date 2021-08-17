@@ -91,8 +91,9 @@ export class PoolComponent implements OnInit, OnDestroy {
 
     const combo = [this.getPoolHistory(), this.getWalletSummary(), this.getCrsBalance()];
 
+    // Todo: take(1) stops taking after 1, but without it, _I think_ is mem leak
     this.subscription.add(this.getLiquidityPool()
-      .pipe(switchMap(() => zip(...combo)))
+      .pipe(switchMap(() => zip(...combo)), take(1))
       .subscribe());
   }
 

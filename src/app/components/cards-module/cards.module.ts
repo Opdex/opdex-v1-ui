@@ -16,6 +16,7 @@ import { LiquidityPoolCardComponent } from './liquidity-pool-card/liquidity-pool
 import { StakingPoolCardComponent } from './staking-pool-card/staking-pool-card.component';
 import { StatCardComponent } from './stat-card/stat-card.component';
 import { ModalsModule } from '@sharedComponents/modals-module/modals.module';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { ModalsModule } from '@sharedComponents/modals-module/modals.module';
     MatIconModule,
     MatButtonModule,
     MatTooltipModule,
+    MatMenuModule,
     SharedPipesModule,
     SharedModule,
     ModalsModule

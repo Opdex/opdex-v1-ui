@@ -22,7 +22,7 @@
       <button mat-icon-button class="small" (click)="switch()"><mat-icon>arrow_downward</mat-icon></button>
     </div>
 
-    <mat-form-field floatLabel="always">
+    <mat-form-field floatLabel="always" class="mb-3">
       <mat-label>Buy</mat-label>
 
       <button mat-icon-button matPrefix disabled>
@@ -39,6 +39,8 @@
     </mat-form-field>
   </form>
 
+  <opdex-deadline-slider label="Deadline" [default]="20" [formControl]="deadline"></opdex-deadline-slider>
+
   <div class="space-between"></div>
 
   <!-- <div class="swap-info mt-1" *ngIf="form.controls.tokenIn.value > 0 && form.controls.to.value > 0">
@@ -52,7 +54,6 @@
   <div *ngIf="txHash">
     <span style="font-size: 10px;">{{txHash}}</span>
   </div>
-  <opdex-deadline-slider label="Deadline" [default]="20" [formControl]="deadline"></opdex-deadline-slider>
 
   <button mat-flat-button color="primary" class="mt-4 w-100" (click)="submit()" [disabled]="!form.valid">Swap</button>
 </opdex-card>

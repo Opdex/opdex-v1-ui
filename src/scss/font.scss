@@ -1,0 +1,110 @@
+@import '~node_modules/bootstrap-4-grid/scss/grid/bootstrap-grid';
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+
+$fontConfig: (
+  display-4: mat-typography-level(112px, 112px, 400, 'Roboto', -0.0134em),
+  display-3: mat-typography-level(56px, 56px, 400, 'Roboto', -0.0089em),
+  display-2: mat-typography-level(45px, 48px, 400, 'Roboto', 0.0000em),
+  display-1: mat-typography-level(34px, 40px, 400, 'Roboto', 0.0074em),
+  headline: mat-typography-level(2.4em, 32px, 500, 'Roboto', 0.0000em),
+  title: mat-typography-level(2.1em, 32px, 400, 'Roboto', 0.0075em),
+  subheading-2: mat-typography-level(1.9em, 28px, 400, 'Roboto', 0.0094em),
+  subheading-1: mat-typography-level(1.7em, 24px, 400, 'Roboto', 0.0067em),
+  body-2: mat-typography-level(1em, 24px, 400, 'Roboto', 0.0179em),
+  body-1: mat-typography-level(1em, 20px, 300, 'Roboto', 0.0179em),
+  button: mat-typography-level(1em, 16px, 400, 'Roboto', 0.0893em),
+  caption: mat-typography-level(.8em, 20px, 300, 'Roboto', 0.0333em),
+  input: mat-typography-level(1em, 1.125, 300, 'Roboto', 0px)
+);
+
+@include mat-core($fontConfig);
+
+.mat-h1, .mat-headline, .mat-typography h1 {
+  font-size: 1.6em;
+}
+
+.mat-h2, .mat-title, .mat-typography h2 {
+  font-size: 1.4em;
+}
+
+.mat-h3, .mat-subheading-2, .mat-typography h3 {
+  font-size: 1.3em;
+}
+
+.mat-h4, .mat-subheading-1, .mat-typography h4 {
+  font-size: 1.2em;
+}
+
+.mat-h5, .mat-typography h5 {
+  font-size: 1em;
+}
+
+.mat-h6, .mat-typography h6 {
+  font-size: 1em;
+}
+
+.mat-body, .mat-body-1, .mat-typography p {
+  font-size: 1em;
+}
+
+.mat-body-strong, .mat-body-2, .mat-typography {
+  font-size: 1em;
+}
+
+.mat-small, .mat-caption {
+  font-size: .8em;
+}
+
+@include media-breakpoint-up(sm) {
+
+}
+
+@include media-breakpoint-up(md) {
+
+}
+
+@include media-breakpoint-up(lg) {
+  .mat-h1, .mat-headline, .mat-typography h1 {
+    font-size: 2.1em;
+  }
+
+  .mat-h2, .mat-title, .mat-typography h2 {
+    font-size: 1.6em;
+  }
+
+  .mat-h3, .mat-subheading-2, .mat-typography h3 {
+    font-size: 1.4em;
+  }
+
+  .mat-h4, .mat-subheading-1, .mat-typography h4 {
+    font-size: 1.2em;
+  }
+
+  .mat-h5, .mat-typography h5 {
+    font-size: 1.1em;
+  }
+
+  .mat-h6, .mat-typography h6 {
+    font-size: 1em;
+  }
+
+  .mat-body, .mat-body-1, .mat-typography p {
+    font-size: 1em;
+  }
+
+  .mat-body-strong, .mat-body-2, .mat-typography {
+    font-size: 1em;
+  }
+
+  .mat-small, .mat-caption {
+    font-size: 1em;
+  }
+}
+
+@include media-breakpoint-up(xl) {
+
+}
+
+@include media-breakpoint-up(xxl) {
+
+}

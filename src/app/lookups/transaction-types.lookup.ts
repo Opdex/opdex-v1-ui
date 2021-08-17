@@ -4,26 +4,36 @@ export const TransactionTypes = [
   {
     id: 1,
     title: 'Swap',
-    view: TransactionView.swap
+    view: TransactionView.swap,
+    icon: 'swap_horiz',
+    iconColor: 'swap'
   },
   {
     id: 2,
     title: 'Provide',
-    view: TransactionView.provide
+    view: TransactionView.provide,
+    icon: 'control_point_duplicate',
+    iconColor: 'provide'
   },
   {
     id: 3,
     title: 'Stake',
-    view: TransactionView.stake
+    view: TransactionView.stake,
+    icon: 'verified_user',
+    iconColor: 'stake'
   },
   {
     id: 4,
     title: 'Mine',
-    view: TransactionView.mine
+    view: TransactionView.mine,
+    icon: 'whatshot',
+    iconColor: 'mine'
   },
   {
     id: 5,
     title: 'Allowance',
-    view: TransactionView.allowance
+    view: TransactionView.allowance,
+    icon: 'add',
+    iconColor: 'provide'
   },
 ]

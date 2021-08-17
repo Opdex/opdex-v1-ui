@@ -53,7 +53,7 @@ export class MarketComponent implements OnInit {
   constructor(private _platformApiService: PlatformApiService, private _marketsService: MarketsService, private _tokensService: TokensService) { }
 
   async ngOnInit(): Promise<void> {
-    this.subscription.add(interval(5000)
+    this.subscription.add(interval(30000)
       .pipe(tap(_ => {
         this._marketsService.refreshMarket();
         this._marketsService.refreshMarketHistory();
@@ -62,8 +62,9 @@ export class MarketComponent implements OnInit {
 
     const combo = [this.getMarketHistory(), this.getPools(), this.getTokens()];
 
+    // Todo: take(1) stops taking after 1, but without it, _I think_ is mem leak
     this.subscription.add(this.getMarket()
-      .pipe(switchMap(() => zip(...combo)))
+      .pipe(switchMap(() => zip(...combo)), take(1))
       .subscribe());
 
     this.miningPools$ = this._platformApiService.getPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 4, {mining: true}));
