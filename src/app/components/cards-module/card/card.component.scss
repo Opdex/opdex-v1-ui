@@ -1,7 +1,7 @@
 
 .card {
-  background: rgba(27,25,47, .85) !important;
-  margin-bottom: 30px;
+  background: rgba(27,25,47, .8) !important;
+  margin-bottom: 15px;
 
   &.hidden {
     transition: all .1s ease-out;
@@ -12,8 +12,8 @@
 
   .foreground {
     padding: 15px;
-    background: rgba(27, 25, 51, 0.9);
-    background: radial-gradient(circle, rgba(27, 25, 51, 0.7), rgba(27,25,47, .9) 100%);
+    // background: rgba(27, 25, 51, 0.3);
+    // background: radial-gradient(circle, rgba(27, 25, 51, 0.2), rgba(27,25,47, .6) 100%);
     border: 1px solid #292929;
 
     &.warn {

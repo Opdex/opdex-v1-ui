@@ -8,10 +8,8 @@
 
     .title {
       color: $blue-primary;
-      font-weight: 500;
       display: inline;
       margin-bottom: 0;
-      font-size: 1.3em;
 
       a {
         text-decoration: none;
@@ -59,7 +57,6 @@
     .sub-heading {
       color: #ccc;
       font-weight: 400 !important;
-      font-size: 16px !important;
     }
 
     .right {
@@ -67,7 +64,6 @@
     }
 
     .value {
-      font-size: 16px;
       margin-bottom: 0px;
     }
   }
@@ -78,10 +74,8 @@
     .top-details {
       .title {
         color: $blue-primary;
-        font-weight: 500;
         display: inline;
         margin-bottom: 0;
-        font-size: 1.5em;
 
         a {
           text-decoration: none;
@@ -97,11 +91,10 @@
 
     .bottom-details {
       .sub-heading {
-        font-size: 16px !important;
       }
 
       .value {
-        font-size: 24px;
+        font-size: 1.2em;
       }
     }
   }

@@ -39,7 +39,6 @@
 }
 
 h1.page-title {
-  font-size: 2.4em;
   margin-bottom: 30px;
   text-shadow: 1px 1px 1px black;
 }
@@ -61,12 +60,8 @@ h1.page-title {
   text-align: right;
 }
 
-
-// .card-col {
-//   padding-bottom: 20px;
-// }
-
 .scrollable-card {
+  min-width: 260px;
   width: 310px;
   padding-right: 20px;
   // margin-bottom: 10px;
@@ -86,6 +81,7 @@ h1.page-title {
   -webkit-overflow-scrolling: touch;
   display: flex;
   flex-wrap: nowrap;
+  margin-bottom: 15px;
 
   &.no-overflow {
     overflow: hidden;
@@ -103,7 +99,13 @@ h1.page-title {
   }
 }
 
-@include media-breakpoint-up(sm) {}
+.page-container {
+  margin-top: 20px;
+}
+
+@include media-breakpoint-up(sm) {
+
+}
 @include media-breakpoint-up(md) {
   .scrollable-card {
     width: 100%;
@@ -112,8 +114,8 @@ h1.page-title {
   }
 }
 @include media-breakpoint-up(lg) {
-  .card-col {
-    padding-bottom: 0 !important;
+  .page-container {
+    margin-top: 40px;
   }
 }
 @include media-breakpoint-up(xl) {}

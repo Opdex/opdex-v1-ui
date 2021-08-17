@@ -1,5 +1,5 @@
 <opdex-card>
-  <h3 class="text-shadow">Recent Transactions</h3>
+  <h2 class="text-shadow">Recent Transactions</h2>
 
   <div class="feed-container" *ngIf="transactions$ | async as transactions" [ngClass]="{'large': size === 'l', 'medium': size === 'm', 'small': size === 's'}">
     <div class="transaction" *ngFor="let tx of transactions; trackBy: transactionsTrackBy">
