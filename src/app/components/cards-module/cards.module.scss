@@ -15,37 +15,6 @@
         text-decoration: none;
       }
     }
-
-    .button-group {
-      button {
-        margin-right: 4px;
-
-        &:last-of-type {
-          margin-right: 0;
-        }
-
-        &.mat-icon-button {
-          color: $dark-primary;
-          font-weight: 500;
-        }
-
-        &.provide, &.add {
-          background-color: $green-primary;
-        }
-
-        &.mine, &.remove {
-          background-color: $red-primary;
-        }
-
-        &.stake {
-          background-color: $purple-primary;
-        }
-
-        &.swap, &.collect {
-          background-color: $blue-primary;
-        }
-      }
-    }
   }
 
   .bottom-details {

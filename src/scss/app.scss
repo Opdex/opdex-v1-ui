@@ -119,3 +119,22 @@ h1.page-title {
   }
 }
 @include media-breakpoint-up(xl) {}
+
+
+.mat-icon {
+  &.provide, &.add {
+    color: $green-primary !important;
+  }
+
+  &.mine, &.remove {
+    color: $red-primary !important;
+  }
+
+  &.stake {
+    color: $purple-primary !important;
+  }
+
+  &.swap, &.collect, &.primary {
+    color: $blue-primary !important;
+  }
+}

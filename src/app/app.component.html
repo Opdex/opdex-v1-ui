@@ -8,19 +8,25 @@
             <mat-icon>{{sidenavMode == 'over' ? 'unfold_more' : 'unfold_less' }}</mat-icon>
           </button>
 
-          <button mat-button class="d-flex" color="primary" [matMenuTriggerFor]="beforeMenu" style="width: 125px; text-align: left;">
+          <button mat-button class="d-flex small" [matMenuTriggerFor]="beforeMenu" style="text-align: left;">
             <div class="menu-content d-flex justify-content-between align-items-center">
               <ng-container *ngFor="let transactionType of transactionTypes">
-                <span *ngIf="message?.view === transactionType.view">{{transactionType.title}}</span>
+                <span *ngIf="message?.view === transactionType.view" class="d-flex align-items-center">
+                  <mat-icon class="mr-3 small" [ngClass]="transactionType.iconColor">{{transactionType.icon}}</mat-icon>
+                  {{transactionType.title}}
+                </span>
               </ng-container>
 
               <mat-icon>keyboard_arrow_down</mat-icon>
             </div>
-
           </button>
+
           <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
             <ng-container *ngFor="let transactionType of transactionTypes">
-              <button mat-menu-item *ngIf="message?.view !== transactionType.view" (click)="setTransactionView(transactionType.view)" style="width: 125px;">{{transactionType.title}}</button>
+              <button mat-menu-item class="small" (click)="setTransactionView(transactionType.view)">
+                <mat-icon class="mr-3" [ngClass]="transactionType.iconColor">{{transactionType.icon}}</mat-icon>
+                {{transactionType.title}}
+              </button>
             </ng-container>
           </mat-menu>
 

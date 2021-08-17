@@ -1,3 +1,4 @@
+@import '/src/scss/colors.scss';
 
 .card {
   background: rgba(27,25,47, .8) !important;
@@ -32,7 +33,7 @@
   }
 
   &.h-100 {
-    height: calc(100% - 30px) !important;
+    height: calc(100% - 15px) !important;
 
     .foreground {
       height: 100%;

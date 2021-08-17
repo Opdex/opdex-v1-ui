@@ -2,12 +2,14 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <h1 class="page-title">Liquidity Pools</h1>
+        <h1 class="page-title mb-3">Liquidity Pools</h1>
 
         <ng-container *ngIf="poolsByVolume$ | async as poolsByVolume">
           <div class="row" *ngIf="poolsByVolume.length">
             <div class="col-12">
-              <h2 class="text-shadow">Top Volume</h2>
+              <h2 class="text-shadow d-flex align-items-center">
+                <mat-icon class="mr-2 primary">bar_chart</mat-icon> Top Volume
+              </h2>
             </div>
           </div>
 
@@ -23,7 +25,10 @@
     <ng-container *ngIf="poolsMining$ | async as poolsMining">
       <div class="row" *ngIf="poolsMining.length">
         <div class="col-12">
-          <h2 class="text-shadow">Liquidity Mining</h2>
+          <h2 class="text-shadow d-flex align-items-center">
+            <mat-icon class="mr-2 mine">whatshot</mat-icon>
+            Liquidity Mining
+          </h2>
 
           <div class="scrollable-row">
             <div class="scrollable-card" *ngFor="let pool of poolsMining">

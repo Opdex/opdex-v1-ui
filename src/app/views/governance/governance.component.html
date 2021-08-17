@@ -1,6 +1,6 @@
 <div class="governance page-container" *ngIf="governance$ | async as governance">
   <div class="container">
-    <div class="row mb-3">
+    <div class="row">
       <div class="col-4">
         <h1 class="page-title mb-3">
           <opdex-copy-button [tooltip]="governance?.address" [value]="governance?.address" icon="link"></opdex-copy-button>
@@ -17,15 +17,17 @@
 
     <div class="scrollable-row">
       <div class="scrollable-card">
-        <opdex-card [fullHeight]="true">
-          <div class="d-flex flex-column justify-content-between h-100">
+        <opdex-card>
+          <div class="d-flex flex-column justify-content-between">
             <h4>Period End <span class="badge {{governance.periodRemainingBlocks > 0 ? 'success' : 'warn'}}">{{governance.periodRemainingBlocks > 0 ? 'Ongoing' : 'Paused'}}</span></h4>
+
             <h5 class="mb-0" *ngIf="governance.periodRemainingBlocks > 0">
               Block #{{governance.periodEndBlock | formatNumber:0}}
               <small class="light float-right">~{{nominationPeriodEndDate | date:'MM/d/YY h:mm a z':'GMT'}}</small>
             </h5>
-            <button mat-flat-button color="primary" class="w-100 mt-2" *ngIf="governance.periodRemainingBlocks === 0" [disabled]="submitting" (click)="distribute()">Distribute Rewards</button>
           </div>
+
+          <button mat-flat-button color="primary" class="w-100 mt-2" *ngIf="governance.periodRemainingBlocks === 0" [disabled]="submitting" (click)="distribute()">Distribute Rewards</button>
         </opdex-card>
       </div>
 
@@ -69,7 +71,10 @@
     <ng-container *ngIf="nominatedPools$ | async as nominatedPools">
       <div class="row" *ngIf="nominatedPools.length">
         <div class="col-12">
-          <h2 class="text-shadow">Nominated Liquidity Pools</h2>
+          <h2 class="text-shadow d-flex align-items-center">
+            <mat-icon class="stake mr-2">verified_user</mat-icon>
+            Nominated Liquidity Pools
+          </h2>
         </div>
       </div>
 
@@ -84,7 +89,10 @@
     <ng-container *ngIf="miningPools$ | async as miningPools">
       <div class="row" *ngIf="miningPools.length">
         <div class="col-12">
-          <h2 class="text-shadow">Active Liquidity Mining</h2>
+          <h2 class="text-shadow d-flex align-items-center">
+            <mat-icon class="mine mr-2">whatshot</mat-icon>
+            Active Liquidity Mining
+          </h2>
         </div>
       </div>
       <div class="scrollable-row">
