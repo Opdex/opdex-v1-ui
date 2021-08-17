@@ -8,10 +8,11 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Observable, throwError } from 'rxjs';
 import { Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, switchMap, take, tap, catchError } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, switchMap, tap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { IToken } from '@sharedModels/responses/platform-api/token.interface';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'opdex-tx-provide-add',
@@ -42,9 +43,10 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     private _fb: FormBuilder,
     protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
-    protected _userContext: UserContextService
+    protected _userContext: UserContextService,
+    protected _bottomSheet: MatBottomSheet
   ) {
-    super(_userContext, _dialog);
+    super(_userContext, _dialog, _bottomSheet);
 
     this.form = this._fb.group({
       amountCrs: ['', [Validators.required]],

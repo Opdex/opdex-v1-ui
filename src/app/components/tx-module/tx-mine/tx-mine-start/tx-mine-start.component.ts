@@ -8,6 +8,7 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Observable } from 'rxjs';
 import { debounceTime, map, switchMap } from 'rxjs/operators';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'opdex-tx-mine-start',
@@ -29,9 +30,10 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
     private _fb: FormBuilder,
     protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
-    protected _userContext: UserContextService
+    protected _userContext: UserContextService,
+    protected _bottomSheet: MatBottomSheet
   ) {
-    super(_userContext, _dialog);
+    super(_userContext, _dialog, _bottomSheet);
 
     this.form = this._fb.group({
       amount: ['', [Validators.required, Validators.min(.00000001)]]
@@ -60,10 +62,10 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
     if (!amount.includes('.')) amount = `${amount}.00`;
 
     const payload = {
-      liquidityPool: this.pool.address,
+      miningPool: this.pool.mining?.address,
       amount: amount
     }
 
-    this.signTx(payload, 'start-mining');
+    this.quoteTransaction(payload, 'start-mining');
   }
 }

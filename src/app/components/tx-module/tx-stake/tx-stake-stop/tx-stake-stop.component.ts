@@ -6,6 +6,7 @@ import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { take } from 'rxjs/operators';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'opdex-tx-stake-stop',
@@ -30,9 +31,10 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
     private _fb: FormBuilder,
     protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
-    protected _userContext: UserContextService
+    protected _userContext: UserContextService,
+    protected _bottomSheet: MatBottomSheet
   ) {
-    super(_userContext, _dialog);
+    super(_userContext, _dialog, _bottomSheet);
 
     this.form = this._fb.group({
       amount: ['', [Validators.required, Validators.min(.00000001)]],

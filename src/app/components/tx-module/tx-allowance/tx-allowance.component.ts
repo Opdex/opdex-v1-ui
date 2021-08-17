@@ -1,3 +1,4 @@
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { take } from 'rxjs/operators';
 import { OnChanges } from '@angular/core';
@@ -38,9 +39,10 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
     private _fb: FormBuilder,
     protected _dialog: MatDialog,
     private _tokensService: TokensService,
-    protected _userContext: UserContextService
+    protected _userContext: UserContextService,
+    protected _bottomSheet: MatBottomSheet
   ) {
-    super(_userContext, _dialog);
+    super(_userContext, _dialog, _bottomSheet);
 
     this.form = this._fb.group({
       token: ['', [Validators.required]],

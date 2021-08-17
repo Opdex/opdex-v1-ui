@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
@@ -29,9 +30,10 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
     private _fb: FormBuilder,
     protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
-    protected _userContext: UserContextService
+    protected _userContext: UserContextService,
+    protected _bottomSheet: MatBottomSheet
   ) {
-    super(_userContext, _dialog);
+    super(_userContext, _dialog, _bottomSheet);
 
     this.form = this._fb.group({
       amount: ['', [Validators.required, Validators.min(.00000001)]]
