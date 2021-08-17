@@ -45,3 +45,10 @@ h1 {
     color: #fff;
   }
 }
+
+
+@media(max-width: 767px) {
+  h1 {
+    font-size: 1.8em;
+  }
+}

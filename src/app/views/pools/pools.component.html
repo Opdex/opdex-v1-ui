@@ -9,8 +9,10 @@
             <div class="col-12">
               <h3 class="text-shadow">Top Volume</h3>
             </div>
+          </div>
 
-            <div class="col-xs-12 col-md-6 col-xl-3" *ngFor="let pool of poolsByVolume">
+          <div class="scrollable-row">
+            <div class="scrollable-card" *ngFor="let pool of poolsByVolume">
               <opdex-liquidity-pool-card [pool]="pool"></opdex-liquidity-pool-card>
             </div>
           </div>
@@ -23,8 +25,8 @@
         <div class="col-12">
           <h3 class="text-shadow">Liquidity Mining</h3>
 
-          <div class="row">
-            <div class="col-xs-12 col-md-6 col-xl-3" *ngFor="let pool of poolsMining">
+          <div class="scrollable-row">
+            <div class="scrollable-card" *ngFor="let pool of poolsMining">
               <opdex-mining-card [pool]="pool"></opdex-mining-card>
             </div>
           </div>

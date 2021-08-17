@@ -60,3 +60,60 @@ h1.page-title {
 .text-align-right {
   text-align: right;
 }
+
+
+// .card-col {
+//   padding-bottom: 20px;
+// }
+
+.scrollable-card {
+  width: 310px;
+  padding-right: 20px;
+  // margin-bottom: 10px;
+  flex: 0 0 auto;
+
+  &:first-of-type {
+    margin-left: 0px;
+  }
+
+  &:last-of-type {
+    padding-right: 10px;
+  }
+}
+
+.scrollable-row {
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-wrap: nowrap;
+
+  &.no-overflow {
+    overflow: hidden;
+    margin-bottom: 0px;
+  }
+
+  &.offset-container {
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+
+  &.double-offset-container {
+    margin-left: -20px;
+    margin-right: -20px;
+  }
+}
+
+@include media-breakpoint-up(sm) {}
+@include media-breakpoint-up(md) {
+  .scrollable-card {
+    width: 100%;
+    max-width: 500px;
+    flex: 0 1 auto;
+  }
+}
+@include media-breakpoint-up(lg) {
+  .card-col {
+    padding-bottom: 0 !important;
+  }
+}
+@include media-breakpoint-up(xl) {}

@@ -9,8 +9,8 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-12 col-md-6 col-xl-3">
+    <div class="scrollable-row">
+      <div class="scrollable-card">
         <opdex-card [fullHeight]="true">
           <div class="d-flex flex-column justify-content-between h-100">
             <h4>Nomination Period End <span class="badge {{governance.periodRemainingBlocks > 0 ? 'success' : 'warn'}}">{{governance.periodRemainingBlocks > 0 ? 'Ongoing' : 'Paused'}}</span></h4>
@@ -23,7 +23,7 @@
         </opdex-card>
       </div>
 
-      <div class="col-12 col-md-6 col-xl-3">
+      <div class="scrollable-card">
         <opdex-card [fullHeight]="true">
           <div class="d-flex flex-column justify-content-between h-100">
             <h4>Nomination Period Duration</h4>
@@ -35,7 +35,7 @@
         </opdex-card>
       </div>
 
-      <div class="col-12 col-md-6 col-xl-3">
+      <div class="scrollable-card">
         <opdex-card [fullHeight]="true">
           <div class="d-flex flex-column justify-content-between h-100">
             <h4>Nomination Rewards</h4>
@@ -47,7 +47,7 @@
         </opdex-card>
       </div>
 
-      <div class="col-12 col-md-6 col-xl-3">
+      <div class="scrollable-card">
         <opdex-card [fullHeight]="true">
           <div class="d-flex flex-column justify-content-between h-100">
             <h4>Nomination Reward Reset</h4>
@@ -64,12 +64,12 @@
       <div class="row" *ngIf="nominatedPools.length">
         <div class="col-12">
           <h3 class="text-shadow">Nominated Liquidity Pools</h3>
+        </div>
+      </div>
 
-          <div class="row">
-            <div class="col-12 col-md-6 col-xl-3" *ngFor="let pool of nominatedPools">
-              <opdex-staking-pool-card [pool]="pool"></opdex-staking-pool-card>
-            </div>
-          </div>
+      <div class="scrollable-row">
+        <div class="scrollable-card" *ngFor="let pool of nominatedPools">
+          <opdex-staking-pool-card [pool]="pool"></opdex-staking-pool-card>
         </div>
       </div>
     </ng-container>
@@ -79,12 +79,11 @@
       <div class="row" *ngIf="miningPools.length">
         <div class="col-12">
           <h3 class="text-shadow">Active Liquidity Mining</h3>
-
-          <div class="row">
-            <div class="col-12 col-md-6 col-xl-3" *ngFor="let pool of miningPools">
-              <opdex-mining-card [pool]="pool"></opdex-mining-card>
-            </div>
-          </div>
+        </div>
+      </div>
+      <div class="scrollable-row">
+        <div class="scrollable-card" *ngFor="let pool of miningPools">
+          <opdex-mining-card [pool]="pool"></opdex-mining-card>
         </div>
       </div>
     </ng-container>
