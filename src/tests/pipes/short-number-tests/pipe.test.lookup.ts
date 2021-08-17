@@ -1,4 +1,7 @@
-import { ShortNumberTest } from "../models/shortNumberTest";
+export class ShortNumberTest {
+  input: string | number;
+  expectedOutput: string;
+}
 
 export const PipesTestLookup = {
   shortNumber: {
@@ -14,8 +17,8 @@ export const PipesTestLookup = {
       .0
     ],
     decimalTests: [
-      {input: '0.0', expectedOutput: '0'}, //Failed
-      {input: 0.0, expectedOutput: '0'}, //Failed
+      {input: '0.0', expectedOutput: '0'},
+      {input: 0.0, expectedOutput: '0'},
       {input: '1.1', expectedOutput: '1.10'},
       {input: '.012', expectedOutput: '0.0120'},
       {input: '.0125635', expectedOutput: '0.0126'},
@@ -25,12 +28,12 @@ export const PipesTestLookup = {
       {input: '0.23446342542345', expectedOutput: '0.2345'}
     ],
     smallNumTests: [
-      {input: '0', expectedOutput: '0'}, //Failed
-      {input: '00', expectedOutput: '0'}, //Failed
-      {input: '000', expectedOutput: '0'}, //Failed
+      {input: '0', expectedOutput: '0'},
+      {input: '00', expectedOutput: '0'},
+      {input: '000', expectedOutput: '0'},
       {input: '1', expectedOutput: '1'},
       {input: 1, expectedOutput: '1'},
-      {input: 0, expectedOutput: '0'}, //Failed
+      {input: 0, expectedOutput: '0'},
       {input: '999', expectedOutput: '999'},
       {input: '99', expectedOutput: '99'},
       {input: '9', expectedOutput: '9'},
@@ -61,6 +64,6 @@ export const PipesTestLookup = {
       {input: '12336411174123.1234', expectedOutput: '12.34T'},
       {input: '2336411174123.1234', expectedOutput: '2.34T'},
       {input: '12336411174123', expectedOutput: '12.34T'}
-    ],
+    ]
   }
 }

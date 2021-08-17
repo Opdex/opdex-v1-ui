@@ -10,8 +10,13 @@ export class ShortNumberPipe implements PipeTransform {
 
   transform(value: string | number): string {
     value = typeof(value) === 'number' ? value.toString() : value;
+
     const isValidNumber = value.search(/^\d*(\.\d+)?$/gm);
     value = isValidNumber === -1 ? 'NAN' : value;
+
+    if (value.replace(/0/g, '').replace('.', '') === '') {
+      return '0';
+    }
 
     if (isValidNumber !== -1) {
       const hasDecimal = value.includes('.');
@@ -53,5 +58,4 @@ export class ShortNumberPipe implements PipeTransform {
     const finalValue = `${leadingValue}.${decimalValue}`;
     return `${parseFloat(finalValue).toFixed(2)}${type.symbol}`;
   }
-
 }

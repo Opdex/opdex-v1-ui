@@ -1,6 +1,5 @@
-import { ShortNumberPipe } from '../../app/pipes/short-number.pipe';
-import { PipesTestLookup } from '../lookups/pipe.test.lookup';
-import { ShortNumberTest } from '../models/shortNumberTest';
+import { ShortNumberPipe } from 'src/app/pipes/short-number.pipe';
+import { PipesTestLookup, ShortNumberTest } from './pipe.test.lookup';
 
 
 describe('ShortNumberPipe', () => {
