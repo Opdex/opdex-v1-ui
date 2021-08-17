@@ -20,7 +20,6 @@ export class VaultComponent implements OnInit, OnDestroy {
     {
       title: 'Locked Tokens',
       value: '0',
-      formatNumber: 0,
       suffix: 'XYZ',
       helpInfo: {
         title: 'Locked Tokens Help',
@@ -31,7 +30,6 @@ export class VaultComponent implements OnInit, OnDestroy {
     {
       title: 'Unassigned Tokens',
       value: '0',
-      formatNumber: 0,
       suffix: 'XYZ',
       helpInfo: {
         title: 'Unassigned Tokens Help',

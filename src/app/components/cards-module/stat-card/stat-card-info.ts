@@ -6,7 +6,6 @@ export class StatCardInfo {
     value: string;
     prefix?: string;
     suffix?: string;
-    formatNumber?: number;
     change?: number = null;
     helpInfo?: HelpInfo;
     show?: boolean;

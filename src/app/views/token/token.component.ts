@@ -89,7 +89,6 @@ export class TokenComponent implements OnInit {
         value: this.token.summary.price.close,
         change: this.token.summary.dailyPriceChange,
         prefix: '$',
-        formatNumber: 2,
         show: true,
         helpInfo: {
           title: 'Price Help',
@@ -99,7 +98,6 @@ export class TokenComponent implements OnInit {
       {
         title: 'Total Supply',
         value: this.token.totalSupply,
-        formatNumber: this.token.decimals,
         daily: true,
         show: true,
         helpInfo: {
