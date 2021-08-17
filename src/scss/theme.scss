@@ -188,11 +188,17 @@ html, body { height: 100%; }
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-image: url('/assets/bg.png');
+  background-image: url('/assets/blur-bg.png');
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
   background-color: #181629;
+}
+
+@media(max-width: 767px) {
+  body {
+    background-size: contain !important;
+  }
 }
 
 main {
