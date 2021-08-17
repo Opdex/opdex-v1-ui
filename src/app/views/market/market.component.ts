@@ -83,7 +83,6 @@ export class MarketComponent implements OnInit {
         title: 'Cirrus (CRS)',
         value: this.market.crsToken.summary.price.close,
         prefix: '$',
-        formatNumber: 2,
         change: this.market.crsToken.summary.dailyPriceChange,
         show: true,
         helpInfo: {
@@ -107,7 +106,6 @@ export class MarketComponent implements OnInit {
         value: this.market.summary.staking.weight,
         suffix: this.market.stakingToken.symbol,
         change: this.market.summary.staking.weightDailyChange,
-        formatNumber: 0,
         show: true,
         helpInfo: {
           title: 'Staking Weight Help',
