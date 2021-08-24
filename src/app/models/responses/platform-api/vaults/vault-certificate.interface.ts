@@ -1,4 +1,4 @@
-import { IPaging } from './../paging.interface';
+import { IPaging } from '../paging.interface';
 
 export interface IVaultCertificate {
   owner: string; // address
