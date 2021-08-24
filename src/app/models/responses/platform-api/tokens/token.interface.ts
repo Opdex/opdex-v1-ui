@@ -1,4 +1,4 @@
-import { IOhlc } from "./Pools/liquidity-pool.interface";
+import { IOhlc } from "../liquidity-pools/liquidity-pool.interface";
 
 export interface ITokenGroup {
   crs: IToken;
@@ -6,6 +6,7 @@ export interface ITokenGroup {
   lp: IToken;
   staking?: IToken;
 }
+
 export interface IToken {
   address: string;
   name: string;
@@ -16,6 +17,7 @@ export interface IToken {
   summary: ITokenSnapshot;
   balance?: any;
 }
+
 export interface ITokenSnapshot {
   price: IOhlc;
   startDate: Date;

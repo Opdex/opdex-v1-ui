@@ -5,7 +5,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 import { switchMap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
@@ -17,7 +17,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
   styleUrls: ['./tx-provide-remove.component.scss']
 })
 export class TxProvideRemoveComponent extends TxBase {
-  @Input() pool: ILiquidityPoolSummaryResponse;
+  @Input() pool: ILiquidityPoolSummary;
   txHash: string;
   form: FormGroup;
   context: any;
@@ -65,6 +65,6 @@ export class TxProvideRemoveComponent extends TxBase {
       recipient: this.context.wallet
     };
 
-    this.signTx(payload, 'remove-liquidity');
+    this.quoteTransaction(payload, 'remove-liquidity');
   }
 }

@@ -1,4 +1,4 @@
-import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 import { Component, OnInit } from '@angular/core';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable } from 'rxjs';
@@ -10,9 +10,9 @@ import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool
   styleUrls: ['./pools.component.scss']
 })
 export class PoolsComponent implements OnInit {
-  pools$: Observable<ILiquidityPoolSummaryResponse[]>;
-  poolsByVolume$: Observable<ILiquidityPoolSummaryResponse[]>;
-  poolsMining$: Observable<ILiquidityPoolSummaryResponse[]>;
+  pools$: Observable<ILiquidityPoolSummary[]>;
+  poolsByVolume$: Observable<ILiquidityPoolSummary[]>;
+  poolsMining$: Observable<ILiquidityPoolSummary[]>;
 
   constructor(private _platformApiService: PlatformApiService) { }
 

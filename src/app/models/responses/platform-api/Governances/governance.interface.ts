@@ -1,6 +1,6 @@
-import { IToken } from "../token.interface";
+import { IPaging } from "../paging.interface";
 
-export interface IGovernanceResponseModel {
+export interface IGovernance {
   address: string;
   periodEndBlock: number;
   periodRemainingBlocks: number;
@@ -8,5 +8,7 @@ export interface IGovernanceResponseModel {
   periodsUntilRewardReset: number;
   miningPoolRewardPerPeriod: string;
   totalRewardsPerPeriod: string;
-  minedToken: IToken;
+  minedToken: string;
 }
+
+export interface IGovernances extends IPaging<IGovernance> { }

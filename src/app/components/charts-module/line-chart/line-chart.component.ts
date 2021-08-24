@@ -183,17 +183,8 @@ export class LineChartComponent implements OnInit, OnChanges {
       rightPriceScale: {
         borderVisible: false
       },
-      handleScroll: {
-        mouseWheel: false,
-        pressedMouseMove: false,
-        horzTouchDrag: false,
-        vertTouchDrag: false
-      },
-      handleScale: {
-        axisPressedMouseMove: false,
-        mouseWheel: false,
-        pinch: false
-      }
+      handleScroll: false,
+      handleScale: false
     });
   }
 

@@ -1,14 +1,16 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { ShortNumberTypes } from '@sharedLookups/short-number-types.lookup';
 
-@Pipe({
-  name: 'shortNumber'
-})
+// Todo: Remove trailing zeros for numbers like 1.00M or 1.10M.
+// Should result in 1M or 1.1M
+@Pipe({ name: 'shortNumber' })
 export class ShortNumberPipe implements PipeTransform {
 
   shortNumberTypes = ShortNumberTypes;
 
   transform(value: string | number): string {
+    if (!value) return '0';
+
     value = typeof(value) === 'number' ? value.toString() : value;
 
     const isValidNumber = value.search(/^\d*(\.\d+)?$/gm);

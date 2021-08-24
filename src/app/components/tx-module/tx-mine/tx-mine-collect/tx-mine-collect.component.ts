@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 
@@ -14,7 +14,7 @@ import { UserContextService } from '@sharedServices/utility/user-context.service
 })
 export class TxMineCollectComponent extends TxBase implements OnChanges {
   @Input() data: any;
-  pool: ILiquidityPoolSummaryResponse;
+  pool: ILiquidityPoolSummary;
   form: FormGroup;
   txHash: string;
 

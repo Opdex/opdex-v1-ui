@@ -3,7 +3,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from '@environments/environment';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Observable, throwError } from 'rxjs';
@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, switchMap, tap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
-import { IToken } from '@sharedModels/responses/platform-api/token.interface';
+import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 @Component({
@@ -20,11 +20,10 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
   styleUrls: ['./tx-provide-add.component.scss']
 })
 export class TxProvideAddComponent extends TxBase implements OnInit {
-  @Input() pool: ILiquidityPoolSummaryResponse;
+  @Input() pool: ILiquidityPoolSummary;
   txHash: string;
   subscription = new Subscription();
   allowance: AllowanceValidation;
-
   form: FormGroup;
 
   get amountCrs(): FormControl {

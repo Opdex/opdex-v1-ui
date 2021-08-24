@@ -1,4 +1,4 @@
-export interface IBlockResponse {
+export interface IBlock {
   height: number;
   hash: string;
   time: Date;

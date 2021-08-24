@@ -1,4 +1,4 @@
-import { Network } from "@sharedModels/networks";
+import { Network } from "src/app/enums/networks";
 
 const api = 'api.opdex.com';
 

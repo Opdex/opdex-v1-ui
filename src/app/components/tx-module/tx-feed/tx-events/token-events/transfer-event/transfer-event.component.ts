@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { IToken } from '@sharedModels/responses/platform-api/token.interface';
-import { ITransactionEventResponse, ITransferEventResponse } from '@sharedModels/responses/platform-api/Transactions/transaction-response';
+import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
+import { ITransferEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/tokens/transfer-event.interface';
+import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { Observable } from 'rxjs';
@@ -12,8 +13,8 @@ import { TxEventBaseComponent } from '../../tx-event-base.component';
   styleUrls: ['./transfer-event.component.scss']
 })
 export class TransferEventComponent extends TxEventBaseComponent {
-  @Input() txEvent: ITransactionEventResponse;
-  event: ITransferEventResponse;
+  @Input() txEvent: ITransactionEvent;
+  event: ITransferEvent;
   token$: Observable<IToken>;
 
   constructor(protected _liquidityPoolsService: LiquidityPoolsService, protected _tokensService: TokensService) {
@@ -21,7 +22,7 @@ export class TransferEventComponent extends TxEventBaseComponent {
   }
 
   ngOnChanges() {
-    this.event = this.txEvent as ITransferEventResponse;
+    this.event = this.txEvent as ITransferEvent;
     this.token$ = this.getToken$(this.event.contract);
   }
 }

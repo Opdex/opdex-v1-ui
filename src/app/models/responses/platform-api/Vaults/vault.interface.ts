@@ -1,18 +1,12 @@
+import { IPaging } from "../paging.interface";
+
 export interface IVault {
   address: string;
+  owner: string;
+  genesis: number;
+  tokensLocked: string;
+  tokensUnassigned: string;
+  lockedToken: any; // This should have a separate Vault class where lockedToken is ONLY IToken type. This interface should use string for the response address
 }
 
-export interface IVaultCertificate {
-  owner: string; // address
-  amount: string; // decimal number
-  vestingStartBlock: number; // block number (number type is safe)
-  vestingEndBlock: number; // block number (number type is safe)
-  redeemed: boolean;
-  revoked: boolean;
-}
-
-
-export interface IVaultCertificatesResponse {
-  results: IVaultCertificate[];
-  paging: any;
-}
+export interface IVaults extends IPaging<IVault> { }

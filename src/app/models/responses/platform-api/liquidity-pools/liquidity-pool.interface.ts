@@ -1,18 +1,18 @@
-import { ITokenGroup } from "../token.interface";
+import { ITokenGroup } from "../tokens/token.interface";
 
-export interface ILiquidityPoolSummaryResponse extends ILiquidityPoolSummary {
+export interface ILiquidityPoolSummary extends ILiquidityPoolSummaryBase {
   address: string;
   token: ITokenGroup;
   mining: IMiningPool;
   snapshotHistory?: ILiquidityPoolSnapshot[];
 }
 
-export interface ILiquidityPoolSnapshotHistoryResponse {
+export interface ILiquidityPoolSnapshotHistory {
   address: string,
   snapshotHistory: ILiquidityPoolSnapshot[];
 }
 
-export interface ILiquidityPoolSummary {
+export interface ILiquidityPoolSummaryBase {
   transactionCount: number;
   reserves: IReserves;
   rewards: IRewards;
@@ -21,7 +21,7 @@ export interface ILiquidityPoolSummary {
   cost: ICost;
 }
 
-export interface ILiquidityPoolSnapshot extends ILiquidityPoolSummary {
+export interface ILiquidityPoolSnapshot extends ILiquidityPoolSummaryBase {
   startDate: Date;
   endDate: Date;
 }
@@ -32,6 +32,7 @@ export interface IOhlc {
   low: string | number;
   close: string | number;
 }
+
 export interface IReserves {
   crs: string;
   src: string;
@@ -65,6 +66,7 @@ export interface ICost {
 
 export interface IMiningPool {
   address: string;
+  liquidityPool: string;
   rewardPerBlock: string;
   miningPeriodEndBlock: number;
   rewardPerLpToken: string;

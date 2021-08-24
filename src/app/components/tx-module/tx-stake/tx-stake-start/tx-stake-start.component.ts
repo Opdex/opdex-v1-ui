@@ -4,7 +4,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
-import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Observable } from 'rxjs';
@@ -18,7 +18,7 @@ import { debounceTime, switchMap, tap, map } from 'rxjs/operators';
 export class TxStakeStartComponent extends TxBase implements OnChanges {
   @Input() data;
   form: FormGroup;
-  pool: ILiquidityPoolSummaryResponse;
+  pool: ILiquidityPoolSummary;
   txHash: string;
   allowance$: Observable<AllowanceValidation>;
 
@@ -66,6 +66,6 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
       amount: amount
     }
 
-    this.signTx(payload, 'start-staking');
+    this.quoteTransaction(payload, 'start-staking');
   }
 }

@@ -3,7 +3,7 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { take } from 'rxjs/operators';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -16,7 +16,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 export class TxStakeStopComponent extends TxBase implements OnChanges {
   @Input() data;
   form: FormGroup;
-  pool: ILiquidityPoolSummaryResponse;
+  pool: ILiquidityPoolSummary;
   txHash: string;
 
   get amount(): FormControl {
@@ -56,6 +56,6 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
       liquidate: this.liquidate.value
     }
 
-    this.signTx(payload, 'stop-staking');
+    this.quoteTransaction(payload, 'stop-staking');
   }
 }

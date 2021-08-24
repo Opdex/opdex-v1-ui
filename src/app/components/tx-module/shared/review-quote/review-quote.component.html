@@ -1,169 +1,165 @@
-<div class="review-tx-modal">
+<div class="review-tx-quote">
   <h3 class="mb-4" mat-dialog-title>{{quoteRequest?.method ?  quoteRequest.method + ' Quote' : 'Transaction Quote'}}</h3>
 
-  <mat-dialog-content class="mb-3">
-    <div class="swap-transaction" *ngIf="data.transactionType === 'swap'">
-      <div class="d-flex justify-content-between align-items-center mb-5">
-        <div>
-          <span class="amount amount-out">+{{data.payload.tokenOutAmount}}</span>
-          <span class="token">xBTC</span>
-          <br>
-          <span class="usd">($345.32)</span>
-        </div>
-
-        <div>
-          <mat-icon>swap_horiz</mat-icon>
-        </div>
-
-        <div>
-          <span class="amount amount-in">-{{data.payload.tokenInAmount}}</span>
-          <span class="token">ODX</span>
-          <br>
-          <span class="usd align-right">($345.32)</span>
-        </div>
+  <div class="swap-transaction" *ngIf="data.transactionType === 'swap'">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+      <div>
+        <span class="amount amount-out">+{{data.payload.tokenOutAmount}}</span>
+        <span class="token">xBTC</span>
+        <br>
+        <span class="usd">($345.32)</span>
       </div>
 
-      <div class="d-flex justify-content-between d-flex">
-        <p class="light">Estimated Transaction Fee</p>
-        <p>$1.30</p>
+      <div>
+        <mat-icon>swap_horiz</mat-icon>
       </div>
 
-      <div class="d-flex justify-content-between d-flex">
-        <p class="light">Tolerance</p>
-        <p>0.5%</p>
-      </div>
-
-      <div class="d-flex justify-content-between d-flex">
-        <p class="light">Deadline</p>
-        <p>03/25/22 4:30PM UTC</p>
-      </div>
-    </div>
-
-    <div class="add-liquidity-transaction" *ngIf="data.transactionType === 'add-liquidity'">
-      <div class="d-flex justify-content-between align-items-center mb-5">
-        <div>
-          <span class="amount amount-in">-{{data.payload.amountCrs}}</span>
-          <span class="token">CRS</span>
-          <br>
-          <span class="usd">($345.32)</span>
-        </div>
-
-        <div>
-          <span class="amount amount-in">-{{data.payload.amountSrc}}</span>
-          <span class="token">wBTC</span>
-          <br>
-          <span class="usd align-right">($345.32)</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="remove-liquidity-transaction" *ngIf="data.transactionType === 'remove-liquidity'">
-      <div class="d-flex justify-content-between align-items-center mb-5">
-        <div>
-          <span class="amount amount-in">-{{data.payload.liquidity}}</span>
-          <span class="token">OLPT</span>
-          <br>
-          <span class="usd">($345.32)</span>
-        </div>
-
-        <div>
-          <span class="amount amount-out">+{{data.payload.amountCrsMin}}</span>
-          <span class="token">CRS <small class="light">(Min)</small></span>
-          <br>
-          <span class="usd">($345.32)</span>
-        </div>
-
-        <div>
-          <span class="amount amount-out">+{{data.payload.amountSrcMin}}</span>
-          <span class="token">wBTC <small class="light">(Min)</small></span>
-          <br>
-          <span class="usd align-right">($345.32)</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="approve-transaction" *ngIf="data.transactionType === 'approve'">
-      <div class="d-flex justify-content-between d-flex">
-        <p class="light">Amount</p>
-        <p>{{data.payload.amount}}</p>
-      </div>
-
-      <div class="d-flex justify-content-between d-flex">
-        <p class="light">Token</p>
-        <p>{{data.payload.token}}</p>
-      </div>
-
-      <div class="d-flex justify-content-between d-flex">
-        <p class="light">Spender</p>
-        <p>{{data.payload.spender}}</p>
-      </div>
-    </div>
-
-    <div class="start-mining" *ngIf="data.transactionType === 'start-mining'">
-      <div class="d-flex justify-content-between d-flex">
-        <p class="light">Amount</p>
-        <p>{{data.payload.amount}}</p>
-      </div>
-    </div>
-
-    <div class="stop-mining" *ngIf="data.transactionType === 'stop-mining'">
-      <div class="d-flex justify-content-between d-flex">
-        <p class="light">Amount</p>
-        <p>{{data.payload.amount}}</p>
+      <div>
+        <span class="amount amount-in">-{{data.payload.tokenInAmount}}</span>
+        <span class="token">ODX</span>
+        <br>
+        <span class="usd align-right">($345.32)</span>
       </div>
     </div>
 
     <div class="d-flex justify-content-between d-flex">
-      <p class="light">Estimated Gas Cost</p>
-      <p>{{(quote?.gasUsed * 100) | coinNotation:8}} CRS</p>
+      <p class="light">Estimated Transaction Fee</p>
+      <p>$1.30</p>
     </div>
 
-    <mat-divider></mat-divider>
+    <div class="d-flex justify-content-between d-flex">
+      <p class="light">Tolerance</p>
+      <p>0.5%</p>
+    </div>
 
-    <ng-container *ngIf="quote?.events?.length">
-      <h4 class="mt-2 mb-3">Quoted Events</h4>
+    <div class="d-flex justify-content-between d-flex">
+      <p class="light">Deadline</p>
+      <p>03/25/22 4:30PM UTC</p>
+    </div>
+  </div>
 
-      <ng-container *ngFor="let event of quote?.events; trackBy: transactionLogsTrackBy;">
-        <div class="tx-event" [ngSwitch]="event.eventType">
-          <opdex-nomination-event [txEvent]="event" *ngSwitchCase="'NominationEvent'"></opdex-nomination-event>
-          <opdex-distribution-event [txEvent]="event" *ngSwitchCase="'DistributionEvent'"></opdex-distribution-event>
-          <opdex-enable-mining-event [txEvent]="event" *ngSwitchCase="'EnableMiningEvent'"></opdex-enable-mining-event>
-          <opdex-transfer-event [txEvent]="event" *ngSwitchCase="'TransferEvent'"></opdex-transfer-event>
-          <opdex-approval-event [txEvent]="event" *ngSwitchCase="'ApprovalEvent'"></opdex-approval-event>
-          <opdex-start-staking-event [txEvent]="event" *ngSwitchCase="'StartStakingEvent'"></opdex-start-staking-event>
-          <opdex-stop-staking-event [txEvent]="event" *ngSwitchCase="'StopStakingEvent'"></opdex-stop-staking-event>
-          <opdex-add-liquidity-event [txEvent]="event" *ngSwitchCase="'AddLiquidityEvent'"></opdex-add-liquidity-event>
-          <opdex-swap-event [txEvent]="event" *ngSwitchCase="'SwapEvent'"></opdex-swap-event>
-          <opdex-remove-liquidity-event [txEvent]="event" *ngSwitchCase="'RemoveLiquidityEvent'"></opdex-remove-liquidity-event>
-          <opdex-stop-mining-event [txEvent]="event" *ngSwitchCase="'StopMiningEvent'"></opdex-stop-mining-event>
-          <opdex-start-mining-event [txEvent]="event" *ngSwitchCase="'StartMiningEvent'"></opdex-start-mining-event>
-          <opdex-collect-staking-rewards-event [txEvent]="event" *ngSwitchCase="'CollectStakingRewardsEvent'"></opdex-collect-staking-rewards-event>
-          <opdex-collect-mining-rewards-event [txEvent]="event" *ngSwitchCase="'CollectMiningRewardsEvent'"></opdex-collect-mining-rewards-event>
-          <opdex-create-liquidity-pool-event [txEvent]="event" *ngSwitchCase="'CreateLiquidityPoolEvent'"></opdex-create-liquidity-pool-event>
-          <div *ngSwitchDefault>Uh oh, looks like we can't identify this transaction's summary.</div>
-        </div>
-      </ng-container>
+  <div class="add-liquidity-transaction" *ngIf="data.transactionType === 'add-liquidity'">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+      <div>
+        <span class="amount amount-in">-{{data.payload.amountCrs}}</span>
+        <span class="token">CRS</span>
+        <br>
+        <span class="usd">($345.32)</span>
+      </div>
+
+      <div>
+        <span class="amount amount-in">-{{data.payload.amountSrc}}</span>
+        <span class="token">wBTC</span>
+        <br>
+        <span class="usd align-right">($345.32)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="remove-liquidity-transaction" *ngIf="data.transactionType === 'remove-liquidity'">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+      <div>
+        <span class="amount amount-in">-{{data.payload.liquidity}}</span>
+        <span class="token">OLPT</span>
+        <br>
+        <span class="usd">($345.32)</span>
+      </div>
+
+      <div>
+        <span class="amount amount-out">+{{data.payload.amountCrsMin}}</span>
+        <span class="token">CRS <small class="light">(Min)</small></span>
+        <br>
+        <span class="usd">($345.32)</span>
+      </div>
+
+      <div>
+        <span class="amount amount-out">+{{data.payload.amountSrcMin}}</span>
+        <span class="token">wBTC <small class="light">(Min)</small></span>
+        <br>
+        <span class="usd align-right">($345.32)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="approve-transaction" *ngIf="data.transactionType === 'approve'">
+    <div class="d-flex justify-content-between d-flex">
+      <p class="light">Amount</p>
+      <p>{{data.payload.amount}}</p>
+    </div>
+
+    <div class="d-flex justify-content-between d-flex">
+      <p class="light">Token</p>
+      <p>{{data.payload.token}}</p>
+    </div>
+
+    <div class="d-flex justify-content-between d-flex">
+      <p class="light">Spender</p>
+      <p>{{data.payload.spender}}</p>
+    </div>
+  </div>
+
+  <div class="start-mining" *ngIf="data.transactionType === 'start-mining'">
+    <div class="d-flex justify-content-between d-flex">
+      <p class="light">Amount</p>
+      <p>{{data.payload.amount}}</p>
+    </div>
+  </div>
+
+  <div class="stop-mining" *ngIf="data.transactionType === 'stop-mining'">
+    <div class="d-flex justify-content-between d-flex">
+      <p class="light">Amount</p>
+      <p>{{data.payload.amount}}</p>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-between d-flex">
+    <p class="light">Estimated Gas Cost</p>
+    <p>{{(quote?.gasUsed * 100) | coinNotation:8}} CRS</p>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <ng-container *ngIf="quote?.events?.length">
+    <h4 class="mt-2 mb-3">Quoted Events</h4>
+
+    <ng-container *ngFor="let event of quote?.events; trackBy: transactionLogsTrackBy;">
+      <div class="tx-event" [ngSwitch]="event.eventType">
+        <opdex-nomination-event [txEvent]="event" *ngSwitchCase="'NominationEvent'"></opdex-nomination-event>
+        <opdex-distribution-event [txEvent]="event" *ngSwitchCase="'DistributionEvent'"></opdex-distribution-event>
+        <opdex-enable-mining-event [txEvent]="event" *ngSwitchCase="'EnableMiningEvent'"></opdex-enable-mining-event>
+        <opdex-transfer-event [txEvent]="event" *ngSwitchCase="'TransferEvent'"></opdex-transfer-event>
+        <opdex-approval-event [txEvent]="event" *ngSwitchCase="'ApprovalEvent'"></opdex-approval-event>
+        <opdex-start-staking-event [txEvent]="event" *ngSwitchCase="'StartStakingEvent'"></opdex-start-staking-event>
+        <opdex-stop-staking-event [txEvent]="event" *ngSwitchCase="'StopStakingEvent'"></opdex-stop-staking-event>
+        <opdex-add-liquidity-event [txEvent]="event" *ngSwitchCase="'AddLiquidityEvent'"></opdex-add-liquidity-event>
+        <opdex-swap-event [txEvent]="event" *ngSwitchCase="'SwapEvent'"></opdex-swap-event>
+        <opdex-remove-liquidity-event [txEvent]="event" *ngSwitchCase="'RemoveLiquidityEvent'"></opdex-remove-liquidity-event>
+        <opdex-stop-mining-event [txEvent]="event" *ngSwitchCase="'StopMiningEvent'"></opdex-stop-mining-event>
+        <opdex-start-mining-event [txEvent]="event" *ngSwitchCase="'StartMiningEvent'"></opdex-start-mining-event>
+        <opdex-collect-staking-rewards-event [txEvent]="event" *ngSwitchCase="'CollectStakingRewardsEvent'"></opdex-collect-staking-rewards-event>
+        <opdex-collect-mining-rewards-event [txEvent]="event" *ngSwitchCase="'CollectMiningRewardsEvent'"></opdex-collect-mining-rewards-event>
+        <opdex-create-liquidity-pool-event [txEvent]="event" *ngSwitchCase="'CreateLiquidityPoolEvent'"></opdex-create-liquidity-pool-event>
+        <div *ngSwitchDefault>Uh oh, looks like we can't identify this transaction event's summary.</div>
+      </div>
     </ng-container>
+  </ng-container>
 
-    <div class="mt-2" *ngIf="quote?.error">
-      <h4 class="mb-2">Quoted Errors</h4>
-      <p class="error" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">{{quote.error}}</p>
-    </div>
+  <div class="mt-2" *ngIf="quote?.error">
+    <h4 class="mb-2">Quoted Errors</h4>
+    <p class="error" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">{{quote.error}}</p>
+  </div>
 
-    <mat-divider></mat-divider>
+  <mat-divider></mat-divider>
 
-    <qrcode [qrdata]="quote.request" [width]="250" [margin]="2" [errorCorrectionLevel]="'M'" *ngIf="quote?.request"></qrcode>
+  <qrcode [qrdata]="quote.request" [width]="250" [margin]="2" [errorCorrectionLevel]="'M'" *ngIf="quote?.request"></qrcode>
 
-    <p class="text-center light">Scan with Stratis wallet to replay quote</p>
+  <p class="text-center light">Scan with Stratis wallet to replay quote</p>
 
-    <small *ngIf="txHash" class="text-center light">{{txHash}}</small>
-  </mat-dialog-content>
+  <small *ngIf="txHash" class="text-center light">{{txHash}}</small>
 
-  <mat-dialog-actions align="center">
-    <button mat-stroked-button class="w-100 mt-2" mat-dialog-close>Close</button>
-    <button mat-flat-button color="primary" class="w-100 mt-3 mb-3 ml-0" (click)="submit()" [disabled]="submitting" cdkFocusInitial>{{!submitting ? 'Local Submit' : 'Submitting'}}</button>
+  <button mat-stroked-button class="w-100 mt-2" mat-dialog-close>Close</button>
+  <button mat-flat-button color="primary" class="w-100 mt-3 mb-3 ml-0" (click)="submit()" [disabled]="submitting" cdkFocusInitial>{{!submitting ? 'Local Submit' : 'Submitting'}}</button>
 
-    <mat-progress-bar mode="indeterminate" *ngIf="submitting"></mat-progress-bar>
-  </mat-dialog-actions>
+  <mat-progress-bar mode="indeterminate" *ngIf="submitting"></mat-progress-bar>
 </div>
 

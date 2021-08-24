@@ -1,9 +1,9 @@
 <p class="mb-0" *ngIf="pool$ | async as pool; else loading">
-  Nominated the <a routerLink="/pools/{{pool.address}}">{{pool.token.src.symbol}}/CRS liquidity pool</a> for liquidity mining with a total staking weight of
-  <strong>{{event.weight | shortNumber}}</strong>
-  {{pool.token.staking.symbol}} tokens.
+  Nominated <a routerLink="/pools/{{pool.address}}">{{pool.token.src.symbol}}/CRS</a> for liquidity mining with
+  <strong>{{event.weight | shortNumber}} </strong>
+  <a routerLink="/tokens/{{pool.address}}">{{pool.token.staking.symbol}}</a> staking weight.
 </p>
 
 <ng-template #loading>
-  Nominated the XYZ/CRS liquidity pool for liquidity mining with a total staking weight of <strong>{{event.weight | shortNumber}}</strong> ABC tokens.
+  Nominated ABC/CRS for liquidity mining with <strong>{{event.weight | shortNumber}}</strong> XYZ staking weight.
 </ng-template>

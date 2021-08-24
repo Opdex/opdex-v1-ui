@@ -1,4 +1,4 @@
-import { ILiquidityPoolSummaryResponse, ILiquidityPoolSnapshotHistoryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary, ILiquidityPoolSnapshotHistory } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -11,11 +11,11 @@ export class LiquidityPoolsService extends CacheService {
     super();
   }
 
-  getLiquidityPool(address: string): Observable<ILiquidityPoolSummaryResponse> {
+  getLiquidityPool(address: string): Observable<ILiquidityPoolSummary> {
     return this.getItem(address, this._platformApi.getPool(address));
   }
 
-  getLiquidityPoolHistory(address: string): Observable<ILiquidityPoolSnapshotHistoryResponse> {
+  getLiquidityPoolHistory(address: string): Observable<ILiquidityPoolSnapshotHistory> {
     return this.getItem(`${address}-history`, this._platformApi.getPoolHistory(address));
   }
 
