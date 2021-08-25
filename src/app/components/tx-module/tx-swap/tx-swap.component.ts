@@ -9,6 +9,7 @@ import { debounceTime, take, distinctUntilChanged, switchMap, map, tap, catchErr
 import { SignTxModalComponent } from 'src/app/components/modals-module/sign-tx-modal/sign-tx-modal.component';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { environment } from '@environments/environment';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-tx-swap',
@@ -17,6 +18,7 @@ import { environment } from '@environments/environment';
 })
 export class TxSwapComponent implements OnDestroy{
   @Input() data: any;
+  icons = Icons;
   tokenInExact = true;
   form: FormGroup;
   tokenInChanges$: Subscription;
@@ -159,7 +161,7 @@ export class TxSwapComponent implements OnDestroy{
       tolerance: 0.1,
       recipient: this.context.wallet
     }
-
+    
     this.signTx({ payload, transactionType: 'swap'});
   }
 
