@@ -1,4 +1,4 @@
-import { IVaultCertificate } from '@sharedModels/responses/platform-api/Vaults/vault.interface';
+import { IVaultCertificate } from '@sharedModels/responses/platform-api/vaults/vault-certificate.interface';
 import { Component, Input, OnChanges, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';

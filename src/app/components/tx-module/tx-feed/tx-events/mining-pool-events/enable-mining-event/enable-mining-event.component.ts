@@ -1,7 +1,10 @@
+import { switchMap } from 'rxjs/operators';
 import { Component, Input } from '@angular/core';
-import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
-import { ITransactionEventResponse, IEnableMiningEventResponse } from '@sharedModels/responses/platform-api/Transactions/transaction-response';
+import { ILiquidityPoolSummary, IMiningPool } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
+import { IEnableMiningEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/mining-pools/enable-mining-event.interface';
+import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
+import { MiningPoolsService } from '@sharedServices/platform/mining-pools.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { Observable } from 'rxjs';
 import { TxEventBaseComponent } from '../../tx-event-base.component';
@@ -12,16 +15,17 @@ import { TxEventBaseComponent } from '../../tx-event-base.component';
   styleUrls: ['./enable-mining-event.component.scss']
 })
 export class EnableMiningEventComponent extends TxEventBaseComponent {
-  @Input() txEvent: ITransactionEventResponse;
-  event: IEnableMiningEventResponse;
-  pool$: Observable<ILiquidityPoolSummaryResponse>;
+  @Input() txEvent: ITransactionEvent;
+  event: IEnableMiningEvent;
+  pool$: Observable<ILiquidityPoolSummary>;
 
-  constructor(protected _liquidityPoolsService: LiquidityPoolsService, protected _tokensService: TokensService) {
+  constructor(private _miningPoolService: MiningPoolsService, protected _liquidityPoolsService: LiquidityPoolsService, protected _tokensService: TokensService) {
     super(_liquidityPoolsService, _tokensService);
   }
 
   ngOnChanges() {
-    this.event = this.txEvent as IEnableMiningEventResponse;
-    this.pool$ = this.getLiquidityPool$(this.event.contract);
+    this.event = this.txEvent as IEnableMiningEvent;
+    this.pool$ = this._miningPoolService.getMiningPool(this.event.contract)
+      .pipe(switchMap((miningPool: IMiningPool) => this._liquidityPoolsService.getLiquidityPool(miningPool.liquidityPool)));
   }
 }

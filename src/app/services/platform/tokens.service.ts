@@ -1,7 +1,7 @@
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IToken } from '@sharedModels/responses/platform-api/token.interface';
+import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
 import { CacheService } from '../utility/cache.service';
 
 @Injectable({providedIn: 'root'})
@@ -29,7 +29,7 @@ export class TokensService extends CacheService {
 
   getTokens() { }
 
-  // Todo: use BigInteger.js to use Math.pow(10, decimals);
+  // Todo: use BigInteger.js to use Math.pow(10, decimals); this is not Number type safe
   getSats(tokenDecimals: number) {
     if (tokenDecimals === 0) return 1;
     else if (tokenDecimals === 1) return 10;

@@ -1,6 +1,6 @@
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
-import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, interval, Observable, Subscription, zip } from 'rxjs';
@@ -22,9 +22,9 @@ export class MarketComponent implements OnInit {
   liquidityHistory: any[];
   stakingHistory: any[];
   volumeHistory: any[];
-  pools: ILiquidityPoolSummaryResponse[];
+  pools: ILiquidityPoolSummary[];
   tokens: any[];
-  miningPools$: Observable<ILiquidityPoolSummaryResponse[]>
+  miningPools$: Observable<ILiquidityPoolSummary[]>
   transactionRequest: ITransactionsRequest;
   chartData: any[];
   chartOptions = [

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 import { TransactionView } from '@sharedModels/transaction-view';
 
 @Component({
@@ -9,7 +9,7 @@ import { TransactionView } from '@sharedModels/transaction-view';
 })
 export class TxStakeComponent {
   @Input() data: any;
-  pool: ILiquidityPoolSummaryResponse;
+  pool: ILiquidityPoolSummary;
   view = TransactionView.stake;
   child: number = 1;
   txOptions = [

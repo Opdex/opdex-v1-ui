@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { SignTxModalComponent } from '@sharedComponents/modals-module/sign-tx-modal/sign-tx-modal.component';
-import { ITransactionQuoteResponse } from '@sharedModels/responses/platform-api/Transactions/transaction-quote-response';
+import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
@@ -16,8 +16,8 @@ export class ReviewQuoteComponent implements OnInit {
   agree = new FormControl(false);
   txHash: string;
   submitting = false;
-  quote$: Observable<ITransactionQuoteResponse>;
-  quote: ITransactionQuoteResponse;
+  quote$: Observable<ITransactionQuote>;
+  quote: ITransactionQuote;
   quoteRequest: any;
 
   public constructor(
@@ -34,13 +34,13 @@ export class ReviewQuoteComponent implements OnInit {
     } else if (this.data.transactionType === 'add-liquidity') {
       this.quote$ = this._platformApi.addLiquidity(this.data.payload);
     } else if (this.data.transactionType === 'remove-liquidity') {
-      this.quote$ = this._platformApi.removeLiquidity(this.data.payload);
+      this.quote$ = this._platformApi.removeLiquidityQuote(this.data.payload.liquidityPool, this.data.payload);
     } else if (this.data.transactionType === 'start-staking') {
-      this.quote$ = this._platformApi.startStaking(this.data.payload);
+      this.quote$ = this._platformApi.startStakingQuote(this.data.payload.liquidityPool, this.data.payload);
     } else if (this.data.transactionType === 'stop-staking') {
-      this.quote$ = this._platformApi.stopStaking(this.data.payload);
+      this.quote$ = this._platformApi.stopStakingQuote(this.data.payload.liquidityPool, this.data.payload);
     } else if (this.data.transactionType === 'collect-staking-rewards') {
-      this.quote$ = this._platformApi.collectStakingRewards(this.data.payload);
+      this.quote$ = this._platformApi.collectStakingRewardsQuote(this.data.payload.liquidityPool, this.data.payload);
     } else if (this.data.transactionType === 'start-mining') {
       this.quote$ = this._platformApi.startMiningQuote(this.data.payload.miningPool, this.data.payload);
     } else if (this.data.transactionType === 'stop-mining') {

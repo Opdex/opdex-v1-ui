@@ -5,7 +5,7 @@ import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
-import { IToken } from '@sharedModels/responses/platform-api/token.interface';
+import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
 
 @Component({
   selector: 'opdex-wallet',

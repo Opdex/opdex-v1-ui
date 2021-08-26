@@ -5,11 +5,11 @@ import { OnChanges } from '@angular/core';
 import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { TxBase } from '../tx-base.component';
-import { IToken } from '@sharedModels/responses/platform-api/token.interface';
+import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
 
 @Component({
   selector: 'opdex-tx-allowance',
@@ -18,7 +18,7 @@ import { IToken } from '@sharedModels/responses/platform-api/token.interface';
 })
 export class TxAllowanceComponent extends TxBase implements OnChanges {
   @Input() data: any;
-  pool: ILiquidityPoolSummaryResponse;
+  pool: ILiquidityPoolSummary;
   txHash: string;
 
   form: FormGroup;

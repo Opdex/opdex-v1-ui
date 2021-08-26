@@ -1,3 +1,4 @@
+import { SharedPipesModule } from './../../pipes/shared-pipes.module';
 // Angular Core Imports
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -28,7 +29,8 @@ import { HelpButtonComponent } from './help-button/help-button.component';
     MatIconModule,
     MatTooltipModule,
     MatButtonModule,
-    ClipboardModule
+    ClipboardModule,
+    SharedPipesModule
   ],
   exports: [
     ChangeIndicatorComponent,

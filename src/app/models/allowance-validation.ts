@@ -1,4 +1,4 @@
-import { IAddressAllowanceResponse } from './responses/platform-api/Addresses/address-allowance.interface';
+import { IAddressAllowanceResponse } from './responses/platform-api/wallets/address-allowance.interface';
 
 export class AllowanceValidation implements IAddressAllowanceResponse {
   owner: string;

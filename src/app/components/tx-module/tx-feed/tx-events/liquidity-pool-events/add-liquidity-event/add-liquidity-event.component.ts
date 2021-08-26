@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
-import { ITransactionEventResponse, IAddLiquidityEventResponse } from '@sharedModels/responses/platform-api/Transactions/transaction-response';
+import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
+import { IAddLiquidityEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/liquidity-pools/add-liquidity-event.interface';
+import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { Observable } from 'rxjs';
@@ -12,16 +13,16 @@ import { TxEventBaseComponent } from '../../tx-event-base.component';
   styleUrls: ['./add-liquidity-event.component.scss']
 })
 export class AddLiquidityEventComponent extends TxEventBaseComponent {
-  @Input() txEvent: ITransactionEventResponse;
-  event: IAddLiquidityEventResponse;
-  pool$: Observable<ILiquidityPoolSummaryResponse>;
+  @Input() txEvent: ITransactionEvent;
+  event: IAddLiquidityEvent;
+  pool$: Observable<ILiquidityPoolSummary>;
 
   constructor(protected _liquidityPoolsService: LiquidityPoolsService, protected _tokensService: TokensService) {
     super(_liquidityPoolsService, _tokensService);
   }
 
   ngOnChanges() {
-    this.event = this.txEvent as IAddLiquidityEventResponse;
+    this.event = this.txEvent as IAddLiquidityEvent;
     this.pool$ = this.getLiquidityPool$(this.event.contract);
   }
 }

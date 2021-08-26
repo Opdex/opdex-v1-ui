@@ -1,6 +1,6 @@
 import { TransactionView } from '@sharedModels/transaction-view';
 import { Component, Input } from '@angular/core';
-import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 
 @Component({
   selector: 'opdex-pool-preview',
@@ -8,7 +8,7 @@ import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-
   styleUrls: ['./pool-preview.component.scss']
 })
 export class PoolPreviewComponent {
-  @Input() pool: ILiquidityPoolSummaryResponse;
+  @Input() pool: ILiquidityPoolSummary;
   @Input() view: TransactionView;
 
   get showStaking() {

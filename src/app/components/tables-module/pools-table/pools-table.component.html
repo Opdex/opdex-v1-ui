@@ -17,7 +17,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Staking Weight </th>
       <td mat-cell *matCellDef="let element">
         <ng-container *ngIf="element.staking; else stakingDisabled">
-          {{element.staking?.weight | shortNumber}} <small>ODX</small>
+          {{element.staking?.weight | shortNumber}} <small>{{element.token.staking.symbol}}</small>
           <opdex-change-indicator [value]="element.staking?.weightDailyChange" size="s" class="percentChange" *ngIf="element.staking?.weightDailyChange != null"></opdex-change-indicator>
         </ng-container>
         <ng-template #stakingDisabled>

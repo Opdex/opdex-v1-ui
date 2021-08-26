@@ -1,5 +1,13 @@
-<p class="mb-0">
-  Stopped mining ODX with
-  <strong>{{event.amount | shortNumber}}</strong>
-  OLPT.
+<p class="mb-0" *ngIf="pool$ | async as pool; else loading">
+  Stopped mining <a routerLink="/tokens/{{pool.token.staking.address}}">{{pool.token.staking.symbol}}</a> with
+  <strong>{{event.amount | shortNumber}} </strong> <a routerLink="/tokens/{{pool.token.lp.address}}">{{pool.token.lp.symbol}}</a> in
+  <a routerLink="/pools/{{pool.address}}">{{pool.token.src.symbol}}/CRS</a>.
 </p>
+
+<ng-template #loading>
+  Stopped mining XYZ with
+  <strong>{{event.amount | shortNumber}}</strong> OLPT
+  in ABC/CRS.
+</ng-template>
+
+

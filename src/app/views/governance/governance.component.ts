@@ -1,10 +1,10 @@
 import { switchMap, take, tap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
-import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, timer } from 'rxjs';
-import { IGovernanceResponseModel } from '@sharedModels/responses/platform-api/Governances/governance.interface';
+import { IGovernance } from '@sharedModels/responses/platform-api/governances/governance.interface';
 import { environment } from '@environments/environment';
 
 @Component({
@@ -13,9 +13,9 @@ import { environment } from '@environments/environment';
   styleUrls: ['./governance.component.scss']
 })
 export class GovernanceComponent implements OnInit {
-  nominatedPools$: Observable<ILiquidityPoolSummaryResponse[]>;
-  miningPools$: Observable<ILiquidityPoolSummaryResponse[]>;
-  governance$: Observable<IGovernanceResponseModel>;
+  nominatedPools$: Observable<ILiquidityPoolSummary[]>;
+  miningPools$: Observable<ILiquidityPoolSummary[]>;
+  governance$: Observable<IGovernance>;
   governance: any;
   submitting: boolean;
   nominationPeriodEndDate: string;
@@ -24,7 +24,7 @@ export class GovernanceComponent implements OnInit {
 
   ngOnInit(): void {
     this.governance$ = timer(0, 20000).pipe(switchMap(_ => {
-       return this._platformApiService.getGovernance(environment.governanceAddress).pipe(tap((rsp: IGovernanceResponseModel) => {
+       return this._platformApiService.getGovernance(environment.governanceAddress).pipe(tap((rsp: IGovernance) => {
         this.governance = rsp;
         const nominationRemainingSeconds = rsp.periodRemainingBlocks * 16;
         let date = new Date();

@@ -1,6 +1,6 @@
 import { TransactionView } from '@sharedModels/transaction-view';
 import { Component, Input, OnChanges } from '@angular/core';
-import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 
 @Component({
   selector: 'opdex-tx-mine',
@@ -9,7 +9,7 @@ import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-
 })
 export class TxMineComponent implements OnChanges {
   @Input() data: any;
-  pool: ILiquidityPoolSummaryResponse;
+  pool: ILiquidityPoolSummary;
   child: number = 1;
   view = TransactionView.mine;
   txOptions = [

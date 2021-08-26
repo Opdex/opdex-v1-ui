@@ -3,8 +3,8 @@ import { ActivatedRoute } from "@angular/router";
 import { environment } from "@environments/environment";
 import { StatCardInfo } from "@sharedComponents/cards-module/stat-card/stat-card-info";
 import { ITransactionsRequest } from "@sharedModels/requests/transactions-filter";
-import { IAddressBalanceResponse } from "@sharedModels/responses/platform-api/Addresses/address_balance.interface";
-import { ILiquidityPoolSummaryResponse, ILiquidityPoolSnapshotHistoryResponse } from "@sharedModels/responses/platform-api/Pools/liquidity-pool.interface";
+import { IAddressBalance } from "@sharedModels/responses/platform-api/wallets/address-balance.interface";
+import { ILiquidityPoolSummary, ILiquidityPoolSnapshotHistory } from "@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface";
 import { TransactionView } from "@sharedModels/transaction-view";
 import { PlatformApiService } from "@sharedServices/api/platform-api.service";
 import { LiquidityPoolsService } from "@sharedServices/platform/liquidity-pools.service";
@@ -20,10 +20,10 @@ import { tap, switchMap, catchError, take, map, delay } from "rxjs/operators";
 })
 export class PoolComponent implements OnInit, OnDestroy {
   poolAddress: string;
-  pool: ILiquidityPoolSummaryResponse;
-  poolHistory: ILiquidityPoolSnapshotHistoryResponse;
-  crsBalance: IAddressBalanceResponse;
-  srcBalance$: Observable<IAddressBalanceResponse>;
+  pool: ILiquidityPoolSummary;
+  poolHistory: ILiquidityPoolSnapshotHistory;
+  crsBalance: IAddressBalance;
+  srcBalance$: Observable<IAddressBalance>;
   transactions: any[];
   liquidityHistory: any[] = [];
   stakingHistory: any[] = [];
@@ -189,12 +189,12 @@ export class PoolComponent implements OnInit, OnDestroy {
     ];
   }
 
-  private getCrsBalance(): Observable<IAddressBalanceResponse> {
+  private getCrsBalance(): Observable<IAddressBalance> {
     const context = this._userContext.getUserContext();
 
     if (context.wallet) {
       return this._platformApiService.getBalance(context.wallet, 'CRS')
-        .pipe(take(1), tap((rsp: IAddressBalanceResponse) => this.crsBalance = rsp), catchError(() => of(null)));
+        .pipe(take(1), tap((rsp: IAddressBalance) => this.crsBalance = rsp), catchError(() => of(null)));
     }
 
     return of(null);
@@ -212,7 +212,7 @@ export class PoolComponent implements OnInit, OnDestroy {
     return of(null);
   }
 
-  private getPoolHistory(): Observable<ILiquidityPoolSnapshotHistoryResponse> {
+  private getPoolHistory(): Observable<ILiquidityPoolSnapshotHistory> {
     return this._liquidityPoolsService.getLiquidityPoolHistory(this.poolAddress)
       .pipe(
         take(1),
@@ -231,7 +231,7 @@ export class PoolComponent implements OnInit, OnDestroy {
             return o;
           });
         }),
-        tap((poolHistory: ILiquidityPoolSnapshotHistoryResponse) => {
+        tap((poolHistory: ILiquidityPoolSnapshotHistory) => {
           this.poolHistory = poolHistory;
 
           let liquidityPoints = [];

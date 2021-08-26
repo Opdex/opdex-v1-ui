@@ -1,7 +1,7 @@
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { Component, Input } from '@angular/core';
 import { TransactionView } from '@sharedModels/transaction-view';
-import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-api/Pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 
 @Component({
   selector: 'opdex-mining-card',
@@ -9,7 +9,7 @@ import { ILiquidityPoolSummaryResponse } from '@sharedModels/responses/platform-
   styleUrls: ['./mining-card.component.scss']
 })
 export class MiningCardComponent {
-  @Input() pool: ILiquidityPoolSummaryResponse;
+  @Input() pool: ILiquidityPoolSummary;
 
   constructor(private _sidebar: SidenavService) { }
 
