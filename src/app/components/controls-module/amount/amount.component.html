@@ -6,10 +6,12 @@
     </button>
   
     <input matInput type="text" [formControl]="formControl" [placeholder]="placeholder" autocomplete="off">
-  
-    <button mat-button matSuffix (click)="changeToken()">
+ 
+    <button *ngIf="!buttonDisabled" mat-button matSuffix (click)="changeToken()">
       {{suffix}}
     </button>
-  
+    <button *ngIf="buttonDisabled" mat-button matSuffix type="button" disabled>
+      {{suffix}}
+    </button>
     <!-- <mat-hint *ngIf="formControl.value">$100.00 <span class="mr-2">(2.95%)</span></mat-hint> -->
   </mat-form-field>

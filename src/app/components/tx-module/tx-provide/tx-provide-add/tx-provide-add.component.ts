@@ -13,6 +13,7 @@ import { of } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-tx-provide-add',
@@ -21,6 +22,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 })
 export class TxProvideAddComponent extends TxBase implements OnInit {
   @Input() pool: ILiquidityPoolSummary;
+  icons = Icons;
   txHash: string;
   subscription = new Subscription();
   allowance: AllowanceValidation;

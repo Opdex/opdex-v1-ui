@@ -10,6 +10,7 @@ import { switchMap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-tx-provide-remove',
@@ -18,6 +19,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 })
 export class TxProvideRemoveComponent extends TxBase {
   @Input() pool: ILiquidityPoolSummary;
+  icons = Icons;
   txHash: string;
   form: FormGroup;
   context: any;

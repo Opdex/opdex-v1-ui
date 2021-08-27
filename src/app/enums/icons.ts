@@ -1,4 +1,5 @@
 export enum Icons {
     remove = 'remove',
-    add = 'add'
+    add = 'add',
+    link = 'link'
 }

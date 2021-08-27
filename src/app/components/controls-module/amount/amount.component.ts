@@ -22,6 +22,7 @@ export class AmountComponent extends ValueAccessor {
   @Input() prefixIcon: Icons;
   @Input() label: string;
   @Input() placeholder: string = "0.00";
+  @Input() buttonDisabled: boolean = false;
   @Output() handleChangeToken: EventEmitter<any> = new EventEmitter<any>();
 
   changeToken(): void {

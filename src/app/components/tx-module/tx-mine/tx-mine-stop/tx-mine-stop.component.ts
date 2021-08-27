@@ -8,6 +8,7 @@ import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-tx-mine-stop',
@@ -16,6 +17,7 @@ import { UserContextService } from '@sharedServices/utility/user-context.service
 })
 export class TxMineStopComponent extends TxBase implements OnChanges {
   @Input() data;
+  icons = Icons;
   form: FormGroup;
   pool: ILiquidityPoolSummary;
   txHash: string;

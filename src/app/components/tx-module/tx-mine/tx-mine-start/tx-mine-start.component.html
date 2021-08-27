@@ -4,17 +4,7 @@
   </ng-container>
 
   <form [formGroup]="form" name="start-mining-form" id="start-mining-form" (submit)="submit()">
-    <mat-form-field floatLabel="always">
-      <mat-label>Mine</mat-label>
-
-      <button mat-icon-button matPrefix disabled>
-        <mat-icon matPrefix>add</mat-icon>
-      </button>
-
-      <input matInput type="text" [required]="true" [formControl]="amount" autocomplete="off" placeholder="0.00">
-
-      <button mat-button matSuffix type="button" disabled>{{pool.token.lp.symbol}}</button>
-    </mat-form-field>
+    <opdex-amount [buttonDisabled]="true" [prefixIcon]="icons.add" label="Mine" [formControl]="amount" [suffix]="pool.token.lp.symbol"></opdex-amount>
 
     <div class="space-between"></div>
 
