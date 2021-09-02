@@ -1,16 +1,13 @@
 <mat-form-field floatLabel="always">
     <mat-label>{{label}}</mat-label>
-  
+
     <button mat-icon-button matPrefix disabled>
       <mat-icon matPrefix>{{prefixIcon}}</mat-icon>
     </button>
-  
+
     <input matInput type="text" [formControl]="formControl" [placeholder]="placeholder" autocomplete="off">
- 
-    <button *ngIf="!buttonDisabled" mat-button matSuffix (click)="changeToken()">
-      {{suffix}}
-    </button>
-    <button *ngIf="buttonDisabled" mat-button matSuffix type="button" disabled>
+
+    <button *ngIf="suffix" mat-button matSuffix (click)="changeToken()" [disabled]="buttonDisabled">
       {{suffix}}
     </button>
     <!-- <mat-hint *ngIf="formControl.value">$100.00 <span class="mr-2">(2.95%)</span></mat-hint> -->

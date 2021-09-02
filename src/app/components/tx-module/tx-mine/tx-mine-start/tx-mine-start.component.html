@@ -4,7 +4,7 @@
   </ng-container>
 
   <form [formGroup]="form" name="start-mining-form" id="start-mining-form" (submit)="submit()">
-    <opdex-amount [buttonDisabled]="true" [prefixIcon]="icons.add" label="Mine" [formControl]="amount" [suffix]="pool.token.lp.symbol"></opdex-amount>
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Mine" [formControl]="amount" [suffix]="pool.token.lp.symbol"></opdex-input-control>
 
     <div class="space-between"></div>
 

@@ -1,6 +1,6 @@
 <div class="stop-staking">
   <form [formGroup]="form" name="stop-staking-form" id="stop-staking-form" (submit)="submit()">
-    <opdex-amount [buttonDisabled]="true" [prefixIcon]="icons.remove" label="Stop Staking" [formControl]="amount" suffix="ODX"></opdex-amount>
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.remove" label="Stop Staking" [formControl]="amount" suffix="ODX"></opdex-input-control>
 
 
     <mat-checkbox

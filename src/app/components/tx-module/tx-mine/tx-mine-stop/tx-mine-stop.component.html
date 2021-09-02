@@ -1,6 +1,6 @@
 <div class="stop-mining">
   <form [formGroup]="form" name="stop-mining-form" id="stop-mining-form" (submit)="submit()">
-    <opdex-amount [buttonDisabled]="true" [prefixIcon]="icons.remove" label="Stop Mining" [formControl]="amount" [suffix]="pool.token.lp.symbol"></opdex-amount>
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.remove" label="Stop Mining" [formControl]="amount" [suffix]="pool.token.lp.symbol"></opdex-input-control>
 
     <div class="space-between"></div>
 

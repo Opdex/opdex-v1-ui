@@ -11,26 +11,26 @@ import { MatButtonModule } from '@angular/material/button';
 
 // Opdex Component Imports
 import { DeadlineSliderComponent } from './deadline-slider/deadline-slider.component';
-import { AmountComponent } from './amount/amount.component';
-import {ReactiveFormsModule } from '@angular/forms';
+import { InputControlComponent } from './input-control/input-control.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     DeadlineSliderComponent,
-    AmountComponent
+    InputControlComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     MatSliderModule,
     MatFormFieldModule,
-    MatInputModule, 
+    MatInputModule,
     MatIconModule,
     MatButtonModule
   ],
   exports: [
     DeadlineSliderComponent,
-    AmountComponent
+    InputControlComponent
   ]
 })
 export class ControlsModule { }

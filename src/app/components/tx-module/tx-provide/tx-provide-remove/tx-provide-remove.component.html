@@ -4,7 +4,7 @@
   </ng-container>
 
   <form [formGroup]="form" name="remove-liquidity-form" id="remove-liquidity-form" (submit)="submit()">
-    <opdex-amount [buttonDisabled]="true" [prefixIcon]="icons.remove" label="Liquidate" [formControl]="liquidity" [suffix]="pool.token.lp.symbol"></opdex-amount>
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.remove" label="Liquidate" [formControl]="liquidity" [suffix]="pool.token.lp.symbol"></opdex-input-control>
 
     <div class="space-between"></div>
 

@@ -4,19 +4,19 @@ import { ValueAccessor } from '@sharedServices/utility/value-accessor';
 import { Icons } from 'src/app/enums/icons';
 
 @Component({
-  selector: 'opdex-amount',
-  templateUrl: './amount.component.html',
-  styleUrls: ['./amount.component.scss'],
+  selector: 'opdex-input-control',
+  templateUrl: './input-control.component.html',
+  styleUrls: ['./input-control.component.scss'],
   providers: [
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AmountComponent), multi: true }
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => InputControlComponent), multi: true }
   ]
 })
-export class AmountComponent extends ValueAccessor {
+export class InputControlComponent extends ValueAccessor {
 
   constructor() {
     super();
   }
- 
+
   @Input() formControl: FormControl;
   @Input() suffix: string;
   @Input() prefixIcon: Icons;

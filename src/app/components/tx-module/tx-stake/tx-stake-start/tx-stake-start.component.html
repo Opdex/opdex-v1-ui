@@ -4,7 +4,7 @@
   </ng-container>
 
   <form [formGroup]="form" name="start-staking-form" id="start-staking-form" (submit)="submit()">
-    <opdex-amount [buttonDisabled]="true" [prefixIcon]="icons.add" label="Stake" [formControl]="amount" suffix="ODX"></opdex-amount>
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Stake" [formControl]="amount" suffix="ODX"></opdex-input-control>
 
 
     <div class="space-between"></div>

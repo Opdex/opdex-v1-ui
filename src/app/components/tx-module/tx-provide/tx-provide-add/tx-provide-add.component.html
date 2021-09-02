@@ -4,8 +4,8 @@
   </ng-container>
 
   <form [formGroup]="form" name="add-liquidity-form" id="swap-form" (submit)="submit()">
-    <opdex-amount [buttonDisabled]="true" [prefixIcon]="icons.add" label="Add CRS" [formControl]="amountCrs" suffix="CRS"></opdex-amount>
-    <opdex-amount [buttonDisabled]="true" [prefixIcon]="icons.add" label="Add {{pool.token.src.symbol}}" [formControl]="amountSrc" [suffix]="pool.token.src.symbol"></opdex-amount>
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Add CRS" [formControl]="amountCrs" suffix="CRS"></opdex-input-control>
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Add {{pool.token.src.symbol}}" [formControl]="amountSrc" [suffix]="pool.token.src.symbol"></opdex-input-control>
     <opdex-deadline-slider label="Deadline" [default]="20" [formControl]="deadline"></opdex-deadline-slider>
 
     <div class="space-between"></div>

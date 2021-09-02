@@ -2,11 +2,11 @@
   <opdex-allowance-validation [allowance]="allowance"></opdex-allowance-validation>
 
   <form [formGroup]="form" name="swap-form" id="swap-form">
-    <opdex-amount [prefixIcon]="icons.remove" label="Sell" [formControl]="tokenInAmount" [suffix]="tokenInDetails?.symbol || 'CRS'" (handleChangeToken)="changeToken('tokenIn')"></opdex-amount>
+    <opdex-input-control [prefixIcon]="icons.remove" label="Sell" [formControl]="tokenInAmount" [suffix]="tokenInDetails?.symbol || 'CRS'" (handleChangeToken)="changeToken('tokenIn')"></opdex-input-control>
     <div class="switch">
       <button mat-icon-button class="small" (click)="switch()"><mat-icon>arrow_downward</mat-icon></button>
     </div>
-    <opdex-amount [prefixIcon]="icons.add" label="Buy" [formControl]="tokenOutAmount" [suffix]="tokenOutDetails?.symbol || 'Select Token'" (handleChangeToken)="changeToken('tokenOut')"></opdex-amount>
+    <opdex-input-control [prefixIcon]="icons.add" label="Buy" [formControl]="tokenOutAmount" [suffix]="tokenOutDetails?.symbol || 'Select Token'" (handleChangeToken)="changeToken('tokenOut')"></opdex-input-control>
   </form>
 
   <opdex-deadline-slider label="Deadline" [default]="20" [formControl]="deadline"></opdex-deadline-slider>
