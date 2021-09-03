@@ -9,6 +9,7 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Observable } from 'rxjs';
 import { debounceTime, switchMap, tap, map } from 'rxjs/operators';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-tx-stake-start',
@@ -17,6 +18,7 @@ import { debounceTime, switchMap, tap, map } from 'rxjs/operators';
 })
 export class TxStakeStartComponent extends TxBase implements OnChanges {
   @Input() data;
+  icons = Icons;
   form: FormGroup;
   pool: ILiquidityPoolSummary;
   txHash: string;

@@ -9,6 +9,7 @@ import { UserContextService } from '@sharedServices/utility/user-context.service
 import { Observable } from 'rxjs';
 import { debounceTime, map, switchMap } from 'rxjs/operators';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-tx-mine-start',
@@ -18,6 +19,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 export class TxMineStartComponent extends TxBase implements OnChanges {
   @Input() data;
   form: FormGroup;
+  icons = Icons;
   pool: ILiquidityPoolSummary;
   txHash: string;
   allowance$: Observable<AllowanceValidation>;

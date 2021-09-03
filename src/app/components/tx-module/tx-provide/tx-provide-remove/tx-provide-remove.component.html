@@ -4,17 +4,7 @@
   </ng-container>
 
   <form [formGroup]="form" name="remove-liquidity-form" id="remove-liquidity-form" (submit)="submit()">
-    <mat-form-field floatLabel="always">
-      <mat-label>Liquidate</mat-label>
-
-      <button mat-icon-button matPrefix disabled>
-        <mat-icon matPrefix>remove</mat-icon>
-      </button>
-
-      <input matInput type="text" [required]="true" [formControl]="liquidity" autocomplete="off" placeholder="0.00">
-
-      <button mat-button matSuffix type="button" disabled>{{pool.token.lp.symbol}}</button>
-    </mat-form-field>
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.remove" label="Liquidate" [formControl]="liquidity" [suffix]="pool.token.lp.symbol"></opdex-input-control>
 
     <div class="space-between"></div>
 
@@ -29,7 +19,6 @@
     <div *ngIf="txHash">
       <span style="font-size: 10px;">{{txHash}}</span>
     </div>
-
 
     <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid">Continue</button>
   </form>

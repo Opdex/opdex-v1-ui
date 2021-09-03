@@ -10,10 +10,10 @@ export class ShortNumberPipe implements PipeTransform {
 
   transform(value: string | number): string {
     if (!value) return '0';
-
+    
     value = typeof(value) === 'number' ? value.toString() : value;
 
-    const isValidNumber = value.search(/^\d*(\.\d+)?$/gm);
+    const isValidNumber = value ? value.search(/^\d*(\.\d+)?$/gm) : -1;
     value = isValidNumber === -1 ? 'NAN' : value;
 
     if (value.replace(/0/g, '').replace('.', '') === '') {

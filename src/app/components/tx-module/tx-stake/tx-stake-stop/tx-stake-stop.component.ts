@@ -7,6 +7,7 @@ import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liqu
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { take } from 'rxjs/operators';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-tx-stake-stop',
@@ -15,6 +16,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 })
 export class TxStakeStopComponent extends TxBase implements OnChanges {
   @Input() data;
+  icons = Icons;
   form: FormGroup;
   pool: ILiquidityPoolSummary;
   txHash: string;

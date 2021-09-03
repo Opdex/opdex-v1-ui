@@ -10,6 +10,7 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { TxBase } from '../tx-base.component';
 import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-tx-allowance',
@@ -18,6 +19,7 @@ import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interf
 })
 export class TxAllowanceComponent extends TxBase implements OnChanges {
   @Input() data: any;
+  icons = Icons;
   pool: ILiquidityPoolSummary;
   txHash: string;
 

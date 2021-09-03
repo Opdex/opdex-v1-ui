@@ -1,61 +1,8 @@
 <opdex-card class="allowance">
   <form [formGroup]="form" name="allowance-form" id="swap-form" (submit)="submit()">
-    <!-- <div class="exactly swap-row">
-      <mat-form-field appearance="outline" class="w-100" >
-        <mat-label>Token</mat-label>
-        <input matInput type="text" [required]="true" [formControl]="token" autocomplete="off">
-      </mat-form-field>
-    </div> -->
-
-    <mat-form-field floatLabel="always" class="mb-3">
-      <mat-label>Token</mat-label>
-      <button mat-icon-button matPrefix type="button" disabled><mat-icon>link</mat-icon></button>
-
-      <input matInput type="text" [required]="true" [formControl]="token" autocomplete="off">
-
-      <!-- <button mat-button matSuffix type="button" disabled>{{pool.token.src.symbol}}</button> -->
-    </mat-form-field>
-
-    <!-- <div class="exactly swap-row">
-      <div class="amount">
-        <mat-form-field appearance="outline" class="w-100" >
-          <mat-label>Spender</mat-label>
-          <input matInput type="text" [required]="true" [formControl]="spender" autocomplete="off">
-        </mat-form-field>
-      </div>
-    </div> -->
-
-    <mat-form-field floatLabel="always" class="mb-3">
-      <mat-label>Spender</mat-label>
-      <button mat-icon-button matPrefix type="button" disabled><mat-icon>link</mat-icon></button>
-
-      <input matInput type="text" [required]="true" [formControl]="spender" autocomplete="off">
-
-    </mat-form-field>
-
-    <!-- <div class="exactly swap-row">
-      <div class="amount">
-        <mat-form-field appearance="outline" class="w-100" >
-          <mat-label>Amount</mat-label>
-          <input matInput type="text" [required]="true" [formControl]="amount" autocomplete="off" placeholder="1.23">
-        </mat-form-field>
-      </div>
-    </div> -->
-
-
-    <mat-form-field floatLabel="always">
-      <mat-label>Amount</mat-label>
-
-      <button mat-icon-button matPrefix disabled>
-        <mat-icon matPrefix>add</mat-icon>
-      </button>
-
-      <input matInput type="text" [required]="true" [formControl]="amount" autocomplete="off" placeholder="0.00">
-
-      <!-- <button mat-button matSuffix type="button" disabled>{{pool.token.src.symbol}}</button> -->
-    </mat-form-field>
-
-
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.link" label="Token" [formControl]="token"></opdex-input-control>
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.link" label="Spender" [formControl]="spender"></opdex-input-control>
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Amount" [formControl]="amount"></opdex-input-control>
 
     <div class="space-between"></div>
 
