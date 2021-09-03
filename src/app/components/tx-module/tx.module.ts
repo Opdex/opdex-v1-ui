@@ -151,7 +151,10 @@ import { ReviewQuoteComponent } from './shared/review-quote/review-quote.compone
     TxMineComponent,
     TxStakeComponent,
     TxAllowanceComponent,
-    TxFeedComponent
+    TxFeedComponent,
+    SetPendingDeployerOwnerEventComponent,
+    ClaimPendingDeployerOwnerEventComponent,
+    CreateMarketEventComponent,
   ]
 })
 export class TransactionModule { }
