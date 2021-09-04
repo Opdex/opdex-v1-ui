@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ICreateMarketEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/deployers/create-market-event.interface';
 import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
 
 @Component({
@@ -10,9 +11,11 @@ export class CreateMarketEventComponent implements OnInit {
 
   constructor() { }
 
-  @Input() txEvent: ITransactionEvent;
+  @Input() txEvent: ICreateMarketEvent;
+  isPublic = false;
 
   ngOnInit(): void {
+    this.isPublic = this.txEvent.authPoolCreators || this.txEvent.authProviders || this.txEvent.authTraders;
   }
 
 }

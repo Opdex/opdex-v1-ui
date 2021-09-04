@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ISetPendingDeployerOwnershipEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/deployers/set-pending-deployer-ownership-event.interfac';
 import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
 
 @Component({
@@ -10,7 +11,7 @@ export class SetPendingDeployerOwnerEventComponent implements OnInit {
 
   constructor() { }
 
-  @Input() txEvent: ITransactionEvent;
+  @Input() txEvent: ISetPendingDeployerOwnershipEvent;
 
   ngOnInit(): void {
   }

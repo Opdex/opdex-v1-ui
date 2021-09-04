@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
+import { IClaimPendingDeployerOwnershipEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/deployers/claim-pending-deployer-ownership-event.interface';
 
 @Component({
   selector: 'opdex-claim-pending-deployer-owner-event',
@@ -10,7 +10,7 @@ export class ClaimPendingDeployerOwnerEventComponent implements OnInit {
 
   constructor() { }
 
-  @Input() txEvent: ITransactionEvent;
+  @Input() txEvent: IClaimPendingDeployerOwnershipEvent;
 
   ngOnInit(): void {
   }

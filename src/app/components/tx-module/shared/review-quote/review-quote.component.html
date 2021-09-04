@@ -139,9 +139,6 @@
         <opdex-collect-staking-rewards-event [txEvent]="event" *ngSwitchCase="'CollectStakingRewardsEvent'"></opdex-collect-staking-rewards-event>
         <opdex-collect-mining-rewards-event [txEvent]="event" *ngSwitchCase="'CollectMiningRewardsEvent'"></opdex-collect-mining-rewards-event>
         <opdex-create-liquidity-pool-event [txEvent]="event" *ngSwitchCase="'CreateLiquidityPoolEvent'"></opdex-create-liquidity-pool-event>
-        <opdex-set-pending-deployer-owner-event [txEvent]="event" *ngSwitchCase="'SetPendingDeployerOwnershipEvent'"></opdex-set-pending-deployer-owner-event>
-        <opdex-create-market-event [txEvent]="event" *ngSwitchCase="'CreateMarketEvent'"></opdex-create-market-event>
-        <opdex-claim-pending-deployer-owner-event [txEvent]="event" *ngSwitchCase="'ClaimPendingDeployerOwnershipEvent'"></opdex-claim-pending-deployer-owner-event>
         <div *ngSwitchDefault>Uh oh, looks like we can't identify this transaction event's summary.</div>
       </div>
     </ng-container>
