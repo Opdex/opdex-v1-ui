@@ -7,15 +7,13 @@ import { ITransactionEvent } from '@sharedModels/responses/platform-api/transact
   templateUrl: './create-market-event.component.html',
   styleUrls: ['./create-market-event.component.scss']
 })
-export class CreateMarketEventComponent implements OnInit {
-
-  constructor() { }
+export class CreateMarketEventComponent {
 
   @Input() txEvent: ICreateMarketEvent;
+
   isPublic = false;
 
   ngOnInit(): void {
     this.isPublic = this.txEvent.authPoolCreators || this.txEvent.authProviders || this.txEvent.authTraders;
   }
-
 }
