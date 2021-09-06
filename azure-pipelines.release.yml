@@ -14,7 +14,7 @@ jobs:
           steps:
             - task: replacetokens@3
               inputs:
-                targetFiles: '$(Pipeline.Workspace)/dist/OpdexUI/**/main*.js'
+                targetFiles: '$(Pipeline.Workspace)/$(ARTIFACT_NAME)/**/main*.js'
                 encoding: 'auto'
                 writeBOM: true
                 verbosity: 'detailed'
@@ -28,7 +28,7 @@ jobs:
             - task: ArchiveFiles@2
               displayName: 'Archive files'
               inputs:
-                rootFolderOrFile: '$(Pipeline.Workspace)/dist/OpdexUI/**/main*.js'
+                rootFolderOrFile: '$(Pipeline.Workspace)/$(ARTIFACT_NAME)/**/main*.js'
                 includeRootFolder: false
                 archiveType: zip
                 archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip

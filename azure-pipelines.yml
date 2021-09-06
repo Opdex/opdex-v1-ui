@@ -45,11 +45,11 @@ stages:
       #     archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       #     replaceExistingArchive: true
 
-      # - task: PublishBuildArtifacts@1
-      #   inputs:
-      #     PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-      #     ArtifactName: '$(ARTIFACT_NAME)'
-      #     publishLocation: 'Container'
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(System.DefaultWorkingDirectory)/dist/OpdexUI'
+          ArtifactName: '$(ARTIFACT_NAME)'
+          publishLocation: 'Container'
 
       # - task: PublishBuildArtifacts@1
       #   inputs:
