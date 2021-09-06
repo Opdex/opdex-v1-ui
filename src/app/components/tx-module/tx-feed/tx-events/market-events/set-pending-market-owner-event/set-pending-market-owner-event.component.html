@@ -1,1 +1,8 @@
-<p>set-pending-market-owner-event works!</p>
+<p class="mb-0" *ngIf="pool$ | async as pool; else loading">
+    <!-- Set {{address | shortAddress}} as the pending market owner. -->
+  </p>
+  
+  <ng-template #loading>
+    Set
+    <!-- Set {{address | shortAddress}} as the pending market owner. -->
+  </ng-template>
