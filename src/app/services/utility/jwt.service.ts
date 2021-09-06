@@ -74,6 +74,6 @@ export class JwtService {
 export function jwtOptionsFactory(jwtService: JwtService) {
   return {
     tokenGetter: () => jwtService.getToken(),
-    allowedDomains: environment.allowedJwtDomains
+    allowedDomains: [environment.apiUrl.replace('https://', '').replace('http://', '')]
   }
 }

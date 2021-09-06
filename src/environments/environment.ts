@@ -6,11 +6,10 @@ const api = 'dev-api.opdex.com';
 export const environment = {
   production: false,
   defaultTheme: 'dark-mode',
-  api: api.includes('localhost') ? `http://${api}` : `https://${api}`,
+  apiUrl: api.includes('localhost') ? `http://${api}` : `https://${api}`,
   marketAddress: 'PWbQLxNnYdyUBLmeEL3ET1WdNx7dvbH8mi',
   routerAddress: 'PMsinMXrr2uNEL5AQD1LpiYTRFiRTA8uZU',
   governanceAddress: 'PGjqKaFDepLNSdakWknucPFB7uXLQGjeCH',
   vaultAddress: 'PHLh9aUdSBS7zke28vnsE4UiVznecFqy9y',
-  allowedJwtDomains: [api],
   network: Network.Devnet
 };
