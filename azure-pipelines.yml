@@ -33,23 +33,23 @@ stages:
 
       - script: |
           npm install
-          npm run build-devnet
+          npm run build-prod
         displayName: 'npm install and build'
 
-      - task: ArchiveFiles@2
-        displayName: 'Archive files'
-        inputs:
-          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist/OpdexUI'
-          includeRootFolder: false
-          archiveType: zip
-          archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-          replaceExistingArchive: true
+      # - task: ArchiveFiles@2
+      #   displayName: 'Archive files'
+      #   inputs:
+      #     rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist/OpdexUI'
+      #     includeRootFolder: false
+      #     archiveType: zip
+      #     archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      #     replaceExistingArchive: true
 
-      - task: PublishBuildArtifacts@1
-        inputs:
-          PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-          ArtifactName: '$(ARTIFACT_NAME)'
-          publishLocation: 'Container'
+      # - task: PublishBuildArtifacts@1
+      #   inputs:
+      #     PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+      #     ArtifactName: '$(ARTIFACT_NAME)'
+      #     publishLocation: 'Container'
 
       # - task: PublishBuildArtifacts@1
       #   inputs:

@@ -6,15 +6,43 @@ jobs:
   - deployment: ${{ parameters.environment }}
     displayName: 'Deploy Resources'
     variables:
-      - group: ${{ parameters.environment }} # points to variable group in Azure DevOps
+      - group: '${{ parameters.environment }}-ui' # points to variable group in Azure DevOps
     environment: ${{ parameters.environment }} # points to environments in Azure DevOps
     strategy:
       runOnce:
         deploy:
           steps:
+            - task: replacetokens@3
+              inputs:
+                targetFiles: '$(Pipeline.Workspace)/dist/OpdexUI/**/main*.js'
+                encoding: 'auto'
+                writeBOM: true
+                verbosity: 'detailed'
+                actionOnMissing: 'warn'
+                keepToken: false
+                tokenPrefix: '#{'
+                tokenSuffix: '}#'
+                useLegacyPattern: false
+                enableTelemetry: true
+
+            - task: ArchiveFiles@2
+              displayName: 'Archive files'
+              inputs:
+                rootFolderOrFile: '$(Pipeline.Workspace)/dist/OpdexUI/**/main*.js'
+                includeRootFolder: false
+                archiveType: zip
+                archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+                replaceExistingArchive: true
+
+            - task: PublishBuildArtifacts@1
+              inputs:
+                PathToPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+                ArtifactName: '$(ARTIFACT_NAME)'
+                publishLocation: 'Container'
+
             - task: AzureWebApp@1
               inputs:
-                azureSubscription: $(azureSubscription) 
+                azureSubscription: $(azureSubscription)
                 appType: 'webApp'
                 appName: 'app-opdex-${{ parameters.environment }}-app'
                 package: '$(Pipeline.Workspace)/$(ARTIFACT_NAME)/*.zip'

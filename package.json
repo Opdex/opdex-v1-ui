@@ -5,9 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build-devnet": "ng build -c devnet",
-    "build-testnet": "ng build -c testnet",
-    "build-mainnet": "ng build -c mainnet",
+    "build-prod": "ng build -c prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

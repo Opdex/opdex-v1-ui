@@ -39,7 +39,7 @@ export class PlatformApiService extends RestApiService {
     protected _router: Router,
   ) {
     super(_http, _error, _jwt, _router);
-    this.api = environment.api;
+    this.api = environment.apiUrl;
   }
 
   ////////////////////////////
