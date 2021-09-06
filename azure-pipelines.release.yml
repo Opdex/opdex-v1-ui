@@ -35,11 +35,11 @@ jobs:
                 archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
                 replaceExistingArchive: true
 
-            - task: PublishBuildArtifacts@1
-              inputs:
-                PathToPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-                ArtifactName: '$(ARTIFACT_NAME)'
-                publishLocation: 'Container'
+            # - task: PublishBuildArtifacts@1
+            #   inputs:
+            #     PathToPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+            #     ArtifactName: '$(ARTIFACT_NAME)'
+            #     publishLocation: 'Container'
 
             - task: AzureWebApp@1
               inputs:
@@ -50,8 +50,8 @@ jobs:
                 deploymentMethod: 'auto'
               displayName: Deploy to App Service
 
-            - task: DeleteFiles@1
-              displayName: 'Remove Zip'
-              inputs:
-                contents: |
-                  $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+            # - task: DeleteFiles@1
+            #   displayName: 'Remove Zip'
+            #   inputs:
+            #     contents: |
+            #       $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
