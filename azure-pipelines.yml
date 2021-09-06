@@ -25,7 +25,6 @@ stages:
       BUILD_CONFIGURATION: 'Release'
 
     steps:
-
       - task: NodeTool@0
         inputs:
           versionSpec: '14.x'
@@ -36,26 +35,11 @@ stages:
           npm run build-prod
         displayName: 'npm install and build'
 
-      # - task: ArchiveFiles@2
-      #   displayName: 'Archive files'
-      #   inputs:
-      #     rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist/OpdexUI'
-      #     includeRootFolder: false
-      #     archiveType: zip
-      #     archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-      #     replaceExistingArchive: true
-
       - task: PublishBuildArtifacts@1
         inputs:
           PathtoPublish: '$(System.DefaultWorkingDirectory)/dist/OpdexUI'
           ArtifactName: '$(ARTIFACT_NAME)'
           publishLocation: 'Container'
-
-      # - task: PublishBuildArtifacts@1
-      #   inputs:
-      #     pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      #     artifactName: '$(ARTIFACT_NAME)'
-      #   displayName: Share
 
 - stage: DEV
   displayName: 'Release to devnet (Azure)'

@@ -34,12 +34,6 @@ jobs:
                 archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
                 replaceExistingArchive: true
 
-            # - task: PublishBuildArtifacts@1
-            #   inputs:
-            #     PathToPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-            #     ArtifactName: '$(ARTIFACT_NAME)'
-            #     publishLocation: 'Container'
-
             - task: AzureWebApp@1
               inputs:
                 azureSubscription: $(azureSubscription)
