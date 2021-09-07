@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
+import { ISetPendingVaultOwnershipEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/vaults/set-pending-vault-ownership-event.interfac';
 
 @Component({
   selector: 'opdex-set-pending-vault-owner-event',
@@ -7,9 +9,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SetPendingVaultOwnerEventComponent implements OnInit {
 
-  constructor() { }
+  @Input() txEvent: ITransactionEvent;
+  event: ISetPendingVaultOwnershipEvent;
 
   ngOnInit(): void {
+    this.event = this.txEvent as ISetPendingVaultOwnershipEvent;
   }
-
 }

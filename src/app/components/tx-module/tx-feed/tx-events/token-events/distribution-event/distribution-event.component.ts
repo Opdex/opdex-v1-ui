@@ -1,9 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Injector, Input } from '@angular/core';
 import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
 import { IDistributionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/tokens/distribution-event.interface';
 import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
-import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
-import { TokensService } from '@sharedServices/platform/tokens.service';
 import { Observable } from 'rxjs';
 import { TxEventBaseComponent } from '../../tx-event-base.component';
 
@@ -17,8 +15,8 @@ export class DistributionEventComponent extends TxEventBaseComponent {
   event: IDistributionEvent;
   token$: Observable<IToken>;
 
-  constructor(protected _liquidityPoolsService: LiquidityPoolsService, protected _tokensService: TokensService) {
-    super(_liquidityPoolsService, _tokensService);
+  constructor(protected injector: Injector) {
+    super(injector);
   }
 
   ngOnChanges() {

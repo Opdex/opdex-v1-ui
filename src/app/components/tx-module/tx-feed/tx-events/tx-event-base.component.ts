@@ -4,14 +4,18 @@ import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liqu
 import { Observable } from 'rxjs';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
+import { Injector } from '@angular/core';
 
 export abstract class TxEventBaseComponent {
   abstract txEvent: ITransactionEvent;
 
-  constructor(
-    protected _liquidityPoolsService: LiquidityPoolsService,
-    protected _tokensService: TokensService
-  ) { }
+  protected readonly _liquidityPoolsService: LiquidityPoolsService;
+  protected readonly _tokensService: TokensService;
+
+  constructor(protected injector: Injector) {
+    this._liquidityPoolsService = injector.get(LiquidityPoolsService);
+    this._tokensService = injector.get(TokensService);
+  }
 
   getLiquidityPool$(address: string): Observable<ILiquidityPoolSummary> {
     return this._liquidityPoolsService.getLiquidityPool(address);

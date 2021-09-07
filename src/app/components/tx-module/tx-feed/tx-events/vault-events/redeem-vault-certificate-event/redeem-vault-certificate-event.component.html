@@ -1,1 +1,7 @@
-<p>redeem-vault-certificate-event works!</p>
+<p class="mb-0" *ngIf="token$ | async as token; else loading;">   	
+    Redeemed vault certificate for <strong>{{event.amount}} {{token.symbol}}</strong>.
+</p>
+
+<ng-template #loading>  	
+    Redeemed vault certificate for <strong>{{event.amount}} ABC</strong>.
+</ng-template>

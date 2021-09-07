@@ -1,1 +1,7 @@
-<p>revoke-vault-certificate-event works!</p>
+<p class="mb-0" *ngIf="token$ | async as token; else loading;">   	  	
+    Revoked vault certificate adjusting from <strong>{{event.oldAmount}}</strong> total tokens to <strong>{{event.newAmount}} {{token.symbol}}</strong>.
+</p>
+
+<ng-template #loading>  	 	
+    Revoked vault certificate adjusting from <strong>{{event.oldAmount}}</strong> total tokens to <strong>{{event.newAmount}} ABC</strong>.
+</ng-template>
