@@ -144,6 +144,12 @@
         <opdex-create-vault-certificate-event [txEvent]="event" *ngSwitchCase="'CreateVaultCertificateEvent'"></opdex-create-vault-certificate-event>
         <opdex-redeem-vault-certificate-event [txEvent]="event" *ngSwitchCase="'RedeemVaultCertificateEvent'"></opdex-redeem-vault-certificate-event>
         <opdex-revoke-vault-certificate-event [txEvent]="event" *ngSwitchCase="'RevokeVaultCertificateEvent'"></opdex-revoke-vault-certificate-event>
+        <opdex-change-market-permission-event [txEvent]="event" *ngSwitchCase="'ChangeMarketPermissionEvent'"></opdex-change-market-permission-event>
+        <opdex-claim-pending-market-owner-event [txEvent]="event" *ngSwitchCase="'ClaimPendingMarketOwnershipEvent'"></opdex-claim-pending-market-owner-event>
+        <opdex-set-pending-market-owner-event [txEvent]="event" *ngSwitchCase="'SetPendingMarketOwnershipEvent'"></opdex-set-pending-market-owner-event>
+        <opdex-claim-pending-deployer-owner-event [txEvent]="event" *ngSwitchCase="'SetPendingDeployerOwnershipEvent'"></opdex-claim-pending-deployer-owner-event>
+        <opdex-create-market-event [txEvent]="event" *ngSwitchCase="'CreateMarketEvent'"></opdex-create-market-event>
+        <opdex-set-pending-deployer-owner-event [txEvent]="event" *ngSwitchCase="'ClaimPendingDeployerOwnershipEvent'"></opdex-set-pending-deployer-owner-event>
         <div *ngSwitchDefault>Uh oh, looks like we can't identify this transaction event's summary.</div>
       </div>
     </ng-container>

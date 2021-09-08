@@ -1,1 +1,3 @@
-<p>change-market-permission-event works!</p>
+<p class="mb-0">
+  {{event.isAuthorized ? 'Added' : 'Removed'}} <strong>{{event.permission}}</strong> permissions for <strong>{{event.address | shortAddress}}</strong>.
+</p>
