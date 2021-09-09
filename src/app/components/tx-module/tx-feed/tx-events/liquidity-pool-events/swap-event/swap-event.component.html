@@ -1,12 +1,12 @@
 <p class="mb-0" *ngIf="pool$ | async as pool; else loading;">
   Swapped
   <strong>{{(event.amountCrsIn === '0.00000000' ? event.amountSrcIn : event.amountCrsIn) | shortNumber}}</strong>
-  <a routerLink="/tokens/{{event.amountCrsIn === '0.00000000' ? pool.token.src.address : 'CRS'}}">
+  <a class="no-decoration" routerLink="/tokens/{{event.amountCrsIn === '0.00000000' ? pool.token.src.address : 'CRS'}}">
     {{event.amountCrsIn === '0.00000000' ? pool.token.src.symbol : 'CRS' }}
   </a>
   for
   <strong>{{(event.amountCrsOut === '0.00000000' ? event.amountSrcOut : event.amountCrsOut) | shortNumber }}</strong>
-  <a routerLink="/tokens/{{event.amountCrsOut === '0.00000000' ? pool.token.src.address : 'CRS'}}">
+  <a class="no-decoration" routerLink="/tokens/{{event.amountCrsOut === '0.00000000' ? pool.token.src.address : 'CRS'}}">
     {{event.amountCrsOut === '0.00000000' ? pool.token.src.symbol : 'CRS' }}
   </a>
 

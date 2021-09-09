@@ -41,7 +41,8 @@
         </opdex-card>
       </div>
 
-      <div class="col-12 col-lg-4">
+      <!-- Todo: Do this with angular and *ngIf so we aren't rendering it in 2 places-->
+      <div class="d-none d-lg-block col-lg-4">
         <opdex-tx-feed [transactionRequest]="transactionRequest"></opdex-tx-feed>
       </div>
     </div>
@@ -78,6 +79,12 @@
           <h2>Top Tokens</h2>
           <opdex-tokens-table [tokens]="tokens" [smallPageSize]="true"></opdex-tokens-table>
         </opdex-card>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 d-lg-none d-xl-none">
+        <opdex-tx-feed [transactionRequest]="transactionRequest"></opdex-tx-feed>
       </div>
     </div>
   </div>

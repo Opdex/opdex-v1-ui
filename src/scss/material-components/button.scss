@@ -1,3 +1,4 @@
+@import 'src/scss/colors';
 
 button {
   &.tiny {
@@ -49,7 +50,7 @@ button {
   &.white {
     background-color: white !important;
     background: white !important;
-    color: #1b192f !important;
+    color: $dark-primary !important;
   }
 }
 

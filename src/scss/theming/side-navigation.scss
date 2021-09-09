@@ -1,3 +1,5 @@
+@import 'src/scss/colors';
+
 .light-mode {
   aside {
     border-right: 1px solid #cecece;
@@ -12,10 +14,10 @@
 .dark-mode {
   aside {
     border-right: 1px solid #292929;
-    background: #1b192f;
+    background: $dark-primary;
 
     .wallet-indicator {
-      border: .2em solid #1b192f;
+      border: .2em solid $dark-primary;
     }
   }
 }
