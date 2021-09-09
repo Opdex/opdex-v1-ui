@@ -4,6 +4,8 @@
 // Import Opdex theme related styles
 @import 'theme';
 
+@import 'theming/_module';
+
 // Import NPM Package style overrides
 @import 'material-components/_module';
 
@@ -36,16 +38,6 @@
 
 .mat-dialog-container {
   overflow: initial !important;
-}
-
-h1.page-title {
-  margin-bottom: 30px;
-  text-shadow: 1px 1px 1px black;
-}
-
-
-.text-shadow {
-  text-shadow: 1px 1px 1px black;
 }
 
 .light {

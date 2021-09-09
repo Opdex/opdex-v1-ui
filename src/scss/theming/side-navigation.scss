@@ -1,0 +1,23 @@
+.light-mode {
+  aside {
+    border-right: 1px solid #cecece;
+    background: rgba(255,255,255, 0.8) !important;
+
+    .foreground {
+      background: rgba(255,255,255, 0.8) !important;
+      // background: radial-gradient(circle, rgba(46, 102, 122, 0.1) 0%, rgba(27,25,47, .9) 80%);
+    }
+  }
+}
+
+.dark-mode {
+  aside {
+    border-right: 1px solid #292929;
+    background: rgba(27,25,47, .7) !important;
+
+    .foreground {
+      background: rgba(27,25,47, .9);
+      background: radial-gradient(circle, rgba(46, 102, 122, 0.1) 0%, rgba(27,25,47, .9) 80%);
+    }
+  }
+}

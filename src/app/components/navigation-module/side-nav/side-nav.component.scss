@@ -1,8 +1,6 @@
 aside {
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #292929;
-  background: rgba(27,25,47, .7) !important;
   height: 100%;
 
   &:hover {
@@ -13,14 +11,13 @@ aside {
     }
   }
 
-
   .foreground {
     padding: 10px;
     height: 100%;
-    background: rgba(27,25,47, .9);
-    background: radial-gradient(circle, rgba(46, 102, 122, 0.1) 0%, rgba(27,25,47, .9) 80%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
-
 
   .mat-button {
     width: 100%;

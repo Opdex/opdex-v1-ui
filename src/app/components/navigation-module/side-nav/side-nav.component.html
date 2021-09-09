@@ -41,6 +41,14 @@
 
     <div class="space-between"></div>
 
+    <ul class="sidebar-nav">
+      <li>
+        <a mat-button (click)="toggleTheme()">
+          <mat-icon>{{theme === 'dark-mode' ? 'brightness_3' : 'brightness_5'}}</mat-icon> {{theme === 'dark-mode' ? 'Dark Mode' : 'Light Mode'}}
+        </a>
+      </li>
+    </ul>
+
     <img class="defi-blocks" src="assets/defi2@2x.png">
   </div>
 </aside>

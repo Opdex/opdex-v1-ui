@@ -2,7 +2,7 @@
   <h2 class="text-shadow">Recent Transactions</h2>
 
   <div class="feed-container" *ngIf="transactions$ | async as transactions" [ngClass]="{'large': size === 'l', 'medium': size === 'm', 'small': size === 's'}">
-    <div class="transaction" *ngFor="let tx of transactions; trackBy: transactionsTrackBy">
+    <div class="transaction" *ngFor="let tx of transactions; trackBy: transactionsTrackBy; let i = index">
       <div class="d-flex flex-direction-column">
         <div class="pr-2">
           <opdex-copy-button [tooltip]="tx.hash" [value]="tx.hash" icon="receipt" [size]="iconSizes.tiny" color="primary"></opdex-copy-button>
@@ -40,6 +40,7 @@
           </ng-container>
         </div>
       </div>
+      <mat-divider *ngIf="i < transactions.length - 1" class="mt-3"></mat-divider>
     </div>
   </div>
 </opdex-card>

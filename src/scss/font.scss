@@ -19,6 +19,18 @@ $fontConfig: (
 
 @include mat-core($fontConfig);
 
+.light-mode {
+  .text-shadow {
+    text-shadow: none;
+  }
+}
+
+.dark-mode {
+  .text-shadow {
+    text-shadow: 1px 1px 1px black;
+  }
+}
+
 .mat-h1, .mat-headline, .mat-typography h1 {
   font-size: 1.6em;
 }

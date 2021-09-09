@@ -1,7 +1,7 @@
 <main [ngClass]="theme">
   <mat-sidenav-container (backdropClick)="closeSidenav()" class="w-100 h-100">
-    <mat-sidenav #sidenav (keydown.escape)="closeSidenav()" position="end" class="sidenav" [fixedInViewport]="true" [fixedTopGap]="0" [fixedBottomGap]="0" [mode]="sidenavMode">
-      <div class="sidenav-container">
+    <mat-sidenav #sidenav (keydown.escape)="closeSidenav()" position="end" class="transaction-sidebar" [fixedInViewport]="true" [fixedTopGap]="0" [fixedBottomGap]="0" [mode]="sidenavMode">
+      <div class="sidebar-container">
 
         <div class="d-flex align-items-center justify-content-between mb-3">
           <button mat-icon-button color="primary" class="small" (click)="toggleSidenavAppearance()">

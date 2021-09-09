@@ -16,10 +16,10 @@
             <p class="mb-2 light">{{pool.token.src.name}} - Cirrus</p>
 
             <div class="d-flex flex-row justify-content-between">
-              <h1 class="page-title mb-0 d-flex align-items-center justify-content-center">
-                <a href="javascript:void(0)" routerLink="/tokens/{{pool.token.src.address}}">{{pool.token.src.symbol}}</a>
+              <h1 class="text-shadow mb-0 d-flex align-items-center justify-content-center">
+                <a class="body-default" href="javascript:void(0)" routerLink="/tokens/{{pool.token.src.address}}">{{pool.token.src.symbol}}</a>
                 <opdex-copy-button [tooltip]="pool.address" [value]="pool.address" icon="link"></opdex-copy-button>
-                <a href="javascript:void(0)" routerLink="/tokens/CRS">CRS</a>
+                <a class="body-default" href="javascript:void(0)" routerLink="/tokens/CRS">CRS</a>
               </h1>
 
               <div class="chip-group">

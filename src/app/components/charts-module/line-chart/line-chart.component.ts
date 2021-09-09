@@ -1,6 +1,9 @@
+import { Subscription } from 'rxjs';
+import { ThemeService } from './../../../services/utility/theme.service';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 import { ResizedEvent } from 'angular-resize-event';
 import { createChart, ISeriesApi, IChartApi, LineWidth, DeepPartial, MouseEventParams } from 'lightweight-charts';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-line-chart',
@@ -21,6 +24,19 @@ export class LineChartComponent implements OnInit, OnChanges {
   @Input() selectedChart: any;
   @Input() chartOptions: any[];
   @Output() onTypeChange = new EventEmitter<string>();
+  theme: string;
+  subscription = new Subscription();
+
+  constructor(private _theme: ThemeService) {
+    this.subscription.add(this._theme.getTheme()
+      .pipe(tap(theme => {
+        this.theme = theme
+
+        if (this.chart) {
+          this.applyChartOptions();
+        }
+      })).subscribe());
+  }
 
   ngOnChanges() {
     this.ngOnInit();
@@ -170,7 +186,7 @@ export class LineChartComponent implements OnInit, OnChanges {
       },
       layout: {
         backgroundColor: 'transparent',
-        textColor: '#f4f4f4',
+        textColor: this.theme === 'light-mode' ? '#222' : '#f4f4f4',
         fontSize: 14,
         fontFamily: 'Arial'
       },
@@ -191,5 +207,6 @@ export class LineChartComponent implements OnInit, OnChanges {
   ngOnDestroy() {
     this.chart.remove();
     this.chart.unsubscribeCrosshairMove(this.crosshairMovedHandler);
+    this.subscription.unsubscribe();
   }
 }
