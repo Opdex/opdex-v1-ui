@@ -2,7 +2,10 @@ import { Component, Injector, Input } from '@angular/core';
 import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
 import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
 import { IRedeemVaultCertificateEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/vaults/redeem-vault-certificate-event.interface';
+import { IVault } from '@sharedModels/responses/platform-api/vaults/vault.interface';
+import { VaultsService } from '@sharedServices/platform/vaults.service';
 import { Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { TxEventBaseComponent } from '../../tx-event-base.component';
 
 @Component({
@@ -15,12 +18,13 @@ export class RedeemVaultCertificateEventComponent extends TxEventBaseComponent {
   event: IRedeemVaultCertificateEvent;
   token$: Observable<IToken>;
 
-  constructor(protected injector: Injector) {
+  constructor(public _vaultService: VaultsService, protected injector: Injector) {
     super(injector);
   }
 
   ngOnChanges() {
     this.event = this.txEvent as IRedeemVaultCertificateEvent;
     this.token$ = this.getToken$(this.event.contract);
+    this.token$ = this._vaultService.getVault().pipe(switchMap((vault: IVault) => this.getToken$(vault.lockedToken)));
   }
 }
