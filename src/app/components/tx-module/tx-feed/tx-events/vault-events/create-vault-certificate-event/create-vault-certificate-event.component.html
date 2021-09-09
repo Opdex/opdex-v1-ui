@@ -1,1 +1,7 @@
-<p>create-vault-certificate-event works!</p>
+<p class="mb-0" *ngIf="token$ | async as token; else loading;">
+    Created new vault certificate for <strong>{{event.amount}}</strong> <a routerLink="/tokens/{{token.address}}">{{token.symbol}}</a>  assigned to <strong>{{event.holder | shortAddress}}</strong>.
+</p>
+
+<ng-template #loading>
+    Created new vault certificate for <strong>{{event.amount}} ABC</strong> assigned to <strong>{{event.holder | shortAddress}}</strong>.
+</ng-template>

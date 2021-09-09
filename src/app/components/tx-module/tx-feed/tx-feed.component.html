@@ -29,6 +29,11 @@
               <opdex-collect-staking-rewards-event [txEvent]="event" *ngSwitchCase="'CollectStakingRewardsEvent'"></opdex-collect-staking-rewards-event>
               <opdex-collect-mining-rewards-event [txEvent]="event" *ngSwitchCase="'CollectMiningRewardsEvent'"></opdex-collect-mining-rewards-event>
               <opdex-create-liquidity-pool-event [txEvent]="event" *ngSwitchCase="'CreateLiquidityPoolEvent'"></opdex-create-liquidity-pool-event>
+              <opdex-set-pending-vault-owner-event [txEvent]="event" *ngSwitchCase="'SetPendingVaultOwnershipEvent'"></opdex-set-pending-vault-owner-event>
+              <opdex-claim-pending-vault-owner-event [txEvent]="event" *ngSwitchCase="'ClaimPendingVaultOwnershipEvent'"></opdex-claim-pending-vault-owner-event>
+              <opdex-create-vault-certificate-event [txEvent]="event" *ngSwitchCase="'CreateVaultCertificateEvent'"></opdex-create-vault-certificate-event>
+              <opdex-redeem-vault-certificate-event [txEvent]="event" *ngSwitchCase="'RedeemVaultCertificateEvent'"></opdex-redeem-vault-certificate-event>
+              <opdex-revoke-vault-certificate-event [txEvent]="event" *ngSwitchCase="'RevokeVaultCertificateEvent'"></opdex-revoke-vault-certificate-event>
               <opdex-change-market-permission-event [txEvent]="event" *ngSwitchCase="'ChangeMarketPermissionEvent'"></opdex-change-market-permission-event>
               <opdex-claim-pending-market-owner-event [txEvent]="event" *ngSwitchCase="'ClaimPendingMarketOwnershipEvent'"></opdex-claim-pending-market-owner-event>
               <opdex-set-pending-market-owner-event [txEvent]="event" *ngSwitchCase="'SetPendingMarketOwnershipEvent'"></opdex-set-pending-market-owner-event>
