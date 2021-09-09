@@ -3,15 +3,14 @@ a {
   font-weight: 500;
 }
 
-.percentChange {
-  display: inline-block;
-  float: right;
-  margin-right: 50px;
-}
-
 .disabled-badge {
   font-size: .8em;
   background: #f7556b;
   padding: 4px 8px;
-  border-radius: 4px
+  border-radius: 4px;
+  color: #fff;
+}
+
+.no-wrap {
+  white-space: nowrap;
 }

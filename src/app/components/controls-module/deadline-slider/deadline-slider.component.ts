@@ -29,5 +29,4 @@ export class DeadlineSliderComponent extends ValueAccessor implements OnInit {
     super.value = newDeadline;
     this.default = event.value;
   }
-
 }

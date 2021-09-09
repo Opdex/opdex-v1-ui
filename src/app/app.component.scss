@@ -6,9 +6,8 @@ opdex-side-nav {
   height: 100%;
   width: $sidebar-width;
   position: fixed;
-  box-shadow: 0px 0px 4px rgba(0,0,0,0.1);
   z-index: 9999;
-  transition: width .2s ease-in;
+  transition: width .15s ease-in;
   overflow: hidden;
   display: none;
 
@@ -44,10 +43,8 @@ opdex-side-nav {
   display: flex;
   flex: 1;
   vertical-align: middle;
-  // background-color: #1e1d2d;
   justify-content: space-between;
   padding: 10px 15px;
-  // border-bottom: 1px solid #292929;
   flex-direction: row;
   font-size: .9em;
 
@@ -85,10 +82,6 @@ opdex-side-nav {
 
     &.no-sidebar,.loaded {
       margin-left: 0px;
-    }
-
-    .page-content-container {
-      padding: 0 25px;
     }
   }
 }

@@ -1,0 +1,29 @@
+.dark-mode {
+  #mobile-nav {
+    background-color: #1e1d2d;
+    border-top: 1px solid #292929;
+
+    a.active {
+      color: #1ca7dc;
+    }
+
+    .wallet-indicator {
+      border: .2em solid #1b192f;
+    }
+  }
+}
+
+.light-mode {
+  #mobile-nav {
+    background-color: #fff;
+    border-top: 1px solid #ccc;
+
+    a.active {
+      color: #1ca7dc;
+    }
+
+    .wallet-indicator {
+      border: .2em solid #fff;
+    }
+  }
+}

@@ -13,7 +13,7 @@
 
 .dark-mode {
   .mat-card {
-    background: rgba(27,25,47, .8) !important;
+    background: rgba(27,25,47, 1) !important;
     box-shadow: 0px 2px 4px rgba(0,0,0,0.3) !important;
 
     .foreground {
@@ -24,7 +24,7 @@
 
 .light-mode {
   .mat-card {
-    background: rgba(255,255,255, 0.8) !important;
+    background: rgba(255,255,255, 1) !important;
     box-shadow: 0px 2px 5px rgba(0,0,0,0.1) !important;
 
     .foreground {

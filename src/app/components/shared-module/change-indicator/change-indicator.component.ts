@@ -8,4 +8,5 @@ import { Component, Input, OnInit } from '@angular/core';
 export class ChangeIndicatorComponent {
   @Input() value: number;
   @Input() size: 's' | 'm' | 'l' = 'l'
+  @Input() forceDisplay: boolean = false;
 }

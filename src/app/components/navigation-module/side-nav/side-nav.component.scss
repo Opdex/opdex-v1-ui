@@ -5,7 +5,7 @@ aside {
 
   &:hover {
     .defi-blocks {
-      transition: .35s ease-in;
+      transition: .3s ease-in;
       position: fixed;
       left: 220px;
     }
@@ -81,39 +81,7 @@ aside {
     width: 100px;
     bottom: 25px;
     z-index: 9999;
-    transition: .35s ease-in;
-  }
-
-  .connection-theme-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-top: 10px;
-
-    .theme-selection {
-      display: flex;
-      flex-direction: row;
-
-      .theme-divider {
-        color: #777;
-        font-size: 1.4em;
-        margin: 0px 3px 0px 6px;
-      }
-
-      .inactive {
-        color: #777;
-      }
-    }
-
-    .connection {
-      .connection-badge {
-        width: 6px;
-        height: 6px;
-        background: green;
-        border-radius: 50%;
-        display: inline-block;
-      }
-    }
+    transition: .15s ease;
   }
 }
 
@@ -121,7 +89,6 @@ aside {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  border: .2em solid #1b192f;
   position: absolute;
   left: 25px;
   top: 10px;

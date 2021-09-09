@@ -237,6 +237,19 @@ main {
   color: mat-color($theme-warn) !important;
 }
 
+.light-mode {
+  .stat-header, .sub-heading {
+    color: #575757 !important;
+  }
+}
+
+.dark-mode {
+  .stat-header, .sub-heading {
+    color: #ccc;
+  }
+}
+
+
 // ::-webkit-scrollbar {
 //   width: 6px;
 //   height: 6px;
