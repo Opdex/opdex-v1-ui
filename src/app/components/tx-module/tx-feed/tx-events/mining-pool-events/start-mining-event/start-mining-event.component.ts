@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Injector, Input } from '@angular/core';
 import { ILiquidityPoolSummary, IMiningPool } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 import { IStartMiningEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/mining-pools/start-mining-event.interface';
 import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
@@ -19,8 +19,8 @@ export class StartMiningEventComponent extends TxEventBaseComponent {
   event: IStartMiningEvent;
   pool$: Observable<ILiquidityPoolSummary>;
 
-  constructor(private _miningPoolService: MiningPoolsService, protected _liquidityPoolsService: LiquidityPoolsService, protected _tokensService: TokensService) {
-    super(_liquidityPoolsService, _tokensService);
+  constructor(protected injector: Injector, private _miningPoolService: MiningPoolsService) {
+    super(injector);
   }
 
   ngOnChanges() {

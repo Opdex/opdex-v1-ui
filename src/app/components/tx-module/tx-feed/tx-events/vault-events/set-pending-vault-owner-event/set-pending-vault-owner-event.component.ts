@@ -1,15 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, Input, OnInit } from '@angular/core';
+import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
+import { ISetPendingVaultOwnershipEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/vaults/set-pending-vault-ownership-event.interfac';
+import { TxEventBaseComponent } from '../../tx-event-base.component';
 
 @Component({
   selector: 'opdex-set-pending-vault-owner-event',
   templateUrl: './set-pending-vault-owner-event.component.html',
   styleUrls: ['./set-pending-vault-owner-event.component.scss']
 })
-export class SetPendingVaultOwnerEventComponent implements OnInit {
+export class SetPendingVaultOwnerEventComponent extends TxEventBaseComponent implements OnInit {
 
-  constructor() { }
+  @Input() txEvent: ITransactionEvent;
+  event: ISetPendingVaultOwnershipEvent;
 
-  ngOnInit(): void {
+  constructor(protected injector: Injector) {
+    super(injector);
   }
 
+  ngOnInit(): void {
+    this.event = this.txEvent as ISetPendingVaultOwnershipEvent;
+  }
 }
