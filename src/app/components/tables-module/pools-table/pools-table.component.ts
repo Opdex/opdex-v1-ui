@@ -28,7 +28,7 @@ export class PoolsTableComponent implements OnChanges, AfterViewInit {
 
   constructor(private _router: Router, private _platformApi: PlatformApiService, private _sidebar: SidenavService) {
     this.dataSource = new MatTableDataSource<any>();
-    this.displayedColumns = ['name', 'liquidity', 'stakingWeight', 'volumeDaily', 'providerRewards', 'stakerRewards', 'options'];
+    this.displayedColumns = ['name', 'liquidity', 'stakingWeight', 'volumeDaily', 'rewards', 'options'];
   }
 
   ngOnChanges() {

@@ -2,7 +2,7 @@
   <div class="container" *ngIf="pool">
     <div class="row">
       <div class="col">
-        <opdex-card [warn]="true" [closable]="true">
+        <opdex-card [warn]="true" [closable]="true" *ngIf="false">
           <h4>Liquidity Pool Warning</h4>
           <p class="mb-0">Anybody can publicly create a liquidity pool between Cirrus token (CRS) and any SRC token. Validate the chosen liquidity pool and SRC token by the SRC token's address.</p>
         </opdex-card>
@@ -10,29 +10,29 @@
     </div>
 
     <div class="row">
-      <div class="col-12 col-xl-5">
+      <div class="col">
+        <div class="chip-group">
+          <div class="chip blue">0.3% Fee</div>
+          <div class="chip purple"><mat-icon>star</mat-icon> Nominated</div>
+          <div class="chip red" *ngIf="pool.mining?.isActive"><mat-icon>whatshot</mat-icon> Mining</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-xl-4">
         <opdex-card>
-          <div class="d-flex flex-column">
-            <p class="mb-2 light">{{pool.token.src.name}} - Cirrus</p>
+          <p class="mb-2 light">{{pool.token.src.name}} - Cirrus</p>
 
-            <div class="d-flex flex-row justify-content-between">
-              <h1 class="page-title mb-0 d-flex align-items-center justify-content-center">
-                <a href="javascript:void(0)" routerLink="/tokens/{{pool.token.src.address}}">{{pool.token.src.symbol}}</a>
-                <opdex-copy-button [tooltip]="pool.address" [value]="pool.address" icon="link"></opdex-copy-button>
-                <a href="javascript:void(0)" routerLink="/tokens/CRS">CRS</a>
-              </h1>
-
-              <div class="chip-group">
-                <div class="chip blue">0.3% Fee</div>
-                <div class="chip purple"><mat-icon class="mr-2">star</mat-icon> Nominated</div>
-                <div class="chip red" *ngIf="pool.mining?.isActive"><mat-icon class="mr-2">whatshot</mat-icon> Mining</div>
-              </div>
-            </div>
-          </div>
+          <h1 class="text-shadow mb-0 d-flex align-items-center">
+            <a class="body-default" href="javascript:void(0)" routerLink="/tokens/{{pool.token.src.address}}">{{pool.token.src.symbol}}</a>
+            <opdex-copy-button [tooltip]="pool.address" [value]="pool.address" icon="link"></opdex-copy-button>
+            <a class="body-default" href="javascript:void(0)" routerLink="/tokens/CRS">CRS</a>
+          </h1>
         </opdex-card>
       </div>
 
-      <div class="col-12 col-md-6 col-xl">
+      <div class="col-12 col-md-6 col-xl-4">
         <opdex-card [fullHeight]="true">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="mb-0">
@@ -61,7 +61,7 @@
         </opdex-card>
       </div>
 
-      <div class="col-12 col-md-6 col-xl">
+      <div class="col-12 col-md-6 col-xl-4">
         <opdex-card [fullHeight]="true">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="mb-0 align-items-center d-flex">

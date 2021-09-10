@@ -5,7 +5,7 @@ const api = 'dev-api.opdex.com';
 
 export const environment = {
   production: false,
-  defaultTheme: 'dark-mode',
+  defaultTheme: 'light-mode',
   apiUrl: api.includes('localhost') ? `http://${api}` : `https://${api}`,
   marketAddress: 'PWbQLxNnYdyUBLmeEL3ET1WdNx7dvbH8mi',
   routerAddress: 'PMsinMXrr2uNEL5AQD1LpiYTRFiRTA8uZU',

@@ -1,7 +1,7 @@
 <p class="mb-0" *ngIf="token$ | async as token; else loading">
   Approved
   <strong>{{event.amount | shortNumber}} </strong>
-  <a routerLink="/tokens/{{token.address}}">{{token.symbol}}</a> allowance to {{event.spender | shortAddress:4}}.
+  <a class="no-decoration" routerLink="/tokens/{{token.address}}">{{token.symbol}}</a> allowance to {{event.spender | shortAddress:4}}.
 </p>
 
 <ng-template #loading>

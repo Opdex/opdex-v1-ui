@@ -1,3 +1,5 @@
+@import 'src/scss/colors';
+
 .review-tx-quote {
   padding-top: 15px;
   overflow-x: hidden;
@@ -17,11 +19,11 @@
     line-height: 1em;
 
     &.amount-in {
-      color: #f7556b;
+      color: $red-primary;
     }
 
     &.amount-out {
-      color: #12ee9d;
+      color: $green-primary;
     }
   }
 

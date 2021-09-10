@@ -1,7 +1,6 @@
 @import '/src/scss/colors.scss';
 
 .card {
-  background: rgba(27,25,47, .8) !important;
   margin-bottom: 15px;
 
   &.hidden {
@@ -13,18 +12,15 @@
 
   .foreground {
     padding: 15px;
-    // background: rgba(27, 25, 51, 0.3);
-    // background: radial-gradient(circle, rgba(27, 25, 51, 0.2), rgba(27,25,47, .6) 100%);
-    border: 1px solid #292929;
 
     &.warn {
       background: rgba(245, 25, 55, 0.4);
-      border: 1px solid #ff7789;
+      border: 1px solid $red-primary;
     }
 
     &.success {
       background: rgb(43 255 0 / 23%);
-      border: 1px solid #77ff82;
+      border: 1px solid $green-primary;
     }
 
     &.thin {

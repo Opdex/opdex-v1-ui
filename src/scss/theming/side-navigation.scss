@@ -1,0 +1,23 @@
+@import 'src/scss/colors';
+
+.light-mode {
+  aside {
+    border-right: 1px solid #cecece;
+    background: #fff;
+
+    .wallet-indicator {
+      border: .2em solid #fff;
+    }
+  }
+}
+
+.dark-mode {
+  aside {
+    border-right: 1px solid #292929;
+    background: $dark-primary;
+
+    .wallet-indicator {
+      border: .2em solid $dark-primary;
+    }
+  }
+}

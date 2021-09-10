@@ -1,0 +1,25 @@
+a {
+  &.light {
+    color: #c5e8fc !important;
+  }
+
+  &.no-decoration {
+    text-decoration: none;
+  }
+}
+
+.light-mode {
+  a {
+    &.body-default {
+      color: #444 !important;
+    }
+  }
+}
+
+.dark-mode {
+  a {
+    &.body-default {
+      color: #fff !important;
+    }
+  }
+}

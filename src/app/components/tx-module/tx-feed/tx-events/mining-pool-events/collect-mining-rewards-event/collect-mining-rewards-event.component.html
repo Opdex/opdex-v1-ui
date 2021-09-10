@@ -1,8 +1,8 @@
 <p class="mb-0" *ngIf="pool$ | async as pool; else loading">
   Collected
   <strong>{{event.amount | shortNumber}} </strong>
-  <a routerLink="/tokens/{{pool.token.staking.address}}">{{pool.token.staking.symbol}}</a> for mining in
-  <a routerLink="/pools/{{pool.address}}">{{pool.token.src.symbol}}/CRS</a>.
+  <a class="no-decoration" routerLink="/tokens/{{pool.token.staking.address}}">{{pool.token.staking.symbol}}</a> for mining in
+  <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.token.src.symbol}}/CRS</a>.
 </p>
 
 <ng-template #loading>

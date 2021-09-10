@@ -1,10 +1,10 @@
 <div id="mobile-nav">
   <div *ngIf="userContext$ | async as context" class="d-flex justify-content-around align-items-center h-100">
     <a mat-icon-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-      <mat-icon>trending_up</mat-icon>
+      <mat-icon>equalizer</mat-icon>
     </a>
     <a mat-icon-button routerLink="/pools" routerLinkActive="active">
-      <mat-icon>bubble_chart</mat-icon>
+      <mat-icon>waves</mat-icon>
     </a>
     <a mat-icon-button routerLink="/tokens" routerLinkActive="active">
       <mat-icon>toll</mat-icon>
@@ -19,6 +19,9 @@
     <a mat-icon-button routerLink="/{{ !context?.wallet ? 'auth' : 'wallet'}}" routerLinkActive="active">
       <span class="wallet-indicator {{context?.wallet ? 'valid' : 'invalid'}}"></span>
       <mat-icon>account_balance_wallet</mat-icon>
+    </a>
+    <a mat-icon-button (click)="toggleTheme()">
+      <mat-icon>{{theme === 'dark-mode' ? 'brightness_3' : 'brightness_5'}}</mat-icon>
     </a>
   </div>
 </div>

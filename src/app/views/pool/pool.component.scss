@@ -1,67 +1,50 @@
-.light-mode {
-  .stats {
-    .stat-header {
-      color: #575757 !important;
-    }
-  }
-}
-
-.dark-mode {
-  .stat-header {
-    color: #bebebe;
-  }
-}
+@import 'src/scss/colors';
 
 h1 {
   display: inline-block;
   letter-spacing: .05em;
-
-  a {
-    // text-decoration: none;
-    color: #fff;
-  }
 }
 
 .chip-group {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  flex: 1;
-  max-width: 400px;
-  white-space: nowrap;
-  justify-content: flex-end;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
 
   .chip {
-    padding: 5px 15px;
+    padding: 5px 10px;
     border-radius: 20px;
     margin-right: 5px;
     color: #fff !important;
     align-items: center;
     display: flex;
-    font-size: 1em;
+    font-size: 16px;
     font-weight: 400;
-
+    margin-bottom: 10px;
+    white-space: nowrap;
 
     &:last-of-type {
       margin-right: 0px;
     }
 
     mat-icon {
-      line-height: 20px;
-      height: 20px !important;
-      width: 20px !important;
+      margin-right: 8px;
+      line-height: 16px;
+      height: 16px !important;
+      width: 16px !important;
+      font-size: 16px !important;
     }
 
     &.purple {
-      background-color: #9c45ee !important;
+      background-color: $purple-primary !important;
     }
 
     &.red {
-      background-color: #f7556b !important;
+      background-color: $red-primary !important;
     }
 
     &.blue {
-      background-color: #1ca7dc !important;
+      background-color: $blue-primary !important;
     }
   }
 }
@@ -73,26 +56,26 @@ h1 {
   }
 
   .swap {
-    background: #1da7dc;
-    color: #1b192f;
+    background: $blue-primary;
+    color: $dark-primary;
     font-weight: 500;
   }
 
   .add {
-    background: #00EB93;
-    color: #1b192f;
+    background: $green-primary;
+    color: $dark-primary;
     font-weight: 500;
   }
 
   .collect {
-    background: #1ca7dc;
-    color: #1b192f;
+    background: $blue-primary;
+    color: $dark-primary;
     font-weight: 500;
   }
 
   .remove {
-    background: #F2435B;
-    color: #1b192f;
+    background: $red-primary;
+    color: $dark-primary;
     font-weight: 500;
   }
 
@@ -105,7 +88,7 @@ h1 {
     .sub-heading {
       color: #ccc;
       font-weight: 400 !important;
-      font-size: 16px !important;
+      margin-bottom: 5px;
     }
 
     .remaining {
@@ -121,27 +104,11 @@ h1 {
 }
 
 .green {
-  color: #00EB93;
+  color: $green-primary;
   font-weight: 400;
 }
 
 .red {
-  color: #F2435B;
+  color: $red-primary;
   font-weight: 400;
-}
-
-.transaction {
-  padding: 20px 0;
-  border-bottom: 1px solid #292929;
-
-  &:last-of-type {
-    border: 0px;
-    padding-bottom: 0px;
-  }
-}
-
-.tx-event {
-  p {
-    margin-bottom: 0px;
-  }
 }

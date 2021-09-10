@@ -8,12 +8,12 @@
     <ul class="sidebar-nav" *ngIf="userContext$ | async as context">
       <li>
         <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <mat-icon>trending_up</mat-icon> Market
+          <mat-icon>equalizer</mat-icon> Market
         </a>
       </li>
       <li>
         <a mat-button routerLink="/pools" routerLinkActive="active">
-          <mat-icon>bubble_chart</mat-icon> Pools
+          <mat-icon>waves</mat-icon> Liquidity Pools
         </a>
       </li>
       <li>
@@ -40,6 +40,14 @@
     </ul>
 
     <div class="space-between"></div>
+
+    <ul class="sidebar-nav">
+      <li>
+        <a mat-button (click)="toggleTheme()">
+          <mat-icon>{{theme === 'dark-mode' ? 'brightness_3' : 'brightness_5'}}</mat-icon> {{theme === 'dark-mode' ? 'Dark Mode' : 'Light Mode'}}
+        </a>
+      </li>
+    </ul>
 
     <img class="defi-blocks" src="assets/defi2@2x.png">
   </div>

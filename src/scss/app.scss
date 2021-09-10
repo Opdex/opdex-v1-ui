@@ -4,6 +4,8 @@
 // Import Opdex theme related styles
 @import 'theme';
 
+@import 'theming/_module';
+
 // Import NPM Package style overrides
 @import 'material-components/_module';
 
@@ -14,18 +16,14 @@
   flex: 1;
 }
 
-// Light Blue 1: #19A7DD
-// Light Blue 2: #1CA7DC
-// Dark Blue 1: #1A192F
-// Dark Blue 2: #1B192F
-// Dark Blue 3: #171244
-// Gray: #7C7C7C
-
-.mat-drawer {
-  // .mat-form-field-wrapper {
-  //   padding-bottom: 0px !important;
-  // }
+.error {
+  color: $red-primary;
 }
+
+.no-wrap {
+  white-space: nowrap;
+}
+
 
 .qrcode {
   canvas {
@@ -36,16 +34,6 @@
 
 .mat-dialog-container {
   overflow: initial !important;
-}
-
-h1.page-title {
-  margin-bottom: 30px;
-  text-shadow: 1px 1px 1px black;
-}
-
-
-.text-shadow {
-  text-shadow: 1px 1px 1px black;
 }
 
 .light {

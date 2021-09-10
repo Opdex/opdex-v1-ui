@@ -1,3 +1,5 @@
+@import 'src/scss/colors';
+
 .change-indicator {
   display: inline-block;
   display: flex;
@@ -41,11 +43,11 @@
   }
 
   &.positive {
-    color: #00EB93;
+    color: $green-primary;
   }
 
   &.negative {
-    color: #F2435B;
+    color: $red-primary;
   }
 
   .mat-icon {

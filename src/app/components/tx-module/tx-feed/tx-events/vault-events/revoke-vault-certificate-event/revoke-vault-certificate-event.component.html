@@ -1,5 +1,5 @@
 <p class="mb-0" *ngIf="token$ | async as token; else loading;">
-    Revoked vault certificate adjusting from <strong>{{event.oldAmount}}</strong> total tokens to <strong>{{event.newAmount}}</strong> <a routerLink="/tokens/{{token.address}}">{{token.symbol}}</a>.
+    Revoked vault certificate adjusting from <strong>{{event.oldAmount}}</strong> total tokens to <strong>{{event.newAmount}}</strong> <a class="no-decoration" routerLink="/tokens/{{token.address}}">{{token.symbol}}</a>.
 </p>
 
 <ng-template #loading>

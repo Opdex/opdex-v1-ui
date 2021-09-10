@@ -11,7 +11,7 @@
 
     <div class="row">
       <div class="col-12">
-        <h1 class="page-title mb-3">
+        <h1 class="text-shadow mb-3">
           <opdex-copy-button [tooltip]="market?.address" [value]="market?.address" icon="link"></opdex-copy-button>
           <span>Market Overview</span>
         </h1>
@@ -41,11 +41,9 @@
         </opdex-card>
       </div>
 
-      <div class="col-12 col-lg-4">
+      <!-- Todo: Do this with angular and *ngIf so we aren't rendering it in 2 places-->
+      <div class="d-none d-lg-block col-lg-4">
         <opdex-tx-feed [transactionRequest]="transactionRequest"></opdex-tx-feed>
-        <!-- <opdex-card>
-          <opdex-volume-chart [chartData]="volumeHistory" title="Market Volume" *ngIf="volumeHistory"></opdex-volume-chart>
-        </opdex-card> -->
       </div>
     </div>
 
@@ -69,20 +67,24 @@
     </ng-container>
 
     <div class="row mb-3">
-      <div class="col-12">
+      <div class="col-12 col-lg-6">
         <opdex-card>
           <h2>Top Pools</h2>
-          <opdex-pools-table [pools]="pools"></opdex-pools-table>
+          <opdex-pools-table [pools]="pools" [smallPageSize]="true"></opdex-pools-table>
+        </opdex-card>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <opdex-card>
+          <h2>Top Tokens</h2>
+          <opdex-tokens-table [tokens]="tokens" [smallPageSize]="true"></opdex-tokens-table>
         </opdex-card>
       </div>
     </div>
 
     <div class="row">
-      <div class="col-12">
-        <opdex-card>
-          <h2>Top Tokens</h2>
-          <opdex-tokens-table [tokens]="tokens"></opdex-tokens-table>
-        </opdex-card>
+      <div class="col-12 d-lg-none d-xl-none">
+        <opdex-tx-feed [transactionRequest]="transactionRequest"></opdex-tx-feed>
       </div>
     </div>
   </div>

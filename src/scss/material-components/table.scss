@@ -12,6 +12,23 @@
     th.mat-header-cell {
       color: #919191 !important;
       font-weight: 400;
+      padding-left: 8px;
+      padding-right: 8px;
+      white-space: nowrap;
+
+      &.empty {
+        min-width: 0px;
+      }
+
+      &:first-of-type {
+        padding-left: 0px !important;
+        padding-right: 8px;
+      }
+
+      &:last-of-type {
+        padding-right: 0px !important;
+        padding-left: 8px !important;
+      }
     }
   }
 
@@ -21,26 +38,29 @@
 
   td.mat-cell {
     border-bottom-width: 0px;
-    min-width: 150px;
-  }
-}
+    padding-left: 8px;
+    padding-right: 8px;
 
-.light-mode {
+    &:first-of-type {
+      padding-left: 0px !important;
+      padding-right: 8px !important;
+    }
 
-}
-
-
-.dark-mode {
-  .table-container {
-    tr.mat-header-row {
-      th.mat-header-cell {
-        color: #fff;
-      }
+    &:last-of-type {
+      padding-right: 0px !important;
+      padding-left: 8px !important;
     }
   }
-}
 
+  td.mat-footer-cell {
+    &:first-of-type {
+      padding-left: 0px !important;
+      padding-right: 8px !important;
+    }
 
-.mat-table, .mat-paginator {
-  background: transparent !important;
+    &:last-of-type {
+      padding-right: 0px !important;
+      padding-left: 8px !important;
+    }
+  }
 }

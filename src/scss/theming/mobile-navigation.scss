@@ -1,0 +1,31 @@
+@import 'src/scss/colors';
+
+.dark-mode {
+  #mobile-nav {
+    background-color: #1e1d2d;
+    border-top: 1px solid #292929;
+
+    a.active {
+      color: $blue-primary;
+    }
+
+    .wallet-indicator {
+      border: .2em solid $dark-primary;
+    }
+  }
+}
+
+.light-mode {
+  #mobile-nav {
+    background-color: #fff;
+    border-top: 1px solid #ccc;
+
+    a.active {
+      color: $blue-primary;
+    }
+
+    .wallet-indicator {
+      border: .2em solid #fff;
+    }
+  }
+}

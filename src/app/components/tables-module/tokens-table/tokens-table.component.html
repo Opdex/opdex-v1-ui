@@ -1,50 +1,41 @@
 <div class="table-container">
   <table mat-table [dataSource]="dataSource" matSort [trackBy]="trackBy" class="w-100">
-    <ng-container matColumnDef="name" >
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> <a href="javascript:void(0)" (click)="navigate(element.address)">{{element.name}}</a> </td>
-    </ng-container>
-
-    <ng-container matColumnDef="address" >
-      <th mat-header-cell *matHeaderCellDef> Address </th>
+    <ng-container matColumnDef="token" sticky>
+      <th mat-header-cell *matHeaderCellDef> Token </th>
       <td mat-cell *matCellDef="let element">
-        {{element.address}}
+        <div class="no-wrap d-flex align-items-center">
+          <opdex-copy-button [tooltip]="element.address" [value]="element.address" icon="link"></opdex-copy-button>
+          <a class="no-decoration b-500" href="javascript:void(0)" (click)="navigate(element.address)">{{element.symbol}}</a>
+        </div>
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="symbol">
-      <th mat-header-cell *matHeaderCellDef> Symbol </th>
-      <td mat-cell *matCellDef="let element"> {{element.symbol }}</td>
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let element">
+        <span class="no-wrap">
+          {{element.name}}
+        </span>
+      </td>
     </ng-container>
-
-    <!-- <ng-container matColumnDef="liquidity">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Liquidity </th>
-      <td mat-cell *matCellDef="let element"> {{element.liquidity}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="volumeDaily">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Volume (24hrs) </th>
-      <td mat-cell *matCellDef="let element"> {{element.volumeDaily}} </td>
-    </ng-container> -->
 
     <ng-container matColumnDef="price">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
-      <td mat-cell *matCellDef="let element"> ${{element.price | shortNumber}} </td>
-    </ng-container>
+      <th mat-header-cell *matHeaderCellDef> Price </th>
+      <td mat-cell *matCellDef="let element">
+        <div class="d-flex justify-content-between">
+          <div class="d-flex no-wrap align-items-center mr-3">
+            <opdex-change-indicator [value]="element.change" [forceDisplay]="true" size="s" class="mr-2"></opdex-change-indicator>
+            ${{element.price | shortNumber}}
+          </div>
 
-    <ng-container matColumnDef="change">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Change (24hr) </th>
-      <td mat-cell *matCellDef="let element"> <opdex-change-indicator [value]="element.change" size="s"></opdex-change-indicator> </td>
-    </ng-container>
-
-    <ng-container matColumnDef="price7d">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Price (7d) </th>
-      <td mat-cell *matCellDef="let element"> <opdex-line-change [chartData]="element.price7d" *ngIf="element.price7d"></opdex-line-change> </td>
+          <opdex-line-change [chartData]="element.price7d" *ngIf="element.price7d" class="float-right"></opdex-line-change>
+        </div>
+      </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-
-  <mat-paginator [pageSizeOptions]="pageSizeOptions" [length]="dataSource?.data?.length"></mat-paginator>
 </div>
+
+<mat-paginator [pageSizeOptions]="pageSizeOptions" [length]="dataSource?.data?.length" [hidePageSize]="true"></mat-paginator>

@@ -1,5 +1,10 @@
 @import 'src/scss/colors';
 
+h1 {
+  display: flex;
+  align-items: center;
+}
+
 .badge {
   margin-left: 10px;
   float: right;
@@ -15,16 +20,5 @@
   &.success {
     background: $green-primary;
     color: $dark-primary;
-  }
-}
-
-h1 {
-  display: flex;
-  letter-spacing: .05em;
-  font-weight: 500;
-  align-items: center;
-
-  a {
-    color: #fff;
   }
 }

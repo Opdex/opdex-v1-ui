@@ -1,17 +1,9 @@
-a {
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.percentChange {
-  display: inline-block;
-  float: right;
-  margin-right: 50px;
-}
+@import 'src/scss/colors';
 
 .disabled-badge {
   font-size: .8em;
-  background: #f7556b;
+  background: $red-primary;
   padding: 4px 8px;
-  border-radius: 4px
+  border-radius: 4px;
+  color: #fff;
 }
