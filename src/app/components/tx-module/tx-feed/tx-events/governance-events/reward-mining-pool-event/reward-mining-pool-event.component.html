@@ -1,1 +1,7 @@
-<p>reward-mining-pool-event works!</p>
+<p class="mb-0" *ngIf="pool$ | async as pool; else loading">
+  Distributed <strong>{{event.amount | shortNumber}} </strong> <a class="no-decoration" routerLink="/tokens/{{pool.token.staking.symbol}}">{{pool.token.staking.symbol}}</a> to the <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.token.src.symbol}}/CRS</a> mining pool.
+</p>
+
+<ng-template #loading>
+  Distributed <strong>{{event.amount | shortNumber}} </strong> to the XYZ/CRS mining pool.
+</ng-template>

@@ -18,7 +18,10 @@
     </a>
     <a mat-icon-button routerLink="/{{ !context?.wallet ? 'auth' : 'wallet'}}" routerLinkActive="active">
       <span class="wallet-indicator {{context?.wallet ? 'valid' : 'invalid'}}"></span>
-      <mat-icon>account_circle</mat-icon>
+      <mat-icon>account_balance_wallet</mat-icon>
+    </a>
+    <a mat-icon-button (click)="toggleTheme()">
+      <mat-icon>{{theme === 'dark-mode' ? 'brightness_3' : 'brightness_5'}}</mat-icon>
     </a>
   </div>
 </div>

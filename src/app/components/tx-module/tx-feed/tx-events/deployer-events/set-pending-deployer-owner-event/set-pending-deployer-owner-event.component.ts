@@ -8,7 +8,6 @@ import { ITransactionEvent } from '@sharedModels/responses/platform-api/transact
   styleUrls: ['./set-pending-deployer-owner-event.component.scss']
 })
 export class SetPendingDeployerOwnerEventComponent implements OnInit {
-
   @Input() txEvent: ITransactionEvent;
   event: ISetPendingDeployerOwnershipEvent;
 

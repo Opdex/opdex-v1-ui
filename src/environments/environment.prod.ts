@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  defaultTheme: 'dark-mode',
+  defaultTheme: 'light-mode',
   apiUrl: '#{apiUrl}#',
   marketAddress: '#{marketAddress}#',
   routerAddress: '#{routerAddress}#',

@@ -1,18 +1,9 @@
 @import 'src/scss/colors';
 
-a {
-  text-decoration: none;
-  font-weight: 500;
-}
-
 .disabled-badge {
   font-size: .8em;
   background: $red-primary;
   padding: 4px 8px;
   border-radius: 4px;
   color: #fff;
-}
-
-.no-wrap {
-  white-space: nowrap;
 }

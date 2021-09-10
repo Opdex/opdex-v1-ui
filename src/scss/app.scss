@@ -16,6 +16,15 @@
   flex: 1;
 }
 
+.error {
+  color: $red-primary;
+}
+
+.no-wrap {
+  white-space: nowrap;
+}
+
+
 .qrcode {
   canvas {
     margin: 30px auto;

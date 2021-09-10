@@ -233,10 +233,6 @@ main {
   }
 }
 
-.error {
-  color: mat-color($theme-warn) !important;
-}
-
 .light-mode {
   .stat-header, .sub-heading {
     color: #575757 !important;
@@ -248,25 +244,3 @@ main {
     color: #ccc;
   }
 }
-
-
-// ::-webkit-scrollbar {
-//   width: 6px;
-//   height: 6px;
-//   border-radius: 2px;
-// }
-
-// /* Track */
-// ::-webkit-scrollbar-track {
-//   background: transparent;
-// }
-
-// /* Handle */
-// ::-webkit-scrollbar-thumb {
-//   background: #383750;
-// }
-
-// /* Handle on hover */
-// ::-webkit-scrollbar-thumb:hover {
-//   background: #555;
-// }

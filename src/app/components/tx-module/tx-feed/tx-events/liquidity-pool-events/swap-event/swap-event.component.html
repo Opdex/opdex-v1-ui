@@ -8,11 +8,10 @@
   <strong>{{(event.amountCrsOut === '0.00000000' ? event.amountSrcOut : event.amountCrsOut) | shortNumber }}</strong>
   <a class="no-decoration" routerLink="/tokens/{{event.amountCrsOut === '0.00000000' ? pool.token.src.address : 'CRS'}}">
     {{event.amountCrsOut === '0.00000000' ? pool.token.src.symbol : 'CRS' }}
-  </a>
-
+  </a>.
 </p>
 
 <ng-template #loading>
   Swapped <strong>{{(event.amountCrsIn === '0.00000000' ? event.amountSrcIn : event.amountCrsIn) | shortNumber}}</strong> xYZT for
-  <strong>{{(event.amountCrsOut === '0.00000000' ? event.amountSrcOut : event.amountCrsOut) }}</strong> xABT
+  <strong>{{(event.amountCrsOut === '0.00000000' ? event.amountSrcOut : event.amountCrsOut) }}</strong> xABT.
 </ng-template>
