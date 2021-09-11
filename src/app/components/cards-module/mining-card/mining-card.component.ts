@@ -1,5 +1,6 @@
+import { MathService } from '@sharedServices/utility/math.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 
@@ -8,10 +9,15 @@ import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liqu
   templateUrl: './mining-card.component.html',
   styleUrls: ['./mining-card.component.scss']
 })
-export class MiningCardComponent {
+export class MiningCardComponent implements OnChanges {
   @Input() pool: ILiquidityPoolSummary;
+  miningUsd: string;
 
-  constructor(private _sidebar: SidenavService) { }
+  constructor(private _sidebar: SidenavService, private _math: MathService) { }
+
+  ngOnChanges() {
+    this.miningUsd = this._math.multiply(this.pool.mining.tokensMining, this.pool.token.lp.summary.price.close as number)
+  }
 
   startMining() {
     this._sidebar.openSidenav(TransactionView.mine, {pool: this.pool, child: 'start'});

@@ -1,3 +1,4 @@
+import { MathService } from '@sharedServices/utility/math.service';
 import { AfterViewInit, Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -22,9 +23,9 @@ export class WalletBalancesTableComponent implements OnChanges, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private _router: Router, private _sidebar: SidenavService) {
+  constructor(private _router: Router, private _sidebar: SidenavService, private _math: MathService) {
     this.dataSource = new MatTableDataSource<any>();
-    this.displayedColumns = ['name', 'balance', 'actions'];
+    this.displayedColumns = ['name', 'balance', 'total', 'actions'];
   }
 
   ngOnChanges() {
@@ -38,7 +39,8 @@ export class WalletBalancesTableComponent implements OnChanges, AfterViewInit {
         symbol: t.symbol,
         address: t.address,
         balance: t.balance.balance,
-        decimals: t.decimals
+        decimals: t.decimals,
+        total: this._math.multiply(t.balance.balance, t.summary.price.close as number)
       }
     });
   }

@@ -1,3 +1,4 @@
+import { MathService } from '@sharedServices/utility/math.service';
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { environment } from "@environments/environment";
@@ -12,6 +13,9 @@ import { SidenavService } from "@sharedServices/utility/sidenav.service";
 import { UserContextService } from "@sharedServices/utility/user-context.service";
 import { Observable, Subscription, zip, of, interval } from "rxjs";
 import { tap, switchMap, catchError, take, map, delay } from "rxjs/operators";
+import { IAddressMining } from "@sharedModels/responses/platform-api/wallets/address-mining.interface";
+import { IToken } from "@sharedModels/responses/platform-api/tokens/token.interface";
+import { IAddressStaking } from '@sharedModels/responses/platform-api/wallets/address-staking.interface';
 
 @Component({
   selector: 'opdex-pool',
@@ -35,6 +39,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   copied: boolean;
   transactionsRequest: ITransactionsRequest;
   chartData: any[];
+  positions: any[];
   chartOptions = [
     {
       type: 'line',
@@ -75,7 +80,8 @@ export class PoolComponent implements OnInit, OnDestroy {
     private _platformApiService: PlatformApiService,
     private _userContext: UserContextService,
     private _sidenav: SidenavService,
-    private _liquidityPoolsService: LiquidityPoolsService
+    private _liquidityPoolsService: LiquidityPoolsService,
+    private _math: MathService
   ) {
     this.poolAddress = this._route.snapshot.params.pool;
   }
@@ -89,11 +95,9 @@ export class PoolComponent implements OnInit, OnDestroy {
         }))
       .subscribe());
 
-    const combo = [this.getPoolHistory(), this.getWalletSummary(), this.getCrsBalance()];
-
     // Todo: take(1) stops taking after 1, but without it, _I think_ is mem leak
     this.subscription.add(this.getLiquidityPool()
-      .pipe(switchMap(() => zip(...combo)), take(1))
+      .pipe(switchMap(() => this.getPoolHistory()), take(1))
       .subscribe());
   }
 
@@ -106,7 +110,7 @@ export class PoolComponent implements OnInit, OnDestroy {
     this._sidenav.openSidenav(view, data);
   }
 
-  private getLiquidityPool(): Observable<void> {
+  private getLiquidityPool(): Observable<any> {
     return this._liquidityPoolsService.getLiquidityPool(this.poolAddress)
       .pipe(
         tap(pool => this.pool = pool),
@@ -126,7 +130,8 @@ export class PoolComponent implements OnInit, OnDestroy {
           if (this.pool){
             this.setPoolStatCards();
           }
-        })
+        }),
+        switchMap(_ => this.getWalletSummary())
       );
   }
 
@@ -189,27 +194,73 @@ export class PoolComponent implements OnInit, OnDestroy {
     ];
   }
 
-  private getCrsBalance(): Observable<IAddressBalance> {
-    const context = this._userContext.getUserContext();
-
-    if (context.wallet) {
-      return this._platformApiService.getBalance(context.wallet, 'CRS')
-        .pipe(take(1), tap((rsp: IAddressBalance) => this.crsBalance = rsp), catchError(() => of(null)));
-    }
-
-    return of(null);
+  private getTokenBalance(walletAddress: string, tokenAddress: string, token: IToken): Observable<IAddressBalance> {
+    return this._platformApiService.getBalance(walletAddress, tokenAddress)
+        .pipe(
+          map((result: IAddressBalance) => {
+            return {
+              token: token,
+              position: 'Balance',
+              amount: result.balance,
+              value: this._math.multiply(result.balance, token.summary.price.close as number)
+            }
+          }),
+          take(1),
+          catchError(() => of(null)));
   }
 
-  // Rip out, instead separate calls to get staking, mining, liquidity, and src token amounts
-  private getWalletSummary(): Observable<void> {
+  private getStakingPosition(walletAddress: string, liquidityPoolAddress: string, token: IToken): Observable<IAddressBalance> {
+    return this._platformApiService.getStakingPosition(walletAddress, liquidityPoolAddress)
+        .pipe(
+          map((result: IAddressStaking) => {
+            return {
+              token: token,
+              position: 'Staking',
+              amount: result.amount,
+              value: this._math.multiply(result.amount, token.summary.price.close as number)
+            }
+          }),
+          take(1),
+          catchError(() => of(null)));
+  }
+
+  private getMiningPosition(walletAddress: string, miningPoolAddress: string, token: IToken): Observable<IAddressBalance> {
+    return this._platformApiService.getMiningPosition(walletAddress, miningPoolAddress)
+        .pipe(map((result: IAddressMining) => {
+          return {
+            token: token,
+            position: 'Mining',
+            amount: result.amount,
+            value: this._math.multiply(result.amount, token.summary.price.close as number)
+          }
+        }),
+        take(1),
+        catchError(() => of(null)));
+  }
+
+  private getWalletSummary(): Observable<IAddressBalance[]> {
     const context = this._userContext.getUserContext();
 
-    if (context.wallet) {
-      return this._platformApiService.getWalletSummaryForPool(this.poolAddress, context.wallet)
-        .pipe(take(1), tap(walletSummary => this.walletBalance = walletSummary));
+    if (context.wallet && this.pool) {
+      const combo = [
+        this.getTokenBalance(context.wallet, 'CRS', this.pool?.token?.crs),
+        this.getTokenBalance(context.wallet, this.pool?.token?.src?.address, this.pool?.token?.src),
+        this.getTokenBalance(context.wallet, this.poolAddress, this.pool?.token?.lp),
+      ];
+
+      if (this.pool?.token?.staking) {
+        combo.push(this.getTokenBalance(context.wallet, this.pool?.token?.staking?.address, this.pool?.token?.staking));
+        combo.push(this.getStakingPosition(context.wallet, this.poolAddress, this.pool?.token?.staking));
+      }
+
+      if (this.pool?.mining) {
+        combo.push(this.getMiningPosition(context.wallet, this.pool?.mining?.address, this.pool.token.lp));
+      }
+
+      return zip(...combo).pipe(tap(results => this.positions = results), take(1));
     }
 
-    return of(null);
+    return of([]);
   }
 
   private getPoolHistory(): Observable<ILiquidityPoolSnapshotHistory> {

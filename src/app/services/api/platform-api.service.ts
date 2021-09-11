@@ -236,11 +236,6 @@ export class PlatformApiService extends RestApiService {
   }
 
   // Balances
-
-  public getWalletSummaryForPool(pool: string, wallet: string): Observable<any> {
-    return this.get<any>(`${this.api}/wallet/summary/pool/${pool}?walletAddress=${wallet}`);
-  }
-
   public getWalletBalances(wallet: string): Observable<IAddressBalances> {
     return this.get<IAddressBalances>(`${this.api}/wallet/${wallet}/balance?limit=${10}&direction=ASC&includeLpTokens=false`);
   }

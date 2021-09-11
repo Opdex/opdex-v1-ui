@@ -20,6 +20,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { WalletLiquidityPoolPositionTableComponent } from './wallet-liquidity-pool-position-table/wallet-liquidity-pool-position-table.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     TokensTableComponent,
     TransactionsTableComponent,
     VaultCertificatesTableComponent,
-    WalletBalancesTableComponent
+    WalletBalancesTableComponent,
+    WalletLiquidityPoolPositionTableComponent
   ],
   imports: [
     CommonModule,
@@ -50,7 +52,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     TokensTableComponent,
     TransactionsTableComponent,
     VaultCertificatesTableComponent,
-    WalletBalancesTableComponent
+    WalletBalancesTableComponent,
+    WalletLiquidityPoolPositionTableComponent
   ]
 })
 export class TablesModule { }

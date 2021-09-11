@@ -17,6 +17,7 @@
     letter-spacing: .05em;
     font-weight: 500;
     align-items: center;
+    margin-bottom: 8px;
   }
 
   .blue {
@@ -31,9 +32,13 @@
 
   .pool-summary {
     .pool-details-section {
-      margin: 15px 0;
+      margin: 8px 0;
       display: flex;
       flex-direction: column;
+
+      &:last-of-type {
+        margin-bottom: 0px !important;
+      }
 
       .title {
         font-size: 1.1em;
@@ -43,12 +48,31 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        align-items: center;
       }
 
 
-      h5 {
+      h6 {
         margin-bottom: 0px;
-        display: inline-block;
+        display: flex;
+        align-items: center;
+
+        small {
+          margin-left: 8px;
+        }
+      }
+
+      small {
+        display: flex;
+        align-items: center;
+      }
+
+      mat-icon {
+        width: 16px;
+        height: 16px;
+        line-height: 16px;
+        font-size: 16px;
+        margin-left: 8px;
       }
     }
   }

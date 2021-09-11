@@ -14,25 +14,19 @@
     </button>
 
     <div class="pool-details-section" *ngIf="showReserves">
-      <p class="title">Reserves</p>
-
       <div class="detail">
-        <h5>CRS</h5>
-        <small>(${{pool.token.crs.summary.price.close | shortNumber}})</small>
-        <small>{{pool.reserves.crs | shortNumber}} CRS</small>
+        <h6>CRS <small>${{pool.token.crs.summary.price.close | shortNumber}}</small></h6>
+        <small>{{pool.reserves.crs | shortNumber}} <mat-icon>lock</mat-icon></small>
       </div>
 
       <div class="detail">
-        <h5>{{pool.token.src.symbol}}</h5>
-        <small>(${{pool.token.src.summary.price.close | shortNumber}})</small>
-        <small>{{pool.reserves.src | shortNumber}} {{pool.token.src.symbol}}</small>
+        <h6>{{pool.token.src.symbol}} <small>${{pool.token.src.summary.price.close | shortNumber}}</small></h6>
+        <small>{{pool.reserves.src | shortNumber}} <mat-icon>lock</mat-icon></small>
       </div>
 
-      <hr class="w-100">
-
       <div class="detail">
-        <h5>Total</h5>
-        <small>${{pool.reserves.usd | shortNumber}} USD</small>
+        <h6>Total</h6>
+        <small>${{pool.reserves.usd | shortNumber}} USD <mat-icon>lock</mat-icon></small>
       </div>
     </div>
 
@@ -40,8 +34,8 @@
       <p class="title">Staking</p>
 
       <div class="detail">
-        <h5>{{pool.token.staking.symbol}}</h5>
-        <small>(${{pool.token.staking.summary.price.close | shortNumber}})</small>
+        <h6>{{pool.token.staking.symbol}}</h6>
+        <small>${{pool.token.staking.summary.price.close | shortNumber}}</small>
         <small>{{pool.staking.weight | shortNumber}} ODX</small>
       </div>
     </div>
@@ -50,8 +44,8 @@
       <p class="title">Mining</p>
 
       <div class="detail">
-        <h5>{{pool.token.lp.symbol}}</h5>
-        <small>(${{pool.token.lp.summary.price.close | shortNumber}})</small>
+        <h6>{{pool.token.lp.symbol}}</h6>
+        <small>${{pool.token.lp.summary.price.close | shortNumber}}</small>
         <small>{{pool.mining?.tokensMining | shortNumber}} {{pool.token.lp.symbol}}</small>
       </div>
     </div>
