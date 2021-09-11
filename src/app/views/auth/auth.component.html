@@ -14,7 +14,7 @@
       </mat-form-field>
 
       <div class="authenticate" *ngIf="publicKey.value">
-        <qrcode [qrdata]="publicKey.value" [width]="300" [margin]="2" [errorCorrectionLevel]="'M'"></qrcode>
+        <qrcode [qrdata]="publicKey.value" [width]="150" [margin]="2" [errorCorrectionLevel]="'M'"></qrcode>
 
         <p class="text-center light">Scan with Stratis Wallet</p>
 

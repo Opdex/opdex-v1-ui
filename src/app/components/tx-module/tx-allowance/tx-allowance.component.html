@@ -1,7 +1,7 @@
-<opdex-card class="allowance">
+<opdex-card class="allowance" [thin]="true">
   <form [formGroup]="form" name="allowance-form" id="swap-form" (submit)="submit()">
-    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.link" label="Token" [formControl]="token"></opdex-input-control>
-    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.link" label="Spender" [formControl]="spender"></opdex-input-control>
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.link" label="Token" [formControl]="token" placeholder="token address"></opdex-input-control>
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.link" label="Spender" [formControl]="spender" placeholder="spender address"></opdex-input-control>
     <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Amount" [formControl]="amount"></opdex-input-control>
 
     <div class="space-between"></div>

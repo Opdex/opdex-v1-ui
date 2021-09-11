@@ -1,7 +1,7 @@
 @import 'src/scss/colors';
 
 .pool-details {
-  margin: 15px 0 30px;
+  margin: 0 0 20px;
   width: 100%;
   position: relative;
 
@@ -10,7 +10,6 @@
     top: 10px;
     right: 10px;
   }
-
 
   h4 {
     display: flex;
@@ -34,32 +33,25 @@
     .pool-details-section {
       margin: 8px 0;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+
+      .col {
+        &.flex-shrink {
+          flex-grow: 0;
+          flex-shrink: 1;
+        }
+
+        &:first-of-type {
+          padding-left: 0px;
+        }
+
+        &:last-of-type {
+          padding-right: 0px;
+        }
+      }
 
       &:last-of-type {
         margin-bottom: 0px !important;
-      }
-
-      .title {
-        font-size: 1.1em;
-      }
-
-      .detail {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-
-      h6 {
-        margin-bottom: 0px;
-        display: flex;
-        align-items: center;
-
-        small {
-          margin-left: 8px;
-        }
       }
 
       small {

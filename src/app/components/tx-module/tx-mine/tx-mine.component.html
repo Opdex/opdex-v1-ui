@@ -5,7 +5,7 @@
 
   <opdex-pool-preview [pool]="pool" [view]="view"></opdex-pool-preview>
 
-  <opdex-card *ngIf="pool">
+  <opdex-card *ngIf="pool" [thin]="true">
     <opdex-tx-mine-start [data]="data" *ngIf="group.value == 1"></opdex-tx-mine-start>
     <opdex-tx-mine-stop [data]="data" *ngIf="group.value == 2"></opdex-tx-mine-stop>
     <opdex-tx-mine-collect [data]="data" *ngIf="group.value == 3"></opdex-tx-mine-collect>

@@ -80,7 +80,7 @@
             <router-outlet #outlet="outlet"></router-outlet>
           </div>
 
-          <opdex-mobile-nav></opdex-mobile-nav>
+          <opdex-mobile-nav *ngIf="context$ | async as context"></opdex-mobile-nav>
         </div>
       </div>
 
