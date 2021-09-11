@@ -45,19 +45,19 @@
             <mat-icon class="provide">remove</mat-icon> Remove Liquidity
           </button>
 
-          <button mat-menu-item class="small d-flex align-items-center" (click)="stake('start')" *ngIf="element.token.symbol === pool.token.staking.symbol && element.position === 'Balance'">
+          <button mat-menu-item class="small d-flex align-items-center" (click)="stake('start')" *ngIf="element.token.symbol === pool.token?.staking?.symbol && element.position === 'Balance'">
             <mat-icon class="stake">verified_user</mat-icon> Start Staking
           </button>
 
-          <button mat-menu-item class="small d-flex align-items-center" (click)="stake('stop')" *ngIf="element.token.symbol === pool.token.staking.symbol && element.position === 'Staking'">
+          <button mat-menu-item class="small d-flex align-items-center" (click)="stake('stop')" *ngIf="element.token.symbol === pool.token?.staking?.symbol && element.position === 'Staking'">
             <mat-icon class="stake">remove</mat-icon> Stop Staking
           </button>
 
-          <button mat-menu-item class="small d-flex align-items-center" (click)="stake('collect')" *ngIf="element.token.symbol === pool.token.staking.symbol && element.position === 'Staking'">
+          <button mat-menu-item class="small d-flex align-items-center" (click)="stake('collect')" *ngIf="element.token.symbol === pool.token?.staking?.symbol && element.position === 'Staking'">
             <mat-icon class="stake">local_play</mat-icon> Collect Staking Rewards
           </button>
 
-          <button mat-menu-item class="small d-flex align-items-center" (click)="mine('start')" *ngIf="element.token.symbol === pool.token.lp.symbol && element.position === 'Balance' && pool.mining?.isActive">
+          <button mat-menu-item class="small d-flex align-items-center" (click)="mine('start')" *ngIf="element.token.symbol === pool.token.lp.symbol && element.position === 'Balance'">
             <mat-icon class="mine">whatshot</mat-icon> Start Mining
           </button>
 
