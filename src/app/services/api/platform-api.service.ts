@@ -116,7 +116,7 @@ export class PlatformApiService extends RestApiService {
   }
 
   public getSwapQuote(payload: any): Observable<string> {
-    return this.post<string>(`${this.api}/quote/swap`, payload, { responseType: 'text' });
+    return this.post<string>(`${this.api}/quote/swap`, payload);
   }
 
   ////////////////////////////
