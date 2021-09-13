@@ -25,6 +25,8 @@ export class ReviewQuoteComponent implements OnInit {
     public _bottomSheetRef: MatBottomSheetRef<SignTxModalComponent>,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: any)
   {
+    // Todo: data injected should be an existing TransactionQuote previously fetched. Then using that data, implement polling on
+    // the replay-quote endpoint removing the need for the if/else logic below.
     console.log(this.data)
   }
 
@@ -48,13 +50,16 @@ export class ReviewQuoteComponent implements OnInit {
     } else if (this.data.transactionType === 'collect-mining-rewards') {
       this.quote$ = this._platformApi.collectMiningRewardsQuote(this.data.payload.miningPool);
     } else if (this.data.transactionType === 'approve') {
-      this.quote$ = this._platformApi.approveAllowance(this.data.payload);
+      this.quote$ = this._platformApi.approveAllowanceQuote(this.data.payload.token, this.data.payload);
+    } else if (this.data.transactionType === 'reward-mining-pools') {
+      this.quote$ = this._platformApi.rewardMiningPoolsQuote(this.data.governance, this.data.payload);
     }
 
     this.quote$
       .pipe(
         take(1),
         tap(q => this.quoteRequest = JSON.parse(atob(q.request))),
+        // Todo: Figure out and comment wtf this does...
         tap(_ => this.quoteRequest.method = this.quoteRequest.method.replace(/([A-Z])/g, ' $1').trim())
       )
       .subscribe(rsp => this.quote = rsp);

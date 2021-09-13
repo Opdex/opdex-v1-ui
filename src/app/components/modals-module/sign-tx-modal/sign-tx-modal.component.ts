@@ -30,22 +30,6 @@ export class SignTxModalComponent {
       transaction$ = this._platformApi.swap(this.data.payload);
     } else if (this.data.transactionType === 'add-liquidity') {
       transaction$ = this._platformApi.addLiquidity(this.data.payload);
-    } else if (this.data.transactionType === 'remove-liquidity') {
-      // transaction$ = this._platformApi.removeLiquidity(this.data.payload);
-    } else if (this.data.transactionType === 'start-staking') {
-      // transaction$ = this._platformApi.startStaking(this.data.payload);
-    } else if (this.data.transactionType === 'stop-staking') {
-      // transaction$ = this._platformApi.stopStaking(this.data.payload);
-    } else if (this.data.transactionType === 'collect-staking-rewards') {
-      // transaction$ = this._platformApi.collectStakingRewards(this.data.payload);
-    } else if (this.data.transactionType === 'start-mining') {
-      // transaction$ = this._platformApi.startMining(this.data.payload);
-    } else if (this.data.transactionType === 'stop-mining') {
-      // transaction$ = this._platformApi.stopMining(this.data.payload);
-    } else if (this.data.transactionType === 'collect-mining-rewards') {
-      // transaction$ = this._platformApi.collectMiningRewards(this.data.payload);
-    } else if (this.data.transactionType === 'approve') {
-      transaction$ = this._platformApi.approveAllowance(this.data.payload);
     }
 
     transaction$

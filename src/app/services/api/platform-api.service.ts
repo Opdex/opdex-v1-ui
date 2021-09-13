@@ -79,6 +79,14 @@ export class PlatformApiService extends RestApiService {
     return this.get<any>(`${this.api}/tokens/${address}/history?timeSpan=${timeSpan}&candleSpan=${candleSpan}`);
   }
 
+  public approveAllowanceQuote(address: string, payload: any): Observable<any> {
+    return this.post<any>(`${this.api}/tokens/${address}/approve`, payload);
+  }
+
+  public distributeTokensQuote(address: string): Observable<any> {
+    return this.post<any>(`${this.api}/tokens/${address}/distribute`, {});
+  }
+
   ////////////////////////////
   // Liquidity Pools
   ////////////////////////////
@@ -155,8 +163,8 @@ export class PlatformApiService extends RestApiService {
     return this.get<IGovernance>(`${this.api}/governances/${address}`);
   }
 
-  public rewardMiningPools(address: string): Observable<any> {
-    return this.post<any>(`${this.api}/governances/${address}/reward-mining-pools`, {});
+  public rewardMiningPoolsQuote(address: string, payload: any): Observable<any> {
+    return this.post<any>(`${this.api}/governances/${address}/reward-mining-pools`, payload);
   }
 
   ////////////////////////////
@@ -215,24 +223,9 @@ export class PlatformApiService extends RestApiService {
     return this.post<any>(`${this.api}/build-transaction/local-broadcast/swap`, payload);
   }
 
-  // Create Liquidity Pool
-  public createPool(payload: any): Observable<any> {
-    return this.post<any>(`${this.api}/build-transaction/local-broadcast/create-pool`, payload);
-  }
-
   // Liquidity Providing
   public addLiquidity(payload: any): Observable<any> {
     return this.post<any>(`${this.api}/build-transaction/local-broadcast/add-liquidity`, payload);
-  }
-
-  // Allowance
-  public approveAllowance(payload: any): Observable<any> {
-    return this.post<any>(`${this.api}/build-transaction/local-broadcast/approve-allowance`, payload);
-  }
-
-  // Distribute tokens
-  public distributeTokens(payload: any): Observable<any> {
-    return this.post<any>(`${this.api}/build-transaction/local-broadcast/distribute-odx`, payload);
   }
 
   // Balances
