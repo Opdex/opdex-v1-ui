@@ -150,6 +150,7 @@
         <opdex-claim-pending-deployer-owner-event [txEvent]="event" *ngSwitchCase="'SetPendingDeployerOwnershipEvent'"></opdex-claim-pending-deployer-owner-event>
         <opdex-create-market-event [txEvent]="event" *ngSwitchCase="'CreateMarketEvent'"></opdex-create-market-event>
         <opdex-set-pending-deployer-owner-event [txEvent]="event" *ngSwitchCase="'ClaimPendingDeployerOwnershipEvent'"></opdex-set-pending-deployer-owner-event>
+        <opdex-reward-mining-pool-event [txEvent]="event" *ngSwitchCase="'RewardMiningPoolEvent'"></opdex-reward-mining-pool-event>
         <div *ngSwitchDefault>Uh oh, looks like we can't identify this transaction event's summary.</div>
       </div>
     </ng-container>

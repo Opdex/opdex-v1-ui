@@ -1,3 +1,5 @@
+import { ReviewQuoteComponent } from './../../components/tx-module/shared/review-quote/review-quote.component';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { switchMap, take, tap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
@@ -20,7 +22,10 @@ export class GovernanceComponent implements OnInit {
   submitting: boolean;
   nominationPeriodEndDate: string;
 
-  constructor(private _platformApiService: PlatformApiService) { }
+  constructor(
+    private _platformApiService: PlatformApiService,
+    private _bottomSheet: MatBottomSheet
+  ) { }
 
   ngOnInit(): void {
     this.governance$ = timer(0, 20000).pipe(switchMap(_ => {
@@ -57,8 +62,9 @@ export class GovernanceComponent implements OnInit {
     return dDisplay + hDisplay + mDisplay + sDisplay;
   }
 
-  distribute() {
-    this.submitting = true;
-    this._platformApiService.rewardMiningPools(this.governance.address).pipe(take(1)).subscribe(() => this.submitting = false);
+  quoteDistribution(): void {
+    this._bottomSheet.open(ReviewQuoteComponent, {
+      data: { governance: this.governance.address, payload: { fullDistribution: true }, transactionType: 'reward-mining-pools' }
+    });
   }
 }
