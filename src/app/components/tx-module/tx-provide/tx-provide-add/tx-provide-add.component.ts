@@ -14,6 +14,7 @@ import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
+import { TransactionTypes } from 'src/app/enums/transaction-types';
 
 @Component({
   selector: 'opdex-tx-provide-add',
@@ -27,6 +28,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   subscription = new Subscription();
   allowance: AllowanceValidation;
   form: FormGroup;
+  transactionTypes = TransactionTypes;
 
   get amountCrs(): FormControl {
     return this.form.get('amountCrs') as FormControl;
