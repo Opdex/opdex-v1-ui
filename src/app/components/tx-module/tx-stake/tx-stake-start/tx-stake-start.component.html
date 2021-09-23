@@ -1,10 +1,10 @@
 <div class="start-staking">
   <ng-container *ngIf="allowance$ | async as allowance">
-    <opdex-allowance-validation [transactionType]="transactionTypes.startStaking" [allowance]="allowance"></opdex-allowance-validation>
+    <opdex-allowance-validation [transactionType]="transactionTypes.startStaking" [allowance]="allowance" symbol="DODX"></opdex-allowance-validation>
   </ng-container>
 
   <form [formGroup]="form" name="start-staking-form" id="start-staking-form" (submit)="submit()">
-    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Stake" [formControl]="amount" suffix="ODX"></opdex-input-control>
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Stake" [formControl]="amount" suffix="DODX"></opdex-input-control>
 
 
     <div class="space-between"></div>

@@ -11,6 +11,7 @@ import { TransactionTypes } from 'src/app/enums/transaction-types';
 })
 export class AllowanceValidationComponent {
   @Input() allowance: AllowanceValidation;
+  @Input() symbol: string;
   @Input() transactionType: TransactionTypes;
 
   transactionTypes = TransactionTypes;
