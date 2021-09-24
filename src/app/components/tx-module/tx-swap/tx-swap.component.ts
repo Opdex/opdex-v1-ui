@@ -10,6 +10,7 @@ import { SignTxModalComponent } from 'src/app/components/modals-module/sign-tx-m
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { environment } from '@environments/environment';
 import { Icons } from 'src/app/enums/icons';
+import { TransactionTypes } from 'src/app/enums/transaction-types';
 
 @Component({
   selector: 'opdex-tx-swap',
@@ -28,6 +29,7 @@ export class TxSwapComponent implements OnDestroy{
   tokenOutDetails: any;
   context: any;
   allowance: AllowanceValidation;
+  transactionTypes = TransactionTypes;
 
   get tokenInAmount(): FormControl {
     return this.form.get('tokenInAmount') as FormControl;
@@ -87,7 +89,6 @@ export class TxSwapComponent implements OnDestroy{
   }
 
   ngOnChanges() {
-    console.log(this.data);
     if (this.data?.pool) {
       this.tokenInDetails = {
         name: "Cirrus",
@@ -161,7 +162,7 @@ export class TxSwapComponent implements OnDestroy{
       tolerance: 0.1,
       recipient: this.context.wallet
     }
-    
+
     this.signTx({ payload, transactionType: 'swap'});
   }
 
@@ -225,7 +226,7 @@ export class TxSwapComponent implements OnDestroy{
 
     return this._platformApi.getAllowance(this.context.wallet, spender, this.tokenIn.value)
       .pipe(
-        map(allowanceResponse => new AllowanceValidation(allowanceResponse, this.tokenInAmount.value, this.tokenInDetails.decimals)),
+        map(allowanceResponse => new AllowanceValidation(allowanceResponse, this.tokenInAmount.value, this.tokenInDetails)),
         tap((rsp: AllowanceValidation) => this.allowance = rsp)
       );
   }

@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { debounceTime, map, switchMap } from 'rxjs/operators';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
+import { TransactionTypes } from 'src/app/enums/transaction-types';
 
 @Component({
   selector: 'opdex-tx-mine-start',
@@ -23,6 +24,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
   pool: ILiquidityPoolSummary;
   txHash: string;
   allowance$: Observable<AllowanceValidation>;
+  transactionTypes = TransactionTypes;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -50,7 +52,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
 
           return this._platformApi
             .getAllowance(this.context.wallet, spender, token)
-            .pipe(map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, 8)));
+            .pipe(map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, this.data?.pool?.token?.lp)));
         })
       );
   }

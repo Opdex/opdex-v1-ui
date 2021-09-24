@@ -1,22 +1,22 @@
+import { IToken } from './responses/platform-api/tokens/token.interface';
 import { IAddressAllowanceResponse } from './responses/platform-api/wallets/address-allowance.interface';
 
-export class AllowanceValidation implements IAddressAllowanceResponse {
+export class AllowanceValidation {
   owner: string;
   spender: string;
-  token: string;
+  token: IToken;
   allowance: string;
   requestToSpend: string;
   isApproved: boolean;
 
-  constructor(allowanceResponse: IAddressAllowanceResponse, requestToSpend: string, tokenDecimals: number) {
+  constructor(allowanceResponse: IAddressAllowanceResponse, requestToSpend: string, token: IToken) {
     this.owner = allowanceResponse.owner;
     this.spender = allowanceResponse.spender;
-    this.token = allowanceResponse.token;
     this.allowance = allowanceResponse.allowance;
     this.requestToSpend = requestToSpend;
+    this.token = token;
 
-
-    this.isApproved = this.validate(tokenDecimals)
+    this.isApproved = this.validate(token.decimals)
   }
 
   private validate(tokenDecimals) :boolean {

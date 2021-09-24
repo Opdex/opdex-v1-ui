@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
+import { TransactionTypes } from 'src/app/enums/transaction-types';
 
 @Component({
   selector: 'opdex-tx-provide-remove',
@@ -24,6 +25,7 @@ export class TxProvideRemoveComponent extends TxBase {
   form: FormGroup;
   context: any;
   allowance$: Observable<AllowanceValidation>;
+  transactionTypes = TransactionTypes;
 
   get liquidity(): FormControl {
     return this.form.get('liquidity') as FormControl;
@@ -52,7 +54,7 @@ export class TxProvideRemoveComponent extends TxBase {
 
     return this._platformApi
       .getAllowance(this.context.wallet, spender, token)
-      .pipe(map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, 8)));
+      .pipe(map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, this.pool.token.lp)));
   }
 
   submit(): void {

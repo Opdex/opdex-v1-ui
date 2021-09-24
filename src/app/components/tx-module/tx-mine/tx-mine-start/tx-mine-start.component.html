@@ -1,6 +1,6 @@
 <div class="start-mining">
   <ng-container *ngIf="allowance$ | async as allowance">
-    <opdex-allowance-validation [allowance]="allowance"></opdex-allowance-validation>
+    <opdex-allowance-validation [transactionType]="transactionTypes.startMining" [allowance]="allowance"></opdex-allowance-validation>
   </ng-container>
 
   <form [formGroup]="form" name="start-mining-form" id="start-mining-form" (submit)="submit()">
