@@ -1,5 +1,5 @@
 <opdex-card class="swap" [thin]="true">
-  <opdex-allowance-validation [transactionType]="transactionTypes.swap" [allowance]="allowance" [symbol]="tokenInDetails?.symbol || 'CRS'"></opdex-allowance-validation>
+  <opdex-allowance-validation [transactionType]="transactionTypes.swap" [allowance]="allowance"></opdex-allowance-validation>
 
   <form [formGroup]="form" name="swap-form" id="swap-form">
     <opdex-input-control [prefixIcon]="icons.remove" label="Sell" [formControl]="tokenInAmount" [suffix]="tokenInDetails?.symbol || 'CRS'" (handleChangeToken)="changeToken('tokenIn')"></opdex-input-control>

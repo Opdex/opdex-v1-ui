@@ -1,6 +1,6 @@
 <div class="add-liquidity">
   <ng-container *ngIf="allowance">
-    <opdex-allowance-validation [transactionType]="transactionTypes.addLiquidity" [allowance]="allowance" [symbol]="pool.token.src.symbol"></opdex-allowance-validation>
+    <opdex-allowance-validation [transactionType]="transactionTypes.addLiquidity" [allowance]="allowance"></opdex-allowance-validation>
   </ng-container>
 
   <form [formGroup]="form" name="add-liquidity-form" id="swap-form" (submit)="submit()">

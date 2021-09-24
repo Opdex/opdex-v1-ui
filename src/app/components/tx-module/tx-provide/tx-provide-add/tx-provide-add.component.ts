@@ -92,7 +92,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     return this._platformApi
       .getAllowance(this.context.wallet, spender, token)
       .pipe(
-        map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, this.pool.token.src.decimals)),
+        map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, this.pool.token.src)),
         tap((rsp: AllowanceValidation) => this.allowance = rsp)
       );
   }

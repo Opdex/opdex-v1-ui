@@ -11,14 +11,17 @@ import { TransactionTypes } from 'src/app/enums/transaction-types';
 })
 export class AllowanceValidationComponent {
   @Input() allowance: AllowanceValidation;
-  @Input() symbol: string;
   @Input() transactionType: TransactionTypes;
-
+  ignore: boolean = false;
   transactionTypes = TransactionTypes;
 
   constructor(private _sidenav: SidenavService) { }
 
   approveAllowance(amount: string, spender: string, token: string) {
     this._sidenav.openSidenav(TransactionView.allowance, { amount, spender, token });
+  }
+
+  setIgnore(value: boolean) {
+    this.ignore = value;
   }
 }

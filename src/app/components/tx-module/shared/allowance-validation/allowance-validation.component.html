@@ -1,17 +1,22 @@
 <ng-container *ngIf="allowance">
-  <opdex-card [warn]="true" *ngIf="!allowance.isApproved">
+  <opdex-card [warn]="true" *ngIf="!allowance.isApproved && !ignore" [thin]="true">
     <h4>Insufficient Allowance</h4>
     <ng-container [ngSwitch]="transactionType">
-      <p *ngSwitchCase="transactionTypes.addLiquidity" class="mb-3">An allowance must be approved in order to add liquidity using {{allowance.requestToSpend | shortNumber}} {{symbol}} tokens.</p>
-      <p *ngSwitchCase="transactionTypes.removeLiquidity" class="mb-3">An allowance must be approved in order to remove liquidity using {{allowance.requestToSpend | shortNumber}} {{symbol}} tokens.</p>
-      <p *ngSwitchCase="transactionTypes.startMining" class="mb-3">An allowance must be approved in order to swap {{allowance.requestToSpend | shortNumber}} {{symbol}} tokens.</p>
-      <p *ngSwitchCase="transactionTypes.swap" class="mb-3">An allowance must be approved in order to mine with {{allowance.requestToSpend | shortNumber}} {{symbol}} tokens.</p>
-      <p *ngSwitchCase="transactionTypes.startStaking" class="mb-3">An allowance must be approved in order to stake {{allowance.requestToSpend | shortNumber}} {{symbol}} tokens.</p>
+      <p *ngSwitchCase="transactionTypes.addLiquidity" class="mb-3">An allowance must be approved in order to add liquidity using {{allowance.requestToSpend | shortNumber}} {{allowance.token.symbol}} tokens.</p>
+      <p *ngSwitchCase="transactionTypes.removeLiquidity" class="mb-3">An allowance must be approved in order to remove liquidity using {{allowance.requestToSpend | shortNumber}} {{allowance.token.symbol}} tokens.</p>
+      <p *ngSwitchCase="transactionTypes.startMining" class="mb-3">An allowance must be approved in order to mine with {{allowance.requestToSpend | shortNumber}} {{allowance.token.symbol}} tokens.</p>
+      <p *ngSwitchCase="transactionTypes.swap" class="mb-3">An allowance must be approved in order to swap {{allowance.requestToSpend | shortNumber}} {{allowance.token.symbol}} tokens.</p>
+      <p *ngSwitchCase="transactionTypes.startStaking" class="mb-3">An allowance must be approved in order to stake {{allowance.requestToSpend | shortNumber}} {{allowance.token.symbol}} tokens.</p>
       <p *ngSwitchDefault class="mb-3">In order to stake {{allowance.requestToSpend}} ODX, the liquidity pool must have an approved allowance of at least that much.</p>
     </ng-container>
-    <button mat-raised-button class="white w-100" (click)="approveAllowance(allowance.requestToSpend, allowance.spender, allowance.token)">Begin Approval</button>
-    <button mat-stroked-button class="mt-2 w-100">{{transactionType}} Anyways</button>
+    <button mat-raised-button class="white w-100" (click)="approveAllowance(allowance.requestToSpend, allowance.spender, allowance.token.address)">Begin Approval</button>
+    <button mat-stroked-button class="mt-2 w-100" (click)="setIgnore(true)">{{transactionType}} Anyways</button>
   </opdex-card>
+
+  <opdex-card [warn]="true" [thin]="true" *ngIf="ignore">
+    <p class="mb-0 d-flex align-items-middle" style="line-height: 24px;"><mat-icon class="mr-2" style="line-height: unset;">error</mat-icon> Insufficient Allowance</p>
+  </opdex-card>
+
   <opdex-card [success]="true" [thin]="true" *ngIf="allowance.isApproved">
     <p class="mb-0 d-flex align-items-middle" style="line-height: 24px;"><mat-icon class="mr-2" style="line-height: unset;">check_circle</mat-icon> Allowance</p>
   </opdex-card>

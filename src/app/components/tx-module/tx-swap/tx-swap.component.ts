@@ -226,8 +226,8 @@ export class TxSwapComponent implements OnDestroy{
 
     return this._platformApi.getAllowance(this.context.wallet, spender, this.tokenIn.value)
       .pipe(
-        map(allowanceResponse => new AllowanceValidation(allowanceResponse, this.tokenInAmount.value, this.tokenInDetails.decimals)),
-        tap((rsp: AllowanceValidation) => {this.allowance = rsp; console.log(this.allowance);})
+        map(allowanceResponse => new AllowanceValidation(allowanceResponse, this.tokenInAmount.value, this.tokenInDetails)),
+        tap((rsp: AllowanceValidation) => this.allowance = rsp)
       );
   }
 

@@ -54,7 +54,7 @@ export class TxProvideRemoveComponent extends TxBase {
 
     return this._platformApi
       .getAllowance(this.context.wallet, spender, token)
-      .pipe(map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, 8)));
+      .pipe(map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, this.pool.token.lp)));
   }
 
   submit(): void {
