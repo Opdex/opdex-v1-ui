@@ -8,6 +8,7 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, timer } from 'rxjs';
 import { IGovernance } from '@sharedModels/responses/platform-api/governances/governance.interface';
 import { environment } from '@environments/environment';
+import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
 
 @Component({
   selector: 'opdex-governance',
@@ -63,8 +64,15 @@ export class GovernanceComponent implements OnInit {
   }
 
   quoteDistribution(): void {
-    this._bottomSheet.open(ReviewQuoteComponent, {
-      data: { governance: this.governance.address, payload: { fullDistribution: true }, transactionType: 'reward-mining-pools' }
-    });
+    const payload = { fullDistribution: true };
+
+    this._platformApiService
+      .rewardMiningPoolsQuote(this.governance.address, payload)
+        .pipe(take(1))
+        .subscribe((quote: ITransactionQuote) => {
+          this._bottomSheet.open(ReviewQuoteComponent, {
+            data: quote
+          });
+        });
   }
 }

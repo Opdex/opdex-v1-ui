@@ -14,7 +14,7 @@ import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interf
 })
 export class WalletComponent implements OnInit {
   transactionsRequest: ITransactionsRequest;
-  walletBalances$: Observable<any[]>;
+  walletBalances: any;
   wallet: string;
 
   constructor(
@@ -23,7 +23,15 @@ export class WalletComponent implements OnInit {
     private _tokensService: TokensService
   ) {
     this.wallet = this._context.getUserContext().wallet;
-    this.walletBalances$ = this._platform.getWalletBalances(this.wallet)
+    this.getWalletBalances(10);
+  }
+
+  handlePageChange(cursor: string) {
+    this.getWalletBalances(null, cursor);
+  }
+
+  getWalletBalances(limit?: number, cursor?: string) {
+    this._platform.getWalletBalances(this.wallet, limit, cursor)
       .pipe(
         switchMap(response => {
           const balances$: Observable<IToken>[] = [];
@@ -42,9 +50,15 @@ export class WalletComponent implements OnInit {
             balances$.push(tokenDetails$);
           })
 
-          return forkJoin(balances$);
-        })
-      )
+          return forkJoin(balances$).pipe(map(balances => {
+            return {
+              paging: response.paging,
+              balances: balances
+            }
+          }));
+        }),
+        take(1)
+      ).subscribe(response => this.walletBalances = response);
   }
 
   ngOnInit(): void {

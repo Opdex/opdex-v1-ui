@@ -3,6 +3,7 @@ import { MatBottomSheet } from "@angular/material/bottom-sheet";
 import { MatDialog } from "@angular/material/dialog";
 import { SignTxModalComponent } from "@sharedComponents/modals-module/sign-tx-modal/sign-tx-modal.component";
 import { UserContextService } from "@sharedServices/utility/user-context.service";
+import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
 
 export abstract class TxBase {
   context: any;
@@ -15,17 +16,17 @@ export abstract class TxBase {
     this.context = _userContext.getUserContext();
   }
 
-  quoteTransaction(payload: any, transactionType: string): void {
-    this._bottomSheet.open(ReviewQuoteComponent, {
-      data: { payload, transactionType }
-    });
-  }
-
   signTx(payload: any, transactionType: string): void {
     this._dialog.open(SignTxModalComponent, {
       width: '600px',
       data:  {payload, transactionType},
       panelClass: ''
+    });
+  }
+
+  quote(quote: ITransactionQuote) {
+    this._bottomSheet.open(ReviewQuoteComponent, {
+      data: quote
     });
   }
 }

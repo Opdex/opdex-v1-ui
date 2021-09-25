@@ -1,11 +1,12 @@
-import { UserContextService } from '../../../../services/utility/user-context.service';
+import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
+import { take } from 'rxjs/operators';
+import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Component, Input, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { take } from 'rxjs/operators';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
 
@@ -19,7 +20,6 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
   icons = Icons;
   form: FormGroup;
   pool: ILiquidityPoolSummary;
-  txHash: string;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -58,6 +58,11 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
       liquidate: this.liquidate.value
     }
 
-    this.quoteTransaction(payload, 'stop-staking');
+    this._platformApi
+      .stopStakingQuote(payload.liquidityPool, payload)
+        .pipe(take(1))
+        .subscribe((quote: ITransactionQuote) => {
+          this.quote(quote);
+        });
   }
 }

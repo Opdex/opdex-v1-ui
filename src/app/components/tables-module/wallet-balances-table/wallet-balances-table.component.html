@@ -1,11 +1,18 @@
 <div class="table-container">
   <table mat-table [dataSource]="dataSource" matSort [trackBy]="trackBy" class="w-100">
-    <ng-container matColumnDef="name">
+    <ng-container matColumnDef="token" sticky>
       <th mat-header-cell *matHeaderCellDef> Token </th>
-      <td mat-cell *matCellDef="let element" class="token-identity">
-        <a class="no-decoration b-500" href="javascript:void(0)" (click)="navigate(element.address)">{{element.symbol}}</a>
-        <small class="ml-2">{{element.name}}</small>
+      <td mat-cell *matCellDef="let element" class="token-identity no-wrap">
+        <div class="no-wrap d-flex align-items-center">
+          <opdex-copy-button [tooltip]="element.address" [value]="element.address" icon="link"></opdex-copy-button>
+          <a class="no-decoration b-500" href="javascript:void(0)" (click)="navigate(element.address)">{{element.symbol}}</a>
+        </div>
       </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>  </th>
+      <td mat-cell *matCellDef="let element"> <span class="no-wrap">{{element.name}}</span> </td>
     </ng-container>
 
     <ng-container matColumnDef="balance">
@@ -21,7 +28,7 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>  </th>
       <td mat-cell *matCellDef="let element">
-        <div class="float-right">
+        <div class="float-right no-wrap">
           <div class="d-inline-block mr-3" style="width: 28px;">
             <button mat-icon-button class="swap small" (click)="swap(element)" title="Swap"><mat-icon>swap_horiz</mat-icon></button>
           </div>
@@ -46,4 +53,9 @@
   </table>
 </div>
 
-<mat-paginator [pageSizeOptions]="pageSizeOptions" [length]="dataSource?.data?.length" [hidePageSize]="true"></mat-paginator>
+<div class="paginator">
+  <div class="d-flex justify-content-center">
+    <button mat-icon-button [disabled]="!previous" (click)="pageChange(previous)"><mat-icon>arrow_back</mat-icon></button>
+    <button mat-icon-button [disabled]="!next" (click)="pageChange(next)"><mat-icon>arrow_forward</mat-icon></button>
+  </div>
+</div>

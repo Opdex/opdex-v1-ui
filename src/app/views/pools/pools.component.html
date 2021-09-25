@@ -42,7 +42,11 @@
     <div class="row" *ngIf="pools$ | async as pools">
       <div class="col-12">
         <opdex-card>
-          <h2 class="text-shadow">Liquidity Pools</h2>
+          <div class="d-flex justify-content-between align-items-center">
+            <h2 class="text-shadow">Liquidity Pools</h2>
+            <button mat-icon-button color="primary" (click)="createPool()"><mat-icon>add</mat-icon></button>
+          </div>
+
           <opdex-pools-table [pools]="pools"></opdex-pools-table>
         </opdex-card>
       </div>

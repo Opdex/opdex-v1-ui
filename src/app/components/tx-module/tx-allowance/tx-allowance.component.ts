@@ -1,3 +1,4 @@
+import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { OnChanges } from '@angular/core';
 import { Component, Input } from '@angular/core';
@@ -7,6 +8,8 @@ import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liqu
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { TxBase } from '../tx-base.component';
 import { Icons } from 'src/app/enums/icons';
+import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-tx-allowance',
@@ -37,7 +40,8 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
     private _fb: FormBuilder,
     protected _dialog: MatDialog,
     protected _userContext: UserContextService,
-    protected _bottomSheet: MatBottomSheet
+    protected _bottomSheet: MatBottomSheet,
+    private _platformApiService: PlatformApiService
   ) {
     super(_userContext, _dialog, _bottomSheet);
 
@@ -68,6 +72,11 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
       spender: this.spender.value
     }
 
-    this.quoteTransaction(payload, 'approve');
+    this._platformApiService
+      .approveAllowanceQuote(payload.token, payload)
+        .pipe(take(1))
+        .subscribe((quote: ITransactionQuote) => {
+          this.quote(quote);
+        });
   }
 }

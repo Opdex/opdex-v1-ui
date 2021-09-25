@@ -7,10 +7,11 @@ import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liqu
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Observable } from 'rxjs';
-import { debounceTime, map, switchMap } from 'rxjs/operators';
+import { debounceTime, map, switchMap, take } from 'rxjs/operators';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
 import { TransactionTypes } from 'src/app/enums/transaction-types';
+import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
 
 @Component({
   selector: 'opdex-tx-mine-start',
@@ -22,7 +23,6 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
   form: FormGroup;
   icons = Icons;
   pool: ILiquidityPoolSummary;
-  txHash: string;
   allowance$: Observable<AllowanceValidation>;
   transactionTypes = TransactionTypes;
 
@@ -70,6 +70,11 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
       amount: amount
     }
 
-    this.quoteTransaction(payload, 'start-mining');
+    this._platformApi
+      .startMiningQuote(payload.miningPool, payload)
+        .pipe(take(1))
+        .subscribe((quote: ITransactionQuote) => {
+          this.quote(quote);
+        });
   }
 }

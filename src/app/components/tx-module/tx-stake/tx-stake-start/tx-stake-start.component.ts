@@ -5,10 +5,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
+import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Observable } from 'rxjs';
-import { debounceTime, switchMap, tap, map } from 'rxjs/operators';
+import { debounceTime, switchMap, tap, map, take } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 import { TransactionTypes } from 'src/app/enums/transaction-types';
 
@@ -22,7 +23,6 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
   icons = Icons;
   form: FormGroup;
   pool: ILiquidityPoolSummary;
-  txHash: string;
   allowance$: Observable<AllowanceValidation>;
   transactionTypes = TransactionTypes;
 
@@ -70,6 +70,11 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
       amount: amount
     }
 
-    this.quoteTransaction(payload, 'start-staking');
+    this._platformApi
+      .startStakingQuote(payload.liquidityPool, payload)
+        .pipe(take(1))
+        .subscribe((quote: ITransactionQuote) => {
+          this.quote(quote);
+        });
   }
 }

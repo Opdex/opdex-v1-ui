@@ -6,12 +6,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
-import { switchMap, map } from 'rxjs/operators';
+import { switchMap, map, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
 import { TransactionTypes } from 'src/app/enums/transaction-types';
+import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
 
 @Component({
   selector: 'opdex-tx-provide-remove',
@@ -21,7 +22,6 @@ import { TransactionTypes } from 'src/app/enums/transaction-types';
 export class TxProvideRemoveComponent extends TxBase {
   @Input() pool: ILiquidityPoolSummary;
   icons = Icons;
-  txHash: string;
   form: FormGroup;
   context: any;
   allowance$: Observable<AllowanceValidation>;
@@ -69,6 +69,11 @@ export class TxProvideRemoveComponent extends TxBase {
       recipient: this.context.wallet
     };
 
-    this.quoteTransaction(payload, 'remove-liquidity');
+    this._platformApi
+      .removeLiquidityQuote(payload.liquidityPool, payload)
+        .pipe(take(1))
+        .subscribe((quote: ITransactionQuote) => {
+          this.quote(quote);
+        });
   }
 }

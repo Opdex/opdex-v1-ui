@@ -5,9 +5,9 @@ import { TokensService } from '@sharedServices/platform/tokens.service';
 import { VaultsService } from './../../services/platform/vaults.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
-import { tap, switchMap } from 'rxjs/operators';
+import { tap, switchMap, take } from 'rxjs/operators';
 import { IVault } from '@sharedModels/responses/platform-api/vaults/vault.interface';
-import { IVaultCertificate } from '@sharedModels/responses/platform-api/vaults/vault-certificate.interface';
+import { IVaultCertificate, IVaultCertificates } from '@sharedModels/responses/platform-api/vaults/vault-certificate.interface';
 
 @Component({
   selector: 'opdex-vault',
@@ -17,7 +17,7 @@ import { IVaultCertificate } from '@sharedModels/responses/platform-api/vaults/v
 export class VaultComponent implements OnInit, OnDestroy {
   subscription: Subscription = new Subscription();
   vault: IVault;
-  certificates: IVaultCertificate[];
+  certificates: IVaultCertificates;
   statCards: StatCardInfo[] = [
     {
       title: 'Locked Tokens',
@@ -70,9 +70,17 @@ export class VaultComponent implements OnInit, OnDestroy {
         }))
       .subscribe());
 
-      this.subscription.add(
-        this._platformApi.getVaultCertificates(environment.vaultAddress)
-          .subscribe(certificates => this.certificates = certificates.results));
+      this.getVaultCertificates(10);
+  }
+
+  getVaultCertificates(limit?: number, cursor?: string) {
+    this._platformApi.getVaultCertificates(environment.vaultAddress, limit, cursor)
+      .pipe(take(1))
+      .subscribe(certificates => this.certificates = certificates)
+  }
+
+  handlePageChange(cursor: string) {
+    this.getVaultCertificates(null, cursor);
   }
 
   ngOnDestroy() {

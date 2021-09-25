@@ -72,6 +72,7 @@ import { SetPendingVaultOwnerEventComponent } from './tx-feed/tx-events/vault-ev
 import { SharedModule } from '@sharedComponents/shared-module/shared.module';
 import { ControlsModule } from '@sharedComponents/controls-module/controls.module';
 import { ReviewQuoteComponent } from './shared/review-quote/review-quote.component';
+import { TxCreatePoolComponent } from './tx-create-pool/tx-create-pool.component';
 
 
 @NgModule({
@@ -119,7 +120,8 @@ import { ReviewQuoteComponent } from './shared/review-quote/review-quote.compone
     ClaimPendingMarketOwnerEventComponent,
     ClaimPendingVaultOwnerEventComponent,
     SetPendingVaultOwnerEventComponent,
-    ReviewQuoteComponent
+    ReviewQuoteComponent,
+    TxCreatePoolComponent
   ],
   imports: [
     CommonModule,
@@ -155,6 +157,7 @@ import { ReviewQuoteComponent } from './shared/review-quote/review-quote.compone
     SetPendingDeployerOwnerEventComponent,
     ClaimPendingDeployerOwnerEventComponent,
     CreateMarketEventComponent,
+    TxCreatePoolComponent,
   ]
 })
 export class TransactionModule { }

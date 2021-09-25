@@ -1,7 +1,7 @@
 import { Network } from '../app/enums/networks';
 
-const api = 'dev-api.opdex.com';
-// const api = 'localhost:44391';
+// const api = 'dev-api.opdex.com';
+const api = 'localhost:44391';
 
 export const environment = {
   production: false,

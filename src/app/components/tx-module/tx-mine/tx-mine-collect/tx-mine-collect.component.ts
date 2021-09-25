@@ -4,8 +4,10 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
+import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-tx-mine-collect',
@@ -16,7 +18,6 @@ export class TxMineCollectComponent extends TxBase implements OnChanges {
   @Input() data: any;
   pool: ILiquidityPoolSummary;
   form: FormGroup;
-  txHash: string;
 
   constructor(
     private _fb: FormBuilder,
@@ -41,6 +42,11 @@ export class TxMineCollectComponent extends TxBase implements OnChanges {
       miningPool: this.pool.mining?.address,
     }
 
-    this.quoteTransaction(payload, 'collect-mining-rewards');
+    this._platformApi
+      .collectMiningRewardsQuote(payload.miningPool)
+        .pipe(take(1))
+        .subscribe((quote: ITransactionQuote) => {
+          this.quote(quote);
+        });
   }
 }

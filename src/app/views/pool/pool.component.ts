@@ -1,6 +1,6 @@
 import { MathService } from '@sharedServices/utility/math.service';
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { environment } from "@environments/environment";
 import { StatCardInfo } from "@sharedComponents/cards-module/stat-card/stat-card-info";
 import { ITransactionsRequest } from "@sharedModels/requests/transactions-filter";
@@ -36,6 +36,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   srcPerCrsHistory: any[] = [];
   walletBalance: any;
   subscription = new Subscription();
+  routerSubscription = new Subscription();
   copied: boolean;
   transactionsRequest: ITransactionsRequest;
   chartData: any[];
@@ -81,19 +82,36 @@ export class PoolComponent implements OnInit, OnDestroy {
     private _userContext: UserContextService,
     private _sidenav: SidenavService,
     private _liquidityPoolsService: LiquidityPoolsService,
-    private _math: MathService
-  ) {
-    this.poolAddress = this._route.snapshot.params.pool;
-  }
+    private _math: MathService,
+    private _router: Router
+  ) { }
 
   async ngOnInit(): Promise<void> {
+    this.init();
+
+    this.routerSubscription.add(
+      this._router.events.subscribe((evt) => {
+        if (!(evt instanceof NavigationEnd)) return;
+        this.init();
+      })
+    );
+  }
+
+  init() {
+    this.poolAddress = this._route.snapshot.params.pool;
+
+    if (!this.subscription.closed) {
+      this.subscription.unsubscribe();
+      this.subscription = new Subscription();
+    }
+
     this.subscription.add(interval(30000)
-      .pipe(
-        tap(_ => {
-          this._liquidityPoolsService.refreshPool(this.poolAddress);
-          this._liquidityPoolsService.refreshPoolHistory(this.poolAddress);
-        }))
-      .subscribe());
+    .pipe(
+      tap(_ => {
+        this._liquidityPoolsService.refreshPool(this.poolAddress);
+        this._liquidityPoolsService.refreshPoolHistory(this.poolAddress);
+      }))
+    .subscribe());
 
     // Todo: take(1) stops taking after 1, but without it, _I think_ is mem leak
     this.subscription.add(this.getLiquidityPool()
@@ -354,5 +372,6 @@ export class PoolComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.routerSubscription.unsubscribe();
   }
 }

@@ -1,5 +1,6 @@
 @import 'src/scss/colors';
 
+
 .review-tx-quote {
   padding-top: 15px;
   overflow-x: hidden;
@@ -46,5 +47,104 @@
 
   p {
     margin-bottom: 0px;
+  }
+}
+
+
+.check-containerbox {
+  display: none;
+}
+
+.check-container {
+  display: inline-block;
+  border-radius: 50%;
+  border: 5px solid rgba(0,0,0,0.1);
+  background: white;
+  vertical-align: middle;
+  margin-right: 20px;
+  width: 4em;
+  height: 4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border .3s ease;
+
+  .mat-icon {
+    opacity: 0.2;
+    font-size: 'calc(1rem + 1vw)' !important;
+    color: transparent;
+    transition: opacity .3s .1s ease;
+    -webkit-text-stroke: 3px rgba(0,0,0,.5);
+    width: auto;
+    height: auto;
+  }
+
+  &:hover {
+    border: 5px solid rgba(0,0,0,0.2);
+  }
+}
+
+.check-animation {
+  &.active {
+    .check-container {
+      animation: check .5s cubic-bezier(0.895, 0.030, 0.685, 0.220) forwards;
+
+      .mat-icon {
+        opacity: 1;
+        color: white !important;
+        -webkit-text-stroke: 0;
+        animation: icon .3s cubic-bezier(1.000, 0.008, 0.565, 1.650) .1s 1 forwards;
+        -webkit-text-stroke: 3px white;
+        width: auto;
+        height: auto;
+      }
+    }
+  }
+}
+
+@keyframes icon {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1)
+  }
+}
+
+@keyframes check {
+  0% {
+    width: 3em;
+    height: 3em;
+    border-width: 5px;
+  }
+  10% {
+    width: 3em;
+    height: 3em;
+    opacity: 0.1;
+    background: rgba(0,0,0,0.2);
+    border-width: 15px;
+  }
+  12% {
+    width: 3em;
+    height: 3em;
+    opacity: 0.4;
+    background: rgba(0,0,0,0.1);
+    border-width: 0;
+  }
+  50% {
+    width: 4em;
+    height: 4em;
+    background: #00d478;
+    border: 0;
+    opacity: 0.6;
+  }
+  100% {
+    width: 4em;
+    height: 4em;
+    background: #00d478;
+    border: 0;
+    opacity: 1;
   }
 }

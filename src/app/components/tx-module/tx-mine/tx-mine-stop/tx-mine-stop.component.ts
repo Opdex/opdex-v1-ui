@@ -1,7 +1,7 @@
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { take } from 'rxjs/operators';
 import { OnChanges } from '@angular/core';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
@@ -9,6 +9,7 @@ import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liqu
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Icons } from 'src/app/enums/icons';
+import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
 
 @Component({
   selector: 'opdex-tx-mine-stop',
@@ -20,7 +21,6 @@ export class TxMineStopComponent extends TxBase implements OnChanges {
   icons = Icons;
   form: FormGroup;
   pool: ILiquidityPoolSummary;
-  txHash: string;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -53,6 +53,11 @@ export class TxMineStopComponent extends TxBase implements OnChanges {
       amount: amount
     }
 
-    this.quoteTransaction(payload, 'stop-mining');
+    this._platformApi
+      .stopMiningQuote(payload.miningPool, payload)
+        .pipe(take(1))
+        .subscribe((quote: ITransactionQuote) => {
+          this.quote(quote);
+        });
   }
 }

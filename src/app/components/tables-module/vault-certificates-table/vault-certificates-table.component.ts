@@ -1,9 +1,7 @@
-import { IVaultCertificate } from '@sharedModels/responses/platform-api/vaults/vault-certificate.interface';
-import { Component, Input, OnChanges, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { IVaultCertificates } from '@sharedModels/responses/platform-api/vaults/vault-certificate.interface';
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'opdex-vault-certificates-table',
@@ -13,18 +11,28 @@ import { Router } from '@angular/router';
 export class VaultCertificatesTableComponent implements OnChanges {
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
-  @Input() certificates: IVaultCertificate[];
+  @Input() certificates: IVaultCertificates;
+  previous: string;
+  next: string;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @Output() onPageChange: EventEmitter<string> = new EventEmitter();
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private _router: Router) {
+  constructor() {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['owner', 'amount', 'revoked', 'redeemed', 'vestingStart', 'vestingEnd'];
   }
 
   ngOnChanges() {
-    this.dataSource.data = this.certificates;
+    if (this.certificates) {
+      this.dataSource.data = this.certificates.results;
+      this.next = this.certificates.paging.next;
+      this.previous = this.certificates.paging.previous;
+    }
+  }
+
+  pageChange(cursor: string) {
+    this.onPageChange.emit(cursor);
   }
 
   trackBy(index: number, pool: any) {

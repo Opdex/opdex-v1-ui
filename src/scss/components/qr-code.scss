@@ -1,0 +1,38 @@
+.qr-code-wrapper {
+  display: inline-block;
+  position: relative;
+  transition: opacity .1s ease;
+  width: 250px;
+  height: 250px;
+
+  &:hover {
+    cursor: pointer;
+    background: black;
+
+    .qrcode {
+      opacity: .2 !important;
+      transition: opacity .1s ease;
+    }
+
+    .mat-icon {
+      display: block;
+      position: absolute;
+      left: 104px;
+      top: 104px;
+      width: 42px;
+      height: 42px;
+      font-size: 42px !important;
+      line-height: 42px;
+      color: #ccc;
+    }
+  }
+
+  .qrcode {
+    transition: opacity .2s ease;
+  }
+
+  .mat-icon {
+    display: none;
+  }
+}
+

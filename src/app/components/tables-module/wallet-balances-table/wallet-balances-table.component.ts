@@ -1,6 +1,5 @@
 import { MathService } from '@sharedServices/utility/math.service';
-import { AfterViewInit, Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -12,28 +11,29 @@ import { SidenavService } from '@sharedServices/utility/sidenav.service';
   templateUrl: './wallet-balances-table.component.html',
   styleUrls: ['./wallet-balances-table.component.scss']
 })
-export class WalletBalancesTableComponent implements OnChanges, AfterViewInit {
+export class WalletBalancesTableComponent implements OnChanges {
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
-  @Input() tokens: any[];
+  @Input() records: any;
   @Input() pageSize: number;
-  @Input() smallPageSize: boolean = false;
-  pageSizeOptions: number[];
+  previous: string;
+  next: string;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @Output() onPageChange: EventEmitter<string> = new EventEmitter();
+
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private _router: Router, private _sidebar: SidenavService, private _math: MathService) {
     this.dataSource = new MatTableDataSource<any>();
-    this.displayedColumns = ['name', 'balance', 'total', 'actions'];
+    this.displayedColumns = ['token', 'name', 'balance', 'total', 'actions'];
   }
 
   ngOnChanges() {
-    this.pageSizeOptions = this.smallPageSize ? [5, 10, 25] : [10, 25, 50];
+    if (!this.records) return;
 
-    if (!this.tokens?.length) return;
+    if (!this.records.balances?.length) return;
 
-    this.dataSource.data = this.tokens.map(t => {
+    this.dataSource.data = this.records.balances.map(t => {
       return {
         name: t.name,
         symbol: t.symbol,
@@ -43,6 +43,13 @@ export class WalletBalancesTableComponent implements OnChanges, AfterViewInit {
         total: this._math.multiply(t.balance.balance, t.summary.price.close as number)
       }
     });
+
+    this.next = this.records.paging?.next;
+    this.previous = this.records.paging?.previous;
+  }
+
+  pageChange(cursor: string) {
+    this.onPageChange.emit(cursor);
   }
 
   provide(pool: any) {
@@ -63,10 +70,6 @@ export class WalletBalancesTableComponent implements OnChanges, AfterViewInit {
   mine(pool: any) {
     return;
     this._sidebar.openSidenav(TransactionView.mine, {pool: pool});
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
   }
 
   navigate(name: string) {

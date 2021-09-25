@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable } from 'rxjs';
 import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
+import { SidenavService } from '@sharedServices/utility/sidenav.service';
+import { TransactionView } from '@sharedModels/transaction-view';
 
 @Component({
   selector: 'opdex-pools',
@@ -14,7 +16,10 @@ export class PoolsComponent implements OnInit {
   poolsByVolume$: Observable<ILiquidityPoolSummary[]>;
   poolsMining$: Observable<ILiquidityPoolSummary[]>;
 
-  constructor(private _platformApiService: PlatformApiService) { }
+  constructor(
+    private _platformApiService: PlatformApiService,
+    private _sidebar: SidenavService
+  ) { }
 
   ngOnInit(): void {
     this.poolsByVolume$ = this._platformApiService.getPools(new LiquidityPoolsSearchQuery('Volume', 'DESC', 0, 4));
@@ -22,5 +27,9 @@ export class PoolsComponent implements OnInit {
     this.poolsMining$ = this._platformApiService.getPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 4, {mining: true}));
 
     this.pools$ = this._platformApiService.getPools();
+  }
+
+  createPool() {
+    this._sidebar.openSidenav(TransactionView.createPool);
   }
 }

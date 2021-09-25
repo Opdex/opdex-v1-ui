@@ -6,22 +6,6 @@
   <form [formGroup]="form" name="start-staking-form" id="start-staking-form" (submit)="submit()">
     <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Stake" [formControl]="amount" [suffix]="pool.token.staking.symbol"></opdex-input-control>
 
-
-    <div class="space-between"></div>
-
-    <!-- <div class="swap-info mt-1" *ngIf="form.controls.tokenIn.value > 0 && form.controls.to.value > 0">
-      <p class="mb-0">Slippage: .1%</p>
-      <p class="mb-0">Minimum Received: 12345</p>
-      <p class="mb-0">Price: 12345</p>
-      <p class="mb-0">Price Impact: 12345</p>
-      <p class="mb-0">Fee: .03%</p>
-    </div> -->
-
-    <div *ngIf="txHash">
-      <span style="font-size: 10px;">{{txHash}}</span>
-    </div>
-
     <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid">Continue</button>
-
   </form>
 </div>

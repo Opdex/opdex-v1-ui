@@ -36,4 +36,11 @@ export const TransactionTypes = [
     icon: 'add',
     iconColor: 'provide'
   },
+  {
+    id: 6,
+    title: 'Create Pool',
+    view: TransactionView.createPool,
+    icon: 'waves',
+    iconColor: 'swap'
+  },
 ]

@@ -1,3 +1,4 @@
+import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
 import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
@@ -8,6 +9,7 @@ import { delay, map, switchMap, take, tap } from 'rxjs/operators';
 import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
 import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
 import { MarketsService } from '@sharedServices/platform/markets.service';
+import { TransactionView } from '@sharedModels/transaction-view';
 
 @Component({
   selector: 'opdex-market',
@@ -50,7 +52,12 @@ export class MarketComponent implements OnInit {
   statCards: StatCardInfo[];
   selectedChart = this.chartOptions[0];
 
-  constructor(private _platformApiService: PlatformApiService, private _marketsService: MarketsService, private _tokensService: TokensService) { }
+  constructor(
+    private _platformApiService: PlatformApiService,
+    private _marketsService: MarketsService,
+    private _tokensService: TokensService,
+    private _sidebar: SidenavService
+  ) { }
 
   async ngOnInit(): Promise<void> {
     this.subscription.add(interval(30000)
@@ -264,6 +271,10 @@ export class MarketComponent implements OnInit {
     if ($event === 'Staking Weight') {
       this.chartData = this.stakingHistory;
     }
+  }
+
+  createPool() {
+    this._sidebar.openSidenav(TransactionView.createPool);
   }
 
   ngOnDestroy() {

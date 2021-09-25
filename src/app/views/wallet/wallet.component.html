@@ -9,26 +9,11 @@
       </div>
     </div>
 
-    <!-- <div class="row mb-5">
-      <div class="col-6">
-        <opdex-card>
-          <h2>Box</h2>
-          <br><br><br><br><br>
-        </opdex-card>
-      </div>
-      <div class="col-6">
-        <opdex-card>
-          <h2>Box</h2>
-          <br><br><br><br><br>
-        </opdex-card>
-      </div>
-    </div> -->
-
     <div class="row">
       <div class="col-12 col-xl-8">
-        <opdex-card *ngIf="walletBalances$ | async as walletBalances" >
+        <opdex-card *ngIf="walletBalances">
           <h2>Balances</h2>
-          <opdex-wallet-balances-table [tokens]="walletBalances"></opdex-wallet-balances-table>
+          <opdex-wallet-balances-table [records]="walletBalances" (onPageChange)="handlePageChange($event)"></opdex-wallet-balances-table>
         </opdex-card>
       </div>
 

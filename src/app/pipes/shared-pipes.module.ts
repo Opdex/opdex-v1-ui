@@ -1,3 +1,4 @@
+import { ContractParameterPipe } from './contract-parameter.pipe';
 import { NgModule } from '@angular/core';
 import { TimeagoModule } from 'ngx-timeago';
 import { CoinNotationPipe } from './coin-notation.pipe';
@@ -12,10 +13,14 @@ import { ShortNumberPipe } from './short-number.pipe';
     FormatNumberPipe,
     ShortAddressPipe,
     TimeAgoPipe,
-    ShortNumberPipe
+    ShortNumberPipe,
+    ContractParameterPipe
   ],
   imports: [
     TimeagoModule.forRoot()
+  ],
+  providers: [
+    FormatNumberPipe
   ],
   exports: [
     CoinNotationPipe,
@@ -23,7 +28,8 @@ import { ShortNumberPipe } from './short-number.pipe';
     ShortAddressPipe,
     TimeAgoPipe,
     TimeagoModule,
-    ShortNumberPipe
+    ShortNumberPipe,
+    ContractParameterPipe
   ]
 })
 export class SharedPipesModule { }

@@ -1,8 +1,8 @@
 <div class="stat-card">
   <opdex-card>
     <h4 class="stat-header">
+      <opdex-help-button *ngIf="statInfo.helpInfo" [info]="statInfo.helpInfo" class="mr-1"></opdex-help-button>
       {{statInfo.title}} <small class="ml-2" *ngIf="statInfo.daily">(24hr)</small>
-      <opdex-help-button *ngIf="statInfo.helpInfo" [info]="statInfo.helpInfo"></opdex-help-button>
     </h4>
 
     <div class="stat">

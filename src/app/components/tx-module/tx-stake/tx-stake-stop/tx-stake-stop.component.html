@@ -1,7 +1,6 @@
 <div class="stop-staking">
   <form [formGroup]="form" name="stop-staking-form" id="stop-staking-form" (submit)="submit()">
-    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.remove" label="Stop Staking" [formControl]="amount" suffix="ODX"></opdex-input-control>
-
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.remove" label="Stop Staking" [formControl]="amount" [suffix]="pool.token.staking.symbol"></opdex-input-control>
 
     <mat-checkbox
       required
@@ -13,21 +12,6 @@
       Liquidate
     </mat-checkbox>
 
-    <div class="space-between"></div>
-
-    <!-- <div class="swap-info mt-1" *ngIf="form.controls.tokenIn.value > 0 && form.controls.to.value > 0">
-      <p class="mb-0">Slippage: .1%</p>
-      <p class="mb-0">Minimum Received: 12345</p>
-      <p class="mb-0">Price: 12345</p>
-      <p class="mb-0">Price Impact: 12345</p>
-      <p class="mb-0">Fee: .03%</p>
-    </div> -->
-
-    <div *ngIf="txHash">
-      <span style="font-size: 10px;">{{txHash}}</span>
-    </div>
-
     <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid">Continue</button>
-
   </form>
 </div>

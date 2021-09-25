@@ -2,7 +2,7 @@ import { TokensService } from '@sharedServices/platform/tokens.service';
 import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
 import { delay, switchMap, take, tap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, Subscription, interval } from 'rxjs';
 import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
@@ -38,16 +38,35 @@ export class TokenComponent implements OnInit {
   selectedChart = this.chartOptions[0];
   transactionRequest: ITransactionsRequest;
   statCards: StatCardInfo[];
+  routerSubscription = new Subscription();
+
 
   constructor(
     private _route: ActivatedRoute,
     private _platformApiService: PlatformApiService,
     private _tokensService: TokensService,
-  ) {
-    this.tokenAddress = this._route.snapshot.params.token;
-  }
+    private _router: Router
+  ) { }
 
   ngOnInit(): void {
+    this.init();
+
+    this.routerSubscription.add(
+      this._router.events.subscribe((evt) => {
+        if (!(evt instanceof NavigationEnd)) return;
+        this.init();
+      })
+    );
+  }
+
+  init() {
+    this.tokenAddress = this._route.snapshot.params.token;
+
+    if (!this.subscription.closed) {
+      this.subscription.unsubscribe();
+      this.subscription = new Subscription();
+    }
+
     this.subscription.add(interval(30000)
       .pipe(tap(_ => {
         this._tokensService.refreshToken(this.tokenAddress);
@@ -155,5 +174,6 @@ export class TokenComponent implements OnInit {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.routerSubscription.unsubscribe();
   }
 }

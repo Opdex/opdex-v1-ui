@@ -179,8 +179,9 @@ export class PlatformApiService extends RestApiService {
     return this.get<IVault>(`${this.api}/vaults/${address}`);
   }
 
-  public getVaultCertificates(address: string): Observable<IVaultCertificates> {
-    return this.get<IVaultCertificates>(`${this.api}/vaults/${address}/certificates`);
+  public getVaultCertificates(address: string, limit?: number, cursor?: string): Observable<IVaultCertificates> {
+    let query = cursor ? `?cursor=${cursor}` : `?limit=${limit}&direction=ASC`;
+    return this.get<IVaultCertificates>(`${this.api}/vaults/${address}/certificates${query}`);
   }
 
   ////////////////////////////
@@ -215,6 +216,10 @@ export class PlatformApiService extends RestApiService {
     return this.post<ITransactionQuote>(`${this.api}/transactions/replay-quote`, payload);
   }
 
+  public notifyTransaction(payload: any): Observable<void> {
+    return this.post(`${this.api}/transactions`, payload);
+  }
+
   ////////////////////////////////////////////////////////
   // Wallet Transactions - Temporary Local ENV only
   ////////////////////////////////////////////////////////
@@ -229,8 +234,10 @@ export class PlatformApiService extends RestApiService {
   }
 
   // Balances
-  public getWalletBalances(wallet: string): Observable<IAddressBalances> {
-    return this.get<IAddressBalances>(`${this.api}/wallet/${wallet}/balance?limit=${10}&direction=ASC&includeLpTokens=false`);
+  public getWalletBalances(wallet: string, limit?: number, cursor?: string): Observable<IAddressBalances> {
+    let query = cursor ? `?cursor=${cursor}` : `?limit=${limit}&direction=ASC&includeLpTokens=false`;
+
+    return this.get<IAddressBalances>(`${this.api}/wallet/${wallet}/balance${query}`);
   }
 
   public getAllowance(owner: string, spender: string, token: string): Observable<IAddressAllowanceResponse> {

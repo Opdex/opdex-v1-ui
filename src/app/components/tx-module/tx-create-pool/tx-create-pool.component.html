@@ -1,0 +1,9 @@
+<div class="create-pool">
+  <opdex-card [thin]="true">
+    <form [formGroup]="form" name="create-pool-form" id="swap-form" (submit)="submit()">
+      <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.link" label="Token" [formControl]="token" placeholder="Token Address..."></opdex-input-control>
+
+      <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid">Continue</button>
+    </form>
+  </opdex-card>
+</div>

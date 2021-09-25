@@ -7,7 +7,7 @@
       <p *ngSwitchCase="transactionTypes.startMining" class="mb-3">An allowance must be approved in order to mine with {{allowance.requestToSpend | shortNumber}} {{allowance.token.symbol}} tokens.</p>
       <p *ngSwitchCase="transactionTypes.swap" class="mb-3">An allowance must be approved in order to swap {{allowance.requestToSpend | shortNumber}} {{allowance.token.symbol}} tokens.</p>
       <p *ngSwitchCase="transactionTypes.startStaking" class="mb-3">An allowance must be approved in order to stake {{allowance.requestToSpend | shortNumber}} {{allowance.token.symbol}} tokens.</p>
-      <p *ngSwitchDefault class="mb-3">In order to stake {{allowance.requestToSpend}} ODX, the liquidity pool must have an approved allowance of at least that much.</p>
+      <p *ngSwitchDefault class="mb-3">In order to stake {{allowance.requestToSpend}} {{allowance.token.symbol}}, the liquidity pool must have an approved allowance of at least that much.</p>
     </ng-container>
     <button mat-raised-button class="white w-100" (click)="approveAllowance(allowance.requestToSpend, allowance.spender, allowance.token.address)">Begin Approval</button>
     <button mat-stroked-button class="mt-2 w-100" (click)="setIgnore(true)">{{transactionType}} Anyways</button>

@@ -1,70 +1,85 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { switchMap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
+import { JwtService } from '@sharedServices/utility/jwt.service';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
+import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { SignTxModalComponent } from '@sharedComponents/modals-module/sign-tx-modal/sign-tx-modal.component';
 import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable } from 'rxjs';
-import { take, tap } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
+import { environment } from '@environments/environment';
+import { Network } from 'src/app/enums/networks';
 
 @Component({
   selector: 'opdex-review-quote',
   templateUrl: './review-quote.component.html',
   styleUrls: ['./review-quote.component.scss']
 })
-export class ReviewQuoteComponent implements OnInit {
+export class ReviewQuoteComponent implements OnInit, OnDestroy {
   agree = new FormControl(false);
   txHash: string;
   submitting = false;
   quote$: Observable<ITransactionQuote>;
   quote: ITransactionQuote;
   quoteRequest: any;
+  hubConnection: HubConnection;
+  isDevnet: boolean;
+  copied: boolean;
 
   public constructor(
     private _platformApi: PlatformApiService,
     public _bottomSheetRef: MatBottomSheetRef<SignTxModalComponent>,
-    @Inject(MAT_BOTTOM_SHEET_DATA) public data: any)
-  {
-    // Todo: data injected should be an existing TransactionQuote previously fetched. Then using that data, implement polling on
-    // the replay-quote endpoint removing the need for the if/else logic below.
-    console.log(this.data)
-  }
+    private _jwt: JwtService,
+    @Inject(MAT_BOTTOM_SHEET_DATA) public data: ITransactionQuote
+  ) { }
 
   ngOnInit() {
-    if (this.data.transactionType === 'swap') {
-      this.quote$ = this._platformApi.swap(this.data.payload);
-    } else if (this.data.transactionType === 'add-liquidity') {
-      this.quote$ = this._platformApi.addLiquidity(this.data.payload);
-    } else if (this.data.transactionType === 'remove-liquidity') {
-      this.quote$ = this._platformApi.removeLiquidityQuote(this.data.payload.liquidityPool, this.data.payload);
-    } else if (this.data.transactionType === 'start-staking') {
-      this.quote$ = this._platformApi.startStakingQuote(this.data.payload.liquidityPool, this.data.payload);
-    } else if (this.data.transactionType === 'stop-staking') {
-      this.quote$ = this._platformApi.stopStakingQuote(this.data.payload.liquidityPool, this.data.payload);
-    } else if (this.data.transactionType === 'collect-staking-rewards') {
-      this.quote$ = this._platformApi.collectStakingRewardsQuote(this.data.payload.liquidityPool, this.data.payload);
-    } else if (this.data.transactionType === 'start-mining') {
-      this.quote$ = this._platformApi.startMiningQuote(this.data.payload.miningPool, this.data.payload);
-    } else if (this.data.transactionType === 'stop-mining') {
-      this.quote$ = this._platformApi.stopMiningQuote(this.data.payload.miningPool, this.data.payload);
-    } else if (this.data.transactionType === 'collect-mining-rewards') {
-      this.quote$ = this._platformApi.collectMiningRewardsQuote(this.data.payload.miningPool);
-    } else if (this.data.transactionType === 'approve') {
-      this.quote$ = this._platformApi.approveAllowanceQuote(this.data.payload.token, this.data.payload);
-    } else if (this.data.transactionType === 'reward-mining-pools') {
-      this.quote$ = this._platformApi.rewardMiningPoolsQuote(this.data.governance, this.data.payload);
-    }
+    this.isDevnet = environment.network == Network.Devnet;
+    this.connectToSignalR();
+    this.setQuoteRequest(this.data.request);
+    this.quote = this.data;
+
+    // Todo: Set on a timer.
+    this.quote$ = this._platformApi.replayQuote({quote: this.data.request});
 
     this.quote$
       .pipe(
         take(1),
-        tap(q => this.quoteRequest = JSON.parse(atob(q.request))),
-        // Todo: Figure out and comment wtf this does...
-        tap(_ => this.quoteRequest.method = this.quoteRequest.method.replace(/([A-Z])/g, ' $1').trim())
-      )
-      .subscribe(rsp => this.quote = rsp);
+        tap(q => this.setQuoteRequest(q.request))
+      ).subscribe(rsp => this.quote = rsp);
+  }
 
+  private async connectToSignalR(): Promise<void> {
+    this.hubConnection = new HubConnectionBuilder()
+      .withUrl(`${environment.apiUrl}/transactions/socket`, {
+        accessTokenFactory: () => this._jwt.getToken()
+      })
+      .configureLogging(LogLevel.Information)
+      .withAutomaticReconnect()
+      .build();
 
+    this.hubConnection.on('OnTransactionBroadcast', async (txHash: string) => {
+      this.submitting = false;
+      this.txHash = txHash;
+    });
+
+    this.hubConnection.onclose(() => {
+      console.log('closing connection')
+    });
+
+    await this.hubConnection.start();
+  }
+
+  private setQuoteRequest(request: string) {
+    const quoteRequest = JSON.parse(atob(request))
+
+    // Changes method name to pascal case with spacing.
+    quoteRequest.method = quoteRequest.method.replace(/([A-Z])/g, ' $1').trim();
+
+    this.quoteRequest = quoteRequest;
   }
 
   public transactionLogsTrackBy(index: number, transactionLog: any) {
@@ -72,13 +87,29 @@ export class ReviewQuoteComponent implements OnInit {
   }
 
   submit() {
-    this.submitting = true;
+    if (!this.isDevnet) {
+      return;
+    }
 
+    this.submitting = true;
     this._platformApi.broadcastQuote({quote: this.quote.request})
-      .pipe(take(1))
-      .subscribe(response => {
-        this.txHash = response.txHash;
-        this.submitting = false;
-      });
+      .pipe(
+        take(1),
+        switchMap(response => this._platformApi.notifyTransaction({walletAddress: this.quoteRequest.sender, transactionHash: response.txHash}).pipe(take(1))))
+        .subscribe();
+  }
+
+  copyHandler() {
+    this.copied = true;
+    setTimeout(() => this.copied = false, 1000);
+  }
+
+  close() {
+    this._bottomSheetRef.dismiss();
+  }
+
+  async ngOnDestroy() {
+    // stop the connection if one exists
+    if (this.hubConnection && this.hubConnection.connectionId) await this.hubConnection.stop();
   }
 }
