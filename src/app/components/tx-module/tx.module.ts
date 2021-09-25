@@ -21,6 +21,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { QRCodeModule } from 'angularx-qrcode';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 
 import { TxSwapComponent } from './tx-swap/tx-swap.component';
@@ -145,7 +146,8 @@ import { TxCreatePoolComponent } from './tx-create-pool/tx-create-pool.component
     SharedPipesModule,
     ClipboardModule,
     SharedModule,
-    ControlsModule
+    ControlsModule,
+    MatAutocompleteModule
   ],
   exports: [
     TxSwapComponent,

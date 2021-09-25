@@ -1,6 +1,30 @@
 <div class="pool-details">
   <div class="pool-selection" *ngIf="!pool">
-    <button mat-flat-button color="primary">Select Liquidity Pool</button>
+    <opdex-card [thin]="true">
+      <form [formGroup]="poolForm" name="liquidity-pool-form" id="liquidity-pool-form">
+        <mat-form-field floatLabel="always">
+          <mat-label>Liquidity Pool</mat-label>
+
+          <button mat-icon-button matPrefix type="button" class="mr-2" disabled><mat-icon>waves</mat-icon></button>
+
+          <input matInput aria-label="Public Key" [matAutocomplete]="auto" [formControl]="poolControl" type="text">
+
+          <mat-hint>Select a liquidity pool.</mat-hint>
+
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectPool($event)">
+            <ng-container *ngIf="pools$ | async">
+              <mat-option *ngFor="let pool of filteredPools$ | async" [value]="pool">
+                <div class="d-flex flex-column">
+                  <small style="font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 20px">{{pool.token.src.symbol}}-CRS</small>
+                  <small class="light" style="font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 16px;">{{pool.address}}</small>
+                </div>
+              </mat-option>
+            </ng-container>
+
+          </mat-autocomplete>
+        </mat-form-field>
+      </form>
+    </opdex-card>
   </div>
 
   <opdex-card class="pool-summary" *ngIf="pool" [thin]="true">

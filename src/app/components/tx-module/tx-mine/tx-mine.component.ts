@@ -22,4 +22,8 @@ export class TxMineComponent implements OnChanges {
     this.child = this.txOptions.find(o => o.action.toLowerCase() == this.data?.child)?.value || 1;
     this.pool = this.data?.pool;
   }
+
+  handlePoolChange(pool: ILiquidityPoolSummary) {
+    this.pool = pool;
+  }
 }

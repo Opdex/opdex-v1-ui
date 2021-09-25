@@ -49,8 +49,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.publicKeys$ = this.publicKey.valueChanges
       .pipe(
         startWith(''),
-        map(key => key ? this._filterPublicKeys(key) : this.publicKeys.slice())
-      );
+        map(key => key ? this._filterPublicKeys(key) : this.publicKeys.slice()));
   }
 
   private _filterPublicKeys(value: string): string[] {
