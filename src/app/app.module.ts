@@ -48,6 +48,9 @@ import { VaultComponent } from './views/vault/vault.component';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { jwtOptionsFactory } from '@sharedServices/utility/jwt.service';
 import { QRCodeModule } from 'angularx-qrcode';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -94,6 +97,9 @@ import { QRCodeModule } from 'angularx-qrcode';
     MatFormFieldModule,
     MatInputModule,
     QRCodeModule,
+    MatAutocompleteModule,
+    MatSelectModule,
+    MatCheckboxModule,
     JwtModule.forRoot({
       jwtOptionsProvider: {
         provide: JWT_OPTIONS,

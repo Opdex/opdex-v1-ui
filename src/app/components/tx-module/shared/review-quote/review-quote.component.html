@@ -60,28 +60,13 @@
 
     <mat-divider></mat-divider>
 
-    <div class="d-flex justify-content-center mt-3 mb-3">
-      <div class="qr-code-wrapper" [cdkCopyToClipboard]="quote?.request" (cdkCopyToClipboardCopied)="copyHandler()">
-        <qrcode
-          [qrdata]="quote.request"
-          [width]="250"
-          [margin]="2"
-          [errorCorrectionLevel]="'M'"
-          *ngIf="quote?.request"></qrcode>
-
-        <mat-icon>{{copied ? 'check_circle' : 'file_copy'}}</mat-icon>
-      </div>
-    </div>
-
-    <div class="mb-3 d-flex justify-content-center">
-      <small class="light d-flex"><opdex-help-button class="mr-1"></opdex-help-button> Help</small>
-    </div>
+    <opdex-qr-code [data]="quote?.request"></opdex-qr-code>
 
     <button mat-stroked-button class="w-100 mt-2" (click)="close()">Close</button>
 
     <ng-container *ngIf="isDevnet">
-      <button mat-flat-button color="primary" class="w-100 mt-3 mb-3 ml-0" (click)="submit()" [disabled]="submitting" cdkFocusInitial>{{!submitting ? 'Local Submit' : 'Submitting'}}</button>
-      <mat-progress-bar mode="indeterminate" *ngIf="submitting"></mat-progress-bar>
+      <button mat-flat-button color="primary" class="w-100 mt-3 ml-0" (click)="submit()" [disabled]="submitting" cdkFocusInitial>{{!submitting ? 'Local Submit' : 'Submitting'}}</button>
+      <mat-progress-bar mode="indeterminate" *ngIf="submitting" class="mt-3"></mat-progress-bar>
     </ng-container>
   </ng-container>
 

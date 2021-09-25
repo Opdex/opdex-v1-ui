@@ -27,7 +27,6 @@ export class ReviewQuoteComponent implements OnInit, OnDestroy {
   quoteRequest: any;
   hubConnection: HubConnection;
   isDevnet: boolean;
-  copied: boolean;
 
   public constructor(
     private _platformApi: PlatformApiService,
@@ -97,11 +96,6 @@ export class ReviewQuoteComponent implements OnInit, OnDestroy {
         take(1),
         switchMap(response => this._platformApi.notifyTransaction({walletAddress: this.quoteRequest.sender, transactionHash: response.txHash}).pipe(take(1))))
         .subscribe();
-  }
-
-  copyHandler() {
-    this.copied = true;
-    setTimeout(() => this.copied = false, 1000);
   }
 
   close() {

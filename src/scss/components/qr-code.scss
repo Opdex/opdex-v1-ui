@@ -1,17 +1,16 @@
 .qr-code-wrapper {
   display: inline-block;
   position: relative;
-  transition: opacity .1s ease;
   width: 250px;
   height: 250px;
+  background: #333;
 
   &:hover {
     cursor: pointer;
-    background: black;
 
     .qrcode {
       opacity: .2 !important;
-      transition: opacity .1s ease;
+      transition: opacity .1s ease-in;
     }
 
     .mat-icon {
@@ -28,7 +27,7 @@
   }
 
   .qrcode {
-    transition: opacity .2s ease;
+    transition: opacity .1s ease-out;
   }
 
   .mat-icon {

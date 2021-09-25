@@ -16,12 +16,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { ChangeIndicatorComponent } from './change-indicator/change-indicator.component';
 import { CopyButtonComponent } from './copy-button/copy-button.component';
 import { HelpButtonComponent } from './help-button/help-button.component';
+import { QrCodeComponent } from './qr-code/qr-code.component';
+
+// Other Imports
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   declarations: [
     ChangeIndicatorComponent,
     CopyButtonComponent,
-    HelpButtonComponent
+    HelpButtonComponent,
+    QrCodeComponent
   ],
   imports: [
     CommonModule,
@@ -30,7 +35,8 @@ import { HelpButtonComponent } from './help-button/help-button.component';
     MatTooltipModule,
     MatButtonModule,
     ClipboardModule,
-    SharedPipesModule
+    SharedPipesModule,
+    QRCodeModule
   ],
   exports: [
     ChangeIndicatorComponent,
@@ -38,7 +44,8 @@ import { HelpButtonComponent } from './help-button/help-button.component';
     MatIconModule,
     MatButtonModule,
     ChangeIndicatorComponent,
-    HelpButtonComponent
+    HelpButtonComponent,
+    QrCodeComponent
   ]
 })
 export class SharedModule { }

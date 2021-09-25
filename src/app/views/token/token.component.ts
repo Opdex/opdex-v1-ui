@@ -110,18 +110,18 @@ export class TokenComponent implements OnInit {
         prefix: '$',
         show: true,
         helpInfo: {
-          title: 'Price Help',
-          paragraph: 'This modal is providing help for Price.'
+          title: 'Price',
+          paragraph: 'This indicator provides the latest known USD price of the token. USD prices are computed using Cirrus (CRS) USD price and the liquidity pool reserve ratio between the displayed token and its liquidity pool reserves.'
         }
       },
       {
         title: 'Total Supply',
         value: this.token.totalSupply,
-        daily: true,
+        daily: false,
         show: true,
         helpInfo: {
-          title: 'Total Supply Help',
-          paragraph: 'This modal is providing help for Total Supply'
+          title: 'Total Supply',
+          paragraph: 'This indicator is the latest known total supply value of the token. The total supply is how many tokens are in circulation and exist in contract.'
         }
       }
     ];

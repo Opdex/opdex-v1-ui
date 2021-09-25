@@ -1,3 +1,4 @@
+import { SharedModule } from '@sharedComponents/shared-module/shared.module';
 import { SharedPipesModule } from './../../pipes/shared-pipes.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -44,7 +45,8 @@ import { HelpModalComponent } from './help-modal/help-modal.component';
     MatCheckboxModule,
     MatProgressBarModule,
     MatBottomSheetModule,
-    QRCodeModule
+    QRCodeModule,
+    SharedModule
   ],
   exports: [
     HelpModalComponent

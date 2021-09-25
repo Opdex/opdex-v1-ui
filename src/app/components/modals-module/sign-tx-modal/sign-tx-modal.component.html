@@ -104,20 +104,8 @@
       <p>0.01 CRS ($0.20)</p>
     </div>
 
-    <!-- <mat-checkbox
-      class="mt-3"
-      color="primary"
-      name="agree"
-      value="false"
-      aria-label="Agree to Terms of Service"
-      [formControl]="agree"
-      *ngIf="!agree.value">
-      I agree to the <a href="javascript:void(0)">Terms & Conditions</a>
-    </mat-checkbox> -->
+    <opdex-qr-code [data]="'aslkdfhaskdjlfjhagsdgfklasdjhfgasdhfmawkjehgkalsjfdhlgasdklf'"></opdex-qr-code>
 
-    <!-- <ng-container *ngIf="agree.value"> -->
-      <!-- <h3>Replay From Your Wallet</h3> -->
-    <qrcode [qrdata]="'aslkdfhaskdjlfjhagsdgfklasdjhfgasdhfmawkjehgkalsjfdhlgasdklf'" [width]="250" [margin]="2" [errorCorrectionLevel]="'M'"></qrcode>
 
     <p class="text-center light">Scan with Stratis Wallet</p>
 

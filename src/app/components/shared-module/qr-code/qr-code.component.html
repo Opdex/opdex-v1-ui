@@ -1,0 +1,17 @@
+<ng-container *ngIf="data">
+  <div class="d-flex justify-content-center mt-3 mb-3">
+    <div class="qr-code-wrapper" [cdkCopyToClipboard]="data" (cdkCopyToClipboardCopied)="copyHandler()">
+      <qrcode
+        [qrdata]="data"
+        [width]="250"
+        [margin]="2"
+        [errorCorrectionLevel]="'M'"></qrcode>
+
+      <mat-icon>{{copied ? 'check_circle' : 'file_copy'}}</mat-icon>
+    </div>
+  </div>
+
+  <div class="mb-3 d-flex justify-content-center">
+    <small class="light d-flex"><opdex-help-button [info]="helpInfo" class="mr-1"></opdex-help-button> Help</small>
+  </div>
+</ng-container>

@@ -94,8 +94,8 @@ export class MarketComponent implements OnInit {
         change: this.market.crsToken.summary.dailyPriceChange,
         show: true,
         helpInfo: {
-          title: 'Cirrus (CRS) Help',
-          paragraph: 'This modal is providing help for Cirrus (CRS)'
+          title: 'What is CRS?',
+          paragraph: 'CRS is the native token of Cirrus sidechain. CRS can be obtained through a Stratis cross chain transfer from STRAX to Cirrus at a 1:1 ratio. CRS are used as a base token in all liquidity pools as well as used for transactional gas costs.'
         }
       },
       {
@@ -105,8 +105,8 @@ export class MarketComponent implements OnInit {
         change: this.market.summary.liquidityDailyChange,
         show: true,
         helpInfo: {
-          title: 'Liquidity Help',
-          paragraph: 'This modal is providing help for Liquidity'
+          title: 'What is Liquidity?',
+          paragraph: 'Liquidity represents the total USD amount of tokens locked in liquidity pools through provisioning. Liquidity can be measured for the market as a whole, or at an individual liquidity pool level.'
         }
       },
       {
@@ -116,8 +116,8 @@ export class MarketComponent implements OnInit {
         change: this.market.summary.staking.weightDailyChange,
         show: true,
         helpInfo: {
-          title: 'Staking Weight Help',
-          paragraph: 'This modal is providing help for Staking Weight.'
+          title: 'What is Staking?',
+          paragraph: 'Staking in liquidity pools acts as voting in the mining governance to enable liquidity mining. This indicator displays how many tokens are staking and can be represented for the market as a whole or at an individual staking pool level.'
         }
       },
       {
@@ -127,8 +127,8 @@ export class MarketComponent implements OnInit {
         daily: true,
         show: true,
         helpInfo: {
-          title: 'Volume Help',
-          paragraph: 'This modal is providing help for Volume'
+          title: 'What is Volume?',
+          paragraph: 'Volume is the total USD value of tokens swapped and is usually displayed on a daily time frame. Volume tracks the value of tokens input to the protocol during swaps including transaction fees.'
         }
       },
       {
@@ -138,8 +138,8 @@ export class MarketComponent implements OnInit {
         prefix: '$',
         show: true,
         helpInfo: {
-          title: 'Rewards Help',
-          paragraph: 'This modal is providing help for Rewards'
+          title: 'What are Rewards?',
+          paragraph: 'The rewards indicator displays the total USD value of transaction fees accumulated based on the volume of swap transactions. Rewards are collected by participants for providing liquidity and for staking in active markets.'
         }
       }
     ];

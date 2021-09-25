@@ -162,8 +162,8 @@ export class PoolComponent implements OnInit, OnDestroy {
         change: this.pool.reserves.usdDailyChange,
         show: true,
         helpInfo: {
-          title: 'Liquidity Help',
-          paragraph: 'This modal is providing help for Liquidity'
+          title: 'What is Liquidity?',
+          paragraph: 'Liquidity represents the total USD amount of tokens locked in liquidity pools through provisioning. Liquidity can be measured for the market as a whole, or at an individual liquidity pool level.'
         }
       },
       {
@@ -173,8 +173,8 @@ export class PoolComponent implements OnInit, OnDestroy {
         change: this.pool.staking?.weightDailyChange || 0,
         show: true,
         helpInfo: {
-          title: 'Staking Weight Help',
-          paragraph: 'This modal is providing help for Staking Weight.'
+          title: 'What is Staking?',
+          paragraph: 'Staking in liquidity pools acts as voting in the mining governance to enable liquidity mining. This indicator displays how many tokens are staking and can be represented for the market as a whole or at an individual staking pool level.'
         }
       },
       {
@@ -184,8 +184,8 @@ export class PoolComponent implements OnInit, OnDestroy {
         daily: true,
         show: true,
         helpInfo: {
-          title: 'Volume Help',
-          paragraph: 'This modal is providing help for Volume'
+          title: 'What is Volume?',
+          paragraph: 'Volume is the total USD value of tokens swapped and is usually displayed on a daily time frame. Volume tracks the value of tokens input to the protocol during swaps including transaction fees.'
         }
       },
       {
@@ -195,8 +195,8 @@ export class PoolComponent implements OnInit, OnDestroy {
         prefix: '$',
         show: true,
         helpInfo: {
-          title: 'Rewards Help',
-          paragraph: 'This modal is providing help for Rewards'
+          title: 'What are Rewards?',
+          paragraph: 'The rewards indicator displays the total USD value of transaction fees accumulated based on the volume of swap transactions. Rewards are collected by participants for providing liquidity and for staking in active markets.'
         }
       },
       {
@@ -205,8 +205,8 @@ export class PoolComponent implements OnInit, OnDestroy {
         suffix: this.pool.token.lp.symbol,
         show: this.pool.mining != null && (this.pool.mining?.isActive || this.pool.mining?.tokensMining !== '0.00000000'),
         helpInfo: {
-          title: 'Liquidity Mining Help',
-          paragraph: 'This modal is providing help for Liquidity Mining'
+          title: 'What is Liquidity Mining?',
+          paragraph: 'Liquidity mining is when new governance tokens are mined when liquidity is provided and staked in mining pools. This indicator displays the totals current being used for mining within the liquidity pool whether liquidity mining is currently active or not.'
         }
       }
     ];
