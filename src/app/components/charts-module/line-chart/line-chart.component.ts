@@ -104,11 +104,12 @@ export class LineChartComponent implements OnInit, OnChanges {
       }
 
       if (this.loading) {
-        this.chart.timeScale().fitContent()
-        this.setLastBarText();
         this.chart.subscribeCrosshairMove(params => this.crosshairMovedHandler(params));
         this.loading = false;
       }
+
+      this.setLastBarText();
+      this.chart.timeScale().fitContent()
     }
   }
 
