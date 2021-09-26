@@ -370,6 +370,22 @@ export class PoolComponent implements OnInit, OnDestroy {
     }
   }
 
+  provide() {
+    this._sidenav.openSidenav(TransactionView.provide, {pool: this.pool});
+  }
+
+  swap() {
+    this._sidenav.openSidenav(TransactionView.swap, {pool: this.pool});
+  }
+
+  stake() {
+    this._sidenav.openSidenav(TransactionView.stake, {pool: this.pool});
+  }
+
+  mine() {
+    this._sidenav.openSidenav(TransactionView.mine, {pool: this.pool});
+  }
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
     this.routerSubscription.unsubscribe();

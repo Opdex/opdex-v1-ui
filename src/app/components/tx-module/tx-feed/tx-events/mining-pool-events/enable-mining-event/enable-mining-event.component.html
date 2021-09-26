@@ -1,10 +1,7 @@
 <p class="mb-0" *ngIf="pool$ | async as pool; else loading">
-  Enabled liquidity mining of <strong>{{event.amount | shortNumber}} </strong>
-  <a class="no-decoration" routerLink="/tokens/{{pool.token.staking.address}}">{{pool.token.staking.symbol}}</a>
-  for
-  <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.token.src.symbol}}/CRS</a>.
+  Enabled liquidity mining for <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.token.src.symbol}}/CRS</a>.
 </p>
 
 <ng-template #loading>
-  Enabled liquidity mining of <strong>{{event.amount | shortNumber}}</strong> XYZ for ABC/CRS.
+  Enabled liquidity mining for ABC/CRS.
 </ng-template>

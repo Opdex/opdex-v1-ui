@@ -5,6 +5,63 @@ h1 {
   letter-spacing: .05em;
 }
 
+.big-button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(37, 37, 37, 0.2) !important;
+  margin-bottom: 15px;
+  min-width: auto;
+
+  &:hover {
+    box-shadow: 0px 2px 1px rgba(0,0,0,0.1) !important;
+  }
+
+  &:disabled {
+    box-shadow: 0px 2px 5px rgba(37, 37, 37, 0.2) !important;
+
+    .mat-icon {
+      opacity: .5;
+    }
+  }
+
+  .text {
+    display: none;
+  }
+
+  &.swap-button {
+    background: rgba($blue-primary, .2) !important;
+
+    .mat-icon {
+      color: $blue-primary;
+    }
+  }
+
+  &.provide-button {
+    background: rgba($green-primary, .2) !important;
+
+    .mat-icon {
+      color: $green-primary;
+    }
+  }
+
+  &.stake-button {
+    background: rgba($purple-primary, .2) !important;
+
+    .mat-icon {
+      color: $purple-primary;
+    }
+  }
+
+  &.mine-button {
+    background: rgba($red-primary, .2) !important;
+
+    .mat-icon {
+      color: $red-primary;
+    }
+  }
+}
+
 .chip-group {
   display: flex;
   flex: 0 1 auto;
@@ -112,3 +169,26 @@ h1 {
   color: $red-primary;
   font-weight: 400;
 }
+
+
+@media (min-width: 320px) { }
+
+@media (min-width: 576px) { }
+
+@media (min-width: 768px) { }
+
+@media (min-width: 992px) {
+  .big-button {
+    padding: 15px;
+
+    .mat-icon {
+      margin-right: 10px;
+    }
+
+    .text {
+      display: inline;
+    }
+  }
+}
+
+@media (min-width: 1200px) { }

@@ -105,6 +105,36 @@
         </div>
 
         <div class="row">
+          <div class="col-3">
+            <button mat-raised-button class="big-button swap-button" (click)="swap()">
+              <mat-icon>swap_horiz</mat-icon>
+              <span class="text">Swap</span>
+            </button>
+          </div>
+
+          <div class="col-3">
+            <button mat-raised-button class="big-button provide-button" (click)="provide()">
+              <mat-icon>control_point_duplicate</mat-icon>
+              <span class="text">Provide</span>
+            </button>
+          </div>
+
+          <div class="col-3">
+            <button mat-raised-button class="big-button stake-button" (click)="stake()">
+              <mat-icon>verified_user</mat-icon>
+              <span class="text">Stake</span>
+            </button>
+          </div>
+
+          <div class="col-3">
+            <button mat-raised-button class="big-button mine-button" (click)="mine()" [disabled]="!pool.mining">
+              <mat-icon>whatshot</mat-icon>
+              <span class="text">Mine</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="row">
           <div class="col-12">
             <opdex-card>
               <h2 class="d-flex align-items-center">Active Positions</h2>
