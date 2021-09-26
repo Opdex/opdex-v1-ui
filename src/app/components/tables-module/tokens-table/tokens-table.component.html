@@ -28,7 +28,9 @@
             ${{element.price | shortNumber}}
           </div>
 
-          <opdex-line-change [chartData]="element.price7d" *ngIf="element.price7d" class="float-right"></opdex-line-change>
+          <div style="width: 150px;" class="float-right">
+            <opdex-line-change [chartData]="element.price7d" *ngIf="element.price7d"></opdex-line-change>
+          </div>
         </div>
       </td>
     </ng-container>

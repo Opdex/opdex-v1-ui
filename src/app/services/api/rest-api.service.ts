@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from '@sharedServices/utility/error.service';
 import { throwError, Observable } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError, delay, retry, retryWhen, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -20,7 +20,7 @@ export class RestApiService {
   protected get<T>(endpoint: string, options: object = {}): Observable<T> {
     return this._http.get<T>(endpoint, options)
       .pipe(
-        retry(3),
+        retryWhen(errors => errors.pipe(delay(1000), take(2))),
         catchError(error => this.handleError(error))
       );
   }
