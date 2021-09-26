@@ -22,9 +22,7 @@
 
     <div class="row mb-4" >
       <div class="col-12 col-md-8">
-        <opdex-card class="p-0">
-          <!-- <opdex-line-chart [chartData]="priceHistory" title="{{token.symbol}} USD" *ngIf="priceHistory"></opdex-line-chart> -->
-
+        <opdex-card [noPadding]="true">
           <opdex-line-chart
                 [chartData]="chartData"
                 [chartOptions]="chartOptions"
@@ -39,14 +37,5 @@
         <opdex-tx-feed [transactionRequest]="transactionRequest"></opdex-tx-feed>
       </div>
     </div>
-
-    <!-- <div class="row mb-4">
-      <div class="col-12 mb-4">
-        <opdex-card>
-          <h2>Recent Transactions</h2>
-          <opdex-transactions-table></opdex-transactions-table>
-        </opdex-card>
-      </div>
-    </div>
-  </div> -->
+  </div>
 </div>

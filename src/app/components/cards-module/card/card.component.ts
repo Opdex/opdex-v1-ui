@@ -11,6 +11,7 @@ export class CardComponent {
   @Input() success: boolean = false;
   @Input() thin: boolean = false;
   @Input() closable: boolean = false;
+  @Input() noPadding: boolean = false;
 
   closed: boolean;
 

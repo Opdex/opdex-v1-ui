@@ -56,19 +56,19 @@ export class PoolComponent implements OnInit, OnDestroy {
     },
     {
       type: 'line',
-      category: 'Staking Weight',
+      category: 'Staking',
       suffix: 'ODX',
       decimals: 2
     },
     {
       type: 'candle',
-      category: 'SRC/CRS Cost',
+      category: 'SRC/CRS',
       suffix: 'SRC',
       decimals: 8
     },
     {
       type: 'candle',
-      category: 'CRS/SRC Cost',
+      category: 'CRS/SRC',
       suffix: 'CRS',
       decimals: 8
     }
@@ -361,11 +361,11 @@ export class PoolComponent implements OnInit, OnDestroy {
       this.chartData = this.liquidityHistory;
     } else if ($event === 'Volume') {
       this.chartData = this.volumeHistory;
-    } else if ($event === 'Staking Weight') {
+    } else if ($event === 'Staking') {
       this.chartData = this.stakingHistory;
-    } else if ($event === `CRS/${this.pool.token.src.symbol} Cost`) {
+    } else if ($event === `CRS/${this.pool.token.src.symbol}`) {
       this.chartData = this.crsPerSrcHistory;
-    } else if ($event === `${this.pool.token.src.symbol}/CRS Cost`) {
+    } else if ($event === `${this.pool.token.src.symbol}/CRS`) {
       this.chartData = this.srcPerCrsHistory;
     }
   }

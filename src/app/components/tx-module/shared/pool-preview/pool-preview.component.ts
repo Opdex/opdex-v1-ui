@@ -43,7 +43,9 @@ export class PoolPreviewComponent {
   }
 
   private _filterPublicKeys(value: string): ILiquidityPoolSummary[] {
-    const filterValue = value.toLowerCase();
+    if (!value) [];
+
+    const filterValue = value.toString().toLowerCase();
 
     return this.pools.filter(pool => {
       var addressMatch = pool.address.toLowerCase().includes(filterValue);

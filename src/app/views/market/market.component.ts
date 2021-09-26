@@ -44,9 +44,9 @@ export class MarketComponent implements OnInit {
     },
     {
       type: 'line',
-      category: 'Staking Weight',
+      category: 'Staking',
       suffix: 'ODX',
-      decimals: 0
+      decimals: 2
     }
   ];
   statCards: StatCardInfo[];
@@ -268,7 +268,7 @@ export class MarketComponent implements OnInit {
       this.chartData = this.volumeHistory;
     }
 
-    if ($event === 'Staking Weight') {
+    if ($event === 'Staking') {
       this.chartData = this.stakingHistory;
     }
   }

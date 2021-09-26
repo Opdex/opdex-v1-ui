@@ -91,6 +91,10 @@ export class PlatformApiService extends RestApiService {
   // Liquidity Pools
   ////////////////////////////
 
+  public createLiquidityPool(payload: any): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/liquidity-pools`, payload);
+  }
+
   public getPool(address: string): Observable<ILiquidityPoolSummary> {
     return this.get<ILiquidityPoolSummary>(`${this.api}/liquidity-pools/${address}`);
   }

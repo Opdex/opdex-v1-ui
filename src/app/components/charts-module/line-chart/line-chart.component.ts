@@ -1,9 +1,10 @@
 import { Subscription } from 'rxjs';
-import { ThemeService } from './../../../services/utility/theme.service';
+import { ThemeService } from '@sharedServices/utility/theme.service';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 import { ResizedEvent } from 'angular-resize-event';
-import { createChart, ISeriesApi, IChartApi, LineWidth, DeepPartial, MouseEventParams } from 'lightweight-charts';
+import { createChart, ISeriesApi, IChartApi, LineWidth, DeepPartial } from 'lightweight-charts';
 import { tap } from 'rxjs/operators';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
   selector: 'opdex-line-chart',
@@ -26,8 +27,10 @@ export class LineChartComponent implements OnInit, OnChanges {
   @Output() onTypeChange = new EventEmitter<string>();
   theme: string;
   subscription = new Subscription();
+  height: number = 400;
+  width: number;
 
-  constructor(private _theme: ThemeService) {
+  constructor(private _theme: ThemeService, private _breakpointObserver: BreakpointObserver) {
     this.subscription.add(this._theme.getTheme()
       .pipe(tap(theme => {
         this.theme = theme
@@ -36,6 +39,17 @@ export class LineChartComponent implements OnInit, OnChanges {
           this.applyChartOptions();
         }
       })).subscribe());
+
+      this.subscription.add(
+        this._breakpointObserver
+          .observe(['(min-width: 992px)'])
+          .subscribe((result: BreakpointState) => {
+            this.height = result.matches ? 400 : 275;
+
+            if (this.chart) {
+              this.chart.resize(this.width, this.height);
+            }
+          }));
   }
 
   ngOnChanges() {
@@ -48,7 +62,7 @@ export class LineChartComponent implements OnInit, OnChanges {
           lineWidth: <DeepPartial<LineWidth>>6,
           topColor: 'transparent',
           bottomColor: 'transparent',
-          priceLineVisible: false,
+          priceLineVisible: true,
           lastValueVisible: false,
           priceFormat: {
             type: 'custom',
@@ -76,6 +90,7 @@ export class LineChartComponent implements OnInit, OnChanges {
       }
 
       if (!this.candleSeries) {
+        console.log(this.chartData)
         this.candleSeries = this.chart.addCandlestickSeries({
           lastValueVisible: false,
           priceLineVisible: false,
@@ -96,7 +111,7 @@ export class LineChartComponent implements OnInit, OnChanges {
       } else if (this.chartOptions && this.selectedChart.type === 'bar') {
         this.volumeSeries.setData(this.chartData);
         this.lineSeries.setData([]);
-        this.candleSeries.setData([])
+        this.candleSeries.setData([]);
       } else if (this.chartOptions && this.selectedChart.type === 'candle') {
         this.candleSeries.setData(this.chartData);
         this.lineSeries.setData([]);
@@ -104,12 +119,12 @@ export class LineChartComponent implements OnInit, OnChanges {
       }
 
       if (this.loading) {
-        this.chart.subscribeCrosshairMove(params => this.crosshairMovedHandler(params));
-        this.loading = false;
+        // this.chart.subscribeCrosshairMove(params => this.crosshairMovedHandler(params));
       }
 
       this.setLastBarText();
       this.chart.timeScale().fitContent()
+      this.loading = false;
     }
   }
 
@@ -123,21 +138,24 @@ export class LineChartComponent implements OnInit, OnChanges {
     this.onTypeChange.emit(value);
   }
 
-  crosshairMovedHandler(param: MouseEventParams): void {
-    if (param === undefined || param.time === undefined || param.point.x < 0 || param.point.y < 0) {
-      this.setLastBarText();
-    } else {
-      const data = param.seriesPrices.values().next().value;
-      const value = data?.close !== undefined ? data.close : data;
-      const decimals = this.selectedChart.decimals > 8 ? 8 : this.selectedChart.decimals
+  // crosshairMovedHandler(param: MouseEventParams): void {
+  //   if (param === undefined || param.time === undefined || param.point.x < 0 || param.point.y < 0) {
+  //     this.setLastBarText();
+  //   } else {
+  //     const data = param.seriesPrices.values().next().value;
+  //     const value = data?.close !== undefined ? data.close : data;
+  //     const decimals = this.selectedChart.decimals > 8 ? 8 : this.selectedChart.decimals
 
-      this.value = this.nFormatter(value,  decimals);
-    }
-  }
+  //     this.value = this.nFormatter(value,  decimals);
+  //   }
+  // }
 
   onResized(event: ResizedEvent) {
-    this.chart.resize(event.newWidth, 400);
-    this.chart.timeScale().fitContent();
+    if (this.chart) {
+      this.width = event.newWidth;
+      this.chart.resize(event.newWidth, this.height);
+      this.chart.timeScale().fitContent();
+    }
   }
 
   // Todo: copied from https://stackoverflow.com/questions/9461621/format-a-number-as-2-5k-if-a-thousand-or-more-otherwise-900
@@ -188,13 +206,13 @@ export class LineChartComponent implements OnInit, OnChanges {
       layout: {
         backgroundColor: 'transparent',
         textColor: this.theme === 'light-mode' ? '#222' : '#f4f4f4',
-        fontSize: 14,
+        fontSize: 12,
         fontFamily: 'Arial'
       },
       timeScale: {
         visible: true,
         timeVisible: true,
-        secondsVisible: true,
+        secondsVisible: false,
         borderVisible: false
       },
       rightPriceScale: {
@@ -207,7 +225,7 @@ export class LineChartComponent implements OnInit, OnChanges {
 
   ngOnDestroy() {
     this.chart.remove();
-    this.chart.unsubscribeCrosshairMove(this.crosshairMovedHandler);
+    // this.chart.unsubscribeCrosshairMove(this.crosshairMovedHandler);
     this.subscription.unsubscribe();
   }
 }

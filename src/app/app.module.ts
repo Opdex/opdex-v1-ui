@@ -2,7 +2,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { JwtService } from './services/utility/jwt.service';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -51,6 +51,7 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ErrorMiddlewareService } from '@sharedServices/middleware/error-middleware.service';
 
 @NgModule({
   declarations: [
@@ -108,8 +109,13 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
       }
     })
   ],
-  providers: [JwtService,
-    {provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}}
+  providers: [
+    JwtService,
+    {provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}},
+    {
+      provide: ErrorHandler,
+      useClass: ErrorMiddlewareService,
+    }
   ],
   bootstrap: [AppComponent]
 })

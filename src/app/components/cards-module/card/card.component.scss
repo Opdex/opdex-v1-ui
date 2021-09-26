@@ -2,6 +2,7 @@
 
 .card {
   margin-bottom: 15px;
+  overflow: hidden;
 
   &.hidden {
     transition: all .1s ease-out;
