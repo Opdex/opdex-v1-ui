@@ -6,6 +6,7 @@
   position: fixed;
   bottom: 0;
   z-index: 999;
+  -webkit-transform: translate3d(0,0,0);
 
   a.active {
     color: $blue-primary;

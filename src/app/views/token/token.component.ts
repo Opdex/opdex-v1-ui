@@ -85,7 +85,7 @@ export class TokenComponent implements OnInit {
         tap(token => {
           this.token = token;
           this.transactionRequest = {
-            limit: 25,
+            limit: 5,
             eventTypes: this.token.address === 'CRS'
                           ? ['SwapEvent', 'AddLiquidityEvent', 'RemoveLiquidityEvent']
                           : ['TransferEvent', 'ApprovalEvent', 'DistributionEvent', 'SwapEvent', 'AddLiquidityEvent', 'RemoveLiquidityEvent', 'StartMiningEvent', 'StopMiningEvent'],

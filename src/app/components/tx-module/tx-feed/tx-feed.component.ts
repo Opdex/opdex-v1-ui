@@ -14,7 +14,7 @@ import { ITransferEvent } from '@sharedModels/responses/platform-api/transaction
 })
 export class TxFeedComponent implements OnChanges {
   @Input() transactionRequest: ITransactionsRequest;
-  @Input() size: 's' | 'm' | 'l' = 's';
+  @Input() size: 's' | 'm' | 'l';
   transactions: ITransactionReceipts;
   copied: boolean;
   transactions$: Observable<ITransactionReceipt[]>;
