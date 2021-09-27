@@ -165,6 +165,11 @@ $theme-warn: mat-palette($mat-warn, main, lighter, darker);
 $theme: mat-light-theme($theme-primary, $theme-accent, $theme-warn);
 $altTheme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
 
+html {
+  overflow-y: scroll;
+  overscroll-behavior-y: none;
+}
+
 html, body { height: 100%; }
 body {
   margin: 0;
