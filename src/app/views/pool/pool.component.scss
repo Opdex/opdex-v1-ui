@@ -32,6 +32,10 @@ h1 {
   &.swap-button {
     background: rgba($blue-primary, .2) !important;
 
+    &:hover {
+      background: rgba($blue-primary, .4) !important;
+    }
+
     .mat-icon {
       color: $blue-primary;
     }
@@ -39,6 +43,10 @@ h1 {
 
   &.provide-button {
     background: rgba($green-primary, .2) !important;
+
+    &:hover {
+      background: rgba($green-primary, .4) !important;
+    }
 
     .mat-icon {
       color: $green-primary;
@@ -48,6 +56,10 @@ h1 {
   &.stake-button {
     background: rgba($purple-primary, .2) !important;
 
+    &:hover {
+      background: rgba($purple-primary, .4) !important;
+    }
+
     .mat-icon {
       color: $purple-primary;
     }
@@ -55,6 +67,10 @@ h1 {
 
   &.mine-button {
     background: rgba($red-primary, .2) !important;
+
+    &:hover {
+      background: rgba($red-primary, .4) !important;
+    }
 
     .mat-icon {
       color: $red-primary;
