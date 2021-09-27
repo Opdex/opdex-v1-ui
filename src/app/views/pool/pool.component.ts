@@ -275,7 +275,9 @@ export class PoolComponent implements OnInit, OnDestroy {
         combo.push(this.getMiningPosition(context.wallet, this.pool?.mining?.address, this.pool.token.lp));
       }
 
-      return zip(...combo).pipe(tap(results => this.positions = results), take(1));
+      return zip(...combo).pipe(
+        tap(results => this.positions = results.filter(result => result !== null)),
+        take(1));
     }
 
     return of([]);
