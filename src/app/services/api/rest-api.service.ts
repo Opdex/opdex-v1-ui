@@ -2,8 +2,8 @@ import { JwtService } from './../utility/jwt.service';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from '@sharedServices/utility/error.service';
-import { throwError, Observable } from 'rxjs';
-import { catchError, delay, map, retryWhen } from 'rxjs/operators';
+import { throwError, Observable, of } from 'rxjs';
+import { catchError, delay, map, mergeMap, retryWhen } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -23,7 +23,10 @@ export class RestApiService {
         retryWhen(err => {
           // Fancy way of retrying, we must throw our own errors after max attempts or RXJS won't catch correctly
           let retries = 0;
+
           return err.pipe(
+            // Skip 404's, if a resource doesn't exist it's unlikely it will within the next few seconds/retries
+            mergeMap((error) => (error.status === 404) ? throwError(error) : of(error)),
             delay(1000),
             map(error => {
               if (retries++ === 2) {
@@ -86,7 +89,6 @@ export class RestApiService {
       this._error.logHttpError(error, error.url);
     }
 
-    console.log('Something');
     // Return an observable with a user-facing error message.
     return throwError(
       'Something bad happened; please try again later.');

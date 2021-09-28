@@ -1,11 +1,14 @@
 <div id="wallet" class="page-container">
   <div class="container">
     <div class="row">
-      <div class="col-12">
+      <div class="col">
         <h1 class="text-shadow mb-3">
           <opdex-copy-button [tooltip]="wallet" [value]="wallet" icon="link"></opdex-copy-button>
           <span>Wallet</span>
         </h1>
+      </div>
+      <div class="col">
+        <button mat-stroked-button color="accent" (click)="logout()" class="float-right small pt-2 pb-2"><mat-icon class="mr-1 small">exit_to_app</mat-icon> Logout</button>
       </div>
     </div>
 

@@ -1,5 +1,9 @@
-<opdex-card>
-  <h2 class="text-shadow">Recent Transactions</h2>
+<opdex-card [hasToolbar]="true" [thin]="true">
+  <ng-container toolbar>
+    <div class="details">
+      <h4 class="title d-inline">Recent Transactions</h4>
+    </div>
+  </ng-container>
 
   <div class="feed-container" *ngIf="transactions$ | async as transactions" [ngClass]="{'large': size === 'l', 'medium': size === 'm', 'small': size === 's'}">
     <div class="transaction" *ngFor="let tx of transactions; trackBy: transactionsTrackBy; let i = index">

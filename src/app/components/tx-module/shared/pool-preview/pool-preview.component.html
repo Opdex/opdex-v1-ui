@@ -28,7 +28,7 @@
   </div>
 
   <opdex-card class="pool-summary" *ngIf="pool" [thin]="true">
-    <h4>
+    <h4 class="mb-0">
       <opdex-copy-button [tooltip]="pool?.address" [value]="pool?.address" icon="link"></opdex-copy-button>
       <a class="blue" routerLink="/pools/{{pool?.address}}">{{pool.token.src.symbol}}-CRS</a>
     </h4>
@@ -38,7 +38,7 @@
     </button>
 
     <ng-container *ngIf="showReserves">
-      <h6 class="mb-0">Reserves</h6>
+      <h6 class="mb-0 mt-1">Reserves</h6>
 
       <div class="pool-details-section">
         <div class="col flex-shrink">
@@ -68,7 +68,7 @@
     </ng-container>
 
     <ng-container *ngIf="pool.token?.staking && showStaking">
-      <h6 class="mb-0">Staking</h6>
+      <h6 class="mb-0 mt-1">Staking</h6>
 
       <div class="pool-details-section" >
         <div class="col flex-shrink">
@@ -90,7 +90,7 @@
     </ng-container>
 
     <ng-container *ngIf="pool.mining?.tokensMining && showMining">
-      <h6 class="mb-0">Mining</h6>
+      <h6 class="mb-0 mt-1">Mining</h6>
 
       <div class="pool-details-section" >
         <div class="col flex-shrink">

@@ -19,8 +19,11 @@
 
     <div class="row">
       <div class="col">
-        <opdex-card>
-          <h2>Certificates</h2>
+        <opdex-card [hasToolbar]="true" [thin]="true">
+          <ng-container toolbar>
+            <h4 class="d-inline mb-0">Certificates</h4>
+          </ng-container>
+
           <opdex-vault-certificates-table [certificates]="certificates" (onPageChange)="handlePageChange($event)"></opdex-vault-certificates-table>
         </opdex-card>
       </div>

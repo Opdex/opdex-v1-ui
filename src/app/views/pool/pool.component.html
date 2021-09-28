@@ -20,6 +20,163 @@
     </div>
 
     <div class="row">
+      <div class="col-12 col-xl-8">
+        <div class="row">
+          <div class="col-12 col-sm-6">
+            <opdex-card [thin]="true">
+              <p class="mb-2 light d-flex align-items-center">
+                <opdex-copy-button [tooltip]="pool.address" [value]="pool.address" icon="link" [size]="iconSizes.small"></opdex-copy-button>
+                <span class="ml-2">{{pool.token.src.name}} - Cirrus</span>
+              </p>
+
+              <div class="row">
+                <div class="col-6">
+                  <div class="d-flex align-items-end">
+                    <h2 class=" mb-0 d-inline">
+                      <a class="body-default" href="javascript:void(0)" routerLink="/tokens/{{pool.token.src.address}}">{{pool.token.src.symbol}}</a>
+                    </h2>
+                    <span class="ml-3 {{pool.token.src.summary.dailyPriceChange < 0 ? 'red' : 'green'}}">
+                      ${{pool.token.src.summary.price.close | shortNumber}}
+                    </span>
+                  </div>
+
+                  <div class="d-flex align-items-center mt-2">
+                    <mat-icon class="mr-2 small">swap_horiz</mat-icon>
+                    <h5 class="d-flex align-items-center mb-0">
+                      <span style="font-weight: 400;">{{pool.cost.crsPerSrc.close | shortNumber }}</span>
+                      <small class="ml-1">CRS</small>
+                    </h5>
+                  </div>
+
+                  <div class="d-flex align-items-center mt-2">
+                    <mat-icon class="mr-2 small">lock</mat-icon>
+                    <h5 class="d-flex align-items-center mb-0">
+                      <span style="font-weight: 400;">{{pool.reserves.src | shortNumber}}</span>
+                      <small class="ml-1">{{pool.token.src.symbol}}</small>
+                    </h5>
+                  </div>
+                </div>
+
+                <div class="col-6">
+                  <div class="d-flex align-items-end">
+                    <h2 class=" mb-0 d-inline">
+                      <a class="body-default" href="javascript:void(0)" routerLink="/tokens/CRS">CRS</a>
+                    </h2>
+                    <span class="ml-3 {{pool.token.crs.summary.dailyPriceChange < 0 ? 'red' : 'green'}}">
+                      ${{pool.token.crs.summary.price.close | shortNumber}}
+                    </span>
+                  </div>
+
+                  <div class="d-flex align-items-center mt-2">
+                    <mat-icon class="mr-2 small">swap_horiz</mat-icon>
+                    <h5 class="d-flex align-items-center mb-0">
+                      <span style="font-weight: 400;">{{pool.cost.srcPerCrs.close | shortNumber}}</span>
+                      <small class="ml-1">{{pool.token.src.symbol}}</small>
+                    </h5>
+                  </div>
+
+                  <div class="d-flex align-items-center mt-2">
+                    <mat-icon class="mr-2 small">lock</mat-icon>
+                    <h5 class="d-flex align-items-center mb-0">
+                      <span style="font-weight: 400;">{{pool.reserves.crs | shortNumber}}</span>
+                      <small class="ml-1">CRS</small>
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            </opdex-card>
+          </div>
+
+          <div class="col-12 col-sm-6">
+            <opdex-card [fullHeight]="true" [thin]="true">
+              <div class="d-flex justify-content-between flex-column h-100">
+                <div *ngFor="let statCard of statCards; let i = index">
+                  <div *ngIf="statCard.show" class="d-flex justify-content-between w-100">
+                    <div class="d-flex">
+                      <opdex-help-button *ngIf="statCard.helpInfo" [info]="statCard.helpInfo" class="mr-1"></opdex-help-button>
+                      <span>{{statCard.title}} <small class="ml-2" *ngIf="statCard.daily">(24hr)</small></span>
+                    </div>
+
+                    <div class="d-flex">
+                      <span>{{statCard.prefix}}{{statCard.value | shortNumber }} <small class="ml-1">{{statCard.suffix}}</small></span>
+                      <opdex-change-indicator [value]="statCard.change" size="s" *ngIf="statCard.change !== null && statCard.change !== undefined"></opdex-change-indicator>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </opdex-card>
+          </div>
+
+          <div class="col-12">
+            <div class="row">
+              <div class="col">
+                <opdex-card [noPadding]="true">
+                  <opdex-line-chart
+                    [chartData]="chartData"
+                    [chartOptions]="chartOptions"
+                    [selectedChart]="selectedChart"
+                    title="{{selectedChart.category}}"
+                    *ngIf="chartData"
+                    (onTypeChange)="handleChartTypeChange($event)"
+                    (onTimeChange)="handleChartTimeChange($event)"></opdex-line-chart>
+                </opdex-card>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-3">
+                <button mat-raised-button class="big-button swap-button" (click)="swap()">
+                  <mat-icon>swap_horiz</mat-icon>
+                  <span class="text">Swap</span>
+                </button>
+              </div>
+
+              <div class="col-3">
+                <button mat-raised-button class="big-button provide-button" (click)="provide()">
+                  <mat-icon>control_point_duplicate</mat-icon>
+                  <span class="text">Provide</span>
+                </button>
+              </div>
+
+              <div class="col-3">
+                <button mat-raised-button class="big-button stake-button" (click)="stake()">
+                  <mat-icon>verified_user</mat-icon>
+                  <span class="text">Stake</span>
+                </button>
+              </div>
+
+              <div class="col-3">
+                <button mat-raised-button class="big-button mine-button" (click)="mine()" [disabled]="!pool.mining">
+                  <mat-icon>whatshot</mat-icon>
+                  <span class="text">Mine</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <opdex-card [hasToolbar]="true" [thin]="true">
+                  <ng-container toolbar>
+                    <h4 class="d-inline mb-0">Current Positions</h4>
+                  </ng-container>
+
+                  <opdex-wallet-liquidity-pool-position-table [pool]="pool" [positions]="positions"></opdex-wallet-liquidity-pool-position-table>
+                </opdex-card>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-4" >
+        <opdex-tx-feed [transactionRequest]="transactionsRequest"></opdex-tx-feed>
+      </div>
+    </div>
+
+
+
+    <!-- <div class="row">
       <div class="col-12 col-xl-4">
         <opdex-card>
           <p class="mb-2 light">{{pool.token.src.name}} - Cirrus</p>
@@ -78,75 +235,18 @@
           </div>
         </opdex-card>
       </div>
-    </div>
+    </div> -->
 
-    <div class="scrollable-row">
+    <!-- <div class="scrollable-row">
       <ng-container *ngFor="let statCard of statCards">
         <div *ngIf="statCard.show" class="scrollable-card">
             <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
         </div>
       </ng-container>
-    </div>
+    </div> -->
 
     <div class="row">
-      <div class="col-12 col-xl-8">
-        <div class="row">
-          <div class="col">
-            <opdex-card [noPadding]="true">
-              <opdex-line-chart
-                [chartData]="chartData"
-                [chartOptions]="chartOptions"
-                [selectedChart]="selectedChart"
-                title="{{selectedChart.category}}"
-                *ngIf="chartData"
-                (onTypeChange)="handleChartTypeChange($event)"></opdex-line-chart>
-            </opdex-card>
-          </div>
-        </div>
 
-        <div class="row">
-          <div class="col-3">
-            <button mat-raised-button class="big-button swap-button" (click)="swap()">
-              <mat-icon>swap_horiz</mat-icon>
-              <span class="text">Swap</span>
-            </button>
-          </div>
-
-          <div class="col-3">
-            <button mat-raised-button class="big-button provide-button" (click)="provide()">
-              <mat-icon>control_point_duplicate</mat-icon>
-              <span class="text">Provide</span>
-            </button>
-          </div>
-
-          <div class="col-3">
-            <button mat-raised-button class="big-button stake-button" (click)="stake()">
-              <mat-icon>verified_user</mat-icon>
-              <span class="text">Stake</span>
-            </button>
-          </div>
-
-          <div class="col-3">
-            <button mat-raised-button class="big-button mine-button" (click)="mine()" [disabled]="!pool.mining">
-              <mat-icon>whatshot</mat-icon>
-              <span class="text">Mine</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-12">
-            <opdex-card>
-              <h2 class="d-flex align-items-center">Active Positions</h2>
-              <opdex-wallet-liquidity-pool-position-table [pool]="pool" [positions]="positions"></opdex-wallet-liquidity-pool-position-table>
-            </opdex-card>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12 col-xl-4" >
-        <opdex-tx-feed [transactionRequest]="transactionsRequest"></opdex-tx-feed>
-      </div>
     </div>
   </div>
 </div>

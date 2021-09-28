@@ -132,6 +132,19 @@ h1 {
   font-weight: 400;
 }
 
+.stat {
+  overflow: hidden;
+  // margin: 8px 0;
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
 
 @media (min-width: 320px) { }
 

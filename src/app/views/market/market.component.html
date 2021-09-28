@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div class="row mb-3">
+    <div class="row">
       <div class="col-12 col-lg-8">
         <opdex-card [noPadding]="true">
           <opdex-line-chart
@@ -37,7 +37,9 @@
             [selectedChart]="selectedChart"
             title="{{selectedChart.category}}"
             *ngIf="chartData"
-            (onTypeChange)="handleChartTypeChange($event)"></opdex-line-chart>
+            [showTimeSpans]="false"
+            (onTypeChange)="handleChartTypeChange($event)"
+            (onTimeChange)="handleChartTimeChange($event)"></opdex-line-chart>
         </opdex-card>
       </div>
 
@@ -66,21 +68,31 @@
       </div>
     </ng-container>
 
-    <div class="row mb-3">
+    <div class="row">
       <div class="col-12 col-lg-6">
-        <opdex-card>
-          <div class="d-flex justify-content-between align-items-center">
-            <h2 class="text-shadow">Top Liquidity Pools</h2>
-            <button mat-icon-button color="primary" (click)="createPool()"><mat-icon>add</mat-icon></button>
-          </div>
+        <opdex-card [hasToolbar]="true" [thin]="true">
+          <ng-container toolbar>
+            <div class="details">
+              <h4 class="title d-inline">Top Liquidity Pools</h4>
+            </div>
+
+            <div class="button-group">
+              <button mat-icon-button color="primary" (click)="createPool()"><mat-icon>add</mat-icon></button>
+            </div>
+          </ng-container>
 
           <opdex-pools-table [pools]="pools" [smallPageSize]="true"></opdex-pools-table>
         </opdex-card>
       </div>
 
       <div class="col-12 col-lg-6">
-        <opdex-card>
-          <h2>Top Tokens</h2>
+        <opdex-card [hasToolbar]="true" [thin]="true">
+          <ng-container toolbar>
+            <div class="details">
+              <h4 class="title d-inline">Top Tokens</h4>
+            </div>
+          </ng-container>
+
           <opdex-tokens-table [tokens]="tokens" [smallPageSize]="true"></opdex-tokens-table>
         </opdex-card>
       </div>

@@ -145,8 +145,8 @@ export class MarketComponent implements OnInit {
     ];
   }
 
-  private getMarketHistory(): Observable<void> {
-    return this._marketsService.getMarketHistory()
+  private getMarketHistory(timeSpan: string = '1Y'): Observable<void> {
+    return this._marketsService.getMarketHistory(timeSpan)
       .pipe(
         take(1),
         delay(10),
@@ -271,6 +271,10 @@ export class MarketComponent implements OnInit {
     if ($event === 'Staking') {
       this.chartData = this.stakingHistory;
     }
+  }
+
+  handleChartTimeChange($event: string) {
+    this.getMarketHistory($event).pipe(take(1)).subscribe();
   }
 
   createPool() {

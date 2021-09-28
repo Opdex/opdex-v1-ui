@@ -5,9 +5,15 @@
 
   <opdex-pool-preview [pool]="pool" [view]="view" (onPoolChange)="handlePoolChange($event)"></opdex-pool-preview>
 
-  <opdex-card *ngIf="pool" [thin]="true">
+  <opdex-card *ngIf="pool && pool?.staking?.isActive; else noStaking" [thin]="true">
     <opdex-tx-stake-start [data]="data" *ngIf="group.value == 1"></opdex-tx-stake-start>
     <opdex-tx-stake-stop [data]="data" *ngIf="group.value == 2"></opdex-tx-stake-stop>
     <opdex-tx-stake-collect [data]="data" *ngIf="group.value == 3"></opdex-tx-stake-collect>
   </opdex-card>
+
+  <ng-template #noStaking>
+    <opdex-card [thin]="true" [warn]="true">
+      Staking is not available for this liquidity pool.
+    </opdex-card>
+  </ng-template>
 </div>

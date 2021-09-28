@@ -127,8 +127,8 @@ export class TokenComponent implements OnInit {
     ];
   }
 
-  private getTokenHistory(): Observable<any> {
-    return this._tokensService.getTokenHistory(this.tokenAddress)
+  private getTokenHistory(timeSpan: string = '1Y'): Observable<any> {
+    return this._tokensService.getTokenHistory(this.tokenAddress, timeSpan)
       .pipe(
         take(1),
         delay(10),
@@ -170,6 +170,10 @@ export class TokenComponent implements OnInit {
     } else if ($event === 'OHLC USD') {
       this.chartData = this.candleHistory;
     }
+  }
+
+  handleChartTimeChange($event: string) {
+    this.getTokenHistory($event).pipe(take(1)).subscribe();
   }
 
   ngOnDestroy() {

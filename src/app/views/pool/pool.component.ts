@@ -1,3 +1,4 @@
+import { IconSizes } from './../../enums/icon-sizes';
 import { MathService } from '@sharedServices/utility/math.service';
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
@@ -41,6 +42,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   transactionsRequest: ITransactionsRequest;
   chartData: any[];
   positions: any[];
+  iconSizes = IconSizes;
   chartOptions = [
     {
       type: 'line',
@@ -276,6 +278,7 @@ export class PoolComponent implements OnInit, OnDestroy {
       }
 
       return zip(...combo).pipe(
+        // we can filter out null results from above queries, or we can return valid 0 values
         tap(results => this.positions = results.filter(result => result !== null)),
         take(1));
     }
@@ -283,8 +286,8 @@ export class PoolComponent implements OnInit, OnDestroy {
     return of([]);
   }
 
-  private getPoolHistory(): Observable<ILiquidityPoolSnapshotHistory> {
-    return this._liquidityPoolsService.getLiquidityPoolHistory(this.poolAddress)
+  private getPoolHistory(timeSpan: string = '1Y'): Observable<ILiquidityPoolSnapshotHistory> {
+    return this._liquidityPoolsService.getLiquidityPoolHistory(this.poolAddress, timeSpan)
       .pipe(
         take(1),
         delay(10),
@@ -356,7 +359,7 @@ export class PoolComponent implements OnInit, OnDestroy {
       }));
   }
 
-  handleChartTypeChange($event) {
+  handleChartTypeChange($event: string) {
     this.selectedChart = this.chartOptions.find(options => options.category === $event);
 
     if ($event === 'Liquidity') {
@@ -370,6 +373,11 @@ export class PoolComponent implements OnInit, OnDestroy {
     } else if ($event === `${this.pool.token.src.symbol}/CRS`) {
       this.chartData = this.srcPerCrsHistory;
     }
+  }
+
+
+  handleChartTimeChange($event: string) {
+    this.getPoolHistory($event).pipe(take(1)).subscribe();
   }
 
   provide() {

@@ -5,9 +5,17 @@
 
   <opdex-pool-preview [pool]="pool" [view]="view" (onPoolChange)="handlePoolChange($event)"></opdex-pool-preview>
 
-  <opdex-card *ngIf="pool" [thin]="true">
+  <!-- We're specifically checking staking capabilities here for right now. In the staking market
+      if the liquidity pool does not have staking, then it cannot ever have liquidity mining. -->
+  <opdex-card *ngIf="pool && pool?.staking?.isActive; else noStaking" [thin]="true">
     <opdex-tx-mine-start [data]="data" *ngIf="group.value == 1"></opdex-tx-mine-start>
     <opdex-tx-mine-stop [data]="data" *ngIf="group.value == 2"></opdex-tx-mine-stop>
     <opdex-tx-mine-collect [data]="data" *ngIf="group.value == 3"></opdex-tx-mine-collect>
   </opdex-card>
+
+  <ng-template #noStaking>
+    <opdex-card [thin]="true" [warn]="true">
+      Mining is not available for this liquidity pool.
+    </opdex-card>
+  </ng-template>
 </div>

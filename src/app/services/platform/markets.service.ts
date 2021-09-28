@@ -16,15 +16,15 @@ export class MarketsService extends CacheService {
     return this.getItem(this.marketAddress, this._platformApi.getMarketOverview());
   }
 
-  getMarketHistory(): Observable<any> {
-    return this.getItem(`${this.marketAddress}-history`, this._platformApi.getMarketHistory());
+  getMarketHistory(timeSpan: string = '1Y'): Observable<any> {
+    return this.getItem(`${this.marketAddress}-history-${timeSpan}`, this._platformApi.getMarketHistory(timeSpan));
   }
 
   refreshMarket(): void {
     this.refreshItem(this.marketAddress);
   }
 
-  refreshMarketHistory(): void {
-    this.refreshItem(`${this.marketAddress}-history`);
+  refreshMarketHistory(timeSpan: string = '1Y'): void {
+    this.refreshItem(`${this.marketAddress}-history-${timeSpan}`);
   }
 }

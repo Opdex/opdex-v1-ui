@@ -4,9 +4,13 @@
       <div class="sidebar-container">
 
         <div class="d-flex align-items-center justify-content-between mb-3">
-          <button mat-icon-button color="primary" class="small" (click)="toggleSidenavAppearance()">
-            <mat-icon>{{sidenavMode == 'over' ? 'unfold_more' : 'unfold_less' }}</mat-icon>
-          </button>
+
+          <!-- Empty div on purpose so the transaction type selector is centered even if the below button is hidden.-->
+          <div style="width: 22px; height: 22px;">
+            <button mat-icon-button color="primary" class="small" (click)="toggleSidenavAppearance()" *ngIf="widescreen">
+              <mat-icon>{{sidenavMode == 'over' ? 'unfold_more' : 'unfold_less' }}</mat-icon>
+            </button>
+          </div>
 
           <button mat-button class="d-flex small" [matMenuTriggerFor]="beforeMenu" style="text-align: left;">
             <div class="menu-content d-flex justify-content-between align-items-center">

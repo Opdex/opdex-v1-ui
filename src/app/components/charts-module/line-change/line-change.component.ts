@@ -43,6 +43,7 @@ export class LineChangeComponent implements OnChanges, OnInit {
             bottomColor: 'transparent',
             priceLineVisible: false,
             lastValueVisible: false,
+            crosshairMarkerVisible: false
           });
         }
 

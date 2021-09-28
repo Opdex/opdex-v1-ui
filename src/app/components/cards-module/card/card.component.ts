@@ -12,11 +12,11 @@ export class CardComponent {
   @Input() thin: boolean = false;
   @Input() closable: boolean = false;
   @Input() noPadding: boolean = false;
+  @Input() hasToolbar = false;
 
   closed: boolean;
 
   close() {
-    console.log(this.closable);
     this.closed = true;
   }
 }

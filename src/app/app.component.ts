@@ -1,3 +1,4 @@
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { environment } from '@environments/environment';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { SidenavService } from './services/utility/sidenav.service';
@@ -31,17 +32,27 @@ export class AppComponent implements OnInit {
   latestSyncedBlock$: Observable<any>;
   context: any;
   network: string;
+  widescreen: boolean;
 
   constructor(
     public overlayContainer: OverlayContainer,
     private _theme: ThemeService,
     private _sidenav: SidenavService,
     private _api: PlatformApiService,
-    private _context: UserContextService
+    private _context: UserContextService,
+    private _breakpointObserver: BreakpointObserver
   ) {
     this.context$ = this._context.getUserContext$().pipe(tap(context => this.context = context));
     this.latestSyncedBlock$ = timer(0,8000).pipe(switchMap(_ => this._api.getLatestSyncedBlock()));
     this.network = environment.network;
+
+    this._breakpointObserver
+      .observe(['(max-width: 1919px)'])
+      .subscribe((result: BreakpointState) => {
+        console.log('hit' + result.matches)
+        this.widescreen = !result.matches;
+        if (!this.widescreen && this.sidenavMode === 'side') this.toggleSidenavAppearance();
+      });
   }
 
   ngOnInit(): void {
