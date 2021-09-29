@@ -13,11 +13,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { DeadlineSliderComponent } from './deadline-slider/deadline-slider.component';
 import { InputControlComponent } from './input-control/input-control.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NumbersOnlyDirective } from './numbers-only.directive';
 
 @NgModule({
   declarations: [
     DeadlineSliderComponent,
-    InputControlComponent
+    InputControlComponent,
+    NumbersOnlyDirective
   ],
   imports: [
     CommonModule,
@@ -30,7 +32,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
   exports: [
     DeadlineSliderComponent,
-    InputControlComponent
+    InputControlComponent,
+    NumbersOnlyDirective
   ]
 })
 export class ControlsModule { }
