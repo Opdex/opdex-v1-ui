@@ -1,10 +1,11 @@
+import { catchError } from 'rxjs/operators';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
 import { delay, switchMap, take, tap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { Observable, Subscription, interval } from 'rxjs';
+import { Observable, Subscription, interval, of } from 'rxjs';
 import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
 
 @Component({
@@ -82,7 +83,13 @@ export class TokenComponent implements OnInit {
   private getToken(): Observable<any> {
     return this._tokensService.getToken(this.tokenAddress)
       .pipe(
+        catchError(_ => of(null)),
         tap(token => {
+          if (token === null) {
+            this._router.navigateByUrl('/not-found');
+            return;
+          }
+
           this.token = token;
           this.transactionRequest = {
             limit: 5,
@@ -128,6 +135,8 @@ export class TokenComponent implements OnInit {
   }
 
   private getTokenHistory(timeSpan: string = '1Y'): Observable<any> {
+    if (!this.token) return of(null);
+
     return this._tokensService.getTokenHistory(this.tokenAddress, timeSpan)
       .pipe(
         take(1),

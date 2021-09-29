@@ -108,12 +108,12 @@ export class PoolComponent implements OnInit, OnDestroy {
     }
 
     this.subscription.add(interval(30000)
-    .pipe(
-      tap(_ => {
-        this._liquidityPoolsService.refreshPool(this.poolAddress);
-        this._liquidityPoolsService.refreshPoolHistory(this.poolAddress);
-      }))
-    .subscribe());
+      .pipe(
+        tap(_ => {
+          this._liquidityPoolsService.refreshPool(this.poolAddress);
+          this._liquidityPoolsService.refreshPoolHistory(this.poolAddress);
+        }))
+      .subscribe());
 
     // Todo: take(1) stops taking after 1, but without it, _I think_ is mem leak
     this.subscription.add(this.getLiquidityPool()
@@ -133,8 +133,14 @@ export class PoolComponent implements OnInit, OnDestroy {
   private getLiquidityPool(): Observable<any> {
     return this._liquidityPoolsService.getLiquidityPool(this.poolAddress)
       .pipe(
+        catchError(_ => of(null)),
         tap(pool => this.pool = pool),
         map((pool) => {
+          if (pool === null) {
+            this._router.navigateByUrl('/not-found');
+            return;
+          }
+
           const miningGovernance = environment.governanceAddress;
 
           var contracts = [pool.address, pool.token.src.address];
@@ -287,6 +293,8 @@ export class PoolComponent implements OnInit, OnDestroy {
   }
 
   private getPoolHistory(timeSpan: string = '1Y'): Observable<ILiquidityPoolSnapshotHistory> {
+    if (!this.pool) return of(null);
+
     return this._liquidityPoolsService.getLiquidityPoolHistory(this.poolAddress, timeSpan)
       .pipe(
         take(1),

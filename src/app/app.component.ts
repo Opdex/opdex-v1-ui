@@ -89,6 +89,9 @@ export class AppComponent implements OnInit {
 
     this.componentCssClass = `${theme} root`;
     this.theme = theme;
+
+    const metaThemeColor = document.querySelector("meta[name=theme-color]");
+    metaThemeColor.setAttribute("content", this.theme === 'light-mode' ? '#ffffff' : '#1b192f');
   }
 
   setTransactionView(view: TransactionView) {

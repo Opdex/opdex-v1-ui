@@ -35,6 +35,11 @@
 }
 
 
+.mat-drawer {
+  z-index: 1000;
+  min-height: 100vh;
+}
+
 .light-mode {
   .mat-drawer-container {
     background: none;

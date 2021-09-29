@@ -25,8 +25,8 @@ export class RestApiService {
           let retries = 0;
 
           return err.pipe(
-            // Skip 404's, if a resource doesn't exist it's unlikely it will within the next few seconds/retries
-            mergeMap((error) => (error.status === 404) ? throwError(error) : of(error)),
+            // only retry 5xx errors
+            mergeMap((error) => (error.status < 500) ? throwError(error) : of(error)),
             delay(1000),
             map(error => {
               if (retries++ === 2) {
