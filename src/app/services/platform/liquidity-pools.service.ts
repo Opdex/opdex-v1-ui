@@ -15,16 +15,16 @@ export class LiquidityPoolsService extends CacheService {
     return this.getItem(address, this._platformApi.getPool(address));
   }
 
-  getLiquidityPoolHistory(address: string): Observable<ILiquidityPoolSnapshotHistory> {
-    return this.getItem(`${address}-history`, this._platformApi.getPoolHistory(address));
+  getLiquidityPoolHistory(address: string, timeSpan: string = '1Y'): Observable<ILiquidityPoolSnapshotHistory> {
+    return this.getItem(`${address}-history-${timeSpan}`, this._platformApi.getPoolHistory(address, timeSpan));
   }
 
   refreshPool(address: string): void {
     this.refreshItem(address);
   }
 
-  refreshPoolHistory(address: string): void {
-    this.refreshItem(`${address}-history`);
+  refreshPoolHistory(address: string, timeSpan: string = '1Y'): void {
+    this.refreshItem(`${address}-history-${timeSpan}`);
   }
 
   getPools() { }

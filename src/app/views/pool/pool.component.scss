@@ -122,60 +122,6 @@ h1 {
   }
 }
 
-
-.mining-pool {
-  h3 {
-    font-weight: 500;
-  }
-
-  .swap {
-    background: $blue-primary;
-    color: $dark-primary;
-    font-weight: 500;
-  }
-
-  .add {
-    background: $green-primary;
-    color: $dark-primary;
-    font-weight: 500;
-  }
-
-  .collect {
-    background: $blue-primary;
-    color: $dark-primary;
-    font-weight: 500;
-  }
-
-  .remove {
-    background: $red-primary;
-    color: $dark-primary;
-    font-weight: 500;
-  }
-
-  .details {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-
-    .sub-heading {
-      color: #ccc;
-      font-weight: 400 !important;
-      margin-bottom: 5px;
-    }
-
-    .remaining {
-      p {
-        text-align: right;
-      }
-    }
-
-    .value {
-      margin-bottom: 0px;
-    }
-  }
-}
-
 .green {
   color: $green-primary;
   font-weight: 400;
@@ -184,6 +130,19 @@ h1 {
 .red {
   color: $red-primary;
   font-weight: 400;
+}
+
+.stat {
+  overflow: hidden;
+  // margin: 8px 0;
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
 }
 
 

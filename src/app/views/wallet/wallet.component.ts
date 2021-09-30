@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
@@ -20,7 +21,8 @@ export class WalletComponent implements OnInit {
   constructor(
     private _context: UserContextService,
     private _platform: PlatformApiService,
-    private _tokensService: TokensService
+    private _tokensService: TokensService,
+    private _router: Router
   ) {
     this.wallet = this._context.getUserContext().wallet;
     this.getWalletBalances(10);
@@ -68,5 +70,10 @@ export class WalletComponent implements OnInit {
       eventTypes: [],
       wallet: this.wallet
     };
+  }
+
+  logout() {
+    this._context.setToken(null);
+    this._router.navigateByUrl('/auth');
   }
 }

@@ -8,13 +8,14 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Observable, throwError } from 'rxjs';
 import { Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, switchMap, tap, catchError } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, switchMap, tap, catchError, take } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
 import { TransactionTypes } from 'src/app/enums/transaction-types';
+import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
 
 @Component({
   selector: 'opdex-tx-provide-add',
@@ -128,12 +129,21 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
       amountSrc: srcValue,
       // todo: Rework to send the actual block number
       // deadline: this.deadline.value.toISOString(),
-      tolerance: .01,
+      // tolerance: .01,
+      amountCrsMin: '0.00000001',
+      amountSrcMin: '0.00000001',
       recipient: this.context.wallet,
-      liquidityPool: this.pool.address
+      // liquidityPool: this.pool.address
     }
 
-    this.signTx(payload, 'add-liquidity');
+    this._platformApi
+      .addLiquidityQuote(this.pool.address, payload)
+        .pipe(take(1))
+        .subscribe((quote: ITransactionQuote) => {
+          this.quote(quote);
+        });
+
+    // this.signTx(payload, 'add-liquidity');
   }
 
   ngOnDestroy() {

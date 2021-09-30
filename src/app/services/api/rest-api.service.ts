@@ -2,8 +2,8 @@ import { JwtService } from './../utility/jwt.service';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from '@sharedServices/utility/error.service';
-import { throwError, Observable } from 'rxjs';
-import { catchError, delay, retry, retryWhen, take } from 'rxjs/operators';
+import { throwError, Observable, of } from 'rxjs';
+import { catchError, delay, map, mergeMap, retryWhen } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -20,7 +20,22 @@ export class RestApiService {
   protected get<T>(endpoint: string, options: object = {}): Observable<T> {
     return this._http.get<T>(endpoint, options)
       .pipe(
-        retryWhen(errors => errors.pipe(delay(1000), take(2))),
+        retryWhen(err => {
+          // Fancy way of retrying, we must throw our own errors after max attempts or RXJS won't catch correctly
+          let retries = 0;
+
+          return err.pipe(
+            // only retry 5xx errors
+            mergeMap((error) => (error.status < 500) ? throwError(error) : of(error)),
+            delay(1000),
+            map(error => {
+              if (retries++ === 2) {
+                throw error;
+              }
+              return error;
+            })
+          )
+        }),
         catchError(error => this.handleError(error))
       );
   }

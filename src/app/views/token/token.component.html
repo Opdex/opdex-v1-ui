@@ -29,7 +29,8 @@
                 [selectedChart]="selectedChart"
                 title="{{selectedChart.category}}"
                 *ngIf="chartData"
-                (onTypeChange)="handleChartTypeChange($event)"></opdex-line-chart>
+                (onTypeChange)="handleChartTypeChange($event)"
+                (onTimeChange)="handleChartTimeChange($event)"></opdex-line-chart>
         </opdex-card>
       </div>
 

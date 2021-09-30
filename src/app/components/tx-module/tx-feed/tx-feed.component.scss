@@ -13,7 +13,7 @@
   }
 
   &.small {
-    max-height: 380px;
+    max-height: 400px;
   }
 
   .transaction {
@@ -30,6 +30,30 @@
 
       p {
         margin-bottom: 0px;
+      }
+    }
+  }
+}
+
+
+.chart-toolbar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  height: 47px;
+  padding-left: 15px;
+  align-items: center;
+  justify-content: space-between;
+
+  .button-group {
+    display: none;
+
+    button {
+      min-width: 0px;
+      padding: 0px 10px !important;
+
+      &:not(:last-of-type) {
+        margin-right: 5px;
       }
     }
   }

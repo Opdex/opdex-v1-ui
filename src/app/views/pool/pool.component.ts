@@ -1,3 +1,4 @@
+import { IconSizes } from './../../enums/icon-sizes';
 import { MathService } from '@sharedServices/utility/math.service';
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
@@ -41,6 +42,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   transactionsRequest: ITransactionsRequest;
   chartData: any[];
   positions: any[];
+  iconSizes = IconSizes;
   chartOptions = [
     {
       type: 'line',
@@ -108,12 +110,12 @@ export class PoolComponent implements OnInit, OnDestroy {
     }
 
     this.subscription.add(interval(30000)
-    .pipe(
-      tap(_ => {
-        this._liquidityPoolsService.refreshPool(this.poolAddress);
-        this._liquidityPoolsService.refreshPoolHistory(this.poolAddress);
-      }))
-    .subscribe());
+      .pipe(
+        tap(_ => {
+          this._liquidityPoolsService.refreshPool(this.poolAddress);
+          this._liquidityPoolsService.refreshPoolHistory(this.poolAddress);
+        }))
+      .subscribe());
 
     // Todo: take(1) stops taking after 1, but without it, _I think_ is mem leak
     this.subscription.add(this.getLiquidityPool()
@@ -133,8 +135,14 @@ export class PoolComponent implements OnInit, OnDestroy {
   private getLiquidityPool(): Observable<any> {
     return this._liquidityPoolsService.getLiquidityPool(this.poolAddress)
       .pipe(
+        catchError(_ => of(null)),
         tap(pool => this.pool = pool),
         map((pool) => {
+          if (pool === null) {
+            this._router.navigateByUrl('/not-found');
+            return;
+          }
+
           const miningGovernance = environment.governanceAddress;
 
           var contracts = [pool.address, pool.token.src.address];
@@ -277,14 +285,19 @@ export class PoolComponent implements OnInit, OnDestroy {
         combo.push(this.getMiningPosition(context.wallet, this.pool?.mining?.address, this.pool.token.lp));
       }
 
-      return zip(...combo).pipe(tap(results => this.positions = results), take(1));
+      return zip(...combo).pipe(
+        // we can filter out null results from above queries, or we can return valid 0 values
+        tap(results => this.positions = results.filter(result => result !== null)),
+        take(1));
     }
 
     return of([]);
   }
 
-  private getPoolHistory(): Observable<ILiquidityPoolSnapshotHistory> {
-    return this._liquidityPoolsService.getLiquidityPoolHistory(this.poolAddress)
+  private getPoolHistory(timeSpan: string = '1Y'): Observable<ILiquidityPoolSnapshotHistory> {
+    if (!this.pool) return of(null);
+
+    return this._liquidityPoolsService.getLiquidityPoolHistory(this.poolAddress, timeSpan)
       .pipe(
         take(1),
         delay(10),
@@ -356,7 +369,7 @@ export class PoolComponent implements OnInit, OnDestroy {
       }));
   }
 
-  handleChartTypeChange($event) {
+  handleChartTypeChange($event: string) {
     this.selectedChart = this.chartOptions.find(options => options.category === $event);
 
     if ($event === 'Liquidity') {
@@ -370,6 +383,11 @@ export class PoolComponent implements OnInit, OnDestroy {
     } else if ($event === `${this.pool.token.src.symbol}/CRS`) {
       this.chartData = this.srcPerCrsHistory;
     }
+  }
+
+
+  handleChartTimeChange($event: string) {
+    this.getPoolHistory($event).pipe(take(1)).subscribe();
   }
 
   provide() {

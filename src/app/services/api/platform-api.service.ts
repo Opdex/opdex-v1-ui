@@ -103,8 +103,8 @@ export class PlatformApiService extends RestApiService {
     return this.get<ILiquidityPoolSummary[]>(`${this.api}/liquidity-pools${query?.getQuery() || ''}`);
   }
 
-  public getPoolHistory(address: string): Observable<ILiquidityPoolSnapshotHistory> {
-    return this.get<ILiquidityPoolSnapshotHistory>(`${this.api}/liquidity-pools/${address}/history?timeSpan=1Y&candleSpan=Hourly`);
+  public getPoolHistory(address: string, timeSpan: string = '1Y'): Observable<ILiquidityPoolSnapshotHistory> {
+    return this.get<ILiquidityPoolSnapshotHistory>(`${this.api}/liquidity-pools/${address}/history?timeSpan=${timeSpan}&candleSpan=Hourly`);
   }
 
   public startStakingQuote(address: string, payload: any): Observable<ITransactionQuote> {
@@ -117,6 +117,10 @@ export class PlatformApiService extends RestApiService {
 
   public collectStakingRewardsQuote(address: string, payload: any): Observable<ITransactionQuote> {
     return this.post<ITransactionQuote>(`${this.api}/liquidity-pools/${address}/staking/collect`, payload);
+  }
+
+  public addLiquidityQuote(address: string, payload: any): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/liquidity-pools/${address}/add`, payload);
   }
 
   public removeLiquidityQuote(address: string, payload: any): Observable<ITransactionQuote> {
@@ -196,8 +200,8 @@ export class PlatformApiService extends RestApiService {
     return this.get<IMarket>(`${this.api}/markets`);
   }
 
-  public getMarketHistory(): Observable<IMarketSnapshot> {
-    return this.get<IMarketSnapshot>(`${this.api}/markets/history`);
+  public getMarketHistory(timeSpan: string = '1Y'): Observable<IMarketSnapshot> {
+    return this.get<IMarketSnapshot>(`${this.api}/markets/history?timeSpan=${timeSpan}`);
   }
 
   ////////////////////////////

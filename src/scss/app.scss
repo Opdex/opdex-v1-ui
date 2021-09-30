@@ -62,17 +62,26 @@
   -webkit-overflow-scrolling: touch;
   display: flex;
   flex-wrap: nowrap;
-  margin-bottom: 15px;
+  margin-left: -10px;
+  margin-right: -10px;
+
+  .scrollable-card:first-of-type {
+    padding-left: 10px;
+  }
 
   &.no-overflow {
     overflow: hidden;
     margin-bottom: 0px;
   }
 
-  &.offset-container {
-    margin-left: -10px;
-    margin-right: -10px;
-  }
+  // &.offset-container {
+  //   margin-left: -10px;
+  //   margin-right: -10px;
+
+  //   .scrollable-card:first-of-type {
+  //     padding-left: 10px;
+  //   }
+  // }
 
   &.double-offset-container {
     margin-left: -20px;
@@ -117,5 +126,12 @@
 
   &.swap, &.collect, &.primary {
     color: $blue-primary !important;
+  }
+
+  &.small {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+    line-height: 16px;
   }
 }

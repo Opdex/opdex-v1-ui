@@ -15,6 +15,11 @@ export class LineChartComponent implements OnInit, OnChanges {
   @ViewChild('chartContainer') container: ElementRef;
   @Input() title: string;
   @Input() chartData: any;
+  @Input() showTimeSpans: boolean = true;
+  @Input() selectedChart: any;
+  @Input() chartOptions: any[];
+  @Output() onTypeChange = new EventEmitter<string>();
+  @Output() onTimeChange = new EventEmitter<string>();
   value: string = '';
   lineSeries: ISeriesApi<'Area'>;
   volumeSeries: ISeriesApi<'Histogram'>;
@@ -22,9 +27,6 @@ export class LineChartComponent implements OnInit, OnChanges {
   chart: IChartApi;
   loading = true;
   chartType: any;
-  @Input() selectedChart: any;
-  @Input() chartOptions: any[];
-  @Output() onTypeChange = new EventEmitter<string>();
   theme: string;
   subscription = new Subscription();
   height: number = 400;
@@ -90,7 +92,6 @@ export class LineChartComponent implements OnInit, OnChanges {
       }
 
       if (!this.candleSeries) {
-        console.log(this.chartData)
         this.candleSeries = this.chart.addCandlestickSeries({
           lastValueVisible: false,
           priceLineVisible: false,
@@ -136,6 +137,10 @@ export class LineChartComponent implements OnInit, OnChanges {
 
   switchChartType(value: string) {
     this.onTypeChange.emit(value);
+  }
+
+  timeChange(value: string) {
+    this.onTimeChange.emit(value);
   }
 
   // crosshairMovedHandler(param: MouseEventParams): void {
