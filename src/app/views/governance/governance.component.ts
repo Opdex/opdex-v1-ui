@@ -1,3 +1,4 @@
+import { UserContextService } from './../../services/utility/user-context.service';
 import { ReviewQuoteComponent } from './../../components/tx-module/shared/review-quote/review-quote.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { switchMap, take, tap } from 'rxjs/operators';
@@ -22,13 +23,17 @@ export class GovernanceComponent implements OnInit {
   governance: any;
   submitting: boolean;
   nominationPeriodEndDate: string;
+  context: any;
 
   constructor(
     private _platformApiService: PlatformApiService,
-    private _bottomSheet: MatBottomSheet
+    private _bottomSheet: MatBottomSheet,
+    private _context: UserContextService
   ) { }
 
   ngOnInit(): void {
+    this.context = this._context.getUserContext();
+
     this.governance$ = timer(0, 20000).pipe(switchMap(_ => {
        return this._platformApiService.getGovernance(environment.governanceAddress).pipe(tap((rsp: IGovernance) => {
         this.governance = rsp;

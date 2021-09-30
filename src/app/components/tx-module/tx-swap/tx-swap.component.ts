@@ -5,7 +5,7 @@ import { Component, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription, of, Observable } from 'rxjs';
-import { debounceTime, take, distinctUntilChanged, switchMap, map, tap, catchError } from 'rxjs/operators';
+import { debounceTime, take, distinctUntilChanged, switchMap, map, tap, catchError, filter } from 'rxjs/operators';
 import { SignTxModalComponent } from 'src/app/components/modals-module/sign-tx-modal/sign-tx-modal.component';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { environment } from '@environments/environment';
@@ -74,6 +74,7 @@ export class TxSwapComponent implements OnDestroy{
         tap((value: string) => this.tokenInExact = true),
         switchMap((value) => this.quote(value)),
         tap((value: string) => this.tokenOutAmount.setValue(value, { emitEvent: false })),
+        filter(_ => this.context.wallet !== undefined),
         switchMap(() => this.validateAllowance())
       ).subscribe();
 
@@ -84,6 +85,7 @@ export class TxSwapComponent implements OnDestroy{
         tap((value: string) => this.tokenInExact = false),
         switchMap((value: string) => this.quote(value)),
         tap((value: string) => this.tokenInAmount.setValue(value, { emitEvent: false })),
+        filter(_ => this.context.wallet !== undefined),
         switchMap(() => this.validateAllowance())
       ).subscribe();
   }

@@ -58,11 +58,9 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.context = this._context.getUserContext();
 
-    if (this.context?.wallet) {
-      this.subscription.add(
-        this._api.auth(environment.marketAddress, this.context?.wallet)
-          .subscribe(jwt => this._context.setToken(jwt)));
-    }
+    this.subscription.add(
+      this._api.auth(environment.marketAddress, this.context?.wallet)
+        .subscribe(jwt => this._context.setToken(jwt)));
 
     this._theme.getTheme().subscribe(theme => this.setTheme(theme));
 

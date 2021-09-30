@@ -40,9 +40,9 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
    */
   private authorize(): boolean {
     // Validate the users JWT
-    if (!this._context.getUserContext()?.wallet) {
-      return this.fail();
-    }
+    // if (!this._context.getUserContext()?.wallet) {
+    //   return this.fail();
+    // }
 
     return true;
   }

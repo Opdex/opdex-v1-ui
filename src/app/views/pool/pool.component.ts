@@ -77,6 +77,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   ]
   selectedChart = this.chartOptions[0];
   statCards: StatCardInfo[];
+  context$: Observable<any>;
 
   constructor(
     private _route: ActivatedRoute,
@@ -90,6 +91,7 @@ export class PoolComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.init();
+    this.context$ = this._userContext.getUserContext$();
 
     this.routerSubscription.add(
       this._router.events.subscribe((evt) => {
@@ -117,7 +119,10 @@ export class PoolComponent implements OnInit, OnDestroy {
 
     // Todo: take(1) stops taking after 1, but without it, _I think_ is mem leak
     this.subscription.add(this.getLiquidityPool()
-      .pipe(switchMap(() => this.getPoolHistory()), take(1))
+      .pipe(
+        switchMap(() => this.getPoolHistory()),
+        switchMap(_ => this.getWalletSummary()),
+        take(1))
       .subscribe());
   }
 
@@ -156,8 +161,7 @@ export class PoolComponent implements OnInit, OnDestroy {
           if (this.pool){
             this.setPoolStatCards();
           }
-        }),
-        switchMap(_ => this.getWalletSummary())
+        })
       );
   }
 
