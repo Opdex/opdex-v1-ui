@@ -1,3 +1,4 @@
+import { environment } from '@environments/environment';
 import { Router } from '@angular/router';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -5,7 +6,7 @@ import { UserContextService } from '@sharedServices/utility/user-context.service
 import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
 
 @Component({
@@ -73,7 +74,11 @@ export class WalletComponent implements OnInit {
   }
 
   logout() {
-    this._context.setToken(null);
-    this._router.navigateByUrl('/auth');
+    this._platform.auth(environment.marketAddress, null)
+      .pipe(
+        tap(token => this._context.setToken(token)),
+        tap(_ => this._router.navigateByUrl('/')),
+        take(1))
+      .subscribe();
   }
 }
