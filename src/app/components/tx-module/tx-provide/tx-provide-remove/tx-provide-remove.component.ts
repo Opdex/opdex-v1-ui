@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
-import { switchMap, map, take } from 'rxjs/operators';
+import { switchMap, map, take, filter, debounceTime, debounce, distinctUntilChanged } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -45,7 +45,11 @@ export class TxProvideRemoveComponent extends TxBase {
     });
 
     this.allowance$ = this.liquidity.valueChanges
-      .pipe(switchMap(amount => this.getAllowance$(amount)));
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        filter(_ => this.context.wallet !== undefined),
+        switchMap(amount => this.getAllowance$(amount)));
   }
 
   getAllowance$(amount: string):Observable<any> {

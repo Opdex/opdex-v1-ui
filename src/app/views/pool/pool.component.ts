@@ -75,6 +75,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   ]
   selectedChart = this.chartOptions[0];
   statCards: StatCardInfo[];
+  context$: Observable<any>;
 
   constructor(
     private _route: ActivatedRoute,
@@ -88,6 +89,7 @@ export class PoolComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.init();
+    this.context$ = this._userContext.getUserContext$();
 
     this.routerSubscription.add(
       this._router.events.subscribe((evt) => {

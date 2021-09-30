@@ -1,4 +1,4 @@
-<main [ngClass]="theme">
+<main [ngClass]="theme" *ngIf="context$ | async as context">
   <mat-sidenav-container (backdropClick)="closeSidenav()" class="w-100 h-100">
     <mat-sidenav #sidenav (keydown.escape)="closeSidenav()" position="end" class="transaction-sidebar" [fixedInViewport]="true" [fixedTopGap]="0" [fixedBottomGap]="0" [mode]="sidenavMode">
       <div class="sidebar-container">
@@ -37,7 +37,7 @@
 
         <mat-divider class="mb-3"></mat-divider>
 
-        <ng-container *ngIf="context$ | async as context">
+        <ng-container>
           <div class="connect-wallet mb-4" *ngIf="!context?.wallet">
             <opdex-card>
               <button mat-flat-button color="primary" class="w-100" routerLink="/auth">Connect Wallet</button>
@@ -57,14 +57,12 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <ng-container *ngIf="context$ | async as context">
-        <opdex-side-nav *ngIf="context.wallet"></opdex-side-nav>
-      </ng-container>
+      <opdex-side-nav></opdex-side-nav>
 
       <div class="animation-container" style="display: block;" [@fadeAnimation]="prepareRoute(outlet)">
         <div id="page-content" [ngClass]="{'no-sidebar': !context?.wallet}">
-          <ng-container *ngIf="context$ | async as context">
-            <div class="banner" *ngIf="context.wallet">
+          <ng-container>
+            <div class="banner">
               <div class="env light">
                 <mat-icon *ngIf="network == 'Devnet'">warning</mat-icon>
                 <p class="mb-0 ml-2">{{network}}</p>
@@ -81,7 +79,7 @@
             <router-outlet #outlet="outlet"></router-outlet>
           </div>
 
-          <opdex-mobile-nav *ngIf="context$ | async as context"></opdex-mobile-nav>
+          <opdex-mobile-nav></opdex-mobile-nav>
         </div>
       </div>
 

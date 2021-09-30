@@ -134,14 +134,16 @@
           </div>
         </div>
 
-        <div class="row">
-          <div class="col-12">
-            <opdex-card>
-              <h2 class="d-flex align-items-center">Active Positions</h2>
-              <opdex-wallet-liquidity-pool-position-table [pool]="pool" [positions]="positions"></opdex-wallet-liquidity-pool-position-table>
-            </opdex-card>
+        <ng-container *ngIf="context$ | async as context">
+          <div class="row" *ngIf="context.wallet">
+            <div class="col-12">
+              <opdex-card>
+                <h2 class="d-flex align-items-center">Active Positions</h2>
+                <opdex-wallet-liquidity-pool-position-table [pool]="pool" [positions]="positions"></opdex-wallet-liquidity-pool-position-table>
+              </opdex-card>
+            </div>
           </div>
-        </div>
+        </ng-container>
       </div>
 
       <div class="col-12 col-xl-4" >
