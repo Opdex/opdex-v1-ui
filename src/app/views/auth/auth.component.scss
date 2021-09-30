@@ -1,17 +1,16 @@
 #auth {
   display: flex;
-  flex: 1;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 60px);
-  padding: 0px 20px;
+  min-height: 75vh;
+  padding: 30px 15px 15px;
 
   opdex-card {
     width: 100%;
     max-width: 500px;
     margin-bottom: 0px !important;
 
-    h1 {
+    h2 {
       text-align: center;
       margin: 0px auto 30px;
       max-width: 300px;
@@ -26,12 +25,12 @@
       top: -40px;
       right: -40px;
       width: 100px;
+      display: none;
     }
   }
 
   .logo {
-    width: 150px;
-    height: 150px;
+    width: 75px;
     margin: 0px auto 15px;
     display: block;
   }

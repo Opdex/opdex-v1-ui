@@ -172,80 +172,9 @@
         </div>
       </div>
 
-      <div class="col-12 col-xl-4" >
-        <opdex-tx-feed [transactionRequest]="transactionsRequest"></opdex-tx-feed>
+      <div class="col-12 col-xl-4">
+        <opdex-tx-feed [transactionRequest]="transactionsRequest" size="l"></opdex-tx-feed>
       </div>
     </div>
-
-
-
-    <!-- <div class="row">
-      <div class="col-12 col-xl-4">
-        <opdex-card>
-          <p class="mb-2 light">{{pool.token.src.name}} - Cirrus</p>
-
-          <h1 class="text-shadow mb-0 d-flex align-items-center">
-            <a class="body-default" href="javascript:void(0)" routerLink="/tokens/{{pool.token.src.address}}">{{pool.token.src.symbol}}</a>
-            <opdex-copy-button [tooltip]="pool.address" [value]="pool.address" icon="link"></opdex-copy-button>
-            <a class="body-default" href="javascript:void(0)" routerLink="/tokens/CRS">CRS</a>
-          </h1>
-        </opdex-card>
-      </div>
-
-      <div class="col-12 col-md-6 col-xl-4">
-        <opdex-card [fullHeight]="true">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="mb-0">
-              {{pool.token.src.symbol}}
-              <span class="ml-2 {{pool.token.src.summary.dailyPriceChange < 0 ? 'red' : 'green'}}">${{pool.token.src.summary.price.close | shortNumber}}</span>
-            </h5>
-            <mat-icon>swap_horiz</mat-icon>
-            <h5 class="mb-0">
-              <span style="font-weight: 400;">{{pool.cost.crsPerSrc.close | shortNumber }}</span>
-              CRS
-            </h5>
-          </div>
-
-          <div class="d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">CRS
-              <span class="ml-2 {{pool.token.crs.summary.dailyPriceChange < 0 ? 'red' : 'green'}}">
-                ${{pool.token.crs.summary.price.close | shortNumber}}
-              </span>
-            </h5>
-            <mat-icon>swap_horiz</mat-icon>
-            <h5 class="mb-0">
-              <span style="font-weight: 400;">{{pool.cost.srcPerCrs.close | shortNumber}}</span>
-              {{pool.token.src.symbol}}
-            </h5>
-          </div>
-        </opdex-card>
-      </div>
-
-      <div class="col-12 col-md-6 col-xl-4">
-        <opdex-card [fullHeight]="true">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="mb-0 align-items-center d-flex">
-              <mat-icon class="mr-3">lock</mat-icon>
-              {{pool.token.src.symbol}}</h5>
-            <h5 class="mb-0" style="font-weight: 400;">{{pool.reserves.src | shortNumber}}</h5>
-          </div>
-          <div class="d-flex justify-content-between align-items-center">
-            <h5 class="mb-0 align-items-center d-flex">
-              <mat-icon class="mr-3">lock</mat-icon>
-              CRS
-            </h5>
-            <h5 class="mb-0" style="font-weight: 400;">{{pool.reserves.crs | shortNumber}}</h5>
-          </div>
-        </opdex-card>
-      </div>
-    </div> -->
-
-    <!-- <div class="scrollable-row">
-      <ng-container *ngFor="let statCard of statCards">
-        <div *ngIf="statCard.show" class="scrollable-card">
-            <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
-        </div>
-      </ng-container>
-    </div> -->
   </div>
 </div>

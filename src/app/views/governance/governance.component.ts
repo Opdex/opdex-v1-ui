@@ -32,7 +32,7 @@ export class GovernanceComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.context = this._context;
+    this.context = this._context.getUserContext();
 
     this.governance$ = timer(0, 20000).pipe(switchMap(_ => {
        return this._platformApiService.getGovernance(environment.governanceAddress).pipe(tap((rsp: IGovernance) => {
