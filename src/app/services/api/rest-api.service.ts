@@ -76,7 +76,7 @@ export class RestApiService {
       // An Unauthorized error occurred
       if (this._jwt.isTokenExpired()) {
         this._jwt.removeToken();
-        this._router.navigateByUrl('/auth');
+        // this._router.navigateByUrl('/auth');
       }
     }
     else {

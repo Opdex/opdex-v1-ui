@@ -6,51 +6,54 @@
   </ng-container>
 
   <div class="feed-container" *ngIf="transactions$ | async as transactions" [ngClass]="{'large': size === 'l', 'medium': size === 'm', 'small': size === 's'}">
-    <div class="transaction" *ngFor="let tx of transactions; trackBy: transactionsTrackBy; let i = index">
-      <div class="d-flex flex-direction-column">
-        <div class="pr-2">
-          <opdex-copy-button [tooltip]="tx.hash" [value]="tx.hash" icon="receipt" [size]="iconSizes.tiny" color="primary"></opdex-copy-button>
+    <ng-container *ngIf="transactions?.length > 0; else noTransactions">
+      <div class="transaction" *ngFor="let tx of transactions; trackBy: transactionsTrackBy; let i = index">
+        <div class="d-flex flex-direction-column">
+          <div class="pr-2">
+            <opdex-copy-button [tooltip]="tx.hash" [value]="tx.hash" icon="receipt" [size]="iconSizes.tiny" color="primary"></opdex-copy-button>
+          </div>
+
+          <div class="pl-2">
+            <small class="d-block light mb-1">{{tx?.block?.medianTime | timeago}}</small>
+
+            <ng-container *ngFor="let event of tx.events; trackBy: transactionLogsTrackBy;">
+
+              <div class="tx-event" [ngSwitch]="event.eventType">
+                <opdex-reward-mining-pool-event [txEvent]="event" *ngSwitchCase="'RewardMiningPoolEvent'"></opdex-reward-mining-pool-event>
+                <opdex-nomination-event [txEvent]="event" *ngSwitchCase="'NominationEvent'"></opdex-nomination-event>
+                <opdex-distribution-event [txEvent]="event" *ngSwitchCase="'DistributionEvent'"></opdex-distribution-event>
+                <opdex-enable-mining-event [txEvent]="event" *ngSwitchCase="'EnableMiningEvent'"></opdex-enable-mining-event>
+                <opdex-transfer-event [txEvent]="event" *ngSwitchCase="'TransferEvent'"></opdex-transfer-event>
+                <opdex-approval-event [txEvent]="event" *ngSwitchCase="'ApprovalEvent'"></opdex-approval-event>
+                <opdex-start-staking-event [txEvent]="event" *ngSwitchCase="'StartStakingEvent'"></opdex-start-staking-event>
+                <opdex-stop-staking-event [txEvent]="event" *ngSwitchCase="'StopStakingEvent'"></opdex-stop-staking-event>
+                <opdex-add-liquidity-event [txEvent]="event" *ngSwitchCase="'AddLiquidityEvent'"></opdex-add-liquidity-event>
+                <opdex-swap-event [txEvent]="event" *ngSwitchCase="'SwapEvent'"></opdex-swap-event>
+                <opdex-remove-liquidity-event [txEvent]="event" *ngSwitchCase="'RemoveLiquidityEvent'"></opdex-remove-liquidity-event>
+                <opdex-stop-mining-event [txEvent]="event" *ngSwitchCase="'StopMiningEvent'"></opdex-stop-mining-event>
+                <opdex-start-mining-event [txEvent]="event" *ngSwitchCase="'StartMiningEvent'"></opdex-start-mining-event>
+                <opdex-collect-staking-rewards-event [txEvent]="event" *ngSwitchCase="'CollectStakingRewardsEvent'"></opdex-collect-staking-rewards-event>
+                <opdex-collect-mining-rewards-event [txEvent]="event" *ngSwitchCase="'CollectMiningRewardsEvent'"></opdex-collect-mining-rewards-event>
+                <opdex-create-liquidity-pool-event [txEvent]="event" *ngSwitchCase="'CreateLiquidityPoolEvent'"></opdex-create-liquidity-pool-event>
+                <opdex-set-pending-vault-owner-event [txEvent]="event" *ngSwitchCase="'SetPendingVaultOwnershipEvent'"></opdex-set-pending-vault-owner-event>
+                <opdex-claim-pending-vault-owner-event [txEvent]="event" *ngSwitchCase="'ClaimPendingVaultOwnershipEvent'"></opdex-claim-pending-vault-owner-event>
+                <opdex-create-vault-certificate-event [txEvent]="event" *ngSwitchCase="'CreateVaultCertificateEvent'"></opdex-create-vault-certificate-event>
+                <opdex-redeem-vault-certificate-event [txEvent]="event" *ngSwitchCase="'RedeemVaultCertificateEvent'"></opdex-redeem-vault-certificate-event>
+                <opdex-revoke-vault-certificate-event [txEvent]="event" *ngSwitchCase="'RevokeVaultCertificateEvent'"></opdex-revoke-vault-certificate-event>
+                <opdex-change-market-permission-event [txEvent]="event" *ngSwitchCase="'ChangeMarketPermissionEvent'"></opdex-change-market-permission-event>
+                <opdex-claim-pending-market-owner-event [txEvent]="event" *ngSwitchCase="'ClaimPendingMarketOwnershipEvent'"></opdex-claim-pending-market-owner-event>
+                <opdex-set-pending-market-owner-event [txEvent]="event" *ngSwitchCase="'SetPendingMarketOwnershipEvent'"></opdex-set-pending-market-owner-event>
+                <opdex-claim-pending-deployer-owner-event [txEvent]="event" *ngSwitchCase="'SetPendingDeployerOwnershipEvent'"></opdex-claim-pending-deployer-owner-event>
+                <opdex-create-market-event [txEvent]="event" *ngSwitchCase="'CreateMarketEvent'"></opdex-create-market-event>
+                <opdex-set-pending-deployer-owner-event [txEvent]="event" *ngSwitchCase="'ClaimPendingDeployerOwnershipEvent'"></opdex-set-pending-deployer-owner-event>
+                <div *ngSwitchDefault>Uh oh, looks like we can't identify this transaction's summary.</div>
+              </div>
+            </ng-container>
+          </div>
         </div>
-
-        <div class="pl-2">
-          <small class="d-block light mb-1">{{tx?.block?.medianTime | timeago}}</small>
-
-          <ng-container *ngFor="let event of tx.events; trackBy: transactionLogsTrackBy;">
-
-            <div class="tx-event" [ngSwitch]="event.eventType">
-              <opdex-reward-mining-pool-event [txEvent]="event" *ngSwitchCase="'RewardMiningPoolEvent'"></opdex-reward-mining-pool-event>
-              <opdex-nomination-event [txEvent]="event" *ngSwitchCase="'NominationEvent'"></opdex-nomination-event>
-              <opdex-distribution-event [txEvent]="event" *ngSwitchCase="'DistributionEvent'"></opdex-distribution-event>
-              <opdex-enable-mining-event [txEvent]="event" *ngSwitchCase="'EnableMiningEvent'"></opdex-enable-mining-event>
-              <opdex-transfer-event [txEvent]="event" *ngSwitchCase="'TransferEvent'"></opdex-transfer-event>
-              <opdex-approval-event [txEvent]="event" *ngSwitchCase="'ApprovalEvent'"></opdex-approval-event>
-              <opdex-start-staking-event [txEvent]="event" *ngSwitchCase="'StartStakingEvent'"></opdex-start-staking-event>
-              <opdex-stop-staking-event [txEvent]="event" *ngSwitchCase="'StopStakingEvent'"></opdex-stop-staking-event>
-              <opdex-add-liquidity-event [txEvent]="event" *ngSwitchCase="'AddLiquidityEvent'"></opdex-add-liquidity-event>
-              <opdex-swap-event [txEvent]="event" *ngSwitchCase="'SwapEvent'"></opdex-swap-event>
-              <opdex-remove-liquidity-event [txEvent]="event" *ngSwitchCase="'RemoveLiquidityEvent'"></opdex-remove-liquidity-event>
-              <opdex-stop-mining-event [txEvent]="event" *ngSwitchCase="'StopMiningEvent'"></opdex-stop-mining-event>
-              <opdex-start-mining-event [txEvent]="event" *ngSwitchCase="'StartMiningEvent'"></opdex-start-mining-event>
-              <opdex-collect-staking-rewards-event [txEvent]="event" *ngSwitchCase="'CollectStakingRewardsEvent'"></opdex-collect-staking-rewards-event>
-              <opdex-collect-mining-rewards-event [txEvent]="event" *ngSwitchCase="'CollectMiningRewardsEvent'"></opdex-collect-mining-rewards-event>
-              <opdex-create-liquidity-pool-event [txEvent]="event" *ngSwitchCase="'CreateLiquidityPoolEvent'"></opdex-create-liquidity-pool-event>
-              <opdex-set-pending-vault-owner-event [txEvent]="event" *ngSwitchCase="'SetPendingVaultOwnershipEvent'"></opdex-set-pending-vault-owner-event>
-              <opdex-claim-pending-vault-owner-event [txEvent]="event" *ngSwitchCase="'ClaimPendingVaultOwnershipEvent'"></opdex-claim-pending-vault-owner-event>
-              <opdex-create-vault-certificate-event [txEvent]="event" *ngSwitchCase="'CreateVaultCertificateEvent'"></opdex-create-vault-certificate-event>
-              <opdex-redeem-vault-certificate-event [txEvent]="event" *ngSwitchCase="'RedeemVaultCertificateEvent'"></opdex-redeem-vault-certificate-event>
-              <opdex-revoke-vault-certificate-event [txEvent]="event" *ngSwitchCase="'RevokeVaultCertificateEvent'"></opdex-revoke-vault-certificate-event>
-              <opdex-change-market-permission-event [txEvent]="event" *ngSwitchCase="'ChangeMarketPermissionEvent'"></opdex-change-market-permission-event>
-              <opdex-claim-pending-market-owner-event [txEvent]="event" *ngSwitchCase="'ClaimPendingMarketOwnershipEvent'"></opdex-claim-pending-market-owner-event>
-              <opdex-set-pending-market-owner-event [txEvent]="event" *ngSwitchCase="'SetPendingMarketOwnershipEvent'"></opdex-set-pending-market-owner-event>
-              <opdex-claim-pending-deployer-owner-event [txEvent]="event" *ngSwitchCase="'SetPendingDeployerOwnershipEvent'"></opdex-claim-pending-deployer-owner-event>
-              <opdex-create-market-event [txEvent]="event" *ngSwitchCase="'CreateMarketEvent'"></opdex-create-market-event>
-              <opdex-set-pending-deployer-owner-event [txEvent]="event" *ngSwitchCase="'ClaimPendingDeployerOwnershipEvent'"></opdex-set-pending-deployer-owner-event>
-              <div *ngSwitchDefault>Uh oh, looks like we can't identify this transaction's summary.</div>
-            </div>
-          </ng-container>
-        </div>
+        <mat-divider *ngIf="i < transactions.length - 1" class="mt-3"></mat-divider>
       </div>
-      <mat-divider *ngIf="i < transactions.length - 1" class="mt-3"></mat-divider>
-    </div>
+    </ng-container>
+    <ng-template #noTransactions>No transactions found.</ng-template>
   </div>
 </opdex-card>
