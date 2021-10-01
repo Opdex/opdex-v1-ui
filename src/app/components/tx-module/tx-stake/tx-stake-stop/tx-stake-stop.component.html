@@ -1,9 +1,8 @@
 <div class="stop-staking">
   <form [formGroup]="form" name="stop-staking-form" id="stop-staking-form" (submit)="submit()">
-    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.remove" label="Stop Staking" [formControl]="amount" [suffix]="pool.token.staking.symbol"></opdex-input-control>
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.remove" label="Stop Staking" [formControl]="amount" [suffix]="pool.token.staking.symbol" [numbersOnly]="true"></opdex-input-control>
 
     <mat-checkbox
-      required
       formControlName="liquidate"
       color="primary"
       name="liquidate"
@@ -12,6 +11,6 @@
       Liquidate
     </mat-checkbox>
 
-    <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid">Continue</button>
+    <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
   </form>
 </div>

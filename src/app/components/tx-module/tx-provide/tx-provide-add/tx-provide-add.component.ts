@@ -1,3 +1,4 @@
+import { DecimalStringRegex, sanitize } from '@sharedLookups/regex';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,7 +9,7 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Observable, throwError } from 'rxjs';
 import { Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, switchMap, tap, catchError, take } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, switchMap, tap, catchError, take, filter } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
@@ -53,12 +54,21 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     super(_userContext, _dialog, _bottomSheet);
 
     this.form = this._fb.group({
-      amountCrs: ['', [Validators.required]],
-      amountSrc: ['', [Validators.required]],
+      amountCrs: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
+      amountSrc: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
       deadline: [new Date(), [Validators.required]]
     });
   }
 
+  // Bug -
+  // Set CRS amount in (quotes and sets SRC amount)
+  // Change SRC amount (quote and change CRS amount)
+  // Change CRS amount (12.24999999 to 12.25) registers no change, no re-quote is given.
+  // FINDINGS
+  // This is because CRS value is manually typed, auto populates SRC value with quote. Change SRC value, auto re-populates CRS from quote.
+  // Then changing CRS does not get triggered by DistinctUntilChanged(), it never knew about the auto populated quote changes so it thinks nothing changed.
+  //
+  // This isn't reproducible 100% of the time, there must be more to it.
   ngOnInit(): void {
     this.subscription.add(
       this.amountCrs.valueChanges
@@ -66,11 +76,8 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
           debounceTime(400),
           distinctUntilChanged(),
           switchMap(amount => this.quote$(amount, this.pool?.token?.crs)),
-          switchMap(amount => this.getAllowance$(amount))
-        )
-        .subscribe(allowance => {
-          this.amountSrc.setValue(allowance.requestToSpend, { emitEvent: false })
-        }));
+          switchMap(amount => this.getAllowance$(amount)))
+        .subscribe(allowance => this.amountSrc.setValue(allowance.requestToSpend, { emitEvent: false })));
 
     this.subscription.add(
       this.amountSrc.valueChanges
@@ -80,6 +87,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
           switchMap((requestAmount: string) => this.getAllowance$(requestAmount)),
           switchMap((allowance: AllowanceValidation) => this.quote$(allowance.requestToSpend, this.pool?.token?.src)),
           tap((quoteAmount: string) => {
+            // The "if" _was_ protecting against new liquidity pools calculating quotes however this check is not on amountCrs valueChanges - re-evaluate
             if (quoteAmount != '') this.amountCrs.setValue(quoteAmount, { emitEvent: false })
           }),
         )
@@ -105,8 +113,8 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
 
     if (!this.pool.reserves?.crs || this.pool.reserves.crs === '0.00000000') return of('');
 
-    value = value.replace(/,/g, '');
-    if (!value.includes('.')) value = `${value}.00`;
+    // Technically the input should be made invalid in this case using form validations, cannot end with decimal point
+    if (value.endsWith('.')) value = `${value}00`;
 
     const payload = {
       amountIn: value,

@@ -1,7 +1,6 @@
 <div class="collect-staking-rewards">
   <form [formGroup]="form" name="collect-staking-rewards-form" id="collect-staking-rewards-form" (submit)="submit()">
     <mat-checkbox
-      required
       formControlName="liquidate"
       color="primary"
       name="liquidate"
@@ -10,6 +9,6 @@
       Liquidate
     </mat-checkbox>
 
-    <button mat-flat-button color="primary" class="mt-4 w-100">Continue</button>
+    <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
   </form>
 </div>

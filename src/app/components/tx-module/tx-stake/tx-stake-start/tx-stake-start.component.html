@@ -4,8 +4,8 @@
   </ng-container>
 
   <form [formGroup]="form" name="start-staking-form" id="start-staking-form" (submit)="submit()">
-    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Stake" [formControl]="amount" [suffix]="pool.token.staking.symbol"></opdex-input-control>
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Stake" [formControl]="amount" [suffix]="pool.token.staking.symbol" [numbersOnly]="true"></opdex-input-control>
 
-    <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid">Continue</button>
+    <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
   </form>
 </div>

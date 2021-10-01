@@ -1,8 +1,6 @@
 import { ControlValueAccessor } from '@angular/forms';
 
 export abstract class ValueAccessor implements ControlValueAccessor {
-  constructor() {}
-
   value: any;
 
   onChange: (val) => void;
@@ -11,6 +9,7 @@ export abstract class ValueAccessor implements ControlValueAccessor {
   writeValue(value: any) {
     this.value = value;
   }
+
   registerOnChange(fn: (_: any) => void): void {
     this.onChange = fn;
   }

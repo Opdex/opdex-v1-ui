@@ -11,6 +11,7 @@ import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { environment } from '@environments/environment';
 import { Icons } from 'src/app/enums/icons';
 import { TransactionTypes } from 'src/app/enums/transaction-types';
+import { DecimalStringRegex } from '@sharedLookups/regex';
 
 @Component({
   selector: 'opdex-tx-swap',
@@ -60,9 +61,9 @@ export class TxSwapComponent implements OnDestroy{
     this.context = this._userContext.getUserContext();
 
     this.form = this._fb.group({
-      tokenInAmount: ['', [Validators.required]],
+      tokenInAmount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
       tokenIn: ['CRS', [Validators.required]],
-      tokenOutAmount: ['', [Validators.required]],
+      tokenOutAmount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
       tokenOut: [null, [Validators.required]],
       deadline: [new Date(), [Validators.required]]
     });
@@ -71,7 +72,7 @@ export class TxSwapComponent implements OnDestroy{
       .pipe(
         debounceTime(400),
         distinctUntilChanged(),
-        tap((value: string) => this.tokenInExact = true),
+        tap(_ => this.tokenInExact = true),
         switchMap((value) => this.quote(value)),
         tap((value: string) => this.tokenOutAmount.setValue(value, { emitEvent: false })),
         filter(_ => this.context.wallet !== undefined),
@@ -82,7 +83,7 @@ export class TxSwapComponent implements OnDestroy{
       .pipe(
         debounceTime(400),
         distinctUntilChanged(),
-        tap((value: string) => this.tokenInExact = false),
+        tap(_ => this.tokenInExact = false),
         switchMap((value: string) => this.quote(value)),
         tap((value: string) => this.tokenInAmount.setValue(value, { emitEvent: false })),
         filter(_ => this.context.wallet !== undefined),

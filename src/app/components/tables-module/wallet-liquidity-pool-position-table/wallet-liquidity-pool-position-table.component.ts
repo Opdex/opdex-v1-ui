@@ -30,7 +30,6 @@ export class WalletLiquidityPoolPositionTableComponent implements OnChanges, Aft
   ngOnChanges() {
     if (!this.positions?.length) return;
 
-    console.log(this.positions)
     this.dataSource.data = this.positions;
   }
 

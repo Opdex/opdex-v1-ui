@@ -17,20 +17,14 @@ import { take } from 'rxjs/operators';
 export class TxMineCollectComponent extends TxBase implements OnChanges {
   @Input() data: any;
   pool: ILiquidityPoolSummary;
-  form: FormGroup;
 
   constructor(
-    private _fb: FormBuilder,
     protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
     protected _userContext: UserContextService,
     protected _bottomSheet: MatBottomSheet
   ) {
     super(_userContext, _dialog, _bottomSheet);
-
-    this.form = this._fb.group({
-      liquidate: [false, [Validators.required]]
-    });
   }
 
   ngOnChanges() {

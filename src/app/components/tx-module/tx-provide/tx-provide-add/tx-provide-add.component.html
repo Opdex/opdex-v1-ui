@@ -4,24 +4,10 @@
   </ng-container>
 
   <form [formGroup]="form" name="add-liquidity-form" id="swap-form" (submit)="submit()">
-    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Add CRS" [formControl]="amountCrs" suffix="CRS"></opdex-input-control>
-    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Add {{pool.token.src.symbol}}" [formControl]="amountSrc" [suffix]="pool.token.src.symbol"></opdex-input-control>
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Add CRS" [formControl]="amountCrs" suffix="CRS" [numbersOnly]="true"></opdex-input-control>
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Add {{pool.token.src.symbol}}" [formControl]="amountSrc" [suffix]="pool.token.src.symbol" [numbersOnly]="true"></opdex-input-control>
     <opdex-deadline-slider label="Deadline" [default]="20" [formControl]="deadline"></opdex-deadline-slider>
 
-    <div class="space-between"></div>
-
-    <!-- <div class="swap-info mt-1" *ngIf="form.controls.tokenIn.value > 0 && form.controls.to.value > 0">
-      <p class="mb-0">Slippage: .1%</p>
-      <p class="mb-0">Minimum Received: 12345</p>
-      <p class="mb-0">Price: 12345</p>
-      <p class="mb-0">Price Impact: 12345</p>
-      <p class="mb-0">Fee: .03%</p>
-    </div> -->
-
-    <div *ngIf="txHash">
-      <span style="font-size: 10px;">{{txHash}}</span>
-    </div>
-
-    <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid">Continue</button>
+    <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
   </form>
 </div>
