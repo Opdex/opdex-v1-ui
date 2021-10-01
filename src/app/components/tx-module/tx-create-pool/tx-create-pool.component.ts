@@ -1,3 +1,4 @@
+import { UserContextService } from './../../../services/utility/user-context.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ReviewQuoteComponent } from './../shared/review-quote/review-quote.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -22,6 +23,7 @@ export class TxCreatePoolComponent {
   icons = Icons;
   txHash: string;
   token$: Observable<string>;
+  context: any;
 
   get token(): FormControl {
     return this.form.get('token') as FormControl;
@@ -30,7 +32,8 @@ export class TxCreatePoolComponent {
   constructor(
     private _fb: FormBuilder,
     private _platform: PlatformApiService,
-    private _bottomSheet: MatBottomSheet
+    private _bottomSheet: MatBottomSheet,
+    private _context: UserContextService
   ) {
     this.form = this._fb.group({
       token: ['', [Validators.required]]
@@ -44,6 +47,8 @@ export class TxCreatePoolComponent {
           // todo: Should validate the token
         })
       );
+
+    this.context = this._context.getUserContext();
   }
 
   submit() {

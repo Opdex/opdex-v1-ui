@@ -64,14 +64,17 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   // Set CRS amount in (quotes and sets SRC amount)
   // Change SRC amount (quote and change CRS amount)
   // Change CRS amount (12.24999999 to 12.25) registers no change, no re-quote is given.
+  // FINDINGS
+  // This is because CRS value is manually typed, auto populates SRC value with quote. Change SRC value, auto re-populates CRS from quote.
+  // Then changing CRS does not get triggered by DistinctUntilChanged(), it never knew about the auto populated quote changes so it thinks nothing changed.
+  //
+  // This isn't reproducible 100% of the time, there must be more to it.
   ngOnInit(): void {
     this.subscription.add(
       this.amountCrs.valueChanges
         .pipe(
-          map(value => sanitize(DecimalStringRegex, value)),
           debounceTime(400),
           distinctUntilChanged(),
-          filter(value => value.length > 0),
           switchMap(amount => this.quote$(amount, this.pool?.token?.crs)),
           switchMap(amount => this.getAllowance$(amount)))
         .subscribe(allowance => this.amountSrc.setValue(allowance.requestToSpend, { emitEvent: false })));
@@ -79,10 +82,8 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     this.subscription.add(
       this.amountSrc.valueChanges
         .pipe(
-          map(value => sanitize(DecimalStringRegex, value)),
           debounceTime(400),
           distinctUntilChanged(),
-          filter(value => value.length > 0),
           switchMap((requestAmount: string) => this.getAllowance$(requestAmount)),
           switchMap((allowance: AllowanceValidation) => this.quote$(allowance.requestToSpend, this.pool?.token?.src)),
           tap((quoteAmount: string) => {

@@ -71,7 +71,7 @@ export class TxSwapComponent implements OnDestroy{
       .pipe(
         debounceTime(400),
         distinctUntilChanged(),
-        tap((value: string) => this.tokenInExact = true),
+        tap(_ => this.tokenInExact = true),
         switchMap((value) => this.quote(value)),
         tap((value: string) => this.tokenOutAmount.setValue(value, { emitEvent: false })),
         filter(_ => this.context.wallet !== undefined),
@@ -82,7 +82,7 @@ export class TxSwapComponent implements OnDestroy{
       .pipe(
         debounceTime(400),
         distinctUntilChanged(),
-        tap((value: string) => this.tokenInExact = false),
+        tap(_ => this.tokenInExact = false),
         switchMap((value: string) => this.quote(value)),
         tap((value: string) => this.tokenInAmount.setValue(value, { emitEvent: false })),
         filter(_ => this.context.wallet !== undefined),

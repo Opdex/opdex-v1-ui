@@ -58,7 +58,7 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
     this.form.patchValue({
       token: this.data?.token,
       spender: this.data?.spender,
-      amount: this.data?.amount
+      amount: this.data?.amount || ''
     });
   }
 

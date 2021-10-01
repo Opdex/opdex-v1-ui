@@ -7,7 +7,7 @@ import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liqu
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Observable } from 'rxjs';
-import { debounceTime, map, switchMap, take } from 'rxjs/operators';
+import { debounceTime, map, switchMap, take, distinctUntilChanged } from 'rxjs/operators';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
 import { TransactionTypes } from 'src/app/enums/transaction-types';
@@ -46,6 +46,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
     this.allowance$ = this.amount.valueChanges
       .pipe(
         debounceTime(300),
+        distinctUntilChanged(),
         switchMap((amount: string) => {
           const spender = this.data?.pool?.mining?.address;
           const token = this.data?.pool?.token?.lp?.address;

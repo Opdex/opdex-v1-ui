@@ -2,28 +2,16 @@
   <opdex-allowance-validation [transactionType]="transactionTypes.swap" [allowance]="allowance"></opdex-allowance-validation>
 
   <form [formGroup]="form" name="swap-form" id="swap-form">
-    <opdex-input-control [prefixIcon]="icons.remove" label="Sell" [formControl]="tokenInAmount" [suffix]="tokenInDetails?.symbol || 'CRS'" (handleChangeToken)="changeToken('tokenIn')"></opdex-input-control>
+    <opdex-input-control [prefixIcon]="icons.remove" label="Sell" [formControl]="tokenInAmount" [suffix]="tokenInDetails?.symbol || 'CRS'" (handleChangeToken)="changeToken('tokenIn')" [numbersOnly]="true"></opdex-input-control>
     <div class="switch">
       <button mat-icon-button class="small" (click)="switch()"><mat-icon>arrow_downward</mat-icon></button>
     </div>
-    <opdex-input-control [prefixIcon]="icons.add" label="Buy" [formControl]="tokenOutAmount" [suffix]="tokenOutDetails?.symbol || 'Select Token'" (handleChangeToken)="changeToken('tokenOut')"></opdex-input-control>
+    <opdex-input-control [prefixIcon]="icons.add" label="Buy" [formControl]="tokenOutAmount" [suffix]="tokenOutDetails?.symbol || 'Select Token'" (handleChangeToken)="changeToken('tokenOut')" [numbersOnly]="true"></opdex-input-control>
   </form>
 
-  <opdex-deadline-slider label="Deadline" [default]="20" [formControl]="deadline"></opdex-deadline-slider>
-
-  <div class="space-between"></div>
-
-  <!-- <div class="swap-info mt-1" *ngIf="form.controls.tokenIn.value > 0 && form.controls.to.value > 0">
-    <p class="mb-0">Slippage: .1%</p>
-    <p class="mb-0">Minimum Received: 12345</p>
-    <p class="mb-0">Price: 12345</p>
-    <p class="mb-0">Price Impact: 12345</p>
-    <p class="mb-0">Fee: .03%</p>
-  </div> -->
-
-  <div *ngIf="txHash">
-    <span style="font-size: 10px;">{{txHash}}</span>
+  <div class="mt-2">
+    <opdex-deadline-slider label="Deadline" [default]="20" [formControl]="deadline"></opdex-deadline-slider>
   </div>
 
-  <button mat-flat-button color="primary" class="mt-4 w-100" (click)="submit()" [disabled]="!form.valid">Swap</button>
+  <button mat-flat-button color="primary" class="mt-4 w-100" (click)="submit()" [disabled]="!form.valid || !context?.wallet">Quote</button>
 </opdex-card>

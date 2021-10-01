@@ -9,7 +9,7 @@ import { ITransactionQuote } from '@sharedModels/responses/platform-api/transact
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Observable } from 'rxjs';
-import { debounceTime, switchMap, tap, map, take } from 'rxjs/operators';
+import { debounceTime, switchMap, tap, map, take, distinctUntilChanged } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 import { TransactionTypes } from 'src/app/enums/transaction-types';
 
@@ -46,6 +46,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
     this.allowance$ = this.amount.valueChanges
       .pipe(
         debounceTime(300),
+        distinctUntilChanged(),
         switchMap((amount: string) => {
           const spender = this.data?.pool?.address;
           const token = this.data?.pool?.token?.staking?.address;
