@@ -3,6 +3,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
+import { DecimalStringRegex } from '@sharedLookups/regex';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
@@ -40,7 +41,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
     super(_userContext, _dialog, _bottomSheet);
 
     this.form = this._fb.group({
-      amount: ['', [Validators.required, Validators.min(.00000001)]]
+      amount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]]
     });
 
     this.allowance$ = this.amount.valueChanges

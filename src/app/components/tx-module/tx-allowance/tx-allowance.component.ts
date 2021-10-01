@@ -10,6 +10,7 @@ import { TxBase } from '../tx-base.component';
 import { Icons } from 'src/app/enums/icons';
 import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
 import { take } from 'rxjs/operators';
+import { DecimalStringRegex } from '@sharedLookups/regex';
 
 @Component({
   selector: 'opdex-tx-allowance',
@@ -48,7 +49,7 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
     this.form = this._fb.group({
       token: ['', [Validators.required]],
       spender: ['', [Validators.required]],
-      amount: ['', [Validators.required]],
+      amount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
     });
   }
 

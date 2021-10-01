@@ -10,6 +10,7 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Icons } from 'src/app/enums/icons';
 import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
+import { DecimalStringRegex } from '@sharedLookups/regex';
 
 @Component({
   selector: 'opdex-tx-mine-stop',
@@ -36,7 +37,7 @@ export class TxMineStopComponent extends TxBase implements OnChanges {
     super(_userContext, _dialog, _bottomSheet);
 
     this.form = this._fb.group({
-      amount: ['', [Validators.required, Validators.min(.00000001)]]
+      amount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]]
     });
   }
 

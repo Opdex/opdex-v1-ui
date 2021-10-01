@@ -13,6 +13,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
 import { TransactionTypes } from 'src/app/enums/transaction-types';
 import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
+import { DecimalStringRegex } from '@sharedLookups/regex';
 
 @Component({
   selector: 'opdex-tx-provide-remove',
@@ -41,7 +42,7 @@ export class TxProvideRemoveComponent extends TxBase {
     super(_userContext, _dialog, _bottomSheet);
 
     this.form = this._fb.group({
-      liquidity: ['', [Validators.required, Validators.min(.00000001)]]
+      liquidity: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]]
     });
 
     this.allowance$ = this.liquidity.valueChanges

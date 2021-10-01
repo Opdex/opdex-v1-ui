@@ -9,6 +9,7 @@ import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liqu
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
+import { DecimalStringRegex } from '@sharedLookups/regex';
 
 @Component({
   selector: 'opdex-tx-stake-stop',
@@ -39,7 +40,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
     super(_userContext, _dialog, _bottomSheet);
 
     this.form = this._fb.group({
-      amount: ['', [Validators.required]],
+      amount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
       liquidate: [false]
     });
   }

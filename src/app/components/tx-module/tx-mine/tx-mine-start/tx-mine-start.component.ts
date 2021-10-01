@@ -12,6 +12,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
 import { TransactionTypes } from 'src/app/enums/transaction-types';
 import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
+import { DecimalStringRegex } from '@sharedLookups/regex';
 
 @Component({
   selector: 'opdex-tx-mine-start',
@@ -40,7 +41,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
     super(_userContext, _dialog, _bottomSheet);
 
     this.form = this._fb.group({
-      amount: ['', [Validators.required, Validators.min(.00000001)]]
+      amount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]]
     });
 
     this.allowance$ = this.amount.valueChanges
