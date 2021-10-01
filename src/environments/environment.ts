@@ -11,9 +11,5 @@ export const environment = {
   routerAddress: 'PMsinMXrr2uNEL5AQD1LpiYTRFiRTA8uZU',
   governanceAddress: 'PGjqKaFDepLNSdakWknucPFB7uXLQGjeCH',
   vaultAddress: 'PHLh9aUdSBS7zke28vnsE4UiVznecFqy9y',
-  // marketAddress: 'PLSU8Dq8QuPSDzJspQzKqn4kFgmP2UZgP6',
-  // routerAddress: 'PBaCTtHCRDRnT4uwZ9XtXrUSToMTxD9qGq',
-  // governanceAddress: 'PFXdo7w8czyQLCkTJZzWnj2JdE2yap6HaX',
-  // vaultAddress: 'PKzdt4bFYUh3c9mPstGTAqqVG16jFFwAdv',
   network: Network.Devnet
 };
