@@ -49,7 +49,6 @@ export class AppComponent implements OnInit {
     this._breakpointObserver
       .observe(['(max-width: 1919px)'])
       .subscribe((result: BreakpointState) => {
-        console.log('hit' + result.matches)
         this.widescreen = !result.matches;
         if (!this.widescreen && this.sidenavMode === 'side') this.toggleSidenavAppearance();
       });

@@ -98,8 +98,6 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     const spender = environment.routerAddress;
     const token = this.pool?.token?.src?.address;
 
-    console.log(amount);
-
     return this._platformApi
       .getAllowance(this.context.wallet, spender, token)
       .pipe(
@@ -123,8 +121,6 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
       tokenIn: tokenIn.address,
       pool: this.pool.address
     };
-
-    console.log(payload)
 
     return this._platformApi.quoteAddLiquidity(payload).pipe(catchError(() => of('')));
   }

@@ -7,7 +7,6 @@ export abstract class ValueAccessor implements ControlValueAccessor {
   onTouched: () => void;
 
   writeValue(value: any) {
-    console.log(value);
     this.value = value;
   }
 
