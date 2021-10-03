@@ -185,7 +185,7 @@ export class MarketComponent implements OnInit {
   }
 
   private getPools(): Observable<void> {
-    return this._platformApiService.getPools()
+    return this._platformApiService.getPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 10))
       .pipe(
         take(1),
         map(pools => {

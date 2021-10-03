@@ -12,13 +12,16 @@ import { environment } from '@environments/environment';
 import { Icons } from 'src/app/enums/icons';
 import { TransactionTypes } from 'src/app/enums/transaction-types';
 import { DecimalStringRegex } from '@sharedLookups/regex';
+import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
+import { TxBase } from '../tx-base.component';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'opdex-tx-swap',
   templateUrl: './tx-swap.component.html',
   styleUrls: ['./tx-swap.component.scss']
 })
-export class TxSwapComponent implements OnDestroy{
+export class TxSwapComponent extends TxBase implements OnDestroy{
   @Input() data: any;
   icons = Icons;
   tokenInExact = true;
@@ -28,7 +31,6 @@ export class TxSwapComponent implements OnDestroy{
   txHash: string;
   tokenInDetails: any;
   tokenOutDetails: any;
-  context: any;
   allowance: AllowanceValidation;
   transactionTypes = TransactionTypes;
 
@@ -54,11 +56,12 @@ export class TxSwapComponent implements OnDestroy{
 
   constructor(
     private _fb: FormBuilder,
-    private _dialog: MatDialog,
+    protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
-    private _userContext: UserContextService
+    protected _userContext: UserContextService,
+    protected _bottomSheet: MatBottomSheet
   ) {
-    this.context = this._userContext.getUserContext();
+    super(_userContext, _dialog, _bottomSheet);
 
     this.form = this._fb.group({
       tokenInAmount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
@@ -73,7 +76,7 @@ export class TxSwapComponent implements OnDestroy{
         debounceTime(400),
         distinctUntilChanged(),
         tap(_ => this.tokenInExact = true),
-        switchMap((value) => this.quote(value)),
+        switchMap((value) => this.amountQuote(value)),
         tap((value: string) => this.tokenOutAmount.setValue(value, { emitEvent: false })),
         filter(_ => this.context.wallet !== undefined),
         switchMap(() => this.validateAllowance())
@@ -84,7 +87,7 @@ export class TxSwapComponent implements OnDestroy{
         debounceTime(400),
         distinctUntilChanged(),
         tap(_ => this.tokenInExact = false),
-        switchMap((value: string) => this.quote(value)),
+        switchMap((value: string) => this.amountQuote(value)),
         tap((value: string) => this.tokenInAmount.setValue(value, { emitEvent: false })),
         filter(_ => this.context.wallet !== undefined),
         switchMap(() => this.validateAllowance())
@@ -133,7 +136,7 @@ export class TxSwapComponent implements OnDestroy{
           this.tokenIn.setValue(rsp.address);
           this.tokenInDetails = rsp;
           this.tokenInExact = true;
-          this.quote(this.tokenInAmount.value)
+          this.amountQuote(this.tokenInAmount.value)
             .pipe(
               tap((quote: string) => this.tokenOutAmount.setValue(quote, { emitEvent: false })),
               switchMap(() => this.validateAllowance()),
@@ -143,7 +146,7 @@ export class TxSwapComponent implements OnDestroy{
           this.tokenOut.setValue(rsp.address);
           this.tokenOutDetails = rsp;
           this.tokenInExact = false;
-          this.quote(this.tokenOutAmount.value)
+          this.amountQuote(this.tokenOutAmount.value)
             .pipe(
               tap((quote: string) => this.tokenInAmount.setValue(quote, { emitEvent: false })),
               switchMap(() => this.validateAllowance()),
@@ -156,17 +159,21 @@ export class TxSwapComponent implements OnDestroy{
 
   submit() {
     const payload = {
-      tokenIn: this.tokenIn.value,
       tokenOut: this.tokenOut.value,
-      deadline: this.deadline.value.toISOString(),
+      deadline: 0, // this.deadline.value.toISOString()
       tokenInAmount: this.tokenInAmount.value,
       tokenOutAmount: this.tokenOutAmount.value,
       tokenInExactAmount: this.tokenInExact,
-      tolerance: 0.1,
+      tokenInMaximumAmount: '10000000000000.00',
+      tokenOutMinimumAmount: '0.00000001',
       recipient: this.context.wallet
     }
 
-    this.signTx({ payload, transactionType: 'swap'});
+
+    this._platformApi
+      .swapQuote(this.tokenIn.value, payload)
+        .pipe(take(1))
+        .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }
 
   switch() {
@@ -186,7 +193,7 @@ export class TxSwapComponent implements OnDestroy{
     if (this.tokenInExact) {
       this.tokenInExact = false;
       this.tokenOutAmount.setValue(tokenInAmount, { emitEvent: false });
-      this.quote(tokenInAmount)
+      this.amountQuote(tokenInAmount)
         .pipe(
           tap((quote: string) => this.tokenInAmount.setValue(quote, { emitEvent: false })),
           switchMap(() => this.validateAllowance()),
@@ -195,7 +202,7 @@ export class TxSwapComponent implements OnDestroy{
     } else {
       this.tokenInExact = true;
       this.tokenInAmount.setValue(tokenOutAmount, { emitEvent: false });
-      this.quote(tokenOutAmount)
+      this.amountQuote(tokenOutAmount)
         .pipe(
           tap((quote: string) => this.tokenOutAmount.setValue(quote, { emitEvent: false })),
           switchMap(() => this.validateAllowance()),
@@ -204,7 +211,7 @@ export class TxSwapComponent implements OnDestroy{
     }
   }
 
-  quote(value: string): Observable<string> {
+  amountQuote(value: string): Observable<string> {
     if (!value || value.replace('0', '') === '.' || !value.includes('.')) {
       return of('0.00');
     }

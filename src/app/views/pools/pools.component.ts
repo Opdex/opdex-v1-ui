@@ -26,7 +26,7 @@ export class PoolsComponent implements OnInit {
 
     this.poolsMining$ = this._platformApiService.getPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 4, {mining: true}));
 
-    this.pools$ = this._platformApiService.getPools();
+    this.pools$ = this._platformApiService.getPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 10));
   }
 
   createPool() {

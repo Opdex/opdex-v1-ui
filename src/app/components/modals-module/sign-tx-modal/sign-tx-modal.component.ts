@@ -23,20 +23,6 @@ export class SignTxModalComponent {
     }
 
   submit() {
-    this.submitting = true;
-    let transaction$: Observable<any>;
 
-    if (this.data.transactionType === 'swap') {
-      transaction$ = this._platformApi.swap(this.data.payload);
-    } else if (this.data.transactionType === 'add-liquidity') {
-      transaction$ = this._platformApi.addLiquidity(this.data.payload);
-    }
-
-    transaction$
-      .pipe(take(1))
-      .subscribe(response => {
-        this.txHash = response.txHash;
-        this.submitting = false;
-      });
   }
 }

@@ -87,6 +87,10 @@ export class PlatformApiService extends RestApiService {
     return this.post<any>(`${this.api}/tokens/${address}/distribute`, {});
   }
 
+  public swapQuote(address: string, payload: any): Observable<any> {
+    return this.post<any>(`${this.api}/tokens/${address}/swap`, payload);
+  }
+
   ////////////////////////////
   // Liquidity Pools
   ////////////////////////////
@@ -231,15 +235,6 @@ export class PlatformApiService extends RestApiService {
   ////////////////////////////////////////////////////////
   // Wallet Transactions - Temporary Local ENV only
   ////////////////////////////////////////////////////////
-
-  public swap(payload: any): Observable<any> {
-    return this.post<any>(`${this.api}/build-transaction/local-broadcast/swap`, payload);
-  }
-
-  // Liquidity Providing
-  public addLiquidity(payload: any): Observable<any> {
-    return this.post<any>(`${this.api}/build-transaction/local-broadcast/add-liquidity`, payload);
-  }
 
   // Balances
   public getWalletBalances(wallet: string, limit?: number, cursor?: string): Observable<IAddressBalances> {
