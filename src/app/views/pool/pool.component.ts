@@ -17,6 +17,7 @@ import { tap, switchMap, catchError, take, map, delay } from "rxjs/operators";
 import { IAddressMining } from "@sharedModels/responses/platform-api/wallets/address-mining.interface";
 import { IToken } from "@sharedModels/responses/platform-api/tokens/token.interface";
 import { IAddressStaking } from '@sharedModels/responses/platform-api/wallets/address-staking.interface';
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 
 @Component({
   selector: 'opdex-pool',
@@ -232,7 +233,9 @@ export class PoolComponent implements OnInit, OnDestroy {
               token: token,
               position: 'Balance',
               amount: result.balance,
-              value: this._math.multiply(result.balance, token.summary.price.close as number)
+              value: this._math.multiply(
+                new FixedDecimal(result.balance, token.decimals),
+                new FixedDecimal(token.summary.price.close.toString(), 8))
             }
           }),
           take(1),
@@ -247,7 +250,9 @@ export class PoolComponent implements OnInit, OnDestroy {
               token: token,
               position: 'Staking',
               amount: result.amount,
-              value: this._math.multiply(result.amount, token.summary.price.close as number)
+              value: this._math.multiply(
+                new FixedDecimal(result.amount, token.decimals),
+                new FixedDecimal(token.summary.price.close.toString(), 8))
             }
           }),
           take(1),
@@ -261,7 +266,9 @@ export class PoolComponent implements OnInit, OnDestroy {
             token: token,
             position: 'Mining',
             amount: result.amount,
-            value: this._math.multiply(result.amount, token.summary.price.close as number)
+            value: this._math.multiply(
+              new FixedDecimal(result.amount, token.decimals),
+              new FixedDecimal(token.summary.price.close.toString(), 8))
           }
         }),
         take(1),

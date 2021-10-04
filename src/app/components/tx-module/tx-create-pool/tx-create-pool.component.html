@@ -3,7 +3,7 @@
     <form [formGroup]="form" name="create-pool-form" id="swap-form" (submit)="submit()">
       <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.link" label="Token" [formControl]="token" placeholder="Token Address..."></opdex-input-control>
 
-      <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
+      <button mat-flat-button color="primary" class="mt-3 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
     </form>
   </opdex-card>
 </div>

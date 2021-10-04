@@ -1,24 +1,20 @@
 <div class="remove-liquidity">
-  <ng-container *ngIf="allowance$ | async as allowance">
-    <opdex-allowance-validation [transactionType]="transactionTypes.removeLiquidity" [allowance]="allowance"></opdex-allowance-validation>
-  </ng-container>
-
   <form [formGroup]="form" name="remove-liquidity-form" id="remove-liquidity-form" (submit)="submit()">
-    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.remove" label="Liquidate" [formControl]="liquidity" [suffix]="pool.token.lp.symbol" [numbersOnly]="true">
-      <div class="d-flex flex-row justify-content-between">
-        <div class="tolerance-amounts">
-          <!-- <span *ngIf="srcInMin">Min: {{srcInMin | shortNumber}}</span> -->
-          <!-- <span *ngIf="srcInMinFiatValue" class="success ml-2">(${{srcInMinFiatValue | shortNumber}})</span> -->
+    <div class="mb-3">
+      <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.remove" label="Liquidate" [formControl]="liquidity" [suffix]="pool.token.lp.symbol" [numbersOnly]="true">
+        <div class="d-flex flex-row justify-content-between">
+          <div class="tolerance-amounts">
+            <span *ngIf="crsOutMin && srcOutMin">Min: {{crsOutMin | shortNumber}} CRS <span style="opacity: .5">|</span> {{srcOutMin | shortNumber}} {{pool.token.src.symbol}}</span>
+          </div>
+          <div class="fiat-quote">
+            <span class="success ml-2" *ngIf="lptInFiatValue && lptInFiatValue !== 'NaN'">${{lptInFiatValue | shortNumber}}</span>
+          </div>
         </div>
-        <div class="fiat-quote">
-          <span class="success ml-2" *ngIf="lptInFiatValue">${{lptInFiatValue | shortNumber}}</span>
-        </div>
-      </div>
-    </opdex-input-control>
+      </opdex-input-control>
+    </div>
 
     <div class="toggle-additional">
-      <button mat-button color="primary" class="tiny" (click)="toggleShowMore(true)" *ngIf="!showMore"><mat-icon class="mr-1">add</mat-icon> More</button>
-      <button mat-button color="warn" class="tiny" (click)="toggleShowMore(false)" *ngIf="showMore"><mat-icon class="mr-1">remove</mat-icon> Less</button>
+      <button mat-icon-button color="primary" class="small" (click)="toggleShowMore(!showMore)" type="button"><mat-icon>{{showMore ? 'remove' : 'add'}}</mat-icon></button>
     </div>
 
     <div class="additional" *ngIf="showMore">
@@ -29,6 +25,12 @@
       </div>
     </div>
 
-    <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
+    <button mat-flat-button color="primary" class="mt-3 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
   </form>
+
+  <ng-container *ngIf="allowance$ | async as allowance">
+    <div class="mt-3">
+      <opdex-allowance-validation [transactionType]="transactionTypes.removeLiquidity" [allowance]="allowance"></opdex-allowance-validation>
+    </div>
+  </ng-container>
 </div>

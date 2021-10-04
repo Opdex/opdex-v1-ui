@@ -1,6 +1,4 @@
 <opdex-card class="swap" [thin]="true">
-  <opdex-allowance-validation [transactionType]="transactionTypes.swap" [allowance]="allowance"></opdex-allowance-validation>
-
   <form [formGroup]="form" name="swap-form" id="swap-form">
     <opdex-input-control [prefixIcon]="icons.remove" label="{{tokenInExact ? 'Sell Exactly' : 'Sell'}}" [formControl]="tokenInAmount" [suffix]="tokenInDetails?.symbol || 'CRS'" (handleChangeToken)="changeToken('tokenIn')" [numbersOnly]="true">
       <div class="d-flex flex-row justify-content-between">
@@ -31,8 +29,7 @@
     </opdex-input-control>
 
     <div class="toggle-additional">
-      <button mat-button color="primary" class="tiny" (click)="toggleShowMore(true)" *ngIf="!showMore"><mat-icon class="mr-1">add</mat-icon> More</button>
-      <button mat-button color="warn" class="tiny" (click)="toggleShowMore(false)" *ngIf="showMore"><mat-icon class="mr-1">remove</mat-icon> Less</button>
+      <button mat-icon-button color="primary" class="small" (click)="toggleShowMore(!showMore)" type="button"><mat-icon>{{showMore ? 'remove' : 'add'}}</mat-icon></button>
     </div>
 
     <div class="additional" *ngIf="showMore">
@@ -44,5 +41,9 @@
     </div>
   </form>
 
-  <button mat-flat-button color="primary" class="mt-2 w-100" (click)="submit()" [disabled]="!form.valid || !context?.wallet">Quote</button>
+  <button mat-flat-button color="primary" class="mt-3 w-100" (click)="submit()" [disabled]="!form.valid || !context?.wallet">Quote</button>
+
+  <div class="mt-3">
+    <opdex-allowance-validation [transactionType]="transactionTypes.swap" [allowance]="allowance"></opdex-allowance-validation>
+  </div>
 </opdex-card>

@@ -1,11 +1,17 @@
 <div class="start-staking">
-  <ng-container *ngIf="allowance$ | async as allowance">
-    <opdex-allowance-validation [transactionType]="transactionTypes.startStaking" [allowance]="allowance"></opdex-allowance-validation>
-  </ng-container>
-
   <form [formGroup]="form" name="start-staking-form" id="start-staking-form" (submit)="submit()">
-    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Stake" [formControl]="amount" [suffix]="pool.token.staking.symbol" [numbersOnly]="true"></opdex-input-control>
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Stake" [formControl]="amount" [suffix]="pool.token.staking.symbol" [numbersOnly]="true">
+      <div class="d-flex flex-row justify-content-end">
+        <span class="success" *ngIf="fiatValue">${{fiatValue | shortNumber}}</span>
+      </div>
+    </opdex-input-control>
 
-    <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
+    <button mat-flat-button color="primary" class="mt-3 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
   </form>
+
+  <ng-container *ngIf="allowance$ | async as allowance">
+    <div class="mt-3">
+      <opdex-allowance-validation [transactionType]="transactionTypes.startStaking" [allowance]="allowance"></opdex-allowance-validation>
+    </div>
+  </ng-container>
 </div>

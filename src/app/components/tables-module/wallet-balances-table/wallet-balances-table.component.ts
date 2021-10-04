@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 
 @Component({
   selector: 'opdex-wallet-balances-table',
@@ -40,7 +41,9 @@ export class WalletBalancesTableComponent implements OnChanges {
         address: t.address,
         balance: t.balance.balance,
         decimals: t.decimals,
-        total: this._math.multiply(t.balance.balance, t.summary.price.close as number)
+        total: this._math.multiply(
+          new FixedDecimal(t.balance.balance, t.decimals),
+          new FixedDecimal(t.summary.price.close.toString(), 8))
       }
     });
 
