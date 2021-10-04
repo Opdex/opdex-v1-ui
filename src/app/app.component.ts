@@ -12,7 +12,9 @@ import { TransactionTypes } from '@sharedLookups/transaction-types.lookup';
 import { FadeAnimation } from '@sharedServices/animations/fade-animation';
 import { RouterOutlet } from '@angular/router';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
-import { skip, switchMap, take, tap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { BugReportModalComponent } from '@sharedComponents/modals-module/bug-report-modal/bug-report-modal.component';
 
 @Component({
   selector: 'opdex-root',
@@ -36,11 +38,12 @@ export class AppComponent implements OnInit {
 
   constructor(
     public overlayContainer: OverlayContainer,
+    public dialog: MatDialog,
     private _theme: ThemeService,
     private _sidenav: SidenavService,
     private _api: PlatformApiService,
     private _context: UserContextService,
-    private _breakpointObserver: BreakpointObserver
+    private _breakpointObserver: BreakpointObserver,
   ) {
     this.context$ = this._context.getUserContext$().pipe(tap(context => this.context = context));
     this.latestSyncedBlock$ = timer(0,8000).pipe(switchMap(_ => this._api.getLatestSyncedBlock()));
@@ -110,6 +113,12 @@ export class AppComponent implements OnInit {
 
   prepareRoute(outlet: RouterOutlet) {
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData.animation;
+  }
+
+  openBugReport(): void {
+    this.dialog.open(BugReportModalComponent, {
+      width: '500px'
+    });
   }
 
   ngOnDestroy() {

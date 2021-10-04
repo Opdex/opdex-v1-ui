@@ -22,6 +22,7 @@ import { TxBoxSettingsModalComponent } from './tx-box-settings-modal/tx-box-sett
 import { TokensModalComponent } from './tokens-modal/tokens-modal.component';
 import { SignTxModalComponent } from './sign-tx-modal/sign-tx-modal.component';
 import { HelpModalComponent } from './help-modal/help-modal.component';
+import { BugReportModalComponent } from './bug-report-modal/bug-report-modal.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { HelpModalComponent } from './help-modal/help-modal.component';
     TxBoxSettingsModalComponent,
     SignTxModalComponent,
     TokensModalComponent,
-    HelpModalComponent
+    HelpModalComponent,
+    BugReportModalComponent
   ],
   imports: [
     CommonModule,
@@ -49,7 +51,8 @@ import { HelpModalComponent } from './help-modal/help-modal.component';
     SharedModule
   ],
   exports: [
-    HelpModalComponent
+    HelpModalComponent,
+    BugReportModalComponent
   ]
 })
 export class ModalsModule { }
