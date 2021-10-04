@@ -1,46 +1,17 @@
+@import '/src/scss//colors';
+
 .remove-liquidity {
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
-
-.swap-row {
+.toggle-additional {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-  padding: 10px 0px;
-
-  .amount {
-    flex: 1;
-  }
-
-  .spend-receive-button {
-    border-radius: 50%;
-  }
-
-  div {
-    margin: 0px 5px;
-
-    &:first-of-type {
-      margin-left: 0px;
-    }
-
-    &:last-of-type {
-      margin-right: 0px;
-    }
-  }
+  justify-content: flex-end;
+  margin: 15px 0;
 }
 
-
-.switch {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  flex-direction: row;
-
-  button {
-    margin-bottom: 10px;
-  }
+.success {
+  color: $green-primary;
 }

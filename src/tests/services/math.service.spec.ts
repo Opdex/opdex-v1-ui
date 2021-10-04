@@ -32,4 +32,8 @@ describe('MathService', () => {
   it(`multiplies 1.523 * 0`, () => {
     expect(service.multiply('1.523', 0)).toBe('0');
   });
+
+  it(`multiplies 0.524 * 0.005`, () => {
+    expect(service.multiply('0.52400000', 0.005)).toBe('0.00262000');
+  });
 });

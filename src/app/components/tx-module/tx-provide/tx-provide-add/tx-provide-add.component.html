@@ -4,9 +4,47 @@
   </ng-container>
 
   <form [formGroup]="form" name="add-liquidity-form" id="swap-form" (submit)="submit()">
-    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Add CRS" [formControl]="amountCrs" suffix="CRS" [numbersOnly]="true"></opdex-input-control>
-    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Add {{pool.token.src.symbol}}" [formControl]="amountSrc" [suffix]="pool.token.src.symbol" [numbersOnly]="true"></opdex-input-control>
-    <opdex-deadline-slider label="Deadline" [default]="20" [formControl]="deadline"></opdex-deadline-slider>
+    <div class="mb-3">
+      <opdex-input-control class="mb-3" [buttonDisabled]="true" [prefixIcon]="icons.add" label="Add CRS" [formControl]="amountCrs" suffix="CRS" [numbersOnly]="true">
+        <div class="d-flex flex-row justify-content-between">
+          <div class="tolerance-amounts">
+            <span *ngIf="crsInMin">Min: {{crsInMin | shortNumber}}</span>
+            <span *ngIf="crsInMinFiatValue" class="success ml-2">(${{crsInMinFiatValue | shortNumber}})</span>
+          </div>
+          <div class="fiat-quote">
+            <span class="success ml-2" *ngIf="crsInFiatValue">${{crsInFiatValue | shortNumber}}</span>
+          </div>
+        </div>
+      </opdex-input-control>
+    </div>
+
+    <div class="mb-3">
+      <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Add {{pool.token.src.symbol}}" [formControl]="amountSrc" [suffix]="pool.token.src.symbol" [numbersOnly]="true">
+        <div class="d-flex flex-row justify-content-between">
+          <div class="tolerance-amounts">
+            <span *ngIf="srcInMin">Min: {{srcInMin | shortNumber}}</span>
+            <span *ngIf="srcInMinFiatValue" class="success ml-2">(${{srcInMinFiatValue | shortNumber}})</span>
+          </div>
+          <div class="fiat-quote">
+            <span class="success ml-2" *ngIf="srcInFiatValue">${{srcInFiatValue | shortNumber}}</span>
+          </div>
+        </div>
+      </opdex-input-control>
+    </div>
+
+
+    <div class="toggle-additional">
+      <button mat-button color="primary" class="tiny" (click)="toggleShowMore(true)" *ngIf="!showMore"><mat-icon class="mr-1">add</mat-icon> More</button>
+      <button mat-button color="warn" class="tiny" (click)="toggleShowMore(false)" *ngIf="showMore"><mat-icon class="mr-1">remove</mat-icon> Less</button>
+    </div>
+
+    <div class="additional" *ngIf="showMore">
+      <opdex-tolerance [control]="tolerance" (onToleranceChange)="calcTolerance($event)"></opdex-tolerance>
+
+      <div class="mt-2">
+        <opdex-deadline [control]="deadline" (onDeadlineChange)="calcDeadline($event)"></opdex-deadline>
+      </div>
+    </div>
 
     <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
   </form>

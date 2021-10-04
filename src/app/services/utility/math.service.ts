@@ -26,14 +26,14 @@ export class MathService {
 
     // Todo: Validate A is a valid decimal number using regex
 
-    // Todo: Count how many A decimals
+    // Count how many A decimals
     const aDecimals = a.toString().length - (a.toString().indexOf('.') + 1);
 
     // Cut decimal, convert to bigint
     const aBigInt = BigInt(a.replace('.', ''));
 
-    // Todo: Count how many B decimals
-    const bDecimals = b.toString().length - (b.toString().indexOf('.') + 1);;
+    // Count how many B decimals
+    const bDecimals = b.toString().length - (b.toString().indexOf('.') + 1);
 
     // Cut decimal, convert to bigint
     const bBigInt = BigInt(b.toString().replace('.', ''));
@@ -50,12 +50,42 @@ export class MathService {
     const whole = product.toString().substring(0, productRoundedLength) || '0';
 
     // remainder (decimal)
-    const remainder = product.toString().substring(productRoundedLength);
+    const remainder = product.toString().substring(productRoundedLength).padStart(aDecimals + bDecimals, '0');
 
     // Using A and B Decimals, convert result
     const total = `${whole}.${remainder}`;
 
     // round
     return total.substring(0, whole.length + 1 + aDecimals)
+  }
+
+  subtract(a: string, b: string): string {
+    // Count how many A decimals
+    const aDecimals = a.toString().length - (a.toString().indexOf('.') + 1);
+
+    // Cut decimal, convert to bigint
+    const aBigInt = BigInt(a.replace('.', ''));
+
+    // Count how many B decimals
+    const bDecimals = b.toString().length - (b.toString().indexOf('.') + 1);
+
+    // Cut decimal, convert to bigint
+    const bBigInt = BigInt(b.toString().replace('.', ''));
+
+    // Subtract
+    const result = aBigInt - bBigInt;
+
+    const resultRoundedLength = result.toString().length - (aDecimals);
+
+    // whole numbers
+    const whole = result.toString().substring(0, resultRoundedLength) || '0';
+
+    // remainder (decimal)
+    const remainder = result.toString().substring(resultRoundedLength).padStart(aDecimals, '0');
+
+    // Using A and B Decimals, convert result
+    const total = `${whole}.${remainder}`;
+
+    return total;
   }
 }

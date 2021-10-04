@@ -10,10 +10,32 @@
   &:not(.mat-paginator-page-size-select) {
     width: 100% !important;
   }
+
+  &.hide-label {
+    .mat-form-field-label {
+      margin-top: .4em !important;
+    }
+  }
+
+  &.active {
+    color: $blue-primary;
+
+    button {
+      color: $blue-primary !important;
+    }
+
+    .mat-form-field-ripple {
+      background: $blue-primary !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
 }
+
 
 .mat-form-field-infix {
   border-top: 1.2em solid transparent;
+  width: 100% !important;
 
   .mat-form-field-appearance-legacy .mat-form-field-label {
     top: 1.2em;

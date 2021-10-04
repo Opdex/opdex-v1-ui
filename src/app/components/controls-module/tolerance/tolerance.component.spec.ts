@@ -1,20 +1,20 @@
 // import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-// import { PoolPreviewComponent } from './pool-preview.component';
+// import { ToleranceComponent } from './tolerance.component';
 
-// describe('PoolPreviewComponent', () => {
-//   let component: PoolPreviewComponent;
-//   let fixture: ComponentFixture<PoolPreviewComponent>;
+// describe('ToleranceComponent', () => {
+//   let component: ToleranceComponent;
+//   let fixture: ComponentFixture<ToleranceComponent>;
 
 //   beforeEach(async () => {
 //     await TestBed.configureTestingModule({
-//       declarations: [ PoolPreviewComponent ]
+//       declarations: [ ToleranceComponent ]
 //     })
 //     .compileComponents();
 //   });
 
 //   beforeEach(() => {
-//     fixture = TestBed.createComponent(PoolPreviewComponent);
+//     fixture = TestBed.createComponent(ToleranceComponent);
 //     component = fixture.componentInstance;
 //     fixture.detectChanges();
 //   });

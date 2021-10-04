@@ -1,4 +1,4 @@
-import { DecimalStringRegex, sanitize } from '@sharedLookups/regex';
+import { DecimalStringRegex } from '@sharedLookups/regex';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -17,6 +17,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
 import { TransactionTypes } from 'src/app/enums/transaction-types';
 import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
+import { MathService } from '@sharedServices/utility/math.service';
 
 @Component({
   selector: 'opdex-tx-provide-add',
@@ -31,6 +32,14 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   allowance: AllowanceValidation;
   form: FormGroup;
   transactionTypes = TransactionTypes;
+  showMore: boolean = false;
+  crsInFiatValue: string;
+  crsInMinFiatValue: string;
+  srcInFiatValue: string;
+  srcInMinFiatValue: string;
+  setTolerance = 0.1;
+  crsInMin: string;
+  srcInMin: string;
 
   get amountCrs(): FormControl {
     return this.form.get('amountCrs') as FormControl;
@@ -44,19 +53,25 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     return this.form.get('deadline') as FormControl;
   }
 
+  get tolerance(): FormControl {
+    return this.form.get('tolerance') as FormControl;
+  }
+
   constructor(
     private _fb: FormBuilder,
     protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
     protected _userContext: UserContextService,
-    protected _bottomSheet: MatBottomSheet
+    protected _bottomSheet: MatBottomSheet,
+    private _mathService: MathService
   ) {
     super(_userContext, _dialog, _bottomSheet);
 
     this.form = this._fb.group({
       amountCrs: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
       amountSrc: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
-      deadline: [new Date(), [Validators.required]]
+      deadline: [''],
+      tolerance: ['']
     });
   }
 
@@ -76,21 +91,22 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
           debounceTime(400),
           distinctUntilChanged(),
           switchMap(amount => this.quote$(amount, this.pool?.token?.crs)),
+          tap(amount => this.amountSrc.setValue(amount, { emitEvent: false })),
+          tap(_ => this.calcTolerance()),
+          filter(_ => this.context?.wallet),
           switchMap(amount => this.getAllowance$(amount)))
-        .subscribe(allowance => this.amountSrc.setValue(allowance.requestToSpend, { emitEvent: false })));
+        .subscribe());
 
     this.subscription.add(
       this.amountSrc.valueChanges
         .pipe(
           debounceTime(400),
           distinctUntilChanged(),
-          switchMap((requestAmount: string) => this.getAllowance$(requestAmount)),
-          switchMap((allowance: AllowanceValidation) => this.quote$(allowance.requestToSpend, this.pool?.token?.src)),
-          tap((quoteAmount: string) => {
-            // The "if" _was_ protecting against new liquidity pools calculating quotes however this check is not on amountCrs valueChanges - re-evaluate
-            if (quoteAmount != '') this.amountCrs.setValue(quoteAmount, { emitEvent: false })
-          }),
-        )
+          switchMap(amount => this.quote$(amount, this.pool?.token?.src)),
+          tap(quoteAmount => this.amountCrs.setValue(quoteAmount, { emitEvent: false })),
+          tap(_ => this.calcTolerance()),
+          filter(_ => this.context?.wallet),
+          switchMap(_ => this.getAllowance$(this.amountSrc.value)))
         .subscribe());
   }
 
@@ -135,13 +151,10 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     const payload = {
       amountCrs: crsValue,
       amountSrc: srcValue,
-      // todo: Rework to send the actual block number
-      // deadline: this.deadline.value.toISOString(),
-      // tolerance: .01,
-      amountCrsMin: '0.00000001',
-      amountSrcMin: '0.00000001',
       recipient: this.context.wallet,
-      // liquidityPool: this.pool.address
+      amountCrsMin: this.crsInMin,
+      amountSrcMin: this.srcInMin,
+      deadline: 0
     }
 
     this._platformApi
@@ -150,8 +163,44 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
         .subscribe((quote: ITransactionQuote) => {
           this.quote(quote);
         });
+  }
 
-    // this.signTx(payload, 'add-liquidity');
+  calcTolerance(tolerance?: number) {
+    if (tolerance) this.setTolerance = tolerance;
+
+    if (this.setTolerance > 99.99 || this.setTolerance < .01) return;
+    if (!this.amountCrs.value || !this.amountSrc.value) return;
+
+    let crsInValue = this.formatDecimalNumber(this.amountCrs.value, this.pool.token.crs.decimals);
+    let crsMinTolerance = this.formatDecimalNumber(this._mathService.multiply(crsInValue, this.setTolerance / 100), this.pool.token.crs.decimals);
+    this.crsInMin = this._mathService.subtract(crsInValue, crsMinTolerance);
+
+    let srcInValue = this.formatDecimalNumber(this.amountSrc.value, this.pool.token.src.decimals);
+    let srcMinTolerance = this.formatDecimalNumber(this._mathService.multiply(srcInValue, this.setTolerance / 100), this.pool.token.src.decimals);
+    this.srcInMin = this._mathService.subtract(srcInValue, srcMinTolerance);
+
+    this.crsInFiatValue = this._mathService.multiply(this.formatDecimalNumber(this.amountCrs.value, this.pool.token.crs.decimals), this.pool.token.crs.summary.price.close as number);
+    this.crsInMinFiatValue = this._mathService.multiply(this.formatDecimalNumber(this.crsInMin, this.pool.token.crs.decimals), this.pool.token.crs.summary.price.close as number);
+    this.srcInFiatValue = this._mathService.multiply(this.formatDecimalNumber(this.amountSrc.value, this.pool.token.src.decimals), this.pool.token.src.summary.price.close as number);
+    this.srcInMinFiatValue = this._mathService.multiply(this.formatDecimalNumber(this.srcInMin, this.pool.token.src.decimals), this.pool.token.src.summary.price.close as number);
+  }
+
+  private formatDecimalNumber(value: string, decimals: number): string {
+    if (!value.includes('.')) value = `${value}.`.padEnd(value.length + 1 + decimals, '0');
+
+    if (value.startsWith('.')) value = `0${value}`;
+
+    var parts = value.split('.');
+
+    return `${parts[0]}.${parts[1].padEnd(decimals, '0')}`;
+  }
+
+  toggleShowMore(value: boolean) {
+    this.showMore = value;
+  }
+
+  calcDeadline(minutes: number) {
+
   }
 
   ngOnDestroy() {

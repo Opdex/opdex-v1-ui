@@ -1,3 +1,4 @@
+import { MathService } from '@sharedServices/utility/math.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { TokensModalComponent } from '../../modals-module/tokens-modal/tokens-modal.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -6,7 +7,6 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription, of, Observable } from 'rxjs';
 import { debounceTime, take, distinctUntilChanged, switchMap, map, tap, catchError, filter } from 'rxjs/operators';
-import { SignTxModalComponent } from 'src/app/components/modals-module/sign-tx-modal/sign-tx-modal.component';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { environment } from '@environments/environment';
 import { Icons } from 'src/app/enums/icons';
@@ -28,11 +28,18 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
   form: FormGroup;
   tokenInChanges$: Subscription;
   tokenOutChanges$: Subscription;
-  txHash: string;
   tokenInDetails: any;
   tokenOutDetails: any;
   allowance: AllowanceValidation;
   transactionTypes = TransactionTypes;
+  showMore: boolean = false;
+  tokenInFiatValue: string;
+  tokenInMaxFiatValue: string;
+  tokenOutFiatValue: string;
+  tokenOutMinFiatValue: string;
+  setTolerance = 0.1;
+  tokenInMax: string;
+  tokenOutMin: string;
 
   get tokenInAmount(): FormControl {
     return this.form.get('tokenInAmount') as FormControl;
@@ -54,10 +61,15 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
     return this.form.get('deadline') as FormControl;
   }
 
+  get tolerance(): FormControl {
+    return this.form.get('tolerance') as FormControl;
+  }
+
   constructor(
     private _fb: FormBuilder,
-    protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
+    private _mathService: MathService,
+    protected _dialog: MatDialog,
     protected _userContext: UserContextService,
     protected _bottomSheet: MatBottomSheet
   ) {
@@ -68,7 +80,8 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
       tokenIn: ['CRS', [Validators.required]],
       tokenOutAmount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
       tokenOut: [null, [Validators.required]],
-      deadline: [new Date(), [Validators.required]]
+      deadline: [''],
+      tolerance: ['']
     });
 
     this.tokenInChanges$ = this.tokenInAmount.valueChanges
@@ -78,6 +91,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
         tap(_ => this.tokenInExact = true),
         switchMap((value) => this.amountQuote(value)),
         tap((value: string) => this.tokenOutAmount.setValue(value, { emitEvent: false })),
+        tap(_ => this.calcTolerance()),
         filter(_ => this.context.wallet !== undefined),
         switchMap(() => this.validateAllowance())
       ).subscribe();
@@ -89,6 +103,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
         tap(_ => this.tokenInExact = false),
         switchMap((value: string) => this.amountQuote(value)),
         tap((value: string) => this.tokenInAmount.setValue(value, { emitEvent: false })),
+        tap(_ => this.calcTolerance()),
         filter(_ => this.context.wallet !== undefined),
         switchMap(() => this.validateAllowance())
       ).subscribe();
@@ -96,35 +111,18 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
 
   ngOnChanges() {
     if (this.data?.pool) {
-      this.tokenInDetails = {
-        name: "Cirrus",
-        symbol: 'CRS',
-        address: 'CRS',
-        decimals: 8,
-        sats: 100000000
-      };
-
+      this.tokenInDetails = this.data.pool.token.crs;
       this.tokenOutDetails = this.data.pool.token.src;
+
       this.tokenOut.setValue(this.tokenOutDetails.address);
     }
-  }
-
-  signTx(data: any): void {
-    this._dialog.open(SignTxModalComponent, {
-      width: '600px',
-      // position: { top: '200px' },
-      data:  data,
-      panelClass: ''
-    });
   }
 
   changeToken(tokenField: string): void {
     const ref = this._dialog.open(TokensModalComponent, {
       width: '600px',
       position: { top: '200px' },
-      data:  {
-        filter: []
-      },
+      data:  { filter: [] },
       panelClass: '',
       autoFocus: false
     });
@@ -139,6 +137,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
           this.amountQuote(this.tokenInAmount.value)
             .pipe(
               tap((quote: string) => this.tokenOutAmount.setValue(quote, { emitEvent: false })),
+              tap(_ => this.calcTolerance()),
               switchMap(() => this.validateAllowance()),
               take(1)
             ).subscribe();
@@ -149,6 +148,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
           this.amountQuote(this.tokenOutAmount.value)
             .pipe(
               tap((quote: string) => this.tokenInAmount.setValue(quote, { emitEvent: false })),
+              tap(_ => this.calcTolerance()),
               switchMap(() => this.validateAllowance()),
               take(1)
             ).subscribe();
@@ -158,17 +158,18 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
   }
 
   submit() {
+    let deadline = 0;
+
     const payload = {
       tokenOut: this.tokenOut.value,
-      deadline: 0, // this.deadline.value.toISOString()
       tokenInAmount: this.tokenInAmount.value,
       tokenOutAmount: this.tokenOutAmount.value,
       tokenInExactAmount: this.tokenInExact,
-      tokenInMaximumAmount: '10000000000000.00',
-      tokenOutMinimumAmount: '0.00000001',
-      recipient: this.context.wallet
+      recipient: this.context.wallet,
+      tokenInMaximumAmount: this.tokenInMax,
+      tokenOutMinimumAmount: this.tokenOutMin,
+      deadline: deadline
     }
-
 
     this._platformApi
       .swapQuote(this.tokenIn.value, payload)
@@ -196,6 +197,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
       this.amountQuote(tokenInAmount)
         .pipe(
           tap((quote: string) => this.tokenInAmount.setValue(quote, { emitEvent: false })),
+          tap(_ => this.calcTolerance()),
           switchMap(() => this.validateAllowance()),
           take(1)
         ).subscribe();
@@ -205,6 +207,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
       this.amountQuote(tokenOutAmount)
         .pipe(
           tap((quote: string) => this.tokenOutAmount.setValue(quote, { emitEvent: false })),
+          tap(_ => this.calcTolerance()),
           switchMap(() => this.validateAllowance()),
           take(1)
         ).subscribe();
@@ -223,8 +226,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
       tokenOutAmount: !this.tokenInExact ? value : null
     };
 
-    return this._platformApi.getSwapQuote(payload)
-      .pipe(catchError(() => of('0.00')));
+    return this._platformApi.getSwapQuote(payload).pipe(catchError(() => of('0.00')));
   }
 
   validateAllowance(): Observable<AllowanceValidation> {
@@ -237,8 +239,43 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
     return this._platformApi.getAllowance(this.context.wallet, spender, this.tokenIn.value)
       .pipe(
         map(allowanceResponse => new AllowanceValidation(allowanceResponse, this.tokenInAmount.value, this.tokenInDetails)),
-        tap((rsp: AllowanceValidation) => this.allowance = rsp)
-      );
+        tap((rsp: AllowanceValidation) => this.allowance = rsp));
+  }
+
+  calcTolerance(tolerance?: number) {
+    if (tolerance) this.setTolerance = tolerance;
+
+    if (this.setTolerance > 99.99 || this.setTolerance < .01) return;
+    if (!this.tokenInAmount.value || !this.tokenInAmount.value) return;
+
+    this.tokenInMax = this._mathService.multiply(this.formatDecimalNumber(this.tokenInAmount.value, this.tokenInDetails.decimals), 1 + (this.setTolerance / 100));
+
+    let tokenOutValue = this.formatDecimalNumber(this.tokenOutAmount.value, this.tokenOutDetails.decimals);
+    let minTolerance = this.formatDecimalNumber(this._mathService.multiply(tokenOutValue, this.setTolerance / 100), this.tokenOutDetails.decimals);
+    this.tokenOutMin = this._mathService.subtract(tokenOutValue, minTolerance);
+
+    this.tokenInFiatValue = this._mathService.multiply(this.formatDecimalNumber(this.tokenInAmount.value, this.tokenInDetails.decimals), this.tokenInDetails.summary.price.close);
+    this.tokenOutFiatValue = this._mathService.multiply(this.formatDecimalNumber(this.tokenOutAmount.value, this.tokenOutDetails.decimals), this.tokenOutDetails.summary.price.close);
+    this.tokenInMaxFiatValue = this._mathService.multiply(this.formatDecimalNumber(this.tokenInMax, this.tokenInDetails.decimals), this.tokenInDetails.summary.price.close);
+    this.tokenOutMinFiatValue = this._mathService.multiply(this.formatDecimalNumber(this.tokenOutMin, this.tokenOutDetails.decimals), this.tokenOutDetails.summary.price.close);
+  }
+
+  private formatDecimalNumber(value: string, decimals: number): string {
+    if (!value.includes('.')) value = `${value}.`.padEnd(value.length + 1 + decimals, '0');
+
+    if (value.startsWith('.')) value = `0${value}`;
+
+    var parts = value.split('.');
+
+    return `${parts[0]}.${parts[1].padEnd(decimals, '0')}`;
+  }
+
+  toggleShowMore(value: boolean) {
+    this.showMore = value;
+  }
+
+  calcDeadline(minutes: number) {
+
   }
 
   ngOnDestroy() {
