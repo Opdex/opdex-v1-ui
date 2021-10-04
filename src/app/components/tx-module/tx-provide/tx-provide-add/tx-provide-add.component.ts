@@ -18,6 +18,7 @@ import { Icons } from 'src/app/enums/icons';
 import { TransactionTypes } from 'src/app/enums/transaction-types';
 import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
 import { MathService } from '@sharedServices/utility/math.service';
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 
 @Component({
   selector: 'opdex-tx-provide-add',
@@ -63,7 +64,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     private _platformApi: PlatformApiService,
     protected _userContext: UserContextService,
     protected _bottomSheet: MatBottomSheet,
-    private _mathService: MathService
+    private _math: MathService
   ) {
     super(_userContext, _dialog, _bottomSheet);
 
@@ -171,28 +172,18 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     if (this.setTolerance > 99.99 || this.setTolerance < .01) return;
     if (!this.amountCrs.value || !this.amountSrc.value) return;
 
-    let crsInValue = this.formatDecimalNumber(this.amountCrs.value, this.pool.token.crs.decimals);
-    let crsMinTolerance = this.formatDecimalNumber(this._mathService.multiply(crsInValue, this.setTolerance / 100), this.pool.token.crs.decimals);
-    this.crsInMin = this._mathService.subtract(crsInValue, crsMinTolerance);
+    let crsInValue = new FixedDecimal(this.amountCrs.value, this.pool.token.crs.decimals);
+    let crsMinTolerance = this._math.multiply(crsInValue, new FixedDecimal((this.setTolerance / 100).toString(), 8));
+    this.crsInMin = this._math.subtract(crsInValue, new FixedDecimal(crsMinTolerance, this.pool.token.crs.decimals));
 
-    let srcInValue = this.formatDecimalNumber(this.amountSrc.value, this.pool.token.src.decimals);
-    let srcMinTolerance = this.formatDecimalNumber(this._mathService.multiply(srcInValue, this.setTolerance / 100), this.pool.token.src.decimals);
-    this.srcInMin = this._mathService.subtract(srcInValue, srcMinTolerance);
+    let srcInValue = new FixedDecimal(this.amountSrc.value, this.pool.token.src.decimals);
+    let srcMinTolerance = this._math.multiply(srcInValue, new FixedDecimal((this.setTolerance / 100).toString(), 8));
+    this.srcInMin = this._math.subtract(srcInValue, new FixedDecimal(srcMinTolerance, this.pool.token.src.decimals));
 
-    this.crsInFiatValue = this._mathService.multiply(this.formatDecimalNumber(this.amountCrs.value, this.pool.token.crs.decimals), this.pool.token.crs.summary.price.close as number);
-    this.crsInMinFiatValue = this._mathService.multiply(this.formatDecimalNumber(this.crsInMin, this.pool.token.crs.decimals), this.pool.token.crs.summary.price.close as number);
-    this.srcInFiatValue = this._mathService.multiply(this.formatDecimalNumber(this.amountSrc.value, this.pool.token.src.decimals), this.pool.token.src.summary.price.close as number);
-    this.srcInMinFiatValue = this._mathService.multiply(this.formatDecimalNumber(this.srcInMin, this.pool.token.src.decimals), this.pool.token.src.summary.price.close as number);
-  }
-
-  private formatDecimalNumber(value: string, decimals: number): string {
-    if (!value.includes('.')) value = `${value}.`.padEnd(value.length + 1 + decimals, '0');
-
-    if (value.startsWith('.')) value = `0${value}`;
-
-    var parts = value.split('.');
-
-    return `${parts[0]}.${parts[1].padEnd(decimals, '0')}`;
+    this.crsInFiatValue = this._math.multiply(new FixedDecimal(this.amountCrs.value, this.pool.token.crs.decimals), new FixedDecimal(this.pool.token.crs.summary.price.close.toString(), 8));
+    this.crsInMinFiatValue = this._math.multiply(new FixedDecimal(this.crsInMin, this.pool.token.crs.decimals), new FixedDecimal(this.pool.token.crs.summary.price.close.toString(), 8));
+    this.srcInFiatValue = this._math.multiply(new FixedDecimal(this.amountSrc.value, this.pool.token.src.decimals), new FixedDecimal(this.pool.token.src.summary.price.close.toString(), 8));
+    this.srcInMinFiatValue = this._math.multiply(new FixedDecimal(this.srcInMin, this.pool.token.src.decimals), new FixedDecimal(this.pool.token.src.summary.price.close.toString(), 8));
   }
 
   toggleShowMore(value: boolean) {

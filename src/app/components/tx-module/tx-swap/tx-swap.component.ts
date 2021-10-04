@@ -15,6 +15,7 @@ import { DecimalStringRegex } from '@sharedLookups/regex';
 import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
 import { TxBase } from '../tx-base.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 
 @Component({
   selector: 'opdex-tx-swap',
@@ -68,7 +69,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
   constructor(
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
-    private _mathService: MathService,
+    private _math: MathService,
     protected _dialog: MatDialog,
     protected _userContext: UserContextService,
     protected _bottomSheet: MatBottomSheet
@@ -248,26 +249,18 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
     if (this.setTolerance > 99.99 || this.setTolerance < .01) return;
     if (!this.tokenInAmount.value || !this.tokenInAmount.value) return;
 
-    this.tokenInMax = this._mathService.multiply(this.formatDecimalNumber(this.tokenInAmount.value, this.tokenInDetails.decimals), 1 + (this.setTolerance / 100));
+    this.tokenInMax = this._math.multiply(
+      new FixedDecimal(this.tokenInAmount.value, this.tokenInDetails.decimals),
+      new FixedDecimal((1 + (this.setTolerance / 100)).toString(), 8));
 
-    let tokenOutValue = this.formatDecimalNumber(this.tokenOutAmount.value, this.tokenOutDetails.decimals);
-    let minTolerance = this.formatDecimalNumber(this._mathService.multiply(tokenOutValue, this.setTolerance / 100), this.tokenOutDetails.decimals);
-    this.tokenOutMin = this._mathService.subtract(tokenOutValue, minTolerance);
+    let tokenOutValue = new FixedDecimal(this.tokenOutAmount.value, this.tokenOutDetails.decimals);
+    let minTolerance = this._math.multiply(tokenOutValue, new FixedDecimal((this.setTolerance / 100).toString(), 8));
+    this.tokenOutMin = this._math.subtract(tokenOutValue, new FixedDecimal(minTolerance, this.tokenOutDetails.decimals));
 
-    this.tokenInFiatValue = this._mathService.multiply(this.formatDecimalNumber(this.tokenInAmount.value, this.tokenInDetails.decimals), this.tokenInDetails.summary.price.close);
-    this.tokenOutFiatValue = this._mathService.multiply(this.formatDecimalNumber(this.tokenOutAmount.value, this.tokenOutDetails.decimals), this.tokenOutDetails.summary.price.close);
-    this.tokenInMaxFiatValue = this._mathService.multiply(this.formatDecimalNumber(this.tokenInMax, this.tokenInDetails.decimals), this.tokenInDetails.summary.price.close);
-    this.tokenOutMinFiatValue = this._mathService.multiply(this.formatDecimalNumber(this.tokenOutMin, this.tokenOutDetails.decimals), this.tokenOutDetails.summary.price.close);
-  }
-
-  private formatDecimalNumber(value: string, decimals: number): string {
-    if (!value.includes('.')) value = `${value}.`.padEnd(value.length + 1 + decimals, '0');
-
-    if (value.startsWith('.')) value = `0${value}`;
-
-    var parts = value.split('.');
-
-    return `${parts[0]}.${parts[1].padEnd(decimals, '0')}`;
+    this.tokenInFiatValue = this._math.multiply(new FixedDecimal(this.tokenInAmount.value, this.tokenInDetails.decimals), new FixedDecimal(this.tokenInDetails.summary.price.close, 8));
+    this.tokenOutFiatValue = this._math.multiply(new FixedDecimal(this.tokenOutAmount.value, this.tokenOutDetails.decimals), new FixedDecimal(this.tokenOutDetails.summary.price.close, 8));
+    this.tokenInMaxFiatValue = this._math.multiply(new FixedDecimal(this.tokenInMax, this.tokenInDetails.decimals), new FixedDecimal(this.tokenInDetails.summary.price.close, 8));
+    this.tokenOutMinFiatValue = this._math.multiply(new FixedDecimal(this.tokenOutMin, this.tokenOutDetails.decimals), new FixedDecimal(this.tokenOutDetails.summary.price.close, 8));
   }
 
   toggleShowMore(value: boolean) {

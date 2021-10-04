@@ -1,3 +1,4 @@
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { environment } from '@environments/environment';
@@ -53,7 +54,7 @@ export class TxProvideRemoveComponent extends TxBase {
     private _platformApi: PlatformApiService,
     protected _userContext: UserContextService,
     protected _bottomSheet: MatBottomSheet,
-    private _mathService: MathService
+    private _math: MathService
   ) {
     super(_userContext, _dialog, _bottomSheet);
 
@@ -107,7 +108,9 @@ export class TxProvideRemoveComponent extends TxBase {
     if (this.setTolerance > 99.99 || this.setTolerance < .01) return;
     if (!this.liquidity.value) return;
 
-    this.lptInFiatValue = this._mathService.multiply(this.formatDecimalNumber(this.liquidity.value, this.pool.token.lp.decimals), this.pool.token.lp.summary.price.close as number);
+    this.lptInFiatValue = this._math.multiply(
+      new FixedDecimal(this.liquidity.value, this.pool.token.lp.decimals),
+      new FixedDecimal(this.pool.token.lp.summary.price.close.toString(), 8));
 
     // 500 liquidity
     // 10000 total supply
