@@ -1,3 +1,4 @@
+import { MathService } from '@sharedServices/utility/math.service';
 import { Component, Input, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -7,6 +8,7 @@ import { DecimalStringRegex } from '@sharedLookups/regex';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Observable } from 'rxjs';
@@ -26,6 +28,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
   pool: ILiquidityPoolSummary;
   allowance$: Observable<AllowanceValidation>;
   transactionTypes = TransactionTypes;
+  fiatValue: string;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -36,7 +39,8 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
     protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
     protected _userContext: UserContextService,
-    protected _bottomSheet: MatBottomSheet
+    protected _bottomSheet: MatBottomSheet,
+    private _math: MathService
   ) {
     super(_userContext, _dialog, _bottomSheet);
 
@@ -48,6 +52,11 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
       .pipe(
         debounceTime(300),
         distinctUntilChanged(),
+        tap(amount => {
+          const stakingTokenFiat = new FixedDecimal(this.pool.token.staking.summary.price.close.toString(), 8);
+          const amountDecimal = new FixedDecimal(amount, this.pool.token.staking.decimals);
+          this.fiatValue = this._math.multiply(amountDecimal, stakingTokenFiat);
+        }),
         switchMap((amount: string) => {
           const spender = this.data?.pool?.address;
           const token = this.data?.pool?.token?.staking?.address;
@@ -75,8 +84,6 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
     this._platformApi
       .startStakingQuote(payload.liquidityPool, payload)
         .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => {
-          this.quote(quote);
-        });
+        .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }
 }

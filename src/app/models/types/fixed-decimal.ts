@@ -40,6 +40,9 @@ export class FixedDecimal {
   }
 
   constructor(value: string, decimals: number) {
+     // TS/JS suck, strings can still be interpreted as numbers
+    value = value.toString();
+
     this._originalValue = value;
     this._decimals = decimals;
 

@@ -1,6 +1,7 @@
+import { MathService } from '@sharedServices/utility/math.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { take } from 'rxjs/operators';
-import { OnChanges } from '@angular/core';
+import { debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
+import { OnChanges, OnDestroy } from '@angular/core';
 import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -11,17 +12,21 @@ import { UserContextService } from '@sharedServices/utility/user-context.service
 import { Icons } from 'src/app/enums/icons';
 import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
 import { DecimalStringRegex } from '@sharedLookups/regex';
+import { Subscription } from 'rxjs';
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 
 @Component({
   selector: 'opdex-tx-mine-stop',
   templateUrl: './tx-mine-stop.component.html',
   styleUrls: ['./tx-mine-stop.component.scss']
 })
-export class TxMineStopComponent extends TxBase implements OnChanges {
+export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy {
   @Input() data;
   icons = Icons;
   form: FormGroup;
   pool: ILiquidityPoolSummary;
+  subscription = new Subscription();
+  fiatValue: string;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -32,13 +37,25 @@ export class TxMineStopComponent extends TxBase implements OnChanges {
     protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
     protected _userContext: UserContextService,
-    protected _bottomSheet: MatBottomSheet
+    protected _bottomSheet: MatBottomSheet,
+    private _math: MathService
   ) {
     super(_userContext, _dialog, _bottomSheet);
 
     this.form = this._fb.group({
       amount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]]
     });
+
+    this.subscription.add(
+      this.amount.valueChanges
+        .pipe(
+          debounceTime(400),
+          distinctUntilChanged())
+        .subscribe(amount => {
+          const lptFiat = new FixedDecimal(this.pool.token.lp.summary.price.close.toString(), 8);
+          const amountDecimal = new FixedDecimal(amount, this.pool.token.lp.decimals);
+          this.fiatValue = this._math.multiply(amountDecimal, lptFiat);
+        }));
   }
 
   ngOnChanges(): void {
@@ -60,5 +77,9 @@ export class TxMineStopComponent extends TxBase implements OnChanges {
         .subscribe((quote: ITransactionQuote) => {
           this.quote(quote);
         });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

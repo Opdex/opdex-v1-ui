@@ -12,7 +12,7 @@ import { TransactionTypes } from 'src/app/enums/transaction-types';
 export class AllowanceValidationComponent {
   @Input() allowance: AllowanceValidation;
   @Input() transactionType: TransactionTypes;
-  ignore: boolean = false;
+  ignore: boolean = true;
   transactionTypes = TransactionTypes;
 
   constructor(private _sidenav: SidenavService) { }

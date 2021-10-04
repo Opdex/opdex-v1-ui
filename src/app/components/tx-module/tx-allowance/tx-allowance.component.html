@@ -4,6 +4,6 @@
     <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.link" label="Spender" [formControl]="spender" placeholder="spender address"></opdex-input-control>
     <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Amount" [formControl]="amount" [numbersOnly]="true"></opdex-input-control>
 
-    <button mat-flat-button color="primary" class="mt-4 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
+    <button mat-flat-button color="primary" class="mt-3 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
   </form>
 </opdex-card>

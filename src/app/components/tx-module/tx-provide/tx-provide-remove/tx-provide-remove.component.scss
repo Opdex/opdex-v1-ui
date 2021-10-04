@@ -1,15 +1,8 @@
 @import '/src/scss//colors';
 
-.remove-liquidity {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
 .toggle-additional {
   display: flex;
   justify-content: flex-end;
-  margin: 15px 0;
 }
 
 .success {

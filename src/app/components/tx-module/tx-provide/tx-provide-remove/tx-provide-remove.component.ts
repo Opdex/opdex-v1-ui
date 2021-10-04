@@ -32,7 +32,10 @@ export class TxProvideRemoveComponent extends TxBase {
   showMore: boolean = false;
   lptInFiatValue: string;
   lptInMinFiatValue: string;
+  usdOut: string;
+  crsOut: string;
   crsOutMin: string;
+  srcOut: string;
   srcOutMin: string;
   setTolerance = 0.1;
 
@@ -88,10 +91,11 @@ export class TxProvideRemoveComponent extends TxBase {
 
     const payload = {
       liquidity: liquidity,
-      amountCrsMin: '0.00000001',
-      amountSrcMin: '0.00000001',
+      amountCrsMin: this.crsOutMin,
+      amountSrcMin: this.srcOutMin,
       liquidityPool: this.pool.address,
-      recipient: this.context.wallet
+      recipient: this.context.wallet,
+      deadline: 0
     };
 
     this._platformApi
@@ -108,28 +112,35 @@ export class TxProvideRemoveComponent extends TxBase {
     if (this.setTolerance > 99.99 || this.setTolerance < .01) return;
     if (!this.liquidity.value) return;
 
-    this.lptInFiatValue = this._math.multiply(
-      new FixedDecimal(this.liquidity.value, this.pool.token.lp.decimals),
-      new FixedDecimal(this.pool.token.lp.summary.price.close.toString(), 8));
+    const lptDecimals = this.pool.token.lp.decimals;
+    const liquidityValue = new FixedDecimal(this.liquidity.value, lptDecimals);
+    const totalSupply = new FixedDecimal(this.pool.token.lp.totalSupply.toString(), lptDecimals);
 
-    // 500 liquidity
-    // 10000 total supply
-    // 2500 crs
-    // 5000 src
-    // Write divide function math with tests
-    // 500 / 10000 = 5%
-    // 5% of 2500 = 125
-    // 5% 0f 5000 = 250
-  }
+    const crsDecimals = this.pool.token.crs.decimals;
+    const srcDecimals = this.pool.token.src.decimals;
+    const reservesUsd = new FixedDecimal(this.pool.reserves.usd.toString(), 8);
+    const reserveCrs = new FixedDecimal(this.pool.reserves.crs, crsDecimals);
+    const reserveSrc = new FixedDecimal(this.pool.reserves.src, srcDecimals);
 
-  private formatDecimalNumber(value: string, decimals: number): string {
-    if (!value.includes('.')) value = `${value}.`.padEnd(value.length + 1 + decimals, '0');
+    const percentageLiquidity = new FixedDecimal(this._math.divide(liquidityValue, totalSupply), 8);
 
-    if (value.startsWith('.')) value = `0${value}`;
+    this.crsOut = this._math.multiply(reserveCrs, percentageLiquidity);
+    this.srcOut = this._math.multiply(reserveSrc, percentageLiquidity);
+    this.usdOut = this._math.multiply(reservesUsd, percentageLiquidity);
 
-    var parts = value.split('.');
+    const crsOut = new FixedDecimal(this.crsOut, crsDecimals);
+    const srcOut = new FixedDecimal(this.srcOut, srcDecimals);
+    const usdOut = new FixedDecimal(this.usdOut, 8);
 
-    return `${parts[0]}.${parts[1].padEnd(decimals, '0')}`;
+    const tolerancePercentage = new FixedDecimal((this.setTolerance / 100).toString(), 8);
+
+    const crsTolerance = new FixedDecimal(this._math.multiply(crsOut, tolerancePercentage), crsDecimals);
+    const srcTolerance = new FixedDecimal(this._math.multiply(srcOut, tolerancePercentage), srcDecimals);
+    const usdTolerance = new FixedDecimal(this._math.multiply(usdOut, tolerancePercentage), 8);
+
+    this.crsOutMin = this._math.subtract(crsOut, crsTolerance);
+    this.srcOutMin = this._math.subtract(srcOut, srcTolerance);
+    this.lptInFiatValue = this._math.subtract(usdOut, usdTolerance);
   }
 
   toggleShowMore(value: boolean) {

@@ -1,5 +1,5 @@
-.start-staking {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+@import '/src/scss//colors';
+
+.success {
+  color: $green-primary;
 }

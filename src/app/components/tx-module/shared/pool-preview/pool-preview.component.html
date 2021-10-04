@@ -44,25 +44,29 @@
         <div class="col flex-shrink">
           <small>{{pool.token.src.symbol}}</small>
           <small>CRS</small>
+          <small>OLPT</small>
           <small>USD</small>
         </div>
 
         <div class="col flex-shrink">
           <small><opdex-change-indicator [value]="pool.token.src.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
           <small><opdex-change-indicator [value]="pool.token.crs.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
+          <small><opdex-change-indicator [value]="pool.token.lp.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
           <small><opdex-change-indicator [value]="pool.reserves.usdDailyChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
         </div>
 
         <div class="col">
           <small>${{pool.token.src.summary.price.close | shortNumber}}</small>
           <small>${{pool.token.crs.summary.price.close | shortNumber}}</small>
+          <small>${{pool.token.lp.summary.price.close | shortNumber}}</small>
           <small></small>
         </div>
 
         <div class="col d-flex align-items-end flex-column">
-          <small>{{pool.reserves.src | shortNumber}} <mat-icon color="primary">lock</mat-icon></small>
-          <small>{{pool.reserves.crs | shortNumber}} <mat-icon color="primary">lock</mat-icon></small>
-          <small>${{pool.reserves.usd | shortNumber}} <mat-icon color="primary">lock</mat-icon></small>
+          <small>{{pool.reserves.src | shortNumber}} <mat-icon>lock</mat-icon></small>
+          <small>{{pool.reserves.crs | shortNumber}} <mat-icon>lock</mat-icon></small>
+          <small>{{pool.token.lp.totalSupply | shortNumber}} <mat-icon>lock</mat-icon></small>
+          <small>${{pool.reserves.usd | shortNumber}} <mat-icon>lock</mat-icon></small>
         </div>
       </div>
     </ng-container>

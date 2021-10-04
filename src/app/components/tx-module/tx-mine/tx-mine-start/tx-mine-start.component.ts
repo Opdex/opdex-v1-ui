@@ -1,3 +1,4 @@
+import { MathService } from '@sharedServices/utility/math.service';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { Component, Input, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -7,12 +8,13 @@ import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liqu
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Observable } from 'rxjs';
-import { debounceTime, map, switchMap, take, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, map, switchMap, take, distinctUntilChanged, tap } from 'rxjs/operators';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
 import { TransactionTypes } from 'src/app/enums/transaction-types';
 import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
 import { DecimalStringRegex } from '@sharedLookups/regex';
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 
 @Component({
   selector: 'opdex-tx-mine-start',
@@ -26,6 +28,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
   pool: ILiquidityPoolSummary;
   allowance$: Observable<AllowanceValidation>;
   transactionTypes = TransactionTypes;
+  fiatValue: string;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -36,7 +39,8 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
     protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
     protected _userContext: UserContextService,
-    protected _bottomSheet: MatBottomSheet
+    protected _bottomSheet: MatBottomSheet,
+    private _math: MathService
   ) {
     super(_userContext, _dialog, _bottomSheet);
 
@@ -48,6 +52,11 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
       .pipe(
         debounceTime(300),
         distinctUntilChanged(),
+        tap(amount => {
+          const lptFiat = new FixedDecimal(this.pool.token.lp.summary.price.close.toString(), 8);
+          const amountDecimal = new FixedDecimal(amount, this.pool.token.lp.decimals);
+          this.fiatValue = this._math.multiply(amountDecimal, lptFiat);
+        }),
         switchMap((amount: string) => {
           const spender = this.data?.pool?.mining?.address;
           const token = this.data?.pool?.token?.lp?.address;
@@ -75,8 +84,6 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
     this._platformApi
       .startMiningQuote(payload.miningPool, payload)
         .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => {
-          this.quote(quote);
-        });
+        .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }
 }
