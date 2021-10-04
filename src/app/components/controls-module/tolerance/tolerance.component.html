@@ -1,0 +1,21 @@
+<div class="tolerance-widget">
+  <label>Tolerance</label>
+  <div class="levels">
+    <div class="button-group">
+      <button mat-stroked-button
+            type="button"
+            color="{{ selectedToleranceLevel === level.id ? 'primary' : 'default' }}"
+            (click)="outputTolerance(level.tolerance)"
+            *ngFor="let level of toleranceLevels">{{level.tolerance}}%</button>
+    </div>
+
+    <opdex-input-control
+      [formControl]="control"
+      suffix="%"
+      [active]="selectedToleranceLevel === 4"
+      label="Custom Tolerance"
+      [showLabel]="false"
+      [buttonDisabled]="true"
+      [numbersOnly]="true"></opdex-input-control>
+  </div>
+</div>

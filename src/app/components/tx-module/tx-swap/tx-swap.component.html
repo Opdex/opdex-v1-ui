@@ -2,16 +2,47 @@
   <opdex-allowance-validation [transactionType]="transactionTypes.swap" [allowance]="allowance"></opdex-allowance-validation>
 
   <form [formGroup]="form" name="swap-form" id="swap-form">
-    <opdex-input-control [prefixIcon]="icons.remove" label="Sell" [formControl]="tokenInAmount" [suffix]="tokenInDetails?.symbol || 'CRS'" (handleChangeToken)="changeToken('tokenIn')" [numbersOnly]="true"></opdex-input-control>
+    <opdex-input-control [prefixIcon]="icons.remove" label="{{tokenInExact ? 'Sell Exactly' : 'Sell'}}" [formControl]="tokenInAmount" [suffix]="tokenInDetails?.symbol || 'CRS'" (handleChangeToken)="changeToken('tokenIn')" [numbersOnly]="true">
+      <div class="d-flex flex-row justify-content-between">
+        <div class="tolerance-amounts">
+          <span *ngIf="tokenInMax && !tokenInExact">Max: {{tokenInMax | shortNumber}}</span>
+          <span *ngIf="tokenInFiatValue && !tokenInExact" class="success ml-2">(${{tokenInMaxFiatValue | shortNumber}})</span>
+        </div>
+        <div class="fiat-quote">
+          <span class="success ml-2" *ngIf="tokenInFiatValue">${{tokenInFiatValue | shortNumber}}</span>
+        </div>
+      </div>
+    </opdex-input-control>
+
     <div class="switch">
       <button mat-icon-button class="small" (click)="switch()"><mat-icon>arrow_downward</mat-icon></button>
     </div>
-    <opdex-input-control [prefixIcon]="icons.add" label="Buy" [formControl]="tokenOutAmount" [suffix]="tokenOutDetails?.symbol || 'Select Token'" (handleChangeToken)="changeToken('tokenOut')" [numbersOnly]="true"></opdex-input-control>
+
+    <opdex-input-control [prefixIcon]="icons.add" label="{{!tokenInExact ? 'Buy Exactly' : 'Buy'}}" [formControl]="tokenOutAmount" [suffix]="tokenOutDetails?.symbol || 'Select Token'" (handleChangeToken)="changeToken('tokenOut')" [numbersOnly]="true">
+      <div class="d-flex flex-row justify-content-between">
+        <div class="tolerance-amounts">
+          <span *ngIf="tokenOutMin && tokenInExact">Min: {{tokenOutMin | shortNumber}}</span>
+          <span *ngIf="tokenOutMinFiatValue && tokenInExact" class="success ml-2">(${{tokenOutMinFiatValue | shortNumber}})</span>
+        </div>
+        <div class="fiat-quote">
+          <span class="success ml-2" *ngIf="tokenOutFiatValue">${{tokenOutFiatValue | shortNumber}}</span>
+        </div>
+      </div>
+    </opdex-input-control>
+
+    <div class="toggle-additional">
+      <button mat-button color="primary" class="tiny" (click)="toggleShowMore(true)" *ngIf="!showMore"><mat-icon class="mr-1">add</mat-icon> More</button>
+      <button mat-button color="warn" class="tiny" (click)="toggleShowMore(false)" *ngIf="showMore"><mat-icon class="mr-1">remove</mat-icon> Less</button>
+    </div>
+
+    <div class="additional" *ngIf="showMore">
+      <opdex-tolerance [control]="tolerance" (onToleranceChange)="calcTolerance($event)"></opdex-tolerance>
+
+      <div class="mt-2">
+        <opdex-deadline [control]="deadline" (onDeadlineChange)="calcDeadline($event)"></opdex-deadline>
+      </div>
+    </div>
   </form>
 
-  <div class="mt-2">
-    <opdex-deadline-slider label="Deadline" [default]="20" [formControl]="deadline"></opdex-deadline-slider>
-  </div>
-
-  <button mat-flat-button color="primary" class="mt-4 w-100" (click)="submit()" [disabled]="!form.valid || !context?.wallet">Quote</button>
+  <button mat-flat-button color="primary" class="mt-2 w-100" (click)="submit()" [disabled]="!form.valid || !context?.wallet">Quote</button>
 </opdex-card>

@@ -1,3 +1,4 @@
+import { MathService } from '@sharedServices/utility/math.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { environment } from '@environments/environment';
 import { Component, Input } from '@angular/core';
@@ -6,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
-import { switchMap, map, take, filter, debounceTime, debounce, distinctUntilChanged } from 'rxjs/operators';
+import { switchMap, map, take, filter, debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -27,9 +28,23 @@ export class TxProvideRemoveComponent extends TxBase {
   context: any;
   allowance$: Observable<AllowanceValidation>;
   transactionTypes = TransactionTypes;
+  showMore: boolean = false;
+  lptInFiatValue: string;
+  lptInMinFiatValue: string;
+  crsOutMin: string;
+  srcOutMin: string;
+  setTolerance = 0.1;
 
   get liquidity(): FormControl {
     return this.form.get('liquidity') as FormControl;
+  }
+
+  get deadline(): FormControl {
+    return this.form.get('deadline') as FormControl;
+  }
+
+  get tolerance(): FormControl {
+    return this.form.get('tolerance') as FormControl;
   }
 
   constructor(
@@ -37,18 +52,22 @@ export class TxProvideRemoveComponent extends TxBase {
     protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
     protected _userContext: UserContextService,
-    protected _bottomSheet: MatBottomSheet
+    protected _bottomSheet: MatBottomSheet,
+    private _mathService: MathService
   ) {
     super(_userContext, _dialog, _bottomSheet);
 
     this.form = this._fb.group({
-      liquidity: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]]
+      liquidity: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
+      deadline: [''],
+      tolerance: ['']
     });
 
     this.allowance$ = this.liquidity.valueChanges
       .pipe(
         debounceTime(400),
         distinctUntilChanged(),
+        tap(_ => this.calcTolerance()),
         filter(_ => this.context.wallet !== undefined),
         switchMap(amount => this.getAllowance$(amount)));
   }
@@ -80,5 +99,41 @@ export class TxProvideRemoveComponent extends TxBase {
         .subscribe((quote: ITransactionQuote) => {
           this.quote(quote);
         });
+  }
+
+  calcTolerance(tolerance?: number) {
+    if (tolerance) this.setTolerance = tolerance;
+
+    if (this.setTolerance > 99.99 || this.setTolerance < .01) return;
+    if (!this.liquidity.value) return;
+
+    this.lptInFiatValue = this._mathService.multiply(this.formatDecimalNumber(this.liquidity.value, this.pool.token.lp.decimals), this.pool.token.lp.summary.price.close as number);
+
+    // 500 liquidity
+    // 10000 total supply
+    // 2500 crs
+    // 5000 src
+    // Write divide function math with tests
+    // 500 / 10000 = 5%
+    // 5% of 2500 = 125
+    // 5% 0f 5000 = 250
+  }
+
+  private formatDecimalNumber(value: string, decimals: number): string {
+    if (!value.includes('.')) value = `${value}.`.padEnd(value.length + 1 + decimals, '0');
+
+    if (value.startsWith('.')) value = `0${value}`;
+
+    var parts = value.split('.');
+
+    return `${parts[0]}.${parts[1].padEnd(decimals, '0')}`;
+  }
+
+  toggleShowMore(value: boolean) {
+    this.showMore = value;
+  }
+
+  calcDeadline(minutes: number) {
+
   }
 }

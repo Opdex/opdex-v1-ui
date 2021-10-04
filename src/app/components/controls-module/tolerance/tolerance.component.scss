@@ -1,0 +1,25 @@
+.tolerance-widget {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    font-weight: 400 !important;
+  }
+
+  .levels {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .button-group {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      button {
+        max-height: 40px;
+        margin-right: 10px;
+      }
+    }
+  }
+}
