@@ -1,0 +1,30 @@
+@import '/src/scss/colors.scss';
+
+.button-group {
+  display: flex;
+  margin-top: 30px;
+
+  .mat-button {
+    width: 100%;
+
+    .social-icon {
+      max-width: 18px;
+      max-height: 18px;
+      margin: 0 5px 0;
+    }
+
+    &.discord {
+      background: $discord !important;
+      color: white;
+    }
+
+    &.github {
+      background: #000 !important;
+      color: white;
+    }
+
+    &:not(:last-of-type) {
+      margin-right: 15px;
+    }
+  }
+}

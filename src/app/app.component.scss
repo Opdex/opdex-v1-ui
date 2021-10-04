@@ -43,7 +43,7 @@ opdex-side-nav {
 .banner {
   display: flex;
   flex: 1;
-  vertical-align: middle;
+  align-items: center;
   justify-content: space-between;
   padding: 10px 15px;
   flex-direction: row;
@@ -52,15 +52,8 @@ opdex-side-nav {
   .env {
     font-weight: 600;
     text-transform: uppercase;
-    vertical-align: middle;
+    align-items: center;
     display: flex;
-  }
-
-  mat-icon {
-    line-height: unset !important;
-    font-size: 1em;
-    width: 1em;
-    height: 1em;
   }
 
   p {
