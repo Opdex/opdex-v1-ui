@@ -1,12 +1,18 @@
-<h2 mat-dialog-title>Report Bug</h2>
+<h2 mat-dialog-title class="d-flex align-items-center">
+  <mat-icon color="warn" class="mr-2">bug_report</mat-icon>Report Bug
+</h2>
+
 <mat-dialog-content>
-    <p>
-        Report bugs and issues in detail on the official Opdex Discord Server if you're a user, or open an issue on Github if you are a developer. How would you like to proceed?
-    </p>
-    <p>
-        <a href="https://discord.gg/TnWVDTTrjf" target="_blank" rel="noopener noreferrer">Discord</a>
-    </p>
-    <p>
-        <a href="https://github.com/Opdex/opdex-ui/issues/" target="_blank" rel="noopener noreferrer">Github</a>
-    </p>
+  <p>Report bugs and issues in detail on the official Opdex Discord server if you're a user, or open an issue on Github if you're a developer. How would you like to proceed?</p>
+
+  <div class="button-group">
+    <a mat-button href="https://discord.gg/TnWVDTTrjf" target="_blank" rel="noopener noreferrer" class="discord">
+      <img src="/assets/social/Discord.svg" class="social-icon" alt="Discord Logo">
+      Discord
+    </a>
+    <a mat-button href="https://github.com/Opdex/opdex-ui/issues/" target="_blank" rel="noopener noreferrer" class="github">
+      <img src="/assets/social/Github.svg" class="social-icon" alt="Discord Logo">
+      Github
+    </a>
+  </div>
 </mat-dialog-content>

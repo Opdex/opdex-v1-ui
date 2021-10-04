@@ -68,9 +68,8 @@
           <ng-container>
             <div class="banner">
               <div class="env light">
-                <mat-icon *ngIf="network == 'Devnet'">warning</mat-icon>
+                <button mat-icon-button title="Report Bug" color="warn" (click)="openBugReport()" class="tiny"><mat-icon>bug_report</mat-icon></button>
                 <p class="mb-0 ml-2">{{network}}</p>
-                    <mat-icon title="Report Bug" color="warn" class="report-bug-button" (click)="openBugReport()">bug_report</mat-icon>
               </div>
 
               <div class="block" *ngIf="latestSyncedBlock$ | async as block">
