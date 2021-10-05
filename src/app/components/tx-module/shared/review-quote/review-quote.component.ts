@@ -8,7 +8,7 @@ import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signal
 import { SignTxModalComponent } from '@sharedComponents/modals-module/sign-tx-modal/sign-tx-modal.component';
 import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '@environments/environment';
 import { Network } from 'src/app/enums/networks';
@@ -27,13 +27,19 @@ export class ReviewQuoteComponent implements OnInit, OnDestroy {
   quoteRequest: any;
   hubConnection: HubConnection;
   isDevnet: boolean;
+  subscription = new Subscription();
 
   public constructor(
     private _platformApi: PlatformApiService,
     public _bottomSheetRef: MatBottomSheetRef<SignTxModalComponent>,
     private _jwt: JwtService,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: ITransactionQuote
-  ) { }
+  ) {
+    this.subscription.add(
+      this._bottomSheetRef.backdropClick().subscribe(_ => {
+        this._bottomSheetRef.dismiss(this.txHash);
+      }));
+  }
 
   ngOnInit() {
     this.isDevnet = environment.network == Network.Devnet;
@@ -99,7 +105,7 @@ export class ReviewQuoteComponent implements OnInit, OnDestroy {
   }
 
   close() {
-    this._bottomSheetRef.dismiss();
+    this._bottomSheetRef.dismiss(this.txHash);
   }
 
   async ngOnDestroy() {

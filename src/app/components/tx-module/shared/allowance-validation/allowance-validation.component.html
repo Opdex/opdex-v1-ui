@@ -1,11 +1,13 @@
 <ng-container *ngIf="allowance">
   <div class="d-flex flex-row align-items-center justify-content-between" *ngIf="!allowance.isApproved">
     <div class="message d-flex flex-row align-items-center">
-      <mat-icon class="small warn mr-2">error</mat-icon>
-      <p class="mb-0 warn" style="font-weight: 400;">Insufficient Allowance</p>
+      <mat-icon class="small warn mr-2" *ngIf="!waiting">error</mat-icon>
+      <mat-spinner *ngIf="waiting" class="tiny mr-2"></mat-spinner>
+      <p class="mb-0 warn" style="font-weight: 400;" *ngIf="!waiting">Insufficient Allowance</p>
+      <p class="mb-0 loading" style="font-weight: 400;" *ngIf="waiting">Awaiting Approval</p>
     </div>
 
-    <button mat-icon-button class="small" color="primary" (click)="setIgnore(!ignore)"><mat-icon>{{ ignore ? 'add' : 'remove' }}</mat-icon></button>
+    <button mat-icon-button class="small" color="primary" (click)="setIgnore(!ignore)" *ngIf="!waiting"><mat-icon>{{ ignore ? 'add' : 'remove' }}</mat-icon></button>
   </div>
 
   <div class="d-flex flex-row align-items-center justify-content-between" *ngIf="allowance.isApproved">
@@ -15,7 +17,7 @@
     </div>
   </div>
 
-  <div class="details mt-2" *ngIf="!allowance.isApproved && !ignore">
+  <div class="details mt-2" *ngIf="!allowance.isApproved && !ignore && !waiting">
     <ng-container [ngSwitch]="transactionType" >
       <p *ngSwitchCase="transactionTypes.addLiquidity" class="mb-3">An allowance must be approved in order to add liquidity using {{allowance.requestToSpend | shortNumber}} {{allowance.token.symbol}} tokens.</p>
       <p *ngSwitchCase="transactionTypes.removeLiquidity" class="mb-3">An allowance must be approved in order to remove liquidity using {{allowance.requestToSpend | shortNumber}} {{allowance.token.symbol}} tokens.</p>

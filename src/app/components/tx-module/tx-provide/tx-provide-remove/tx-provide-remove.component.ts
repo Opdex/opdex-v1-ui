@@ -8,8 +8,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
-import { switchMap, map, take, filter, debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { switchMap, map, take, filter, debounceTime, distinctUntilChanged, tap, mergeMap } from 'rxjs/operators';
+import { Observable, Subscription, timer } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
@@ -27,7 +27,7 @@ export class TxProvideRemoveComponent extends TxBase {
   icons = Icons;
   form: FormGroup;
   context: any;
-  allowance$: Observable<AllowanceValidation>;
+  allowance$: Subscription;
   transactionTypes = TransactionTypes;
   showMore: boolean = false;
   lptInFiatValue: string;
@@ -38,6 +38,8 @@ export class TxProvideRemoveComponent extends TxBase {
   srcOut: string;
   srcOutMin: string;
   setTolerance = 0.1;
+  allowanceTransaction$: Subscription;
+  allowance: AllowanceValidation;
 
   get liquidity(): FormControl {
     return this.form.get('liquidity') as FormControl;
@@ -73,16 +75,20 @@ export class TxProvideRemoveComponent extends TxBase {
         distinctUntilChanged(),
         tap(_ => this.calcTolerance()),
         filter(_ => this.context.wallet !== undefined),
-        switchMap(amount => this.getAllowance$(amount)));
+        switchMap(amount => this.getAllowance$(amount)))
+        .subscribe();
   }
 
-  getAllowance$(amount: string):Observable<any> {
+  getAllowance$(amount?: string):Observable<any> {
+    amount = amount || this.liquidity.value;
     const spender = environment.routerAddress;
     const token = this.pool?.token?.lp?.address;
 
     return this._platformApi
       .getAllowance(this.context.wallet, spender, token)
-      .pipe(map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, this.pool.token.lp)));
+      .pipe(
+        map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, this.pool.token.lp)),
+        tap((rsp: AllowanceValidation) => this.allowance = rsp));
   }
 
   submit(): void {
@@ -143,11 +149,26 @@ export class TxProvideRemoveComponent extends TxBase {
     this.lptInFiatValue = this._math.subtract(usdOut, usdTolerance);
   }
 
+  allowanceApproval(txHash: string) {
+    if (txHash || this.allowance.isApproved || this.allowanceTransaction$) {
+      if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
+    }
+
+    this.allowanceTransaction$ = timer(8000, 8000)
+      .pipe(switchMap(_ => this.getAllowance$()))
+      .subscribe();
+  }
+
+
   toggleShowMore(value: boolean) {
     this.showMore = value;
   }
 
   calcDeadline(minutes: number) {
 
+  }
+
+  ngOnDestroy() {
+    if (this.allowance$) this.allowance$.unsubscribe();
   }
 }

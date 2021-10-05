@@ -2,7 +2,7 @@
   <table mat-table [dataSource]="dataSource" matSort [trackBy]="trackBy" class="w-100">
     <ng-container matColumnDef="pool" sticky>
       <th mat-header-cell *matHeaderCellDef> Liquidity Pool </th>
-      <td mat-cell *matCellDef="let element" class="token-identity no-wrap">
+      <td mat-cell *matCellDef="let element" class="no-wrap">
         <div class="no-wrap d-flex align-items-center">
           <opdex-copy-button [tooltip]="element.liquidityPoolAddress" [value]="element.liquidityPoolAddress" icon="link"></opdex-copy-button>
           <a class="no-decoration b-500" href="javascript:void(0)" (click)="navigate(element.liquidityPoolAddress)">{{element.name}}</a>
@@ -20,7 +20,7 @@
     <ng-container matColumnDef="position">
       <th mat-header-cell *matHeaderCellDef> Position </th>
       <td mat-cell *matCellDef="let element">
-        <span class="no-wrap">{{element.position | shortNumber}} <small>{{element.miningTokenSymbol}}</small></span>
+        <span class="no-wrap" style="font-weight: 400;">{{element.position | shortNumber}} <small>{{element.miningTokenSymbol}}</small></span>
       </td>
     </ng-container>
 

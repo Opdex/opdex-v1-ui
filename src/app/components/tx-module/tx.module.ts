@@ -1,3 +1,4 @@
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
 import { SharedPipesModule } from './../../pipes/shared-pipes.module';
 import { CardsModule } from '@sharedComponents/cards-module/cards.module';
@@ -147,7 +148,8 @@ import { TxCreatePoolComponent } from './tx-create-pool/tx-create-pool.component
     ClipboardModule,
     SharedModule,
     ControlsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatProgressSpinnerModule
   ],
   exports: [
     TxSwapComponent,

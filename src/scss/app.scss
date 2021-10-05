@@ -145,3 +145,15 @@
   overflow: hidden;
   white-space: nowrap;
 }
+
+.mat-spinner {
+  &.tiny {
+    width: 16px !important;
+    height: 16px !important;
+
+    svg {
+      width: 16px !important;
+      height: 16px !important;
+    }
+  }
+}

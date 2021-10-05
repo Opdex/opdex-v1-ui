@@ -4,8 +4,8 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Subscription, of, Observable } from 'rxjs';
-import { debounceTime, take, distinctUntilChanged, switchMap, map, tap, catchError, filter, startWith } from 'rxjs/operators';
+import { Subscription, of, Observable, throwError, timer } from 'rxjs';
+import { debounceTime, take, distinctUntilChanged, switchMap, map, tap, catchError, filter, startWith, retry, delay, mergeMap, retryWhen, takeUntil } from 'rxjs/operators';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { environment } from '@environments/environment';
 import { Icons } from 'src/app/enums/icons';
@@ -51,6 +51,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   filteredTokenOut$: Observable<IToken[]>;
   changeTokenIn: boolean;
   changeTokenOut: boolean;
+  allowanceTransaction$: Subscription;
 
   get tokenInAmount(): FormControl {
     return this.form.get('tokenInAmount') as FormControl;
@@ -325,6 +326,16 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
 
   calcDeadline(minutes: number) {
 
+  }
+
+  allowanceApproval(txHash: string) {
+    if (txHash || this.allowance.isApproved || this.allowanceTransaction$) {
+      if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
+    }
+
+    this.allowanceTransaction$ = timer(8000, 8000)
+      .pipe(tap(_ => this.quoteChangeToken()))
+      .subscribe();
   }
 
   ngOnDestroy() {
