@@ -7,6 +7,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, Subscription, interval, of } from 'rxjs';
 import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'opdex-token',
@@ -46,7 +47,8 @@ export class TokenComponent implements OnInit {
     private _route: ActivatedRoute,
     private _platformApiService: PlatformApiService,
     private _tokensService: TokensService,
-    private _router: Router
+    private _router: Router,
+    private _title: Title
   ) { }
 
   ngOnInit(): void {
@@ -102,6 +104,7 @@ export class TokenComponent implements OnInit {
             direction: 'DESC'
           }
           if (this.token){
+            this._title.setTitle(`${this.token.symbol} - ${this.token.name}`);
             this.setTokenStatCards();
           }
         })

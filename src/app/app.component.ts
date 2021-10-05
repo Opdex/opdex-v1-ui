@@ -15,6 +15,7 @@ import { UserContextService } from '@sharedServices/utility/user-context.service
 import { switchMap, tap } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { BugReportModalComponent } from '@sharedComponents/modals-module/bug-report-modal/bug-report-modal.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'opdex-root',
@@ -44,6 +45,7 @@ export class AppComponent implements OnInit {
     private _api: PlatformApiService,
     private _context: UserContextService,
     private _breakpointObserver: BreakpointObserver,
+    private _title: Title
   ) {
     this.context$ = this._context.getUserContext$().pipe(tap(context => this.context = context));
     this.latestSyncedBlock$ = timer(0,8000).pipe(switchMap(_ => this._api.getLatestSyncedBlock()));
@@ -112,6 +114,10 @@ export class AppComponent implements OnInit {
   }
 
   prepareRoute(outlet: RouterOutlet) {
+    if (outlet.activatedRouteData.title) {
+      this._title.setTitle(outlet.activatedRouteData.title);
+    }
+
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData.animation;
   }
 
