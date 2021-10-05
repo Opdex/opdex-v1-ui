@@ -8,7 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
-import { switchMap, map, take, filter, debounceTime, distinctUntilChanged, tap, mergeMap } from 'rxjs/operators';
+import { switchMap, map, take, filter, debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { Observable, Subscription, timer } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -149,7 +149,7 @@ export class TxProvideRemoveComponent extends TxBase {
     this.lptInFiatValue = this._math.subtract(usdOut, usdTolerance);
   }
 
-  allowanceApproval(txHash: string) {
+  handleAllowanceApproval(txHash: string) {
     if (txHash || this.allowance.isApproved || this.allowanceTransaction$) {
       if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
     }
@@ -170,5 +170,6 @@ export class TxProvideRemoveComponent extends TxBase {
 
   ngOnDestroy() {
     if (this.allowance$) this.allowance$.unsubscribe();
+    if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
   }
 }

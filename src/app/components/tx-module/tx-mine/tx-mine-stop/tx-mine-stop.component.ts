@@ -67,16 +67,13 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
     if (!amount.includes('.')) amount = `${amount}.00`;
 
     const payload = {
-      miningPool: this.pool.mining?.address,
       amount: amount
     }
 
     this._platformApi
-      .stopMiningQuote(payload.miningPool, payload)
+      .stopMiningQuote(this.pool.mining.address, payload)
         .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => {
-          this.quote(quote);
-        });
+        .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }
 
   ngOnDestroy() {

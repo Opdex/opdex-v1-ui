@@ -42,12 +42,12 @@ export class AllowanceValidationComponent implements OnChanges {
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => {
           this._bottomSheet.open(ReviewQuoteComponent, { data: quote })
-          .afterDismissed()
-          .pipe(take(1), filter(txhash => txhash !== null && txhash !== undefined))
-          .subscribe(txhash => {
-            this.waiting = true;
-            this.onAllowanceApproved.emit(txhash);
-          });
+            .afterDismissed()
+            .pipe(take(1), filter(txhash => txhash !== null && txhash !== undefined))
+            .subscribe(txhash => {
+              this.waiting = true;
+              this.onAllowanceApproved.emit(txhash);
+            });
         });
   }
 

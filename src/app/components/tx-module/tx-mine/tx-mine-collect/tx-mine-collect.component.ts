@@ -1,5 +1,4 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
@@ -32,15 +31,9 @@ export class TxMineCollectComponent extends TxBase implements OnChanges {
   }
 
   submit(): void {
-    const payload = {
-      miningPool: this.pool.mining?.address,
-    }
-
     this._platformApi
-      .collectMiningRewardsQuote(payload.miningPool)
+      .collectMiningRewardsQuote(this.pool.mining.address)
         .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => {
-          this.quote(quote);
-        });
+        .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }
 }

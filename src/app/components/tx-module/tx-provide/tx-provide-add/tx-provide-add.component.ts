@@ -195,7 +195,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
 
   }
 
-  allowanceApproval(txHash: string) {
+  handleAllowanceApproval(txHash: string) {
     if (txHash || this.allowance.isApproved || this.allowanceTransaction$) {
       if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
     }
@@ -207,5 +207,6 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
   }
 }

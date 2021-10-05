@@ -1,11 +1,12 @@
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Subscription, of, Observable, throwError, timer } from 'rxjs';
-import { debounceTime, take, distinctUntilChanged, switchMap, map, tap, catchError, filter, startWith, retry, delay, mergeMap, retryWhen, takeUntil } from 'rxjs/operators';
+import { Subscription, of, Observable, timer } from 'rxjs';
+import { debounceTime, take, distinctUntilChanged, switchMap, map, tap, catchError, filter, startWith } from 'rxjs/operators';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { environment } from '@environments/environment';
 import { Icons } from 'src/app/enums/icons';
@@ -16,7 +17,6 @@ import { TxBase } from '../tx-base.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 
 @Component({
   selector: 'opdex-tx-swap',
@@ -306,18 +306,29 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     if (this.setTolerance > 99.99 || this.setTolerance < .01) return;
     if (!this.tokenInAmount.value || !this.tokenInAmount.value) return;
 
-    this.tokenInMax = this._math.multiply(
-      new FixedDecimal(this.tokenInAmount.value, this.tokenInDetails.decimals),
-      new FixedDecimal((1 + (this.setTolerance / 100)).toString(), 8));
+    const tokenInDecimals = this.tokenInDetails.decimals;
+    const tokenOutDecimals = this.tokenOutDetails.decimals;
 
-    let tokenOutValue = new FixedDecimal(this.tokenOutAmount.value, this.tokenOutDetails.decimals);
-    let minTolerance = this._math.multiply(tokenOutValue, new FixedDecimal((this.setTolerance / 100).toString(), 8));
-    this.tokenOutMin = this._math.subtract(tokenOutValue, new FixedDecimal(minTolerance, this.tokenOutDetails.decimals));
+    const tokenInAmount = new FixedDecimal(this.tokenInAmount.value, tokenInDecimals);
+    const tokenInPrice = new FixedDecimal(this.tokenInDetails.summary.price.close, 8);
+    const tokenInTolerance = new FixedDecimal((1 + (this.setTolerance / 100)).toString(), 8);
 
-    this.tokenInFiatValue = this._math.multiply(new FixedDecimal(this.tokenInAmount.value, this.tokenInDetails.decimals), new FixedDecimal(this.tokenInDetails.summary.price.close, 8));
-    this.tokenOutFiatValue = this._math.multiply(new FixedDecimal(this.tokenOutAmount.value, this.tokenOutDetails.decimals), new FixedDecimal(this.tokenOutDetails.summary.price.close, 8));
-    this.tokenInMaxFiatValue = this._math.multiply(new FixedDecimal(this.tokenInMax, this.tokenInDetails.decimals), new FixedDecimal(this.tokenInDetails.summary.price.close, 8));
-    this.tokenOutMinFiatValue = this._math.multiply(new FixedDecimal(this.tokenOutMin, this.tokenOutDetails.decimals), new FixedDecimal(this.tokenOutDetails.summary.price.close, 8));
+    this.tokenInMax = this._math.multiply(tokenInAmount, tokenInTolerance);
+    const tokenInMax = new FixedDecimal(this.tokenInMax, tokenInDecimals);
+
+    const tokenOutAmount = new FixedDecimal(this.tokenOutAmount.value, tokenOutDecimals);
+    const tokenOutPrice = new FixedDecimal(this.tokenOutDetails.summary.price.close, 8);
+    const tokenOutTolerancePercentage = new FixedDecimal((this.setTolerance / 100).toString(), 8);
+    const tokenOutToleranceAmount = this._math.multiply(tokenOutAmount, tokenOutTolerancePercentage);
+    const tokenOutTolerance = new FixedDecimal(tokenOutToleranceAmount, tokenOutDecimals);
+
+    this.tokenOutMin = this._math.subtract(tokenOutAmount, tokenOutTolerance);
+    const tokenOutMin = new FixedDecimal(this.tokenOutMin, tokenOutDecimals);
+
+    this.tokenInFiatValue = this._math.multiply(tokenInAmount, tokenInPrice);
+    this.tokenOutFiatValue = this._math.multiply(tokenOutAmount, tokenOutPrice);
+    this.tokenInMaxFiatValue = this._math.multiply(tokenInMax, tokenInPrice);
+    this.tokenOutMinFiatValue = this._math.multiply(tokenOutMin, tokenOutPrice);
   }
 
   toggleShowMore(value: boolean) {
@@ -328,7 +339,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
 
   }
 
-  allowanceApproval(txHash: string) {
+  handleAllowanceApproval(txHash: string) {
     if (txHash || this.allowance.isApproved || this.allowanceTransaction$) {
       if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
     }
@@ -341,5 +352,6 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   ngOnDestroy() {
     if (this.tokenInChanges$) this.tokenInChanges$.unsubscribe();
     if (this.tokenOutChanges$) this.tokenOutChanges$.unsubscribe();
+    if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
   }
 }
