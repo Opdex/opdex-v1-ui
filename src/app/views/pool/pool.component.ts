@@ -18,6 +18,7 @@ import { IAddressMining } from "@sharedModels/responses/platform-api/wallets/add
 import { IToken } from "@sharedModels/responses/platform-api/tokens/token.interface";
 import { IAddressStaking } from '@sharedModels/responses/platform-api/wallets/address-staking.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'opdex-pool',
@@ -87,7 +88,8 @@ export class PoolComponent implements OnInit, OnDestroy {
     private _sidenav: SidenavService,
     private _liquidityPoolsService: LiquidityPoolsService,
     private _math: MathService,
-    private _router: Router
+    private _router: Router,
+    private _title: Title
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -160,6 +162,7 @@ export class PoolComponent implements OnInit, OnDestroy {
             eventTypes: ['SwapEvent', 'StartStakingEvent', 'StopStakingEvent', 'CollectStakingRewardsEvent', 'StartMiningEvent', 'StopMiningEvent', 'AddLiquidityEvent', 'RemoveLiquidityEvent', 'CollectMiningRewardsEvent', 'EnableMiningEvent', 'NominationEvent',]
           };
           if (this.pool){
+            this._title.setTitle(`${this.pool.token.src.symbol}-CRS Liquidity Pool`);
             this.setPoolStatCards();
           }
         })
