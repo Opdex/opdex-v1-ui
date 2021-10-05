@@ -1,12 +1,11 @@
 import { MathService } from '@sharedServices/utility/math.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
-import { TokensModalComponent } from '../../modals-module/tokens-modal/tokens-modal.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription, of, Observable } from 'rxjs';
-import { debounceTime, take, distinctUntilChanged, switchMap, map, tap, catchError, filter } from 'rxjs/operators';
+import { debounceTime, take, distinctUntilChanged, switchMap, map, tap, catchError, filter, startWith } from 'rxjs/operators';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { environment } from '@environments/environment';
 import { Icons } from 'src/app/enums/icons';
@@ -15,6 +14,8 @@ import { DecimalStringRegex } from '@sharedLookups/regex';
 import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
 import { TxBase } from '../tx-base.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 
 @Component({
@@ -22,7 +23,10 @@ import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
   templateUrl: './tx-swap.component.html',
   styleUrls: ['./tx-swap.component.scss']
 })
-export class TxSwapComponent extends TxBase implements OnDestroy{
+export class TxSwapComponent extends TxBase implements OnDestroy {
+  @ViewChild('tokenInInput') tokenInInput: ElementRef;
+  @ViewChild('tokenOutInput') tokenOutInput: ElementRef;
+
   @Input() data: any;
   icons = Icons;
   tokenInExact = true;
@@ -41,6 +45,12 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
   setTolerance = 0.1;
   tokenInMax: string;
   tokenOutMin: string;
+  tokens$: Observable<IToken[]>;
+  tokens: IToken[];
+  filteredTokenIn$: Observable<IToken[]>;
+  filteredTokenOut$: Observable<IToken[]>;
+  changeTokenIn: boolean;
+  changeTokenOut: boolean;
 
   get tokenInAmount(): FormControl {
     return this.form.get('tokenInAmount') as FormControl;
@@ -91,6 +101,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
         distinctUntilChanged(),
         tap(_ => this.tokenInExact = true),
         switchMap((value) => this.amountQuote(value)),
+        filter(quote => quote !== '0'),
         tap((value: string) => this.tokenOutAmount.setValue(value, { emitEvent: false })),
         tap(_ => this.calcTolerance()),
         filter(_ => this.context.wallet !== undefined),
@@ -103,11 +114,40 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
         distinctUntilChanged(),
         tap(_ => this.tokenInExact = false),
         switchMap((value: string) => this.amountQuote(value)),
+        filter(quote => quote !== '0'),
         tap((value: string) => this.tokenInAmount.setValue(value, { emitEvent: false })),
         tap(_ => this.calcTolerance()),
         filter(_ => this.context.wallet !== undefined),
         switchMap(() => this.validateAllowance())
       ).subscribe();
+
+      this.tokens$ = this._platformApi
+        .getTokens()
+        .pipe(tap(tokens => this.tokens = tokens));
+
+      this.filteredTokenIn$ = this.tokenIn.valueChanges
+        .pipe(
+          startWith(''),
+          map((token: string) => token ? this._filterPublicKeys(token) : this.tokens.slice()));
+
+      this.filteredTokenOut$ = this.tokenOut.valueChanges
+        .pipe(
+          startWith(''),
+          map((token: string) => token ? this._filterPublicKeys(token) : this.tokens.slice()));
+  }
+
+  private _filterPublicKeys(value: string): IToken[] {
+    if (!value) [];
+
+    const filterValue = value.toString().toLowerCase();
+
+    return this.tokens.filter(token => {
+      var addressMatch = token.address.toLowerCase().includes(filterValue);
+      var symbolMatch = token.symbol.toLowerCase().includes(filterValue);
+      var nameMatch = token.name.toLowerCase().includes(filterValue);
+
+      return addressMatch || nameMatch || symbolMatch;
+    });
   }
 
   ngOnChanges() {
@@ -119,43 +159,52 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
     }
   }
 
-  changeToken(tokenField: string): void {
-    const ref = this._dialog.open(TokensModalComponent, {
-      width: '600px',
-      position: { top: '200px' },
-      data:  { filter: [] },
-      panelClass: '',
-      autoFocus: false
-    });
+  selectInputToken($event?: MatAutocompleteSelectedEvent) {
+    this.changeTokenIn = false;
 
-    ref.afterClosed().pipe(take(1)).subscribe(rsp => {
-      if (rsp != null) {
-        // Todo: trim or pad token values based on the new selected tokens decimals
-        if (tokenField === 'tokenIn') {
-          this.tokenIn.setValue(rsp.address);
-          this.tokenInDetails = rsp;
-          this.tokenInExact = true;
-          this.amountQuote(this.tokenInAmount.value)
-            .pipe(
-              tap((quote: string) => this.tokenOutAmount.setValue(quote, { emitEvent: false })),
-              tap(_ => this.calcTolerance()),
-              switchMap(() => this.validateAllowance()),
-              take(1)
-            ).subscribe();
-        } else {
-          this.tokenOut.setValue(rsp.address);
-          this.tokenOutDetails = rsp;
-          this.tokenInExact = false;
-          this.amountQuote(this.tokenOutAmount.value)
-            .pipe(
-              tap((quote: string) => this.tokenInAmount.setValue(quote, { emitEvent: false })),
-              tap(_ => this.calcTolerance()),
-              switchMap(() => this.validateAllowance()),
-              take(1)
-            ).subscribe();
-        }
-      }
-    });
+    if ($event) {
+      this.tokenInDetails = this.tokens.find(t => t.address === $event.option.value);
+      this.quoteChangeToken();
+    }
+  }
+
+  selectOutputToken($event?: MatAutocompleteSelectedEvent) {
+    this.changeTokenOut = false;
+
+    if ($event) {
+      this.tokenOutDetails = this.tokens.find(t => t.address === $event.option.value);
+      this.quoteChangeToken();
+    }
+  }
+
+  quoteChangeToken() {
+    if (this.tokenInExact) {
+      this.amountQuote(this.tokenInAmount.value)
+        .pipe(
+          filter(quote => quote !== '0'),
+          tap((quote: string) => this.tokenOutAmount.setValue(quote, { emitEvent: false })),
+          tap(_ => this.calcTolerance()),
+          switchMap(() => this.validateAllowance()),
+          take(1)).subscribe();
+    } else {
+      this.amountQuote(this.tokenOutAmount.value)
+        .pipe(
+          filter(quote => quote !== '0'),
+          tap((quote: string) => this.tokenInAmount.setValue(quote, { emitEvent: false })),
+          tap(_ => this.calcTolerance()),
+          switchMap(() => this.validateAllowance()),
+          take(1)).subscribe();
+    }
+  }
+
+  changeToken(tokenField: string): void {
+    if (tokenField === 'tokenIn') {
+      this.changeTokenIn = true;
+      setTimeout(() => this.tokenInInput.nativeElement.focus());
+    } else {
+      this.changeTokenOut = true;
+      setTimeout(() => this.tokenOutInput.nativeElement.focus());
+    }
   }
 
   submit() {
@@ -197,6 +246,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
       this.tokenOutAmount.setValue(tokenInAmount, { emitEvent: false });
       this.amountQuote(tokenInAmount)
         .pipe(
+          filter(quote => quote !== '0'),
           tap((quote: string) => this.tokenInAmount.setValue(quote, { emitEvent: false })),
           tap(_ => this.calcTolerance()),
           switchMap(() => this.validateAllowance()),
@@ -207,6 +257,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
       this.tokenInAmount.setValue(tokenOutAmount, { emitEvent: false });
       this.amountQuote(tokenOutAmount)
         .pipe(
+          filter(quote => quote !== '0'),
           tap((quote: string) => this.tokenOutAmount.setValue(quote, { emitEvent: false })),
           tap(_ => this.calcTolerance()),
           switchMap(() => this.validateAllowance()),
@@ -217,17 +268,22 @@ export class TxSwapComponent extends TxBase implements OnDestroy{
 
   amountQuote(value: string): Observable<string> {
     if (!value || value.replace('0', '') === '.' || !value.includes('.')) {
-      return of('0.00');
+      return of('0');
     }
 
+    const valueDecimals = this.tokenInExact ? this.tokenInDetails.decimals : this.tokenOutDetails.decimals;
+    var fixedDecimalValue = new FixedDecimal(value, valueDecimals);
+
     const payload = {
-      tokenIn: this.tokenIn.value,
-      tokenOut: this.tokenOut.value,
-      tokenInAmount: this.tokenInExact ? value : null,
-      tokenOutAmount: !this.tokenInExact ? value : null
+      tokenIn: this.tokenInDetails.address,
+      tokenOut: this.tokenOutDetails.address,
+      tokenInAmount: this.tokenInExact ? fixedDecimalValue.formattedValue : null,
+      tokenOutAmount: !this.tokenInExact ? fixedDecimalValue.formattedValue : null
     };
 
-    return this._platformApi.getSwapQuote(payload).pipe(catchError(() => of('0.00')));
+    if (fixedDecimalValue.isZero) return of('0');
+
+    return this._platformApi.getSwapQuote(payload).pipe(catchError(() => of('0')));
   }
 
   validateAllowance(): Observable<AllowanceValidation> {

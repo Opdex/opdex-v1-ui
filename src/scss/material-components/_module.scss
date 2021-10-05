@@ -60,6 +60,7 @@
 .mat-drawer {
   z-index: 1000;
   min-height: 100vh;
+  overscroll-behavior: contain;
 }
 
 .light-mode {

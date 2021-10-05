@@ -19,7 +19,6 @@ import { QRCodeModule } from 'angularx-qrcode';
 
 import { ConnectWalletModalComponent } from './connect-wallet-modal/connect-wallet-modal.component';
 import { TxBoxSettingsModalComponent } from './tx-box-settings-modal/tx-box-settings-modal.component';
-import { TokensModalComponent } from './tokens-modal/tokens-modal.component';
 import { SignTxModalComponent } from './sign-tx-modal/sign-tx-modal.component';
 import { HelpModalComponent } from './help-modal/help-modal.component';
 import { BugReportModalComponent } from './bug-report-modal/bug-report-modal.component';
@@ -29,7 +28,6 @@ import { BugReportModalComponent } from './bug-report-modal/bug-report-modal.com
     ConnectWalletModalComponent,
     TxBoxSettingsModalComponent,
     SignTxModalComponent,
-    TokensModalComponent,
     HelpModalComponent,
     BugReportModalComponent
   ],

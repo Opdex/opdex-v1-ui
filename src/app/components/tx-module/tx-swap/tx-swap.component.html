@@ -1,6 +1,6 @@
 <opdex-card class="swap" [thin]="true">
   <form [formGroup]="form" name="swap-form" id="swap-form">
-    <opdex-input-control [prefixIcon]="icons.remove" label="{{tokenInExact ? 'Sell Exactly' : 'Sell'}}" [formControl]="tokenInAmount" [suffix]="tokenInDetails?.symbol || 'CRS'" (handleChangeToken)="changeToken('tokenIn')" [numbersOnly]="true">
+    <opdex-input-control *ngIf="!changeTokenIn" [prefixIcon]="icons.remove" label="{{tokenInExact ? 'Sell Exactly' : 'Sell'}}" [formControl]="tokenInAmount" [suffix]="tokenInDetails?.symbol || 'CRS'" (handleChangeToken)="changeToken('tokenIn')" [numbersOnly]="true">
       <div class="d-flex flex-row justify-content-between">
         <div class="tolerance-amounts">
           <span *ngIf="tokenInMax && !tokenInExact">Max: {{tokenInMax | shortNumber}}</span>
@@ -12,11 +12,33 @@
       </div>
     </opdex-input-control>
 
+    <mat-form-field floatLabel="always" *ngIf="changeTokenIn">
+      <mat-label>Sell Token</mat-label>
+
+      <button mat-icon-button matPrefix type="button" class="mr-2" disabled><mat-icon>link</mat-icon></button>
+
+      <input matInput aria-label="Public Key" [matAutocomplete]="tokenInAutoComplete" [formControl]="tokenIn" type="text" #tokenInInput>
+
+      <mat-hint>Select a token</mat-hint>
+
+      <mat-autocomplete #tokenInAutoComplete="matAutocomplete" (optionSelected)="selectInputToken($event)" (closed)="selectInputToken()">
+        <ng-container *ngIf="tokens$ | async">
+          <mat-option *ngFor="let token of filteredTokenIn$ | async" [value]="token.address">
+            <div class="d-flex flex-column">
+              <small style="font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 20px">{{token.symbol}} - {{token.name}}</small>
+              <small class="light" style="font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 16px;">{{token.address}}</small>
+            </div>
+          </mat-option>
+        </ng-container>
+
+      </mat-autocomplete>
+    </mat-form-field>
+
     <div class="switch">
       <button mat-icon-button class="small" (click)="switch()"><mat-icon>arrow_downward</mat-icon></button>
     </div>
 
-    <opdex-input-control [prefixIcon]="icons.add" label="{{!tokenInExact ? 'Buy Exactly' : 'Buy'}}" [formControl]="tokenOutAmount" [suffix]="tokenOutDetails?.symbol || 'Select Token'" (handleChangeToken)="changeToken('tokenOut')" [numbersOnly]="true">
+    <opdex-input-control *ngIf="!changeTokenOut" [prefixIcon]="icons.add" label="{{!tokenInExact ? 'Buy Exactly' : 'Buy'}}" [formControl]="tokenOutAmount" [suffix]="tokenOutDetails?.symbol || 'Select Token'" (handleChangeToken)="changeToken('tokenOut')" [numbersOnly]="true">
       <div class="d-flex flex-row justify-content-between">
         <div class="tolerance-amounts">
           <span *ngIf="tokenOutMin && tokenInExact">Min: {{tokenOutMin | shortNumber}}</span>
@@ -27,6 +49,28 @@
         </div>
       </div>
     </opdex-input-control>
+
+    <mat-form-field floatLabel="always" *ngIf="changeTokenOut">
+      <mat-label>Buy Token</mat-label>
+
+      <button mat-icon-button matPrefix type="button" class="mr-2" disabled><mat-icon>link</mat-icon></button>
+
+      <input matInput aria-label="Public Key" [matAutocomplete]="tokenOutAutoComplete" [formControl]="tokenOut" type="text" #tokenOutInput>
+
+      <mat-hint>Select a token</mat-hint>
+
+      <mat-autocomplete #tokenOutAutoComplete="matAutocomplete" (optionSelected)="selectOutputToken($event)" (closed)="selectOutputToken()">
+        <ng-container *ngIf="tokens$ | async">
+          <mat-option *ngFor="let token of filteredTokenOut$ | async" [value]="token.address">
+            <div class="d-flex flex-column">
+              <small style="font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 20px">{{token.symbol}} - {{token.name}}</small>
+              <small class="light" style="font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 16px;">{{token.address}}</small>
+            </div>
+          </mat-option>
+        </ng-container>
+
+      </mat-autocomplete>
+    </mat-form-field>
 
     <div class="toggle-additional">
       <button mat-icon-button color="primary" class="small" (click)="toggleShowMore(!showMore)" type="button"><mat-icon>{{showMore ? 'remove' : 'add'}}</mat-icon></button>
