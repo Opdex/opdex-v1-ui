@@ -24,6 +24,9 @@
 
   .foreground {
     padding: 15px;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
 
     &.warn {
       background: rgba(245, 25, 55, 0.4);
@@ -44,7 +47,11 @@
     height: calc(100% - 15px) !important;
 
     .foreground {
-      height: 100%;
+      height: 100% !important;
+
+      &.has-toolbar {
+        height: calc(100% - 47px) !important;
+      }
     }
   }
 }

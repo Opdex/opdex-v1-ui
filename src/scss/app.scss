@@ -135,3 +135,13 @@
     line-height: 16px;
   }
 }
+
+.positive-value {
+  color: $green-primary;
+}
+
+.overflow-ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

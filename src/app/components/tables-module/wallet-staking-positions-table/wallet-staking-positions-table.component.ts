@@ -1,18 +1,18 @@
-import { MathService } from '@sharedServices/utility/math.service';
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TransactionView } from '@sharedModels/transaction-view';
-import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
+import { MathService } from '@sharedServices/utility/math.service';
+import { SidenavService } from '@sharedServices/utility/sidenav.service';
 
 @Component({
-  selector: 'opdex-wallet-balances-table',
-  templateUrl: './wallet-balances-table.component.html',
-  styleUrls: ['./wallet-balances-table.component.scss']
+  selector: 'opdex-wallet-staking-positions-table',
+  templateUrl: './wallet-staking-positions-table.component.html',
+  styleUrls: ['./wallet-staking-positions-table.component.scss']
 })
-export class WalletBalancesTableComponent implements OnChanges {
+export class WalletStakingPositionsTableComponent implements OnChanges {
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
   @Input() records: any;
@@ -21,28 +21,29 @@ export class WalletBalancesTableComponent implements OnChanges {
   next: string;
 
   @Output() onPageChange: EventEmitter<string> = new EventEmitter();
-
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private _router: Router, private _sidebar: SidenavService, private _math: MathService) {
     this.dataSource = new MatTableDataSource<any>();
-    this.displayedColumns = ['token', 'name', 'balance', 'total', 'actions'];
+    this.displayedColumns = ['pool', 'status', 'position', 'value', 'actions'];
   }
 
   ngOnChanges() {
     if (!this.records) return;
-    if (!this.records.balances?.length) return;
 
-    this.dataSource.data = this.records.balances.map(t => {
+    if (!this.records.positions?.length) return;
+
+    this.dataSource.data = this.records.positions.map(p => {
       return {
-        name: t.name,
-        symbol: t.symbol,
-        address: t.address,
-        balance: t.balance.balance,
-        decimals: t.decimals,
-        total: this._math.multiply(
-          new FixedDecimal(t.balance.balance, t.decimals),
-          new FixedDecimal(t.summary.price.close.toString(), 8))
+        name: `${p.pool.token.src.symbol}-CRS`,
+        stakingTokenSymbol: p.pool.token.staking.symbol,
+        liquidityPoolAddress: p.pool.address,
+        position: p.position.amount,
+        decimals: p.pool.token.lp.decimals,
+        isNominated: true,
+        value: this._math.multiply(
+          new FixedDecimal(p.position.amount, p.pool.token.staking.decimals),
+          new FixedDecimal(p.pool.token.staking.summary.price.close.toString(), 8))
       }
     });
 
@@ -75,7 +76,7 @@ export class WalletBalancesTableComponent implements OnChanges {
   }
 
   navigate(name: string) {
-    this._router.navigateByUrl(`/tokens/${name}`);
+    this._router.navigateByUrl(`/pools/${name}`);
   }
 
   trackBy(index: number, pool: any) {

@@ -1,6 +1,7 @@
+import { IAddressMiningPositions } from './../../models/responses/platform-api/wallets/address-mining.interface';
 import { IBlock } from '@sharedModels/responses/platform-api/blocks/block.interface';
 import { IAddressMining } from '@sharedModels/responses/platform-api/wallets/address-mining.interface';
-import { IAddressStaking } from '@sharedModels/responses/platform-api/wallets/address-staking.interface';
+import { IAddressStaking, IAddressStakingPositions } from '@sharedModels/responses/platform-api/wallets/address-staking.interface';
 import { ITransactionBroadcast } from '@sharedModels/responses/platform-api/transactions/transaction-broadcast.interface';
 import { IMarketSnapshot } from '@sharedModels/responses/platform-api/markets/market-snapshot.interface';
 import { IMarket } from '@sharedModels/responses/platform-api/markets/market.interface';
@@ -257,5 +258,17 @@ export class PlatformApiService extends RestApiService {
 
   public getMiningPosition(owner: string, miningPool: string): Observable<IAddressMining> {
     return this.get<IAddressMining>(`${this.api}/wallet/${owner}/mining/${miningPool}`);
+  }
+
+  public getMiningPositions(owner: string, limit?: number, cursor?: string): Observable<IAddressMiningPositions> {
+    let query = cursor ? `?cursor=${cursor}` : `?limit=${limit}&direction=ASC`;
+
+    return this.get<IAddressMiningPositions>(`${this.api}/wallet/${owner}/mining${query}`);
+  }
+
+  public getStakingPositions(owner: string, limit?: number, cursor?: string): Observable<IAddressStakingPositions> {
+    let query = cursor ? `?cursor=${cursor}` : `?limit=${limit}&direction=ASC`;
+
+    return this.get<IAddressStakingPositions>(`${this.api}/wallet/${owner}/staking${query}`);
   }
 }
