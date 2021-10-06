@@ -20,7 +20,7 @@ $dark-disabled-text: rgba(rgba(black, 0.87), 0.38);
 $dark-dividers: rgba(rgba(black, 0.87), 0.12);
 $dark-focused: rgba(rgba(black, 0.87), 0.12);
 
-$light-theme-foreground-palette: (
+mat.$light-theme-foreground-palette: (
   base:              black,
   divider:           rgba(black, 0.12),
   dividers:          rgba(black, 0.12),
@@ -47,7 +47,7 @@ $light-disabled-text: rgba(white, 0.5);
 $light-dividers: rgba(white, 0.08);
 $light-focused: rgba(white, 0.12);
 
-$dark-theme-foreground-palette: (
+mat.$dark-theme-foreground-palette: (
   base:              $light-text,
   divider:           rgba(white, 0.12),
   dividers:          rgba(white, 0.12),
@@ -77,7 +77,7 @@ $light-bg-lighter-5:  lighten($light-background, 5%);
 $dark-bg-alpha-4:     rgba(#2c2c2c, 0.04);
 $dark-bg-alpha-12:    rgba(#2c2c2c, 0.12);
 
-$light-theme-background-palette: (
+mat.$light-theme-background-palette: (
   background:               $light-background,
   status-bar:               $light-bg-darker-20,
   app-bar:                  $light-bg-darker-5,
@@ -104,7 +104,7 @@ $light-bg-alpha-4:    rgba(#fafafa, 0.04);
 $light-bg-alpha-12:   rgba(#fafafa, 0.12);
 
 // Background palette for dark themes.
-$dark-theme-background-palette: (
+mat.$dark-theme-background-palette: (
   background:               $dark-background,
   status-bar:               $dark-bg-lighter-20,
   app-bar:                  $dark-bg-lighter-5,

@@ -38,7 +38,7 @@
   }
 }
 
-@media(min-width: 768px) {
+@media(min-width: 769px) {
   %pool-card {
     .top-details {
       .title {
@@ -55,12 +55,6 @@
     .button-group {
       button {
         margin-right: 10px;
-      }
-    }
-
-    .bottom-details {
-      .value {
-        font-size: 1.2em;
       }
     }
   }

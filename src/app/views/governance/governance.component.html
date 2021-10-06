@@ -1,4 +1,4 @@
-<div class="governance page-container" *ngIf="governance$ | async as governance">
+<div class="governance page-container" *ngIf="governance">
   <div class="container">
     <div class="row">
       <div class="col-4">
@@ -10,20 +10,24 @@
     </div>
 
     <div class="row">
-      <div class="col-12">
-        <h2>Mining Nomination Details</h2>
-      </div>
-    </div>
-
-    <div class="scrollable-row">
-      <div class="scrollable-card">
+      <div class="col-12 col-md-6 col-lg-4 col-xl-3">
         <opdex-card>
           <div class="d-flex flex-column justify-content-between">
-            <h4>Period End <span class="badge {{governance.periodRemainingBlocks > 0 ? 'success' : 'warn'}}">{{governance.periodRemainingBlocks > 0 ? 'Ongoing' : 'Paused'}}</span></h4>
+            <h4 class="d-flex flex-row align-items-center justify-content-between">
+              <span class="text d-flex flex-row align-items-center">
+                <opdex-help-button class="mr-2" [info]="nominationsHelpInfo"></opdex-help-button> Nominations
+              </span>
+
+              <span class="badge {{governance.periodRemainingBlocks > 0 ? 'success' : 'warn'}}">{{governance.periodRemainingBlocks > 0 ? 'Ongoing' : 'Awaiting Distribution'}}</span>
+            </h4>
 
             <h5 class="mb-0" *ngIf="governance.periodRemainingBlocks > 0">
-              Block #{{governance.periodEndBlock | formatNumber:0}}
-              <small class="light float-right">~{{nominationPeriodEndDate | date:'MM/d/YY h:mm a z':'GMT'}}</small>
+              <mat-progress-bar mode="determinate" value="{{((governance.periodBlockDuration - governance.periodRemainingBlocks) / governance.periodBlockDuration) * 100}}"></mat-progress-bar>
+
+              <div class="mt-2 d-flex flex-row justify-content-between align-items-center">
+                <small class="light">{{(governance.periodBlockDuration - governance.periodRemainingBlocks) | formatNumber:0}} of {{governance.periodBlockDuration | formatNumber:0}} blocks</small>
+                <small class="light float-right">{{governance.nominationPeriodEndDate | timeago}}</small>
+              </div>
             </h5>
           </div>
 
@@ -31,37 +35,21 @@
         </opdex-card>
       </div>
 
-      <div class="scrollable-card">
+      <div class="col-12 col-md-6 col-lg-4 col-xl-3">
         <opdex-card [fullHeight]="true">
           <div class="d-flex flex-column justify-content-between h-100">
-            <h4>Period Duration</h4>
-            <h5 class="mb-0">
-              {{governance.periodBlockDuration | formatNumber:0}} Blocks
-              <small class="light float-right">~{{secondsToDhms(governance.periodBlockDuration * 16)}}</small>
-            </h5>
-          </div>
-        </opdex-card>
-      </div>
+            <div class="d-flex flex-row align-items-center justify-content-between">
+              <h4 class="text d-flex flex-row align-items-center">
+                <opdex-help-button class="mr-2" [info]="rewardsHelpInfo"></opdex-help-button> Rewards
+              </h4>
 
-      <div class="scrollable-card">
-        <opdex-card [fullHeight]="true">
-          <div class="d-flex flex-column justify-content-between h-100">
-            <h4>Rewards</h4>
-            <h5 class="mb-0">
-              {{governance.totalRewardsPerPeriod | shortNumber}} ODX
-              <small class="light float-right">{{governance.miningPoolRewardPerPeriod | shortNumber}} each</small>
-            </h5>
-          </div>
-        </opdex-card>
-      </div>
+              <p class="rewards d-flex flex-row align-items-center" style="font-weight: 400;"><mat-icon color="warn" class="mr-1 small">whatshot</mat-icon>{{governance.totalRewardsPerPeriod | shortNumber}} {{governance.minedToken?.symbol}}</p>
+            </div>
 
-      <div class="scrollable-card">
-        <opdex-card [fullHeight]="true">
-          <div class="d-flex flex-column justify-content-between h-100">
-            <h4>Reward Reset</h4>
+            <mat-progress-bar mode="determinate" value="{{ ((12 - governance.periodsUntilRewardReset) / 12) * 100 }}"></mat-progress-bar>
+
             <h5 class="mb-0">
-              {{governance.periodsUntilRewardReset}} Periods
-              <small class="light float-right">~{{((governance.periodsUntilRewardReset * governance.periodBlockDuration) + governance.periodRemainingBlocks) | formatNumber: 0}} Blocks</small>
+              <small class="light">Resets in {{governance.periodsUntilRewardReset}} Nomination Period{{governance.periodsUntilRewardReset === 1 ? '' : 's'}}</small>
             </h5>
           </div>
         </opdex-card>

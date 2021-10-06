@@ -1,8 +1,10 @@
-import { UserContextService } from './../../services/utility/user-context.service';
-import { ReviewQuoteComponent } from './../../components/tx-module/shared/review-quote/review-quote.component';
+import { Subscription } from 'rxjs';
+import { TokensService } from '@sharedServices/platform/tokens.service';
+import { UserContextService } from '@sharedServices/utility/user-context.service';
+import { ReviewQuoteComponent } from '@sharedComponents/tx-module/shared/review-quote/review-quote.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { switchMap, take, tap } from 'rxjs/operators';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
 import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -10,17 +12,18 @@ import { Observable, timer } from 'rxjs';
 import { IGovernance } from '@sharedModels/responses/platform-api/governances/governance.interface';
 import { environment } from '@environments/environment';
 import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
+import { Governance } from '@sharedModels/platform/governances/governance';
 
 @Component({
   selector: 'opdex-governance',
   templateUrl: './governance.component.html',
   styleUrls: ['./governance.component.scss']
 })
-export class GovernanceComponent implements OnInit {
+export class GovernanceComponent implements OnInit, OnDestroy {
   nominatedPools$: Observable<ILiquidityPoolSummary[]>;
   miningPools$: Observable<ILiquidityPoolSummary[]>;
-  governance$: Observable<IGovernance>;
-  governance: any;
+  governance$: Subscription;
+  governance: Governance;
   submitting: boolean;
   nominationPeriodEndDate: string;
   context: any;
@@ -28,21 +31,32 @@ export class GovernanceComponent implements OnInit {
   constructor(
     private _platformApiService: PlatformApiService,
     private _bottomSheet: MatBottomSheet,
-    private _context: UserContextService
+    private _context: UserContextService,
+    private _tokenService: TokensService,
   ) { }
+
+  nominationsHelpInfo = {
+    title: 'What are nominations?',
+    paragraph: 'Every month (164,250 blocks), the top 4 liquidity pools by staking weight at the end of the nomination period will have liquidity mining enabled.'
+  }
+
+  rewardsHelpInfo = {
+    title: 'What are rewards?',
+    paragraph: 'Rewards are the mined tokens distributed to mining pools after successful nominations. Every 12 periods, the number of mining tokens per nomination adjusts with the governance token distribution schedule.'
+  }
 
   ngOnInit(): void {
     this.context = this._context.getUserContext();
 
-    this.governance$ = timer(0, 20000).pipe(switchMap(_ => {
-       return this._platformApiService.getGovernance(environment.governanceAddress).pipe(tap((rsp: IGovernance) => {
-        this.governance = rsp;
-        const nominationRemainingSeconds = rsp.periodRemainingBlocks * 16;
-        let date = new Date();
-        date.setSeconds(date.getSeconds() + nominationRemainingSeconds);
-        this.nominationPeriodEndDate = date.toISOString();
-      }));
-    }));
+    this.governance$ = timer(0, 20000)
+      .pipe(
+        switchMap(_ => {
+          return this._platformApiService.getGovernance(environment.governanceAddress)
+            .pipe(
+              tap((rsp: IGovernance) => this.governance = new Governance(rsp)),
+              switchMap(governance => this._tokenService.getToken(governance.minedToken)),
+              tap(minedToken => this.governance.setMinedToken(minedToken)));
+        })).subscribe();
 
     this.nominatedPools$ = timer(0, 20000).pipe(switchMap(_ => {
       return this._platformApiService.getPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 4, {nominated: true}));
@@ -79,5 +93,9 @@ export class GovernanceComponent implements OnInit {
             data: quote
           });
         });
+  }
+
+  ngOnDestroy() {
+    if (this.governance$) this.governance$.unsubscribe();
   }
 }
