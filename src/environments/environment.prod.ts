@@ -6,5 +6,6 @@ export const environment = {
   routerAddress: '#{routerAddress}#',
   governanceAddress: '#{governanceAddress}#',
   vaultAddress: '#{vaultAddress}#',
-  network: '#{network}#'
+  network: '#{network}#',
+  ga: '#{ga}#'
 };

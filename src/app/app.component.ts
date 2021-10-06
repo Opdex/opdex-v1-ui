@@ -10,12 +10,13 @@ import { ISidenavMessage, TransactionView } from '@sharedModels/transaction-view
 import { Observable, Subscription, timer } from 'rxjs';
 import { TransactionTypes } from '@sharedLookups/transaction-types.lookup';
 import { FadeAnimation } from '@sharedServices/animations/fade-animation';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet, RoutesRecognized } from '@angular/router';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
-import { switchMap, tap } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { BugReportModalComponent } from '@sharedComponents/modals-module/bug-report-modal/bug-report-modal.component';
 import { Title } from '@angular/platform-browser';
+import { GoogleAnalyticsService } from 'ngx-google-analytics';
 
 @Component({
   selector: 'opdex-root',
@@ -40,12 +41,14 @@ export class AppComponent implements OnInit {
   constructor(
     public overlayContainer: OverlayContainer,
     public dialog: MatDialog,
+    public router: Router,
+    public gaService: GoogleAnalyticsService,
     private _theme: ThemeService,
     private _sidenav: SidenavService,
     private _api: PlatformApiService,
     private _context: UserContextService,
     private _breakpointObserver: BreakpointObserver,
-    private _title: Title
+    private _title: Title,
   ) {
     this.context$ = this._context.getUserContext$().pipe(tap(context => this.context = context));
     this.latestSyncedBlock$ = timer(0,8000).pipe(switchMap(_ => this._api.getLatestSyncedBlock()));
@@ -65,6 +68,22 @@ export class AppComponent implements OnInit {
     this.subscription.add(
       this._api.auth(environment.marketAddress, this.context?.wallet)
         .subscribe(jwt => this._context.setToken(jwt)));
+
+    this.subscription.add(
+      this.router.events.pipe(
+          filter(event => event instanceof RoutesRecognized)
+      ).pipe(
+        map( (event: RoutesRecognized) => {
+          return { path: event.url, title: event.state.root.firstChild.data['title'] };
+        })
+      ).subscribe(route => {
+        if (route.title) {
+          this._title.setTitle(route.title);
+          this.gaService.pageView(route.path, route.title)
+        }    
+      })
+    )
+    
 
     this._theme.getTheme().subscribe(theme => this.setTheme(theme));
 
@@ -114,10 +133,6 @@ export class AppComponent implements OnInit {
   }
 
   prepareRoute(outlet: RouterOutlet) {
-    if (outlet.activatedRouteData.title) {
-      this._title.setTitle(outlet.activatedRouteData.title);
-    }
-
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData.animation;
   }
 

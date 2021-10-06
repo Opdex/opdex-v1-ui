@@ -8,6 +8,7 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, Subscription, interval, of } from 'rxjs';
 import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
 import { Title } from '@angular/platform-browser';
+import { GoogleAnalyticsService } from 'ngx-google-analytics';
 
 @Component({
   selector: 'opdex-token',
@@ -48,7 +49,8 @@ export class TokenComponent implements OnInit {
     private _platformApiService: PlatformApiService,
     private _tokensService: TokensService,
     private _router: Router,
-    private _title: Title
+    private _title: Title,
+    private _gaService: GoogleAnalyticsService
   ) { }
 
   ngOnInit(): void {
@@ -104,6 +106,7 @@ export class TokenComponent implements OnInit {
             direction: 'DESC'
           }
           if (this.token){
+            this._gaService.pageView(this._route.routeConfig.path, `${this.token.symbol} - ${this.token.name}`)
             this._title.setTitle(`${this.token.symbol} - ${this.token.name}`);
             this.setTokenStatCards();
           }
