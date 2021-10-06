@@ -76,8 +76,6 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
     this._platformApiService
       .approveAllowanceQuote(payload.token, payload)
         .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => {
-          this.quote(quote);
-        });
+        .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }
 }

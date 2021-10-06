@@ -43,15 +43,12 @@ export class TxStakeCollectComponent extends TxBase implements OnChanges {
 
   submit(): void {
     const payload = {
-      liquidityPool: this.pool.address,
       liquidate: this.liquidate.value
     };
 
     this._platformApi
-      .collectStakingRewardsQuote(payload.liquidityPool, payload)
+      .collectStakingRewardsQuote(this.pool.address, payload)
         .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => {
-          this.quote(quote);
-        });
+        .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }
 }

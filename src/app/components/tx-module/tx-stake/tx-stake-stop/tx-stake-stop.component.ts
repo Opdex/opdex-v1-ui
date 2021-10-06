@@ -71,13 +71,12 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
     if (!amount.includes('.')) amount = `${amount}.00`;
 
     const payload = {
-      liquidityPool: this.pool.address,
       amount: amount,
       liquidate: this.liquidate.value
     }
 
     this._platformApi
-      .stopStakingQuote(payload.liquidityPool, payload)
+      .stopStakingQuote(this.pool.address, payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }
