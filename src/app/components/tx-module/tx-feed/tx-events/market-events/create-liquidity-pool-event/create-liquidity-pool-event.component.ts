@@ -21,6 +21,6 @@ export class CreateLiquidityPoolEventComponent extends TxEventBaseComponent {
 
   ngOnChanges() {
     this.event = this.txEvent as ICreateLiquidityPoolEvent;
-    this.token$ = this.getToken$(this.event.contract);
+    this.token$ = this.getToken$(this.event.token);
   }
 }

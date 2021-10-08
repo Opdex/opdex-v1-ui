@@ -48,9 +48,9 @@
 
             <mat-progress-bar mode="determinate" value="{{ ((12 - governance.periodsUntilRewardReset) / 12) * 100 }}"></mat-progress-bar>
 
-            <h5 class="mb-0">
+            <div class="mt-2">
               <small class="light">Resets in {{governance.periodsUntilRewardReset}} Nomination Period{{governance.periodsUntilRewardReset === 1 ? '' : 's'}}</small>
-            </h5>
+            </div>
           </div>
         </opdex-card>
       </div>
