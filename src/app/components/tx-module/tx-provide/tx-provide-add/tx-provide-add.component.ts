@@ -93,10 +93,12 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
           debounceTime(400),
           distinctUntilChanged(),
           switchMap(amount => this.quote$(amount, this.pool?.token?.crs)),
-          tap(amount => this.amountSrc.setValue(amount, { emitEvent: false })),
+          tap(amount => {
+            if (amount !== '') this.amountSrc.setValue(amount, { emitEvent: false })
+          }),
           tap(_ => this.calcTolerance()),
           filter(_ => this.context?.wallet),
-          switchMap(amount => this.getAllowance$()))
+          switchMap(_ => this.getAllowance$()))
         .subscribe());
 
     this.subscription.add(
@@ -105,7 +107,9 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
           debounceTime(400),
           distinctUntilChanged(),
           switchMap(amount => this.quote$(amount, this.pool?.token?.src)),
-          tap(quoteAmount => this.amountCrs.setValue(quoteAmount, { emitEvent: false })),
+          tap(quoteAmount => {
+            if (quoteAmount !== '') this.amountCrs.setValue(quoteAmount, { emitEvent: false })
+          }),
           tap(_ => this.calcTolerance()),
           filter(_ => this.context?.wallet),
           switchMap(_ => this.getAllowance$()))
