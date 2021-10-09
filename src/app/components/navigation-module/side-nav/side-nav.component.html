@@ -1,38 +1,44 @@
-<aside id="side-nav">
+<div id="side-nav" [ngClass]="{'pinned': isPinned}">
   <div class="foreground">
     <div class="logo" routerLink="/">
       <img src="/assets/logo-light-blue.png" alt="Opdex Logo">
       <p class="opdex">OPDEX</p>
     </div>
 
+    <div class="stick-nav">
+      <button mat-mini-fab class="small navbar-pin" (click)="togglePin()">
+        <mat-icon>{{isPinned ? 'keyboard_arrow_left' : 'keyboard_arrow_right'}}</mat-icon>
+      </button>
+    </div>
+
     <ul class="sidebar-nav" *ngIf="userContext$ | async as context">
       <li>
-        <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a mat-button (click)="route('/')" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
           <mat-icon>equalizer</mat-icon> Market
         </a>
       </li>
       <li>
-        <a mat-button routerLink="/pools" routerLinkActive="active">
+        <a mat-button (click)="route('/pools')" routerLinkActive="active">
           <mat-icon>waves</mat-icon> Liquidity Pools
         </a>
       </li>
       <li>
-        <a mat-button routerLink="/tokens" routerLinkActive="active">
+        <a mat-button (click)="route('/tokens')" routerLinkActive="active">
           <mat-icon>toll</mat-icon> Tokens
         </a>
       </li>
       <li>
-        <a mat-button routerLink="/governance" routerLinkActive="active">
+        <a mat-button (click)="route('/governance')" routerLinkActive="active">
           <mat-icon>gavel</mat-icon> Governance
         </a>
       </li>
       <li>
-        <a mat-button routerLink="/vault" routerLinkActive="active">
+        <a mat-button (click)="route('/vault')" routerLinkActive="active">
           <mat-icon>lock</mat-icon> Vault
         </a>
       </li>
       <li>
-        <a mat-button routerLink="/{{ !context?.wallet ? 'auth' : 'wallet'}}" routerLinkActive="active">
+        <a mat-button (click)="route(!context?.wallet ? '/auth' : '/wallet')" routerLinkActive="active">
           <span class="wallet-indicator {{context?.wallet ? 'valid' : 'invalid'}}"></span>
           <mat-icon>account_balance_wallet</mat-icon> Wallet
         </a>
@@ -42,13 +48,13 @@
     <div class="space-between"></div>
 
     <ul class="sidebar-nav">
-      <li>
+      <!-- <li>
         <a mat-button (click)="toggleTheme()">
           <mat-icon>{{theme === 'dark-mode' ? 'brightness_3' : 'brightness_5'}}</mat-icon> {{theme === 'dark-mode' ? 'Dark Mode' : 'Light Mode'}}
         </a>
-      </li>
+      </li> -->
     </ul>
 
     <img class="defi-blocks" src="assets/defi2@2x.png">
   </div>
-</aside>
+</div>

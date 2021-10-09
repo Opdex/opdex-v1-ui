@@ -1,0 +1,21 @@
+<div class="status-bar">
+  <opdex-hamburger [isOpen]="menuOpen" (onToggle)="toggleMenu($event)"></opdex-hamburger>
+
+  <div class="d-flex flex-row align-items-center justify-content-end w-100">
+    <ng-container *ngIf="theme$ | async as theme">
+      <button mat-icon-button class="small" (click)="toggleTheme(theme === 'dark-mode' ? 'light-mode' : 'dark-mode')"  matTooltip="{{theme === 'dark-mode' ? 'Dark Mode' : 'Light Mode'}}">
+        <mat-icon>{{theme === 'dark-mode' ? 'brightness_3' : 'brightness_7'}}</mat-icon>
+      </button>
+    </ng-container>
+
+    <button mat-icon-button class="small" (click)="networkTooltip.toggle()">
+      <mat-icon [matTooltip]="network" #networkTooltip="matTooltip">languages</mat-icon>
+    </button>
+    <ng-container *ngIf="latestSyncedBlock$ | async as block">
+      <button mat-icon-button class="small" (click)="blockTooltip.toggle()">
+        <mat-icon matTooltip="Block #{{block.height | formatNumber:0}}" #blockTooltip="matTooltip">layers</mat-icon>
+      </button>
+    </ng-container>
+    <button mat-icon-button matTooltip="Report Bug" color="warn" (click)="openBugReport()" class="small"><mat-icon>bug_report</mat-icon></button>
+  </div>
+</div>

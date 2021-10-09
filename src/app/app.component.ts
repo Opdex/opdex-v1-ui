@@ -99,6 +99,10 @@ export class AppComponent implements OnInit {
         }));
   }
 
+  toggleTheme() {
+    this._theme.setTheme(this.theme === 'light-mode' ? 'dark-mode' : 'light-mode');
+  }
+
   private setTheme(theme: string): void {
     const overlayClassList = this.overlayContainer.getContainerElement().classList;
     overlayClassList.add(theme);
@@ -133,6 +137,21 @@ export class AppComponent implements OnInit {
 
   prepareRoute(outlet: RouterOutlet) {
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData.animation;
+  }
+
+  menuOpen = false;
+  toggleMenu(event: boolean) {
+    this.menuOpen = event;
+  }
+
+  isPinned = false;
+  handlePinnedToggle(event: boolean) {
+    this.isPinned = event;
+  }
+
+  handleRouteChanged(url: string) {
+    // dont care about the url just close the menu
+    this.menuOpen = false;
   }
 
   openBugReport(): void {

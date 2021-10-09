@@ -35,8 +35,8 @@ export class TransactionRequest implements ITransactionsRequest {
   }
 
   public buildQueryString(): string {
-    if (this.next?.length) return `?next=${this.next}`;
-    if (this.previous?.length) return `?previous=${this.next}`;
+    if (this.next?.length) return `?cursor=${this.next}`;
+    if (this.previous?.length) return `?cursor=${this.previous}`;
 
     var query = '';
 

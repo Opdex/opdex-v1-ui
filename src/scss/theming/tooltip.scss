@@ -1,0 +1,17 @@
+
+@import 'src/scss/colors';
+
+.light-mode {
+  .mat-tooltip {
+    background: #ffffff !important;
+    border: 1px solid #ccc;
+    color: #333;
+  }
+}
+
+.dark-mode {
+  .mat-tooltip {
+    background: #1e1d2d !important;
+    border: 1px solid #292929;
+  }
+}
