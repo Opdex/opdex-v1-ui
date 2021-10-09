@@ -16,9 +16,9 @@ import { AuthGuard } from '@sharedServices/guards/auth.guard';
 const routes: Routes = [
   { path: '', component: MarketComponent, data: { animation: 'MarketView', title: 'Market'}, canActivate: [AuthGuard], canActivateChild: [AuthGuard] },
   { path: 'pools', component: PoolsComponent, data: { animation: 'PoolsView', title: 'Liquidity Pools'}, canActivate: [AuthGuard], canActivateChild: [AuthGuard] },
-  { path: 'pools/:pool', component: PoolComponent, data: { animation: 'PoolView'}, canActivate: [AuthGuard], canActivateChild: [AuthGuard] },
+  { path: 'pools/:pool', component: PoolComponent, data: { animation: 'PoolView', title: 'Liquidity Pool'}, canActivate: [AuthGuard], canActivateChild: [AuthGuard] },
   { path: 'tokens', component: TokensComponent, data: { animation: 'TokensView', title: 'Tokens'}, canActivate: [AuthGuard], canActivateChild: [AuthGuard] },
-  { path: 'tokens/:token', component: TokenComponent, data: { animation: 'TokenView'}, canActivate: [AuthGuard], canActivateChild: [AuthGuard] },
+  { path: 'tokens/:token', component: TokenComponent, data: { animation: 'TokenView', title: 'SRC Token'}, canActivate: [AuthGuard], canActivateChild: [AuthGuard] },
   { path: 'wallet', component: WalletComponent, data: { animation: 'WalletView', title: 'Wallet Summary'}, canActivate: [AuthGuard], canActivateChild: [AuthGuard] },
   { path: 'governance', component: GovernanceComponent, data: { animation: 'GovernanceView', title: 'Governance'}, canActivate: [AuthGuard], canActivateChild: [AuthGuard] },
   { path: 'vault', component: VaultComponent, data: { animation: 'VaultView', title: 'Vault'}, canActivate: [AuthGuard], canActivateChild: [AuthGuard] },

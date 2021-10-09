@@ -11,5 +11,6 @@ export const environment = {
   routerAddress: 'PMsinMXrr2uNEL5AQD1LpiYTRFiRTA8uZU',
   governanceAddress: 'PGjqKaFDepLNSdakWknucPFB7uXLQGjeCH',
   vaultAddress: 'PHLh9aUdSBS7zke28vnsE4UiVznecFqy9y',
-  network: Network.Devnet
+  network: Network.Devnet,
+  ga: ''
 };

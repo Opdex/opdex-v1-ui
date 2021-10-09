@@ -19,6 +19,7 @@ import { IToken } from "@sharedModels/responses/platform-api/tokens/token.interf
 import { IAddressStaking } from '@sharedModels/responses/platform-api/wallets/address-staking.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { Title } from '@angular/platform-browser';
+import { GoogleAnalyticsService } from 'ngx-google-analytics';
 
 @Component({
   selector: 'opdex-pool',
@@ -89,7 +90,8 @@ export class PoolComponent implements OnInit, OnDestroy {
     private _liquidityPoolsService: LiquidityPoolsService,
     private _math: MathService,
     private _router: Router,
-    private _title: Title
+    private _title: Title,
+    private _gaService: GoogleAnalyticsService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -162,6 +164,7 @@ export class PoolComponent implements OnInit, OnDestroy {
             eventTypes: ['SwapEvent', 'StartStakingEvent', 'StopStakingEvent', 'CollectStakingRewardsEvent', 'StartMiningEvent', 'StopMiningEvent', 'AddLiquidityEvent', 'RemoveLiquidityEvent', 'CollectMiningRewardsEvent', 'EnableMiningEvent', 'NominationEvent',]
           };
           if (this.pool){
+            this._gaService.pageView(this._route.routeConfig.path, `${this.pool.token.src.symbol}-CRS Liquidity Pool`)
             this._title.setTitle(`${this.pool.token.src.symbol}-CRS Liquidity Pool`);
             this.setPoolStatCards();
           }
