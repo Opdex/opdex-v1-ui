@@ -14,6 +14,7 @@ import { forkJoin, Observable } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
 import { IAddressStaking } from '@sharedModels/responses/platform-api/wallets/address-staking.interface';
+import { WalletsService } from '@sharedServices/platform/wallets.service';
 
 @Component({
   selector: 'opdex-wallet',
@@ -34,6 +35,7 @@ export class WalletComponent implements OnInit {
     private _platform: PlatformApiService,
     private _tokensService: TokensService,
     private _liquidityPoolService: LiquidityPoolsService,
+    private _WalletsService: WalletsService,
     private _router: Router,
     private _math: MathService
   ) {
@@ -42,7 +44,7 @@ export class WalletComponent implements OnInit {
     this.getMiningPositions(10);
     this.getStakingPositions(10);
 
-    this._platform.getBalance(this.wallet, 'CRS')
+    this._WalletsService.getBalance(this.wallet, 'CRS')
       .pipe(
         tap(crsBalance => this.crsBalance = crsBalance),
         switchMap(crsBalance => this._tokensService.getToken(crsBalance.token)),
@@ -67,7 +69,7 @@ export class WalletComponent implements OnInit {
   }
 
   getMiningPositions(limit?: number, cursor?: string) {
-    this._platform.getMiningPositions(this.wallet, limit, cursor)
+    this._WalletsService.getMiningPositions(this.wallet, limit, cursor)
       .pipe(
         switchMap(response => {
           const positions$: Observable<IAddressMining>[] = [];
@@ -91,7 +93,7 @@ export class WalletComponent implements OnInit {
   }
 
   getStakingPositions(limit?: number, cursor?: string) {
-    this._platform.getStakingPositions(this.wallet, limit, cursor)
+    this._WalletsService.getStakingPositions(this.wallet, limit, cursor)
       .pipe(
         switchMap(response => {
           const positions$: Observable<IAddressStaking>[] = [];
@@ -115,7 +117,7 @@ export class WalletComponent implements OnInit {
   }
 
   getWalletBalances(limit?: number, cursor?: string) {
-    this._platform.getWalletBalances(this.wallet, limit, cursor)
+    this._WalletsService.getWalletBalances(this.wallet, limit, cursor)
       .pipe(
         switchMap(response => {
           const balances$: Observable<IToken>[] = [];
