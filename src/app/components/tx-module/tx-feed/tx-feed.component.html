@@ -17,7 +17,6 @@
             <small class="d-block light mb-1">{{tx?.block?.medianTime | timeago}}</small>
 
             <ng-container *ngFor="let event of tx.events; trackBy: transactionLogsTrackBy;">
-
               <div class="tx-event" [ngSwitch]="event.eventType">
                 <opdex-reward-mining-pool-event [txEvent]="event" *ngSwitchCase="'RewardMiningPoolEvent'"></opdex-reward-mining-pool-event>
                 <opdex-nomination-event [txEvent]="event" *ngSwitchCase="'NominationEvent'"></opdex-nomination-event>
@@ -49,9 +48,20 @@
                 <div *ngSwitchDefault>Uh oh, looks like we can't identify this transaction's summary.</div>
               </div>
             </ng-container>
+
+            <ng-container *ngIf="tx.events.length === 0">
+              No known transaction events.
+            </ng-container>
           </div>
         </div>
         <mat-divider *ngIf="i < transactions.length - 1" class="mt-3"></mat-divider>
+      </div>
+
+      <div class="paginator">
+        <div class="d-flex justify-content-center">
+          <button mat-icon-button [disabled]="!transactionRequest.previous" (click)="pageChange(transactionRequest.previous)"><mat-icon>arrow_back</mat-icon></button>
+          <button mat-icon-button [disabled]="!transactionRequest.next" (click)="pageChange(transactionRequest.next)"><mat-icon>arrow_forward</mat-icon></button>
+        </div>
       </div>
     </ng-container>
     <ng-template #noTransactions>No transactions found.</ng-template>

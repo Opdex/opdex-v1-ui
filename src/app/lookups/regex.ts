@@ -5,7 +5,7 @@
  * \d* - enforces ending with an optional number
  * \d+ would enforce ending with a digit after the decimal
  */
-export const DecimalStringRegex = /\d+\.?\d*/;
+export const DecimalStringRegex = /\d*\.?\d*/;
 
 export function sanitize(regex: RegExp, value: string): string {
   var sanitized = regex.exec(value);

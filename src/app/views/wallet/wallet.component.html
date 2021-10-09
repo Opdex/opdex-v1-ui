@@ -43,8 +43,7 @@
                 </div>
               </ng-container>
 
-              <opdex-wallet-balances-table [records]="walletBalances" (onPageChange)="handleBalancesPageChange($event)" *ngIf="walletBalances; else zero"></opdex-wallet-balances-table>
-              <ng-template #zero>There are no known balances for this wallet address.</ng-template>
+              <opdex-wallet-balances-table [records]="walletBalances" (onPageChange)="handleBalancesPageChange($event)"></opdex-wallet-balances-table>
             </opdex-card>
           </div>
         </div>
@@ -58,8 +57,7 @@
                 </div>
               </ng-container>
 
-              <opdex-wallet-mining-positions-table [records]="miningPositions" (onPageChange)="handleMiningPositionsPageChange($event)" *ngIf="walletBalances; else zero"></opdex-wallet-mining-positions-table>
-              <ng-template #zero>There are no known mining positions for this wallet address.</ng-template>
+              <opdex-wallet-mining-positions-table [records]="miningPositions" (onPageChange)="handleMiningPositionsPageChange($event)"></opdex-wallet-mining-positions-table>
             </opdex-card>
           </div>
           <div class="col-12 col-xl-6">
@@ -70,8 +68,7 @@
                 </div>
               </ng-container>
 
-              <opdex-wallet-staking-positions-table [records]="stakingPositions" (onPageChange)="handleStakingPositionsPageChange($event)" *ngIf="walletBalances; else zero"></opdex-wallet-staking-positions-table>
-              <ng-template #zero>There are no known staking positions for this wallet address.</ng-template>
+              <opdex-wallet-staking-positions-table [records]="stakingPositions" (onPageChange)="handleStakingPositionsPageChange($event)"></opdex-wallet-staking-positions-table>
             </opdex-card>
           </div>
         </div>

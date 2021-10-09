@@ -1,13 +1,25 @@
-aside {
+#side-nav {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
+  width: 100%;
 
-  &:hover {
+  &:hover, &.pinned {
     .defi-blocks {
       transition: .3s ease-in;
       position: fixed;
-      left: 220px;
+      left: 190px;
+    }
+
+    .stick-nav {
+      position: fixed;
+      transition: .15s ease-in;
+      opacity: 1;
+      left: 243px;
+
+      .mat-mini-fab {
+        box-shadow: none !important;
+      }
     }
   }
 
@@ -82,6 +94,17 @@ aside {
     bottom: 25px;
     z-index: 9999;
     transition: .15s ease;
+    display: none;
+  }
+
+  .stick-nav {
+    position: fixed;
+    top: 25px;
+    z-index: 9999;
+    transition: .15s ease;
+    opacity: 0;
+    left: 143px;
+    display: none;
   }
 }
 
@@ -101,3 +124,23 @@ aside {
     background: #00EB93;
   }
 }
+
+@media (min-width: 320px) { }
+
+@media (min-width: 576px) { }
+
+@media (min-width: 768px) {
+  #side-nav {
+    .defi-blocks {
+      display: block;
+    }
+
+    .stick-nav {
+      display: block;
+    }
+  }
+}
+
+@media (min-width: 992px) { }
+
+@media (min-width: 1200px) { }

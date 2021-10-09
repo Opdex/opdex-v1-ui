@@ -1,23 +1,39 @@
 @import 'src/scss/colors';
 
 .light-mode {
-  aside {
-    border-right: 1px solid #cecece;
+  #side-nav {
+    border-right: 1px solid #ccc;
     background: #fff;
 
     .wallet-indicator {
       border: .2em solid #fff;
     }
+
+    .navbar-pin {
+      &.mat-mini-fab {
+        background: #fff;
+        border: 1px solid #ccc;
+        color: #333;
+      }
+    }
   }
 }
 
 .dark-mode {
-  aside {
+  #side-nav {
     border-right: 1px solid #292929;
     background: $dark-primary;
 
     .wallet-indicator {
       border: .2em solid $dark-primary;
+    }
+
+    .navbar-pin {
+      &.mat-mini-fab {
+        background: $dark-primary;
+        border: 1px solid #292929;
+        color: #fff;
+      }
     }
   }
 }

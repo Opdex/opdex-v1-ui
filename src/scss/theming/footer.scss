@@ -1,0 +1,15 @@
+@import 'src/scss/colors';
+
+.dark-mode {
+  .footer {
+    background-color: #1e1d2d;
+    border-top: 1px solid #292929;
+  }
+}
+
+.light-mode {
+  .footer {
+    background-color: #fff;
+    border-top: 1px solid #ccc;
+  }
+}
