@@ -1,4 +1,3 @@
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, Input, OnChanges } from '@angular/core';
 import { ITransactionsRequest, TransactionRequest } from '@sharedModels/platform-api/requests/transactions-filter';
 import { ITransactionReceipt, ITransactionReceipts } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
@@ -6,6 +5,7 @@ import { map, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { ITransferEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/tokens/transfer-event.interface';
+import { TransactionsService } from '@sharedServices/platform/transactions.service';
 
 @Component({
   selector: 'opdex-tx-feed',
@@ -20,7 +20,7 @@ export class TxFeedComponent implements OnChanges {
   transactions$: Observable<ITransactionReceipt[]>;
   iconSizes = IconSizes;
 
-  constructor(private _platformApi: PlatformApiService) { }
+  constructor(private _transactionsService: TransactionsService) { }
 
   ngOnChanges(): void {
     if (this.transactionRequest && !this.transactions$) {
@@ -29,7 +29,7 @@ export class TxFeedComponent implements OnChanges {
   }
 
   getTransactions(): Observable<ITransactionReceipt[]> {
-    return this._platformApi.getTransactions(new TransactionRequest(this.transactionRequest))
+    return this._transactionsService.getTransactions(new TransactionRequest(this.transactionRequest))
       .pipe(
         take(1),
         // Filter transactions
