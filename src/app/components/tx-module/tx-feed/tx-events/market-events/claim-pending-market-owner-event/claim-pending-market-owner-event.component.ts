@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IClaimPendingDeployerOwnershipEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/deployers/claim-pending-deployer-ownership-event.interface';
-import { IClaimPendingMarketOwnershipEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/markets/claim-pending-market-ownership-event.interface';
-import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
+import { IClaimPendingDeployerOwnershipEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/deployers/claim-pending-deployer-ownership-event.interface';
+import { IClaimPendingMarketOwnershipEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/markets/claim-pending-market-ownership-event.interface';
+import { ITransactionEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/transaction-event.interface';
 
 @Component({
   selector: 'opdex-claim-pending-market-owner-event',

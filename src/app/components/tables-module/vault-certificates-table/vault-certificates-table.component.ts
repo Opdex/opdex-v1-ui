@@ -1,4 +1,4 @@
-import { IVaultCertificates } from '@sharedModels/responses/platform-api/vaults/vault-certificate.interface';
+import { IVaultCertificates } from '@sharedModels/platform-api/responses/vaults/vault-certificate.interface';
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';

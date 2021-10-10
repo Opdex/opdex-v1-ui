@@ -1,7 +1,7 @@
 import { Component, Injector, Input } from '@angular/core';
-import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
-import { IDistributionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/tokens/distribution-event.interface';
-import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
+import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
+import { IDistributionEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/tokens/distribution-event.interface';
+import { ITransactionEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/transaction-event.interface';
 import { Observable } from 'rxjs';
 import { TxEventBaseComponent } from '../../tx-event-base.component';
 

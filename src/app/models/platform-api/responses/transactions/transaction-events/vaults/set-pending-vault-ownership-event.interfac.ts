@@ -1,3 +1,3 @@
-import { IOwnershipEvent } from './../ownership-event.interface';
+import { IOwnershipEvent } from '../ownership-event.interface';
 
 export interface ISetPendingVaultOwnershipEvent extends IOwnershipEvent {}

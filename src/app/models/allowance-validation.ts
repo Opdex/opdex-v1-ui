@@ -1,5 +1,5 @@
-import { IToken } from './responses/platform-api/tokens/token.interface';
-import { IAddressAllowanceResponse } from './responses/platform-api/wallets/address-allowance.interface';
+import { IToken } from './platform-api/responses/tokens/token.interface';
+import { IAddressAllowanceResponse } from './platform-api/responses/wallets/address-allowance.interface';
 
 export class AllowanceValidation {
   owner: string;

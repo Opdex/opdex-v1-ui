@@ -1,4 +1,4 @@
-export enum TransactionTypes {
+export enum AllowanceTransactionTypes {
   addLiquidity = 'Add Liquidity',
   removeLiquidity = 'Remove Liquidity',
   swap = 'Swap',

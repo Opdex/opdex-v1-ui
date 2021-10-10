@@ -1,5 +1,5 @@
 <p class="mb-0" *ngIf="pool$ | async as pool; else loading">
-  Enabled liquidity mining for <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.token.src.symbol}}/CRS</a>.
+  Enabled liquidity mining for <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.token.src.symbol}}/{{pool.token.crs.symbol}}</a>.
 </p>
 
 <ng-template #loading>

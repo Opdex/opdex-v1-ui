@@ -1,20 +1,20 @@
 import { ThemeService } from '@sharedServices/utility/theme.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
-import { IAddressBalance } from './../../models/responses/platform-api/wallets/address-balance.interface';
+import { IAddressBalance } from '../../models/platform-api/responses/wallets/address-balance.interface';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
-import { IAddressMining } from '@sharedModels/responses/platform-api/wallets/address-mining.interface';
+import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { environment } from '@environments/environment';
 import { Router } from '@angular/router';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
-import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
+import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions-filter';
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
-import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
-import { IAddressStaking } from '@sharedModels/responses/platform-api/wallets/address-staking.interface';
+import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
+import { IAddressStaking } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
 
 @Component({

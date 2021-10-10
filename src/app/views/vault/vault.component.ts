@@ -6,8 +6,8 @@ import { VaultsService } from './../../services/platform/vaults.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
 import { tap, switchMap, take } from 'rxjs/operators';
-import { IVault } from '@sharedModels/responses/platform-api/vaults/vault.interface';
-import { IVaultCertificate, IVaultCertificates } from '@sharedModels/responses/platform-api/vaults/vault-certificate.interface';
+import { IVault } from '@sharedModels/platform-api/responses/vaults/vault.interface';
+import { IVaultCertificate, IVaultCertificates } from '@sharedModels/platform-api/responses/vaults/vault-certificate.interface';
 
 @Component({
   selector: 'opdex-vault',

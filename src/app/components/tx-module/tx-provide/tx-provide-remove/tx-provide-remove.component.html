@@ -4,7 +4,7 @@
       <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.remove" label="Liquidate" [formControl]="liquidity" [suffix]="pool.token.lp.symbol" [numbersOnly]="true">
         <div class="d-flex flex-row justify-content-between">
           <div class="tolerance-amounts">
-            <span *ngIf="crsOutMin && srcOutMin">Min: {{crsOutMin | shortNumber}} CRS <span style="opacity: .5">|</span> {{srcOutMin | shortNumber}} {{pool.token.src.symbol}}</span>
+            <span *ngIf="crsOutMin && srcOutMin">Min: {{crsOutMin | shortNumber}} {{pool.token.crs.symbol}} <span style="opacity: .5">|</span> {{srcOutMin | shortNumber}} {{pool.token.src.symbol}}</span>
           </div>
           <div class="fiat-quote">
             <span class="success ml-2" *ngIf="lptInFiatValue && lptInFiatValue !== 'NaN'">${{lptInFiatValue | shortNumber}}</span>

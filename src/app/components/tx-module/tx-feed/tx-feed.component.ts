@@ -1,11 +1,11 @@
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, Input, OnChanges } from '@angular/core';
-import { ITransactionsRequest, TransactionRequest } from '@sharedModels/requests/transactions-filter';
-import { ITransactionReceipt, ITransactionReceipts } from '@sharedModels/responses/platform-api/transactions/transaction.interface';
+import { ITransactionsRequest, TransactionRequest } from '@sharedModels/platform-api/requests/transactions-filter';
+import { ITransactionReceipt, ITransactionReceipts } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
 import { map, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { IconSizes } from 'src/app/enums/icon-sizes';
-import { ITransferEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/tokens/transfer-event.interface';
+import { ITransferEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/tokens/transfer-event.interface';
 
 @Component({
   selector: 'opdex-tx-feed',

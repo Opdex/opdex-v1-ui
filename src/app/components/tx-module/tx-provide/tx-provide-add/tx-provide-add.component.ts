@@ -4,7 +4,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from '@environments/environment';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Observable, throwError, timer } from 'rxjs';
@@ -12,11 +12,11 @@ import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, switchMap, tap, catchError, take, filter } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
-import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
+import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
-import { TransactionTypes } from 'src/app/enums/transaction-types';
-import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
+import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
+import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { MathService } from '@sharedServices/utility/math.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 
@@ -32,7 +32,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   subscription = new Subscription();
   allowance: AllowanceValidation;
   form: FormGroup;
-  transactionTypes = TransactionTypes;
+  transactionTypes = AllowanceTransactionTypes;
   showMore: boolean = false;
   crsInFiatValue: string;
   crsInMinFiatValue: string;

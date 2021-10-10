@@ -1,4 +1,4 @@
-import { ILiquidityPoolSummary, ILiquidityPoolSnapshotHistory } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary, ILiquidityPoolSnapshotHistory } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';

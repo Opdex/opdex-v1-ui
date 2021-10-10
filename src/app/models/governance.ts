@@ -1,5 +1,5 @@
-import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
-import { IGovernance } from '@sharedModels/responses/platform-api/governances/governance.interface';
+import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
+import { IGovernance } from '@sharedModels/platform-api/responses/governances/governance.interface';
 
 export class Governance {
   private _address: string;

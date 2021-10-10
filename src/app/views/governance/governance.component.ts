@@ -5,14 +5,14 @@ import { ReviewQuoteComponent } from '@sharedComponents/tx-module/shared/review-
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { switchMap, take, tap } from 'rxjs/operators';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
-import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
+import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pool-filter';
+import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, timer } from 'rxjs';
-import { IGovernance } from '@sharedModels/responses/platform-api/governances/governance.interface';
+import { IGovernance } from '@sharedModels/platform-api/responses/governances/governance.interface';
 import { environment } from '@environments/environment';
-import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
-import { Governance } from '@sharedModels/platform/governances/governance';
+import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
+import { Governance } from '@sharedModels/governance';
 
 @Component({
   selector: 'opdex-governance',

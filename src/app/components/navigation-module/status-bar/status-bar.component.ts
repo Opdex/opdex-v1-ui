@@ -1,5 +1,5 @@
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { IBlock } from '@sharedModels/responses/platform-api/blocks/block.interface';
+import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
 import { ThemeService } from '@sharedServices/utility/theme.service';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';

@@ -1,7 +1,7 @@
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { catchError } from 'rxjs/operators';
 import { TokensService } from '@sharedServices/platform/tokens.service';
-import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
+import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions-filter';
 import { delay, switchMap, take, tap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';

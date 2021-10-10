@@ -10,12 +10,12 @@ import { debounceTime, take, distinctUntilChanged, switchMap, map, tap, catchErr
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { environment } from '@environments/environment';
 import { Icons } from 'src/app/enums/icons';
-import { TransactionTypes } from 'src/app/enums/transaction-types';
+import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
 import { DecimalStringRegex } from '@sharedLookups/regex';
-import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
+import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { TxBase } from '../tx-base.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
+import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
@@ -36,7 +36,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   tokenInDetails: any;
   tokenOutDetails: any;
   allowance: AllowanceValidation;
-  transactionTypes = TransactionTypes;
+  transactionTypes = AllowanceTransactionTypes;
   showMore: boolean = false;
   tokenInFiatValue: string;
   tokenInMaxFiatValue: string;

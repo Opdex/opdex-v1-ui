@@ -35,7 +35,7 @@ export class WalletMiningPositionsTableComponent implements OnChanges {
 
     this.dataSource.data = this.records.positions.map(p => {
       return {
-        name: `${p.pool.token.src.symbol}-CRS`,
+        name: `${p.pool.token.src.symbol}-${p.pool.token.crs.symbol}`,
         miningTokenSymbol: p.pool.token.lp.symbol,
         liquidityPoolAddress: p.pool.address,
         miningPoolAddress: p.position.miningPool,
