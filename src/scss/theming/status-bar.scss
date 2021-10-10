@@ -1,0 +1,13 @@
+.light-mode {
+  .status-bar {
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+  }
+}
+
+.dark-mode {
+  .status-bar {
+    background-color: #1e1d2d;
+    border-bottom: 1px solid #292929;
+  }
+}

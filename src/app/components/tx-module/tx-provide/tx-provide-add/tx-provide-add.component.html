@@ -1,7 +1,7 @@
 <div class="add-liquidity">
   <form [formGroup]="form" name="add-liquidity-form" id="swap-form" (submit)="submit()">
     <div class="mb-3">
-      <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Add CRS" [formControl]="amountCrs" suffix="CRS" [numbersOnly]="true">
+      <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Add {{pool.token.crs.symbol}}" [formControl]="amountCrs" [suffix]="pool.token.crs.symbol" [numbersOnly]="true">
         <div class="d-flex flex-row justify-content-between">
           <div class="tolerance-amounts">
             <span *ngIf="crsInMin">Min: {{crsInMin | shortNumber}}</span>
@@ -33,10 +33,10 @@
     </div>
 
     <div class="additional" *ngIf="showMore">
-      <opdex-tolerance [control]="tolerance" (onToleranceChange)="calcTolerance($event)"></opdex-tolerance>
+      <opdex-tolerance [value]="toleranceThreshold" (onToleranceChange)="calcTolerance($event)"></opdex-tolerance>
 
       <div class="mt-2">
-        <opdex-deadline [control]="deadline" (onDeadlineChange)="calcDeadline($event)"></opdex-deadline>
+        <opdex-deadline [value]="deadlineThreshold" (onDeadlineChange)="calcDeadline($event)"></opdex-deadline>
       </div>
     </div>
 

@@ -41,13 +41,11 @@
 
         <mat-divider class="mb-3"></mat-divider>
 
-        <ng-container>
-          <div class="connect-wallet mb-4" *ngIf="!context?.wallet">
-            <opdex-card>
-              <button mat-flat-button color="primary" class="w-100" routerLink="/auth">Connect Wallet</button>
-            </opdex-card>
-          </div>
-        </ng-container>
+        <div class="connect-wallet mb-4" *ngIf="!context?.wallet">
+          <button mat-stroked-button class="w-100 d-flex align-items-center" color="primary" routerLink="/auth">
+            Connect Wallet
+          </button>
+        </div>
 
         <div [ngSwitch]="message?.view">
           <opdex-tx-swap *ngSwitchCase="1" [data]="message?.data"></opdex-tx-swap>
@@ -61,41 +59,32 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <opdex-side-nav></opdex-side-nav>
+      <div class="main-content-container" [ngClass]="{'sidebar-pinned': isPinned}">
+        <aside id="desktop-sidenav" [ngClass]="{'pinned': isPinned}">
+          <opdex-side-nav (onPinnedToggle)="handlePinnedToggle($event)"></opdex-side-nav>
+        </aside>
 
-      <div class="animation-container" style="display: block;" [@fadeAnimation]="prepareRoute(outlet)">
-        <div id="page-content">
-          <ng-container>
-            <div class="banner">
-              <div class="env light">
-                <button mat-icon-button title="Report Bug" color="warn" (click)="openBugReport()" class="tiny"><mat-icon>bug_report</mat-icon></button>
-                <p class="mb-0 ml-2">{{network}}</p>
-              </div>
+        <div class="animation-container" style="min-height: 100vh;"  [@fadeAnimation]="prepareRoute(outlet)">
+          <div id="page-content">
+            <opdex-status-bar [menuOpen]="menuOpen" (onMenuToggle)="toggleMenu($event)"></opdex-status-bar>
 
-              <div class="block" *ngIf="latestSyncedBlock$ | async as block">
-                <span class="light">Latest Synced Block:</span>
-                <p class="mb-0 ml-2">{{block.height | formatNumber:0}}</p>
-              </div>
+            <div class="mobile-nav" [ngClass]="{'open': menuOpen}">
+              <opdex-side-nav (onRouteChanged)="handleRouteChanged($event)"></opdex-side-nav>
             </div>
-          </ng-container>
 
-          <div class="page-content-container">
-            <router-outlet #outlet="outlet"></router-outlet>
+            <div class="page-content-container">
+              <router-outlet #outlet="outlet"></router-outlet>
+            </div>
+
+            <div class="space-between"></div>
+
+            <opdex-footer></opdex-footer>
           </div>
-
-          <opdex-mobile-nav></opdex-mobile-nav>
         </div>
       </div>
 
     </mat-sidenav-content>
   </mat-sidenav-container>
 </main>
+
 <div class="background"></div>
-
-
-
-
-
-
-
-

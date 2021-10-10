@@ -6,15 +6,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { DecimalStringRegex } from '@sharedLookups/regex';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
-import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
-import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Observable, Subscription, timer } from 'rxjs';
 import { debounceTime, switchMap, tap, map, take, distinctUntilChanged } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
-import { TransactionTypes } from 'src/app/enums/transaction-types';
+import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
 
 @Component({
   selector: 'opdex-tx-stake-start',
@@ -27,7 +27,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
   form: FormGroup;
   pool: ILiquidityPoolSummary;
   allowance$: Subscription;
-  transactionTypes = TransactionTypes;
+  transactionTypes = AllowanceTransactionTypes;
   fiatValue: string;
   allowance: AllowanceValidation;
   allowanceTransaction$ = new Subscription();

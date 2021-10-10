@@ -1,7 +1,7 @@
 import { Component, Injector, Input } from '@angular/core';
-import { ILiquidityPoolSummary, IMiningPool } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
-import { IStartMiningEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/mining-pools/start-mining-event.interface';
-import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
+import { ILiquidityPoolSummary, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { IStartMiningEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/mining-pools/start-mining-event.interface';
+import { ITransactionEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/transaction-event.interface';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { MiningPoolsService } from '@sharedServices/platform/mining-pools.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';

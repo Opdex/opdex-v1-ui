@@ -10,13 +10,17 @@
     </div>
 
     <opdex-input-control
-      [formControl]="control"
+      [formControl]="customDeadline"
       suffix="Minutes"
       [active]="selectedDeadlineLevel === 4"
       label="Custom Deadline"
       [showLabel]="false"
       [buttonDisabled]="true"
       [placeholder]="'0'"
-      [numbersOnly]="true"></opdex-input-control>
+      [numbersOnly]="true">
+      <ng-container *ngIf="!customDeadline.valid">
+        <span class="error">0 minimum and 120 maximum</span>
+      </ng-container>
+    </opdex-input-control>
   </div>
 </div>

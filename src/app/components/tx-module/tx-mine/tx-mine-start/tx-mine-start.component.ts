@@ -4,15 +4,15 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Subscription, timer } from 'rxjs';
 import { debounceTime, map, switchMap, take, distinctUntilChanged, tap } from 'rxjs/operators';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
-import { TransactionTypes } from 'src/app/enums/transaction-types';
-import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
+import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
+import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { DecimalStringRegex } from '@sharedLookups/regex';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 
@@ -27,7 +27,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
   icons = Icons;
   pool: ILiquidityPoolSummary;
   allowance$ = new Subscription();
-  transactionTypes = TransactionTypes;
+  transactionTypes = AllowanceTransactionTypes;
   fiatValue: string;
   allowance: AllowanceValidation;
   allowanceTransaction$ = new Subscription();

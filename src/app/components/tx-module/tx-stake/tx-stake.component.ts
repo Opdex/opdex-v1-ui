@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { TransactionView } from '@sharedModels/transaction-view';
 
 @Component({

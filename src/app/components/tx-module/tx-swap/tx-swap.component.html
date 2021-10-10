@@ -76,10 +76,10 @@
     </div>
 
     <div class="additional" *ngIf="showMore">
-      <opdex-tolerance [control]="tolerance" (onToleranceChange)="calcTolerance($event)"></opdex-tolerance>
+      <opdex-tolerance [value]="toleranceThreshold" (onToleranceChange)="calcTolerance($event)"></opdex-tolerance>
 
       <div class="mt-2">
-        <opdex-deadline [control]="deadline" (onDeadlineChange)="calcDeadline($event)"></opdex-deadline>
+        <opdex-deadline [value]="deadlineThreshold" (onDeadlineChange)="calcDeadline($event)"></opdex-deadline>
       </div>
     </div>
   </form>

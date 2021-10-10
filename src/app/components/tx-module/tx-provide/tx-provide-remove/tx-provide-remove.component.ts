@@ -7,14 +7,14 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { switchMap, map, take, filter, debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { Observable, Subscription, timer } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
-import { TransactionTypes } from 'src/app/enums/transaction-types';
-import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
+import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
+import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { DecimalStringRegex } from '@sharedLookups/regex';
 
 @Component({
@@ -28,7 +28,7 @@ export class TxProvideRemoveComponent extends TxBase {
   form: FormGroup;
   context: any;
   allowance$: Subscription;
-  transactionTypes = TransactionTypes;
+  transactionTypes = AllowanceTransactionTypes;
   showMore: boolean = false;
   lptInFiatValue: string;
   lptInMinFiatValue: string;
@@ -37,20 +37,15 @@ export class TxProvideRemoveComponent extends TxBase {
   crsOutMin: string;
   srcOut: string;
   srcOutMin: string;
-  setTolerance = 0.1;
+  toleranceThreshold = 0.1;
+  deadlineThreshold = 10;
   allowanceTransaction$: Subscription;
   allowance: AllowanceValidation;
+  latestSyncedBlock$: Subscription;
+  latestBlock: number;
 
   get liquidity(): FormControl {
     return this.form.get('liquidity') as FormControl;
-  }
-
-  get deadline(): FormControl {
-    return this.form.get('deadline') as FormControl;
-  }
-
-  get tolerance(): FormControl {
-    return this.form.get('tolerance') as FormControl;
   }
 
   constructor(
@@ -63,10 +58,16 @@ export class TxProvideRemoveComponent extends TxBase {
   ) {
     super(_userContext, _dialog, _bottomSheet);
 
+    if (this.context?.preferences?.deadlineThreshold) {
+      this.deadlineThreshold = this.context.preferences.deadlineThreshold;
+    }
+
+    if (this.context?.preferences?.toleranceThreshold) {
+      this.toleranceThreshold = this.context.preferences.toleranceThreshold;
+    }
+
     this.form = this._fb.group({
       liquidity: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
-      deadline: [''],
-      tolerance: ['']
     });
 
     this.allowance$ = this.liquidity.valueChanges
@@ -77,6 +78,11 @@ export class TxProvideRemoveComponent extends TxBase {
         filter(_ => this.context.wallet !== undefined),
         switchMap(amount => this.getAllowance$(amount)))
         .subscribe();
+
+      this.latestSyncedBlock$ = timer(0,8000)
+        .pipe(
+          switchMap(_ => this._platformApi.getLatestSyncedBlock()),
+          tap(block => this.latestBlock = block.height)).subscribe();
   }
 
   getAllowance$(amount?: string):Observable<any> {
@@ -101,7 +107,7 @@ export class TxProvideRemoveComponent extends TxBase {
       amountSrcMin: this.srcOutMin,
       liquidityPool: this.pool.address,
       recipient: this.context.wallet,
-      deadline: 0
+      deadline: this.calcDeadline(this.deadlineThreshold)
     };
 
     this._platformApi
@@ -113,9 +119,9 @@ export class TxProvideRemoveComponent extends TxBase {
   }
 
   calcTolerance(tolerance?: number) {
-    if (tolerance) this.setTolerance = tolerance;
+    if (tolerance) this.toleranceThreshold = tolerance;
 
-    if (this.setTolerance > 99.99 || this.setTolerance < .01) return;
+    if (this.toleranceThreshold > 99.99 || this.toleranceThreshold < .01) return;
     if (!this.liquidity.value) return;
 
     const lptDecimals = this.pool.token.lp.decimals;
@@ -124,7 +130,7 @@ export class TxProvideRemoveComponent extends TxBase {
 
     const crsDecimals = this.pool.token.crs.decimals;
     const srcDecimals = this.pool.token.src.decimals;
-    const reservesUsd = new FixedDecimal(this.pool.reserves.usd.toString(), 8);
+    const reservesUsd = new FixedDecimal(this.pool.reserves.usd.toFixed(8), 8);
     const reserveCrs = new FixedDecimal(this.pool.reserves.crs, crsDecimals);
     const reserveSrc = new FixedDecimal(this.pool.reserves.src, srcDecimals);
 
@@ -138,7 +144,7 @@ export class TxProvideRemoveComponent extends TxBase {
     const srcOut = new FixedDecimal(this.srcOut, srcDecimals);
     const usdOut = new FixedDecimal(this.usdOut, 8);
 
-    const tolerancePercentage = new FixedDecimal((this.setTolerance / 100).toString(), 8);
+    const tolerancePercentage = new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8);
 
     const crsTolerance = new FixedDecimal(this._math.multiply(crsOut, tolerancePercentage), crsDecimals);
     const srcTolerance = new FixedDecimal(this._math.multiply(srcOut, tolerancePercentage), srcDecimals);
@@ -164,12 +170,16 @@ export class TxProvideRemoveComponent extends TxBase {
     this.showMore = value;
   }
 
-  calcDeadline(minutes: number) {
+  calcDeadline(minutes: number): number {
+    this.deadlineThreshold = minutes;
+    const blocks = Math.ceil(60 * minutes / 16);
 
+    return blocks + this.latestBlock;
   }
 
   ngOnDestroy() {
     if (this.allowance$) this.allowance$.unsubscribe();
     if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
+    if (this.latestSyncedBlock$) this.latestSyncedBlock$.unsubscribe();
   }
 }

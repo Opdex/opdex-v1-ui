@@ -2,9 +2,9 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
-import { TransactionTypes } from 'src/app/enums/transaction-types';
+import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
 import { ReviewQuoteComponent } from '../review-quote/review-quote.component';
-import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
+import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { take, filter } from 'rxjs/operators';
 
 @Component({
@@ -14,10 +14,10 @@ import { take, filter } from 'rxjs/operators';
 })
 export class AllowanceValidationComponent implements OnChanges {
   @Input() allowance: AllowanceValidation;
-  @Input() transactionType: TransactionTypes;
+  @Input() transactionType: AllowanceTransactionTypes;
   @Output() onAllowanceApproved: EventEmitter<string> = new EventEmitter();
   ignore: boolean = true;
-  transactionTypes = TransactionTypes;
+  transactionTypes = AllowanceTransactionTypes;
   waiting: boolean;
 
   constructor(

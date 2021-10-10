@@ -1,8 +1,8 @@
 import { Component, Injector, Input } from '@angular/core';
-import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
-import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
-import { ICreateVaultCertificateEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/vaults/create-vault-certificate-event.interface';
-import { IVault } from '@sharedModels/responses/platform-api/vaults/vault.interface';
+import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
+import { ITransactionEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/transaction-event.interface';
+import { ICreateVaultCertificateEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vaults/create-vault-certificate-event.interface';
+import { IVault } from '@sharedModels/platform-api/responses/vaults/vault.interface';
 import { VaultsService } from '@sharedServices/platform/vaults.service';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';

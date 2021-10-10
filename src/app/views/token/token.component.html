@@ -1,27 +1,30 @@
 <div id="token" class="page-container">
-  <div class="container pt-3" *ngIf="token">
-    <div class="row mb-4">
-      <div class="col-12">
-        <p class="mb-2 light">{{token.name}}</p>
-        <h1 class="text-shadow mb-3">
-          <opdex-copy-button [tooltip]="token.address" [value]="token.address" icon="link"></opdex-copy-button>
-          <span>{{token.symbol}}</span>
-        </h1>
+  <div class="container" *ngIf="token">
+    <div class="row">
+      <div class="col-12 col-xl-4">
+        <opdex-card>
+          <div class="d-flex justify-content-between">
+            <div class="left">
+              <p class="mb-2 light d-flex align-items-center">
+                <opdex-copy-button [tooltip]="token.address" [value]="token.address" icon="link" [size]="iconSizes.small"></opdex-copy-button>
+                <span class="ml-2">{{token.name}}</span>
+              </p>
+              <h1 class="text-shadow mb-0">
+                <span>{{token.symbol}}</span>
+              </h1>
+            </div>
 
-        <div class="stats mt-4">
-          <div class="row">
-            <ng-container *ngFor="let statCard of statCards">
-              <div *ngIf="statCard.show" class="col-12 col-md-6 col-lg-4 col-xl-3">
-                <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
-              </div>
-            </ng-container>
+            <div class="right d-flex flex-row align-items-end">
+              <h2 class="mb-0 mr-2">${{token.summary.price.close | shortNumber}}</h2>
+              <opdex-change-indicator style="padding-bottom: 2px;" [value]="token.summary.dailyPriceChange" size="s" *ngIf="token.summary.dailyPriceChange !== null && token.summary.dailyPriceChange !== undefined"></opdex-change-indicator>
+            </div>
           </div>
-        </div>
+        </opdex-card>
       </div>
     </div>
 
-    <div class="row mb-4" >
-      <div class="col-12 col-md-8">
+    <div class="row">
+      <div class="col-12 col-xl-8">
         <opdex-card [noPadding]="true">
           <opdex-line-chart
                 [chartData]="chartData"
@@ -34,7 +37,7 @@
         </opdex-card>
       </div>
 
-      <div class="col-12 col-md-4">
+      <div class="col-12 col-xl-4">
         <opdex-tx-feed [transactionRequest]="transactionRequest"></opdex-tx-feed>
       </div>
     </div>

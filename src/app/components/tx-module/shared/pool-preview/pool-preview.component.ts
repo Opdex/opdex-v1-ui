@@ -1,11 +1,11 @@
-import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { map, startWith, tap } from 'rxjs/operators';
-import { LiquidityPoolsSearchQuery } from '@sharedModels/requests/liquidity-pool-filter';
+import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pool-filter';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({

@@ -2,27 +2,39 @@
 
 $sidebar-width: 100px;
 
-opdex-side-nav {
-  height: 100%;
-  width: $sidebar-width;
-  position: fixed;
-  z-index: 9999;
-  transition: width .15s ease-in;
-  overflow: hidden;
-  display: none;
+.main-content-container {
+  #desktop-sidenav {
+    height: 100vh;
+    width: $sidebar-width;
+    position: fixed;
+    z-index: 9999;
+    transition: width .15s ease-in;
+    overflow: hidden;
+    display: none;
 
-  &:hover {
-    width: 260px;
+    &:hover {
+      width: 260px;
+    }
+
+    &.pinned {
+      width: 260px;
+    }
   }
-}
 
-#page-content {
-  height: 100%;
-  margin-left: 0;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  margin-bottom: 60px;
+  .page-content-container {
+    margin-top: 40px;
+  }
+
+  .animation-container {
+    display: flex;
+    flex-direction: column;
+
+    #page-content {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+  }
 }
 
 .transaction-sidebar {
@@ -40,24 +52,19 @@ opdex-side-nav {
   }
 }
 
-.banner {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 15px;
-  flex-direction: row;
-  font-size: .9em;
+.mobile-nav {
+  position: fixed;
+  top: 40px;
+  width: 100%;
+  z-index: 999;
+  transform: translateX(-100vw);
+  min-height: calc(100vh - 40px);
+  transition: transform .2s ease-out;
+  left: 0;
 
-  .env {
-    font-weight: 600;
-    text-transform: uppercase;
-    align-items: center;
-    display: flex;
-  }
-
-  p {
-    display: inline-block;
+  &.open {
+    transform: translateX(0);
+    transition: transform .2s ease-out;
   }
 }
 
@@ -66,16 +73,31 @@ opdex-side-nav {
 @media (min-width: 576px) { }
 
 @media (min-width: 768px) {
-  opdex-side-nav {
-    display: block;
+  .mobile-nav {
+    display: none;
   }
 
-  #page-content {
-    margin-left: $sidebar-width;
-    margin-bottom: auto;
+  .main-content-container {
+    &.sidebar-pinned {
+      #desktop-sidenav {
+        width: 260px;
+      }
 
-    &.no-sidebar,.loaded {
-      margin-left: 0px;
+      .animation-container {
+        margin-left: 260px;
+      }
+    }
+
+    .page-content-container {
+      margin-top: 0px;
+    }
+
+    .animation-container {
+      margin-left: 100px;
+    }
+
+    #desktop-sidenav {
+      display: inline-block;
     }
   }
 }

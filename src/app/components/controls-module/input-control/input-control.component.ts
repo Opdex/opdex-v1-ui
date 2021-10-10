@@ -3,7 +3,6 @@ import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/cor
 import { FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ValueAccessor } from '@sharedServices/utility/value-accessor';
 import { Icons } from 'src/app/enums/icons';
-import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 @Component({
   selector: 'opdex-input-control',

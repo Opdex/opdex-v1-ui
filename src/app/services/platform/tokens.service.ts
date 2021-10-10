@@ -1,7 +1,7 @@
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
+import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { CacheService } from '../utility/cache.service';
 
 @Injectable({providedIn: 'root'})

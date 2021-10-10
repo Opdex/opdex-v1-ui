@@ -9,7 +9,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { TransactionView } from '@sharedModels/transaction-view';
 import { Icons } from 'src/app/enums/icons';
 import { debounceTime } from 'rxjs/operators';
-import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
+import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 
 @Component({
   selector: 'opdex-tx-create-pool',
@@ -43,7 +43,6 @@ export class TxCreatePoolComponent {
       .pipe(
         debounceTime(300),
         tap((token: string) => {
-          console.log(token);
           // todo: Should validate the token
         })
       );

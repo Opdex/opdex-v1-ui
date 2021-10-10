@@ -1,9 +1,9 @@
-import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
+import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { Component, Injector, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TxEventBaseComponent } from '../../tx-event-base.component';
-import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
-import { IApprovalEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/tokens/approve-event.interface';
+import { ITransactionEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/transaction-event.interface';
+import { IApprovalEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/tokens/approve-event.interface';
 
 @Component({
   selector: 'opdex-approval-event',

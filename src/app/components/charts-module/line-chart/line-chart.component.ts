@@ -74,7 +74,7 @@ export class LineChartComponent implements OnInit, OnChanges {
           scaleMargins : {
             top: 1,
             bottom: 99
-          }
+          },
         });
       }
 

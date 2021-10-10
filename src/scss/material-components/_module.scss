@@ -4,6 +4,7 @@
 @import 'button';
 @import 'slider';
 @import 'bottom-drawer';
+@import 'tooltip';
 
 
 .mat-form-field {
@@ -17,17 +18,33 @@
     }
   }
 
-  &.active {
-    color: $blue-primary;
+  &.ng-invalid.ng-touched {
+    color: $red-primary;
 
     button {
-      color: $blue-primary !important;
+      color: $red-primary !important;
     }
 
     .mat-form-field-ripple {
-      background: $blue-primary !important;
+      background: $red-primary !important;
       opacity: 1 !important;
       transform: none !important;
+    }
+  }
+
+  &.active {
+    &:not(.ng-invalid) {
+      color: $blue-primary;
+
+      button {
+        color: $blue-primary !important;
+      }
+
+      .mat-form-field-ripple {
+        background: $blue-primary !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
     }
   }
 }
@@ -110,13 +127,3 @@
   opacity: 0 !important;
 }
 
-.mat-tooltip {
-  font-size: 16px !important;
-  max-width: 600px !important;
-  padding-left: 10px !important;
-  padding-right: 10px !important;
-  overflow: visible !important;
-  text-overflow: wrap !important;
-  background: #1e1d2d !important;
-  border: 1px solid #292929;
-}

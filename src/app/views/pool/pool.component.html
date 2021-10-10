@@ -4,7 +4,7 @@
       <div class="col">
         <opdex-card [warn]="true" [closable]="true" *ngIf="false">
           <h4>Liquidity Pool Warning</h4>
-          <p class="mb-0">Anybody can publicly create a liquidity pool between Cirrus token (CRS) and any SRC token. Validate the chosen liquidity pool and SRC token by the SRC token's address.</p>
+          <p class="mb-0">Anybody can publicly create a liquidity pool between Cirrus token ({{pool.token.crs.symbol}}) and any SRC token. Validate the chosen liquidity pool and SRC token by the SRC token's address.</p>
         </opdex-card>
       </div>
     </div>
@@ -33,7 +33,7 @@
                 <div class="col-6">
                   <div class="d-flex align-items-end">
                     <h2 class=" mb-0 d-inline">
-                      <a class="body-default" href="javascript:void(0)" routerLink="/tokens/{{pool.token.src.address}}">{{pool.token.src.symbol}}</a>
+                      <a class="body-default" style="text-decoration: none; font-weight: 300;" href="javascript:void(0)" routerLink="/tokens/{{pool.token.src.address}}">{{pool.token.src.symbol}}</a>
                     </h2>
                     <span class="ml-3 {{pool.token.src.summary.dailyPriceChange < 0 ? 'red' : 'green'}}">
                       ${{pool.token.src.summary.price.close | shortNumber}}
@@ -41,15 +41,15 @@
                   </div>
 
                   <div class="d-flex align-items-center mt-2">
-                    <mat-icon class="mr-2 small">swap_horiz</mat-icon>
+                    <mat-icon class="mr-2 tiny">swap_horiz</mat-icon>
                     <h5 class="d-flex align-items-center mb-0">
                       <span style="font-weight: 400;">{{pool.cost.crsPerSrc.close | shortNumber }}</span>
-                      <small class="ml-1">CRS</small>
+                      <small class="ml-1">{{pool.token.crs.symbol}}</small>
                     </h5>
                   </div>
 
                   <div class="d-flex align-items-center mt-2">
-                    <mat-icon class="mr-2 small">lock</mat-icon>
+                    <mat-icon class="mr-2 tiny">lock</mat-icon>
                     <h5 class="d-flex align-items-center mb-0">
                       <span style="font-weight: 400;">{{pool.reserves.src | shortNumber}}</span>
                       <small class="ml-1">{{pool.token.src.symbol}}</small>
@@ -60,7 +60,7 @@
                 <div class="col-6">
                   <div class="d-flex align-items-end">
                     <h2 class=" mb-0 d-inline">
-                      <a class="body-default" href="javascript:void(0)" routerLink="/tokens/CRS">CRS</a>
+                      <a class="body-default" style="text-decoration: none; font-weight: 300;" href="javascript:void(0)" routerLink="/tokens/{{pool.token.crs.address}}">{{pool.token.crs.symbol}}</a>
                     </h2>
                     <span class="ml-3 {{pool.token.crs.summary.dailyPriceChange < 0 ? 'red' : 'green'}}">
                       ${{pool.token.crs.summary.price.close | shortNumber}}
@@ -68,7 +68,7 @@
                   </div>
 
                   <div class="d-flex align-items-center mt-2">
-                    <mat-icon class="mr-2 small">swap_horiz</mat-icon>
+                    <mat-icon class="mr-2 tiny">swap_horiz</mat-icon>
                     <h5 class="d-flex align-items-center mb-0">
                       <span style="font-weight: 400;">{{pool.cost.srcPerCrs.close | shortNumber}}</span>
                       <small class="ml-1">{{pool.token.src.symbol}}</small>
@@ -76,10 +76,10 @@
                   </div>
 
                   <div class="d-flex align-items-center mt-2">
-                    <mat-icon class="mr-2 small">lock</mat-icon>
+                    <mat-icon class="mr-2 tiny">lock</mat-icon>
                     <h5 class="d-flex align-items-center mb-0">
                       <span style="font-weight: 400;">{{pool.reserves.crs | shortNumber}}</span>
-                      <small class="ml-1">CRS</small>
+                      <small class="ml-1">{{pool.token.crs.symbol}}</small>
                     </h5>
                   </div>
                 </div>
@@ -89,8 +89,8 @@
 
           <div class="col-12 col-sm-6">
             <opdex-card [fullHeight]="true" [thin]="true">
-              <div class="d-flex justify-content-between flex-column h-100">
-                <div *ngFor="let statCard of statCards; let i = index">
+              <div class="d-flex justify-content-around flex-column h-100">
+                <ng-container *ngFor="let statCard of statCards; let i = index">
                   <div *ngIf="statCard.show" class="d-flex justify-content-between w-100">
                     <div class="d-flex align-items-center">
                       <opdex-help-button *ngIf="statCard.helpInfo" [info]="statCard.helpInfo" class="mr-2"></opdex-help-button>
@@ -102,7 +102,7 @@
                       <opdex-change-indicator [value]="statCard.change" size="s" *ngIf="statCard.change !== null && statCard.change !== undefined"></opdex-change-indicator>
                     </div>
                   </div>
-                </div>
+                </ng-container>
               </div>
 
             </opdex-card>

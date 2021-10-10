@@ -1,6 +1,6 @@
 import { Component, Injector, Input, OnInit } from '@angular/core';
-import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
-import { ISetPendingVaultOwnershipEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/vaults/set-pending-vault-ownership-event.interfac';
+import { ITransactionEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/transaction-event.interface';
+import { ISetPendingVaultOwnershipEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vaults/set-pending-vault-ownership-event.interfac';
 import { TxEventBaseComponent } from '../../tx-event-base.component';
 
 @Component({

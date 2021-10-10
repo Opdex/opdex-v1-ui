@@ -1,3 +1,4 @@
+import { ControlsModule } from '@sharedComponents/controls-module/controls.module';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { JwtService } from './services/utility/jwt.service';
@@ -52,6 +53,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ErrorMiddlewareService } from '@sharedServices/middleware/error-middleware.service';
+import { NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule } from 'ngx-google-analytics';
+import { environment } from '@environments/environment';
 
 @NgModule({
   declarations: [
@@ -101,13 +104,16 @@ import { ErrorMiddlewareService } from '@sharedServices/middleware/error-middlew
     MatAutocompleteModule,
     MatSelectModule,
     MatCheckboxModule,
+    ControlsModule,
     JwtModule.forRoot({
       jwtOptionsProvider: {
         provide: JWT_OPTIONS,
         useFactory: jwtOptionsFactory,
         deps: [JwtService]
       }
-    })
+    }),
+    NgxGoogleAnalyticsModule.forRoot(environment.ga),
+    NgxGoogleAnalyticsRouterModule
   ],
   providers: [
     JwtService,

@@ -1,6 +1,6 @@
 import { TransactionView } from '../../../models/transaction-view';
 import { Component, Input, OnChanges } from '@angular/core';
-import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 
 @Component({
   selector: 'opdex-tx-provide',

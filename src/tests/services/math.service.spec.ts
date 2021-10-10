@@ -19,6 +19,8 @@ const MathTestLookup = {
     { a: new FixedDecimal('1.523', 3), b: new FixedDecimal('0.000', 3), expectedOutput: '0'},
     { a: new FixedDecimal('0.524', 3), b: new FixedDecimal('0.005', 3), expectedOutput: '0.002'},
     { a: new FixedDecimal('0.52400000', 8), b: new FixedDecimal('0.005', 3), expectedOutput: '0.00262000'},
+    { a: new FixedDecimal('0.1', 8), b: new FixedDecimal('0.00112', 8), expectedOutput: '0.00011200'},
+    { a: new FixedDecimal('0.000821718157178238', 18), b: new FixedDecimal('0.00112', 8), expectedOutput: '0.000000920324336039'},
   ],
   divideTests: [
     { a: new FixedDecimal('20.00000000', 8), b: new FixedDecimal('5.00000000', 8), expectedOutput: '4.00000000'},

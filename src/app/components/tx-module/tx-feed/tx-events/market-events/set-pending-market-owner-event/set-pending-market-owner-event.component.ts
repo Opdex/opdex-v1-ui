@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ISetPendingMarketOwnershipEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/markets/set-pending-market-ownership-event.interfac';
-import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
+import { ISetPendingMarketOwnershipEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/markets/set-pending-market-ownership-event.interfac';
+import { ITransactionEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/transaction-event.interface';
 
 @Component({
   selector: 'opdex-set-pending-market-owner-event',

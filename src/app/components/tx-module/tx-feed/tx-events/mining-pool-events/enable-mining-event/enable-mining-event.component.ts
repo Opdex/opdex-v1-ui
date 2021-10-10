@@ -1,8 +1,8 @@
 import { switchMap } from 'rxjs/operators';
 import { Component, Injector, Input } from '@angular/core';
-import { ILiquidityPoolSummary, IMiningPool } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
-import { IEnableMiningEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/mining-pools/enable-mining-event.interface';
-import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
+import { ILiquidityPoolSummary, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { IEnableMiningEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/mining-pools/enable-mining-event.interface';
+import { ITransactionEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/transaction-event.interface';
 import { MiningPoolsService } from '@sharedServices/platform/mining-pools.service';
 import { Observable } from 'rxjs';
 import { TxEventBaseComponent } from '../../tx-event-base.component';

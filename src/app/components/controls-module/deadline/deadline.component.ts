@@ -1,5 +1,5 @@
 import { Component, Input, EventEmitter, Output, OnDestroy, OnChanges } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, tap } from 'rxjs/operators';
 
@@ -9,10 +9,10 @@ import { debounceTime, distinctUntilChanged, filter, tap } from 'rxjs/operators'
   styleUrls: ['./deadline.component.scss']
 })
 export class DeadlineComponent implements OnChanges, OnDestroy {
-  @Input() control: FormControl;
+  @Input() value: number;
   @Output() onDeadlineChange: EventEmitter<number> = new EventEmitter();
-
-  subscription = new Subscription();
+  customDeadline: FormControl;
+  subscription: Subscription;
   deadlineLevels = [
     { id: 1, deadline: 10 },
     { id: 2, deadline: 30 },
@@ -20,19 +20,28 @@ export class DeadlineComponent implements OnChanges, OnDestroy {
   ];
   selectedDeadlineLevel: number = this.deadlineLevels[0].id;
 
-  ngOnChanges() {
-    if (this.control) {
-      this.subscription.unsubscribe();
-      this.subscription = new Subscription();
+  constructor() {
+    this.customDeadline = new FormControl('', [Validators.min(0), Validators.max(120), Validators.pattern(/^[0-9]*$/)]);
+    this.subscription = new Subscription();
 
-      this.subscription.add(
-        this.control.valueChanges
-          .pipe(
-            debounceTime(400),
-            distinctUntilChanged(),
-            filter(value => value >= 1 && value <= 120),
-            tap(value => this.outputDeadline(value)))
-          .subscribe());
+    this.subscription.add(
+      this.customDeadline.valueChanges
+        .pipe(
+          debounceTime(400),
+          distinctUntilChanged(),
+          filter(value => value >= 1 && value <= 120 && this.customDeadline.valid),
+          tap(value => this.outputDeadline(value)))
+        .subscribe());
+  }
+
+  ngOnChanges() {
+    if (this.value) {
+      const level = this.deadlineLevels.find(l => l.deadline === this.value);
+      if (level !== undefined) {
+        this.outputDeadline(this.value);
+      } else {
+        this.customDeadline.setValue(this.value);
+      }
     }
   }
 

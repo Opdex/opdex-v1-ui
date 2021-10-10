@@ -10,75 +10,86 @@
     </div>
 
     <div class="row">
-      <div class="col-12 col-md-6 col-xl-8">
-        <div class="row">
-          <div class="col-12 col-xl-4">
-            <opdex-card [hasToolbar]="true" [fullHeight]="true">
-              <ng-container toolbar>
-                <div class="w-100 justify-content-between d-flex align-items-center">
-                  <h4 class="mb-0">Summary</h4>
-                  <button mat-button (click)="logout()" class="small" color="warn">Logout <mat-icon class="ml-1 small">exit_to_app</mat-icon></button>
-                </div>
-              </ng-container>
+      <div class="col-12 col-xl-4">
+        <opdex-card [hasToolbar]="true">
+          <ng-container toolbar>
+            <div class="w-100 justify-content-between d-flex align-items-center">
+              <h4 class="mb-0">Summary</h4>
+              <button mat-button (click)="logout()" class="small" color="warn">Logout <mat-icon class="ml-1 small">exit_to_app</mat-icon></button>
+            </div>
+          </ng-container>
 
-              <div class="crs mb-2 d-flex flex-row justify-content-between align-items-center" *ngIf="crsBalance">
-                <p class="big-balance">{{crsBalance.balance | shortNumber}} <small>CRS</small></p>
-                <p class="mb-0 positive-value">${{crsBalanceValue | shortNumber}}</p>
-              </div>
-
-              <div class="address overflow-ellipsis">
-                <small class="light">{{wallet}}</small>
-              </div>
-
-              <!-- <mat-divider></mat-divider> -->
-              <span class="space-between"></span>
-
-            </opdex-card>
+          <div class="crs mb-2 d-flex flex-row justify-content-between align-items-center" *ngIf="crsBalance">
+            <p class="big-balance">{{crsBalance.balance | shortNumber}} <small>CRS</small></p>
+            <p class="mb-0 positive-value">${{crsBalanceValue | shortNumber}}</p>
           </div>
-          <div class="col-12 col-xl-8">
-            <opdex-card [hasToolbar]="true" [fullHeight]="true">
-              <ng-container toolbar>
-                <div class="details">
-                  <h4 class="title d-inline">Current Balances</h4>
-                </div>
-              </ng-container>
 
-              <opdex-wallet-balances-table [records]="walletBalances" (onPageChange)="handleBalancesPageChange($event)" *ngIf="walletBalances; else zero"></opdex-wallet-balances-table>
-              <ng-template #zero>There are no known balances for this wallet address.</ng-template>
-            </opdex-card>
+          <div class="address overflow-ellipsis">
+            <small class="light">{{wallet.wallet}}</small>
           </div>
-        </div>
 
-        <div class="row">
-          <div class="col-12 col-xl-6">
-            <opdex-card [hasToolbar]="true">
-              <ng-container toolbar>
-                <div class="details">
-                  <h4 class="mb-0 d-flex align-items-center"><mat-icon color="warn" class="mr-2">whatshot</mat-icon>Mining Positions</h4>
-                </div>
-              </ng-container>
-
-              <opdex-wallet-mining-positions-table [records]="miningPositions" (onPageChange)="handleMiningPositionsPageChange($event)" *ngIf="walletBalances; else zero"></opdex-wallet-mining-positions-table>
-              <ng-template #zero>There are no known mining positions for this wallet address.</ng-template>
-            </opdex-card>
+          <div class="d-flex mb-3 mt-3">
+            <mat-divider style="position: relative;"></mat-divider>
           </div>
-          <div class="col-12 col-xl-6">
-            <opdex-card [hasToolbar]="true">
-              <ng-container toolbar>
-                <div class="details">
-                  <h4 class="mb-0 d-flex align-items-center"><mat-icon class="stake mr-2">verified_user</mat-icon>Staking Positions</h4>
-                </div>
-              </ng-container>
 
-              <opdex-wallet-staking-positions-table [records]="stakingPositions" (onPageChange)="handleStakingPositionsPageChange($event)" *ngIf="walletBalances; else zero"></opdex-wallet-staking-positions-table>
-              <ng-template #zero>There are no known staking positions for this wallet address.</ng-template>
-            </opdex-card>
+          <div class="preferences">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-0 light">Preferences</h5>
+              <button mat-icon-button (click)="togglePreferences()" color="primary"><mat-icon>{{showPreferences ? 'remove' : 'add'}}</mat-icon></button>
+            </div>
           </div>
-        </div>
+
+          <div class="mt-3" *ngIf="showPreferences">
+            <div class="theme mb-3">
+              <label class="d-block mb-3">Theme</label>
+
+              <button mat-stroked-button class="mr-2" (click)="toggleTheme('light-mode')" color="{{ wallet.preferences.theme === 'light-mode' ? 'primary' : '' }}" >
+                <mat-icon>brightness_7</mat-icon> Light Mode
+              </button>
+
+              <button mat-stroked-button (click)="toggleTheme('dark-mode')" color="{{ wallet.preferences.theme === 'dark-mode' ? 'primary' : '' }}">
+                <mat-icon>brightness_3</mat-icon> Dark Mode
+              </button>
+            </div>
+
+            <opdex-tolerance [value]="wallet?.preferences?.toleranceThreshold" (onToleranceChange)="handleToleranceChange($event)"></opdex-tolerance>
+            <opdex-deadline [value]="wallet?.preferences?.deadlineThreshold" (onDeadlineChange)="handleDeadlineChange($event)"></opdex-deadline>
+          </div>
+        </opdex-card>
+
+        <opdex-tx-feed [transactionRequest]="transactionsRequest"></opdex-tx-feed>
       </div>
 
-      <div class="col-12 col-md-6 col-xl-4">
-        <opdex-tx-feed [transactionRequest]="transactionsRequest"></opdex-tx-feed>
+      <div class="col-12 col-xl-8">
+        <opdex-card [hasToolbar]="true">
+          <ng-container toolbar>
+            <div class="details">
+              <h4 class="title d-inline">Current Balances</h4>
+            </div>
+          </ng-container>
+
+          <opdex-wallet-balances-table [records]="walletBalances" (onPageChange)="handleBalancesPageChange($event)"></opdex-wallet-balances-table>
+        </opdex-card>
+
+        <opdex-card [hasToolbar]="true">
+          <ng-container toolbar>
+            <div class="details">
+              <h4 class="mb-0 d-flex align-items-center"><mat-icon color="warn" class="mr-2">whatshot</mat-icon>Mining Positions</h4>
+            </div>
+          </ng-container>
+
+          <opdex-wallet-mining-positions-table [records]="miningPositions" (onPageChange)="handleMiningPositionsPageChange($event)"></opdex-wallet-mining-positions-table>
+        </opdex-card>
+
+        <opdex-card [hasToolbar]="true">
+          <ng-container toolbar>
+            <div class="details">
+              <h4 class="mb-0 d-flex align-items-center"><mat-icon class="stake mr-2">verified_user</mat-icon>Staking Positions</h4>
+            </div>
+          </ng-container>
+
+          <opdex-wallet-staking-positions-table [records]="stakingPositions" (onPageChange)="handleStakingPositionsPageChange($event)"></opdex-wallet-staking-positions-table>
+        </opdex-card>
       </div>
     </div>
   </div>

@@ -1,9 +1,9 @@
 import { Component, Injector, Input } from '@angular/core';
 import { TxEventBaseComponent } from '../../tx-event-base.component';
-import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { Observable } from 'rxjs';
-import { ICollectStakingRewardsEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/liquidity-pools/staking/collect-staking-rewards.interface';
-import { ITransactionEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/transaction-event.interface';
+import { ICollectStakingRewardsEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/liquidity-pools/staking/collect-staking-rewards.interface';
+import { ITransactionEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/transaction-event.interface';
 
 @Component({
   selector: 'opdex-collect-staking-rewards-event',

@@ -4,7 +4,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from '@environments/environment';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { ILiquidityPoolSummary } from '@sharedModels/responses/platform-api/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Observable, throwError, timer } from 'rxjs';
@@ -12,11 +12,11 @@ import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, switchMap, tap, catchError, take, filter } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
-import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
+import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
-import { TransactionTypes } from 'src/app/enums/transaction-types';
-import { ITransactionQuote } from '@sharedModels/responses/platform-api/transactions/transaction-quote.interface';
+import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
+import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { MathService } from '@sharedServices/utility/math.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 
@@ -32,16 +32,19 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   subscription = new Subscription();
   allowance: AllowanceValidation;
   form: FormGroup;
-  transactionTypes = TransactionTypes;
+  transactionTypes = AllowanceTransactionTypes;
   showMore: boolean = false;
   crsInFiatValue: string;
   crsInMinFiatValue: string;
   srcInFiatValue: string;
   srcInMinFiatValue: string;
-  setTolerance = 0.1;
+  toleranceThreshold = 0.1;
+  deadlineThreshold = 10;
   crsInMin: string;
   srcInMin: string;
   allowanceTransaction$: Subscription;
+  latestSyncedBlock$: Subscription;
+  latestBlock: number;
 
   get amountCrs(): FormControl {
     return this.form.get('amountCrs') as FormControl;
@@ -49,14 +52,6 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
 
   get amountSrc(): FormControl {
     return this.form.get('amountSrc') as FormControl;
-  }
-
-  get deadline(): FormControl {
-    return this.form.get('deadline') as FormControl;
-  }
-
-  get tolerance(): FormControl {
-    return this.form.get('tolerance') as FormControl;
   }
 
   constructor(
@@ -69,11 +64,17 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   ) {
     super(_userContext, _dialog, _bottomSheet);
 
+    if (this.context?.preferences?.deadlineThreshold) {
+      this.deadlineThreshold = this.context.preferences.deadlineThreshold;
+    }
+
+    if (this.context?.preferences?.toleranceThreshold) {
+      this.toleranceThreshold = this.context.preferences.toleranceThreshold;
+    }
+
     this.form = this._fb.group({
       amountCrs: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
       amountSrc: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
-      deadline: [''],
-      tolerance: ['']
     });
   }
 
@@ -114,6 +115,11 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
           filter(_ => this.context?.wallet),
           switchMap(_ => this.getAllowance$()))
         .subscribe());
+
+      this.latestSyncedBlock$ = timer(0,8000)
+        .pipe(
+          switchMap(_ => this._platformApi.getLatestSyncedBlock()),
+          tap(block => this.latestBlock = block.height)).subscribe();
   }
 
   getAllowance$():Observable<AllowanceValidation> {
@@ -160,7 +166,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
       recipient: this.context.wallet,
       amountCrsMin: this.crsInMin,
       amountSrcMin: this.srcInMin,
-      deadline: 0
+      deadline: this.calcDeadline(this.deadlineThreshold)
     }
 
     this._platformApi
@@ -172,17 +178,17 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   }
 
   calcTolerance(tolerance?: number) {
-    if (tolerance) this.setTolerance = tolerance;
+    if (tolerance) this.toleranceThreshold = tolerance;
 
-    if (this.setTolerance > 99.99 || this.setTolerance < .01) return;
+    if (this.toleranceThreshold > 99.99 || this.toleranceThreshold < .01) return;
     if (!this.amountCrs.value || !this.amountSrc.value) return;
 
     let crsInValue = new FixedDecimal(this.amountCrs.value, this.pool.token.crs.decimals);
-    let crsMinTolerance = this._math.multiply(crsInValue, new FixedDecimal((this.setTolerance / 100).toString(), 8));
+    let crsMinTolerance = this._math.multiply(crsInValue, new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8));
     this.crsInMin = this._math.subtract(crsInValue, new FixedDecimal(crsMinTolerance, this.pool.token.crs.decimals));
 
     let srcInValue = new FixedDecimal(this.amountSrc.value, this.pool.token.src.decimals);
-    let srcMinTolerance = this._math.multiply(srcInValue, new FixedDecimal((this.setTolerance / 100).toString(), 8));
+    let srcMinTolerance = this._math.multiply(srcInValue, new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8));
     this.srcInMin = this._math.subtract(srcInValue, new FixedDecimal(srcMinTolerance, this.pool.token.src.decimals));
 
     this.crsInFiatValue = this._math.multiply(new FixedDecimal(this.amountCrs.value, this.pool.token.crs.decimals), new FixedDecimal(this.pool.token.crs.summary.price.close.toString(), 8));
@@ -195,8 +201,11 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     this.showMore = value;
   }
 
-  calcDeadline(minutes: number) {
+  calcDeadline(minutes: number): number {
+    this.deadlineThreshold = minutes;
+    const blocks = Math.ceil(60 * minutes / 16);
 
+    return blocks + this.latestBlock;
   }
 
   handleAllowanceApproval(txHash: string) {
@@ -212,5 +221,6 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   ngOnDestroy() {
     this.subscription.unsubscribe();
     if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
+    if (this.latestSyncedBlock$) this.latestSyncedBlock$.unsubscribe();
   }
 }

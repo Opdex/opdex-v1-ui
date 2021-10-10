@@ -1,19 +1,21 @@
+import { ThemeService } from '@sharedServices/utility/theme.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
-import { IAddressBalance } from './../../models/responses/platform-api/wallets/address-balance.interface';
+import { IAddressBalance } from '../../models/platform-api/responses/wallets/address-balance.interface';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
-import { IAddressMining } from '@sharedModels/responses/platform-api/wallets/address-mining.interface';
+import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { environment } from '@environments/environment';
 import { Router } from '@angular/router';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
-import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
+import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions-filter';
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
-import { IToken } from '@sharedModels/responses/platform-api/tokens/token.interface';
-import { IAddressStaking } from '@sharedModels/responses/platform-api/wallets/address-staking.interface';
+import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
+import { IAddressStaking } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
+import { WalletsService } from '@sharedServices/platform/wallets.service';
 
 @Component({
   selector: 'opdex-wallet',
@@ -25,24 +27,27 @@ export class WalletComponent implements OnInit {
   walletBalances: any;
   miningPositions: any;
   stakingPositions: any;
-  wallet: string;
+  wallet: any;
   crsBalance: IAddressBalance;
   crsBalanceValue: string;
+  showPreferences: boolean;
 
   constructor(
     private _context: UserContextService,
     private _platform: PlatformApiService,
     private _tokensService: TokensService,
     private _liquidityPoolService: LiquidityPoolsService,
+    private _WalletsService: WalletsService,
     private _router: Router,
-    private _math: MathService
+    private _math: MathService,
+    private _theme: ThemeService
   ) {
-    this.wallet = this._context.getUserContext().wallet;
+    this.wallet = this._context.getUserContext();
     this.getWalletBalances(10);
     this.getMiningPositions(10);
     this.getStakingPositions(10);
 
-    this._platform.getBalance(this.wallet, 'CRS')
+    this._WalletsService.getBalance(this.wallet.wallet, 'CRS')
       .pipe(
         tap(crsBalance => this.crsBalance = crsBalance),
         switchMap(crsBalance => this._tokensService.getToken(crsBalance.token)),
@@ -52,6 +57,26 @@ export class WalletComponent implements OnInit {
           this.crsBalanceValue = this._math.multiply(crsBalanceFixed, costFixed);
         }),
         take(1)).subscribe();
+  }
+
+  handleDeadlineChange(threshold: number) {
+    this.wallet.preferences.deadlineThreshold = threshold;
+    this._context.setUserPreferences(this.wallet.wallet, this.wallet.preferences);
+  }
+
+  handleToleranceChange(threshold: number) {
+    this.wallet.preferences.toleranceThreshold = threshold;
+    this._context.setUserPreferences(this.wallet.wallet, this.wallet.preferences);
+  }
+
+  toggleTheme(theme: string) {
+    this.wallet.preferences.theme = theme;
+    this._context.setUserPreferences(this.wallet.wallet, this.wallet.preferences);
+    this._theme.setTheme(theme);
+  }
+
+  togglePreferences() {
+    this.showPreferences = !this.showPreferences;
   }
 
   handleBalancesPageChange(cursor: string) {
@@ -67,7 +92,7 @@ export class WalletComponent implements OnInit {
   }
 
   getMiningPositions(limit?: number, cursor?: string) {
-    this._platform.getMiningPositions(this.wallet, limit, cursor)
+    this._WalletsService.getMiningPositions(this.wallet.wallet, limit, cursor)
       .pipe(
         switchMap(response => {
           const positions$: Observable<IAddressMining>[] = [];
@@ -91,7 +116,7 @@ export class WalletComponent implements OnInit {
   }
 
   getStakingPositions(limit?: number, cursor?: string) {
-    this._platform.getStakingPositions(this.wallet, limit, cursor)
+    this._WalletsService.getStakingPositions(this.wallet.wallet, limit, cursor)
       .pipe(
         switchMap(response => {
           const positions$: Observable<IAddressStaking>[] = [];
@@ -115,7 +140,7 @@ export class WalletComponent implements OnInit {
   }
 
   getWalletBalances(limit?: number, cursor?: string) {
-    this._platform.getWalletBalances(this.wallet, limit, cursor)
+    this._WalletsService.getWalletBalances(this.wallet.wallet, limit, cursor)
       .pipe(
         switchMap(response => {
           const balances$: Observable<IToken>[] = [];
@@ -147,7 +172,7 @@ export class WalletComponent implements OnInit {
       limit: 5,
       direction: "DESC",
       eventTypes: [],
-      wallet: this.wallet
+      wallet: this.wallet.wallet
     };
   }
 

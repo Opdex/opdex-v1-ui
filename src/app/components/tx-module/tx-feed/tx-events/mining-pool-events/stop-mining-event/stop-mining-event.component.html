@@ -1,7 +1,7 @@
 <p class="mb-0" *ngIf="pool$ | async as pool; else loading">
   Stopped mining <a class="no-decoration" routerLink="/tokens/{{pool.token.staking.address}}">{{pool.token.staking.symbol}}</a> with
   <strong>{{event.amount | shortNumber}} </strong> <a class="no-decoration" routerLink="/tokens/{{pool.token.lp.address}}">{{pool.token.lp.symbol}}</a> in
-  <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.token.src.symbol}}/CRS</a>.
+  <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.token.src.symbol}}/{{pool.token.crs.symbol}}</a>.
 </p>
 
 <ng-template #loading>

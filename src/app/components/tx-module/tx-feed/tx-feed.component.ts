@@ -1,10 +1,10 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { ITransactionsRequest, TransactionRequest } from '@sharedModels/requests/transactions-filter';
-import { ITransactionReceipt, ITransactionReceipts } from '@sharedModels/responses/platform-api/transactions/transaction.interface';
+import { ITransactionsRequest, TransactionRequest } from '@sharedModels/platform-api/requests/transactions-filter';
+import { ITransactionReceipt, ITransactionReceipts } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
 import { map, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { IconSizes } from 'src/app/enums/icon-sizes';
-import { ITransferEvent } from '@sharedModels/responses/platform-api/transactions/transaction-events/tokens/transfer-event.interface';
+import { ITransferEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/tokens/transfer-event.interface';
 import { TransactionsService } from '@sharedServices/platform/transactions.service';
 
 @Component({
@@ -40,28 +40,28 @@ export class TxFeedComponent implements OnChanges {
             .map(transaction => {
 
               // Filter event types if provided
-              if (this.transactionRequest.eventTypes?.length) {
-                transaction.events = transaction.events.filter(event => this.transactionRequest.eventTypes.includes(event.eventType));
-              }
+              // if (this.transactionRequest.eventTypes?.length) {
+              //   transaction.events = transaction.events.filter(event => this.transactionRequest.eventTypes.includes(event.eventType));
+              // }
 
               // If the wallet is specified, hide transfer events in the transaction that do not involve the wallet address (e.g. contract to contract transfers)
               const wallet = this.transactionRequest.wallet;
               if (wallet?.length > 0) {
-                transaction.events = transaction.events.filter(event => {
-                  if (event.eventType === 'TransferEvent') {
-                    const transferEvent = <ITransferEvent>event;
-                    return transferEvent.from === wallet || transferEvent.to === wallet;
-                  }
+                // transaction.events = transaction.events.filter(event => {
+                //   if (event.eventType === 'TransferEvent') {
+                //     const transferEvent = <ITransferEvent>event;
+                //     return transferEvent.from === wallet || transferEvent.to === wallet;
+                //   }
 
-                  return true;
-                });
+                //   return true;
+                // });
               }
 
               return transaction;
             });
 
           // Only transactions that have events
-          transactionsResponse.results = filteredTransactions.filter(tx => tx.events.length >= 1);
+          // transactionsResponse.results = filteredTransactions.filter(tx => tx.events.length >= 1);
 
           // Set next/previous pages
           this.transactionRequest.next = transactionsResponse.paging.next;
@@ -74,6 +74,16 @@ export class TxFeedComponent implements OnChanges {
           return transactions;
         })
       );
+  }
+
+  pageChange(cursor: string) {
+    if (this.transactionRequest.next === cursor) {
+      this.transactionRequest.previous = null;
+    } else {
+      this.transactionRequest.next = null;
+    }
+
+    this.transactions$ = this.getTransactions();
   }
 
   public transactionsTrackBy(index: number, transaction: any) {
