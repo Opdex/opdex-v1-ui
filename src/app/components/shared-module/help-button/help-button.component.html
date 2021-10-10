@@ -1,5 +1,9 @@
-<button mat-icon-button color="primary" class="tiny" (click)="openHelp()" type="button">
-  <div [title]="info.title" class="my-auto">
-    <mat-icon>help</mat-icon>
-  </div>
+<button
+  mat-icon-button
+  color="primary"
+  class="tiny"
+  (click)="openHelp()"
+  type="button"
+  [matTooltip]="info.title">
+  <mat-icon>help</mat-icon>
 </button>

@@ -1,25 +1,25 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+// import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WalletStakingPositionsTableComponent } from './wallet-staking-positions-table.component';
+// import { WalletStakingPositionsTableComponent } from './wallet-staking-positions-table.component';
 
-describe('WalletStakingPositionsTableComponent', () => {
-  let component: WalletStakingPositionsTableComponent;
-  let fixture: ComponentFixture<WalletStakingPositionsTableComponent>;
+// describe('WalletStakingPositionsTableComponent', () => {
+//   let component: WalletStakingPositionsTableComponent;
+//   let fixture: ComponentFixture<WalletStakingPositionsTableComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ WalletStakingPositionsTableComponent ]
-    })
-    .compileComponents();
-  });
+//   beforeEach(async () => {
+//     await TestBed.configureTestingModule({
+//       declarations: [ WalletStakingPositionsTableComponent ]
+//     })
+//     .compileComponents();
+//   });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(WalletStakingPositionsTableComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+//   beforeEach(() => {
+//     fixture = TestBed.createComponent(WalletStakingPositionsTableComponent);
+//     component = fixture.componentInstance;
+//     fixture.detectChanges();
+//   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+//   it('should create', () => {
+//     expect(component).toBeTruthy();
+//   });
+// });

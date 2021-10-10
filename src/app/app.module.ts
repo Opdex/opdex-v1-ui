@@ -1,3 +1,4 @@
+import { ControlsModule } from '@sharedComponents/controls-module/controls.module';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { JwtService } from './services/utility/jwt.service';
@@ -103,6 +104,7 @@ import { environment } from '@environments/environment';
     MatAutocompleteModule,
     MatSelectModule,
     MatCheckboxModule,
+    ControlsModule,
     JwtModule.forRoot({
       jwtOptionsProvider: {
         provide: JWT_OPTIONS,

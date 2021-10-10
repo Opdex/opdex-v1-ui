@@ -56,7 +56,8 @@ export class FixedDecimal {
 
     const parts = value.split('.');
     const wholeNumber = parts[0];
-    const fractionNumber = parts[1].padEnd(decimals, '0');
+    const fractionNumber = parts[1].padEnd(decimals, '0').substr(0, decimals);
+    console.log('fraction Number: ' + fractionNumber)
 
     this._wholeNumber = wholeNumber;
     this._fractionNumber = fractionNumber;

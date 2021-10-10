@@ -1,3 +1,4 @@
+import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { environment } from '@environments/environment';
@@ -10,8 +11,15 @@ export class ThemeService {
   private theme$: BehaviorSubject<string>;
   private themeKey = 'theme';
 
-  constructor(private _db: StorageService) {
-    const defaultTheme = this._db.getLocalStorage<string>(this.themeKey, false) || environment.defaultTheme;
+  constructor(
+    private _db: StorageService,
+    private _context: UserContextService
+  ) {
+    const defaultTheme =
+      this._context.getUserContext()?.preferences?.theme ||
+      this._db.getLocalStorage<string>(this.themeKey, false) ||
+      environment.defaultTheme;
+
     this.theme$ = new BehaviorSubject(defaultTheme);
   }
 

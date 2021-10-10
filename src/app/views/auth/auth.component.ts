@@ -1,3 +1,4 @@
+import { ThemeService } from '@sharedServices/utility/theme.service';
 import { StorageService } from './../../services/utility/storage.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
@@ -36,9 +37,10 @@ export class AuthComponent implements OnInit, OnDestroy {
     private _api: PlatformApiService,
     private _context: UserContextService,
     private _router: Router,
-    private _storage: StorageService
+    private _storage: StorageService,
+    private _theme: ThemeService
   ) {
-    this.storageKey = `${environment.network}-public-keys`;
+    this.storageKey = 'public-keys';
     this.form = this._fb.group({
       publicKey: ['', [Validators.required]],
       rememberMe: [false]
@@ -92,6 +94,12 @@ export class AuthComponent implements OnInit, OnDestroy {
           }
 
           this._context.setToken(token);
+
+          const context = this._context.getUserContext();
+          if (context.preferences?.theme) {
+            this._theme.setTheme(context.preferences.theme);
+          }
+
           this.error = false;
         }
 

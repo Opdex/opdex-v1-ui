@@ -41,13 +41,11 @@
 
         <mat-divider class="mb-3"></mat-divider>
 
-        <ng-container>
-          <div class="connect-wallet mb-4" *ngIf="!context?.wallet">
-            <opdex-card>
-              <button mat-flat-button color="primary" class="w-100" routerLink="/auth">Connect Wallet</button>
-            </opdex-card>
-          </div>
-        </ng-container>
+        <div class="connect-wallet mb-4" *ngIf="!context?.wallet">
+          <button mat-stroked-button class="w-100 d-flex align-items-center" color="primary" routerLink="/auth">
+            Connect Wallet
+          </button>
+        </div>
 
         <div [ngSwitch]="message?.view">
           <opdex-tx-swap *ngSwitchCase="1" [data]="message?.data"></opdex-tx-swap>

@@ -8,8 +8,12 @@
   padding: 0 8px;
 
   .button-group {
+    display: flex;
+
     a {
       margin-right: 8px;
+      display: flex;
+      align-items: center;
 
       &:last-of-type {
         margin-right: 0px;

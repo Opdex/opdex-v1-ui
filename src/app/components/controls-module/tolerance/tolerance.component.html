@@ -10,12 +10,16 @@
     </div>
 
     <opdex-input-control
-      [formControl]="control"
+      [formControl]="customTolerance"
       suffix="%"
       [active]="selectedToleranceLevel === 4"
       label="Custom Tolerance"
       [showLabel]="false"
       [buttonDisabled]="true"
-      [numbersOnly]="true"></opdex-input-control>
+      [numbersOnly]="true">
+      <ng-container *ngIf="!customTolerance.valid">
+        <span class="error">0.01 minimum and 99.99 maximum</span>
+      </ng-container>
+    </opdex-input-control>
   </div>
 </div>

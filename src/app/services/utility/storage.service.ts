@@ -1,16 +1,32 @@
 import { Injectable } from '@angular/core';
+import { environment } from '@environments/environment';
+import { Network } from 'src/app/enums/networks';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
+  keyPrefix: string;
+
+  constructor() {
+    const network = environment.network === Network.Devnet
+      ? environment.network.substring(0, 3).toLowerCase()
+      : environment.network.substring(0, 4).toLowerCase();
+
+    this.keyPrefix = `odx-${network}-`;
+  }
+
+  private keyWithPrefix(key: string): string {
+    return `${this.keyPrefix}${key}`;
+  }
+
   /**
    * @summary Get a value form local storage based on the provided key
    * @param key The key to search local storage for
    * @param parse Defaults to true, set to false to not parse the value (e.g. expecting a string response)
    */
   getLocalStorage<T>(key: string, parse: boolean = true): T {
-    const result = <string>localStorage.getItem(key);
+    const result = <string>localStorage.getItem(this.keyWithPrefix(key));
 
     return parse === true
       ? JSON.parse(result)
@@ -28,7 +44,7 @@ export class StorageService {
       ? JSON.stringify(data)
       : data as string;
 
-    localStorage.setItem(key, dataString);
+    localStorage.setItem(this.keyWithPrefix(key), dataString);
   }
 
   /**
@@ -36,7 +52,7 @@ export class StorageService {
    * @param key The key to remove from local storage
    */
   removeLocalStorage(key: string): void {
-    localStorage.removeItem(key);
+    localStorage.removeItem(this.keyWithPrefix(key));
   }
 
   /**
@@ -45,7 +61,7 @@ export class StorageService {
    * @param parse Defaults to true, set to false to not parse the value (e.g. expecting a string response)
    */
   getSessionStorage<T>(key: string, parse: boolean = true): T {
-    const result = <string>sessionStorage.getItem(key);
+    const result = <string>sessionStorage.getItem(this.keyWithPrefix(key));
 
     return parse === true
       ? JSON.parse(result)
@@ -63,7 +79,7 @@ export class StorageService {
       ? JSON.stringify(data)
       : data as string;
 
-    sessionStorage.setItem(key, dataString);
+    sessionStorage.setItem(this.keyWithPrefix(key), dataString);
   }
 
   /**
@@ -71,6 +87,6 @@ export class StorageService {
    * @param key The key to remove from session storage
    */
   removeSessionStorage(key: string): void {
-    sessionStorage.removeItem(key);
+    sessionStorage.removeItem(this.keyWithPrefix(key));
   }
 }

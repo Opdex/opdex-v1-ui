@@ -18,17 +18,33 @@
     }
   }
 
-  &.active {
-    color: $blue-primary;
+  &.ng-invalid.ng-touched {
+    color: $red-primary;
 
     button {
-      color: $blue-primary !important;
+      color: $red-primary !important;
     }
 
     .mat-form-field-ripple {
-      background: $blue-primary !important;
+      background: $red-primary !important;
       opacity: 1 !important;
       transform: none !important;
+    }
+  }
+
+  &.active {
+    &:not(.ng-invalid) {
+      color: $blue-primary;
+
+      button {
+        color: $blue-primary !important;
+      }
+
+      .mat-form-field-ripple {
+        background: $blue-primary !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
     }
   }
 }

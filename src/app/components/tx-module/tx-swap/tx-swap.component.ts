@@ -42,7 +42,8 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   tokenInMaxFiatValue: string;
   tokenOutFiatValue: string;
   tokenOutMinFiatValue: string;
-  setTolerance = 0.1;
+  toleranceThreshold = 0.1;
+  deadlineThreshold = 10;
   tokenInMax: string;
   tokenOutMin: string;
   tokens$: Observable<IToken[]>;
@@ -52,6 +53,8 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   changeTokenIn: boolean;
   changeTokenOut: boolean;
   allowanceTransaction$: Subscription;
+  latestSyncedBlock$: Subscription;
+  latestBlock: number;
 
   get tokenInAmount(): FormControl {
     return this.form.get('tokenInAmount') as FormControl;
@@ -69,14 +72,6 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     return this.form.get('tokenOut') as FormControl;
   }
 
-  get deadline(): FormControl {
-    return this.form.get('deadline') as FormControl;
-  }
-
-  get tolerance(): FormControl {
-    return this.form.get('tolerance') as FormControl;
-  }
-
   constructor(
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
@@ -87,13 +82,19 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   ) {
     super(_userContext, _dialog, _bottomSheet);
 
+    if (this.context?.preferences?.deadlineThreshold) {
+      this.deadlineThreshold = this.context.preferences.deadlineThreshold;
+    }
+
+    if (this.context?.preferences?.toleranceThreshold) {
+      this.toleranceThreshold = this.context.preferences.toleranceThreshold;
+    }
+
     this.form = this._fb.group({
       tokenInAmount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
       tokenIn: ['CRS', [Validators.required]],
       tokenOutAmount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
-      tokenOut: [null, [Validators.required]],
-      deadline: [''],
-      tolerance: ['']
+      tokenOut: [null, [Validators.required]]
     });
 
     this.tokenInChanges$ = this.tokenInAmount.valueChanges
@@ -121,6 +122,11 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
         filter(_ => this.context.wallet !== undefined),
         switchMap(() => this.validateAllowance())
       ).subscribe();
+
+      this.latestSyncedBlock$ = timer(0,8000)
+        .pipe(
+          switchMap(_ => this._platformApi.getLatestSyncedBlock()),
+          tap(block => this.latestBlock = block.height)).subscribe();
 
       this.tokens$ = this._platformApi
         .getTokens()
@@ -209,8 +215,6 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   }
 
   submit() {
-    let deadline = 0;
-
     const payload = {
       tokenOut: this.tokenOut.value,
       tokenInAmount: this.tokenInAmount.value,
@@ -219,7 +223,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
       recipient: this.context.wallet,
       tokenInMaximumAmount: this.tokenInMax,
       tokenOutMinimumAmount: this.tokenOutMin,
-      deadline: deadline
+      deadline: this.calcDeadline(this.deadlineThreshold)
     }
 
     this._platformApi
@@ -301,9 +305,9 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   }
 
   calcTolerance(tolerance?: number) {
-    if (tolerance) this.setTolerance = tolerance;
+    if (tolerance) this.toleranceThreshold = tolerance;
 
-    if (this.setTolerance > 99.99 || this.setTolerance < .01) return;
+    if (this.toleranceThreshold > 99.99 || this.toleranceThreshold < .01) return;
     if (!this.tokenInAmount.value || !this.tokenInAmount.value) return;
 
     const tokenInDecimals = this.tokenInDetails.decimals;
@@ -311,19 +315,27 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
 
     const tokenInAmount = new FixedDecimal(this.tokenInAmount.value, tokenInDecimals);
     const tokenInPrice = new FixedDecimal(this.tokenInDetails.summary.price.close, 8);
-    const tokenInTolerance = new FixedDecimal((1 + (this.setTolerance / 100)).toString(), 8);
+    const tokenInTolerance = new FixedDecimal((1 + (this.toleranceThreshold / 100)).toFixed(8), 8);
 
     this.tokenInMax = this._math.multiply(tokenInAmount, tokenInTolerance);
     const tokenInMax = new FixedDecimal(this.tokenInMax, tokenInDecimals);
 
     const tokenOutAmount = new FixedDecimal(this.tokenOutAmount.value, tokenOutDecimals);
     const tokenOutPrice = new FixedDecimal(this.tokenOutDetails.summary.price.close, 8);
-    const tokenOutTolerancePercentage = new FixedDecimal((this.setTolerance / 100).toString(), 8);
+    const tokenOutTolerancePercentage = new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8);
+    console.log('tokenOutTolerancePercentage: ' + tokenOutTolerancePercentage.formattedValue);
     const tokenOutToleranceAmount = this._math.multiply(tokenOutAmount, tokenOutTolerancePercentage);
+    console.log('tokenOutToleranceAmount : ' + tokenOutToleranceAmount)
+
     const tokenOutTolerance = new FixedDecimal(tokenOutToleranceAmount, tokenOutDecimals);
+
+    console.log('token out amount: ' + tokenOutAmount.formattedValue)
+    console.log('token out tolerance: ' + tokenOutTolerance.formattedValue)
 
     this.tokenOutMin = this._math.subtract(tokenOutAmount, tokenOutTolerance);
     const tokenOutMin = new FixedDecimal(this.tokenOutMin, tokenOutDecimals);
+
+    console.log(tokenOutMin)
 
     this.tokenInFiatValue = this._math.multiply(tokenInAmount, tokenInPrice);
     this.tokenOutFiatValue = this._math.multiply(tokenOutAmount, tokenOutPrice);
@@ -335,8 +347,11 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     this.showMore = value;
   }
 
-  calcDeadline(minutes: number) {
+  calcDeadline(minutes: number): number {
+    this.deadlineThreshold = minutes;
+    const blocks = Math.ceil(60 * minutes / 16);
 
+    return blocks + this.latestBlock;
   }
 
   handleAllowanceApproval(txHash: string) {
@@ -353,5 +368,6 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     if (this.tokenInChanges$) this.tokenInChanges$.unsubscribe();
     if (this.tokenOutChanges$) this.tokenOutChanges$.unsubscribe();
     if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
+    if (this.latestSyncedBlock$) this.latestSyncedBlock$.unsubscribe();
   }
 }

@@ -1,6 +1,13 @@
+import { StorageService } from './storage.service';
 import { BehaviorSubject } from 'rxjs';
 import { JwtService } from './jwt.service';
 import { Injectable } from '@angular/core';
+
+export interface IUserPreferences {
+  theme: string;
+  deadlineThreshold: number;
+  toleranceThreshold: number;
+}
 
 @Injectable({ providedIn: 'root' })
 
@@ -8,7 +15,10 @@ export class UserContextService {
   private userContext$ = new BehaviorSubject<any>(null);
   private _token: string;
 
-  constructor(private _jwtService: JwtService) { }
+  constructor(
+    private _jwtService: JwtService,
+    private _storage: StorageService
+  ) { }
 
   getUserContext$() {
     return this.userContext$.asObservable();
@@ -28,14 +38,24 @@ export class UserContextService {
     this.userContext$.next(data);
   }
 
+  setUserPreferences(wallet: string, preferences: IUserPreferences): void {
+    this._storage.setLocalStorage(wallet, preferences, true);
+  }
+
   getUserContext() {
     const data = this._jwtService.decodeToken();
 
     if (!data) return null;
 
+    let preferences = {} as IUserPreferences;
+    if (data.wallet) {
+      preferences = this._storage.getLocalStorage(data?.wallet, true) || {} as IUserPreferences;
+    }
+
     return {
       market: data.market,
-      wallet: data.wallet
+      wallet: data.wallet,
+      preferences
     };
   }
 }

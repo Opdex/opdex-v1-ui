@@ -1,12 +1,11 @@
+import { IconSizes } from 'src/app/enums/icon-sizes';
 import { catchError } from 'rxjs/operators';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { ITransactionsRequest } from '@sharedModels/requests/transactions-filter';
 import { delay, switchMap, take, tap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, Subscription, interval, of } from 'rxjs';
-import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
 import { Title } from '@angular/platform-browser';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
 
@@ -24,6 +23,7 @@ export class TokenComponent implements OnInit {
   priceHistory: any[] = [];
   candleHistory: any[] = [];
   chartData: any[];
+  iconSizes = IconSizes;
   chartOptions = [
     {
       type: 'line',
@@ -40,13 +40,11 @@ export class TokenComponent implements OnInit {
   ]
   selectedChart = this.chartOptions[0];
   transactionRequest: ITransactionsRequest;
-  statCards: StatCardInfo[];
   routerSubscription = new Subscription();
 
 
   constructor(
     private _route: ActivatedRoute,
-    private _platformApiService: PlatformApiService,
     private _tokensService: TokensService,
     private _router: Router,
     private _title: Title,
@@ -108,36 +106,9 @@ export class TokenComponent implements OnInit {
           if (this.token){
             this._gaService.pageView(this._route.routeConfig.path, `${this.token.symbol} - ${this.token.name}`)
             this._title.setTitle(`${this.token.symbol} - ${this.token.name}`);
-            this.setTokenStatCards();
           }
         })
       );
-  }
-
-  private setTokenStatCards(): void {
-    this.statCards = [
-      {
-        title: 'Price',
-        value: this.token.summary.price.close,
-        change: this.token.summary.dailyPriceChange,
-        prefix: '$',
-        show: true,
-        helpInfo: {
-          title: 'Price',
-          paragraph: 'This indicator provides the latest known USD price of the token. USD prices are computed using Cirrus (CRS) USD price and the liquidity pool reserve ratio between the displayed token and its liquidity pool reserves.'
-        }
-      },
-      {
-        title: 'Total Supply',
-        value: this.token.totalSupply,
-        daily: false,
-        show: true,
-        helpInfo: {
-          title: 'Total Supply',
-          paragraph: 'This indicator is the latest known total supply value of the token. The total supply is how many tokens are in circulation and exist in contract.'
-        }
-      }
-    ];
   }
 
   private getTokenHistory(timeSpan: string = '1Y'): Observable<any> {

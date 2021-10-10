@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { HelpInfo } from '@sharedComponents/modals-module/help-modal/help-info';
 import { HelpModalComponent } from '@sharedComponents/modals-module/help-modal/help-modal.component';
