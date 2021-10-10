@@ -39,7 +39,6 @@ export class ToleranceComponent implements OnChanges, OnDestroy {
     if (this.value) {
       const level = this.toleranceLevels.find(l => l.tolerance === this.value);
       if (level !== undefined) {
-        console.log(this.value)
         this.outputTolerance(this.value);
       } else {
         this.customTolerance.setValue(this.value);
@@ -48,7 +47,6 @@ export class ToleranceComponent implements OnChanges, OnDestroy {
   }
 
   outputTolerance(tolerance: number) {
-    console.log(tolerance)
     const level = this.toleranceLevels.find(l => l.tolerance === tolerance);
     this.selectedToleranceLevel = level === undefined ? 4 : level.id;
 

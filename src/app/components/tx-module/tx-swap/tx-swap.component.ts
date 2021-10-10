@@ -323,19 +323,12 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     const tokenOutAmount = new FixedDecimal(this.tokenOutAmount.value, tokenOutDecimals);
     const tokenOutPrice = new FixedDecimal(this.tokenOutDetails.summary.price.close, 8);
     const tokenOutTolerancePercentage = new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8);
-    console.log('tokenOutTolerancePercentage: ' + tokenOutTolerancePercentage.formattedValue);
     const tokenOutToleranceAmount = this._math.multiply(tokenOutAmount, tokenOutTolerancePercentage);
-    console.log('tokenOutToleranceAmount : ' + tokenOutToleranceAmount)
 
     const tokenOutTolerance = new FixedDecimal(tokenOutToleranceAmount, tokenOutDecimals);
 
-    console.log('token out amount: ' + tokenOutAmount.formattedValue)
-    console.log('token out tolerance: ' + tokenOutTolerance.formattedValue)
-
     this.tokenOutMin = this._math.subtract(tokenOutAmount, tokenOutTolerance);
     const tokenOutMin = new FixedDecimal(this.tokenOutMin, tokenOutDecimals);
-
-    console.log(tokenOutMin)
 
     this.tokenInFiatValue = this._math.multiply(tokenInAmount, tokenInPrice);
     this.tokenOutFiatValue = this._math.multiply(tokenOutAmount, tokenOutPrice);

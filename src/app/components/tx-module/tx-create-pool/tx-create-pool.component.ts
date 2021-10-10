@@ -43,7 +43,6 @@ export class TxCreatePoolComponent {
       .pipe(
         debounceTime(300),
         tap((token: string) => {
-          console.log(token);
           // todo: Should validate the token
         })
       );

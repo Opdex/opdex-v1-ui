@@ -38,7 +38,6 @@ export class DeadlineComponent implements OnChanges, OnDestroy {
     if (this.value) {
       const level = this.deadlineLevels.find(l => l.deadline === this.value);
       if (level !== undefined) {
-        console.log(this.value)
         this.outputDeadline(this.value);
       } else {
         this.customDeadline.setValue(this.value);

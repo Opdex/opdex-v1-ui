@@ -19,7 +19,6 @@ export class SignTxModalComponent {
     private _platformApi: PlatformApiService,
     public dialogRef: MatDialogRef<SignTxModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
-      console.log(this.data)
     }
 
   submit() {
