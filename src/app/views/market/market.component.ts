@@ -1,13 +1,13 @@
 import { IconSizes } from './../../enums/icon-sizes';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
-import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions-filter';
+import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, interval, Observable, Subscription, zip } from 'rxjs';
 import { delay, map, switchMap, take, tap } from 'rxjs/operators';
-import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pool-filter';
+import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
 import { MarketsService } from '@sharedServices/platform/markets.service';
 import { TransactionView } from '@sharedModels/transaction-view';

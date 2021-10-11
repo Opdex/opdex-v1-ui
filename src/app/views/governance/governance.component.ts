@@ -5,7 +5,7 @@ import { ReviewQuoteComponent } from '@sharedComponents/tx-module/shared/review-
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { switchMap, take, tap } from 'rxjs/operators';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pool-filter';
+import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, timer } from 'rxjs';

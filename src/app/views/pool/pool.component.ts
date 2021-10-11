@@ -4,7 +4,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { environment } from "@environments/environment";
 import { StatCardInfo } from "@sharedComponents/cards-module/stat-card/stat-card-info";
-import { ITransactionsRequest } from "@sharedModels/platform-api/requests/transactions-filter";
+import { ITransactionsRequest } from "@sharedModels/platform-api/requests/transactions/transactions-filter";
 import { IAddressBalance } from "@sharedModels/platform-api/responses/wallets/address-balance.interface";
 import { ILiquidityPoolSummary, ILiquidityPoolSnapshotHistory } from "@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface";
 import { TransactionView } from "@sharedModels/transaction-view";

@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
-import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions-filter';
+import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';

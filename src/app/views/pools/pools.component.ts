@@ -2,7 +2,7 @@ import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liqu
 import { Component, OnInit } from '@angular/core';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable } from 'rxjs';
-import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pool-filter';
+import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { TransactionView } from '@sharedModels/transaction-view';
 

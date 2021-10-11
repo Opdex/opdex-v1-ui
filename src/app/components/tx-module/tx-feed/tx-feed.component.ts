@@ -1,6 +1,6 @@
 import { TransactionReceipt } from '@sharedModels/transaction';
 import { Component, Input, OnChanges } from '@angular/core';
-import { ITransactionsRequest, TransactionRequest } from '@sharedModels/platform-api/requests/transactions-filter';
+import { ITransactionsRequest, TransactionRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { ITransactionReceipts } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
 import { map, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
