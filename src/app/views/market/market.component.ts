@@ -1,3 +1,4 @@
+import { IconSizes } from './../../enums/icon-sizes';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions-filter';
@@ -18,6 +19,7 @@ import { environment } from '@environments/environment';
   styleUrls: ['./market.component.scss']
 })
 export class MarketComponent implements OnInit {
+  iconSizes = IconSizes;
   subscription = new Subscription();
   theme$: Observable<string>;
   market: any;
@@ -93,17 +95,6 @@ export class MarketComponent implements OnInit {
   private setMarketStatCards(): void {
     this.statCards = [
       {
-        title: `Cirrus (${this.market.crsToken.symbol})`,
-        value: this.market.crsToken.summary.price.close,
-        prefix: '$',
-        change: this.market.crsToken.summary.dailyPriceChange,
-        show: true,
-        helpInfo: {
-          title: `What is ${this.market.crsToken.symbol}?`,
-          paragraph: `${this.market.crsToken.symbol} is the native token of the ${environment.network.toLowerCase()} Cirrus sidechain. ${this.market.crsToken.symbol} can be obtained through a Stratis cross chain transfer from STRAX to Cirrus at a 1:1 ratio. ${this.market.crsToken.symbol} are used as a base token in all liquidity pools as well as used for transactional gas costs.`
-        }
-      },
-      {
         title: 'Liquidity',
         value: this.market.summary.liquidity,
         prefix: '$',
@@ -115,7 +106,7 @@ export class MarketComponent implements OnInit {
         }
       },
       {
-        title: 'Staking Weight',
+        title: 'Staking',
         value: this.market.summary.staking.weight,
         suffix: this.market.stakingToken.symbol,
         change: this.market.summary.staking.weightDailyChange,

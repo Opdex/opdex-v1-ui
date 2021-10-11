@@ -1,7 +1,7 @@
 .feed-container {
   position: relative;
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 
   &.large {
@@ -9,7 +9,7 @@
   }
 
   &.medium {
-    max-height: 560px;
+    max-height: 535px;
   }
 
   &.small {

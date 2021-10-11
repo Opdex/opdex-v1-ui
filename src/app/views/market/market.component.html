@@ -15,21 +15,75 @@
           <opdex-copy-button [tooltip]="market?.address" [value]="market?.address" icon="link"></opdex-copy-button>
           <span>Market Overview</span>
         </h1>
-
-        <div class="stats">
-          <div class="scrollable-row">
-            <ng-container *ngFor="let statCard of statCards">
-              <div *ngIf="statCard.show" class="scrollable-card">
-                <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
-              </div>
-          </ng-container>
-          </div>
-        </div>
       </div>
     </div>
 
+
     <div class="row">
       <div class="col-12 col-lg-8">
+        <div class="row">
+          <div class="col-12 col-sm-6">
+            <opdex-card [fullHeight]="true">
+              <div class="row">
+                <div class="{{market.stakingToken ? 'col-6' : 'col-12' }}">
+                  <p class="mb-0 light d-flex align-items-center">
+                    <opdex-copy-button [tooltip]="market.crsToken.address" [value]="market.crsToken.address" icon="link" [size]="iconSizes.small"></opdex-copy-button>
+                    <span class="ml-2">{{market.crsToken.name}}</span>
+                  </p>
+
+                  <a class="body-default no-decoration d-flex align-items-center" routerLink="/tokens/{{market.crsToken.address}}" matTooltip="Market Anchor Token">
+                    <mat-icon color="primary" class="mr-2">toll</mat-icon>
+                    <h2 class="d-inline-block mb-0">{{market.crsToken.symbol}}</h2>
+                  </a>
+
+                  <div class="d-flex flex-row mt-2">
+                    <span class="mr-2">${{market.crsToken.summary.price.close | shortNumber}}</span>
+                    <opdex-change-indicator [value]="market.crsToken.summary.dailyPriceChange" size="s" *ngIf="market.crsToken.summary.dailyPriceChange !== null && market.crsToken.summary.dailyPriceChange !== undefined"></opdex-change-indicator>
+                  </div>
+                </div>
+
+                <div class="col-6" *ngIf="market.stakingToken">
+                  <p class="mb-0 light d-flex align-items-center">
+                    <opdex-copy-button [tooltip]="market.stakingToken.address" [value]="market.stakingToken.address" icon="link" [size]="iconSizes.small"></opdex-copy-button>
+                    <span class="ml-2">{{market.stakingToken.name}}</span>
+                  </p>
+
+                  <a class="body-default no-decoration d-flex align-items-center" routerLink="/tokens/{{market.stakingToken.address}}" matTooltip="Market Staking Token">
+                    <mat-icon class="stake mr-2">verified_user</mat-icon>
+                    <h2 class="d-inline-block mb-0">{{market.stakingToken.symbol}}</h2>
+                  </a>
+
+                  <div class="d-flex flex-row mt-2">
+                    <span class="mr-2">${{market.stakingToken.summary.price.close | shortNumber}}</span>
+                    <opdex-change-indicator [value]="market.stakingToken.summary.dailyPriceChange" size="s" *ngIf="market.stakingToken.summary.dailyPriceChange !== null && market.stakingToken.summary.dailyPriceChange !== undefined"></opdex-change-indicator>
+                  </div>
+                </div>
+              </div>
+            </opdex-card>
+          </div>
+
+          <div class="col-12 col-sm-6">
+            <opdex-card [fullHeight]="true">
+              <div class="d-flex justify-content-around flex-column h-100">
+                <ng-container *ngFor="let statCard of statCards; let i = index">
+                  <div *ngIf="statCard.show" class="d-flex justify-content-between w-100">
+                    <div class="d-flex align-items-center">
+                      <opdex-help-button *ngIf="statCard.helpInfo" [info]="statCard.helpInfo" class="mr-2"></opdex-help-button>
+                      <span>{{statCard.title}} <small class="ml-2" *ngIf="statCard.daily">(24hr)</small></span>
+                    </div>
+
+                    <div class="d-flex align-items-center">
+                      <opdex-change-indicator [value]="statCard.change" size="s" *ngIf="statCard.change !== null && statCard.change !== undefined"></opdex-change-indicator>
+                      <span class="ml-2">{{statCard.prefix}}{{statCard.value | shortNumber }} <small class="ml-1">{{statCard.suffix}}</small></span>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </opdex-card>
+          </div>
+        </div>
+
+
         <opdex-card [noPadding]="true">
           <opdex-line-chart
             [chartData]="chartData"
@@ -45,7 +99,7 @@
 
       <!-- Todo: Do this with angular and *ngIf so we aren't rendering it in 2 places-->
       <div class="d-none d-lg-block col-lg-4">
-        <opdex-tx-feed [transactionRequest]="transactionRequest" size="s"></opdex-tx-feed>
+        <opdex-tx-feed [transactionRequest]="transactionRequest" size="m"></opdex-tx-feed>
       </div>
     </div>
 
