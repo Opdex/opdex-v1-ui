@@ -42,7 +42,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   ) {
     this.storageKey = 'public-keys';
     this.form = this._fb.group({
-      publicKey: ['', [Validators.required]],
+      publicKey: ['', [Validators.required, Validators.minLength(32), Validators.maxLength(36)]],
       rememberMe: [false]
     });
 

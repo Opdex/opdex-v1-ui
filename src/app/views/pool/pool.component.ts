@@ -62,19 +62,19 @@ export class PoolComponent implements OnInit, OnDestroy {
     {
       type: 'line',
       category: 'Staking',
-      suffix: 'ODX',
+      suffix: '',
       decimals: 2
     },
     {
       type: 'candle',
       category: 'SRC/CRS',
-      suffix: 'SRC',
+      suffix: 'CRS',
       decimals: 8
     },
     {
       type: 'candle',
       category: 'CRS/SRC',
-      suffix: 'CRS',
+      suffix: 'SRC',
       decimals: 8
     }
   ]
@@ -163,10 +163,16 @@ export class PoolComponent implements OnInit, OnDestroy {
             contracts: contracts,
             eventTypes: ['SwapEvent', 'StartStakingEvent', 'StopStakingEvent', 'CollectStakingRewardsEvent', 'StartMiningEvent', 'StopMiningEvent', 'AddLiquidityEvent', 'RemoveLiquidityEvent', 'CollectMiningRewardsEvent', 'EnableMiningEvent', 'NominationEvent',]
           };
+
           if (this.pool){
             this._gaService.pageView(this._route.routeConfig.path, `${this.pool.token.src.symbol}-CRS Liquidity Pool`)
             this._title.setTitle(`${this.pool.token.src.symbol}-CRS Liquidity Pool`);
             this.setPoolStatCards();
+
+            this.chartOptions.map(o => {
+              if (o.category === 'Staking') o.suffix = pool.token?.staking?.symbol;
+              return 0;
+            });
           }
         })
       );
@@ -286,7 +292,7 @@ export class PoolComponent implements OnInit, OnDestroy {
 
     if (context.wallet && this.pool) {
       const combo = [
-        this.getTokenBalance(context.wallet, 'CRS', this.pool?.token?.crs),
+        this.getTokenBalance(context.wallet, this.pool?.token?.crs?.address, this.pool?.token?.crs),
         this.getTokenBalance(context.wallet, this.pool?.token?.src?.address, this.pool?.token?.src),
         this.getTokenBalance(context.wallet, this.poolAddress, this.pool?.token?.lp),
       ];
@@ -325,6 +331,14 @@ export class PoolComponent implements OnInit, OnDestroy {
 
             if (o.category.includes('SRC')) {
               o.category = o.category.replace('SRC', this.pool.token.src.symbol);
+            }
+
+            if (o.suffix === 'CRS') {
+              o.suffix = this.pool.token.crs.symbol;
+            }
+
+            if (o.category.includes('CRS')) {
+              o.category = o.category.replace('CRS', this.pool.token.crs.symbol);
             }
 
             return o;
@@ -393,10 +407,10 @@ export class PoolComponent implements OnInit, OnDestroy {
       this.chartData = this.volumeHistory;
     } else if ($event === 'Staking') {
       this.chartData = this.stakingHistory;
-    } else if ($event === `CRS/${this.pool.token.src.symbol}`) {
-      this.chartData = this.crsPerSrcHistory;
-    } else if ($event === `${this.pool.token.src.symbol}/CRS`) {
+    } else if ($event === `${this.pool.token.crs.symbol}/${this.pool.token.src.symbol}`) {
       this.chartData = this.srcPerCrsHistory;
+    } else if ($event === `${this.pool.token.src.symbol}/${this.pool.token.crs.symbol}`) {
+      this.chartData = this.crsPerSrcHistory;
     }
   }
 

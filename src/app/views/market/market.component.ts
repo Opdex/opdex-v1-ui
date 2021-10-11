@@ -10,6 +10,7 @@ import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/l
 import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
 import { MarketsService } from '@sharedServices/platform/markets.service';
 import { TransactionView } from '@sharedModels/transaction-view';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'opdex-market',
@@ -45,7 +46,7 @@ export class MarketComponent implements OnInit {
     {
       type: 'line',
       category: 'Staking',
-      suffix: 'ODX',
+      suffix: '',
       decimals: 2
     }
   ];
@@ -82,20 +83,24 @@ export class MarketComponent implements OnInit {
       .pipe(tap(market => {
         this.market = market;
         this.setMarketStatCards();
+        this.chartOptions.map(o => {
+          if (o.category === 'Staking') o.suffix = this.market.stakingToken.symbol;
+          return 0;
+        });
       }));
   }
 
   private setMarketStatCards(): void {
     this.statCards = [
       {
-        title: 'Cirrus (CRS)',
+        title: `Cirrus (${this.market.crsToken.symbol})`,
         value: this.market.crsToken.summary.price.close,
         prefix: '$',
         change: this.market.crsToken.summary.dailyPriceChange,
         show: true,
         helpInfo: {
-          title: 'What is CRS?',
-          paragraph: 'CRS is the native token of Cirrus sidechain. CRS can be obtained through a Stratis cross chain transfer from STRAX to Cirrus at a 1:1 ratio. CRS are used as a base token in all liquidity pools as well as used for transactional gas costs.'
+          title: `What is ${this.market.crsToken.symbol}?`,
+          paragraph: `${this.market.crsToken.symbol} is the native token of the ${environment.network.toLowerCase()} Cirrus sidechain. ${this.market.crsToken.symbol} can be obtained through a Stratis cross chain transfer from STRAX to Cirrus at a 1:1 ratio. ${this.market.crsToken.symbol} are used as a base token in all liquidity pools as well as used for transactional gas costs.`
         }
       },
       {

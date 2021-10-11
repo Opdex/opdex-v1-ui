@@ -10,7 +10,7 @@
     </div>
 
     <div class="row">
-      <div class="col-12 col-xl-4">
+      <div class="col-12 col-lg-6 col-xl-4">
         <opdex-card [hasToolbar]="true">
           <ng-container toolbar>
             <div class="w-100 justify-content-between d-flex align-items-center">
@@ -21,7 +21,8 @@
 
           <div class="crs mb-2 d-flex flex-row justify-content-between align-items-center" *ngIf="crsBalance">
             <p class="big-balance">{{crsBalance.balance | shortNumber}} <small>CRS</small></p>
-            <p class="mb-0 positive-value">${{crsBalanceValue | shortNumber}}</p>
+            <!-- API bug returning zero - hiding until resolved -->
+            <!-- <p class="mb-0 positive-value">${{crsBalanceValue | shortNumber}}</p> -->
           </div>
 
           <div class="address overflow-ellipsis">
@@ -57,14 +58,14 @@
           </div>
         </opdex-card>
 
-        <opdex-tx-feed [transactionRequest]="transactionsRequest"></opdex-tx-feed>
+        <opdex-tx-feed class="desktop-tx-feed" [transactionRequest]="transactionsRequest"></opdex-tx-feed>
       </div>
 
-      <div class="col-12 col-xl-8">
+      <div class="col-12 col-lg-6 col-xl-8">
         <opdex-card [hasToolbar]="true">
           <ng-container toolbar>
             <div class="details">
-              <h4 class="title d-inline">Current Balances</h4>
+              <h4 class="mb-0 d-flex align-items-center"><mat-icon color="primary" class="mr-2">toll</mat-icon>Balances</h4>
             </div>
           </ng-container>
 
@@ -90,6 +91,10 @@
 
           <opdex-wallet-staking-positions-table [records]="stakingPositions" (onPageChange)="handleStakingPositionsPageChange($event)"></opdex-wallet-staking-positions-table>
         </opdex-card>
+      </div>
+
+      <div class="col-12 mobile-tx-feed">
+        <opdex-tx-feed [transactionRequest]="transactionsRequest"></opdex-tx-feed>
       </div>
     </div>
   </div>

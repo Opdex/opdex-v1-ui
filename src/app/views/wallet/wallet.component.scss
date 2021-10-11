@@ -14,3 +14,28 @@ h1 {
   }
 }
 
+.mobile-tx-feed {
+  display: block;
+}
+
+.desktop-tx-feed {
+  display: none;
+}
+
+@media (min-width: 320px) { }
+
+@media (min-width: 576px) { }
+
+@media (min-width: 768px) { }
+
+@media (min-width: 992px) { }
+
+@media (min-width: 1200px) {
+  .mobile-tx-feed {
+    display: none;
+  }
+
+  .desktop-tx-feed {
+    display: block;
+  }
+}

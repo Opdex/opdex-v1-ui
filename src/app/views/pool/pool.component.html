@@ -41,7 +41,7 @@
                   </div>
 
                   <div class="d-flex align-items-center mt-2">
-                    <mat-icon class="mr-2 tiny">swap_horiz</mat-icon>
+                    <mat-icon color="primary" class="mr-2 tiny">swap_horiz</mat-icon>
                     <h5 class="d-flex align-items-center mb-0">
                       <span style="font-weight: 400;">{{pool.cost.crsPerSrc.close | shortNumber }}</span>
                       <small class="ml-1">{{pool.token.crs.symbol}}</small>
@@ -49,7 +49,7 @@
                   </div>
 
                   <div class="d-flex align-items-center mt-2">
-                    <mat-icon class="mr-2 tiny">lock</mat-icon>
+                    <mat-icon color="primary" class="mr-2 tiny">lock</mat-icon>
                     <h5 class="d-flex align-items-center mb-0">
                       <span style="font-weight: 400;">{{pool.reserves.src | shortNumber}}</span>
                       <small class="ml-1">{{pool.token.src.symbol}}</small>
@@ -68,7 +68,7 @@
                   </div>
 
                   <div class="d-flex align-items-center mt-2">
-                    <mat-icon class="mr-2 tiny">swap_horiz</mat-icon>
+                    <mat-icon color="primary" class="mr-2 tiny">swap_horiz</mat-icon>
                     <h5 class="d-flex align-items-center mb-0">
                       <span style="font-weight: 400;">{{pool.cost.srcPerCrs.close | shortNumber}}</span>
                       <small class="ml-1">{{pool.token.src.symbol}}</small>
@@ -76,7 +76,7 @@
                   </div>
 
                   <div class="d-flex align-items-center mt-2">
-                    <mat-icon class="mr-2 tiny">lock</mat-icon>
+                    <mat-icon color="primary" class="mr-2 tiny">lock</mat-icon>
                     <h5 class="d-flex align-items-center mb-0">
                       <span style="font-weight: 400;">{{pool.reserves.crs | shortNumber}}</span>
                       <small class="ml-1">{{pool.token.crs.symbol}}</small>
@@ -98,8 +98,8 @@
                     </div>
 
                     <div class="d-flex align-items-center">
-                      <span>{{statCard.prefix}}{{statCard.value | shortNumber }} <small class="ml-1">{{statCard.suffix}}</small></span>
                       <opdex-change-indicator [value]="statCard.change" size="s" *ngIf="statCard.change !== null && statCard.change !== undefined"></opdex-change-indicator>
+                      <span class="ml-2">{{statCard.prefix}}{{statCard.value | shortNumber }} <small class="ml-1">{{statCard.suffix}}</small></span>
                     </div>
                   </div>
                 </ng-container>

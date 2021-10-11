@@ -15,5 +15,6 @@ export enum Icons {
     darkMoke = 'brightness_3',
     checkCircle = 'check_circle',
     check = 'check_circle',
-    close = 'close'
+    close = 'close',
+    tokens = 'toll'
 }

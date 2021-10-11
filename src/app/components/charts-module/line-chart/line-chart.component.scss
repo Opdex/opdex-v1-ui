@@ -23,19 +23,27 @@
     display: block;
   }
 
-  .button-group {
+  .mobile-menu {
+    display: block;
+  }
+
+  .desktop-menu {
     display: none;
 
-    button {
-      min-width: 0px;
-      padding: 0px 10px !important;
+    &.button-group {
+      button {
+        min-width: 0px;
+        padding: 0px 10px !important;
 
-      &:not(:last-of-type) {
-        margin-right: 5px;
+        &:not(:last-of-type) {
+          margin-right: 5px;
+        }
       }
     }
   }
 }
+
+
 
 
 @media (min-width: 320px) { }
@@ -46,7 +54,11 @@
 
 @media (min-width: 992px) {
   .chart-toolbar {
-    .button-group {
+    .mobile-menu {
+      display: none;
+    }
+
+    .desktop-menu {
       display: block;
     }
 

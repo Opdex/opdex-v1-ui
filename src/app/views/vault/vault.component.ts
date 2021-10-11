@@ -25,7 +25,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       suffix: 'XYZ',
       helpInfo: {
         title: 'Locked Tokens',
-        paragraph: 'THe locked tokens indicator displays how many governance tokens are currently locked within the vault contract. As certificates are redeemed and tokens are collected, the supply will be reduced accordingly.'
+        paragraph: 'The locked tokens indicator displays how many governance tokens are currently locked within the vault contract. As certificates are redeemed and tokens are collected, the supply will be reduced accordingly.'
       },
       show: true
     },

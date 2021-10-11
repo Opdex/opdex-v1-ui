@@ -1,7 +1,7 @@
 <div class="chart-toolbar">
   <div class="details">
     <a mat-button [matMenuTriggerFor]="menu">
-      <h4 class="title d-inline" >{{title}}</h4> <mat-icon class="ml-2">arrow_drop_down</mat-icon>
+      <h4 class="title d-inline">{{title}}</h4> <mat-icon class="ml-2">arrow_drop_down</mat-icon>
     </a>
 
     <mat-menu #menu="matMenu">
@@ -11,12 +11,25 @@
     <h4 class="d-inline mb-0">{{value}}</h4>
   </div>
 
-  <div class="button-group" *ngIf="showTimeSpans">
-    <button mat-stroked-button class="small mr-1 pl-1 pr-1" (click)="timeChange('1D')">1D</button>
-    <button mat-stroked-button class="small mr-1 pl-1 pr-1" (click)="timeChange('1W')">1W</button>
-    <button mat-stroked-button class="small mr-1 pl-1 pr-1" (click)="timeChange('1M')">1M</button>
-    <button mat-stroked-button class="small pl-1 pr-1" (click)="timeChange('1Y')">1Y</button>
-  </div>
+  <ng-container *ngIf="showTimeSpans">
+    <div class="button-group desktop-menu" >
+      <button mat-stroked-button class="small mr-1 pl-1 pr-1" (click)="timeChange('1D')">1D</button>
+      <button mat-stroked-button class="small mr-1 pl-1 pr-1" (click)="timeChange('1W')">1W</button>
+      <button mat-stroked-button class="small mr-1 pl-1 pr-1" (click)="timeChange('1M')">1M</button>
+      <button mat-stroked-button class="small pl-1 pr-1" (click)="timeChange('1Y')">1Y</button>
+    </div>
+
+    <button mat-icon-button color="primary" class="small mobile-menu" [matMenuTriggerFor]="timeSpanMenu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #timeSpanMenu="matMenu" xPosition="before" class="w-100">
+      <button mat-menu-item class="small" (click)="timeChange('1D')">1 Day</button>
+      <button mat-menu-item class="small" (click)="timeChange('1W')">1 Week</button>
+      <button mat-menu-item class="small" (click)="timeChange('1M')">1 Month</button>
+      <button mat-menu-item class="small" (click)="timeChange('1Y')">1 Year</button>
+    </mat-menu>
+  </ng-container>
 </div>
 
 <div class="chart-wrapper">
