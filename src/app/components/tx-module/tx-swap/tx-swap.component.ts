@@ -272,7 +272,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   }
 
   amountQuote(value: string): Observable<string> {
-    if (!value || value.replace('0', '') === '.' || !value.includes('.')) {
+    if (!value || value.replace('0', '') === '.') {
       return of('0');
     }
 
