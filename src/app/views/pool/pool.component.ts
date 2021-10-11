@@ -165,8 +165,8 @@ export class PoolComponent implements OnInit, OnDestroy {
           };
 
           if (this.pool){
-            this._gaService.pageView(this._route.routeConfig.path, `${this.pool.token.src.symbol}-CRS Liquidity Pool`)
-            this._title.setTitle(`${this.pool.token.src.symbol}-CRS Liquidity Pool`);
+            this._gaService.pageView(this._route.routeConfig.path, `${this.pool.token.src.symbol}-${this.pool.token.crs.symbol} Liquidity Pool`)
+            this._title.setTitle(`${this.pool.token.src.symbol}-${this.pool.token.crs.symbol} Liquidity Pool`);
             this.setPoolStatCards();
 
             this.chartOptions.map(o => {

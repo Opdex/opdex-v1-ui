@@ -8,6 +8,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Observable, Subscription, interval, of } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 
 @Component({
   selector: 'opdex-token',
@@ -142,6 +143,11 @@ export class TokenComponent implements OnInit {
           this.priceHistory = priceHistory;
           this.candleHistory = candleHistory;
 
+          // Temporary fix for CRS pricing coming back as 0
+          const tokenPrice = new FixedDecimal(this.token.summary.price.close, this.token.decimals);
+          if (tokenPrice.isZero) {
+            this.token.summary.price.close = priceHistory[priceHistory.length - 1].value;
+          }
 
           this.handleChartTypeChange(this.selectedChart.category);
         })
