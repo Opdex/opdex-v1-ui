@@ -59,8 +59,8 @@
 
       <div class="paginator">
         <div class="d-flex justify-content-center">
-          <button mat-icon-button [disabled]="!transactionRequest.previous" (click)="pageChange(transactionRequest.previous)"><mat-icon>arrow_back</mat-icon></button>
-          <button mat-icon-button [disabled]="!transactionRequest.next" (click)="pageChange(transactionRequest.next)"><mat-icon>arrow_forward</mat-icon></button>
+          <button mat-icon-button [disabled]="!previousPage" (click)="previous()"><mat-icon>arrow_back</mat-icon></button>
+          <button mat-icon-button [disabled]="!nextPage" (click)="next()"><mat-icon>arrow_forward</mat-icon></button>
         </div>
       </div>
     </ng-container>

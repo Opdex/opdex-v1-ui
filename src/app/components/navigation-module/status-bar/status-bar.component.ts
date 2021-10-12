@@ -1,11 +1,10 @@
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
+import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
 import { ThemeService } from '@sharedServices/utility/theme.service';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { BugReportModalComponent } from '@sharedComponents/modals-module/bug-report-modal/bug-report-modal.component';
-import { Observable, timer } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { environment } from '@environments/environment';
 
 @Component({
@@ -23,9 +22,9 @@ export class StatusBarComponent {
   constructor(
     public dialog: MatDialog,
     private _theme: ThemeService,
-    private _api: PlatformApiService
+    private _blocksService: BlocksService
   ) {
-    this.latestSyncedBlock$ = timer(0,8000).pipe(switchMap(_ => this._api.getLatestSyncedBlock()));
+    this.latestSyncedBlock$ = this._blocksService.getLatestBlock$();
     this.theme$ = this._theme.getTheme();
     this.network = environment.network;
   }

@@ -26,7 +26,7 @@ export class RestApiService {
 
           return err.pipe(
             // only retry 5xx errors
-            mergeMap((error) => (error.status < 500) ? throwError(error) : of(error)),
+            mergeMap((error) => (error.status < 500 && error.status !== 401) ? throwError(error) : of(error)),
             delay(1000),
             map(error => {
               if (retries++ === 2) {

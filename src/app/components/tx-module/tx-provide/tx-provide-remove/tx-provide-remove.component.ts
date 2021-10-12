@@ -1,3 +1,4 @@
+import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
@@ -54,7 +55,8 @@ export class TxProvideRemoveComponent extends TxBase {
     private _platformApi: PlatformApiService,
     protected _userContext: UserContextService,
     protected _bottomSheet: MatBottomSheet,
-    private _math: MathService
+    private _math: MathService,
+    private _blocksService: BlocksService,
   ) {
     super(_userContext, _dialog, _bottomSheet);
 
@@ -79,10 +81,7 @@ export class TxProvideRemoveComponent extends TxBase {
         switchMap(amount => this.getAllowance$(amount)))
         .subscribe();
 
-      this.latestSyncedBlock$ = timer(0,8000)
-        .pipe(
-          switchMap(_ => this._platformApi.getLatestSyncedBlock()),
-          tap(block => this.latestBlock = block.height)).subscribe();
+      this.latestSyncedBlock$ = this._blocksService.getLatestBlock$().subscribe(block => this.latestBlock = block?.height);
   }
 
   getAllowance$(amount?: string):Observable<any> {

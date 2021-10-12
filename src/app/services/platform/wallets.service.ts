@@ -1,16 +1,16 @@
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { CacheService } from '@sharedServices/utility/cache.service';
 import { Observable } from 'rxjs';
 import { IAddressBalance, IAddressBalances } from '@sharedModels/platform-api/responses/wallets/address-balance.interface';
 import { IAddressStaking, IAddressStakingPositions } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { IAddressMining, IAddressMiningPositions } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
+import { BlocksService } from './blocks.service';
 
 @Injectable({ providedIn: 'root' })
 export class WalletsService extends CacheService {
-
-  constructor(private _platformApi: PlatformApiService) {
-    super();
+  constructor(private _platformApi: PlatformApiService, protected _injector: Injector) {
+    super(_injector);
   }
 
   getBalance(wallet: string, token: string): Observable<IAddressBalance> {

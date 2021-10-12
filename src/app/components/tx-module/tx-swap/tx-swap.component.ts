@@ -1,3 +1,4 @@
+import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
@@ -78,7 +79,8 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     private _math: MathService,
     protected _dialog: MatDialog,
     protected _userContext: UserContextService,
-    protected _bottomSheet: MatBottomSheet
+    protected _bottomSheet: MatBottomSheet,
+    private _blocksService: BlocksService
   ) {
     super(_userContext, _dialog, _bottomSheet);
 
@@ -123,10 +125,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
         switchMap(() => this.validateAllowance())
       ).subscribe();
 
-      this.latestSyncedBlock$ = timer(0,8000)
-        .pipe(
-          switchMap(_ => this._platformApi.getLatestSyncedBlock()),
-          tap(block => this.latestBlock = block.height)).subscribe();
+      this.latestSyncedBlock$ = this._blocksService.getLatestBlock$().subscribe(block => this.latestBlock = block?.height);
 
       this.tokens$ = this._platformApi
         .getTokens()

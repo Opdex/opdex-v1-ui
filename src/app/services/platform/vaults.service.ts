@@ -1,5 +1,5 @@
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { CacheService } from '@sharedServices/utility/cache.service';
 import { environment } from '@environments/environment';
 import { Observable } from 'rxjs';
@@ -8,8 +8,8 @@ import { Observable } from 'rxjs';
 export class VaultsService extends CacheService {
   private vaultAddress = environment.vaultAddress;
 
-  constructor(private _platformApi: PlatformApiService) {
-    super();
+  constructor(private _platformApi: PlatformApiService, protected _injector: Injector) {
+    super(_injector);
   }
 
   getVault(): Observable<any> {
