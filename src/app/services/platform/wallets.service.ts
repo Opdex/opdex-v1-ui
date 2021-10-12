@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { IAddressBalance, IAddressBalances } from '@sharedModels/platform-api/responses/wallets/address-balance.interface';
 import { IAddressStaking, IAddressStakingPositions } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { IAddressMining, IAddressMiningPositions } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
-import { BlocksService } from './blocks.service';
 
 @Injectable({ providedIn: 'root' })
 export class WalletsService extends CacheService {

@@ -58,7 +58,6 @@ export class TxFeedComponent implements OnChanges, OnDestroy {
   next() {
     this.transactionRequest.next = this.nextPage;
     this.transactionRequest.previous = null;
-    console.log(this.transactionRequest)
     this.getTransactions();
   }
 

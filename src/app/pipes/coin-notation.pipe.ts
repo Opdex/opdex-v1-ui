@@ -1,6 +1,5 @@
 import { FixedDecimal } from './../models/types/fixed-decimal';
 import { Pipe, PipeTransform } from '@angular/core';
-import { TokensService } from '@sharedServices/platform/tokens.service';
 
 @Pipe({
   name: 'coinNotation'
@@ -8,7 +7,6 @@ import { TokensService } from '@sharedServices/platform/tokens.service';
 export class CoinNotationPipe implements PipeTransform {
   transform(value: number, decimals: number = 8): number | string {
     var valueString = value.toString().padStart(decimals, '0');
-    console.log(valueString);
 
     if (valueString.length === decimals) {
       valueString = `0.${valueString}`;

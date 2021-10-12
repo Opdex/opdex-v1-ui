@@ -38,7 +38,7 @@ export class WalletComponent implements OnInit {
     private _platform: PlatformApiService,
     private _tokensService: TokensService,
     private _liquidityPoolService: LiquidityPoolsService,
-    private _walletsService: WalletsService, // No in use until we have cache busting
+    private _walletsService: WalletsService,
     private _router: Router,
     private _math: MathService,
     private _theme: ThemeService

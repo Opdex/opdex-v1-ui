@@ -58,10 +58,7 @@ export class AppComponent implements OnInit {
     this.context = this._context.getUserContext();
     this.subscription.add(
       this._api.auth(environment.marketAddress, this.context?.wallet)
-        .pipe(
-          tap(jwt => this._context.setToken(jwt)),
-          tap(_ => console.log(this.context)))
-        .subscribe());
+        .subscribe(jwt => this._context.setToken(jwt)));
 
     this._breakpointObserver
       .observe(['(max-width: 1919px)'])
