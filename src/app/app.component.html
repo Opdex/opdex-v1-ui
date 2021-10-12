@@ -1,4 +1,4 @@
-<main [ngClass]="theme" *ngIf="context$ | async as context">
+<main [ngClass]="theme" [hidden]="context">
   <mat-sidenav-container (backdropClick)="closeSidenav()" class="w-100 h-100">
     <mat-sidenav #sidenav (keydown.escape)="closeSidenav()" position="end" class="transaction-sidebar" [fixedInViewport]="true" [fixedTopGap]="0" [fixedBottomGap]="0" [mode]="sidenavMode">
       <div class="sidebar-container">
@@ -64,7 +64,7 @@
           <opdex-side-nav (onPinnedToggle)="handlePinnedToggle($event)"></opdex-side-nav>
         </aside>
 
-        <div class="animation-container" style="min-height: 100vh;"  [@fadeAnimation]="prepareRoute(outlet)">
+        <div class="animation-container" style="min-height: 100vh;">
           <div id="page-content">
             <opdex-status-bar [menuOpen]="menuOpen" (onMenuToggle)="toggleMenu($event)"></opdex-status-bar>
 
@@ -72,7 +72,7 @@
               <opdex-side-nav (onRouteChanged)="handleRouteChanged($event)"></opdex-side-nav>
             </div>
 
-            <div class="page-content-container">
+            <div class="page-content-container"  [@fadeAnimation]="prepareRoute(outlet)">
               <router-outlet #outlet="outlet"></router-outlet>
             </div>
 

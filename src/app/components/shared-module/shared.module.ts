@@ -1,4 +1,4 @@
-import { SharedPipesModule } from './../../pipes/shared-pipes.module';
+import { SharedPipesModule } from '@sharedPipes/shared-pipes.module';
 // Angular Core Imports
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';

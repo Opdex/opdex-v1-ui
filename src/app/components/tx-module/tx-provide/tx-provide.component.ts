@@ -1,4 +1,4 @@
-import { TransactionView } from '../../../models/transaction-view';
+import { TransactionView } from '@sharedModels/transaction-view';
 import { Component, Input, OnChanges } from '@angular/core';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 

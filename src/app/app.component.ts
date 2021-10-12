@@ -68,7 +68,7 @@ export class AppComponent implements OnInit {
     this.subscription.add(
       this._api.auth(environment.marketAddress, this.context?.wallet)
         .subscribe(jwt => this._context.setToken(jwt)));
-        
+
     this.subscription.add(
       this.router.events.pipe(
         filter(event => event instanceof RoutesRecognized),
@@ -79,10 +79,10 @@ export class AppComponent implements OnInit {
         if (route.title) {
           this._title.setTitle(route.title);
           this.gaService.pageView(route.path, route.title)
-        }    
+        }
       })
     )
-    
+
 
     this._theme.getTheme().subscribe(theme => this.setTheme(theme));
 

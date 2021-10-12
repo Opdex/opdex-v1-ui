@@ -2,7 +2,7 @@ import { environment } from '@environments/environment';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
 import { TokensService } from '@sharedServices/platform/tokens.service';
-import { VaultsService } from './../../services/platform/vaults.service';
+import { VaultsService } from '@sharedServices/platform/vaults.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
 import { tap, switchMap, take } from 'rxjs/operators';

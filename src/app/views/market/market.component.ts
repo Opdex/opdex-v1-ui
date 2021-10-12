@@ -11,7 +11,6 @@ import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/l
 import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
 import { MarketsService } from '@sharedServices/platform/markets.service';
 import { TransactionView } from '@sharedModels/transaction-view';
-import { environment } from '@environments/environment';
 
 @Component({
   selector: 'opdex-market',

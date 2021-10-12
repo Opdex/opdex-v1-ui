@@ -1,4 +1,4 @@
-import { IAddressMiningPositions } from '../../models/platform-api/responses/wallets/address-mining.interface';
+import { IAddressMiningPositions } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
 import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { IAddressStaking, IAddressStakingPositions } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';

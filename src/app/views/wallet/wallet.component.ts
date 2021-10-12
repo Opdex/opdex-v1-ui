@@ -1,7 +1,7 @@
 import { ThemeService } from '@sharedServices/utility/theme.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
-import { IAddressBalance } from '../../models/platform-api/responses/wallets/address-balance.interface';
+import { IAddressBalance } from '@sharedModels/platform-api/responses/wallets/address-balance.interface';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { environment } from '@environments/environment';

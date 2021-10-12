@@ -28,7 +28,7 @@
                 <div class="{{market.stakingToken ? 'col-6' : 'col-12' }}">
                   <p class="mb-0 light d-flex align-items-center">
                     <opdex-copy-button [tooltip]="market.crsToken.address" [value]="market.crsToken.address" icon="link" [size]="iconSizes.small"></opdex-copy-button>
-                    <span class="ml-2">{{market.crsToken.name}}</span>
+                    <span class="ml-2 overflow-ellipsis">{{market.crsToken.name}}</span>
                   </p>
 
                   <a class="body-default no-decoration d-flex align-items-center" routerLink="/tokens/{{market.crsToken.address}}" matTooltip="Market Anchor Token">
@@ -45,7 +45,7 @@
                 <div class="col-6" *ngIf="market.stakingToken">
                   <p class="mb-0 light d-flex align-items-center">
                     <opdex-copy-button [tooltip]="market.stakingToken.address" [value]="market.stakingToken.address" icon="link" [size]="iconSizes.small"></opdex-copy-button>
-                    <span class="ml-2">{{market.stakingToken.name}}</span>
+                    <span class="ml-2 overflow-ellipsis">{{market.stakingToken.name}}</span>
                   </p>
 
                   <a class="body-default no-decoration d-flex align-items-center" routerLink="/tokens/{{market.stakingToken.address}}" matTooltip="Market Staking Token">

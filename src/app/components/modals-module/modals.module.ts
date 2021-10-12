@@ -1,5 +1,5 @@
 import { SharedModule } from '@sharedComponents/shared-module/shared.module';
-import { SharedPipesModule } from './../../pipes/shared-pipes.module';
+import { SharedPipesModule } from '@sharedPipes/shared-pipes.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';

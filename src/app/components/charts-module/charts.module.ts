@@ -1,3 +1,4 @@
+import { SharedPipesModule } from '@sharedPipes/shared-pipes.module';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -18,7 +19,8 @@ import { AngularResizedEventModule } from 'angular-resize-event';
     AngularResizedEventModule,
     MatMenuModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    SharedPipesModule
   ],
   exports: [
     LineChartComponent,

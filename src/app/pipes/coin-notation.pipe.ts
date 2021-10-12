@@ -13,7 +13,7 @@ export class CoinNotationPipe implements PipeTransform {
     if (typeof value === 'string') {
       let bigint = BigInt(value);
       var satsPerToken = this._tokenService.getSats(decimals);
-      temp = parseFloat((bigint / BigInt(satsPerToken)).toString());
+      temp = parseFloat((bigint / satsPerToken).toString());
 
       return fixed ? temp.toFixed(decimals) || 0 : this.numberWithCommas(temp);
     }
@@ -21,7 +21,7 @@ export class CoinNotationPipe implements PipeTransform {
 
     if (typeof value === 'number') {
       var satsPerToken = this._tokenService.getSats(decimals);
-      temp = value / satsPerToken;
+      temp = parseFloat((BigInt(value) / satsPerToken).toString());
       return fixed ? temp?.toFixed(decimals) || 0 : this.numberWithCommas(temp);
     }
 

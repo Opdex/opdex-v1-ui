@@ -1,6 +1,6 @@
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
-import { SharedPipesModule } from './../../pipes/shared-pipes.module';
+import { SharedPipesModule } from '@sharedPipes/shared-pipes.module';
 import { CardsModule } from '@sharedComponents/cards-module/cards.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
