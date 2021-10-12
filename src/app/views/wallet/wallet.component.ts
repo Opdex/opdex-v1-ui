@@ -31,13 +31,14 @@ export class WalletComponent implements OnInit {
   crsBalance: IAddressBalance;
   crsBalanceValue: string;
   showPreferences: boolean;
+  block = 1;
 
   constructor(
     private _context: UserContextService,
     private _platform: PlatformApiService,
     private _tokensService: TokensService,
     private _liquidityPoolService: LiquidityPoolsService,
-    private _WalletsService: WalletsService,
+    private _walletsService: WalletsService,
     private _router: Router,
     private _math: MathService,
     private _theme: ThemeService
@@ -47,7 +48,7 @@ export class WalletComponent implements OnInit {
     this.getMiningPositions(10);
     this.getStakingPositions(10);
 
-    this._WalletsService.getBalance(this.wallet.wallet, 'CRS')
+    this._walletsService.getBalance(this.wallet.wallet, 'CRS')
       .pipe(
         tap(crsBalance => this.crsBalance = crsBalance),
         switchMap(crsBalance => this._tokensService.getToken(crsBalance.token)),
@@ -92,7 +93,7 @@ export class WalletComponent implements OnInit {
   }
 
   getMiningPositions(limit?: number, cursor?: string) {
-    this._WalletsService.getMiningPositions(this.wallet.wallet, limit, cursor)
+    this._walletsService.getMiningPositions(this.wallet.wallet, limit, cursor)
       .pipe(
         switchMap(response => {
           const positions$: Observable<IAddressMining>[] = [];
@@ -116,7 +117,7 @@ export class WalletComponent implements OnInit {
   }
 
   getStakingPositions(limit?: number, cursor?: string) {
-    this._WalletsService.getStakingPositions(this.wallet.wallet, limit, cursor)
+    this._walletsService.getStakingPositions(this.wallet.wallet, limit, cursor)
       .pipe(
         switchMap(response => {
           const positions$: Observable<IAddressStaking>[] = [];
@@ -140,7 +141,7 @@ export class WalletComponent implements OnInit {
   }
 
   getWalletBalances(limit?: number, cursor?: string) {
-    this._WalletsService.getWalletBalances(this.wallet.wallet, limit, cursor)
+    this._walletsService.getWalletBalances(this.wallet.wallet, limit, cursor)
       .pipe(
         switchMap(response => {
           const balances$: Observable<IToken>[] = [];

@@ -218,10 +218,6 @@ export class MarketComponent implements OnInit {
           const tokens$: Observable<any>[] = [];
 
           tokens.forEach(token => {
-            if (this.tokens) {
-              this._tokensService.refreshTokenHistory(token.address, '1W', 'Hourly');
-            }
-
             const tokenWithHistory$: Observable<any> = this.getTokenHistory(token);
             tokens$.push(tokenWithHistory$);
           });

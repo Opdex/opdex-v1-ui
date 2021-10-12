@@ -1,3 +1,4 @@
+import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { DecimalStringRegex } from '@sharedLookups/regex';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -60,7 +61,8 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     private _platformApi: PlatformApiService,
     protected _userContext: UserContextService,
     protected _bottomSheet: MatBottomSheet,
-    private _math: MathService
+    private _math: MathService,
+    private _blocksService: BlocksService
   ) {
     super(_userContext, _dialog, _bottomSheet);
 
@@ -116,10 +118,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
           switchMap(_ => this.getAllowance$()))
         .subscribe());
 
-      this.latestSyncedBlock$ = timer(0,8000)
-        .pipe(
-          switchMap(_ => this._platformApi.getLatestSyncedBlock()),
-          tap(block => this.latestBlock = block.height)).subscribe();
+      this.latestSyncedBlock$ = this._blocksService.getLatestBlock$().subscribe(block => this.latestBlock = block?.height);
   }
 
   getAllowance$():Observable<AllowanceValidation> {

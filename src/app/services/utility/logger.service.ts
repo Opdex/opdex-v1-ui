@@ -21,8 +21,6 @@ export class LoggerService {
   public silly = (data: any) => this._log('silly', data);
 
   private _log(level: string, data: string, notify = false) {
-    console.log(data);
-
     if (notify) {
       this._notifications.alert(new Notification('Error', data));
     }

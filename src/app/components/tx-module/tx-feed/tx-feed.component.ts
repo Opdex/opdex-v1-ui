@@ -1,9 +1,11 @@
+import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { tap } from 'rxjs/operators';
 import { TransactionReceipt } from '@sharedModels/transaction';
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
 import { ITransactionsRequest, TransactionRequest } from '@sharedModels/platform-api/requests/transactions-filter';
 import { ITransactionReceipts } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
 import { map, take } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { TransactionsService } from '@sharedServices/platform/transactions.service';
 
@@ -12,24 +14,27 @@ import { TransactionsService } from '@sharedServices/platform/transactions.servi
   templateUrl: './tx-feed.component.html',
   styleUrls: ['./tx-feed.component.scss']
 })
-export class TxFeedComponent implements OnChanges {
+export class TxFeedComponent implements OnChanges, OnDestroy {
   @Input() transactionRequest: ITransactionsRequest;
   @Input() size: 's' | 'm' | 'l';
   transactions: ITransactionReceipts;
   copied: boolean;
   transactions$: Observable<TransactionReceipt[]>;
   iconSizes = IconSizes;
+  nextPage: string;
+  previousPage: string;
+  subscription = new Subscription();
 
-  constructor(private _transactionsService: TransactionsService) { }
+  constructor(private _transactionsService: TransactionsService, private _blocksService: BlocksService) { }
 
   ngOnChanges(): void {
     if (this.transactionRequest && !this.transactions$) {
-      this.transactions$ = this.getTransactions();
+      this.subscription.add(this._blocksService.getLatestBlock$().pipe(tap(_ => this.getTransactions())).subscribe());
     }
   }
 
-  getTransactions(): Observable<TransactionReceipt[]> {
-    return this._transactionsService.getTransactions(new TransactionRequest(this.transactionRequest))
+  getTransactions(): void {
+    this.transactions$ = this._transactionsService.getTransactions(new TransactionRequest(this.transactionRequest))
       .pipe(
         take(1),
         // Filter transactions
@@ -42,22 +47,24 @@ export class TxFeedComponent implements OnChanges {
               .filter(tx => tx.events.length >= 1);
 
           // Set next/previous pages
-          this.transactionRequest.next = transactionsResponse.paging.next;
-          this.transactionRequest.previous = transactionsResponse.paging.previous;
+          this.nextPage = transactionsResponse.paging.next;
+          this.previousPage = transactionsResponse.paging.previous;
 
           return receipts;
         })
       );
   }
 
-  pageChange(cursor: string) {
-    if (this.transactionRequest.next === cursor) {
-      this.transactionRequest.previous = null;
-    } else {
-      this.transactionRequest.next = null;
-    }
+  next() {
+    this.transactionRequest.next = this.nextPage;
+    this.transactionRequest.previous = null;
+    this.getTransactions();
+  }
 
-    this.transactions$ = this.getTransactions();
+  previous() {
+    this.transactionRequest.previous = this.previousPage;
+    this.transactionRequest.next = null;
+    this.getTransactions();
   }
 
   public transactionsTrackBy(index: number, transaction: any) {
@@ -74,5 +81,9 @@ export class TxFeedComponent implements OnChanges {
     setTimeout(() => {
       this.copied = false;
     }, 1000);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
