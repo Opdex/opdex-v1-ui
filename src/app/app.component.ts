@@ -91,6 +91,8 @@ export class AppComponent implements OnInit {
   }
 
   private setTheme(theme: string): void {
+    if (theme === this.theme) return;
+
     const overlayClassList = this.overlayContainer.getContainerElement().classList;
     overlayClassList.add(theme);
 
