@@ -1,10 +1,8 @@
-import { UserContextService } from '@sharedServices/utility/user-context.service';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { ReviewQuoteComponent } from './../shared/review-quote/review-quote.component';
+import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { take, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { Component, Input } from '@angular/core';
+import { Component, Input, Injector } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { Icons } from 'src/app/enums/icons';
@@ -16,7 +14,7 @@ import { ITransactionQuote } from '@sharedModels/platform-api/responses/transact
   templateUrl: './tx-create-pool.component.html',
   styleUrls: ['./tx-create-pool.component.scss']
 })
-export class TxCreatePoolComponent {
+export class TxCreatePoolComponent extends TxBase {
   @Input() data: any;
   view = TransactionView.createPool;
   form: FormGroup;
@@ -32,9 +30,10 @@ export class TxCreatePoolComponent {
   constructor(
     private _fb: FormBuilder,
     private _platform: PlatformApiService,
-    private _bottomSheet: MatBottomSheet,
-    private _context: UserContextService
+    protected _injector: Injector
   ) {
+    super(_injector);
+
     this.form = this._fb.group({
       token: ['', [Validators.required]]
     });
@@ -46,8 +45,6 @@ export class TxCreatePoolComponent {
           // todo: Should validate the token
         })
       );
-
-    this.context = this._context.getUserContext();
   }
 
   submit() {
@@ -58,10 +55,14 @@ export class TxCreatePoolComponent {
     this._platform
       .createLiquidityPool(payload)
         .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => {
-          this._bottomSheet.open(ReviewQuoteComponent, {
-            data: quote
-          });
-        });
+        .subscribe((quote: ITransactionQuote) => this.quote(quote));
+  }
+
+  destroyContext$() {
+    this.context$.unsubscribe();
+  }
+
+  ngOnDestroy() {
+    this.destroyContext$();
   }
 }

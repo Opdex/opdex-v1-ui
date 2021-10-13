@@ -1,20 +1,17 @@
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { DecimalStringRegex } from '@sharedLookups/regex';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { environment } from '@environments/environment';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Observable, throwError, timer } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, switchMap, tap, catchError, take, filter } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
 import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
@@ -57,14 +54,12 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
 
   constructor(
     private _fb: FormBuilder,
-    protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
-    protected _userContext: UserContextService,
-    protected _bottomSheet: MatBottomSheet,
+    protected _injector: Injector,
     private _math: MathService,
     private _blocksService: BlocksService
   ) {
-    super(_userContext, _dialog, _bottomSheet);
+    super(_injector);
 
     if (this.context?.preferences?.deadlineThreshold) {
       this.deadlineThreshold = this.context.preferences.deadlineThreshold;
@@ -217,7 +212,12 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
       .subscribe();
   }
 
+  destroyContext$() {
+    this.context$.unsubscribe();
+  }
+
   ngOnDestroy() {
+    this.destroyContext$();
     this.subscription.unsubscribe();
     if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
     if (this.latestSyncedBlock$) this.latestSyncedBlock$.unsubscribe();

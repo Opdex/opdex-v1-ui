@@ -1,9 +1,9 @@
 <button
   mat-icon-button
-  color="primary"
-  class="tiny"
+  class="tiny d-flex align-items-center"
   (click)="openHelp()"
   type="button"
+  color="primary"
   [matTooltip]="info.title">
-  <mat-icon>help</mat-icon>
+  <mat-icon class="{{iconColor}}">{{ icon ? icon : icons.help }}</mat-icon>
 </button>

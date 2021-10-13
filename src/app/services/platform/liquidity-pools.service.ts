@@ -11,8 +11,8 @@ export class LiquidityPoolsService extends CacheService {
     super(_injector);
   }
 
-  getLiquidityPool(address: string): Observable<ILiquidityPoolSummary> {
-    return this.getItem(address, this._platformApi.getPool(address));
+  getLiquidityPool(address: string, cacheOnly?: boolean): Observable<ILiquidityPoolSummary> {
+    return this.getItem(address, this._platformApi.getPool(address), cacheOnly);
   }
 
   getLiquidityPoolHistory(address: string, timeSpan: string = '1Y'): Observable<ILiquidityPoolSnapshotHistory> {

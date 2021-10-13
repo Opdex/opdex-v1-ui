@@ -18,10 +18,10 @@ export abstract class TxEventBaseComponent {
   }
 
   getLiquidityPool$(address: string): Observable<ILiquidityPoolSummary> {
-    return this._liquidityPoolsService.getLiquidityPool(address);
+    return this._liquidityPoolsService.getLiquidityPool(address, true);
   }
 
   getToken$(address: string): Observable<IToken> {
-    return this._tokensService.getToken(address);
+    return this._tokensService.getToken(address, true);
   }
 }

@@ -1,18 +1,15 @@
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
-import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { environment } from '@environments/environment';
-import { Component, Input } from '@angular/core';
+import { Component, Input, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { switchMap, map, take, filter, debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { Observable, Subscription, timer } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
 import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
@@ -51,14 +48,12 @@ export class TxProvideRemoveComponent extends TxBase {
 
   constructor(
     private _fb: FormBuilder,
-    protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
-    protected _userContext: UserContextService,
-    protected _bottomSheet: MatBottomSheet,
+    protected _injector: Injector,
     private _math: MathService,
     private _blocksService: BlocksService,
   ) {
-    super(_userContext, _dialog, _bottomSheet);
+    super(_injector);
 
     if (this.context?.preferences?.deadlineThreshold) {
       this.deadlineThreshold = this.context.preferences.deadlineThreshold;
@@ -176,7 +171,12 @@ export class TxProvideRemoveComponent extends TxBase {
     return blocks + this.latestBlock;
   }
 
+  destroyContext$() {
+    this.context$.unsubscribe();
+  }
+
   ngOnDestroy() {
+    this.destroyContext$();
     if (this.allowance$) this.allowance$.unsubscribe();
     if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
     if (this.latestSyncedBlock$) this.latestSyncedBlock$.unsubscribe();

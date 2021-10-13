@@ -1,15 +1,12 @@
 import { MathService } from '@sharedServices/utility/math.service';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Subscription, timer } from 'rxjs';
 import { debounceTime, map, switchMap, take, distinctUntilChanged, tap } from 'rxjs/operators';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
 import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
@@ -38,13 +35,11 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
 
   constructor(
     private _fb: FormBuilder,
-    protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
-    protected _userContext: UserContextService,
-    protected _bottomSheet: MatBottomSheet,
-    private _math: MathService
+    private _math: MathService,
+    protected _injector: Injector
   ) {
-    super(_userContext, _dialog, _bottomSheet);
+    super(_injector);
 
     this.form = this._fb.group({
       amount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]]
@@ -107,7 +102,12 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
         .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }
 
+  destroyContext$() {
+    this.context$.unsubscribe();
+  }
+
   ngOnDestroy() {
+    this.destroyContext$();
     if (this.allowance$) this.allowance$.unsubscribe();
     if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
   }

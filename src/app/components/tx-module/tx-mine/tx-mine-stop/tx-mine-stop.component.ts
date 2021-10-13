@@ -1,7 +1,7 @@
 import { MathService } from '@sharedServices/utility/math.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
-import { OnChanges, OnDestroy } from '@angular/core';
+import { Injector, OnChanges, OnDestroy } from '@angular/core';
 import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -34,13 +34,11 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
 
   constructor(
     private _fb: FormBuilder,
-    protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
-    protected _userContext: UserContextService,
-    protected _bottomSheet: MatBottomSheet,
+    protected _injector: Injector,
     private _math: MathService
   ) {
-    super(_userContext, _dialog, _bottomSheet);
+    super(_injector);
 
     this.form = this._fb.group({
       amount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]]
@@ -76,7 +74,12 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
         .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }
 
+  destroyContext$() {
+    this.context$.unsubscribe();
+  }
+
   ngOnDestroy() {
+    this.destroyContext$();
     this.subscription.unsubscribe();
   }
 }

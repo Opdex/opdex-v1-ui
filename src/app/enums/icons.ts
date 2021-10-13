@@ -2,6 +2,9 @@ export enum Icons {
     remove = 'remove',
     add = 'add',
     link = 'link',
+    liquidityPool = 'waves',
+    market = 'equalizer',
+    volume = 'equalizer',
     mining = 'whatshot',
     staking = 'verified_user',
     swap = 'swap_horiz',
@@ -16,5 +19,7 @@ export enum Icons {
     checkCircle = 'check_circle',
     check = 'check_circle',
     close = 'close',
-    tokens = 'toll'
+    tokens = 'toll',
+    rewards = 'star',
+    help = 'help'
 }

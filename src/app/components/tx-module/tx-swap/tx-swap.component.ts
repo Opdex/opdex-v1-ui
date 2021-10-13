@@ -3,7 +3,7 @@ import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, ViewChild, Injector } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription, of, Observable, timer } from 'rxjs';
@@ -77,12 +77,10 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
     private _math: MathService,
-    protected _dialog: MatDialog,
-    protected _userContext: UserContextService,
-    protected _bottomSheet: MatBottomSheet,
+    protected _injector: Injector,
     private _blocksService: BlocksService
   ) {
-    super(_userContext, _dialog, _bottomSheet);
+    super(_injector);
 
     if (this.context?.preferences?.deadlineThreshold) {
       this.deadlineThreshold = this.context.preferences.deadlineThreshold;
@@ -356,7 +354,12 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
       .subscribe();
   }
 
+  destroyContext$() {
+    this.context$.unsubscribe();
+  }
+
   ngOnDestroy() {
+    this.destroyContext$();
     if (this.tokenInChanges$) this.tokenInChanges$.unsubscribe();
     if (this.tokenOutChanges$) this.tokenOutChanges$.unsubscribe();
     if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();

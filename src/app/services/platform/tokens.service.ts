@@ -11,8 +11,8 @@ export class TokensService extends CacheService {
     super(_injector);
   }
 
-  getToken(address: string): Observable<IToken> {
-    return this.getItem(address, this._platformApi.getToken(address));
+  getToken(address: string, cacheOnly?: boolean): Observable<IToken> {
+    return this.getItem(address, this._platformApi.getToken(address), cacheOnly);
   }
 
   getTokenHistory(address: string, timeSpan: string = "1Y", candleSpan: string = "Hourly"): Observable<any> {
