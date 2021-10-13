@@ -36,8 +36,7 @@ export class SideNavComponent implements OnDestroy {
     this.onPinnedToggle.emit(this.isPinned);
   }
 
-  route(url: string) {
-    this._router.navigateByUrl(url);
+  emitRouteChange(url: string) {
     this.onRouteChanged.emit(url);
   }
 
