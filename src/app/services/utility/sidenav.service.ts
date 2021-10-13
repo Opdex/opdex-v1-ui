@@ -7,22 +7,9 @@ export class SidenavService {
   private isOpen: boolean = false;
   private sidenav$: Subject<ISidenavMessage> = new Subject();
 
-  constructor() { }
-
   getStatus() {
     return this.sidenav$.asObservable();
   }
-
-  // Todo: Right now the sidenav must be explicitly opened or closed
-  // The below function is a starter to being able to toggle the sidenav but
-  // it's not complete or tested. The toggle portion works as expected (open|close)
-  // but if you have a student sidenav open, then _toggle_ notifications sidenav
-  // The sidenav will close rather than stay open and switch to the notifications view.
-
-  // toggleSidenav(view: TransactionView, data?: any) {
-  //   this.isOpen = !this.isOpen;
-  //   this.sidenav$.next({ status: this.isOpen, view, data });
-  // }
 
   /**
    * @summary Opens the sidebar with the desired component and data

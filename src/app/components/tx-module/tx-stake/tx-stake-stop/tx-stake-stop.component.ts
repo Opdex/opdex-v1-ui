@@ -2,7 +2,7 @@ import { MathService } from '@sharedServices/utility/math.service';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
@@ -37,13 +37,11 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
 
   constructor(
     private _fb: FormBuilder,
-    protected _dialog: MatDialog,
+    protected _injector: Injector,
     private _platformApi: PlatformApiService,
-    protected _userContext: UserContextService,
-    protected _bottomSheet: MatBottomSheet,
     private _math: MathService
   ) {
-    super(_userContext, _dialog, _bottomSheet);
+    super(_injector);
 
     this.form = this._fb.group({
       amount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
@@ -79,5 +77,14 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
       .stopStakingQuote(this.pool.address, payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote));
+  }
+
+  destroyContext$() {
+    this.context$.unsubscribe();
+  }
+
+  ngOnDestroy() {
+    this.destroyContext$();
+    this.subscription.unsubscribe();
   }
 }

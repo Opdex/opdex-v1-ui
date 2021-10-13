@@ -18,6 +18,7 @@ import { MiningCardComponent } from './mining-card/mining-card.component';
 import { LiquidityPoolCardComponent } from './liquidity-pool-card/liquidity-pool-card.component';
 import { StakingPoolCardComponent } from './staking-pool-card/staking-pool-card.component';
 import { StatCardComponent } from './stat-card/stat-card.component';
+import { ConnectWalletCardComponent } from './connect-wallet-card/connect-wallet-card.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { StatCardComponent } from './stat-card/stat-card.component';
     MiningCardComponent,
     LiquidityPoolCardComponent,
     StakingPoolCardComponent,
-    StatCardComponent
+    StatCardComponent,
+    ConnectWalletCardComponent
   ],
   imports: [
     CommonModule,
@@ -44,7 +46,8 @@ import { StatCardComponent } from './stat-card/stat-card.component';
     MiningCardComponent,
     LiquidityPoolCardComponent,
     StakingPoolCardComponent,
-    StatCardComponent
+    StatCardComponent,
+    ConnectWalletCardComponent
   ]
 })
 export class CardsModule { }

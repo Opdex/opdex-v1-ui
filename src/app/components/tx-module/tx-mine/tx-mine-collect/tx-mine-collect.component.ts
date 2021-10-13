@@ -1,11 +1,8 @@
-import { Component, Input, OnChanges } from '@angular/core';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { take } from 'rxjs/operators';
 
 @Component({
@@ -18,12 +15,10 @@ export class TxMineCollectComponent extends TxBase implements OnChanges {
   pool: ILiquidityPoolSummary;
 
   constructor(
-    protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
-    protected _userContext: UserContextService,
-    protected _bottomSheet: MatBottomSheet
+    protected _injector: Injector,
   ) {
-    super(_userContext, _dialog, _bottomSheet);
+    super(_injector);
   }
 
   ngOnChanges() {
@@ -35,5 +30,13 @@ export class TxMineCollectComponent extends TxBase implements OnChanges {
       .collectMiningRewardsQuote(this.pool.mining.address)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote));
+  }
+
+  destroyContext$() {
+    this.context$.unsubscribe();
+  }
+
+  ngOnDestroy() {
+    this.destroyContext$();
   }
 }

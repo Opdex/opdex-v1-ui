@@ -1,3 +1,4 @@
+import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
 import { SharedPipesModule } from '@sharedPipes/shared-pipes.module';
@@ -75,6 +76,7 @@ import { SharedModule } from '@sharedComponents/shared-module/shared.module';
 import { ControlsModule } from '@sharedComponents/controls-module/controls.module';
 import { ReviewQuoteComponent } from './shared/review-quote/review-quote.component';
 import { TxCreatePoolComponent } from './tx-create-pool/tx-create-pool.component';
+import { TxSidebarComponent } from './tx-sidebar/tx-sidebar.component';
 
 
 @NgModule({
@@ -123,7 +125,8 @@ import { TxCreatePoolComponent } from './tx-create-pool/tx-create-pool.component
     ClaimPendingVaultOwnerEventComponent,
     SetPendingVaultOwnerEventComponent,
     ReviewQuoteComponent,
-    TxCreatePoolComponent
+    TxCreatePoolComponent,
+    TxSidebarComponent
   ],
   imports: [
     CommonModule,
@@ -149,7 +152,8 @@ import { TxCreatePoolComponent } from './tx-create-pool/tx-create-pool.component
     SharedModule,
     ControlsModule,
     MatAutocompleteModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatMenuModule
   ],
   exports: [
     TxSwapComponent,
@@ -162,6 +166,7 @@ import { TxCreatePoolComponent } from './tx-create-pool/tx-create-pool.component
     ClaimPendingDeployerOwnerEventComponent,
     CreateMarketEventComponent,
     TxCreatePoolComponent,
+    TxSidebarComponent
   ]
 })
 export class TransactionModule { }

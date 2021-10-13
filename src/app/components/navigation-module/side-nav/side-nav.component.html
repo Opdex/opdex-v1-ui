@@ -13,32 +13,35 @@
 
     <ul class="sidebar-nav" *ngIf="userContext$ | async as context">
       <li>
-        <a mat-button (click)="route('/')" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a mat-button (click)="emitRouteChange('/')" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
           <mat-icon>equalizer</mat-icon> Market
         </a>
       </li>
       <li>
-        <a mat-button (click)="route('/pools')" routerLinkActive="active">
+        <a mat-button (click)="emitRouteChange('/pools')" routerLink="/pools" routerLinkActive="active">
           <mat-icon>waves</mat-icon> Liquidity Pools
         </a>
       </li>
       <li>
-        <a mat-button (click)="route('/tokens')" routerLinkActive="active">
+        <a mat-button (click)="emitRouteChange('/tokens')" routerLink="/tokens" routerLinkActive="active">
           <mat-icon>toll</mat-icon> Tokens
         </a>
       </li>
       <li>
-        <a mat-button (click)="route('/governance')" routerLinkActive="active">
+        <a mat-button (click)="emitRouteChange('/governance')" routerLink="/governance" routerLinkActive="active">
           <mat-icon>gavel</mat-icon> Governance
         </a>
       </li>
       <li>
-        <a mat-button (click)="route('/vault')" routerLinkActive="active">
+        <a mat-button (click)="emitRouteChange('/vault')" routerLink="/vault" routerLinkActive="active">
           <mat-icon>lock</mat-icon> Vault
         </a>
       </li>
       <li>
-        <a mat-button (click)="route(!context?.wallet ? '/auth' : '/wallet')" routerLinkActive="active">
+        <a mat-button
+          (click)="emitRouteChange(!context?.wallet ? '/auth' : '/wallet')"
+          routerLink="{{!context?.wallet ? '/auth' : '/wallet'}}"
+          routerLinkActive="active">
           <span class="wallet-indicator {{context?.wallet ? 'valid' : 'invalid'}}"></span>
           <mat-icon>account_balance_wallet</mat-icon> Wallet
         </a>

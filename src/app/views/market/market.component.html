@@ -68,8 +68,8 @@
                 <ng-container *ngFor="let statCard of statCards; let i = index">
                   <div *ngIf="statCard.show" class="d-flex justify-content-between w-100">
                     <div class="d-flex align-items-center">
-                      <opdex-help-button *ngIf="statCard.helpInfo" [info]="statCard.helpInfo" class="mr-2"></opdex-help-button>
-                      <span>{{statCard.title}} <small class="ml-2" *ngIf="statCard.daily">(24hr)</small></span>
+                      <opdex-help-button *ngIf="statCard.helpInfo" [info]="statCard.helpInfo" [icon]="statCard.icon" [iconColor]="statCard.iconColor" class="mr-2"></opdex-help-button>
+                      <span>{{statCard.title}} <small *ngIf="statCard.daily">(24hr)</small></span>
                     </div>
 
                     <div class="d-flex align-items-center">
