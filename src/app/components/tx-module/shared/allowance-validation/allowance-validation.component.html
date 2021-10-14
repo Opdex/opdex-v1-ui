@@ -19,14 +19,14 @@
 
   <div class="details mt-2" *ngIf="!allowance.isApproved && !ignore && !waiting">
     <ng-container [ngSwitch]="transactionType" >
-      <p *ngSwitchCase="transactionTypes.addLiquidity" class="mb-3">An allowance must be approved in order to add liquidity using {{allowance.requestToSpend | shortNumber}} {{allowance.token.symbol}} tokens.</p>
-      <p *ngSwitchCase="transactionTypes.removeLiquidity" class="mb-3">An allowance must be approved in order to remove liquidity using {{allowance.requestToSpend | shortNumber}} {{allowance.token.symbol}} tokens.</p>
-      <p *ngSwitchCase="transactionTypes.startMining" class="mb-3">An allowance must be approved in order to mine with {{allowance.requestToSpend | shortNumber}} {{allowance.token.symbol}} tokens.</p>
-      <p *ngSwitchCase="transactionTypes.swap" class="mb-3">An allowance must be approved in order to swap {{allowance.requestToSpend | shortNumber}} {{allowance.token.symbol}} tokens.</p>
-      <p *ngSwitchCase="transactionTypes.startStaking" class="mb-3">An allowance must be approved in order to stake {{allowance.requestToSpend | shortNumber}} {{allowance.token.symbol}} tokens.</p>
-      <p *ngSwitchDefault class="mb-3">In order to stake {{allowance.requestToSpend}} {{allowance.token.symbol}}, the liquidity pool must have an approved allowance of at least that much.</p>
+      <p *ngSwitchCase="transactionTypes.addLiquidity" class="mb-3">An allowance must be approved in order to add liquidity using {{allowance.requestToSpend.formattedValue | shortNumber}} {{allowance.token.symbol}} tokens.</p>
+      <p *ngSwitchCase="transactionTypes.removeLiquidity" class="mb-3">An allowance must be approved in order to remove liquidity using {{allowance.requestToSpend.formattedValue | shortNumber}} {{allowance.token.symbol}} tokens.</p>
+      <p *ngSwitchCase="transactionTypes.startMining" class="mb-3">An allowance must be approved in order to mine with {{allowance.requestToSpend.formattedValue | shortNumber}} {{allowance.token.symbol}} tokens.</p>
+      <p *ngSwitchCase="transactionTypes.swap" class="mb-3">An allowance must be approved in order to swap {{allowance.requestToSpend.formattedValue | shortNumber}} {{allowance.token.symbol}} tokens.</p>
+      <p *ngSwitchCase="transactionTypes.startStaking" class="mb-3">An allowance must be approved in order to stake {{allowance.requestToSpend.formattedValue | shortNumber}} {{allowance.token.symbol}} tokens.</p>
+      <p *ngSwitchDefault class="mb-3">In order to stake {{allowance.requestToSpend.formattedValue}} {{allowance.token.symbol}}, the liquidity pool must have an approved allowance of at least that much.</p>
     </ng-container>
 
-    <button mat-stroked-button class="w-100" color="primary" (click)="approveAllowance(allowance.requestToSpend, allowance.spender, allowance.token.address)">Begin Approval</button>
+    <button mat-stroked-button class="w-100" color="primary" (click)="approveAllowance(allowance.requestToSpend.formattedValue, allowance.spender, allowance.token.address)">Begin Approval</button>
   </div>
 </ng-container>

@@ -127,7 +127,7 @@ export class MarketComponent implements OnInit {
         daily: true,
         show: true,
         icon: Icons.volume,
-        iconColor: 'primary',
+        iconColor: 'provide',
         helpInfo: {
           title: 'What is Volume?',
           paragraph: 'Volume is the total USD value of tokens swapped and is usually displayed on a daily time frame. Volume tracks the value of tokens input to the protocol during swaps including transaction fees.'
@@ -140,7 +140,7 @@ export class MarketComponent implements OnInit {
         prefix: '$',
         show: true,
         icon: Icons.rewards,
-        iconColor: 'provide',
+        iconColor: 'reward',
         helpInfo: {
           title: 'What are Rewards?',
           paragraph: 'The rewards indicator displays the total USD value of transaction fees accumulated based on the volume of swap transactions. Rewards are collected by participants for providing liquidity and for staking in active markets.'
