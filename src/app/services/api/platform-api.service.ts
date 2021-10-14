@@ -26,6 +26,7 @@ import { IMiningQuote } from '@sharedModels/platform-api/requests/mining-quote';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { IMiningPools } from '@sharedModels/platform-api/responses/mining-pools/mining-pool.interface';
 import { IVaults, IVault } from '@sharedModels/platform-api/responses/vaults/vault.interface';
+import { IProvideAmountIn } from '@sharedModels/platform-api/responses/liquidity-pools/provide-amount-in.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -132,8 +133,8 @@ export class PlatformApiService extends RestApiService {
     return this.post<ITransactionQuote>(`${this.api}/liquidity-pools/${address}/remove`, payload);
   }
 
-  public quoteAddLiquidity(payload: any): Observable<any> {
-    return this.post<any>(`${this.api}/quote/add-liquidity`, payload);
+  public quoteAddLiquidity(address: string, payload: any): Observable<IProvideAmountIn> {
+    return this.post<IProvideAmountIn>(`${this.api}/liquidity-pools/${address}/add/amount-in`, payload);
   }
 
   public getSwapQuote(payload: any): Observable<string> {

@@ -17,6 +17,7 @@ import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-t
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { MathService } from '@sharedServices/utility/math.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
+import { IProvideAmountIn } from '@sharedModels/platform-api/responses/liquidity-pools/provide-amount-in.interface';
 
 @Component({
   selector: 'opdex-tx-provide-add',
@@ -139,11 +140,13 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
 
     const payload = {
       amountIn: value,
-      tokenIn: tokenIn.address,
-      pool: this.pool.address
+      tokenIn: tokenIn.address
     };
 
-    return this._platformApi.quoteAddLiquidity(payload).pipe(catchError(() => of('')));
+    return this._platformApi.quoteAddLiquidity(this.pool.address, payload)
+      .pipe(
+        map((response: IProvideAmountIn) => response?.amountIn || ''),
+        catchError(() => of('')));
   }
 
   submit(): void {
