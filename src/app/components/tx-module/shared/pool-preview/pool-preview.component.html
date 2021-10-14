@@ -54,27 +54,27 @@
         </div>
 
         <div class="col">
-          <small>{{pool.token.src.symbol}}</small>
           <small>{{pool.token.crs.symbol}}</small>
+          <small>{{pool.token.src.symbol}}</small>
           <small>{{pool.token.lp.symbol}}</small>
         </div>
 
         <div class="col">
-          <small>{{pool.reserves.src | shortNumber}}</small>
           <small>{{pool.reserves.crs | shortNumber}}</small>
+          <small>{{pool.reserves.src | shortNumber}}</small>
           <small>{{pool.token.lp.totalSupply | shortNumber}}</small>
         </div>
 
         <div class="col d-flex flex-row align-items-end">
           <div class="d-flex flex-column align-items-end">
-            <small><opdex-change-indicator [value]="pool.token.src.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
             <small><opdex-change-indicator [value]="pool.token.crs.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
+            <small><opdex-change-indicator [value]="pool.token.src.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
             <small><opdex-change-indicator [value]="pool.token.lp.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
           </div>
 
           <div class="ml-2">
-            <small>${{pool.token.src.summary.price.close | shortNumber}}</small>
             <small>${{pool.token.crs.summary.price.close | shortNumber}}</small>
+            <small>${{pool.token.src.summary.price.close | shortNumber}}</small>
             <small>${{pool.token.lp.summary.price.close | shortNumber}}</small>
           </div>
         </div>
