@@ -1,5 +1,5 @@
 export interface ILocalWalletCredentials {
-    walletAddress: Address;
+    walletAddress: string;
     walletName: string;
     walletPassword: string;
 }

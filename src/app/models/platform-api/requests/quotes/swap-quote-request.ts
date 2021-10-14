@@ -1,6 +1,6 @@
 export interface ISwapQuoteRequest {
-        tokenIn: Address;
-        tokenOut: Address;
+        tokenIn: string;
+        tokenOut: string;
         tokenInAmount: number;
         tokenOutAmount: number;
 }

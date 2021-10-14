@@ -1,6 +1,19 @@
 export interface ICreateVaultCertificateQuoteRequest {
-        //[Required]
-        holder: Address;
-        //[Required]
+        holder: string;
         amount: number;
+        isValid: boolean;
+}
+
+export class CreateVaultCertificateQuoteRequest implements ICreateVaultCertificateQuoteRequest {
+        holder: string;
+        amount: number;
+        isValid: boolean;
+
+        constructor(request: ICreateVaultCertificateQuoteRequest) {
+                if(!request.holder)
+                        this.isValid = false;
+                
+                this.holder = request.holder;
+                this.amount = request.amount;
+        }
 }

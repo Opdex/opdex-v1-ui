@@ -1,6 +1,6 @@
+import { MarketPermissionTypes } from "src/app/enums/market-permission-types";
+
 export interface ISetMarketPermissionsQuoteRequest {
-    //required
-    permission: MarketPermissionType;
-    //[Required]
+    permission: MarketPermissionTypes;
     authorize: boolean;
 }
