@@ -13,7 +13,7 @@ import { IAddressBalance } from '@sharedModels/platform-api/responses/wallets/ad
 import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { IAddressStaking } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
-import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
+import { catchError, map, skip, switchMap, take, tap } from 'rxjs/operators';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 
 @Component({
@@ -39,8 +39,13 @@ export class WalletPreviewComponent implements OnDestroy {
     private _liquidityPoolService: LiquidityPoolsService,
     private _blocksService: BlocksService
   ) {
-    this.subscription.add(this._userContext.getUserContext$().subscribe(context => this.context = context));
-    this.subscription.add(this._blocksService.getLatestBlock$().pipe(switchMap(_ => this.getWalletSummary())).subscribe());
+    this.subscription.add(this._userContext.getUserContext$()
+      .pipe(
+        tap(context => this.context = context),
+        switchMap(_ => this.getWalletSummary()))
+      .subscribe());
+
+    this.subscription.add(this._blocksService.getLatestBlock$().pipe(skip(1), switchMap(_ => this.getWalletSummary())).subscribe());
   }
 
   ngOnChanges() {
