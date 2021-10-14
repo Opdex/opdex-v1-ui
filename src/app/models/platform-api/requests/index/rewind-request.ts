@@ -1,3 +1,4 @@
 export interface IRewindRequest {
-        public ulong Block { get; set; } 
+        //required
+        block: number;
 }

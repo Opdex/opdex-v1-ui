@@ -1,7 +1,6 @@
 export interface ICollectMarketFeesQuoteRequest {
-    [Required]
-        public Address Token { get; set; }
-
-        [Required]
-        public FixedDecimal Amount { get; set; }
+    //Required
+    token: Address;
+    //Required
+    amount: number;
 }

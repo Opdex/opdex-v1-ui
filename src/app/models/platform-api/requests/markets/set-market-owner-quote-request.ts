@@ -1,3 +1,4 @@
 export interface ISetMarketOwnerQuoteRequest {
-    public Address Owner { get; set; }
+    //required
+    owner: Address;
 }

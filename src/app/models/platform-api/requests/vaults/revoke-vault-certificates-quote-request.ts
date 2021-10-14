@@ -1,3 +1,4 @@
 export interface IRevokeVaultCertificatesQuoteRequest {
-    public Address Holder { get; set; }
+    //required
+    holder: Address;
 }

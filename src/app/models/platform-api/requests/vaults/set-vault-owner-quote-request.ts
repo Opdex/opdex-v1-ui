@@ -1,3 +1,4 @@
 export interface ISetVaultOwnerQuoteRequest {
-    public Address Owner { get; set; }
+    //required
+    owner: Address;
 }

@@ -1,3 +1,4 @@
 export interface IAddTokenRequest {
-    public Address TokenAddress { get; set; }
+    //required
+    tokenAddress: Address;
 }

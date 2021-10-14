@@ -1,4 +1,4 @@
 export interface IProcessTransactionRequest {
-    TxHash: string;
-    SortOrder: number;
+    txHash: string;
+    sortOrder: number;
 }
