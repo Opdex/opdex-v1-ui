@@ -50,7 +50,6 @@ export class TxProvideRemoveComponent extends TxBase {
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
     protected _injector: Injector,
-    private _math: MathService,
     private _blocksService: BlocksService,
   ) {
     super(_injector);
@@ -128,11 +127,11 @@ export class TxProvideRemoveComponent extends TxBase {
     const reserveCrs = new FixedDecimal(this.pool.reserves.crs, crsDecimals);
     const reserveSrc = new FixedDecimal(this.pool.reserves.src, srcDecimals);
 
-    const percentageLiquidity = new FixedDecimal(this._math.divide(liquidityValue, totalSupply), 8);
+    const percentageLiquidity = new FixedDecimal(MathService.divide(liquidityValue, totalSupply), 8);
 
-    this.crsOut = this._math.multiply(reserveCrs, percentageLiquidity);
-    this.srcOut = this._math.multiply(reserveSrc, percentageLiquidity);
-    this.usdOut = this._math.multiply(reservesUsd, percentageLiquidity);
+    this.crsOut = MathService.multiply(reserveCrs, percentageLiquidity);
+    this.srcOut = MathService.multiply(reserveSrc, percentageLiquidity);
+    this.usdOut = MathService.multiply(reservesUsd, percentageLiquidity);
 
     const crsOut = new FixedDecimal(this.crsOut, crsDecimals);
     const srcOut = new FixedDecimal(this.srcOut, srcDecimals);
@@ -140,13 +139,13 @@ export class TxProvideRemoveComponent extends TxBase {
 
     const tolerancePercentage = new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8);
 
-    const crsTolerance = new FixedDecimal(this._math.multiply(crsOut, tolerancePercentage), crsDecimals);
-    const srcTolerance = new FixedDecimal(this._math.multiply(srcOut, tolerancePercentage), srcDecimals);
-    const usdTolerance = new FixedDecimal(this._math.multiply(usdOut, tolerancePercentage), 8);
+    const crsTolerance = new FixedDecimal(MathService.multiply(crsOut, tolerancePercentage), crsDecimals);
+    const srcTolerance = new FixedDecimal(MathService.multiply(srcOut, tolerancePercentage), srcDecimals);
+    const usdTolerance = new FixedDecimal(MathService.multiply(usdOut, tolerancePercentage), 8);
 
-    this.crsOutMin = this._math.subtract(crsOut, crsTolerance);
-    this.srcOutMin = this._math.subtract(srcOut, srcTolerance);
-    this.lptInFiatValue = this._math.subtract(usdOut, usdTolerance);
+    this.crsOutMin = MathService.subtract(crsOut, crsTolerance);
+    this.srcOutMin = MathService.subtract(srcOut, srcTolerance);
+    this.lptInFiatValue = MathService.subtract(usdOut, usdTolerance);
   }
 
   handleAllowanceApproval(txHash: string) {

@@ -4,8 +4,8 @@ import { Subscription } from 'rxjs';
 import { ThemeService } from '@sharedServices/utility/theme.service';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 import { ResizedEvent } from 'angular-resize-event';
-import { createChart, ISeriesApi, IChartApi, LineWidth, DeepPartial, SeriesOptionsCommon, AreaStyleOptions } from 'lightweight-charts';
-import { tap, startWith } from 'rxjs/operators';
+import { createChart, ISeriesApi, IChartApi, LineWidth, DeepPartial } from 'lightweight-charts';
+import { tap } from 'rxjs/operators';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
@@ -131,7 +131,7 @@ export class LineChartComponent implements OnInit, OnChanges {
       lastValueVisible: false,
       priceFormat: {
         type: 'custom',
-        minMove: 1,
+        minMove: 0.01,
         formatter: (price: string) => this.priceFormatter(price)
       }
     });
@@ -153,7 +153,7 @@ export class LineChartComponent implements OnInit, OnChanges {
     this.volumeSeries = this.chart.addHistogramSeries({
       priceFormat: {
         type: 'custom',
-        minMove: 0.00000001,
+        minMove: 0.01,
         formatter: (price: string) => this.priceFormatter(price)
       },
       color: 'rgba(71, 188, 235, .8)',

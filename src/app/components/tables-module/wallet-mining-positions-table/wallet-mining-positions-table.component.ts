@@ -23,7 +23,7 @@ export class WalletMiningPositionsTableComponent implements OnChanges {
   @Output() onPageChange: EventEmitter<string> = new EventEmitter();
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private _router: Router, private _sidebar: SidenavService, private _math: MathService) {
+  constructor(private _router: Router, private _sidebar: SidenavService) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['pool', 'status', 'position', 'value', 'actions'];
   }
@@ -42,7 +42,7 @@ export class WalletMiningPositionsTableComponent implements OnChanges {
         position: p.position.amount,
         isActive: p.pool.mining?.isActive === true,
         decimals: p.pool.token.lp.decimals,
-        value: this._math.multiply(
+        value: MathService.multiply(
           new FixedDecimal(p.position.amount, p.pool.token.lp.decimals),
           new FixedDecimal(p.pool.token.lp.summary.price.close.toString(), 8))
       }

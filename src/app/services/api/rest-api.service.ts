@@ -78,8 +78,7 @@ export class RestApiService {
         this._jwt.removeToken();
         // this._router.navigateByUrl('/auth');
       }
-    }
-    else {
+    } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong.
       console.error(

@@ -1,14 +1,11 @@
 import { MathService } from '@sharedServices/utility/math.service';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
 import { Injector, OnChanges, OnDestroy } from '@angular/core';
 import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Icons } from 'src/app/enums/icons';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { DecimalStringRegex } from '@sharedLookups/regex';
@@ -36,7 +33,6 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
     protected _injector: Injector,
-    private _math: MathService
   ) {
     super(_injector);
 
@@ -52,7 +48,7 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
         .subscribe(amount => {
           const lptFiat = new FixedDecimal(this.pool.token.lp.summary.price.close.toString(), 8);
           const amountDecimal = new FixedDecimal(amount, this.pool.token.lp.decimals);
-          this.fiatValue = this._math.multiply(amountDecimal, lptFiat);
+          this.fiatValue = MathService.multiply(amountDecimal, lptFiat);
         }));
   }
 

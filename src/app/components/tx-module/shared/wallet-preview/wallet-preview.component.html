@@ -1,0 +1,49 @@
+<opdex-card *ngIf="context?.wallet">
+  <div class="d-flex justify-content-between align-items-center">
+    <h4 class="mb-0">Positions</h4>
+    <button mat-icon-button
+      class="small"
+      color="primary"
+      (click)="toggleVisibility()">
+      <mat-icon>{{hide ? icons.add : icons.remove}}</mat-icon>
+    </button>
+  </div>
+
+  <div [hidden]="hide" class="mt-2">
+    <ng-container *ngFor="let position of positions; trackBy: trackPosition">
+      <div class="d-flex align-items-center">
+        <div class="col d-flex flex-shrink align-items-center">
+          <button type="button" mat-icon-button color="primary" class="tiny" *ngIf="position.position === 'Balance'" (click)="balanceTooltip.toggle()">
+            <mat-icon #balanceTooltip="matTooltip" [matTooltip]="position.position">{{icons.tokens}}</mat-icon>
+          </button>
+
+          <button type="button" mat-icon-button color="primary" class=" tiny" *ngIf="position.position === 'Providing'" (click)="providingTooltip.toggle()">
+            <mat-icon class="provide" #providingTooltip="matTooltip" [matTooltip]="position.position">{{icons.provide}}</mat-icon>
+          </button>
+
+          <button type="button" mat-icon-button color="primary"  class="tiny" *ngIf="position.position === 'Staking'" (click)="stakingTooltip.toggle()">
+            <mat-icon class="stake" #stakingTooltip="matTooltip" [matTooltip]="position.position">{{icons.staking}}</mat-icon>
+          </button>
+
+          <button type="button" mat-icon-button color="primary" class="tiny" (click)="miningTooltip.toggle()" *ngIf="position.position === 'Mining'" >
+            <mat-icon class="mine" #miningTooltip="matTooltip" [matTooltip]="position.position">{{icons.mining}}</mat-icon>
+          </button>
+        </div>
+
+        <div class="col">
+          <small>{{position.token.symbol}}</small>
+        </div>
+
+        <div class="col">
+          <a class="no-decoration" [matTooltip]="position.amount.formattedValue" [cdkCopyToClipboard]="position.amount.formattedValue" href="javascript:void(0)">
+            <small>{{position.amount.formattedValue | shortNumber}}</small>
+          </a>
+        </div>
+
+        <div class="col d-flex align-items-end flex-column">
+          <small>${{position.value.formattedValue | shortNumber}}</small>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</opdex-card>

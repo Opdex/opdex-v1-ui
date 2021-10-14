@@ -40,7 +40,6 @@ export class WalletComponent implements OnInit {
     private _liquidityPoolService: LiquidityPoolsService,
     private _walletsService: WalletsService,
     private _router: Router,
-    private _math: MathService,
     private _theme: ThemeService
   ) {
     this.wallet = this._context.getUserContext();
@@ -55,7 +54,7 @@ export class WalletComponent implements OnInit {
         tap((token: IToken) => {
           const costFixed = new FixedDecimal(token.summary.price.close.toString(), 8);
           const crsBalanceFixed = new FixedDecimal(this.crsBalance.balance, 8);
-          this.crsBalanceValue = this._math.multiply(crsBalanceFixed, costFixed);
+          this.crsBalanceValue = MathService.multiply(crsBalanceFixed, costFixed);
         }),
         take(1)).subscribe();
   }

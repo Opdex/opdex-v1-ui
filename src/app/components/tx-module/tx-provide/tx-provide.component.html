@@ -5,6 +5,8 @@
 
   <opdex-pool-preview [pool]="pool" [view]="view" (onPoolChange)="handlePoolChange($event)"></opdex-pool-preview>
 
+  <opdex-wallet-preview [balanceTokens]="[pool.token.crs.address, pool.token.src.address, pool.token.lp.address]"></opdex-wallet-preview>
+
   <opdex-card *ngIf="pool" [thin]="true">
     <opdex-tx-provide-add *ngIf="group.value == 1" [pool]="pool"></opdex-tx-provide-add>
     <opdex-tx-provide-remove *ngIf="group.value == 2" [pool]="pool"></opdex-tx-provide-remove>

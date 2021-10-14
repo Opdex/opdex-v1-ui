@@ -1,3 +1,4 @@
+import { Icons } from 'src/app/enums/icons';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
@@ -19,6 +20,7 @@ export class AllowanceValidationComponent implements OnChanges {
   ignore: boolean = true;
   transactionTypes = AllowanceTransactionTypes;
   waiting: boolean;
+  icons = Icons;
 
   constructor(
     private _bottomSheet: MatBottomSheet,

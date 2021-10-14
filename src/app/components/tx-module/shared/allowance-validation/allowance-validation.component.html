@@ -1,10 +1,10 @@
 <ng-container *ngIf="allowance">
   <div class="d-flex flex-row align-items-center justify-content-between" *ngIf="!allowance.isApproved">
     <div class="message d-flex flex-row align-items-center">
-      <mat-icon class="small warn mr-2" *ngIf="!waiting">error</mat-icon>
+      <mat-icon class="small warn mr-2" *ngIf="!waiting">{{icons.error}}</mat-icon>
       <mat-spinner *ngIf="waiting" class="tiny mr-2"></mat-spinner>
-      <p class="mb-0 warn" style="font-weight: 400;" *ngIf="!waiting">Insufficient Allowance</p>
-      <p class="mb-0 loading" style="font-weight: 400;" *ngIf="waiting">Awaiting Approval</p>
+      <h5 class="mb-0" style="font-weight: 400;" *ngIf="!waiting">Insufficient Allowance</h5>
+      <h5 class="mb-0" style="font-weight: 400;" *ngIf="waiting">Awaiting Approval</h5>
     </div>
 
     <button mat-icon-button class="small" color="primary" (click)="setIgnore(!ignore)" *ngIf="!waiting"><mat-icon>{{ ignore ? 'add' : 'remove' }}</mat-icon></button>
@@ -12,8 +12,8 @@
 
   <div class="d-flex flex-row align-items-center justify-content-between" *ngIf="allowance.isApproved">
     <div class="message d-flex flex-row align-items-center">
-      <mat-icon class="small success mr-2">check_circle</mat-icon>
-      <p class="mb-0 success" style="font-weight: 400;">Allowance</p>
+      <mat-icon class="small success mr-2">{{icons.checkOutline}}</mat-icon>
+      <h5 class="mb-0" style="font-weight: 400;">Allowance</h5>
     </div>
   </div>
 

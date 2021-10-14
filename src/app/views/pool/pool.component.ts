@@ -1,5 +1,6 @@
+import { AddressPosition } from '@sharedModels/address-position';
+import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { IconSizes } from './../../enums/icon-sizes';
-import { MathService } from '@sharedServices/utility/math.service';
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { environment } from "@environments/environment";
@@ -8,7 +9,6 @@ import { ITransactionsRequest } from "@sharedModels/platform-api/requests/transa
 import { IAddressBalance } from "@sharedModels/platform-api/responses/wallets/address-balance.interface";
 import { ILiquidityPoolSummary, ILiquidityPoolSnapshotHistory } from "@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface";
 import { TransactionView } from "@sharedModels/transaction-view";
-import { PlatformApiService } from "@sharedServices/api/platform-api.service";
 import { LiquidityPoolsService } from "@sharedServices/platform/liquidity-pools.service";
 import { SidenavService } from "@sharedServices/utility/sidenav.service";
 import { UserContextService } from "@sharedServices/utility/user-context.service";
@@ -85,14 +85,13 @@ export class PoolComponent implements OnInit, OnDestroy {
 
   constructor(
     private _route: ActivatedRoute,
-    private _platformApiService: PlatformApiService,
     private _userContext: UserContextService,
     private _sidenav: SidenavService,
     private _liquidityPoolsService: LiquidityPoolsService,
-    private _math: MathService,
     private _router: Router,
     private _title: Title,
-    private _gaService: GoogleAnalyticsService
+    private _gaService: GoogleAnalyticsService,
+    private _walletService: WalletsService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -248,79 +247,61 @@ export class PoolComponent implements OnInit, OnDestroy {
     ];
   }
 
-  private getTokenBalance(walletAddress: string, tokenAddress: string, token: IToken): Observable<IAddressBalance> {
-    return this._platformApiService.getBalance(walletAddress, tokenAddress)
+  private getTokenBalance(walletAddress: string, token: IToken): Observable<AddressPosition> {
+    return this._walletService.getBalance(walletAddress, token.address)
         .pipe(
-          map((result: IAddressBalance) => {
-            return {
-              token: token,
-              position: 'Balance',
-              amount: result.balance,
-              value: this._math.multiply(
-                new FixedDecimal(result.balance, token.decimals),
-                new FixedDecimal(token.summary.price.close.toString(), 8))
-            }
-          }),
-          take(1),
-          catchError(() => of(null)));
+          catchError(() => of(null)),
+          map((result: IAddressBalance) => new AddressPosition(walletAddress, token, 'Balance', new FixedDecimal(result?.balance || '0', token.decimals))),
+          take(1));
   }
 
-  private getStakingPosition(walletAddress: string, liquidityPoolAddress: string, token: IToken): Observable<IAddressBalance> {
-    return this._platformApiService.getStakingPosition(walletAddress, liquidityPoolAddress)
+  private getStakingPosition(walletAddress: string, liquidityPoolAddress: string, token: IToken): Observable<AddressPosition> {
+    return this._walletService.getStakingPosition(walletAddress, liquidityPoolAddress)
         .pipe(
-          map((result: IAddressStaking) => {
-            return {
-              token: token,
-              position: 'Staking',
-              amount: result.amount,
-              value: this._math.multiply(
-                new FixedDecimal(result.amount, token.decimals),
-                new FixedDecimal(token.summary.price.close.toString(), 8))
-            }
-          }),
-          take(1),
-          catchError(() => of(null)));
+          catchError(() => of(null)),
+          map((result: IAddressStaking) => new AddressPosition(walletAddress, token, 'Staking', new FixedDecimal(result?.amount || '0', token.decimals))),
+          take(1));
   }
 
-  private getMiningPosition(walletAddress: string, miningPoolAddress: string, token: IToken): Observable<IAddressBalance> {
-    return this._platformApiService.getMiningPosition(walletAddress, miningPoolAddress)
-        .pipe(map((result: IAddressMining) => {
-          return {
-            token: token,
-            position: 'Mining',
-            amount: result.amount,
-            value: this._math.multiply(
-              new FixedDecimal(result.amount, token.decimals),
-              new FixedDecimal(token.summary.price.close.toString(), 8))
-          }
-        }),
-        take(1),
-        catchError(() => of(null)));
+  private getMiningPosition(walletAddress: string, miningPoolAddress: string, token: IToken): Observable<AddressPosition> {
+    return this._walletService.getMiningPosition(walletAddress, miningPoolAddress)
+        .pipe(
+          catchError(() => of(null)),
+          map((result: IAddressMining) => new AddressPosition(walletAddress, token, 'Mining', new FixedDecimal(result?.amount || '0', token.decimals))),
+          take(1));
   }
 
-  private getWalletSummary(): Observable<IAddressBalance[]> {
+  private getWalletSummary(): Observable<AddressPosition[]> {
     const context = this._userContext.getUserContext();
 
     if (context.wallet && this.pool) {
+      const crsToken = this.pool.token.crs;
+      const srcToken = this.pool.token.src;
+      const lpToken = this.pool.token.lp;
+      const stakingToken = this.pool.token.staking;
+
       const combo = [
-        this.getTokenBalance(context.wallet, this.pool?.token?.crs?.address, this.pool?.token?.crs),
-        this.getTokenBalance(context.wallet, this.pool?.token?.src?.address, this.pool?.token?.src),
-        this.getTokenBalance(context.wallet, this.poolAddress, this.pool?.token?.lp),
+        this.getTokenBalance(context.wallet, crsToken),
+        this.getTokenBalance(context.wallet, srcToken),
       ];
 
-      if (this.pool?.token?.staking) {
-        combo.push(this.getTokenBalance(context.wallet, this.pool?.token?.staking?.address, this.pool?.token?.staking));
-        combo.push(this.getStakingPosition(context.wallet, this.poolAddress, this.pool?.token?.staking));
+      if (stakingToken) {
+        combo.push(this.getTokenBalance(context.wallet, stakingToken));
       }
 
-      if (this.pool?.mining) {
-        combo.push(this.getMiningPosition(context.wallet, this.pool?.mining?.address, this.pool.token.lp));
+      // Yes, this can be added to the initial array, but this order is better for UX
+      combo.push(this.getTokenBalance(context.wallet, lpToken));
+
+      // Yes, this could be combined with the above check, but this order is better for UX
+      if (stakingToken) {
+        combo.push(this.getStakingPosition(context.wallet, this.poolAddress, stakingToken));
       }
 
-      return zip(...combo).pipe(
-        // we can filter out null results from above queries, or we can return valid 0 values
-        tap(results => this.positions = results.filter(result => result !== null)),
-        take(1));
+      if (this.pool.mining) {
+        combo.push(this.getMiningPosition(context.wallet, this.pool.mining.address, lpToken));
+      }
+
+      return zip(...combo).pipe(take(1), tap(results => this.positions = results));
     }
 
     return of([]);
@@ -348,8 +329,12 @@ export class PoolComponent implements OnInit, OnDestroy {
               o.suffix = this.pool.token.crs.symbol;
             }
 
-            if (o.category.includes('CRS')) {
-              o.category = o.category.replace('CRS', this.pool.token.crs.symbol);
+            if (o.category.includes('/')) {
+              var parts = o.category.split('/');
+
+              o.category = parts[0].includes('CRS')
+                ? `${this.pool.token.crs.symbol}/${parts[1]}`
+                : `${parts[0]}/${this.pool.token.crs.symbol}`;
             }
 
             return o;
