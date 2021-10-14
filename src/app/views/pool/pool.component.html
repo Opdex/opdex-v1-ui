@@ -12,7 +12,7 @@
     <div class="row">
       <div class="col">
         <div class="chip-group">
-          <div class="chip blue">{{pool.transactionFee * 100}}%</div>
+          <div class="chip blue">{{pool.transactionFee * 100}}% Fee</div>
           <div class="chip purple" *ngIf="pool.staking?.isNominated"><mat-icon>{{icons.staking}}</mat-icon> Nominated</div>
           <div class="chip red" *ngIf="pool.mining?.isActive"><mat-icon>{{icons.mining}}</mat-icon> Mining</div>
         </div>
