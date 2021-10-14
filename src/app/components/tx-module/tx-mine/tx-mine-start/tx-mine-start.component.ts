@@ -36,7 +36,6 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
   constructor(
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
-    private _math: MathService,
     protected _injector: Injector
   ) {
     super(_injector);
@@ -62,7 +61,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
     const lptFiat = new FixedDecimal(this.pool.token.lp.summary.price.close.toString(), 8);
     const amountDecimal = new FixedDecimal(amount, this.pool.token.lp.decimals);
 
-    this.fiatValue = this._math.multiply(amountDecimal, lptFiat);
+    this.fiatValue = MathService.multiply(amountDecimal, lptFiat);
   }
 
   private getAllowance$(amount?: string) {

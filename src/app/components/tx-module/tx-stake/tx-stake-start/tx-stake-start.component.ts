@@ -37,7 +37,6 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
     protected _injector: Injector,
-    private _math: MathService
   ) {
     super(_injector);
 
@@ -62,7 +61,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
     const stakingTokenFiat = new FixedDecimal(this.pool.token.staking.summary.price.close.toString(), 8);
     const amountDecimal = new FixedDecimal(amount, this.pool.token.staking.decimals);
 
-    this.fiatValue = this._math.multiply(amountDecimal, stakingTokenFiat);
+    this.fiatValue = MathService.multiply(amountDecimal, stakingTokenFiat);
   }
 
   private getAllowance$(amount?: string): Observable<AllowanceValidation> {

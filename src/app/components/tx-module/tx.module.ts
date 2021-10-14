@@ -77,6 +77,7 @@ import { ControlsModule } from '@sharedComponents/controls-module/controls.modul
 import { ReviewQuoteComponent } from './shared/review-quote/review-quote.component';
 import { TxCreatePoolComponent } from './tx-create-pool/tx-create-pool.component';
 import { TxSidebarComponent } from './tx-sidebar/tx-sidebar.component';
+import { WalletPreviewComponent } from './shared/wallet-preview/wallet-preview.component';
 
 
 @NgModule({
@@ -126,7 +127,8 @@ import { TxSidebarComponent } from './tx-sidebar/tx-sidebar.component';
     SetPendingVaultOwnerEventComponent,
     ReviewQuoteComponent,
     TxCreatePoolComponent,
-    TxSidebarComponent
+    TxSidebarComponent,
+    WalletPreviewComponent
   ],
   imports: [
     CommonModule,

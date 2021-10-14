@@ -21,5 +21,9 @@ export enum Icons {
     close = 'close',
     tokens = 'toll',
     rewards = 'star',
-    help = 'help'
+    help = 'help',
+    copy = 'file_copy',
+    error = 'error_outline',
+    checkOutline = 'check_circle_outline'
+
 }

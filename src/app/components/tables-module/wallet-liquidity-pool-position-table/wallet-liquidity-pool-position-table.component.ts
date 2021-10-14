@@ -1,3 +1,4 @@
+import { AddressPosition } from '@sharedModels/address-position';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { AfterViewInit, Component, Input, OnChanges, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
@@ -5,7 +6,6 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TransactionView } from '@sharedModels/transaction-view';
-import { MathService } from '@sharedServices/utility/math.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 
 @Component({
@@ -15,15 +15,15 @@ import { SidenavService } from '@sharedServices/utility/sidenav.service';
 })
 export class WalletLiquidityPoolPositionTableComponent implements OnChanges, AfterViewInit {
   displayedColumns: string[];
-  dataSource: MatTableDataSource<any>;
-  @Input() positions: any[];
+  dataSource: MatTableDataSource<AddressPosition>;
+  @Input() positions: AddressPosition[];
   @Input() pool: ILiquidityPoolSummary;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private _router: Router, private _sidebar: SidenavService, private _math: MathService) {
-    this.dataSource = new MatTableDataSource<any>();
+  constructor(private _router: Router, private _sidebar: SidenavService) {
+    this.dataSource = new MatTableDataSource<AddressPosition>();
     this.displayedColumns = ['token', 'position', 'amount', 'value', 'actions'];
   }
 

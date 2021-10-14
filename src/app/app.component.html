@@ -1,6 +1,14 @@
 <main [ngClass]="theme">
   <mat-sidenav-container (backdropClick)="closeSidenav()" class="w-100 h-100">
-    <mat-sidenav #sidenav (keydown.escape)="closeSidenav()" position="end" class="transaction-sidebar" [fixedInViewport]="true" [fixedTopGap]="0" [fixedBottomGap]="0" [mode]="sidenavMode">
+    <mat-sidenav #sidenav
+      (keydown.escape)="closeSidenav()"
+      position="end"
+      class="transaction-sidebar"
+      [fixedInViewport]="true"
+      [fixedTopGap]="0"
+      [fixedBottomGap]="0"
+      [mode]="sidenavMode"
+      [autoFocus]="false">
       <opdex-tx-sidebar (onModeChange)="handleSidenavModeChange($event)" [message]="message"></opdex-tx-sidebar>
     </mat-sidenav>
 

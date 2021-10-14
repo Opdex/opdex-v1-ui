@@ -24,7 +24,7 @@ export class WalletBalancesTableComponent implements OnChanges {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private _router: Router, private _sidebar: SidenavService, private _math: MathService) {
+  constructor(private _router: Router, private _sidebar: SidenavService) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['token', 'name', 'balance', 'total', 'actions'];
   }
@@ -40,7 +40,7 @@ export class WalletBalancesTableComponent implements OnChanges {
         address: t.address,
         balance: t.balance.balance,
         decimals: t.decimals,
-        total: this._math.multiply(
+        total: MathService.multiply(
           new FixedDecimal(t.balance.balance, t.decimals),
           new FixedDecimal(t.summary.price.close.toString(), 8))
       }

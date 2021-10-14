@@ -31,7 +31,7 @@
 
               <div class="row">
                 <div class="col-6">
-                  <div class="d-flex align-items-end">
+                  <div class="d-flex align-items-center">
                     <h2 class=" mb-0 d-inline">
                       <a class="body-default" style="text-decoration: none; font-weight: 300;" href="javascript:void(0)" routerLink="/tokens/{{pool.token.src.address}}">{{pool.token.src.symbol}}</a>
                     </h2>
@@ -58,7 +58,7 @@
                 </div>
 
                 <div class="col-6">
-                  <div class="d-flex align-items-end">
+                  <div class="d-flex align-items-center">
                     <h2 class=" mb-0 d-inline">
                       <a class="body-default" style="text-decoration: none; font-weight: 300;" href="javascript:void(0)" routerLink="/tokens/{{pool.token.crs.address}}">{{pool.token.crs.symbol}}</a>
                     </h2>
@@ -140,7 +140,7 @@
               </div>
 
               <div class="col-3">
-                <button mat-raised-button class="big-button stake-button" (click)="stake()">
+                <button mat-raised-button class="big-button stake-button" (click)="stake()" [disabled]="!pool.staking?.isActive">
                   <mat-icon>verified_user</mat-icon>
                   <span class="text">Stake</span>
                 </button>

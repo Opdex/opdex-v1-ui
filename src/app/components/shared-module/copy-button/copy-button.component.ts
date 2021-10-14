@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({

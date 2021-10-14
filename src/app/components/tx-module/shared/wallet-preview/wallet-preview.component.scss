@@ -1,0 +1,22 @@
+.col {
+  &.flex-shrink {
+    flex-grow: 0;
+    flex-shrink: 1;
+  }
+
+  &:first-of-type {
+    padding-left: 0px;
+  }
+
+  &:last-of-type {
+    padding-right: 0px;
+  }
+}
+
+.minimum-link-button {
+  padding: 0px !important;
+  min-height: 0px !important;
+  line-height: inherit !important;
+  min-width: 0px !important;
+  font-weight: inherit !important;
+}

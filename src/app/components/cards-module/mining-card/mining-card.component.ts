@@ -14,10 +14,10 @@ export class MiningCardComponent implements OnChanges {
   @Input() pool: ILiquidityPoolSummary;
   miningUsd: string;
 
-  constructor(private _sidebar: SidenavService, private _math: MathService) { }
+  constructor(private _sidebar: SidenavService) { }
 
   ngOnChanges() {
-    this.miningUsd = this._math.multiply(
+    this.miningUsd = MathService.multiply(
       new FixedDecimal(this.pool.mining.tokensMining, this.pool.token.lp.decimals),
       new FixedDecimal(this.pool.token.lp.summary.price.close.toString(), 8));
   }

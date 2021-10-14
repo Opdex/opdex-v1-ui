@@ -56,7 +56,6 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
     protected _injector: Injector,
-    private _math: MathService,
     private _blocksService: BlocksService
   ) {
     super(_injector);
@@ -178,17 +177,17 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     if (!this.amountCrs.value || !this.amountSrc.value) return;
 
     let crsInValue = new FixedDecimal(this.amountCrs.value, this.pool.token.crs.decimals);
-    let crsMinTolerance = this._math.multiply(crsInValue, new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8));
-    this.crsInMin = this._math.subtract(crsInValue, new FixedDecimal(crsMinTolerance, this.pool.token.crs.decimals));
+    let crsMinTolerance = MathService.multiply(crsInValue, new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8));
+    this.crsInMin = MathService.subtract(crsInValue, new FixedDecimal(crsMinTolerance, this.pool.token.crs.decimals));
 
     let srcInValue = new FixedDecimal(this.amountSrc.value, this.pool.token.src.decimals);
-    let srcMinTolerance = this._math.multiply(srcInValue, new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8));
-    this.srcInMin = this._math.subtract(srcInValue, new FixedDecimal(srcMinTolerance, this.pool.token.src.decimals));
+    let srcMinTolerance = MathService.multiply(srcInValue, new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8));
+    this.srcInMin = MathService.subtract(srcInValue, new FixedDecimal(srcMinTolerance, this.pool.token.src.decimals));
 
-    this.crsInFiatValue = this._math.multiply(new FixedDecimal(this.amountCrs.value, this.pool.token.crs.decimals), new FixedDecimal(this.pool.token.crs.summary.price.close.toString(), 8));
-    this.crsInMinFiatValue = this._math.multiply(new FixedDecimal(this.crsInMin, this.pool.token.crs.decimals), new FixedDecimal(this.pool.token.crs.summary.price.close.toString(), 8));
-    this.srcInFiatValue = this._math.multiply(new FixedDecimal(this.amountSrc.value, this.pool.token.src.decimals), new FixedDecimal(this.pool.token.src.summary.price.close.toString(), 8));
-    this.srcInMinFiatValue = this._math.multiply(new FixedDecimal(this.srcInMin, this.pool.token.src.decimals), new FixedDecimal(this.pool.token.src.summary.price.close.toString(), 8));
+    this.crsInFiatValue = MathService.multiply(new FixedDecimal(this.amountCrs.value, this.pool.token.crs.decimals), new FixedDecimal(this.pool.token.crs.summary.price.close.toString(), 8));
+    this.crsInMinFiatValue = MathService.multiply(new FixedDecimal(this.crsInMin, this.pool.token.crs.decimals), new FixedDecimal(this.pool.token.crs.summary.price.close.toString(), 8));
+    this.srcInFiatValue = MathService.multiply(new FixedDecimal(this.amountSrc.value, this.pool.token.src.decimals), new FixedDecimal(this.pool.token.src.summary.price.close.toString(), 8));
+    this.srcInMinFiatValue = MathService.multiply(new FixedDecimal(this.srcInMin, this.pool.token.src.decimals), new FixedDecimal(this.pool.token.src.summary.price.close.toString(), 8));
   }
 
   toggleShowMore(value: boolean) {

@@ -228,10 +228,10 @@ main {
   color: #fff;
 
   $primary: map-get($altTheme, primary);
-  $primaryDarkerColor: mat.get-color-from-palette($primary, darker);
+  $primaryLighterColor: mat.get-color-from-palette($primary, lighter);
 
   a {
-    color: $primaryDarkerColor;
+    color: $primaryLighterColor;
   }
 }
 
