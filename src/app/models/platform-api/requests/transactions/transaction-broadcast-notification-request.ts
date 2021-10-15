@@ -1,13 +1,13 @@
 export interface ITransactionBroadcastNotificationRequest {
     walletAddress: string;
     transactionHash: string;
-    isValid: boolean;
+    isValid?: boolean;
 }
 
 export class TransactionBroadcastNotificationRequest implements ITransactionBroadcastNotificationRequest{
     walletAddress: string;
     transactionHash: string;
-    isValid: boolean;
+    isValid?: boolean = true;
 
     constructor(request: ITransactionBroadcastNotificationRequest) {
         if(!this.walletAddress || !this.transactionHash) {

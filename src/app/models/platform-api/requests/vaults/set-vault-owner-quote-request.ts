@@ -1,11 +1,11 @@
 export interface ISetVaultOwnerQuoteRequest {
     owner: string;
-    isValid: boolean;
+    isValid?: boolean;
 }
 
 export class SetVaultOwnerQuoteRequest implements ISetVaultOwnerQuoteRequest {
     owner: string;
-    isValid: boolean;
+    isValid?: boolean = true;
 
     constructor(request: ISetVaultOwnerQuoteRequest){
         if(!request.owner)

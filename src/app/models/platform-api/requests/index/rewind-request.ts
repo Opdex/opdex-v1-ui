@@ -5,7 +5,7 @@ export interface IRewindRequest {
 
 export class RewindRequest implements IRewindRequest {
     block: number;
-    isValid?: boolean;
+    isValid?: boolean = true;
 
     constructor(request: IRewindRequest) {
         if (!request.block)

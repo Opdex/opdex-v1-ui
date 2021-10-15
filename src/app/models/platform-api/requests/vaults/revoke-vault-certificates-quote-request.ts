@@ -1,11 +1,11 @@
 export interface IRevokeVaultCertificatesQuoteRequest {
     holder: string;
-    isValid: boolean;
+    isValid?: boolean;
 }
 
 export class RevokeVaultCertificatesQuoteRequest implements IRevokeVaultCertificatesQuoteRequest{
     holder: string;
-    isValid: boolean;
+    isValid?: boolean = true;
 
     constructor(request: IRevokeVaultCertificatesQuoteRequest){
         if(!request.holder)

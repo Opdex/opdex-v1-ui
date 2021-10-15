@@ -5,7 +5,7 @@ export interface ICreateStandardMarketQuoteRequest {
     authLiquidityProviders: boolean;
     authTraders: boolean;
     enableMarketFee: boolean;
-    isValid: boolean;
+    isValid?: boolean;
 }
 
 export class CreateStandardMarketQuoteRequest implements ICreateStandardMarketQuoteRequest {
@@ -15,7 +15,7 @@ export class CreateStandardMarketQuoteRequest implements ICreateStandardMarketQu
     authLiquidityProviders: boolean;
     authTraders: boolean;
     enableMarketFee: boolean;
-    isValid: boolean;
+    isValid?: boolean = true;
 
     constructor(request: ICreateStandardMarketQuoteRequest) {
         if(!request.marketOwner)

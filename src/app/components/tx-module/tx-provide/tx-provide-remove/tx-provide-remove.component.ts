@@ -16,6 +16,7 @@ import { Icons } from 'src/app/enums/icons';
 import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { DecimalStringRegex } from '@sharedLookups/regex';
+import { IRemoveLiquidityRequest, RemoveLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/remove-liquidity-request';
 
 @Component({
   selector: 'opdex-tx-provide-remove',
@@ -101,21 +102,23 @@ export class TxProvideRemoveComponent extends TxBase {
     let liquidity = this.liquidity.value.toString().replace(/,/g, '');
     if (!liquidity.includes('.')) liquidity = `${liquidity}.00`;
 
-    const payload = {
+    const payload: IRemoveLiquidityRequest = new RemoveLiquidityRequest({
       liquidity: liquidity,
       amountCrsMin: this.crsOutMin,
       amountSrcMin: this.srcOutMin,
       liquidityPool: this.pool.address,
       recipient: this.context.wallet,
       deadline: this.calcDeadline(this.deadlineThreshold)
-    };
+    });
 
-    this._platformApi
-      .removeLiquidityQuote(payload.liquidityPool, payload)
-        .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => {
-          this.quote(quote);
-        });
+    if(payload.isValid){
+      this._platformApi
+        .removeLiquidityQuote(payload.liquidityPool, payload)
+          .pipe(take(1))
+          .subscribe((quote: ITransactionQuote) => {
+            this.quote(quote);
+          });
+    }
   }
 
   calcTolerance(tolerance?: number) {

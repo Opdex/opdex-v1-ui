@@ -3,6 +3,7 @@ import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
+import { ICollectStakingRewardsRequest } from '@sharedModels/platform-api/requests/liquidity-pools/collect-staking-rewards-request';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -42,7 +43,7 @@ export class TxStakeCollectComponent extends TxBase implements OnChanges {
   }
 
   submit(): void {
-    const payload = {
+    const payload: ICollectStakingRewardsRequest = {
       liquidate: this.liquidate.value
     };
 

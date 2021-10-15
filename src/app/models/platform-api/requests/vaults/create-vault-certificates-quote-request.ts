@@ -1,13 +1,13 @@
 export interface ICreateVaultCertificateQuoteRequest {
         holder: string;
         amount: number;
-        isValid: boolean;
+        isValid?: boolean;
 }
 
 export class CreateVaultCertificateQuoteRequest implements ICreateVaultCertificateQuoteRequest {
         holder: string;
         amount: number;
-        isValid: boolean;
+        isValid?: boolean = true;
 
         constructor(request: ICreateVaultCertificateQuoteRequest) {
                 if(!request.holder)

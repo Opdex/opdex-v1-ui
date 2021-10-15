@@ -15,6 +15,7 @@ import { Observable, Subscription, timer } from 'rxjs';
 import { debounceTime, switchMap, tap, map, take, distinctUntilChanged } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
+import { IStartStakingRequest } from '@sharedModels/platform-api/requests/liquidity-pools/start-staking-request';
 
 @Component({
   selector: 'opdex-tx-stake-start',
@@ -87,7 +88,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
     let amount = this.amount.value.toString().replace(/,/g, '');
     if (!amount.includes('.')) amount = `${amount}.00`;
 
-    const payload = {
+    const payload: IStartStakingRequest = {
       amount: amount
     }
 

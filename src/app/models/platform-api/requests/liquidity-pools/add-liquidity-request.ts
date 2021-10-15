@@ -1,21 +1,21 @@
 export interface IAddLiquidityRequest {
     amountCrs: number;
     amountSrc: number;
-    amountSrcMin: number;
-    amountCrsMin: number;
+    amountSrcMin: string;
+    amountCrsMin: string;
     recipient: string;
     deadline: number;
-    isValid: boolean;
+    isValid?: boolean;
 }
 
 export class AddLiquidityRequest implements IAddLiquidityRequest {
     amountCrs: number;
     amountSrc: number;
-    amountSrcMin: number;
-    amountCrsMin: number;
+    amountSrcMin: string;
+    amountCrsMin: string;
     recipient: string;
     deadline: number;
-    isValid: boolean;
+    isValid?: boolean = true;
 
     constructor(request: IAddLiquidityRequest) {
         if(!request.recipient) {

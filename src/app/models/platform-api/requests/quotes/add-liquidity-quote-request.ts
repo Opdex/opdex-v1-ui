@@ -1,5 +1,5 @@
 export interface IAddLiquidityQuoteRequest {
-    amountIn: number;
+    amountIn: string;
     tokenIn: string;
     pool: string;
 }

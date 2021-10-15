@@ -13,6 +13,7 @@ import { IGovernance } from '@sharedModels/platform-api/responses/governances/go
 import { environment } from '@environments/environment';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { Governance } from '@sharedModels/governance';
+import { IRewardMiningPoolsRequest } from '@sharedModels/platform-api/requests/governances/reward-mining-pools-request';
 
 @Component({
   selector: 'opdex-governance',
@@ -83,7 +84,7 @@ export class GovernanceComponent implements OnInit, OnDestroy {
   }
 
   quoteDistribution(): void {
-    const payload = { fullDistribution: true };
+    const payload: IRewardMiningPoolsRequest = { fullDistribution: true };
 
     this._platformApiService
       .rewardMiningPoolsQuote(this.governance.address, payload)

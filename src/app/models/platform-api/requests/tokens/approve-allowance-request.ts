@@ -1,13 +1,15 @@
 export interface IApproveAllowanceRequest {
-    amount: number;
+    amount: string;
     spender: string; 
-    isValid: boolean;
+    token: string;
+    isValid?: boolean;
 }
 
 export class ApproveAllowanceRequest implements IApproveAllowanceRequest {
-    amount: number;
-    spender: string; 
-    isValid: boolean;
+    amount: string;
+    spender: string;
+    token: string; 
+    isValid?: boolean = true;
 
     constructor(request: IApproveAllowanceRequest) {
         if(!request.spender)
@@ -15,5 +17,6 @@ export class ApproveAllowanceRequest implements IApproveAllowanceRequest {
         
         this.amount = request.amount;
         this.spender = request.spender;
+        this.token = request.token;
     }
 }

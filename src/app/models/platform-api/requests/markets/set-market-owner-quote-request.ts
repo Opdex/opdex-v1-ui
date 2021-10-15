@@ -1,11 +1,11 @@
 export interface ISetMarketOwnerQuoteRequest {
     owner: string;
-    isValid: boolean;
+    isValid?: boolean;
 }
 
 export class SetMarketOwnerQuoteRequest implements ISetMarketOwnerQuoteRequest {
     owner: string;
-    isValid: boolean;
+    isValid?: boolean = true;
 
     constructor(request: ISetMarketOwnerQuoteRequest) {
         if(!request.owner)

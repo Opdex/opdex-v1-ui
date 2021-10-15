@@ -1,11 +1,11 @@
 export interface IQuoteReplayRequest {
     quote: string;
-    isValid: boolean;
+    isValid?: boolean;
 }
 
 export class QuoteReplayRequest implements IQuoteReplayRequest {
     quote: string;
-    isValid: boolean;
+    isValid?: boolean = true;
 
     constructor(request: IQuoteReplayRequest) {
         if(!request.quote) {

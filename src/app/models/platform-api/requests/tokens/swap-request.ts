@@ -3,11 +3,11 @@ export interface ISwapRequest {
     tokenInAmount: number;
     tokenOutAmount: number;
     tokenInExactAmount: boolean;
-    tokenInMaximumAmount: number;
-    tokenOutMinimumAmount: number;
+    tokenInMaximumAmount: string;
+    tokenOutMinimumAmount: string;
     recipient: string;
     deadline: number;
-    isValid: boolean;
+    isValid?: boolean;
 }
 
 export class SwapRequest implements ISwapRequest {
@@ -15,11 +15,11 @@ export class SwapRequest implements ISwapRequest {
     tokenInAmount: number;
     tokenOutAmount: number;
     tokenInExactAmount: boolean;
-    tokenInMaximumAmount: number;
-    tokenOutMinimumAmount: number;
+    tokenInMaximumAmount: string;
+    tokenOutMinimumAmount: string;
     recipient: string;
     deadline: number;
-    isValid: boolean;
+    isValid?: boolean = true;
 
     constructor(request: ISwapRequest){
         if (!request.tokenOut || !request.recipient) {

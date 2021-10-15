@@ -17,6 +17,8 @@ import { TxBase } from '../tx-base.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { ISwapRequest, SwapRequest } from '@sharedModels/platform-api/requests/tokens/swap-request';
+import { ISwapQuoteRequest } from '@sharedModels/platform-api/requests/quotes/swap-quote-request';
 
 @Component({
   selector: 'opdex-tx-swap',
@@ -215,7 +217,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   }
 
   submit() {
-    const payload = {
+    const payload: ISwapRequest = new SwapRequest({
       tokenOut: this.tokenOut.value,
       tokenInAmount: this.tokenInAmount.value,
       tokenOutAmount: this.tokenOutAmount.value,
@@ -224,12 +226,14 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
       tokenInMaximumAmount: this.tokenInMax,
       tokenOutMinimumAmount: this.tokenOutMin,
       deadline: this.calcDeadline(this.deadlineThreshold)
-    }
+    });
 
-    this._platformApi
-      .swapQuote(this.tokenIn.value, payload)
-        .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => this.quote(quote));
+    if(payload.isValid){
+      this._platformApi
+        .swapQuote(this.tokenIn.value, payload)
+          .pipe(take(1))
+          .subscribe((quote: ITransactionQuote) => this.quote(quote));
+    }
   }
 
   switch() {
@@ -279,7 +283,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     const valueDecimals = this.tokenInExact ? this.tokenInDetails.decimals : this.tokenOutDetails.decimals;
     var fixedDecimalValue = new FixedDecimal(value, valueDecimals);
 
-    const payload = {
+    const payload: ISwapQuoteRequest = {
       tokenIn: this.tokenInDetails.address,
       tokenOut: this.tokenOutDetails.address,
       tokenInAmount: this.tokenInExact ? fixedDecimalValue.formattedValue : null,

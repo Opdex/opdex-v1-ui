@@ -1,11 +1,11 @@
 export interface ICreateLiquidityPoolRequest {
     token: string;
-    isValid: boolean;
+    isValid?: boolean;
 }
 
 export class CreateLiquidityPoolRequest implements ICreateLiquidityPoolRequest {
     token: string;
-    isValid: boolean;
+    isValid?: boolean = true;
 
     constructor(request: ICreateLiquidityPoolRequest) {
         if(!request.token)

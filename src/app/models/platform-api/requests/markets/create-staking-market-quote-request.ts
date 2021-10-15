@@ -1,11 +1,11 @@
 export interface ICreateStakingMarketQuoteRequest {
     stakingToken: string;
-    isValid: boolean;
+    isValid?: boolean;
 }
 
 export class CreateStakingMarketQuoteRequest implements ICreateStakingMarketQuoteRequest {
     stakingToken: string;
-    isValid: boolean;
+    isValid?: boolean = true;
 
     constructor(request: ICreateStakingMarketQuoteRequest) {
         if(!request.stakingToken)

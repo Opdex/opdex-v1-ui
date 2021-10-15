@@ -19,6 +19,9 @@ import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-t
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { MathService } from '@sharedServices/utility/math.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
+import { AddLiquidityRequest, IAddLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/add-liquidity-request';
+import { IQuoteReplayRequest } from '@sharedModels/platform-api/requests/transactions/quote-replay-request';
+import { IAddLiquidityQuoteRequest } from '@sharedModels/platform-api/requests/quotes/add-liquidity-quote-request';
 
 @Component({
   selector: 'opdex-tx-provide-add',
@@ -144,7 +147,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     // Technically the input should be made invalid in this case using form validations, cannot end with decimal point
     if (value.endsWith('.')) value = `${value}00`;
 
-    const payload = {
+    const payload: IAddLiquidityQuoteRequest = {
       amountIn: value,
       tokenIn: tokenIn.address,
       pool: this.pool.address
@@ -160,21 +163,23 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     let srcValue = this.amountSrc.value.toString().replace(/,/g, '');
     if (!srcValue.includes('.')) srcValue = `${srcValue}.00`;
 
-    const payload = {
+    const payload: IAddLiquidityRequest = new AddLiquidityRequest({
       amountCrs: crsValue,
       amountSrc: srcValue,
       recipient: this.context.wallet,
       amountCrsMin: this.crsInMin,
       amountSrcMin: this.srcInMin,
       deadline: this.calcDeadline(this.deadlineThreshold)
-    }
+    });
 
-    this._platformApi
-      .addLiquidityQuote(this.pool.address, payload)
-        .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => {
-          this.quote(quote);
-        });
+    if(payload.isValid){
+      this._platformApi
+        .addLiquidityQuote(this.pool.address, payload)
+          .pipe(take(1))
+          .subscribe((quote: ITransactionQuote) => {
+            this.quote(quote);
+          });
+    }
   }
 
   calcTolerance(tolerance?: number) {
