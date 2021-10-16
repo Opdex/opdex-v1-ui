@@ -55,7 +55,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ErrorMiddlewareService } from '@sharedServices/middleware/error-middleware.service';
 import { NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule } from 'ngx-google-analytics';
 import { environment } from '@environments/environment';
-import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
 
 @NgModule({
   declarations: [
@@ -114,8 +113,7 @@ import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
       }
     }),
     NgxGoogleAnalyticsModule.forRoot(environment.ga),
-    NgxGoogleAnalyticsRouterModule,
-    ScrollToModule.forRoot()
+    NgxGoogleAnalyticsRouterModule
   ],
   providers: [
     JwtService,

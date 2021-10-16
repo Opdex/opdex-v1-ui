@@ -1,11 +1,9 @@
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { AfterViewInit, Component, Input, OnChanges, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { ILiquidityPoolsSearchFilter, LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pool-filter';
-import { Observable } from 'rxjs';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { TransactionView } from '@sharedModels/transaction-view';
 
@@ -26,7 +24,7 @@ export class PoolsTableComponent implements OnChanges, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private _router: Router, private _platformApi: PlatformApiService, private _sidebar: SidenavService) {
+  constructor(private _router: Router, private _sidebar: SidenavService) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['name', 'liquidity', 'stakingWeight', 'volumeDaily', 'rewards', 'options'];
   }
@@ -50,26 +48,6 @@ export class PoolsTableComponent implements OnChanges, AfterViewInit {
   trackBy(index: number, pool: any) {
     return pool.name + pool.address
   }
-
-  // Todo: Wait for API stories
-  // Responses will need to include
-  // - # of total pools used to properly build pagination
-
-  // public applyFilter() {
-
-  // }
-
-  // public getNext(event: PageEvent) {
-
-  // }
-
-  // public handleSort(event: Sort) {
-
-  // }
-
-  // private getLiquidityPools(): Observable<any> {
-  //   return this._platformApi.getPools();
-  // }
 
   provide(pool: any) {
     this._sidebar.openSidenav(TransactionView.provide, {pool: pool});

@@ -12,10 +12,6 @@ import { Observable, Subscription } from 'rxjs';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { TransactionsService } from '@sharedServices/platform/transactions.service';
 
-const placeholders = [
-  1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-];
-
 @Component({
   selector: 'opdex-tx-feed',
   templateUrl: './tx-feed.component.html',
@@ -36,7 +32,7 @@ export class TxFeedComponent implements OnChanges, OnDestroy {
   newTransactions: TransactionReceipt[] = [];
   refreshAvailable: boolean;
   loading = true;
-  placeholders: any[] = placeholders;
+  endReached: boolean;
 
   constructor(
     private _transactionsService: TransactionsService,
@@ -71,6 +67,10 @@ export class TxFeedComponent implements OnChanges, OnDestroy {
     }
   }
 
+  onScroll() {
+    this.more();
+  }
+
   refresh() {
     this.transactions.unshift(...this.newTransactions);
     this.newTransactions = [];
@@ -94,7 +94,11 @@ export class TxFeedComponent implements OnChanges, OnDestroy {
           // Refreshing latest shouldn't set nextPage. (e.g. 3 pages down, checking for new txs,
           // don't set next page but alert user to scroll up)
           if (!this.nextPage || request.cursor) {
-            this.nextPage = transactionsResponse.paging.next;
+            if (!transactionsResponse.paging.next) {
+              this.endReached = true;
+            } else {
+              this.nextPage = transactionsResponse.paging.next;
+            }
           }
 
           return receipts;
@@ -103,10 +107,16 @@ export class TxFeedComponent implements OnChanges, OnDestroy {
   }
 
   more() {
+    if (this.endReached) return;
+
     this.transactionRequest.cursor = this.nextPage;
     this.getTransactions(this.transactionRequest)
       .pipe(take(1))
       .subscribe((transactions: TransactionReceipt[]) => this.transactions.push(...transactions));
+  }
+
+  toggleRefresh() {
+    this.refreshAvailable = !this.refreshAvailable;
   }
 
   public transactionsTrackBy(index: number, transaction: any) {

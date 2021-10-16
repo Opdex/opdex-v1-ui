@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
+import { TokensService } from '@sharedServices/platform/tokens.service';
 import { forkJoin, Observable } from 'rxjs';
 import { take, map, switchMap } from 'rxjs/operators';
 
@@ -11,21 +11,21 @@ import { take, map, switchMap } from 'rxjs/operators';
 export class TokensComponent {
   tokens$: Observable<any>;
 
-  constructor(private _platformApiService: PlatformApiService) {
-    this.tokens$ = this._platformApiService.getTokens()
-    .pipe(
-      switchMap((tokens: any[]) => {
-        const poolArray$: Observable<any>[] = [];
+  constructor(private _tokenService: TokensService) {
+    this.tokens$ = this._tokenService.getTokens()
+      .pipe(
+        switchMap((tokens: any[]) => {
+          const poolArray$: Observable<any>[] = [];
 
-        tokens.forEach(token => poolArray$.push(this.getTokenHistory$(token)));
+          tokens.forEach(token => poolArray$.push(this.getTokenHistory$(token)));
 
-        return forkJoin(poolArray$);
-      })
-    );
+          return forkJoin(poolArray$);
+        })
+      );
   }
 
   private getTokenHistory$(token: any): Observable<any> {
-    return this._platformApiService.getTokenHistory(token.address, "1W")
+    return this._tokenService.getTokenHistory(token.address, "1W")
       .pipe(
         take(1),
         map((tokenHistory: any) => {

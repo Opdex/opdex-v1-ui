@@ -6,7 +6,7 @@ import { CardsModule } from '@sharedComponents/cards-module/cards.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 // Material Imports
 import { MatIconModule } from '@angular/material/icon';
@@ -24,7 +24,6 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { QRCodeModule } from 'angularx-qrcode';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-
 
 import { TxSwapComponent } from './tx-swap/tx-swap.component';
 import { TxProvideComponent } from './tx-provide/tx-provide.component';
@@ -178,7 +177,7 @@ import { AllowanceTransactionSummaryComponent } from './tx-feed/tx-summary/allow
     MatAutocompleteModule,
     MatProgressSpinnerModule,
     MatMenuModule,
-    ScrollToModule
+    InfiniteScrollModule
   ],
   exports: [
     TxSwapComponent,

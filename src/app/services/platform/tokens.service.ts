@@ -15,6 +15,10 @@ export class TokensService extends CacheService {
     return this.getItem(address, this._platformApi.getToken(address), cacheOnly);
   }
 
+  getTokens(limit: number = 10, includeLpt: boolean = false): Observable<IToken[]> {
+    return this.getItem(`tokens-${limit}-${includeLpt}`, this._platformApi.getTokens());
+  }
+
   getTokenHistory(address: string, timeSpan: string = "1Y", candleSpan: string = "Hourly"): Observable<any> {
     return this.getItem(`${address}-history-${timeSpan}-${candleSpan}`, this._platformApi.getTokenHistory(address, timeSpan, candleSpan));
   }
@@ -23,9 +27,11 @@ export class TokensService extends CacheService {
     this.refreshItem(address);
   }
 
+  refreshTokens(limit: number = 10, includeLpt: boolean = false): void {
+    this.refreshItem(`tokens-${limit}-${includeLpt}`);
+  }
+
   refreshTokenHistory(address: string, timeSpan: string = "1Y", candleSpan: string = "Hourly"): void {
     this.refreshItem(`${address}-history-${timeSpan}-${candleSpan}`);
   }
-
-  getTokens() { }
 }

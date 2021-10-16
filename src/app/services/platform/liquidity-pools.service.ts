@@ -1,3 +1,4 @@
+import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pool-filter';
 import { ILiquidityPoolSummary, ILiquidityPoolSnapshotHistory } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable, Injector } from '@angular/core';
@@ -19,8 +20,16 @@ export class LiquidityPoolsService extends CacheService {
     return this.getItem(`${address}-history-${timeSpan}`, this._platformApi.getPoolHistory(address, timeSpan));
   }
 
+  getLiquidityPools(request: LiquidityPoolsSearchQuery) {
+    return this.getItem(`liquidity-pools-${request.getQuery()}`, this._platformApi.getPools(request));
+  }
+
   refreshPool(address: string): void {
     this.refreshItem(address);
+  }
+
+  refreshLiquidityPools(request: LiquidityPoolsSearchQuery): void {
+    this.refreshItem(`liquidity-pools-${request.getQuery()}`);
   }
 
   refreshPoolHistory(address: string, timeSpan: string = '1Y'): void {

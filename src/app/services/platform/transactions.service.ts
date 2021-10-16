@@ -13,7 +13,7 @@ export class TransactionsService extends CacheService {
   }
 
   getTransaction(hash: string): Observable<ITransactionReceipt> {
-    return this.getItem(`transaction-request-${hash}`, this._platformApi.getTransaction(hash));
+    return this.getItem(`transaction-request-${hash}`, this._platformApi.getTransaction(hash), true);
   }
 
   refreshTransaction(hash: string): void {
@@ -21,7 +21,8 @@ export class TransactionsService extends CacheService {
   }
 
   getTransactions(request: TransactionRequest): Observable<ITransactionReceipts> {
-    return this.getItem(`transactions-request-${request.buildQueryString()}`, this._platformApi.getTransactions(request));
+    const isHistorical = request.cursor?.length > 0;
+    return this.getItem(`transactions-request-${request.buildQueryString()}`, this._platformApi.getTransactions(request), isHistorical);
   }
 
   refreshTransactions(request: TransactionRequest) {

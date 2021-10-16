@@ -1,3 +1,4 @@
+import { GovernancesService } from './../../services/platform/governances.service';
 import { Subscription } from 'rxjs';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
@@ -13,6 +14,7 @@ import { IGovernance } from '@sharedModels/platform-api/responses/governances/go
 import { environment } from '@environments/environment';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { Governance } from '@sharedModels/governance';
+import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 
 @Component({
   selector: 'opdex-governance',
@@ -30,9 +32,11 @@ export class GovernanceComponent implements OnInit, OnDestroy {
 
   constructor(
     private _platformApiService: PlatformApiService,
+    private _governanceService: GovernancesService,
     private _bottomSheet: MatBottomSheet,
     private _context: UserContextService,
     private _tokenService: TokensService,
+    private _liquidityPoolsService: LiquidityPoolsService
   ) { }
 
   nominationsHelpInfo = {
@@ -51,7 +55,7 @@ export class GovernanceComponent implements OnInit, OnDestroy {
     this.governance$ = timer(0, 20000)
       .pipe(
         switchMap(_ => {
-          return this._platformApiService.getGovernance(environment.governanceAddress)
+          return this._governanceService.getGovernance(environment.governanceAddress)
             .pipe(
               tap((rsp: IGovernance) => this.governance = new Governance(rsp)),
               switchMap(governance => this._tokenService.getToken(governance.minedToken)),
@@ -59,11 +63,11 @@ export class GovernanceComponent implements OnInit, OnDestroy {
         })).subscribe();
 
     this.nominatedPools$ = timer(0, 20000).pipe(switchMap(_ => {
-      return this._platformApiService.getPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 4, {nominated: true}));
+      return this._liquidityPoolsService.getLiquidityPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 4, {nominated: true}));
     }));
 
     this.miningPools$ = timer(0, 20000).pipe(switchMap(_ => {
-      return this._platformApiService.getPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 4, {mining: true}));
+      return this._liquidityPoolsService.getLiquidityPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 4, {mining: true}));
     }));
   }
 

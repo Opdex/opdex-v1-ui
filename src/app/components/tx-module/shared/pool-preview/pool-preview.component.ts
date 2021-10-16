@@ -1,6 +1,6 @@
-import { IconSizes } from './../../../../enums/icon-sizes';
+import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TransactionView } from '@sharedModels/transaction-view';
@@ -31,13 +31,13 @@ export class PoolPreviewComponent {
     return this.poolForm.get('poolControl') as FormControl;
   }
 
-  constructor(private _fb: FormBuilder, private _platform: PlatformApiService) {
+  constructor(private _fb: FormBuilder, private _liquidityPoolsService: LiquidityPoolsService) {
     this.poolForm = this._fb.group({
       poolControl: ['', [Validators.required]]
     });
 
-    this.pools$ = this._platform
-      .getPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 10))
+    this.pools$ = this._liquidityPoolsService
+      .getLiquidityPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 10))
       .pipe(tap(pools => this.pools = pools));
 
     this.filteredPools$ = this.poolControl.valueChanges
