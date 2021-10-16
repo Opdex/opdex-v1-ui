@@ -41,6 +41,10 @@
   text-align: right;
 }
 
+.text-align-left {
+  text-align: left;
+}
+
 .scrollable-card {
   min-width: 310px;
   width: 310px;
@@ -127,6 +131,11 @@
     color: $blue-primary !important;
   }
 
+  &.reward {
+    color: $yellow-primary !important;
+    text-shadow: 0px 0px 1px black;
+  }
+
   &.small {
     font-size: 22px;
     height: 22px;
@@ -160,6 +169,26 @@
     svg {
       width: 16px !important;
       height: 16px !important;
+    }
+  }
+
+  &.small {
+    width: 22px !important;
+    height: 22px !important;
+
+    svg {
+      width: 22px !important;
+      height: 22px !important;
+    }
+  }
+
+  &.small {
+    width: 28px !important;
+    height: 28px !important;
+
+    svg {
+      width: 28px !important;
+      height: 28px !important;
     }
   }
 }

@@ -1,10 +1,10 @@
 <ng-container *ngIf="allowance">
   <div class="d-flex flex-row align-items-center justify-content-between" *ngIf="!allowance.isApproved">
     <div class="message d-flex flex-row align-items-center">
-      <mat-icon class="small warn mr-2" *ngIf="!waiting">error</mat-icon>
+      <mat-icon class="small warn mr-2" *ngIf="!waiting">{{icons.error}}</mat-icon>
       <mat-spinner *ngIf="waiting" class="tiny mr-2"></mat-spinner>
-      <p class="mb-0 warn" style="font-weight: 400;" *ngIf="!waiting">Insufficient Allowance</p>
-      <p class="mb-0 loading" style="font-weight: 400;" *ngIf="waiting">Awaiting Approval</p>
+      <h5 class="mb-0" style="font-weight: 400;" *ngIf="!waiting">Insufficient Allowance</h5>
+      <h5 class="mb-0" style="font-weight: 400;" *ngIf="waiting">Awaiting Approval</h5>
     </div>
 
     <button mat-icon-button class="small" color="primary" (click)="setIgnore(!ignore)" *ngIf="!waiting"><mat-icon>{{ ignore ? 'add' : 'remove' }}</mat-icon></button>
@@ -12,21 +12,21 @@
 
   <div class="d-flex flex-row align-items-center justify-content-between" *ngIf="allowance.isApproved">
     <div class="message d-flex flex-row align-items-center">
-      <mat-icon class="small success mr-2">check_circle</mat-icon>
-      <p class="mb-0 success" style="font-weight: 400;">Allowance</p>
+      <mat-icon class="small success mr-2">{{icons.checkOutline}}</mat-icon>
+      <h5 class="mb-0" style="font-weight: 400;">Allowance</h5>
     </div>
   </div>
 
   <div class="details mt-2" *ngIf="!allowance.isApproved && !ignore && !waiting">
     <ng-container [ngSwitch]="transactionType" >
-      <p *ngSwitchCase="transactionTypes.addLiquidity" class="mb-3">An allowance must be approved in order to add liquidity using {{allowance.requestToSpend | shortNumber}} {{allowance.token.symbol}} tokens.</p>
-      <p *ngSwitchCase="transactionTypes.removeLiquidity" class="mb-3">An allowance must be approved in order to remove liquidity using {{allowance.requestToSpend | shortNumber}} {{allowance.token.symbol}} tokens.</p>
-      <p *ngSwitchCase="transactionTypes.startMining" class="mb-3">An allowance must be approved in order to mine with {{allowance.requestToSpend | shortNumber}} {{allowance.token.symbol}} tokens.</p>
-      <p *ngSwitchCase="transactionTypes.swap" class="mb-3">An allowance must be approved in order to swap {{allowance.requestToSpend | shortNumber}} {{allowance.token.symbol}} tokens.</p>
-      <p *ngSwitchCase="transactionTypes.startStaking" class="mb-3">An allowance must be approved in order to stake {{allowance.requestToSpend | shortNumber}} {{allowance.token.symbol}} tokens.</p>
-      <p *ngSwitchDefault class="mb-3">In order to stake {{allowance.requestToSpend}} {{allowance.token.symbol}}, the liquidity pool must have an approved allowance of at least that much.</p>
+      <p *ngSwitchCase="transactionTypes.addLiquidity" class="mb-3">An allowance must be approved in order to add liquidity using {{allowance.requestToSpend.formattedValue | shortNumber}} {{allowance.token.symbol}} tokens.</p>
+      <p *ngSwitchCase="transactionTypes.removeLiquidity" class="mb-3">An allowance must be approved in order to remove liquidity using {{allowance.requestToSpend.formattedValue | shortNumber}} {{allowance.token.symbol}} tokens.</p>
+      <p *ngSwitchCase="transactionTypes.startMining" class="mb-3">An allowance must be approved in order to mine with {{allowance.requestToSpend.formattedValue | shortNumber}} {{allowance.token.symbol}} tokens.</p>
+      <p *ngSwitchCase="transactionTypes.swap" class="mb-3">An allowance must be approved in order to swap {{allowance.requestToSpend.formattedValue | shortNumber}} {{allowance.token.symbol}} tokens.</p>
+      <p *ngSwitchCase="transactionTypes.startStaking" class="mb-3">An allowance must be approved in order to stake {{allowance.requestToSpend.formattedValue | shortNumber}} {{allowance.token.symbol}} tokens.</p>
+      <p *ngSwitchDefault class="mb-3">In order to stake {{allowance.requestToSpend.formattedValue}} {{allowance.token.symbol}}, the liquidity pool must have an approved allowance of at least that much.</p>
     </ng-container>
 
-    <button mat-stroked-button class="w-100" color="primary" (click)="approveAllowance(allowance.requestToSpend, allowance.spender, allowance.token.address)">Begin Approval</button>
+    <button mat-stroked-button class="w-100" color="primary" (click)="approveAllowance(allowance.requestToSpend.formattedValue, allowance.spender, allowance.token.address)">Begin Approval</button>
   </div>
 </ng-container>

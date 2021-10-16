@@ -20,7 +20,6 @@ export class SideNavComponent implements OnDestroy {
   constructor(
     private _context: UserContextService,
     private _theme: ThemeService,
-    private _router: Router
   ) {
     this.userContext$ = this._context.getUserContext$();
     this.theme$ = this._theme.getTheme().subscribe((theme: 'light-mode' | 'dark-mode') => this.theme = theme);
@@ -36,8 +35,7 @@ export class SideNavComponent implements OnDestroy {
     this.onPinnedToggle.emit(this.isPinned);
   }
 
-  route(url: string) {
-    this._router.navigateByUrl(url);
+  emitRouteChange(url: string) {
     this.onRouteChanged.emit(url);
   }
 

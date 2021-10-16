@@ -1,8 +1,6 @@
 import { MathService } from '@sharedServices/utility/math.service';
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { DecimalStringRegex } from '@sharedLookups/regex';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
@@ -10,12 +8,11 @@ import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liqu
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Observable, Subscription, timer } from 'rxjs';
 import { debounceTime, switchMap, tap, map, take, distinctUntilChanged } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
-import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
 import { IStartStakingRequest } from '@sharedModels/platform-api/requests/liquidity-pools/start-staking-request';
+import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
 
 @Component({
   selector: 'opdex-tx-stake-start',
@@ -28,7 +25,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
   form: FormGroup;
   pool: ILiquidityPoolSummary;
   allowance$: Subscription;
-  transactionTypes = AllowanceTransactionTypes;
+  transactionTypes = AllowanceRequiredTransactionTypes;
   fiatValue: string;
   allowance: AllowanceValidation;
   allowanceTransaction$ = new Subscription();
@@ -39,13 +36,10 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
 
   constructor(
     private _fb: FormBuilder,
-    protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
-    protected _userContext: UserContextService,
-    protected _bottomSheet: MatBottomSheet,
-    private _math: MathService
+    protected _injector: Injector,
   ) {
-    super(_userContext, _dialog, _bottomSheet);
+    super(_injector);
 
     this.form = this._fb.group({
       amount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]]
@@ -68,7 +62,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
     const stakingTokenFiat = new FixedDecimal(this.pool.token.staking.summary.price.close.toString(), 8);
     const amountDecimal = new FixedDecimal(amount, this.pool.token.staking.decimals);
 
-    this.fiatValue = this._math.multiply(amountDecimal, stakingTokenFiat);
+    this.fiatValue = MathService.multiply(amountDecimal, stakingTokenFiat);
   }
 
   private getAllowance$(amount?: string): Observable<AllowanceValidation> {
@@ -108,7 +102,12 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
       .subscribe();
   }
 
+  destroyContext$() {
+    this.context$.unsubscribe();
+  }
+
   ngOnDestroy() {
+    this.destroyContext$();
     if (this.allowance$) this.allowance$.unsubscribe();
     if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
   }

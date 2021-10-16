@@ -1,6 +1,6 @@
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
-import { SharedPipesModule } from './../../pipes/shared-pipes.module';
+import { SharedPipesModule } from '@sharedPipes/shared-pipes.module';
 import { SharedModule } from '@sharedComponents/shared-module/shared.module';
 import { ChartsModule } from './../charts-module/charts.module';
 import { CardsModule } from '@sharedComponents/cards-module/cards.module';

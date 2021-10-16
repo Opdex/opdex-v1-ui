@@ -1,5 +1,5 @@
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { CacheService } from '@sharedServices/utility/cache.service';
 import { Observable } from 'rxjs';
 import { ITransactionReceipt, ITransactionReceipts } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
@@ -8,12 +8,12 @@ import { TransactionRequest } from '@sharedModels/platform-api/requests/transact
 @Injectable({ providedIn: 'root' })
 export class TransactionsService extends CacheService {
 
-  constructor(private _platformApi: PlatformApiService) {
-    super();
+  constructor(private _platformApi: PlatformApiService, protected _injector: Injector) {
+    super(_injector);
   }
 
   getTransaction(hash: string): Observable<ITransactionReceipt> {
-    return this.getItem(`transaction-request-${hash}`, this._platformApi.getTransaction(hash));
+    return this.getItem(`transaction-request-${hash}`, this._platformApi.getTransaction(hash), true);
   }
 
   refreshTransaction(hash: string): void {
@@ -21,7 +21,8 @@ export class TransactionsService extends CacheService {
   }
 
   getTransactions(request: TransactionRequest): Observable<ITransactionReceipts> {
-    return this.getItem(`transactions-request-${request.buildQueryString()}`, this._platformApi.getTransactions(request));
+    const isHistorical = request.cursor?.length > 0;
+    return this.getItem(`transactions-request-${request.buildQueryString()}`, this._platformApi.getTransactions(request), isHistorical);
   }
 
   refreshTransactions(request: TransactionRequest) {

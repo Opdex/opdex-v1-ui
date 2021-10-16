@@ -1,7 +1,7 @@
 import { ThemeService } from '@sharedServices/utility/theme.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
-import { IAddressBalance } from '../../models/platform-api/responses/wallets/address-balance.interface';
+import { IAddressBalance } from '@sharedModels/platform-api/responses/wallets/address-balance.interface';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { environment } from '@environments/environment';
@@ -31,15 +31,15 @@ export class WalletComponent implements OnInit {
   crsBalance: IAddressBalance;
   crsBalanceValue: string;
   showPreferences: boolean;
+  block = 1;
 
   constructor(
     private _context: UserContextService,
     private _platform: PlatformApiService,
     private _tokensService: TokensService,
     private _liquidityPoolService: LiquidityPoolsService,
-    private _WalletsService: WalletsService,
+    private _walletsService: WalletsService,
     private _router: Router,
-    private _math: MathService,
     private _theme: ThemeService
   ) {
     this.wallet = this._context.getUserContext();
@@ -47,14 +47,14 @@ export class WalletComponent implements OnInit {
     this.getMiningPositions(10);
     this.getStakingPositions(10);
 
-    this._WalletsService.getBalance(this.wallet.wallet, 'CRS')
+    this._walletsService.getBalance(this.wallet.wallet, 'CRS')
       .pipe(
         tap(crsBalance => this.crsBalance = crsBalance),
         switchMap(crsBalance => this._tokensService.getToken(crsBalance.token)),
         tap((token: IToken) => {
           const costFixed = new FixedDecimal(token.summary.price.close.toString(), 8);
           const crsBalanceFixed = new FixedDecimal(this.crsBalance.balance, 8);
-          this.crsBalanceValue = this._math.multiply(crsBalanceFixed, costFixed);
+          this.crsBalanceValue = MathService.multiply(crsBalanceFixed, costFixed);
         }),
         take(1)).subscribe();
   }
@@ -92,7 +92,7 @@ export class WalletComponent implements OnInit {
   }
 
   getMiningPositions(limit?: number, cursor?: string) {
-    this._WalletsService.getMiningPositions(this.wallet.wallet, limit, cursor)
+    this._walletsService.getMiningPositions(this.wallet.wallet, limit, cursor)
       .pipe(
         switchMap(response => {
           const positions$: Observable<IAddressMining>[] = [];
@@ -116,7 +116,7 @@ export class WalletComponent implements OnInit {
   }
 
   getStakingPositions(limit?: number, cursor?: string) {
-    this._WalletsService.getStakingPositions(this.wallet.wallet, limit, cursor)
+    this._walletsService.getStakingPositions(this.wallet.wallet, limit, cursor)
       .pipe(
         switchMap(response => {
           const positions$: Observable<IAddressStaking>[] = [];
@@ -140,7 +140,7 @@ export class WalletComponent implements OnInit {
   }
 
   getWalletBalances(limit?: number, cursor?: string) {
-    this._WalletsService.getWalletBalances(this.wallet.wallet, limit, cursor)
+    this._walletsService.getWalletBalances(this.wallet.wallet, limit, cursor)
       .pipe(
         switchMap(response => {
           const balances$: Observable<IToken>[] = [];
@@ -169,7 +169,7 @@ export class WalletComponent implements OnInit {
 
   ngOnInit(): void {
     this.transactionsRequest = {
-      limit: 5,
+      limit: 10,
       direction: "DESC",
       eventTypes: [],
       wallet: this.wallet.wallet

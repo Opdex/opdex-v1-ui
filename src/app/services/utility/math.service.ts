@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class MathService {
-  multiply(a: FixedDecimal, b: FixedDecimal) {
+  static multiply(a: FixedDecimal, b: FixedDecimal) {
     if (!a || !b) return '0';
 
     const product = a.bigInt * b.bigInt;
@@ -26,7 +26,7 @@ export class MathService {
     return total.substring(0, whole.length + 1 + a.decimals)
   }
 
-  subtract(a: FixedDecimal, b: FixedDecimal) {
+  static subtract(a: FixedDecimal, b: FixedDecimal) {
     if (!a || !b) return '0';
 
     // Subtract
@@ -44,7 +44,7 @@ export class MathService {
     return `${whole}.${remainder}`;
   }
 
-  add(a: FixedDecimal, b: FixedDecimal) {
+  static add(a: FixedDecimal, b: FixedDecimal) {
     if (!a || !b) return '0';
 
     // Subtract
@@ -62,7 +62,7 @@ export class MathService {
     return `${whole}.${remainder}`;
   }
 
-  divide(a: FixedDecimal, b: FixedDecimal) {
+  static divide(a: FixedDecimal, b: FixedDecimal) {
     if (!a || !b || a.isZero || b.isZero) return '0';
 
     const result = (a.bigInt * BigInt(Math.pow(10, b.decimals))) / b.bigInt;

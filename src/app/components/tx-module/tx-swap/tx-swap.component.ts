@@ -1,20 +1,18 @@
+import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
-import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, ViewChild, Injector } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { Subscription, of, Observable, timer } from 'rxjs';
 import { debounceTime, take, distinctUntilChanged, switchMap, map, tap, catchError, filter, startWith } from 'rxjs/operators';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { environment } from '@environments/environment';
 import { Icons } from 'src/app/enums/icons';
-import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
+import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
 import { DecimalStringRegex } from '@sharedLookups/regex';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { TxBase } from '../tx-base.component';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { ISwapRequest, SwapRequest } from '@sharedModels/platform-api/requests/tokens/swap-request';
@@ -38,7 +36,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   tokenInDetails: any;
   tokenOutDetails: any;
   allowance: AllowanceValidation;
-  transactionTypes = AllowanceTransactionTypes;
+  transactionTypes = AllowanceRequiredTransactionTypes;
   showMore: boolean = false;
   tokenInFiatValue: string;
   tokenInMaxFiatValue: string;
@@ -77,12 +75,10 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   constructor(
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
-    private _math: MathService,
-    protected _dialog: MatDialog,
-    protected _userContext: UserContextService,
-    protected _bottomSheet: MatBottomSheet
+    protected _injector: Injector,
+    private _blocksService: BlocksService
   ) {
-    super(_userContext, _dialog, _bottomSheet);
+    super(_injector);
 
     if (this.context?.preferences?.deadlineThreshold) {
       this.deadlineThreshold = this.context.preferences.deadlineThreshold;
@@ -125,10 +121,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
         switchMap(() => this.validateAllowance())
       ).subscribe();
 
-      this.latestSyncedBlock$ = timer(0,8000)
-        .pipe(
-          switchMap(_ => this._platformApi.getLatestSyncedBlock()),
-          tap(block => this.latestBlock = block.height)).subscribe();
+      this.latestSyncedBlock$ = this._blocksService.getLatestBlock$().subscribe(block => this.latestBlock = block?.height);
 
       this.tokens$ = this._platformApi
         .getTokens()
@@ -276,7 +269,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   }
 
   amountQuote(value: string): Observable<string> {
-    if (!value || value.replace('0', '') === '.' || !value.includes('.')) {
+    if (!value || value.replace('0', '') === '.') {
       return of('0');
     }
 
@@ -321,23 +314,23 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     const tokenInPrice = new FixedDecimal(this.tokenInDetails.summary.price.close, 8);
     const tokenInTolerance = new FixedDecimal((1 + (this.toleranceThreshold / 100)).toFixed(8), 8);
 
-    this.tokenInMax = this._math.multiply(tokenInAmount, tokenInTolerance);
+    this.tokenInMax = MathService.multiply(tokenInAmount, tokenInTolerance);
     const tokenInMax = new FixedDecimal(this.tokenInMax, tokenInDecimals);
 
     const tokenOutAmount = new FixedDecimal(this.tokenOutAmount.value, tokenOutDecimals);
     const tokenOutPrice = new FixedDecimal(this.tokenOutDetails.summary.price.close, 8);
     const tokenOutTolerancePercentage = new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8);
-    const tokenOutToleranceAmount = this._math.multiply(tokenOutAmount, tokenOutTolerancePercentage);
+    const tokenOutToleranceAmount = MathService.multiply(tokenOutAmount, tokenOutTolerancePercentage);
 
     const tokenOutTolerance = new FixedDecimal(tokenOutToleranceAmount, tokenOutDecimals);
 
-    this.tokenOutMin = this._math.subtract(tokenOutAmount, tokenOutTolerance);
+    this.tokenOutMin = MathService.subtract(tokenOutAmount, tokenOutTolerance);
     const tokenOutMin = new FixedDecimal(this.tokenOutMin, tokenOutDecimals);
 
-    this.tokenInFiatValue = this._math.multiply(tokenInAmount, tokenInPrice);
-    this.tokenOutFiatValue = this._math.multiply(tokenOutAmount, tokenOutPrice);
-    this.tokenInMaxFiatValue = this._math.multiply(tokenInMax, tokenInPrice);
-    this.tokenOutMinFiatValue = this._math.multiply(tokenOutMin, tokenOutPrice);
+    this.tokenInFiatValue = MathService.multiply(tokenInAmount, tokenInPrice);
+    this.tokenOutFiatValue = MathService.multiply(tokenOutAmount, tokenOutPrice);
+    this.tokenInMaxFiatValue = MathService.multiply(tokenInMax, tokenInPrice);
+    this.tokenOutMinFiatValue = MathService.multiply(tokenOutMin, tokenOutPrice);
   }
 
   toggleShowMore(value: boolean) {
@@ -361,7 +354,12 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
       .subscribe();
   }
 
+  destroyContext$() {
+    this.context$.unsubscribe();
+  }
+
   ngOnDestroy() {
+    this.destroyContext$();
     if (this.tokenInChanges$) this.tokenInChanges$.unsubscribe();
     if (this.tokenOutChanges$) this.tokenOutChanges$.unsubscribe();
     if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();

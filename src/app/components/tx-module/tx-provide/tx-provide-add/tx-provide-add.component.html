@@ -14,19 +14,17 @@
       </opdex-input-control>
     </div>
 
-    <div class="mb-3">
-      <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Add {{pool.token.src.symbol}}" [formControl]="amountSrc" [suffix]="pool.token.src.symbol" [numbersOnly]="true">
-        <div class="d-flex flex-row justify-content-between">
-          <div class="tolerance-amounts">
-            <span *ngIf="srcInMin">Min: {{srcInMin | shortNumber}}</span>
-            <span *ngIf="srcInMinFiatValue" class="success ml-2">(${{srcInMinFiatValue | shortNumber}})</span>
-          </div>
-          <div class="fiat-quote">
-            <span class="success ml-2" *ngIf="srcInFiatValue">${{srcInFiatValue | shortNumber}}</span>
-          </div>
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Add {{pool.token.src.symbol}}" [formControl]="amountSrc" [suffix]="pool.token.src.symbol" [numbersOnly]="true">
+      <div class="d-flex flex-row justify-content-between">
+        <div class="tolerance-amounts">
+          <span *ngIf="srcInMin">Min: {{srcInMin | shortNumber}}</span>
+          <span *ngIf="srcInMinFiatValue" class="success ml-2">(${{srcInMinFiatValue | shortNumber}})</span>
         </div>
-      </opdex-input-control>
-    </div>
+        <div class="fiat-quote">
+          <span class="success ml-2" *ngIf="srcInFiatValue">${{srcInFiatValue | shortNumber}}</span>
+        </div>
+      </div>
+    </opdex-input-control>
 
     <div class="toggle-additional">
       <button mat-icon-button color="primary" class="small" (click)="toggleShowMore(!showMore)" type="button"><mat-icon>{{showMore ? 'remove' : 'add'}}</mat-icon></button>

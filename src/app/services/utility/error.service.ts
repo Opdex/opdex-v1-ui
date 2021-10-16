@@ -4,7 +4,7 @@ import { OpdexErrorStatus } from '@sharedModels/errors/opdex-error';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Notification } from '@sharedModels/notification';
 import { LoggerService } from './logger.service';
-import { environment } from '../../../environments/environment';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'

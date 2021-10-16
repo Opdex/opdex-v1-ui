@@ -1,3 +1,5 @@
+<opdex-wallet-preview [balanceTokens]="[tokenInDetails.address, tokenOutDetails.address]"></opdex-wallet-preview>
+
 <opdex-card class="swap" [thin]="true">
   <form [formGroup]="form" name="swap-form" id="swap-form">
     <opdex-input-control *ngIf="!changeTokenIn" [prefixIcon]="icons.remove" label="{{tokenInExact ? 'Sell Exactly' : 'Sell'}}" [formControl]="tokenInAmount" [suffix]="tokenInDetails?.symbol || 'CRS'" (handleChangeToken)="changeToken('tokenIn')" [numbersOnly]="true">
@@ -84,7 +86,7 @@
     </div>
   </form>
 
-  <button mat-flat-button color="primary" class="mt-3 w-100" (click)="submit()" [disabled]="!form.valid || !context?.wallet">Quote</button>
+  <button mat-flat-button color="primary" class="mt-3 w-100" (click)="submit()" [disabled]="!form.valid || !context?.wallet || !tokenInMax || !tokenOutMin">Quote</button>
 
   <div class="mt-3" *ngIf="allowance">
     <opdex-allowance-validation [transactionType]="transactionTypes.swap" [allowance]="allowance" (onAllowanceApproved)="handleAllowanceApproval($event)"></opdex-allowance-validation>

@@ -1,13 +1,12 @@
-import { environment } from '@environments/environment';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
 import { TokensService } from '@sharedServices/platform/tokens.service';
-import { VaultsService } from './../../services/platform/vaults.service';
+import { VaultsService } from '@sharedServices/platform/vaults.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
 import { tap, switchMap, take } from 'rxjs/operators';
 import { IVault } from '@sharedModels/platform-api/responses/vaults/vault.interface';
-import { IVaultCertificate, IVaultCertificates } from '@sharedModels/platform-api/responses/vaults/vault-certificate.interface';
+import { IVaultCertificates } from '@sharedModels/platform-api/responses/vaults/vault-certificate.interface';
 
 @Component({
   selector: 'opdex-vault',
@@ -74,7 +73,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   getVaultCertificates(limit?: number, cursor?: string) {
-    this._platformApi.getVaultCertificates(environment.vaultAddress, limit, cursor)
+    this._vaultsService.getVaultCertificates(limit, cursor)
       .pipe(take(1))
       .subscribe(certificates => this.certificates = certificates)
   }

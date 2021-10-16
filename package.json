@@ -29,6 +29,7 @@
     "bootstrap-4-grid": "^3.4.0",
     "lightweight-charts": "^3.6.1",
     "ngx-google-analytics": "^11.2.1",
+    "ngx-infinite-scroll": "^10.0.1",
     "ngx-timeago": "^2.0.0",
     "rxjs": "^6.6.7",
     "tslib": "^2.3.1",

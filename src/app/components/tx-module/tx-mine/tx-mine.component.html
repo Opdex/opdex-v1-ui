@@ -5,6 +5,10 @@
 
   <opdex-pool-preview [pool]="pool" [view]="view" (onPoolChange)="handlePoolChange($event)"></opdex-pool-preview>
 
+  <opdex-wallet-preview
+    [balanceTokens]="[pool.token.lp.address]"
+    [positionMining]="[pool.address]"></opdex-wallet-preview>
+
   <!-- We're specifically checking staking capabilities here for right now. In the staking market
       if the liquidity pool does not have staking, then it cannot ever have liquidity mining. -->
   <opdex-card *ngIf="pool && pool?.staking?.isActive; else noStaking" [thin]="true">

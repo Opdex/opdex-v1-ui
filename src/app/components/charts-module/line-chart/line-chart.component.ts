@@ -1,3 +1,5 @@
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
+import { ShortNumberPipe } from '@sharedPipes/short-number.pipe';
 import { Subscription } from 'rxjs';
 import { ThemeService } from '@sharedServices/utility/theme.service';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
@@ -9,7 +11,8 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 @Component({
   selector: 'opdex-line-chart',
   templateUrl: './line-chart.component.html',
-  styleUrls: ['./line-chart.component.scss']
+  styleUrls: ['./line-chart.component.scss'],
+  providers: [ShortNumberPipe]
 })
 export class LineChartComponent implements OnInit, OnChanges {
   @ViewChild('chartContainer') container: ElementRef;
@@ -32,7 +35,7 @@ export class LineChartComponent implements OnInit, OnChanges {
   height: number = 400;
   width: number;
 
-  constructor(private _theme: ThemeService, private _breakpointObserver: BreakpointObserver) {
+  constructor(private _theme: ThemeService, private _breakpointObserver: BreakpointObserver, private _shortNumber: ShortNumberPipe) {
     this.subscription.add(this._theme.getTheme()
       .pipe(tap(theme => {
         this.theme = theme
@@ -58,66 +61,21 @@ export class LineChartComponent implements OnInit, OnChanges {
     this.ngOnInit();
 
     if (this.chartData && this.chartOptions) {
-      if (!this.lineSeries) {
-        this.lineSeries = this.chart.addAreaSeries({
-          lineColor: 'rgba(71, 188, 235, .7)',
-          lineWidth: <DeepPartial<LineWidth>>6,
-          topColor: 'transparent',
-          bottomColor: 'transparent',
-          priceLineVisible: true,
-          lastValueVisible: false,
-          priceFormat: {
-            type: 'custom',
-            minMove: 0.00000001,
-            formatter: price => this.nFormatter(price, this.selectedChart.decimals > 8 ? 8 : this.selectedChart.decimals)
-          },
-          scaleMargins : {
-            top: 1,
-            bottom: 99
-          },
-        });
-      }
-
-      if (!this.volumeSeries) {
-        this.volumeSeries = this.chart.addHistogramSeries({
-          priceFormat: {
-            type: 'custom',
-            minMove: 0.00000001,
-            formatter: price => this.nFormatter(price,  this.selectedChart.decimals > 8 ? 8 : this.selectedChart.decimals)
-          },
-          color: 'rgba(71, 188, 235, .8)',
-          lastValueVisible: false,
-          base: 0,
-        });
-      }
-
-      if (!this.candleSeries) {
-        this.candleSeries = this.chart.addCandlestickSeries({
-          lastValueVisible: false,
-          priceLineVisible: false,
-          priceFormat: {
-            type: 'custom',
-            minMove: 0.00000001,
-            formatter: price => this.nFormatter(price,  this.selectedChart.decimals > 8 ? 8 : this.selectedChart.decimals)
-          }
-        });
+      if (this.chartOptions && this.selectedChart.type === 'line') {
+        this.clearSeries();
+        this.addLineSeries();
+        this.lineSeries.setData(this.chartData);
+      } else if (this.chartOptions && this.selectedChart.type === 'bar') {
+        this.clearSeries();
+        this.addVolumeSeries();
+        this.volumeSeries.setData(this.chartData);
+      } else if (this.chartOptions && this.selectedChart.type === 'candle') {
+        this.clearSeries();
+        this.addCandleStickSeries();
+        this.candleSeries.setData(this.chartData);
       }
 
       this.applyChartOptions();
-
-      if (this.chartOptions && this.selectedChart.type === 'line') {
-        this.lineSeries.setData(this.chartData);
-        this.volumeSeries.setData([])
-        this.candleSeries.setData([])
-      } else if (this.chartOptions && this.selectedChart.type === 'bar') {
-        this.volumeSeries.setData(this.chartData);
-        this.lineSeries.setData([]);
-        this.candleSeries.setData([]);
-      } else if (this.chartOptions && this.selectedChart.type === 'candle') {
-        this.candleSeries.setData(this.chartData);
-        this.lineSeries.setData([]);
-        this.volumeSeries.setData([]);
-      }
 
       if (this.loading) {
         // this.chart.subscribeCrosshairMove(params => this.crosshairMovedHandler(params));
@@ -143,6 +101,78 @@ export class LineChartComponent implements OnInit, OnChanges {
     this.onTimeChange.emit(value);
   }
 
+  private clearSeries() {
+    if (this.lineSeries) {
+      this.chart.removeSeries(this.lineSeries);
+      this.lineSeries.setData([]);
+      this.lineSeries = null;
+    }
+
+    if (this.volumeSeries) {
+      this.chart.removeSeries(this.volumeSeries);
+      this.volumeSeries.setData([]);
+      this.volumeSeries = null;
+    }
+
+    if (this.candleSeries) {
+      this.chart.removeSeries(this.candleSeries);
+      this.candleSeries.setData([]);
+      this.candleSeries = null;
+    }
+  }
+
+  private addLineSeries() {
+    this.lineSeries = this.chart.addAreaSeries({
+      lineColor: 'rgba(71, 188, 235, .7)',
+      lineWidth: <DeepPartial<LineWidth>>6,
+      topColor: 'transparent',
+      bottomColor: 'transparent',
+      priceLineVisible: true,
+      lastValueVisible: false,
+      priceFormat: {
+        type: 'custom',
+        minMove: 0.01,
+        formatter: (price: string) => this.priceFormatter(price)
+      }
+    });
+  }
+
+  private addCandleStickSeries() {
+    this.candleSeries = this.chart.addCandlestickSeries({
+      lastValueVisible: false,
+      priceLineVisible: false,
+      priceFormat: {
+        type: 'custom',
+        minMove: 0.00000001,
+        formatter: (price: string) => this.priceFormatter(price)
+      }
+    });
+  }
+
+  private addVolumeSeries() {
+    this.volumeSeries = this.chart.addHistogramSeries({
+      priceFormat: {
+        type: 'custom',
+        minMove: 0.01,
+        formatter: (price: string) => this.priceFormatter(price)
+      },
+      color: 'rgba(71, 188, 235, .8)',
+      lastValueVisible: false,
+      base: 0,
+    });
+  }
+
+  private priceFormatter(price: string): string {
+    if (price.toString().startsWith('-')) return '';
+
+    const newPrice = new FixedDecimal(price, this.selectedChart.decimals > 8 ? 8 : this.selectedChart.decimals);
+    const shortNumber = this._shortNumber.transform(newPrice.formattedValue);
+
+    if (shortNumber == 'NAN') return '';
+
+    return `${this.selectedChart.prefix || ''}${shortNumber}`;
+  }
+
   // crosshairMovedHandler(param: MouseEventParams): void {
   //   if (param === undefined || param.time === undefined || param.point.x < 0 || param.point.y < 0) {
   //     this.setLastBarText();
@@ -163,38 +193,12 @@ export class LineChartComponent implements OnInit, OnChanges {
     }
   }
 
-  // Todo: copied from https://stackoverflow.com/questions/9461621/format-a-number-as-2-5k-if-a-thousand-or-more-otherwise-900
-  // Rip out and write our own, using this for short term
-  nFormatter(num, digits): string {
-    var si = [
-      { value: 1, symbol: "" },
-      { value: 1E3, symbol: "k" },
-      { value: 1E6, symbol: "M" },
-      { value: 1E9, symbol: "B" },
-      { value: 1E12, symbol: "T" },
-      { value: 1E15, symbol: "P" },
-      { value: 1E18, symbol: "E" }
-    ];
-    var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-    var i;
-    for (i = si.length - 1; i > 0; i--) {
-      if (num >= si[i].value) {
-        break;
-      }
-    }
-
-    let prefix = this.selectedChart.prefix || '';
-    let suffix = this.selectedChart.suffix || '';
-    return prefix+(num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol+ ' ' +suffix;
-  }
-
   private setLastBarText() {
     if (this.chartData && this.chartData.length > 0) {
       const data = this.chartData[this.chartData.length - 1]
       const value = data?.close !== undefined ? data.close : data.value;
-      const decimals = this.selectedChart.decimals > 8 ? 8 : this.selectedChart.decimals;
 
-      this.value = this.nFormatter(value,  decimals);
+      this.value = value;
     }
   }
 
@@ -221,7 +225,8 @@ export class LineChartComponent implements OnInit, OnChanges {
         borderVisible: false
       },
       rightPriceScale: {
-        borderVisible: false
+        borderVisible: false,
+        alignLabels: true,
       },
       handleScroll: false,
       handleScale: false

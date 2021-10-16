@@ -12,9 +12,9 @@
     <div class="row">
       <div class="col">
         <div class="chip-group">
-          <div class="chip blue">0.3% Fee</div>
-          <div class="chip purple"><mat-icon>star</mat-icon> Nominated</div>
-          <div class="chip red" *ngIf="pool.mining?.isActive"><mat-icon>whatshot</mat-icon> Mining</div>
+          <div class="chip blue">{{pool.transactionFee * 100}}% Fee</div>
+          <div class="chip purple" *ngIf="pool.staking?.isNominated"><mat-icon>{{icons.staking}}</mat-icon> Nominated</div>
+          <div class="chip red" *ngIf="pool.mining?.isActive"><mat-icon>{{icons.mining}}</mat-icon> Mining</div>
         </div>
       </div>
     </div>
@@ -31,7 +31,7 @@
 
               <div class="row">
                 <div class="col-6">
-                  <div class="d-flex align-items-end">
+                  <div class="d-flex align-items-center">
                     <h2 class=" mb-0 d-inline">
                       <a class="body-default" style="text-decoration: none; font-weight: 300;" href="javascript:void(0)" routerLink="/tokens/{{pool.token.src.address}}">{{pool.token.src.symbol}}</a>
                     </h2>
@@ -41,7 +41,7 @@
                   </div>
 
                   <div class="d-flex align-items-center mt-2">
-                    <mat-icon color="primary" class="mr-2 tiny">swap_horiz</mat-icon>
+                    <mat-icon color="primary" class="mr-2 tiny">{{icons.swap}}</mat-icon>
                     <h5 class="d-flex align-items-center mb-0">
                       <span style="font-weight: 400;">{{pool.cost.crsPerSrc.close | shortNumber }}</span>
                       <small class="ml-1">{{pool.token.crs.symbol}}</small>
@@ -49,7 +49,7 @@
                   </div>
 
                   <div class="d-flex align-items-center mt-2">
-                    <mat-icon color="primary" class="mr-2 tiny">lock</mat-icon>
+                    <mat-icon color="primary" class="mr-2 tiny">{{icons.lock}}</mat-icon>
                     <h5 class="d-flex align-items-center mb-0">
                       <span style="font-weight: 400;">{{pool.reserves.src | shortNumber}}</span>
                       <small class="ml-1">{{pool.token.src.symbol}}</small>
@@ -58,7 +58,7 @@
                 </div>
 
                 <div class="col-6">
-                  <div class="d-flex align-items-end">
+                  <div class="d-flex align-items-center">
                     <h2 class=" mb-0 d-inline">
                       <a class="body-default" style="text-decoration: none; font-weight: 300;" href="javascript:void(0)" routerLink="/tokens/{{pool.token.crs.address}}">{{pool.token.crs.symbol}}</a>
                     </h2>
@@ -68,7 +68,7 @@
                   </div>
 
                   <div class="d-flex align-items-center mt-2">
-                    <mat-icon color="primary" class="mr-2 tiny">swap_horiz</mat-icon>
+                    <mat-icon color="primary" class="mr-2 tiny">{{icons.swap}}</mat-icon>
                     <h5 class="d-flex align-items-center mb-0">
                       <span style="font-weight: 400;">{{pool.cost.srcPerCrs.close | shortNumber}}</span>
                       <small class="ml-1">{{pool.token.src.symbol}}</small>
@@ -76,7 +76,7 @@
                   </div>
 
                   <div class="d-flex align-items-center mt-2">
-                    <mat-icon color="primary" class="mr-2 tiny">lock</mat-icon>
+                    <mat-icon color="primary" class="mr-2 tiny">{{icons.lock}}</mat-icon>
                     <h5 class="d-flex align-items-center mb-0">
                       <span style="font-weight: 400;">{{pool.reserves.crs | shortNumber}}</span>
                       <small class="ml-1">{{pool.token.crs.symbol}}</small>
@@ -93,8 +93,8 @@
                 <ng-container *ngFor="let statCard of statCards; let i = index">
                   <div *ngIf="statCard.show" class="d-flex justify-content-between w-100">
                     <div class="d-flex align-items-center">
-                      <opdex-help-button *ngIf="statCard.helpInfo" [info]="statCard.helpInfo" class="mr-2"></opdex-help-button>
-                      <span>{{statCard.title}} <small class="ml-2" *ngIf="statCard.daily">(24hr)</small></span>
+                      <opdex-help-button *ngIf="statCard.helpInfo" [info]="statCard.helpInfo" [icon]="statCard.icon" [iconColor]="statCard.iconColor" class="mr-2"></opdex-help-button>
+                      <span>{{statCard.title}} <small *ngIf="statCard.daily">(24hr)</small></span>
                     </div>
 
                     <div class="d-flex align-items-center">
@@ -127,28 +127,28 @@
             <div class="row">
               <div class="col-3">
                 <button mat-raised-button class="big-button swap-button" (click)="swap()">
-                  <mat-icon>swap_horiz</mat-icon>
+                  <mat-icon>{{icons.swap}}</mat-icon>
                   <span class="text">Swap</span>
                 </button>
               </div>
 
               <div class="col-3">
                 <button mat-raised-button class="big-button provide-button" (click)="provide()">
-                  <mat-icon>control_point_duplicate</mat-icon>
+                  <mat-icon>{{icons.provide}}</mat-icon>
                   <span class="text">Provide</span>
                 </button>
               </div>
 
               <div class="col-3">
-                <button mat-raised-button class="big-button stake-button" (click)="stake()">
-                  <mat-icon>verified_user</mat-icon>
+                <button mat-raised-button class="big-button stake-button" (click)="stake()" [disabled]="!pool.staking?.isActive">
+                  <mat-icon>{{icons.staking}}</mat-icon>
                   <span class="text">Stake</span>
                 </button>
               </div>
 
               <div class="col-3">
                 <button mat-raised-button class="big-button mine-button" (click)="mine()" [disabled]="!pool.mining">
-                  <mat-icon>whatshot</mat-icon>
+                  <mat-icon>{{icons.mining}}</mat-icon>
                   <span class="text">Mine</span>
                 </button>
               </div>
@@ -167,7 +167,6 @@
                 </div>
               </div>
             </ng-container>
-
           </div>
         </div>
       </div>

@@ -3,12 +3,13 @@
     <div class="row">
       <div class="col-12 col-xl-4">
         <opdex-card>
+          <p class="mb-2 light d-flex align-items-center">
+            <opdex-copy-button [tooltip]="token.address" [value]="token.address" icon="link" [size]="iconSizes.small"></opdex-copy-button>
+            <span class="ml-2">{{token.name}}</span>
+          </p>
+
           <div class="d-flex justify-content-between">
             <div class="left">
-              <p class="mb-2 light d-flex align-items-center">
-                <opdex-copy-button [tooltip]="token.address" [value]="token.address" icon="link" [size]="iconSizes.small"></opdex-copy-button>
-                <span class="ml-2">{{token.name}}</span>
-              </p>
               <h1 class="text-shadow mb-0">
                 <span>{{token.symbol}}</span>
               </h1>
@@ -38,7 +39,7 @@
       </div>
 
       <div class="col-12 col-xl-4">
-        <opdex-tx-feed [transactionRequest]="transactionRequest"></opdex-tx-feed>
+        <opdex-tx-feed [transactionRequest]="transactionRequest" size="s"></opdex-tx-feed>
       </div>
     </div>
   </div>

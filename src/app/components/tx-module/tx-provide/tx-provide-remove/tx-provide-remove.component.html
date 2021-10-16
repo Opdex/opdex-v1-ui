@@ -1,17 +1,15 @@
 <div class="remove-liquidity">
   <form [formGroup]="form" name="remove-liquidity-form" id="remove-liquidity-form" (submit)="submit()">
-    <div class="mb-3">
-      <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.remove" label="Liquidate" [formControl]="liquidity" [suffix]="pool.token.lp.symbol" [numbersOnly]="true">
-        <div class="d-flex flex-row justify-content-between">
-          <div class="tolerance-amounts">
-            <span *ngIf="crsOutMin && srcOutMin">Min: {{crsOutMin | shortNumber}} {{pool.token.crs.symbol}} <span style="opacity: .5">|</span> {{srcOutMin | shortNumber}} {{pool.token.src.symbol}}</span>
-          </div>
-          <div class="fiat-quote">
-            <span class="success ml-2" *ngIf="lptInFiatValue && lptInFiatValue !== 'NaN'">${{lptInFiatValue | shortNumber}}</span>
-          </div>
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.remove" label="Liquidate" [formControl]="liquidity" [suffix]="pool.token.lp.symbol" [numbersOnly]="true">
+      <div class="d-flex flex-row justify-content-between">
+        <div class="tolerance-amounts">
+          <span *ngIf="crsOutMin && srcOutMin">Min: {{crsOutMin | shortNumber}} {{pool.token.crs.symbol}} <span style="opacity: .5">|</span> {{srcOutMin | shortNumber}} {{pool.token.src.symbol}}</span>
         </div>
-      </opdex-input-control>
-    </div>
+        <div class="fiat-quote">
+          <span class="success ml-2" *ngIf="lptInFiatValue && lptInFiatValue !== 'NaN'">${{lptInFiatValue | shortNumber}}</span>
+        </div>
+      </div>
+    </opdex-input-control>
 
     <div class="toggle-additional">
       <button mat-icon-button color="primary" class="small" (click)="toggleShowMore(!showMore)" type="button"><mat-icon>{{showMore ? 'remove' : 'add'}}</mat-icon></button>

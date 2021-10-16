@@ -26,7 +26,7 @@ export class RestApiService {
 
           return err.pipe(
             // only retry 5xx errors
-            mergeMap((error) => (error.status < 500) ? throwError(error) : of(error)),
+            mergeMap((error) => (error.status < 500 && error.status !== 401) ? throwError(error) : of(error)),
             delay(1000),
             map(error => {
               if (retries++ === 2) {
@@ -73,13 +73,12 @@ export class RestApiService {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error);
     } else if (error.status === 401) {
-      // An Unauthorized error occurred
+      // Hack, reload the entire view if we have an expired token
       if (this._jwt.isTokenExpired()) {
         this._jwt.removeToken();
-        // this._router.navigateByUrl('/auth');
+        location.reload();
       }
-    }
-    else {
+    } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong.
       console.error(

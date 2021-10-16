@@ -1,14 +1,11 @@
 import { MathService } from '@sharedServices/utility/math.service';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
-import { UserContextService } from '@sharedServices/utility/user-context.service';
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
 import { DecimalStringRegex } from '@sharedLookups/regex';
 import { Subscription } from 'rxjs';
@@ -38,13 +35,10 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
 
   constructor(
     private _fb: FormBuilder,
-    protected _dialog: MatDialog,
+    protected _injector: Injector,
     private _platformApi: PlatformApiService,
-    protected _userContext: UserContextService,
-    protected _bottomSheet: MatBottomSheet,
-    private _math: MathService
   ) {
-    super(_userContext, _dialog, _bottomSheet);
+    super(_injector);
 
     this.form = this._fb.group({
       amount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
@@ -59,7 +53,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
         .subscribe(amount => {
           const stakingTokenFiat = new FixedDecimal(this.pool.token.staking.summary.price.close.toString(), 8);
           const amountDecimal = new FixedDecimal(amount, this.pool.token.staking.decimals);
-          this.fiatValue = this._math.multiply(amountDecimal, stakingTokenFiat);
+          this.fiatValue = MathService.multiply(amountDecimal, stakingTokenFiat);
         }));
   }
 
@@ -80,5 +74,14 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
       .stopStakingQuote(this.pool.address, payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote));
+  }
+
+  destroyContext$() {
+    this.context$.unsubscribe();
+  }
+
+  ngOnDestroy() {
+    this.destroyContext$();
+    this.subscription.unsubscribe();
   }
 }

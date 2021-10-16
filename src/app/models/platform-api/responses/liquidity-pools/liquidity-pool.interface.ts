@@ -14,6 +14,7 @@ export interface ILiquidityPoolSnapshotHistory {
 
 export interface ILiquidityPoolSummaryBase {
   transactionCount: number;
+  transactionFee: number;
   reserves: IReserves;
   rewards: IRewards;
   staking: IStaking;
@@ -57,6 +58,7 @@ export interface IStaking {
   usd: number;
   weightDailyChange: number;
   isActive: boolean;
+  isNominated: boolean;
 }
 
 export interface ICost {

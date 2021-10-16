@@ -30,6 +30,7 @@ export class ReviewQuoteComponent implements OnInit, OnDestroy {
   hubConnection: HubConnection;
   isDevnet: boolean;
   subscription = new Subscription();
+  hideErrorsBug = false;
 
   public constructor(
     private _platformApi: PlatformApiService,
@@ -84,6 +85,9 @@ export class ReviewQuoteComponent implements OnInit, OnDestroy {
 
   private setQuoteRequest(request: string) {
     const quoteRequest = JSON.parse(atob(request))
+
+    // SFN bug showing errors incorrectly, hide them for all transactions where CRS are sent in
+    this.hideErrorsBug = quoteRequest.method.includes('AddLiquidity') || quoteRequest.method.includes('Crs');
 
     // Changes method name to pascal case with spacing.
     quoteRequest.method = quoteRequest.method.replace(/([A-Z])/g, ' $1').trim();

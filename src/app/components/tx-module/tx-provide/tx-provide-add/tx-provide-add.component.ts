@@ -1,27 +1,25 @@
+import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { DecimalStringRegex } from '@sharedLookups/regex';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { environment } from '@environments/environment';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Observable, throwError, timer } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, switchMap, tap, catchError, take, filter } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
-import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
+import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { MathService } from '@sharedServices/utility/math.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
-import { AddLiquidityRequest, IAddLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/add-liquidity-request';
-import { IQuoteReplayRequest } from '@sharedModels/platform-api/requests/transactions/quote-replay-request';
+import { IAddLiquidityRequest, AddLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/add-liquidity-request';
 import { IAddLiquidityQuoteRequest } from '@sharedModels/platform-api/requests/quotes/add-liquidity-quote-request';
+import { IProvideAmountIn } from '@sharedModels/platform-api/responses/liquidity-pools/provide-amount-in.interface';
 
 @Component({
   selector: 'opdex-tx-provide-add',
@@ -35,7 +33,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   subscription = new Subscription();
   allowance: AllowanceValidation;
   form: FormGroup;
-  transactionTypes = AllowanceTransactionTypes;
+  transactionTypes = AllowanceRequiredTransactionTypes;
   showMore: boolean = false;
   crsInFiatValue: string;
   crsInMinFiatValue: string;
@@ -59,13 +57,11 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
 
   constructor(
     private _fb: FormBuilder,
-    protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
-    protected _userContext: UserContextService,
-    protected _bottomSheet: MatBottomSheet,
-    private _math: MathService
+    protected _injector: Injector,
+    private _blocksService: BlocksService
   ) {
-    super(_userContext, _dialog, _bottomSheet);
+    super(_injector);
 
     if (this.context?.preferences?.deadlineThreshold) {
       this.deadlineThreshold = this.context.preferences.deadlineThreshold;
@@ -119,10 +115,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
           switchMap(_ => this.getAllowance$()))
         .subscribe());
 
-      this.latestSyncedBlock$ = timer(0,8000)
-        .pipe(
-          switchMap(_ => this._platformApi.getLatestSyncedBlock()),
-          tap(block => this.latestBlock = block.height)).subscribe();
+      this.latestSyncedBlock$ = this._blocksService.getLatestBlock$().subscribe(block => this.latestBlock = block?.height);
   }
 
   getAllowance$():Observable<AllowanceValidation> {
@@ -149,11 +142,13 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
 
     const payload: IAddLiquidityQuoteRequest = {
       amountIn: value,
-      tokenIn: tokenIn.address,
-      pool: this.pool.address
+      tokenIn: tokenIn.address
     };
 
-    return this._platformApi.quoteAddLiquidity(payload).pipe(catchError(() => of('')));
+    return this._platformApi.quoteAddLiquidity(this.pool.address, payload)
+      .pipe(
+        map((response: IProvideAmountIn) => response?.amountIn || ''),
+        catchError(() => of('')));
   }
 
   submit(): void {
@@ -189,17 +184,17 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     if (!this.amountCrs.value || !this.amountSrc.value) return;
 
     let crsInValue = new FixedDecimal(this.amountCrs.value, this.pool.token.crs.decimals);
-    let crsMinTolerance = this._math.multiply(crsInValue, new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8));
-    this.crsInMin = this._math.subtract(crsInValue, new FixedDecimal(crsMinTolerance, this.pool.token.crs.decimals));
+    let crsMinTolerance = MathService.multiply(crsInValue, new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8));
+    this.crsInMin = MathService.subtract(crsInValue, new FixedDecimal(crsMinTolerance, this.pool.token.crs.decimals));
 
     let srcInValue = new FixedDecimal(this.amountSrc.value, this.pool.token.src.decimals);
-    let srcMinTolerance = this._math.multiply(srcInValue, new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8));
-    this.srcInMin = this._math.subtract(srcInValue, new FixedDecimal(srcMinTolerance, this.pool.token.src.decimals));
+    let srcMinTolerance = MathService.multiply(srcInValue, new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8));
+    this.srcInMin = MathService.subtract(srcInValue, new FixedDecimal(srcMinTolerance, this.pool.token.src.decimals));
 
-    this.crsInFiatValue = this._math.multiply(new FixedDecimal(this.amountCrs.value, this.pool.token.crs.decimals), new FixedDecimal(this.pool.token.crs.summary.price.close.toString(), 8));
-    this.crsInMinFiatValue = this._math.multiply(new FixedDecimal(this.crsInMin, this.pool.token.crs.decimals), new FixedDecimal(this.pool.token.crs.summary.price.close.toString(), 8));
-    this.srcInFiatValue = this._math.multiply(new FixedDecimal(this.amountSrc.value, this.pool.token.src.decimals), new FixedDecimal(this.pool.token.src.summary.price.close.toString(), 8));
-    this.srcInMinFiatValue = this._math.multiply(new FixedDecimal(this.srcInMin, this.pool.token.src.decimals), new FixedDecimal(this.pool.token.src.summary.price.close.toString(), 8));
+    this.crsInFiatValue = MathService.multiply(new FixedDecimal(this.amountCrs.value, this.pool.token.crs.decimals), new FixedDecimal(this.pool.token.crs.summary.price.close.toString(), 8));
+    this.crsInMinFiatValue = MathService.multiply(new FixedDecimal(this.crsInMin, this.pool.token.crs.decimals), new FixedDecimal(this.pool.token.crs.summary.price.close.toString(), 8));
+    this.srcInFiatValue = MathService.multiply(new FixedDecimal(this.amountSrc.value, this.pool.token.src.decimals), new FixedDecimal(this.pool.token.src.summary.price.close.toString(), 8));
+    this.srcInMinFiatValue = MathService.multiply(new FixedDecimal(this.srcInMin, this.pool.token.src.decimals), new FixedDecimal(this.pool.token.src.summary.price.close.toString(), 8));
   }
 
   toggleShowMore(value: boolean) {
@@ -223,7 +218,12 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
       .subscribe();
   }
 
+  destroyContext$() {
+    this.context$.unsubscribe();
+  }
+
   ngOnDestroy() {
+    this.destroyContext$();
     this.subscription.unsubscribe();
     if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
     if (this.latestSyncedBlock$) this.latestSyncedBlock$.unsubscribe();

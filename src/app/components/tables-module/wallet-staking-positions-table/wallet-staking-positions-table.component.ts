@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -23,7 +23,7 @@ export class WalletStakingPositionsTableComponent implements OnChanges {
   @Output() onPageChange: EventEmitter<string> = new EventEmitter();
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private _router: Router, private _sidebar: SidenavService, private _math: MathService) {
+  constructor(private _router: Router, private _sidebar: SidenavService) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['pool', 'status', 'position', 'value', 'actions'];
   }
@@ -40,8 +40,8 @@ export class WalletStakingPositionsTableComponent implements OnChanges {
         liquidityPoolAddress: p.pool.address,
         position: p.position.amount,
         decimals: p.pool.token.lp.decimals,
-        isNominated: true,
-        value: this._math.multiply(
+        isNominated: p.pool?.staking?.isNominated === true,
+        value: MathService.multiply(
           new FixedDecimal(p.position.amount, p.pool.token.staking.decimals),
           new FixedDecimal(p.pool.token.staking.summary.price.close.toString(), 8))
       }

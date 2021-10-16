@@ -1,19 +1,17 @@
+import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
-import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { environment } from '@environments/environment';
-import { Component, Input } from '@angular/core';
+import { Component, Input, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { switchMap, map, take, filter, debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { Observable, Subscription, timer } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Icons } from 'src/app/enums/icons';
-import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
+import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { DecimalStringRegex } from '@sharedLookups/regex';
 import { IRemoveLiquidityRequest, RemoveLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/remove-liquidity-request';
@@ -29,7 +27,7 @@ export class TxProvideRemoveComponent extends TxBase {
   form: FormGroup;
   context: any;
   allowance$: Subscription;
-  transactionTypes = AllowanceTransactionTypes;
+  transactionTypes = AllowanceRequiredTransactionTypes;
   showMore: boolean = false;
   lptInFiatValue: string;
   lptInMinFiatValue: string;
@@ -51,13 +49,11 @@ export class TxProvideRemoveComponent extends TxBase {
 
   constructor(
     private _fb: FormBuilder,
-    protected _dialog: MatDialog,
     private _platformApi: PlatformApiService,
-    protected _userContext: UserContextService,
-    protected _bottomSheet: MatBottomSheet,
-    private _math: MathService
+    protected _injector: Injector,
+    private _blocksService: BlocksService,
   ) {
-    super(_userContext, _dialog, _bottomSheet);
+    super(_injector);
 
     if (this.context?.preferences?.deadlineThreshold) {
       this.deadlineThreshold = this.context.preferences.deadlineThreshold;
@@ -80,10 +76,7 @@ export class TxProvideRemoveComponent extends TxBase {
         switchMap(amount => this.getAllowance$(amount)))
         .subscribe();
 
-      this.latestSyncedBlock$ = timer(0,8000)
-        .pipe(
-          switchMap(_ => this._platformApi.getLatestSyncedBlock()),
-          tap(block => this.latestBlock = block.height)).subscribe();
+      this.latestSyncedBlock$ = this._blocksService.getLatestBlock$().subscribe(block => this.latestBlock = block?.height);
   }
 
   getAllowance$(amount?: string):Observable<any> {
@@ -137,11 +130,11 @@ export class TxProvideRemoveComponent extends TxBase {
     const reserveCrs = new FixedDecimal(this.pool.reserves.crs, crsDecimals);
     const reserveSrc = new FixedDecimal(this.pool.reserves.src, srcDecimals);
 
-    const percentageLiquidity = new FixedDecimal(this._math.divide(liquidityValue, totalSupply), 8);
+    const percentageLiquidity = new FixedDecimal(MathService.divide(liquidityValue, totalSupply), 8);
 
-    this.crsOut = this._math.multiply(reserveCrs, percentageLiquidity);
-    this.srcOut = this._math.multiply(reserveSrc, percentageLiquidity);
-    this.usdOut = this._math.multiply(reservesUsd, percentageLiquidity);
+    this.crsOut = MathService.multiply(reserveCrs, percentageLiquidity);
+    this.srcOut = MathService.multiply(reserveSrc, percentageLiquidity);
+    this.usdOut = MathService.multiply(reservesUsd, percentageLiquidity);
 
     const crsOut = new FixedDecimal(this.crsOut, crsDecimals);
     const srcOut = new FixedDecimal(this.srcOut, srcDecimals);
@@ -149,13 +142,13 @@ export class TxProvideRemoveComponent extends TxBase {
 
     const tolerancePercentage = new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8);
 
-    const crsTolerance = new FixedDecimal(this._math.multiply(crsOut, tolerancePercentage), crsDecimals);
-    const srcTolerance = new FixedDecimal(this._math.multiply(srcOut, tolerancePercentage), srcDecimals);
-    const usdTolerance = new FixedDecimal(this._math.multiply(usdOut, tolerancePercentage), 8);
+    const crsTolerance = new FixedDecimal(MathService.multiply(crsOut, tolerancePercentage), crsDecimals);
+    const srcTolerance = new FixedDecimal(MathService.multiply(srcOut, tolerancePercentage), srcDecimals);
+    const usdTolerance = new FixedDecimal(MathService.multiply(usdOut, tolerancePercentage), 8);
 
-    this.crsOutMin = this._math.subtract(crsOut, crsTolerance);
-    this.srcOutMin = this._math.subtract(srcOut, srcTolerance);
-    this.lptInFiatValue = this._math.subtract(usdOut, usdTolerance);
+    this.crsOutMin = MathService.subtract(crsOut, crsTolerance);
+    this.srcOutMin = MathService.subtract(srcOut, srcTolerance);
+    this.lptInFiatValue = MathService.subtract(usdOut, usdTolerance);
   }
 
   handleAllowanceApproval(txHash: string) {
@@ -180,7 +173,12 @@ export class TxProvideRemoveComponent extends TxBase {
     return blocks + this.latestBlock;
   }
 
+  destroyContext$() {
+    this.context$.unsubscribe();
+  }
+
   ngOnDestroy() {
+    this.destroyContext$();
     if (this.allowance$) this.allowance$.unsubscribe();
     if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
     if (this.latestSyncedBlock$) this.latestSyncedBlock$.unsubscribe();

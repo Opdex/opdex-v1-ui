@@ -28,10 +28,10 @@
                 <div class="{{market.stakingToken ? 'col-6' : 'col-12' }}">
                   <p class="mb-0 light d-flex align-items-center">
                     <opdex-copy-button [tooltip]="market.crsToken.address" [value]="market.crsToken.address" icon="link" [size]="iconSizes.small"></opdex-copy-button>
-                    <span class="ml-2">{{market.crsToken.name}}</span>
+                    <span class="ml-2 overflow-ellipsis">{{market.crsToken.name}}</span>
                   </p>
 
-                  <a class="body-default no-decoration d-flex align-items-center" routerLink="/tokens/{{market.crsToken.address}}" matTooltip="Market Anchor Token">
+                  <a class="body-default no-decoration d-inline-flex align-items-center" routerLink="/tokens/{{market.crsToken.address}}" matTooltip="Market Anchor Token">
                     <mat-icon color="primary" class="mr-2">toll</mat-icon>
                     <h2 class="d-inline-block mb-0">{{market.crsToken.symbol}}</h2>
                   </a>
@@ -45,10 +45,10 @@
                 <div class="col-6" *ngIf="market.stakingToken">
                   <p class="mb-0 light d-flex align-items-center">
                     <opdex-copy-button [tooltip]="market.stakingToken.address" [value]="market.stakingToken.address" icon="link" [size]="iconSizes.small"></opdex-copy-button>
-                    <span class="ml-2">{{market.stakingToken.name}}</span>
+                    <span class="ml-2 overflow-ellipsis">{{market.stakingToken.name}}</span>
                   </p>
 
-                  <a class="body-default no-decoration d-flex align-items-center" routerLink="/tokens/{{market.stakingToken.address}}" matTooltip="Market Staking Token">
+                  <a class="body-default no-decoration d-inline-flex align-items-center" routerLink="/tokens/{{market.stakingToken.address}}" matTooltip="Market Staking Token">
                     <mat-icon class="stake mr-2">verified_user</mat-icon>
                     <h2 class="d-inline-block mb-0">{{market.stakingToken.symbol}}</h2>
                   </a>
@@ -68,8 +68,8 @@
                 <ng-container *ngFor="let statCard of statCards; let i = index">
                   <div *ngIf="statCard.show" class="d-flex justify-content-between w-100">
                     <div class="d-flex align-items-center">
-                      <opdex-help-button *ngIf="statCard.helpInfo" [info]="statCard.helpInfo" class="mr-2"></opdex-help-button>
-                      <span>{{statCard.title}} <small class="ml-2" *ngIf="statCard.daily">(24hr)</small></span>
+                      <opdex-help-button *ngIf="statCard.helpInfo" [info]="statCard.helpInfo" [icon]="statCard.icon" [iconColor]="statCard.iconColor" class="mr-2"></opdex-help-button>
+                      <span>{{statCard.title}} <small *ngIf="statCard.daily">(24hr)</small></span>
                     </div>
 
                     <div class="d-flex align-items-center">
@@ -154,7 +154,7 @@
 
     <div class="row">
       <div class="col-12 d-lg-none d-xl-none">
-        <opdex-tx-feed [transactionRequest]="transactionRequest"></opdex-tx-feed>
+        <opdex-tx-feed [transactionRequest]="transactionRequest" size="s"></opdex-tx-feed>
       </div>
     </div>
   </div>

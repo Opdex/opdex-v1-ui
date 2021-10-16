@@ -1,22 +1,24 @@
 import { SharedModule } from './../shared-module/shared.module';
-import { SharedPipesModule } from './../../pipes/shared-pipes.module';
+import { SharedPipesModule } from '@sharedPipes/shared-pipes.module';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ModalsModule } from '@sharedComponents/modals-module/modals.module';
 
 // Material Imports
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
 
+// Module Components
 import { CardComponent } from './card/card.component';
 import { MiningCardComponent } from './mining-card/mining-card.component';
 import { LiquidityPoolCardComponent } from './liquidity-pool-card/liquidity-pool-card.component';
 import { StakingPoolCardComponent } from './staking-pool-card/staking-pool-card.component';
 import { StatCardComponent } from './stat-card/stat-card.component';
-import { ModalsModule } from '@sharedComponents/modals-module/modals.module';
-import { MatMenuModule } from '@angular/material/menu';
+import { ConnectWalletCardComponent } from './connect-wallet-card/connect-wallet-card.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import { MatMenuModule } from '@angular/material/menu';
     MiningCardComponent,
     LiquidityPoolCardComponent,
     StakingPoolCardComponent,
-    StatCardComponent
+    StatCardComponent,
+    ConnectWalletCardComponent
   ],
   imports: [
     CommonModule,
@@ -43,7 +46,8 @@ import { MatMenuModule } from '@angular/material/menu';
     MiningCardComponent,
     LiquidityPoolCardComponent,
     StakingPoolCardComponent,
-    StatCardComponent
+    StatCardComponent,
+    ConnectWalletCardComponent
   ]
 })
 export class CardsModule { }

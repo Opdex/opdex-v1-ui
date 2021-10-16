@@ -1,11 +1,8 @@
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { OnChanges } from '@angular/core';
+import { OnChanges, Injector } from '@angular/core';
 import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
-import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { TxBase } from '../tx-base.component';
 import { Icons } from 'src/app/enums/icons';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
@@ -40,12 +37,10 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
 
   constructor(
     private _fb: FormBuilder,
-    protected _dialog: MatDialog,
-    protected _userContext: UserContextService,
-    protected _bottomSheet: MatBottomSheet,
+    protected _injector: Injector,
     private _platformApiService: PlatformApiService
   ) {
-    super(_userContext, _dialog, _bottomSheet);
+    super(_injector);
 
     this.form = this._fb.group({
       token: ['', [Validators.required]],
@@ -82,5 +77,13 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
           .pipe(take(1))
           .subscribe((quote: ITransactionQuote) => this.quote(quote));
     }
+  }
+
+  destroyContext$() {
+    this.context$.unsubscribe();
+  }
+
+  ngOnDestroy() {
+    this.destroyContext$();
   }
 }

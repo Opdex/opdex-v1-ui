@@ -1,0 +1,11 @@
+<div class="w-100 d-flex align-items-center" *ngIf="tokenInAmount && tokenOutAmount && tokenIn && tokenOut && !error">
+  <div class="col no-wrap flex-shrink">
+    -{{tokenInAmount.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/tokens/{{tokenIn.address}}">{{tokenIn.symbol}}</a>
+  </div>
+
+  <div class="col no-wrap">
+    +{{tokenOutAmount.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/tokens/{{tokenOut.address}}">{{tokenOut.symbol}}</a>
+  </div>
+</div>
+
+<div class="col" *ngIf="error">{{error}}</div>

@@ -1,61 +1,15 @@
-<main [ngClass]="theme" *ngIf="context$ | async as context">
+<main [ngClass]="theme">
   <mat-sidenav-container (backdropClick)="closeSidenav()" class="w-100 h-100">
-    <mat-sidenav #sidenav (keydown.escape)="closeSidenav()" position="end" class="transaction-sidebar" [fixedInViewport]="true" [fixedTopGap]="0" [fixedBottomGap]="0" [mode]="sidenavMode">
-      <div class="sidebar-container">
-
-        <div class="d-flex align-items-center justify-content-between mb-3">
-
-          <!-- Empty div on purpose so the transaction type selector is centered even if the below button is hidden.-->
-          <div style="width: 22px; height: 22px;">
-            <button mat-icon-button color="primary" class="small" (click)="toggleSidenavAppearance()" *ngIf="widescreen">
-              <mat-icon>{{sidenavMode == 'over' ? 'unfold_more' : 'unfold_less' }}</mat-icon>
-            </button>
-          </div>
-
-          <button mat-button class="d-flex small" [matMenuTriggerFor]="beforeMenu" style="text-align: left;">
-            <div class="menu-content d-flex justify-content-between align-items-center">
-              <ng-container *ngFor="let transactionType of transactionTypes">
-                <span *ngIf="message?.view === transactionType.view" class="d-flex align-items-center">
-                  <mat-icon class="mr-3 small" [ngClass]="transactionType.iconColor">{{transactionType.icon}}</mat-icon>
-                  {{transactionType.title}}
-                </span>
-              </ng-container>
-
-              <mat-icon>keyboard_arrow_down</mat-icon>
-            </div>
-          </button>
-
-          <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
-            <ng-container *ngFor="let transactionType of transactionTypes">
-              <button mat-menu-item class="small" (click)="setTransactionView(transactionType.view)">
-                <mat-icon class="mr-3" [ngClass]="transactionType.iconColor">{{transactionType.icon}}</mat-icon>
-                {{transactionType.title}}
-              </button>
-            </ng-container>
-          </mat-menu>
-
-          <button mat-icon-button color="primary" (click)="closeSidenav()" class="small" aria-label="Close Sidenav">
-            <mat-icon>close</mat-icon>
-          </button>
-        </div>
-
-        <mat-divider class="mb-3"></mat-divider>
-
-        <div class="connect-wallet mb-4" *ngIf="!context?.wallet">
-          <button mat-stroked-button class="w-100 d-flex align-items-center" color="primary" routerLink="/auth">
-            Connect Wallet
-          </button>
-        </div>
-
-        <div [ngSwitch]="message?.view">
-          <opdex-tx-swap *ngSwitchCase="1" [data]="message?.data"></opdex-tx-swap>
-          <opdex-tx-provide *ngSwitchCase="2" [data]="message?.data"></opdex-tx-provide>
-          <opdex-tx-stake *ngSwitchCase="3" [data]="message?.data"></opdex-tx-stake>
-          <opdex-tx-mine *ngSwitchCase="4" [data]="message?.data"></opdex-tx-mine>
-          <opdex-tx-allowance *ngSwitchCase="5" [data]="message?.data"></opdex-tx-allowance>
-          <opdex-tx-create-pool *ngSwitchCase="6" [data]="message?.data"></opdex-tx-create-pool>
-        </div>
-      </div>
+    <mat-sidenav #sidenav
+      (keydown.escape)="closeSidenav()"
+      position="end"
+      class="transaction-sidebar"
+      [fixedInViewport]="true"
+      [fixedTopGap]="0"
+      [fixedBottomGap]="0"
+      [mode]="sidenavMode"
+      [autoFocus]="false">
+      <opdex-tx-sidebar (onModeChange)="handleSidenavModeChange($event)" [message]="message"></opdex-tx-sidebar>
     </mat-sidenav>
 
     <mat-sidenav-content>
@@ -64,15 +18,15 @@
           <opdex-side-nav (onPinnedToggle)="handlePinnedToggle($event)"></opdex-side-nav>
         </aside>
 
-        <div class="animation-container" style="min-height: 100vh;"  [@fadeAnimation]="prepareRoute(outlet)">
+        <div class="animation-container" style="min-height: 100vh;">
           <div id="page-content">
-            <opdex-status-bar [menuOpen]="menuOpen" (onMenuToggle)="toggleMenu($event)"></opdex-status-bar>
+            <opdex-status-bar [menuOpen]="menuOpen" (onMenuToggle)="toggleMobileMenu($event)"></opdex-status-bar>
 
             <div class="mobile-nav" [ngClass]="{'open': menuOpen}">
               <opdex-side-nav (onRouteChanged)="handleRouteChanged($event)"></opdex-side-nav>
             </div>
 
-            <div class="page-content-container">
+            <div class="page-content-container" [@fadeAnimation]="prepareRoute(outlet)">
               <router-outlet #outlet="outlet"></router-outlet>
             </div>
 
@@ -82,7 +36,6 @@
           </div>
         </div>
       </div>
-
     </mat-sidenav-content>
   </mat-sidenav-container>
 </main>

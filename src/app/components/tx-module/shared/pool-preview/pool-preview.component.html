@@ -29,8 +29,8 @@
 
   <opdex-card class="pool-summary" *ngIf="pool" [thin]="true">
     <h4 class="mb-0">
-      <opdex-copy-button [tooltip]="pool?.address" [value]="pool?.address" icon="link"></opdex-copy-button>
-      <a class="blue" routerLink="/pools/{{pool?.address}}">{{pool.token.src.symbol}}-{{pool.token.crs.symbol}}</a>
+      <opdex-copy-button [tooltip]="pool?.address" [value]="pool?.address" icon="link" [size]="iconSizes.small"></opdex-copy-button>
+      <a class="blue ml-1" routerLink="/pools/{{pool?.address}}">{{pool.token.src.symbol}}-{{pool.token.crs.symbol}}</a>
     </h4>
 
     <button mat-icon-button class="exit tiny" (click)="clearPool()">
@@ -38,79 +38,113 @@
     </button>
 
     <ng-container *ngIf="showReserves">
-      <h6 class="mb-0 mt-1">Reserves</h6>
-
       <div class="pool-details-section">
-        <div class="col flex-shrink">
-          <small>{{pool.token.src.symbol}}</small>
-          <small>{{pool.token.crs.symbol}}</small>
-          <small>{{pool.token.lp.symbol}}</small>
-          <small>USD</small>
-        </div>
+        <div class="col flex-shrink d-flex flex-column justify-content-end">
+          <button type="button" mat-icon-button color="primary" class="tiny d-block" (click)="srcToggle.toggle()">
+            <mat-icon #srcToggle="matTooltip" matTooltip="Reserves">{{icons.tokens}}</mat-icon>
+          </button>
 
-        <div class="col flex-shrink">
-          <small><opdex-change-indicator [value]="pool.token.src.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
-          <small><opdex-change-indicator [value]="pool.token.crs.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
-          <small><opdex-change-indicator [value]="pool.token.lp.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
-          <small><opdex-change-indicator [value]="pool.reserves.usdDailyChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
+          <button type="button" mat-icon-button color="primary" class="tiny d-block" (click)="crsToggle.toggle()">
+            <mat-icon #crsToggle="matTooltip" matTooltip="Reserves">{{icons.tokens}}</mat-icon>
+          </button>
+
+          <button type="button" mat-icon-button color="primary" class="tiny d-block" (click)="lpToggle.toggle()">
+            <mat-icon class="provide" #lpToggle="matTooltip" matTooltip="Liquidity Pool Token Supply">{{icons.provide}}</mat-icon>
+          </button>
         </div>
 
         <div class="col">
-          <small>${{pool.token.src.summary.price.close | shortNumber}}</small>
-          <small>${{pool.token.crs.summary.price.close | shortNumber}}</small>
-          <small>${{pool.token.lp.summary.price.close | shortNumber}}</small>
-          <small></small>
+          <small class="light no-wrap">Token</small>
+          <small>{{pool.token.crs.symbol}}</small>
+          <small>{{pool.token.src.symbol}}</small>
+          <small>{{pool.token.lp.symbol}}</small>
         </div>
 
-        <div class="col d-flex align-items-end flex-column">
-          <small>{{pool.reserves.src | shortNumber}} <mat-icon>lock</mat-icon></small>
-          <small>{{pool.reserves.crs | shortNumber}} <mat-icon>lock</mat-icon></small>
-          <small>{{pool.token.lp.totalSupply | shortNumber}} <mat-icon>lock</mat-icon></small>
-          <small>${{pool.reserves.usd | shortNumber}} <mat-icon>lock</mat-icon></small>
+        <div class="col">
+          <small class="light no-wrap">Reserves</small>
+          <small>{{pool.reserves.crs | shortNumber}}</small>
+          <small>{{pool.reserves.src | shortNumber}}</small>
+          <small>{{pool.token.lp.totalSupply | shortNumber}}</small>
+        </div>
+
+        <div class="col d-flex flex-row align-items-end">
+          <div class="d-flex flex-column align-items-end">
+            <small class="light no-wrap">(24hr)</small>
+            <small><opdex-change-indicator [value]="pool.token.crs.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
+            <small><opdex-change-indicator [value]="pool.token.src.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
+            <small><opdex-change-indicator [value]="pool.token.lp.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
+          </div>
+
+          <div class="ml-2">
+            <small class="light">Price</small>
+            <small>${{pool.token.crs.summary.price.close | shortNumber}}</small>
+            <small>${{pool.token.src.summary.price.close | shortNumber}}</small>
+            <small>${{pool.token.lp.summary.price.close | shortNumber}}</small>
+          </div>
         </div>
       </div>
     </ng-container>
 
     <ng-container *ngIf="pool.token?.staking && showStaking">
-      <h6 class="mb-0 mt-1">Staking</h6>
-
       <div class="pool-details-section" >
-        <div class="col flex-shrink">
-          <small>{{pool.token.staking.symbol}}</small>
-        </div>
-
-        <div class="col flex-shrink">
-          <small><opdex-change-indicator [value]="pool.token.staking.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
+        <div class="col flex-shrink d-flex flex-column justify-content-end">
+          <button type="button" mat-icon-button color="primary" class="tiny d-block" (click)="stakingToggle.toggle()">
+            <mat-icon class="stake" #stakingToggle="matTooltip" matTooltip="Staking Weight">{{icons.staking}}</mat-icon>
+          </button>
         </div>
 
         <div class="col">
-          <small>${{pool.token.staking.summary.price.close | shortNumber}}</small>
+          <small class="light no-wrap">Token</small>
+          <small>{{pool.token.staking.symbol}}</small>
         </div>
 
-        <div class="col d-flex align-items-end flex-column">
-          <small>{{pool.staking.weight | shortNumber}} <mat-icon class="stake">verified_user</mat-icon></small>
+        <div class="col">
+          <small class="light no-wrap">Weight</small>
+          <small>{{pool.staking.weight | shortNumber}}</small>
+        </div>
+
+        <div class="col d-flex flex-row align-items-end">
+          <div class="d-flex flex-column align-items-end">
+            <small class="light no-wrap">(24hr)</small>
+            <small><opdex-change-indicator [value]="pool.token.staking.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
+          </div>
+
+          <div class="ml-2">
+            <small class="light">Price</small>
+            <small>${{pool.token.staking.summary.price.close | shortNumber}}</small>
+          </div>
         </div>
       </div>
     </ng-container>
 
     <ng-container *ngIf="pool.mining?.tokensMining && showMining">
-      <h6 class="mb-0 mt-1">Mining</h6>
-
-      <div class="pool-details-section" >
-        <div class="col flex-shrink">
-          <small>{{pool.token.lp.symbol}}</small>
-        </div>
-
-        <div class="col flex-shrink">
-          <small><opdex-change-indicator [value]="pool.token.lp.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
+      <div class="pool-details-section">
+        <div class="col flex-shrink d-flex flex-column justify-content-end">
+          <button type="button" mat-icon-button color="primary" class="tiny d-block" (click)="miningToggle.toggle()">
+            <mat-icon class="mine" #miningToggle="matTooltip" matTooltip="Mining">{{icons.mining}}</mat-icon>
+          </button>
         </div>
 
         <div class="col">
-          <small>${{pool.token.lp.summary.price.close | shortNumber}}</small>
+          <small class="light no-wrap">Token</small>
+          <small>{{pool.token.lp.symbol}}</small>
         </div>
 
-        <div class="col d-flex align-items-end flex-column">
-          <small>{{pool.mining?.tokensMining | shortNumber}} <mat-icon class="mine">whatshot</mat-icon></small>
+        <div class="col">
+          <small class="light no-wrap">Weight</small>
+          <small>{{pool.mining?.tokensMining | shortNumber}}</small>
+        </div>
+
+        <div class="col d-flex flex-row align-items-end">
+          <div class="d-flex flex-column align-items-end">
+            <small class="light no-wrap">(24hr)</small>
+            <small><opdex-change-indicator [value]="pool.token.lp.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
+          </div>
+
+          <div class="ml-2">
+            <small class="light">Price</small>
+            <small>${{pool.token.lp.summary.price.close | shortNumber}}</small>
+          </div>
         </div>
       </div>
     </ng-container>
