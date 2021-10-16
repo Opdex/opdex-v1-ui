@@ -7,6 +7,7 @@ import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-requi
 import { ReviewQuoteComponent } from '../review-quote/review-quote.component';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { take, filter } from 'rxjs/operators';
+import { ApproveAllowanceRequest, IApproveAllowanceRequest } from '@sharedModels/platform-api/requests/tokens/approve-allowance-request';
 
 @Component({
   selector: 'opdex-allowance-validation',
@@ -33,24 +34,27 @@ export class AllowanceValidationComponent implements OnChanges {
   }
 
   approveAllowance(amount: string, spender: string, token: string) {
-    const payload = {
-      token: token,
-      amount: amount,
-      spender: spender
-    }
+    const payload: IApproveAllowanceRequest = new ApproveAllowanceRequest(
+      {
+        amount: amount,
+        spender: spender
+      }
+    )
 
-    this._platformApi
-      .approveAllowanceQuote(payload.token, payload)
-        .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => {
-          this._bottomSheet.open(ReviewQuoteComponent, { data: quote })
-            .afterDismissed()
-            .pipe(take(1), filter(txhash => txhash !== null && txhash !== undefined))
-            .subscribe(txhash => {
-              this.waiting = true;
-              this.onAllowanceApproved.emit(txhash);
-            });
-        });
+    if(payload.isValid){
+      this._platformApi
+        .approveAllowanceQuote(token, payload)
+          .pipe(take(1))
+          .subscribe((quote: ITransactionQuote) => {
+            this._bottomSheet.open(ReviewQuoteComponent, { data: quote })
+              .afterDismissed()
+              .pipe(take(1), filter(txhash => txhash !== null && txhash !== undefined))
+              .subscribe(txhash => {
+                this.waiting = true;
+                this.onAllowanceApproved.emit(txhash);
+              });
+          });
+    }
   }
 
   setIgnore(value: boolean) {

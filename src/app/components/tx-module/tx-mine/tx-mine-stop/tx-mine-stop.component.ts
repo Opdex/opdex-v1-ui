@@ -11,6 +11,7 @@ import { ITransactionQuote } from '@sharedModels/platform-api/responses/transact
 import { DecimalStringRegex } from '@sharedLookups/regex';
 import { Subscription } from 'rxjs';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
+import { IMiningQuote } from '@sharedModels/platform-api/requests/mining-pools/mining-quote';
 
 @Component({
   selector: 'opdex-tx-mine-stop',
@@ -60,7 +61,7 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
     let amount = this.amount.value.toString().replace(/,/g, '');
     if (!amount.includes('.')) amount = `${amount}.00`;
 
-    const payload = {
+    const payload: IMiningQuote = {
       amount: amount
     }
 

@@ -2,11 +2,11 @@ import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liqu
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Component, OnInit } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
-import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pool-filter';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { map, switchMap } from 'rxjs/operators';
+import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
+import { combineLatest, Observable } from 'rxjs';
 
 interface IPoolsView {
   topVolume: ILiquidityPoolSummary[],

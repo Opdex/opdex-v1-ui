@@ -6,7 +6,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { TransactionView } from '@sharedModels/transaction-view';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { map, startWith, tap } from 'rxjs/operators';
-import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pool-filter';
+import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Icons } from 'src/app/enums/icons';
 

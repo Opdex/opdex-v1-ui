@@ -8,6 +8,7 @@ import { Icons } from 'src/app/enums/icons';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { take } from 'rxjs/operators';
 import { DecimalStringRegex } from '@sharedLookups/regex';
+import { ApproveAllowanceRequest, IApproveAllowanceRequest } from '@sharedModels/platform-api/requests/tokens/approve-allowance-request';
 
 @Component({
   selector: 'opdex-tx-allowance',
@@ -62,16 +63,19 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
     let amount = this.amount.value.toString().replace(/,/g, '');
     if (!amount.includes('.')) amount = `${amount}.00`;
 
-    const payload = {
-      token: this.token.value,
-      amount: amount,
-      spender: this.spender.value
-    }
+    const payload: IApproveAllowanceRequest = new ApproveAllowanceRequest(
+      {
+        amount: amount,
+        spender: this.spender.value
+      }
+    )
 
-    this._platformApiService
-      .approveAllowanceQuote(payload.token, payload)
-        .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => this.quote(quote));
+    if(payload.isValid){
+      this._platformApiService
+        .approveAllowanceQuote(this.token.value, payload)
+          .pipe(take(1))
+          .subscribe((quote: ITransactionQuote) => this.quote(quote));
+    }
   }
 
   destroyContext$() {

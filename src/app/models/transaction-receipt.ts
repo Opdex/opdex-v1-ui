@@ -96,7 +96,7 @@ export class TransactionReceipt {
   }
 
   private getTransactionSummary(): string {
-    switch (this.transactionType.title) {
+    switch (this.transactionType?.title) {
       case 'Provide': return this.getProvidingSummary();
       case 'Stake': return this.getStakingSummary();
       case 'Mine': return this.getMiningSummary();

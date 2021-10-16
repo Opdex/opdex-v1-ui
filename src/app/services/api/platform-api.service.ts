@@ -1,3 +1,4 @@
+import { ITokenSnapshot } from './../../models/platform-api/responses/tokens/token.interface';
 import { IAddressMiningPositions } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
 import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
@@ -16,16 +17,29 @@ import { RestApiService } from './rest-api.service';
 import { ErrorService } from '@sharedServices/utility/error.service';
 import { Observable } from 'rxjs';
 import { ILiquidityPoolSnapshotHistory, ILiquidityPoolSummary, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
-import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pool-filter';
-import { TransactionRequest } from '@sharedModels/platform-api/requests/transactions-filter';
+import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
+import { TransactionRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { ITransactionReceipt, ITransactionReceipts } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
 import { IAddressAllowanceResponse } from '@sharedModels/platform-api/responses/wallets/address-allowance.interface';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IVaultCertificates } from '@sharedModels/platform-api/responses/vaults/vault-certificate.interface';
-import { IMiningQuote } from '@sharedModels/platform-api/requests/mining-quote';
+import { IMiningQuote } from '@sharedModels/platform-api/requests/mining-pools/mining-quote';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { IMiningPools } from '@sharedModels/platform-api/responses/mining-pools/mining-pool.interface';
 import { IVaults, IVault } from '@sharedModels/platform-api/responses/vaults/vault.interface';
+import { ISwapQuoteRequest } from '@sharedModels/platform-api/requests/quotes/swap-quote-request';
+import { IApproveAllowanceRequest } from '@sharedModels/platform-api/requests/tokens/approve-allowance-request';
+import { ICreateLiquidityPoolRequest } from '@sharedModels/platform-api/requests/liquidity-pools/create-liquidity-pool-request';
+import { IStartStakingRequest } from '@sharedModels/platform-api/requests/liquidity-pools/start-staking-request';
+import { IStopStakingRequest } from '@sharedModels/platform-api/requests/liquidity-pools/stop-staking-request';
+import { ICollectStakingRewardsRequest } from '@sharedModels/platform-api/requests/liquidity-pools/collect-staking-rewards-request';
+import { IAddLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/add-liquidity-request';
+import { IRemoveLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/remove-liquidity-request';
+import { IAddLiquidityAmountInQuoteRequest } from '@sharedModels/platform-api/requests/quotes/add-liquidity-amount-in-quote-request';
+import { IRewardMiningPoolsRequest } from '@sharedModels/platform-api/requests/governances/reward-mining-pools-request';
+import { IQuoteReplayRequest } from '@sharedModels/platform-api/requests/transactions/quote-replay-request';
+import { ITransactionBroadcastNotificationRequest } from '@sharedModels/platform-api/requests/transactions/transaction-broadcast-notification-request';
+import { ISwapRequest } from '@sharedModels/platform-api/requests/tokens/swap-request';
 import { IProvideAmountIn } from '@sharedModels/platform-api/responses/liquidity-pools/provide-amount-in.interface';
 
 @Injectable({
@@ -69,35 +83,35 @@ export class PlatformApiService extends RestApiService {
   // Tokens
   ////////////////////////////
 
-  public getTokens(limit: number = 10, includeLpt: boolean = false): Observable<any[]> {
-    return this.get<any[]>(`${this.api}/tokens?take=${limit}&lpToken=${includeLpt}`);
+  public getTokens(limit: number = 10, includeLpt: boolean = false): Observable<IToken[]> {
+    return this.get<IToken[]>(`${this.api}/tokens?take=${limit}&lpToken=${includeLpt}`);
   }
 
   public getToken(address: string): Observable<IToken> {
     return this.get<IToken>(`${this.api}/tokens/${address}`);
   }
 
-  public getTokenHistory(address: string, timeSpan: string = '1Y', candleSpan: string = 'Hourly'): Observable<any> {
-    return this.get<any>(`${this.api}/tokens/${address}/history?timeSpan=${timeSpan}&candleSpan=${candleSpan}`);
+  public getTokenHistory(address: string, timeSpan: string = '1Y', candleSpan: string = 'Hourly'): Observable<ITokenSnapshot[]> {
+    return this.get<ITokenSnapshot[]>(`${this.api}/tokens/${address}/history?timeSpan=${timeSpan}&candleSpan=${candleSpan}`);
   }
 
-  public approveAllowanceQuote(address: string, payload: any): Observable<any> {
-    return this.post<any>(`${this.api}/tokens/${address}/approve`, payload);
+  public approveAllowanceQuote(address: string, payload: IApproveAllowanceRequest): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/tokens/${address}/approve`, payload);
   }
 
-  public distributeTokensQuote(address: string): Observable<any> {
-    return this.post<any>(`${this.api}/tokens/${address}/distribute`, {});
+  public distributeTokensQuote(address: string): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/tokens/${address}/distribute`, {});
   }
 
-  public swapQuote(address: string, payload: any): Observable<any> {
-    return this.post<any>(`${this.api}/tokens/${address}/swap`, payload);
+  public swapQuote(address: string, payload: ISwapRequest): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/tokens/${address}/swap`, payload);
   }
 
   ////////////////////////////
   // Liquidity Pools
   ////////////////////////////
 
-  public createLiquidityPool(payload: any): Observable<ITransactionQuote> {
+  public createLiquidityPool(payload: ICreateLiquidityPoolRequest): Observable<ITransactionQuote> {
     return this.post<ITransactionQuote>(`${this.api}/liquidity-pools`, payload);
   }
 
@@ -113,31 +127,35 @@ export class PlatformApiService extends RestApiService {
     return this.get<ILiquidityPoolSnapshotHistory>(`${this.api}/liquidity-pools/${address}/history?timeSpan=${timeSpan}&candleSpan=Hourly`);
   }
 
-  public startStakingQuote(address: string, payload: any): Observable<ITransactionQuote> {
+  public startStakingQuote(address: string, payload: IStartStakingRequest): Observable<ITransactionQuote> {
     return this.post<ITransactionQuote>(`${this.api}/liquidity-pools/${address}/staking/start`, payload);
   }
 
-  public stopStakingQuote(address: string, payload: any): Observable<ITransactionQuote> {
+  public stopStakingQuote(address: string, payload: IStopStakingRequest): Observable<ITransactionQuote> {
     return this.post<ITransactionQuote>(`${this.api}/liquidity-pools/${address}/staking/stop`, payload);
   }
 
-  public collectStakingRewardsQuote(address: string, payload: any): Observable<ITransactionQuote> {
+  public collectStakingRewardsQuote(address: string, payload: ICollectStakingRewardsRequest): Observable<ITransactionQuote> {
     return this.post<ITransactionQuote>(`${this.api}/liquidity-pools/${address}/staking/collect`, payload);
   }
 
-  public addLiquidityQuote(address: string, payload: any): Observable<ITransactionQuote> {
+  public addLiquidityQuote(address: string, payload: IAddLiquidityRequest): Observable<ITransactionQuote> {
     return this.post<ITransactionQuote>(`${this.api}/liquidity-pools/${address}/add`, payload);
   }
 
-  public removeLiquidityQuote(address: string, payload: any): Observable<ITransactionQuote> {
+  public removeLiquidityQuote(address: string, payload: IRemoveLiquidityRequest): Observable<ITransactionQuote> {
     return this.post<ITransactionQuote>(`${this.api}/liquidity-pools/${address}/remove`, payload);
   }
 
-  public quoteAddLiquidity(address: string, payload: any): Observable<IProvideAmountIn> {
+  public quoteAddLiquidity(address: string, payload: IAddLiquidityAmountInQuoteRequest): Observable<IProvideAmountIn> {
     return this.post<IProvideAmountIn>(`${this.api}/liquidity-pools/${address}/add/amount-in`, payload);
   }
 
-  public getSwapQuote(payload: any): Observable<string> {
+  ////////////////////////////
+  // Ouote
+  ////////////////////////////
+
+  public getSwapQuote(payload: ISwapQuoteRequest): Observable<string> {
     return this.post<string>(`${this.api}/quote/swap`, payload);
   }
 
@@ -177,8 +195,8 @@ export class PlatformApiService extends RestApiService {
     return this.get<IGovernance>(`${this.api}/governances/${address}`);
   }
 
-  public rewardMiningPoolsQuote(address: string, payload: any): Observable<any> {
-    return this.post<any>(`${this.api}/governances/${address}/reward-mining-pools`, payload);
+  public rewardMiningPoolsQuote(address: string, payload: IRewardMiningPoolsRequest): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/governances/${address}/reward-mining-pools`, payload);
   }
 
   ////////////////////////////
@@ -222,15 +240,15 @@ export class PlatformApiService extends RestApiService {
     return this.get<ITransactionReceipt>(`${this.api}/transactions/${hash}`);
   }
 
-  public broadcastQuote(payload: any): Observable<ITransactionBroadcast> {
+  public broadcastQuote(payload: IQuoteReplayRequest): Observable<ITransactionBroadcast> {
     return this.post<ITransactionBroadcast>(`${this.api}/transactions/broadcast-quote`, payload);
   }
 
-  public replayQuote(payload: any): Observable<ITransactionQuote> {
+  public replayQuote(payload: IQuoteReplayRequest): Observable<ITransactionQuote> {
     return this.post<ITransactionQuote>(`${this.api}/transactions/replay-quote`, payload);
   }
 
-  public notifyTransaction(payload: any): Observable<void> {
+  public notifyTransaction(payload: ITransactionBroadcastNotificationRequest): Observable<void> {
     return this.post(`${this.api}/transactions`, payload);
   }
 

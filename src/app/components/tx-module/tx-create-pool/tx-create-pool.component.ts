@@ -8,6 +8,7 @@ import { TransactionView } from '@sharedModels/transaction-view';
 import { Icons } from 'src/app/enums/icons';
 import { debounceTime } from 'rxjs/operators';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
+import { CreateLiquidityPoolRequest, ICreateLiquidityPoolRequest } from '@sharedModels/platform-api/requests/liquidity-pools/create-liquidity-pool-request';
 
 @Component({
   selector: 'opdex-tx-create-pool',
@@ -48,14 +49,16 @@ export class TxCreatePoolComponent extends TxBase {
   }
 
   submit() {
-    const payload = {
+    const payload: ICreateLiquidityPoolRequest = new CreateLiquidityPoolRequest({
       token: this.token.value
-    }
+    });
 
-    this._platform
-      .createLiquidityPool(payload)
-        .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => this.quote(quote));
+    if(payload.isValid){
+      this._platform
+        .createLiquidityPool(payload)
+          .pipe(take(1))
+          .subscribe((quote: ITransactionQuote) => this.quote(quote));
+    }
   }
 
   destroyContext$() {

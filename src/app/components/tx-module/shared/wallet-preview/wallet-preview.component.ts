@@ -1,4 +1,5 @@
-import { IconSizes } from './../../../../enums/icon-sizes';
+import { MiningPoolsService } from '@sharedServices/platform/mining-pools.service';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
@@ -14,7 +15,7 @@ import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/add
 import { IAddressStaking } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { catchError, map, skip, switchMap, take, tap } from 'rxjs/operators';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 
 @Component({
   selector: 'opdex-wallet-preview',
@@ -37,7 +38,8 @@ export class WalletPreviewComponent implements OnDestroy {
     private _walletService: WalletsService,
     private _tokenService: TokensService,
     private _liquidityPoolService: LiquidityPoolsService,
-    private _blocksService: BlocksService
+    private _blocksService: BlocksService,
+    private _miningPoolService: MiningPoolsService
   ) {
     this.subscription.add(this._userContext.getUserContext$()
       .pipe(
@@ -106,24 +108,23 @@ export class WalletPreviewComponent implements OnDestroy {
           const amount = new FixedDecimal(result.amount, liquidityPool.token.staking.decimals);
           return new AddressPosition(walletAddress, liquidityPool.token.staking, 'Staking', amount);
         }),
-
         take(1));
   }
 
-  private getMiningPosition(walletAddress: string, liquidityPoolAddress: string): Observable<AddressPosition> {
+  private getMiningPosition(walletAddress: string, miningPoolAddress: string): Observable<AddressPosition> {
     const combo = [
-      this._liquidityPoolService.getLiquidityPool(liquidityPoolAddress),
-      this._walletService.getMiningPosition(walletAddress, liquidityPoolAddress).pipe(catchError(_ => of({ amount: '0' } as IAddressMining)))
+      this._miningPoolService.getMiningPool(miningPoolAddress),
+      this._walletService.getMiningPosition(walletAddress, miningPoolAddress).pipe(catchError(_ => of({ amount: '0' } as IAddressMining)))
     ];
 
     return combineLatest(combo)
       .pipe(
-        map(([liquidityPool, result]: [ILiquidityPoolSummary, IAddressMining]) => {
-          // Governance token does not have mining because it does not have staking, return null
-          if (!liquidityPool.staking?.isActive) return null as AddressPosition;
-
-          const amount = new FixedDecimal(result.amount, liquidityPool.token.lp.decimals);
-          return new AddressPosition(walletAddress, liquidityPool.token.lp, 'Mining', amount);
+        switchMap(([miningPool, result]: [IMiningPool, IAddressMining]) => {
+          return this._tokenService.getToken(miningPool.liquidityPool)
+            .pipe(map(token => {
+              const amount = new FixedDecimal(result.amount, token.decimals);
+              return new AddressPosition(walletAddress, token, 'Mining', amount);
+            }));
         }),
         take(1));
   }

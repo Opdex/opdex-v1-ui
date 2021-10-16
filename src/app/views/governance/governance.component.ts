@@ -1,4 +1,4 @@
-import { GovernancesService } from './../../services/platform/governances.service';
+import { GovernancesService } from '@sharedServices/platform/governances.service';
 import { Subscription } from 'rxjs';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
@@ -6,7 +6,7 @@ import { ReviewQuoteComponent } from '@sharedComponents/tx-module/shared/review-
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { switchMap, take, tap } from 'rxjs/operators';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pool-filter';
+import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, timer } from 'rxjs';
@@ -14,6 +14,7 @@ import { IGovernance } from '@sharedModels/platform-api/responses/governances/go
 import { environment } from '@environments/environment';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { Governance } from '@sharedModels/governance';
+import { IRewardMiningPoolsRequest } from '@sharedModels/platform-api/requests/governances/reward-mining-pools-request';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 
 @Component({
@@ -87,7 +88,7 @@ export class GovernanceComponent implements OnInit, OnDestroy {
   }
 
   quoteDistribution(): void {
-    const payload = { fullDistribution: true };
+    const payload: IRewardMiningPoolsRequest = { fullDistribution: true };
 
     this._platformApiService
       .rewardMiningPoolsQuote(this.governance.address, payload)

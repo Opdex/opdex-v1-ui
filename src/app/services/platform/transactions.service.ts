@@ -3,7 +3,7 @@ import { Injectable, Injector } from '@angular/core';
 import { CacheService } from '@sharedServices/utility/cache.service';
 import { Observable } from 'rxjs';
 import { ITransactionReceipt, ITransactionReceipts } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
-import { TransactionRequest } from '@sharedModels/platform-api/requests/transactions-filter';
+import { TransactionRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 
 @Injectable({ providedIn: 'root' })
 export class TransactionsService extends CacheService {

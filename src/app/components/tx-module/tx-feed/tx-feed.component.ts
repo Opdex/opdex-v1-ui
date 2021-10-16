@@ -1,16 +1,13 @@
-import { take } from 'rxjs/operators';
-import { switchMap } from 'rxjs/operators';
-import { Icons } from 'src/app/enums/icons';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
-import { tap } from 'rxjs/operators';
-import { TransactionReceipt } from '@sharedModels/transaction-receipt';
-import { Component, ElementRef, Input, OnChanges, OnDestroy, ViewChild } from '@angular/core';
-import { ITransactionsRequest, TransactionRequest } from '@sharedModels/platform-api/requests/transactions-filter';
 import { ITransactionReceipts } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
-import { map } from 'rxjs/operators';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 import { Observable, Subscription } from 'rxjs';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { TransactionsService } from '@sharedServices/platform/transactions.service';
+import { Component, OnChanges, OnDestroy, ViewChild, ElementRef, Input } from '@angular/core';
+import { ITransactionsRequest, TransactionRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
+import { TransactionReceipt } from '@sharedModels/transaction-receipt';
+import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-tx-feed',

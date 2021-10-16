@@ -10,6 +10,7 @@ import { Icons } from 'src/app/enums/icons';
 import { DecimalStringRegex } from '@sharedLookups/regex';
 import { Subscription } from 'rxjs';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
+import { IStopStakingRequest } from '@sharedModels/platform-api/requests/liquidity-pools/stop-staking-request';
 
 @Component({
   selector: 'opdex-tx-stake-stop',
@@ -64,7 +65,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
     let amount = this.amount.value.toString().replace(/,/g, '');
     if (!amount.includes('.')) amount = `${amount}.00`;
 
-    const payload = {
+    const payload: IStopStakingRequest = {
       amount: amount,
       liquidate: this.liquidate.value
     }

@@ -12,6 +12,8 @@ import { Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '@environments/environment';
 import { Network } from 'src/app/enums/networks';
+import { IQuoteReplayRequest, QuoteReplayRequest } from '@sharedModels/platform-api/requests/transactions/quote-replay-request';
+import { TransactionBroadcastNotificationRequest } from '@sharedModels/platform-api/requests/transactions/transaction-broadcast-notification-request';
 
 @Component({
   selector: 'opdex-review-quote',
@@ -48,8 +50,10 @@ export class ReviewQuoteComponent implements OnInit, OnDestroy {
     this.setQuoteRequest(this.data.request);
     this.quote = this.data;
 
+    const payload: IQuoteReplayRequest = new QuoteReplayRequest({quote: this.data.request});
+
     // Todo: Set on a timer.
-    this.quote$ = this._platformApi.replayQuote({quote: this.data.request});
+    this.quote$ = this._platformApi.replayQuote(payload);
 
     this.quote$
       .pipe(
@@ -101,10 +105,11 @@ export class ReviewQuoteComponent implements OnInit, OnDestroy {
     }
 
     this.submitting = true;
-    this._platformApi.broadcastQuote({quote: this.quote.request})
+    const payload: IQuoteReplayRequest = new QuoteReplayRequest({quote: this.quote.request});
+    this._platformApi.broadcastQuote(payload)
       .pipe(
         take(1),
-        switchMap(response => this._platformApi.notifyTransaction({walletAddress: this.quoteRequest.sender, transactionHash: response.txHash}).pipe(take(1))))
+        switchMap(response => this._platformApi.notifyTransaction(new TransactionBroadcastNotificationRequest({walletAddress: this.quoteRequest.sender, transactionHash: response.txHash})).pipe(take(1))))
         .subscribe();
   }
 
