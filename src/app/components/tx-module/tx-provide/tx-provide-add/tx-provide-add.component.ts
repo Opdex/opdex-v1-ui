@@ -18,7 +18,7 @@ import { ITransactionQuote } from '@sharedModels/platform-api/responses/transact
 import { MathService } from '@sharedServices/utility/math.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { IAddLiquidityRequest, AddLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/add-liquidity-request';
-import { IAddLiquidityQuoteRequest } from '@sharedModels/platform-api/requests/quotes/add-liquidity-quote-request';
+import { IAddLiquidityAmountInQuoteRequest } from '@sharedModels/platform-api/requests/quotes/add-liquidity-amount-in-quote-request';
 import { IProvideAmountIn } from '@sharedModels/platform-api/responses/liquidity-pools/provide-amount-in.interface';
 
 @Component({
@@ -140,7 +140,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     // Technically the input should be made invalid in this case using form validations, cannot end with decimal point
     if (value.endsWith('.')) value = `${value}00`;
 
-    const payload: IAddLiquidityQuoteRequest = {
+    const payload: IAddLiquidityAmountInQuoteRequest = {
       amountIn: value,
       tokenIn: tokenIn.address
     };
