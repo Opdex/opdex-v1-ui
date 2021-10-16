@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, ViewChild, AfterViewInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   templateUrl: './tokens-table.component.html',
   styleUrls: ['./tokens-table.component.scss']
 })
-export class TokensTableComponent implements OnChanges {
+export class TokensTableComponent implements OnChanges, AfterViewInit {
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
   @Input() tokens: any[];
@@ -45,9 +45,9 @@ export class TokensTableComponent implements OnChanges {
     })
   }
 
-    ngAfterViewInit() {
-      this.dataSource.paginator = this.paginator;
-    }
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
 
   navigate(name: string) {
     this._router.navigateByUrl(`/tokens/${name}`);

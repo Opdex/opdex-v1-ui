@@ -103,7 +103,7 @@ export class TransactionReceipt {
       case 'Vault Certificate': return this.getVaultCertificateSummary();
       case 'Ownership': return this.getOwnershipSummary();
       case 'Swap': return 'Swap';
-      case 'Create Pool': return 'Create pool';
+      case 'Create Pool': return 'Create Pool';
       case 'Enable Mining': return 'Enable Mining';
       case 'Distribute': return 'Distribute';
       case 'Permissions': return 'Set Permission';
