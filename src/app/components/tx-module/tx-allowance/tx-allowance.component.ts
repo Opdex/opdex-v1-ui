@@ -65,7 +65,6 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
 
     const payload: IApproveAllowanceRequest = new ApproveAllowanceRequest(
       {
-        token: this.token.value,
         amount: amount,
         spender: this.spender.value
       }
@@ -73,7 +72,7 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
 
     if(payload.isValid){
       this._platformApiService
-        .approveAllowanceQuote(payload.token, payload)
+        .approveAllowanceQuote(this.token.value, payload)
           .pipe(take(1))
           .subscribe((quote: ITransactionQuote) => this.quote(quote));
     }

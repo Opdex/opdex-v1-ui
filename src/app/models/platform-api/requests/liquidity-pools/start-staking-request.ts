@@ -1,3 +1,3 @@
 export interface IStartStakingRequest {
-    amount: number;
+  amount: string;
 }

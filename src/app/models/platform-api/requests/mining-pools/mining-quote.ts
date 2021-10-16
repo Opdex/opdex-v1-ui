@@ -1,3 +1,3 @@
 export interface IMiningQuote {
-    amount: number;
+  amount: string;
 }

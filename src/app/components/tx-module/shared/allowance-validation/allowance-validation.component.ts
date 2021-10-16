@@ -36,15 +36,14 @@ export class AllowanceValidationComponent implements OnChanges {
   approveAllowance(amount: string, spender: string, token: string) {
     const payload: IApproveAllowanceRequest = new ApproveAllowanceRequest(
       {
-        token: token,
         amount: amount,
         spender: spender
       }
     )
-    
+
     if(payload.isValid){
       this._platformApi
-        .approveAllowanceQuote(payload.token, payload)
+        .approveAllowanceQuote(token, payload)
           .pipe(take(1))
           .subscribe((quote: ITransactionQuote) => {
             this._bottomSheet.open(ReviewQuoteComponent, { data: quote })

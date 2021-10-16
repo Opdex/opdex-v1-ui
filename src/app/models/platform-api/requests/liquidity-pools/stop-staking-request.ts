@@ -1,4 +1,4 @@
 export interface IStopStakingRequest {
-    liquidate: boolean;
-    amount: number;
+  liquidate: boolean;
+  amount: string;
 }
