@@ -11,7 +11,7 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, Subscription, timer } from 'rxjs';
 import { debounceTime, switchMap, tap, map, take, distinctUntilChanged } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
-import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
+import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
 
 @Component({
   selector: 'opdex-tx-stake-start',
@@ -24,7 +24,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
   form: FormGroup;
   pool: ILiquidityPoolSummary;
   allowance$: Subscription;
-  transactionTypes = AllowanceTransactionTypes;
+  transactionTypes = AllowanceRequiredTransactionTypes;
   fiatValue: string;
   allowance: AllowanceValidation;
   allowanceTransaction$ = new Subscription();

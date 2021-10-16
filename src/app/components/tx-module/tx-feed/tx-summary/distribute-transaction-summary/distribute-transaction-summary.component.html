@@ -1,0 +1,24 @@
+<ng-container *ngIf="token && !error">
+
+  <div class="d-flex align-items-center mb-2">
+    <button mat-icon-button color="primary" class="tiny mr-2" routerLink="/governance">
+      <mat-icon class="swap">{{icons.governance}}</mat-icon>
+    </button>
+
+    +{{governanceAmount.formattedValue | shortNumber}}
+
+    <a class="ml-1 no-decoration" routerLink="/tokens/{{token.address}}">{{token.symbol}}</a>
+  </div>
+
+  <div class="d-flex align-items-center">
+    <button mat-icon-button color="primary" class="tiny mr-2" routerLink="/vault">
+      <mat-icon class="swap">{{icons.vault}}</mat-icon>
+    </button>
+
+    +{{vaultAmount.formattedValue | shortNumber}}
+
+    <a class="ml-1 no-decoration" routerLink="/tokens/{{token.address}}">{{token.symbol}}</a>
+  </div>
+</ng-container>
+
+<div *ngIf="error">{{error}}</div>

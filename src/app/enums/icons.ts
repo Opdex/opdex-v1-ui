@@ -24,6 +24,15 @@ export enum Icons {
     help = 'help',
     copy = 'file_copy',
     error = 'error_outline',
-    checkOutline = 'check_circle_outline'
-
+    checkOutline = 'check_circle_outline',
+    gas = 'local_gas_station',
+    governance = 'gavel',
+    vault = 'lock',
+    approve = 'person_add',
+    transfer = 'arrow_forward',
+    owner = 'person',
+    permissions = 'group_add',
+    receipt = 'receipt',
+    refresh = 'autorenew',
+    arrowDown = 'keyboard_arrow_down'
 }

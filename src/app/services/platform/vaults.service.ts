@@ -16,7 +16,15 @@ export class VaultsService extends CacheService {
     return this.getItem(this.vaultAddress, this._platformApi.getVault(this.vaultAddress));
   }
 
+  getVaultCertificates(limit, cursor): Observable<any> {
+    return this.getItem(`${this.vaultAddress}-${cursor ? cursor : limit}`, this._platformApi.getVaultCertificates(this.vaultAddress, limit, cursor));
+  }
+
   refreshVault(): void {
     this.refreshItem(this.vaultAddress);
+  }
+
+  refreshVaultCertificates(limit, cursor): void {
+    this.refreshItem(`${this.vaultAddress}-${cursor ? cursor : limit}`);
   }
 }

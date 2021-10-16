@@ -169,7 +169,7 @@ export class WalletComponent implements OnInit {
 
   ngOnInit(): void {
     this.transactionsRequest = {
-      limit: 5,
+      limit: 10,
       direction: "DESC",
       eventTypes: [],
       wallet: this.wallet.wallet

@@ -13,7 +13,7 @@ import { of } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { Icons } from 'src/app/enums/icons';
-import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
+import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { MathService } from '@sharedServices/utility/math.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
@@ -31,7 +31,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   subscription = new Subscription();
   allowance: AllowanceValidation;
   form: FormGroup;
-  transactionTypes = AllowanceTransactionTypes;
+  transactionTypes = AllowanceRequiredTransactionTypes;
   showMore: boolean = false;
   crsInFiatValue: string;
   crsInMinFiatValue: string;

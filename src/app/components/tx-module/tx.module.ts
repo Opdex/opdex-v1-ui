@@ -6,7 +6,7 @@ import { CardsModule } from '@sharedComponents/cards-module/cards.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 // Material Imports
 import { MatIconModule } from '@angular/material/icon';
@@ -24,7 +24,6 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { QRCodeModule } from 'angularx-qrcode';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-
 
 import { TxSwapComponent } from './tx-swap/tx-swap.component';
 import { TxProvideComponent } from './tx-provide/tx-provide.component';
@@ -78,6 +77,17 @@ import { ReviewQuoteComponent } from './shared/review-quote/review-quote.compone
 import { TxCreatePoolComponent } from './tx-create-pool/tx-create-pool.component';
 import { TxSidebarComponent } from './tx-sidebar/tx-sidebar.component';
 import { WalletPreviewComponent } from './shared/wallet-preview/wallet-preview.component';
+import { SwapTransactionSummaryComponent } from './tx-feed/tx-summary/swap-transaction-summary/swap-transaction-summary.component';
+import { ProvideTransactionSummaryComponent } from './tx-feed/tx-summary/provide-transaction-summary/provide-transaction-summary.component';
+import { MineTransactionSummaryComponent } from './tx-feed/tx-summary/mine-transaction-summary/mine-transaction-summary.component';
+import { StakeTransactionSummaryComponent } from './tx-feed/tx-summary/stake-transaction-summary/stake-transaction-summary.component';
+import { CreatePoolTransactionSummaryComponent } from './tx-feed/tx-summary/create-pool-transaction-summary/create-pool-transaction-summary.component';
+import { EnableMiningTransactionSummaryComponent } from './tx-feed/tx-summary/enable-mining-transaction-summary/enable-mining-transaction-summary.component';
+import { DistributeTransactionSummaryComponent } from './tx-feed/tx-summary/distribute-transaction-summary/distribute-transaction-summary.component';
+import { VaultCertificateTransactionSummaryComponent } from './tx-feed/tx-summary/vault-certificate-transaction-summary/vault-certificate-transaction-summary.component';
+import { OwnershipTransactionSummaryComponent } from './tx-feed/tx-summary/ownership-transaction-summary/ownership-transaction-summary.component';
+import { PermissionsTransactionSummaryComponent } from './tx-feed/tx-summary/permissions-transaction-summary/permissions-transaction-summary.component';
+import { AllowanceTransactionSummaryComponent } from './tx-feed/tx-summary/allowance-transaction-summary/allowance-transaction-summary.component';
 
 
 @NgModule({
@@ -128,7 +138,18 @@ import { WalletPreviewComponent } from './shared/wallet-preview/wallet-preview.c
     ReviewQuoteComponent,
     TxCreatePoolComponent,
     TxSidebarComponent,
-    WalletPreviewComponent
+    WalletPreviewComponent,
+    SwapTransactionSummaryComponent,
+    ProvideTransactionSummaryComponent,
+    MineTransactionSummaryComponent,
+    StakeTransactionSummaryComponent,
+    CreatePoolTransactionSummaryComponent,
+    EnableMiningTransactionSummaryComponent,
+    DistributeTransactionSummaryComponent,
+    VaultCertificateTransactionSummaryComponent,
+    OwnershipTransactionSummaryComponent,
+    PermissionsTransactionSummaryComponent,
+    AllowanceTransactionSummaryComponent
   ],
   imports: [
     CommonModule,
@@ -155,7 +176,8 @@ import { WalletPreviewComponent } from './shared/wallet-preview/wallet-preview.c
     ControlsModule,
     MatAutocompleteModule,
     MatProgressSpinnerModule,
-    MatMenuModule
+    MatMenuModule,
+    InfiniteScrollModule
   ],
   exports: [
     TxSwapComponent,

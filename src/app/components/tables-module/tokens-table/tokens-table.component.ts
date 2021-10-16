@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   templateUrl: './tokens-table.component.html',
   styleUrls: ['./tokens-table.component.scss']
 })
-export class TokensTableComponent implements OnChanges, AfterViewInit {
+export class TokensTableComponent implements OnChanges {
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
   @Input() tokens: any[];
@@ -30,21 +30,24 @@ export class TokensTableComponent implements OnChanges, AfterViewInit {
 
     if (!this.tokens?.length) return;
 
-    this.dataSource.data = this.tokens.map(t => {
-      return {
-        name: t.name,
-        symbol: t.symbol,
-        price: t.summary?.price?.close,
-        change: t.summary?.dailyPriceChange,
-        address: t.address,
-        price7d: t.snapshotHistory
-      }
-    });
+    // Set timeout or lightweight charts are going to yell at you about un-found ids
+    setTimeout(() => {
+      this.dataSource.data = [...this.tokens.map(t => {
+        return {
+          name: t.name,
+          symbol: t.symbol,
+          price: t.summary?.price?.close,
+          change: t.summary?.dailyPriceChange,
+          address: t.address,
+          price7d: t.snapshotHistory
+        }
+      })];
+    })
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
+    ngAfterViewInit() {
+      this.dataSource.paginator = this.paginator;
+    }
 
   navigate(name: string) {
     this._router.navigateByUrl(`/tokens/${name}`);

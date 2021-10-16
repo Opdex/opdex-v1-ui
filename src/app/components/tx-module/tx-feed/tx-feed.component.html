@@ -1,69 +1,82 @@
-<opdex-card [hasToolbar]="true">
+<opdex-card [hasToolbar]="true" style="position: relative;" [noPadding]="true">
   <ng-container toolbar>
     <div class="details">
       <h4 class="title d-inline">Recent Transactions</h4>
     </div>
   </ng-container>
 
-  <div class="feed-container" *ngIf="transactions$ | async as transactions" [ngClass]="{'large': size === 'l', 'medium': size === 'm', 'small': size === 's'}">
-    <ng-container *ngIf="transactions?.length > 0; else noTransactions">
-      <div class="transaction" *ngFor="let tx of transactions; trackBy: transactionsTrackBy; let i = index">
-        <div class="d-flex flex-direction-column">
-          <div class="pr-2">
-            <opdex-copy-button [tooltip]="tx.hash" [value]="tx.hash" icon="receipt" [size]="iconSizes.tiny" color="primary"></opdex-copy-button>
-          </div>
-
-          <div class="pl-2">
-            <small class="d-block light mb-1">{{tx?.block?.medianTime | timeago}}</small>
-
-            <ng-container *ngFor="let event of tx.events; trackBy: transactionLogsTrackBy;">
-              <div class="tx-event" [ngSwitch]="event.eventType">
-                <opdex-reward-mining-pool-event [txEvent]="event" *ngSwitchCase="'RewardMiningPoolEvent'"></opdex-reward-mining-pool-event>
-                <opdex-nomination-event [txEvent]="event" *ngSwitchCase="'NominationEvent'"></opdex-nomination-event>
-                <opdex-distribution-event [txEvent]="event" *ngSwitchCase="'DistributionEvent'"></opdex-distribution-event>
-                <opdex-enable-mining-event [txEvent]="event" *ngSwitchCase="'EnableMiningEvent'"></opdex-enable-mining-event>
-                <opdex-transfer-event [txEvent]="event" *ngSwitchCase="'TransferEvent'"></opdex-transfer-event>
-                <opdex-approval-event [txEvent]="event" *ngSwitchCase="'ApprovalEvent'"></opdex-approval-event>
-                <opdex-start-staking-event [txEvent]="event" *ngSwitchCase="'StartStakingEvent'"></opdex-start-staking-event>
-                <opdex-stop-staking-event [txEvent]="event" *ngSwitchCase="'StopStakingEvent'"></opdex-stop-staking-event>
-                <opdex-add-liquidity-event [txEvent]="event" *ngSwitchCase="'AddLiquidityEvent'"></opdex-add-liquidity-event>
-                <opdex-swap-event [txEvent]="event" *ngSwitchCase="'SwapEvent'"></opdex-swap-event>
-                <opdex-remove-liquidity-event [txEvent]="event" *ngSwitchCase="'RemoveLiquidityEvent'"></opdex-remove-liquidity-event>
-                <opdex-stop-mining-event [txEvent]="event" *ngSwitchCase="'StopMiningEvent'"></opdex-stop-mining-event>
-                <opdex-start-mining-event [txEvent]="event" *ngSwitchCase="'StartMiningEvent'"></opdex-start-mining-event>
-                <opdex-collect-staking-rewards-event [txEvent]="event" *ngSwitchCase="'CollectStakingRewardsEvent'"></opdex-collect-staking-rewards-event>
-                <opdex-collect-mining-rewards-event [txEvent]="event" *ngSwitchCase="'CollectMiningRewardsEvent'"></opdex-collect-mining-rewards-event>
-                <opdex-create-liquidity-pool-event [txEvent]="event" *ngSwitchCase="'CreateLiquidityPoolEvent'"></opdex-create-liquidity-pool-event>
-                <opdex-set-pending-vault-owner-event [txEvent]="event" *ngSwitchCase="'SetPendingVaultOwnershipEvent'"></opdex-set-pending-vault-owner-event>
-                <opdex-claim-pending-vault-owner-event [txEvent]="event" *ngSwitchCase="'ClaimPendingVaultOwnershipEvent'"></opdex-claim-pending-vault-owner-event>
-                <opdex-create-vault-certificate-event [txEvent]="event" *ngSwitchCase="'CreateVaultCertificateEvent'"></opdex-create-vault-certificate-event>
-                <opdex-redeem-vault-certificate-event [txEvent]="event" *ngSwitchCase="'RedeemVaultCertificateEvent'"></opdex-redeem-vault-certificate-event>
-                <opdex-revoke-vault-certificate-event [txEvent]="event" *ngSwitchCase="'RevokeVaultCertificateEvent'"></opdex-revoke-vault-certificate-event>
-                <opdex-change-market-permission-event [txEvent]="event" *ngSwitchCase="'ChangeMarketPermissionEvent'"></opdex-change-market-permission-event>
-                <opdex-claim-pending-market-owner-event [txEvent]="event" *ngSwitchCase="'ClaimPendingMarketOwnershipEvent'"></opdex-claim-pending-market-owner-event>
-                <opdex-set-pending-market-owner-event [txEvent]="event" *ngSwitchCase="'SetPendingMarketOwnershipEvent'"></opdex-set-pending-market-owner-event>
-                <opdex-claim-pending-deployer-owner-event [txEvent]="event" *ngSwitchCase="'SetPendingDeployerOwnershipEvent'"></opdex-claim-pending-deployer-owner-event>
-                <opdex-create-market-event [txEvent]="event" *ngSwitchCase="'CreateMarketEvent'"></opdex-create-market-event>
-                <opdex-set-pending-deployer-owner-event [txEvent]="event" *ngSwitchCase="'ClaimPendingDeployerOwnershipEvent'"></opdex-set-pending-deployer-owner-event>
-                <div *ngSwitchDefault>Uh oh, looks like we can't identify this transaction's summary.</div>
+  <div #feedContainer
+    class="feed-container"
+    [ngClass]="{'large': size === 'l', 'medium': size === 'm', 'small': size === 's'}"
+    style="position: relative;"
+    infiniteScroll
+    [infiniteScrollDistance]="1"
+    [infiniteScrollThrottle]="50"
+    [scrollWindow]="false"
+    (scrolled)="onScroll()">
+    <ng-container *ngIf="!loading; else loader">
+      <ng-container *ngIf="transactions?.length > 0; else noTransactions" >
+        <div class="transaction" *ngFor="let tx of transactions; trackBy: transactionsTrackBy; let i = index">
+          <div class="tx-container">
+            <div class="d-flex flex-row align-items-center w-100 mb-1">
+              <div class="icon-container">
+                <opdex-copy-button
+                  [tooltip]="tx.hash"
+                  [value]="tx.hash"
+                  [icon]="tx.transactionType?.icon || icons.error"
+                  [size]="iconSizes.small"
+                  [color]="tx.transactionType?.iconColor || 'error'"></opdex-copy-button>
               </div>
-            </ng-container>
 
-            <ng-container *ngIf="tx.events.length === 0">
-              No known transaction events.
-            </ng-container>
+              <div class="w-100 d-flex light justify-content-between">
+                <small>{{tx?.transactionSummary}}</small>
+                <small>{{tx?.block?.medianTime | timeago}}</small>
+              </div>
+            </div>
+
+            <div class="w-100 icon-container-offset" *ngIf="tx.transactionType; else invalid">
+              <ng-container [ngSwitch]="tx.transactionType.title">
+                <opdex-swap-transaction-summary [transaction]="tx" *ngSwitchCase="'Swap'"></opdex-swap-transaction-summary>
+                <opdex-provide-transaction-summary [transaction]="tx" *ngSwitchCase="'Provide'"></opdex-provide-transaction-summary>
+                <opdex-mine-transaction-summary [transaction]="tx" *ngSwitchCase="'Mine'"></opdex-mine-transaction-summary>
+                <opdex-stake-transaction-summary [transaction]="tx" *ngSwitchCase="'Stake'"></opdex-stake-transaction-summary>
+                <opdex-enable-mining-transaction-summary [transaction]="tx" *ngSwitchCase="'Enable Mining'"></opdex-enable-mining-transaction-summary>
+                <opdex-create-pool-transaction-summary [transaction]="tx" *ngSwitchCase="'Create Pool'"></opdex-create-pool-transaction-summary>
+                <opdex-distribute-transaction-summary [transaction]="tx" *ngSwitchCase="'Distribute'"></opdex-distribute-transaction-summary>
+                <opdex-allowance-transaction-summary [transaction]="tx" *ngSwitchCase="'Allowance'"></opdex-allowance-transaction-summary>
+              </ng-container>
+            </div>
+
+            <ng-template #invalid>
+              <div class="icon-container-offset d-flex flex-row align-items-center">
+                Unable to read transaction summary.
+              </div>
+            </ng-template>
           </div>
-        </div>
-        <mat-divider *ngIf="i < transactions.length - 1" class="mt-3"></mat-divider>
-      </div>
 
-      <div class="paginator">
-        <div class="d-flex justify-content-center">
-          <button mat-icon-button [disabled]="!previousPage" (click)="previous()"><mat-icon>arrow_back</mat-icon></button>
-          <button mat-icon-button [disabled]="!nextPage" (click)="next()"><mat-icon>arrow_forward</mat-icon></button>
+          <mat-divider *ngIf="i < transactions.length - 1" style="position: relative;"></mat-divider>
         </div>
-      </div>
+
+        <div class="d-flex flex-row align-items-center justify-content-center mt-3 mb-3" *ngIf="!endReached && nextPage">
+          <mat-spinner class="tiny mr-2"></mat-spinner> Coming right up...
+        </div>
+      </ng-container>
+      <ng-template #noTransactions>
+        <div class="mt-2 mb-2">
+          No transactions found.
+        </div>
+      </ng-template>
     </ng-container>
-    <ng-template #noTransactions>No transactions found.</ng-template>
+
+    <ng-template #loader>
+      <div class="d-flex h-100 flex-column align-items-center justify-content-center">
+        <mat-spinner class="small mb-3"></mat-spinner>
+        <p>Magic happening...</p>
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="refresh-container" [ngClass]="{'refreshAvailable': refreshAvailable}" >
+    <button mat-flat-button color="primary" (click)="refresh()">Refresh <mat-icon class="tiny">{{icons.refresh}}</mat-icon></button>
   </div>
 </opdex-card>

@@ -1,10 +1,9 @@
-import { Icons } from './../../enums/icons';
-import { IconSizes } from './../../enums/icon-sizes';
+import { Icons } from 'src/app/enums/icons';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions-filter';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, interval, Observable, Subscription, zip } from 'rxjs';
 import { delay, map, switchMap, take, tap } from 'rxjs/operators';
@@ -12,6 +11,7 @@ import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/l
 import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
 import { MarketsService } from '@sharedServices/platform/markets.service';
 import { TransactionView } from '@sharedModels/transaction-view';
+import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 
 @Component({
   selector: 'opdex-market',
@@ -56,10 +56,10 @@ export class MarketComponent implements OnInit {
   selectedChart = this.chartOptions[0];
 
   constructor(
-    private _platformApiService: PlatformApiService,
     private _marketsService: MarketsService,
     private _tokensService: TokensService,
-    private _sidebar: SidenavService
+    private _sidebar: SidenavService,
+    private _liquidityPoolsService: LiquidityPoolsService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -77,7 +77,7 @@ export class MarketComponent implements OnInit {
       .pipe(switchMap(() => zip(...combo)), take(1))
       .subscribe());
 
-    this.miningPools$ = this._platformApiService.getPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 4, {mining: true}));
+    this.miningPools$ = this._liquidityPoolsService.getLiquidityPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 4, {mining: true}));
   }
 
   private getMarket(): Observable<any> {
@@ -189,7 +189,7 @@ export class MarketComponent implements OnInit {
   }
 
   private getPools(): Observable<void> {
-    return this._platformApiService.getPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 10))
+    return this._liquidityPoolsService.getLiquidityPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 10))
       .pipe(
         take(1),
         map(pools => {
@@ -220,21 +220,17 @@ export class MarketComponent implements OnInit {
   }
 
   private getTokens(): Observable<any[]> {
-    return this._platformApiService.getTokens(10, false)
-      .pipe(
-        take(1),
-        switchMap((tokens: any[]) => {
-          const tokens$: Observable<any>[] = [];
+    return this._tokensService.getTokens(10, false)
+    .pipe(
+      take(1),
+      switchMap((tokens: any[]) => {
+        const poolArray$: Observable<any>[] = [];
 
-          tokens.forEach(token => {
-            const tokenWithHistory$: Observable<any> = this.getTokenHistory(token);
-            tokens$.push(tokenWithHistory$);
-          });
+        tokens.forEach(token => poolArray$.push(this.getTokenHistory(token)));
 
-          return forkJoin(tokens$);
-        }),
-        tap(tokens => this.tokens = tokens)
-      );
+        return forkJoin(poolArray$);
+      }),
+      tap(tokens => this.tokens = tokens));
   }
 
   private getTokenHistory(token: any): Observable<any> {

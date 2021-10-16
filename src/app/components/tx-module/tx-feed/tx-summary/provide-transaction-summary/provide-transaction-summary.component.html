@@ -1,0 +1,19 @@
+<ng-container *ngIf="pool && !error">
+  <div class="d-flex align-items-center mb-2">
+    <div class="col no-wrap">
+      {{isAddition ? '+' : '-'}}{{lptAmount.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.token.src.symbol}}/{{pool.token.crs.symbol}}</a> <a class="ml-1 no-decoration" routerLink="/tokens/{{pool.address}}">{{pool.token.lp.symbol}}</a>
+    </div>
+  </div>
+
+  <div class="d-flex align-items-center">
+    <div class="col flex-shrink no-wrap">
+      {{isAddition ? '-' : '+'}}{{crsAmount.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/tokens/{{pool.token.crs.address}}">{{pool.token.crs.symbol}}</a>
+    </div>
+
+    <div class="col no-wrap">
+      {{isAddition ? '-' : '+'}}{{srcAmount.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/tokens/{{pool.token.src.address}}">{{pool.token.src.symbol}}</a>
+    </div>
+  </div>
+</ng-container>
+
+<div *ngIf="error">{{error}}</div>

@@ -95,7 +95,7 @@ export class TokenComponent implements OnInit {
 
           this.token = token;
           this.transactionRequest = {
-            limit: 5,
+            limit: 10,
             eventTypes: this.token.address === 'CRS'
                           ? ['SwapEvent', 'AddLiquidityEvent', 'RemoveLiquidityEvent']
                           : ['TransferEvent', 'ApprovalEvent', 'DistributionEvent', 'SwapEvent', 'AddLiquidityEvent', 'RemoveLiquidityEvent', 'StartMiningEvent', 'StopMiningEvent'],

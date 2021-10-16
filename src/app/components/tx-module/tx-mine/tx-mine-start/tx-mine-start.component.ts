@@ -8,7 +8,7 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Subscription, timer } from 'rxjs';
 import { debounceTime, map, switchMap, take, distinctUntilChanged, tap } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
-import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
+import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { DecimalStringRegex } from '@sharedLookups/regex';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
@@ -24,7 +24,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
   icons = Icons;
   pool: ILiquidityPoolSummary;
   allowance$ = new Subscription();
-  transactionTypes = AllowanceTransactionTypes;
+  transactionTypes = AllowanceRequiredTransactionTypes;
   fiatValue: string;
   allowance: AllowanceValidation;
   allowanceTransaction$ = new Subscription();

@@ -55,7 +55,7 @@ export class LineChangeComponent implements OnChanges, OnInit {
 
         this.loading = false;
       }
-    }, 100);
+    }, 0);
   }
 
   private applyChartOptions() {

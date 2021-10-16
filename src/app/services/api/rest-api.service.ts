@@ -73,10 +73,10 @@ export class RestApiService {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error);
     } else if (error.status === 401) {
-      // An Unauthorized error occurred
+      // Hack, reload the entire view if we have an expired token
       if (this._jwt.isTokenExpired()) {
         this._jwt.removeToken();
-        // this._router.navigateByUrl('/auth');
+        location.reload();
       }
     } else {
       // The backend returned an unsuccessful response code.

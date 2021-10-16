@@ -19,7 +19,7 @@ export class TxSidebarComponent {
   @Output() onModeChange = new EventEmitter<'over' | 'side'>();
 
   sidenavMode: 'over' | 'side' = 'over';
-  transactionTypes = [...TransactionTypes];
+  transactionTypes = [...TransactionTypes.filter(type => type.view)];
   context$: Observable<any>;
   widescreen: boolean;
   subscription = new Subscription();

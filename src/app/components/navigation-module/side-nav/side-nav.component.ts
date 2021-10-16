@@ -20,7 +20,6 @@ export class SideNavComponent implements OnDestroy {
   constructor(
     private _context: UserContextService,
     private _theme: ThemeService,
-    private _router: Router
   ) {
     this.userContext$ = this._context.getUserContext$();
     this.theme$ = this._theme.getTheme().subscribe((theme: 'light-mode' | 'dark-mode') => this.theme = theme);
