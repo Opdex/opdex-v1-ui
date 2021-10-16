@@ -4,16 +4,14 @@ export interface ITransactionsRequest {
   wallet?: string;
   limit?: number;
   direction?: string;
-  next?: string;
-  previous?: string;
+  cursor?: string
 }
 
 export class TransactionRequest implements ITransactionsRequest {
   contracts?: string[];
   eventTypes?: string[];
   wallet?: string;
-  next?: string;
-  previous?: string;
+  cursor?: string;
   limit: number;
   direction: string;
 
@@ -28,15 +26,13 @@ export class TransactionRequest implements ITransactionsRequest {
     this.contracts = request.contracts;
     this.eventTypes = request.eventTypes;
     this.wallet = request.wallet;
-    this.next = request.next;
-    this.previous = request.previous;
+    this.cursor = request.cursor;
     this.limit = request.limit;
     this.direction = request.direction;
   }
 
   public buildQueryString(): string {
-    if (this.next?.length) return `?cursor=${this.next}`;
-    if (this.previous?.length) return `?cursor=${this.previous}`;
+    if (this.cursor?.length) return `?cursor=${this.cursor}`;
 
     var query = '';
 

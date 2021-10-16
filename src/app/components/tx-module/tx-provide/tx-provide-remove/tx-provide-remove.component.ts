@@ -11,7 +11,7 @@ import { switchMap, map, take, filter, debounceTime, distinctUntilChanged, tap }
 import { Observable, Subscription, timer } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { Icons } from 'src/app/enums/icons';
-import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
+import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { DecimalStringRegex } from '@sharedLookups/regex';
 
@@ -26,7 +26,7 @@ export class TxProvideRemoveComponent extends TxBase {
   form: FormGroup;
   context: any;
   allowance$: Subscription;
-  transactionTypes = AllowanceTransactionTypes;
+  transactionTypes = AllowanceRequiredTransactionTypes;
   showMore: boolean = false;
   lptInFiatValue: string;
   lptInMinFiatValue: string;

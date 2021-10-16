@@ -9,7 +9,7 @@ import { debounceTime, take, distinctUntilChanged, switchMap, map, tap, catchErr
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { environment } from '@environments/environment';
 import { Icons } from 'src/app/enums/icons';
-import { AllowanceTransactionTypes } from 'src/app/enums/allowance-transaction-types';
+import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
 import { DecimalStringRegex } from '@sharedLookups/regex';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { TxBase } from '../tx-base.component';
@@ -34,7 +34,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   tokenInDetails: any;
   tokenOutDetails: any;
   allowance: AllowanceValidation;
-  transactionTypes = AllowanceTransactionTypes;
+  transactionTypes = AllowanceRequiredTransactionTypes;
   showMore: boolean = false;
   tokenInFiatValue: string;
   tokenInMaxFiatValue: string;
