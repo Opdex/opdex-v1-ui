@@ -7,7 +7,7 @@
 
   <opdex-wallet-preview
     [balanceTokens]="[pool.token.lp.address]"
-    [positionMining]="[pool.address]"></opdex-wallet-preview>
+    [positionMining]="[pool.mining?.address]"></opdex-wallet-preview>
 
   <!-- We're specifically checking staking capabilities here for right now. In the staking market
       if the liquidity pool does not have staking, then it cannot ever have liquidity mining. -->
