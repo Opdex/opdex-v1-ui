@@ -8,7 +8,7 @@ import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { switchMap, map, take, filter, debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
-import { Observable, Subscription, timer } from 'rxjs';
+import { Observable, of, Subscription, timer } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { Icons } from 'src/app/enums/icons';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
@@ -76,13 +76,20 @@ export class TxProvideRemoveComponent extends TxBase {
         switchMap(amount => this.getAllowance$(amount)))
         .subscribe();
 
-      this.latestSyncedBlock$ = this._blocksService.getLatestBlock$().subscribe(block => this.latestBlock = block?.height);
+      this.latestSyncedBlock$ = this._blocksService.getLatestBlock$()
+        .pipe(
+          tap(block => this.latestBlock = block?.height),
+          filter(_ => this.context?.wallet),
+          switchMap(_ => this.getAllowance$()))
+        .subscribe();
   }
 
   getAllowance$(amount?: string):Observable<any> {
     amount = amount || this.liquidity.value;
     const spender = environment.routerAddress;
     const token = this.pool?.token?.lp?.address;
+
+    if (!amount) return of(null);
 
     return this._platformApi
       .getAllowance(this.context.wallet, spender, token)

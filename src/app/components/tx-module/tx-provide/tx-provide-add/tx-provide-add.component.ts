@@ -115,12 +115,19 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
           switchMap(_ => this.getAllowance$()))
         .subscribe());
 
-      this.latestSyncedBlock$ = this._blocksService.getLatestBlock$().subscribe(block => this.latestBlock = block?.height);
+        this.latestSyncedBlock$ = this._blocksService.getLatestBlock$()
+          .pipe(
+            tap(block => this.latestBlock = block?.height),
+            filter(_ => this.context?.wallet),
+            switchMap(_ => this.getAllowance$()))
+          .subscribe();
   }
 
   getAllowance$():Observable<AllowanceValidation> {
     const spender = environment.routerAddress;
     const token = this.pool?.token?.src?.address;
+
+    if (!this.amountSrc.value) return of(null);
 
     return this._platformApi
       .getAllowance(this.context.wallet, spender, token)

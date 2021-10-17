@@ -74,7 +74,7 @@ export class AppComponent implements OnInit {
         this.context = context;
 
         if (!this.context?.wallet) this.stopHubConnection();
-        else if (!this.hubConnection) await this.connectToSignalR();
+        else if (!this.hubConnection?.connectionId) await this.connectToSignalR();
       }));
 
     // Refresh blocks on timer
@@ -198,6 +198,7 @@ export class AppComponent implements OnInit {
   private async stopHubConnection(): Promise<void> {
     if (this.hubConnection && this.hubConnection.connectionId) {
       await this.hubConnection.stop();
+      this.hubConnection = null;
     }
   }
 
