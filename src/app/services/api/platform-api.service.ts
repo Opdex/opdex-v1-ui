@@ -260,34 +260,34 @@ export class PlatformApiService extends RestApiService {
   public getWalletBalances(wallet: string, limit?: number, cursor?: string): Observable<IAddressBalances> {
     let query = cursor ? `?cursor=${cursor}` : `?limit=${limit}&direction=ASC&includeLpTokens=false`;
 
-    return this.get<IAddressBalances>(`${this.api}/wallet/${wallet}/balance${query}`);
+    return this.get<IAddressBalances>(`${this.api}/wallets/${wallet}/balance${query}`);
   }
 
   public getAllowance(owner: string, spender: string, token: string): Observable<IAddressAllowanceResponse> {
-    return this.get<IAddressAllowanceResponse>(`${this.api}/wallet/${owner}/allowance/${token}/approved/${spender}`);
+    return this.get<IAddressAllowanceResponse>(`${this.api}/wallets/${owner}/allowance/${token}/approved/${spender}`);
   }
 
   public getBalance(owner: string, token: string): Observable<IAddressBalance> {
-    return this.get<IAddressBalance>(`${this.api}/wallet/${owner}/balance/${token}`);
+    return this.get<IAddressBalance>(`${this.api}/wallets/${owner}/balance/${token}`);
   }
 
   public getStakingPosition(owner: string, liquidityPool: string): Observable<IAddressStaking> {
-    return this.get<IAddressStaking>(`${this.api}/wallet/${owner}/staking/${liquidityPool}`);
+    return this.get<IAddressStaking>(`${this.api}/wallets/${owner}/staking/${liquidityPool}`);
   }
 
   public getMiningPosition(owner: string, miningPool: string): Observable<IAddressMining> {
-    return this.get<IAddressMining>(`${this.api}/wallet/${owner}/mining/${miningPool}`);
+    return this.get<IAddressMining>(`${this.api}/wallets/${owner}/mining/${miningPool}`);
   }
 
   public getMiningPositions(owner: string, limit?: number, cursor?: string): Observable<IAddressMiningPositions> {
     let query = cursor ? `?cursor=${cursor}` : `?limit=${limit}&direction=ASC`;
 
-    return this.get<IAddressMiningPositions>(`${this.api}/wallet/${owner}/mining${query}`);
+    return this.get<IAddressMiningPositions>(`${this.api}/wallets/${owner}/mining${query}`);
   }
 
   public getStakingPositions(owner: string, limit?: number, cursor?: string): Observable<IAddressStakingPositions> {
     let query = cursor ? `?cursor=${cursor}` : `?limit=${limit}&direction=ASC`;
 
-    return this.get<IAddressStakingPositions>(`${this.api}/wallet/${owner}/staking${query}`);
+    return this.get<IAddressStakingPositions>(`${this.api}/wallets/${owner}/staking${query}`);
   }
 }
