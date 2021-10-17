@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { NotificationService } from './notification.service';
-import { Notification } from '@sharedModels/notification';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +21,7 @@ export class LoggerService {
 
   private _log(level: string, data: string, notify = false) {
     if (notify) {
-      this._notifications.alert(new Notification('Error', data));
+      // this._notifications.alert(new Notification('Error', data));
     }
   }
 }

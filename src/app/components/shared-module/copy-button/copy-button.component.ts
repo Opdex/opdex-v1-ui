@@ -12,10 +12,12 @@ export class CopyButtonComponent {
   @Input() value: any;
   @Input() size: IconSizes;
   @Input() icon: string;
+  @Input() stopPropagation = false;
 
   copied = false;
 
-  copyHandler() {
+  copyHandler(event) {
+    if (this.stopPropagation) event.stopPropagation();
     this.copied = true;
     setTimeout(() => this.copied = false, 1000);
   }

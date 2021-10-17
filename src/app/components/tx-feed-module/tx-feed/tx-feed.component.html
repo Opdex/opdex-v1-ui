@@ -1,0 +1,46 @@
+<opdex-card [hasToolbar]="true" style="position: relative;" [noPadding]="true">
+  <ng-container toolbar>
+    <div class="details">
+      <h4 class="title d-inline">Recent Transactions</h4>
+    </div>
+  </ng-container>
+
+  <div #feedContainer
+    class="feed-container"
+    [ngClass]="{'large': size === 'l', 'medium': size === 'm', 'small': size === 's'}"
+    style="position: relative;"
+    infiniteScroll
+    [infiniteScrollDistance]="2"
+    [infiniteScrollThrottle]="150"
+    [scrollWindow]="false"
+    (scrolled)="onScroll()">
+    <ng-container *ngIf="!loading; else loader">
+      <ng-container *ngIf="transactions?.length > 0; else noTransactions" >
+        <opdex-tx-receipt
+          *ngFor="let tx of transactions; trackBy: transactionsTrackBy; let i = index;"
+          [tx]="tx"
+          [showBottomDivider]="i < transactions.length - 1"></opdex-tx-receipt>
+
+        <div class="d-flex flex-row align-items-center justify-content-center mt-3 mb-3" *ngIf="!endReached && nextPage">
+          <mat-spinner class="tiny mr-2"></mat-spinner> Coming right up...
+        </div>
+      </ng-container>
+      <ng-template #noTransactions>
+        <div class="mt-2 mb-2">
+          No transactions found.
+        </div>
+      </ng-template>
+    </ng-container>
+
+    <ng-template #loader>
+      <div class="d-flex h-100 flex-column align-items-center justify-content-center">
+        <mat-spinner class="small mb-3"></mat-spinner>
+        <p>Magic happening...</p>
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="refresh-container" [ngClass]="{'refreshAvailable': refreshAvailable}" >
+    <button mat-flat-button color="primary" (click)="refresh()">Refresh <mat-icon class="tiny">{{icons.refresh}}</mat-icon></button>
+  </div>
+</opdex-card>
