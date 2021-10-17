@@ -12,12 +12,11 @@ export class TransactionBroadcastNotificationComponent {
   intro = true;
 
   constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) {
-    setTimeout(() => {
-      this.intro = false;
-    }, 1000);
+    // Wait 1 second before changing the green check icon to a spinning loader
+    setTimeout(() => this.intro = false, 1000);
   }
 
-  close() {
+  close(): void {
     this.data.dismiss();
   }
 }

@@ -20,7 +20,7 @@ import { TransactionBroadcastNotificationRequest } from '@sharedModels/platform-
   templateUrl: './review-quote.component.html',
   styleUrls: ['./review-quote.component.scss']
 })
-export class ReviewQuoteComponent implements OnInit, OnDestroy {
+export class ReviewQuoteComponent implements OnInit {
   agree = new FormControl(false);
   txHash: string;
   submitting = false;
@@ -46,7 +46,6 @@ export class ReviewQuoteComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isDevnet = environment.network == Network.Devnet;
-    // this.connectToSignalR();
     this.setQuoteRequest(this.data.request);
     this.quote = this.data;
 
@@ -60,27 +59,6 @@ export class ReviewQuoteComponent implements OnInit, OnDestroy {
         take(1),
         tap(q => this.setQuoteRequest(q.request))
       ).subscribe(rsp => this.quote = rsp);
-  }
-
-  private async connectToSignalR(): Promise<void> {
-    this.hubConnection = new HubConnectionBuilder()
-      .withUrl(`${environment.apiUrl}/transactions/socket`, {
-        accessTokenFactory: () => this._jwt.getToken()
-      })
-      .configureLogging(LogLevel.Information)
-      .withAutomaticReconnect()
-      .build();
-
-    this.hubConnection.on('OnTransactionBroadcast', async (txHash: string) => {
-      this.submitting = false;
-      this.txHash = txHash;
-    });
-
-    this.hubConnection.onclose(() => {
-      console.log('closing connection')
-    });
-
-    await this.hubConnection.start();
   }
 
   private setQuoteRequest(request: string) {
@@ -108,17 +86,12 @@ export class ReviewQuoteComponent implements OnInit, OnDestroy {
     const payload: IQuoteReplayRequest = new QuoteReplayRequest({quote: this.quote.request});
     this._platformApi.broadcastQuote(payload)
       .pipe(
-        take(1),
-        switchMap(response => this._platformApi.notifyTransaction(new TransactionBroadcastNotificationRequest({walletAddress: this.quoteRequest.sender, transactionHash: response.txHash})).pipe(take(1))))
+        switchMap(response => this._platformApi.notifyTransaction(new TransactionBroadcastNotificationRequest({walletAddress: this.quoteRequest.sender, transactionHash: response.txHash})).pipe(take(1))),
+        take(1))
         .subscribe();
   }
 
   close() {
     this._bottomSheetRef.dismiss(this.txHash);
-  }
-
-  async ngOnDestroy() {
-    // stop the connection if one exists
-    if (this.hubConnection && this.hubConnection.connectionId) await this.hubConnection.stop();
   }
 }

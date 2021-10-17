@@ -18,12 +18,11 @@ export class TxReceiptComponent {
   iconSizes = IconSizes;
   collapsed = true;
 
-  toggleCollapse() {
+  toggleCollapse(): void {
     this.collapsed = !this.collapsed;
   }
 
-  copyHandler(event) {
-    console.log(event)
+  copyHandler(event): void {
     event.stopPropagation();
   }
 }

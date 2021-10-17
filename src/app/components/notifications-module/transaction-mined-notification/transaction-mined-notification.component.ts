@@ -16,15 +16,14 @@ export class TransactionMinedNotificationComponent {
   collapsed: boolean = true;
 
   constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) {
-    console.log(data.transaction);
     this.transaction = data.transaction;
   }
 
-  toggleCollapse() {
+  toggleCollapse(): void {
     this.collapsed = !this.collapsed;
   }
 
-  close() {
+  close(): void {
     this.data.dismiss();
   }
 }

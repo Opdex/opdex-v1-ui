@@ -66,20 +66,15 @@ export class AppComponent implements OnInit {
         .subscribe(jwt => this._context.setToken(jwt)));
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     // Get context
     this.subscription
       .add(this._context.getUserContext$()
       .subscribe(async context => {
         this.context = context;
 
-        if (this.hubConnection && !this.context?.wallet) {
-          this.hubConnection.stop();
-        }
-
-        if (!this.hubConnection && this.context?.wallet) {
-          await this.connectToSignalR();
-        }
+        if (!this.context?.wallet) this.stopHubConnection();
+        else if (!this.hubConnection) await this.connectToSignalR();
       }));
 
     // Refresh blocks on timer
@@ -107,10 +102,6 @@ export class AppComponent implements OnInit {
           if (message.status === true) await this.sidenav.open()
           else await this.sidenav.close();
         }));
-  }
-
-  notify() {
-    this._notificationService.pushBroadcastTransactionNotification("76993278130b9071ab23a612003d6818c7b0a14f54ba80936c99ca77148068a1");
   }
 
   toggleTheme() {
@@ -170,7 +161,7 @@ export class AppComponent implements OnInit {
       .withUrl(`${environment.apiUrl}/transactions/socket`, {
         accessTokenFactory: () => this._jwt.getToken()
       })
-      .configureLogging(LogLevel.Information)
+      .configureLogging(LogLevel.Warning)
       .withAutomaticReconnect()
       .build();
 
@@ -186,7 +177,7 @@ export class AppComponent implements OnInit {
           // Push the UI notification to the user
           this._notificationService.pushMinedTransactionNotification(transaction);
 
-          // Todo: Should probably also update an observable for observers
+          // Consider: Pushing to queue, or doing so when the pushed notification is closed
         });
     });
 
@@ -194,7 +185,7 @@ export class AppComponent implements OnInit {
       // Push the UI notification to the user
       this._notificationService.pushBroadcastTransactionNotification(txHash);
 
-      // Todo: Should probably also update an observable for the tx sidebar to act on.
+      // Consider: Pushing to queue, or doing so when the pushed notification is closed
     });
 
     this.hubConnection.onclose(() => {
@@ -204,7 +195,14 @@ export class AppComponent implements OnInit {
     await this.hubConnection.start();
   }
 
-  ngOnDestroy() {
+  private async stopHubConnection(): Promise<void> {
+    if (this.hubConnection && this.hubConnection.connectionId) {
+      await this.hubConnection.stop();
+    }
+  }
+
+  async ngOnDestroy(): Promise<void> {
     this.subscription.unsubscribe();
+    await this.stopHubConnection();
   }
 }

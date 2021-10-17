@@ -10,8 +10,8 @@
     [ngClass]="{'large': size === 'l', 'medium': size === 'm', 'small': size === 's'}"
     style="position: relative;"
     infiniteScroll
-    [infiniteScrollDistance]="1"
-    [infiniteScrollThrottle]="50"
+    [infiniteScrollDistance]="2"
+    [infiniteScrollThrottle]="150"
     [scrollWindow]="false"
     (scrolled)="onScroll()">
     <ng-container *ngIf="!loading; else loader">

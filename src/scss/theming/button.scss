@@ -1,8 +1,6 @@
 @import 'src/scss/colors';
 
-
 @media (hover: hover) and (pointer: fine) {
-
   .light-mode {
     .row-hoverable {
       &:hover {
@@ -20,5 +18,4 @@
       }
     }
   }
-
 }
