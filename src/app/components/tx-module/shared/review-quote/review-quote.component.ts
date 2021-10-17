@@ -46,7 +46,7 @@ export class ReviewQuoteComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isDevnet = environment.network == Network.Devnet;
-    this.connectToSignalR();
+    // this.connectToSignalR();
     this.setQuoteRequest(this.data.request);
     this.quote = this.data;
 

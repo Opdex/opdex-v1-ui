@@ -1,0 +1,65 @@
+<div class="transaction-receipt row-hoverable" *ngIf="tx" (click)="toggleCollapse()">
+  <div class="tx-container">
+    <div class="d-flex flex-row align-items-center w-100 mb-1">
+      <div class="icon-container">
+        <mat-icon class="{{tx.transactionType?.iconColor || 'error'}} small">{{tx.transactionType?.icon || icons.error}}</mat-icon>
+      </div>
+
+      <div class="w-100 d-flex light justify-content-between">
+        <small>{{tx?.transactionSummary}}</small>
+        <small *ngIf="showTimeAgo">{{tx?.block?.medianTime | timeago}}</small>
+      </div>
+    </div>
+
+    <div class="w-100 icon-container-offset" *ngIf="tx.transactionType; else invalid">
+      <ng-container [ngSwitch]="tx.transactionType.title">
+        <opdex-swap-transaction-summary [transaction]="tx" *ngSwitchCase="'Swap'"></opdex-swap-transaction-summary>
+        <opdex-provide-transaction-summary [transaction]="tx" *ngSwitchCase="'Provide'"></opdex-provide-transaction-summary>
+        <opdex-mine-transaction-summary [transaction]="tx" *ngSwitchCase="'Mine'"></opdex-mine-transaction-summary>
+        <opdex-stake-transaction-summary [transaction]="tx" *ngSwitchCase="'Stake'"></opdex-stake-transaction-summary>
+        <opdex-enable-mining-transaction-summary [transaction]="tx" *ngSwitchCase="'Enable Mining'"></opdex-enable-mining-transaction-summary>
+        <opdex-create-pool-transaction-summary [transaction]="tx" *ngSwitchCase="'Create Pool'"></opdex-create-pool-transaction-summary>
+        <opdex-distribute-transaction-summary [transaction]="tx" *ngSwitchCase="'Distribute'"></opdex-distribute-transaction-summary>
+        <opdex-allowance-transaction-summary [transaction]="tx" *ngSwitchCase="'Allowance'"></opdex-allowance-transaction-summary>
+      </ng-container>
+    </div>
+
+    <ng-template #invalid>
+      <div class="icon-container-offset d-flex flex-row align-items-center">
+        Unable to read transaction summary.
+      </div>
+    </ng-template>
+
+    <div class="collapsed" [@collapse]="collapsed">
+      <div class="d-flex flex-row align-items-center justify-content-between icon-container-offset pt-3">
+        <div class="d-flex flex-row align-items-center">
+          <opdex-copy-button
+            [tooltip]="tx.hash"
+            [value]="tx.hash"
+            [icon]="icons.receipt"
+            [size]="iconSizes.tiny"
+            color="primary" [stopPropagation]="true"></opdex-copy-button>
+
+          <span class="ml-2"><small>{{tx.hash | shortAddress:3}}</small></span>
+        </div>
+
+        <div class="d-flex flex-row align-items-center">
+          <opdex-copy-button
+            [tooltip]="tx.from"
+            [value]="tx.from"
+            [icon]="icons.owner"
+            [size]="iconSizes.tiny"
+            color="swap" [stopPropagation]="true"></opdex-copy-button>
+
+            <span class="ml-2"><small>{{tx.from | shortAddress:3}}</small></span>
+        </div>
+
+        <div class="d-flex flex-row align-items-center justify-content-end">
+          <mat-icon class="tiny mr-2 mine">{{icons.gas}}</mat-icon> <small>{{tx.gasUsed | formatNumber:0}}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <mat-divider *ngIf="showBottomDivider" style="position: relative;"></mat-divider>
+</div>

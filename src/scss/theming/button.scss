@@ -1,1 +1,24 @@
 @import 'src/scss/colors';
+
+
+@media (hover: hover) and (pointer: fine) {
+
+  .light-mode {
+    .row-hoverable {
+      &:hover {
+        cursor: pointer;
+        background-color: #fafafa;
+      }
+    }
+  }
+
+  .dark-mode {
+    .row-hoverable {
+      &:hover {
+        cursor: pointer;
+        background-color: #161729;
+      }
+    }
+  }
+
+}

@@ -20,6 +20,7 @@
 
         <div class="animation-container" style="min-height: 100vh;">
           <div id="page-content">
+            <button mat-button class="small" (click)="notify()">notify</button>
             <opdex-status-bar [menuOpen]="menuOpen" (onMenuToggle)="toggleMobileMenu($event)"></opdex-status-bar>
 
             <div class="mobile-nav" [ngClass]="{'open': menuOpen}">

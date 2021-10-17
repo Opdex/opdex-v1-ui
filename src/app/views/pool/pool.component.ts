@@ -159,7 +159,7 @@ export class PoolComponent implements OnInit, OnDestroy {
           if (pool?.mining?.address) contracts.push(pool.mining.address);
 
           this.transactionsRequest = {
-            limit: 10,
+            limit: 15,
             direction: "DESC",
             contracts: contracts,
             eventTypes: ['SwapEvent', 'StartStakingEvent', 'StopStakingEvent', 'CollectStakingRewardsEvent', 'StartMiningEvent', 'StopMiningEvent', 'AddLiquidityEvent', 'RemoveLiquidityEvent', 'CollectMiningRewardsEvent', 'EnableMiningEvent', 'NominationEvent',]

@@ -162,6 +162,12 @@
 }
 
 .mat-spinner {
+  &.green {
+    circle {
+      stroke: $green-primary;
+    }
+  }
+
   &.tiny {
     width: 16px !important;
     height: 16px !important;
@@ -182,7 +188,7 @@
     }
   }
 
-  &.small {
+  &.medium {
     width: 28px !important;
     height: 28px !important;
 

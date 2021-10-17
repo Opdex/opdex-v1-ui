@@ -1,0 +1,16 @@
+<div class="d-flex flex-row">
+  <div class="mr-2">
+    <mat-icon class="small provide" *ngIf="intro">{{icons.checkOutline}}</mat-icon>
+    <mat-spinner class="small green" *ngIf="!intro"></mat-spinner>
+  </div>
+
+
+  <div class="w-100 overflow-ellipsis">
+    <div class="d-flex flex-row justify-content-between">
+      Transaction Submitted
+      <button mat-icon-button class="tiny" (click)="close()"><mat-icon>{{icons.close}}</mat-icon></button>
+    </div>
+
+    <small class="message light overflow-ellipsis">{{data.txHash}}</small>
+  </div>
+</div>

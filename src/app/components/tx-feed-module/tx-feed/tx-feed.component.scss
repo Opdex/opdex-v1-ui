@@ -4,7 +4,6 @@
   max-height: 70vh;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 0 15px;
 
   &.large {
     height: 100%;
@@ -16,21 +15,6 @@
 
   &.small {
     height: 100%;
-  }
-
-  .transaction {
-    .tx-container {
-      padding: 15px 0;
-
-      .icon-container {
-        min-width: 40px;
-        max-width: 40px;
-      }
-
-      .icon-container-offset {
-        margin-left: 40px;
-      }
-    }
   }
 }
 
