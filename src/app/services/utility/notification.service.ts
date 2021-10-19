@@ -12,7 +12,7 @@ export class NotificationService {
     this._snackbar.openFromComponent(TransactionBroadcastNotificationComponent, {
       duration: 3000,
       horizontalPosition: 'right',
-      verticalPosition: 'top',
+      verticalPosition: 'bottom',
       panelClass: ['notification'],
       data: {
         txHash,
@@ -24,7 +24,7 @@ export class NotificationService {
   public pushMinedTransactionNotification(transaction: TransactionReceipt) {
     this._snackbar.openFromComponent(TransactionMinedNotificationComponent, {
       horizontalPosition: 'right',
-      verticalPosition: 'top',
+      verticalPosition: 'bottom',
       panelClass: ['notification', 'p-0'],
       data: {
         transaction,
