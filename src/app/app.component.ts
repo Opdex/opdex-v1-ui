@@ -158,15 +158,12 @@ export class AppComponent implements OnInit {
 
   private async connectToSignalR(): Promise<void> {
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(`${environment.apiUrl}/transactions/socket`, {
-        accessTokenFactory: () => this._jwt.getToken()
-      })
+      .withUrl(`${environment.apiUrl}/transactions/socket`, { accessTokenFactory: () => this._jwt.getToken() })
       .configureLogging(LogLevel.Warning)
       .withAutomaticReconnect()
       .build();
 
-    this.hubConnection.on('OnTransactionMined', async (txHash: string) => {
-
+    this.hubConnection.on('OnTransactionMined', (txHash: string) => {
       this._transactionService.getTransaction(txHash)
         .pipe(
           catchError(_ => of(null)),
@@ -174,18 +171,12 @@ export class AppComponent implements OnInit {
           map((transaction: ITransactionReceipt) => new TransactionReceipt(transaction)),
           take(1))
         .subscribe(transaction => {
-          // Push the UI notification to the user
-          this._notificationService.pushMinedTransactionNotification(transaction);
-
-          // Consider: Pushing to queue, or doing so when the pushed notification is closed
+          this._transactionService.pushMinedTransaction(transaction);
         });
     });
 
-    this.hubConnection.on('OnTransactionBroadcast', async (txHash: string) => {
-      // Push the UI notification to the user
-      this._notificationService.pushBroadcastTransactionNotification(txHash);
-
-      // Consider: Pushing to queue, or doing so when the pushed notification is closed
+    this.hubConnection.on('OnTransactionBroadcast', (txHash: string) => {
+      this._transactionService.pushBroadcastedTransaction(txHash);
     });
 
     this.hubConnection.onclose(() => {

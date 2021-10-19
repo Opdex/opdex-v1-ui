@@ -9,12 +9,8 @@ import { Icons } from 'src/app/enums/icons';
 })
 export class TransactionBroadcastNotificationComponent {
   icons = Icons;
-  intro = true;
 
-  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) {
-    // Wait 1 second before changing the green check icon to a spinning loader
-    setTimeout(() => this.intro = false, 1000);
-  }
+  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) {}
 
   close(): void {
     this.data.dismiss();

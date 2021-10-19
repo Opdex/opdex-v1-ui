@@ -27,6 +27,6 @@
   </form>
 
   <div class="mt-3" *ngIf="allowance">
-    <opdex-allowance-validation [transactionType]="transactionTypes.removeLiquidity" [allowance]="allowance" (onAllowanceApproved)="handleAllowanceApproval($event)"></opdex-allowance-validation>
+    <opdex-allowance-validation [transactionType]="transactionTypes.removeLiquidity" [allowance]="allowance"></opdex-allowance-validation>
   </div>
 </div>
