@@ -34,5 +34,6 @@ export enum Icons {
     permissions = 'group_add',
     receipt = 'receipt',
     refresh = 'autorenew',
-    arrowDown = 'keyboard_arrow_down'
+    arrowDown = 'keyboard_arrow_down',
+    block = 'layers'
 }

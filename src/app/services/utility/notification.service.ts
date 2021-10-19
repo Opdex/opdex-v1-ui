@@ -10,6 +10,7 @@ export class NotificationService {
 
   public pushBroadcastTransactionNotification(txHash: string) {
     this._snackbar.openFromComponent(TransactionBroadcastNotificationComponent, {
+      duration: 3000,
       horizontalPosition: 'right',
       verticalPosition: 'top',
       panelClass: ['notification'],

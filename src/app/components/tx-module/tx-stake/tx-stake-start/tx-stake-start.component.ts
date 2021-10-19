@@ -1,3 +1,4 @@
+import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { MathService } from '@sharedServices/utility/math.service';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -8,8 +9,8 @@ import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liqu
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { Observable, Subscription, timer } from 'rxjs';
-import { debounceTime, switchMap, tap, map, take, distinctUntilChanged } from 'rxjs/operators';
+import { Observable, of, Subscription } from 'rxjs';
+import { debounceTime, switchMap, tap, map, take, distinctUntilChanged, filter } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 import { IStartStakingRequest } from '@sharedModels/platform-api/requests/liquidity-pools/start-staking-request';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
@@ -29,6 +30,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
   fiatValue: string;
   allowance: AllowanceValidation;
   allowanceTransaction$ = new Subscription();
+  latestSyncedBlock$: Subscription;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -38,12 +40,19 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
     protected _injector: Injector,
+    private _blocksService: BlocksService
   ) {
     super(_injector);
 
     this.form = this._fb.group({
       amount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]]
     });
+
+    this.latestSyncedBlock$ = this._blocksService.getLatestBlock$()
+      .pipe(
+        filter(_ => this.context?.wallet),
+        switchMap(_ => this.getAllowance$()))
+      .subscribe();
 
     this.allowance$ = this.amount.valueChanges
       .pipe(
@@ -71,6 +80,8 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
     const spender = this.data?.pool?.address;
     const token = this.data?.pool?.token?.staking?.address;
 
+    if (!amount) return of(null);
+
     return this._platformApi
       .getAllowance(this.context.wallet, spender, token)
       .pipe(
@@ -92,16 +103,6 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
         .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }
 
-  handleAllowanceApproval(txHash: string) {
-    if (txHash || this.allowance.isApproved || this.allowanceTransaction$) {
-      if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
-    }
-
-    this.allowanceTransaction$ = timer(8000, 8000)
-      .pipe(switchMap(_ => this.getAllowance$()))
-      .subscribe();
-  }
-
   destroyContext$() {
     this.context$.unsubscribe();
   }
@@ -109,6 +110,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
   ngOnDestroy() {
     this.destroyContext$();
     if (this.allowance$) this.allowance$.unsubscribe();
+    if (this.latestSyncedBlock$) this.latestSyncedBlock$.unsubscribe();
     if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
   }
 }

@@ -5,14 +5,15 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { Subscription, timer } from 'rxjs';
-import { debounceTime, map, switchMap, take, distinctUntilChanged, tap } from 'rxjs/operators';
+import { of, Subscription } from 'rxjs';
+import { debounceTime, map, switchMap, take, distinctUntilChanged, tap, filter } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { DecimalStringRegex } from '@sharedLookups/regex';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { IMiningQuote } from '@sharedModels/platform-api/requests/mining-pools/mining-quote';
+import { BlocksService } from '@sharedServices/platform/blocks.service';
 
 @Component({
   selector: 'opdex-tx-mine-start',
@@ -29,6 +30,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
   fiatValue: string;
   allowance: AllowanceValidation;
   allowanceTransaction$ = new Subscription();
+  latestSyncedBlock$: Subscription;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -37,7 +39,8 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
   constructor(
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
-    protected _injector: Injector
+    protected _injector: Injector,
+    private _blocksService: BlocksService
   ) {
     super(_injector);
 
@@ -51,6 +54,12 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
         distinctUntilChanged(),
         tap(amount => this.setFiatValue(amount)),
         switchMap((amount: string) => this.getAllowance$(amount)))
+      .subscribe();
+
+    this.latestSyncedBlock$ = this._blocksService.getLatestBlock$()
+      .pipe(
+        filter(_ => this.context?.wallet),
+        switchMap(_ => this.getAllowance$()))
       .subscribe();
   }
 
@@ -71,21 +80,13 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
     const spender = this.data?.pool?.mining?.address;
     const token = this.data?.pool?.token?.lp?.address;
 
+    if (!amount) return of(null);
+
     return this._platformApi
       .getAllowance(this.context.wallet, spender, token)
       .pipe(
         map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, this.data?.pool?.token?.lp)),
         tap(allowance => this.allowance = allowance));
-  }
-
-  handleAllowanceApproval(txHash: string) {
-    if (txHash || this.allowance.isApproved || this.allowanceTransaction$) {
-      if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
-    }
-
-    this.allowanceTransaction$ = timer(8000, 8000)
-      .pipe(switchMap(_ => this.getAllowance$()))
-      .subscribe();
   }
 
   submit(): void {
@@ -110,5 +111,6 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
     this.destroyContext$();
     if (this.allowance$) this.allowance$.unsubscribe();
     if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
+    if (this.latestSyncedBlock$) this.latestSyncedBlock$.unsubscribe();
   }
 }

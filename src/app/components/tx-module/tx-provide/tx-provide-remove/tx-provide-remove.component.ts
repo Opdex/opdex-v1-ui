@@ -8,7 +8,7 @@ import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { switchMap, map, take, filter, debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
-import { Observable, of, Subscription, timer } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { Icons } from 'src/app/enums/icons';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
@@ -157,17 +157,6 @@ export class TxProvideRemoveComponent extends TxBase {
     this.srcOutMin = MathService.subtract(srcOut, srcTolerance);
     this.lptInFiatValue = MathService.subtract(usdOut, usdTolerance);
   }
-
-  handleAllowanceApproval(txHash: string) {
-    if (txHash || this.allowance.isApproved || this.allowanceTransaction$) {
-      if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
-    }
-
-    this.allowanceTransaction$ = timer(8000, 8000)
-      .pipe(switchMap(_ => this.getAllowance$()))
-      .subscribe();
-  }
-
 
   toggleShowMore(value: boolean) {
     this.showMore = value;

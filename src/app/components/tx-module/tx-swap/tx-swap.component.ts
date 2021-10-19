@@ -348,16 +348,6 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     return blocks + this.latestBlock;
   }
 
-  handleAllowanceApproval(txHash: string) {
-    if (txHash || this.allowance.isApproved || this.allowanceTransaction$) {
-      if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
-    }
-
-    this.allowanceTransaction$ = timer(8000, 8000)
-      .pipe(tap(_ => this.quoteChangeToken()))
-      .subscribe();
-  }
-
   destroyContext$() {
     this.context$.unsubscribe();
   }
