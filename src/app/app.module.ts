@@ -56,6 +56,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ErrorMiddlewareService } from '@sharedServices/middleware/error-middleware.service';
 import { NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule } from 'ngx-google-analytics';
 import { environment } from '@environments/environment';
+import { ServiceWorkerModule } from '@angular/service-worker';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NotificationsModule } from '@sharedComponents/notifications-module/notifications.module';
 
@@ -119,7 +120,13 @@ import { NotificationsModule } from '@sharedComponents/notifications-module/noti
       }
     }),
     NgxGoogleAnalyticsModule.forRoot(environment.ga),
-    NgxGoogleAnalyticsRouterModule
+    NgxGoogleAnalyticsRouterModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the app is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
   providers: [
     JwtService,
