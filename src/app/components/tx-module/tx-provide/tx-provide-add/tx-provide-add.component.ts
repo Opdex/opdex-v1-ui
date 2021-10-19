@@ -6,7 +6,7 @@ import { environment } from '@environments/environment';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { Observable, throwError, timer } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, switchMap, tap, catchError, take, filter } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -115,12 +115,19 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
           switchMap(_ => this.getAllowance$()))
         .subscribe());
 
-      this.latestSyncedBlock$ = this._blocksService.getLatestBlock$().subscribe(block => this.latestBlock = block?.height);
+        this.latestSyncedBlock$ = this._blocksService.getLatestBlock$()
+          .pipe(
+            tap(block => this.latestBlock = block?.height),
+            filter(_ => this.context?.wallet),
+            switchMap(_ => this.getAllowance$()))
+          .subscribe();
   }
 
   getAllowance$():Observable<AllowanceValidation> {
     const spender = environment.routerAddress;
     const token = this.pool?.token?.src?.address;
+
+    if (!this.amountSrc.value) return of(null);
 
     return this._platformApi
       .getAllowance(this.context.wallet, spender, token)
@@ -206,16 +213,6 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     const blocks = Math.ceil(60 * minutes / 16);
 
     return blocks + this.latestBlock;
-  }
-
-  handleAllowanceApproval(txHash: string) {
-    if (txHash || this.allowance.isApproved || this.allowanceTransaction$) {
-      if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
-    }
-
-    this.allowanceTransaction$ = timer(8000, 8000)
-      .pipe(switchMap(_ => this.getAllowance$()))
-      .subscribe();
   }
 
   destroyContext$() {

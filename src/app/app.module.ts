@@ -1,3 +1,4 @@
+import { TxFeedModule } from './components/tx-feed-module/tx-feed.module';
 import { ControlsModule } from '@sharedComponents/controls-module/controls.module';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -56,6 +57,8 @@ import { ErrorMiddlewareService } from '@sharedServices/middleware/error-middlew
 import { NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule } from 'ngx-google-analytics';
 import { environment } from '@environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NotificationsModule } from '@sharedComponents/notifications-module/notifications.module';
 
 @NgModule({
   declarations: [
@@ -83,6 +86,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     TablesModule,
     ModalsModule,
     SharedPipesModule,
+    NotificationsModule,
     CardsModule,
     SharedModule,
     MatCardModule,
@@ -106,6 +110,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     MatSelectModule,
     MatCheckboxModule,
     ControlsModule,
+    MatSnackBarModule,
+    TxFeedModule,
     JwtModule.forRoot({
       jwtOptionsProvider: {
         provide: JWT_OPTIONS,

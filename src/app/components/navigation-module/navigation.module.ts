@@ -14,6 +14,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatListModule,
     MatDialogModule,
     MatTooltipModule,
+    MatProgressSpinnerModule,
+    MatMenuModule,
     SharedPipesModule
   ],
   exports: [

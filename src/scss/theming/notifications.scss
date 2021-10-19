@@ -1,0 +1,20 @@
+@import 'src/scss/colors';
+.mat-snack-bar-container {
+  padding: 0px;
+}
+
+.dark-mode {
+  .mat-snack-bar-container {
+    background: rgba(18, 17, 32, 0.97);
+    color: white;
+    border: 1px solid #292929;
+  }
+}
+
+.light-mode {
+  .mat-snack-bar-container {
+    background: rgba(255,255,255, 0.97);
+    border: 1px solid rgb(228, 228, 228);
+    color: $dark-primary !important;
+  }
+}

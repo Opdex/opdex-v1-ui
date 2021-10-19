@@ -115,23 +115,23 @@
 
 
 .mat-icon {
-  &.provide, &.add {
+  &.provide, &.add, &.green {
     color: $green-primary !important;
   }
 
-  &.mine, &.remove {
+  &.mine, &.remove, &.red {
     color: $red-primary !important;
   }
 
-  &.stake {
+  &.stake, &.purple {
     color: $purple-primary !important;
   }
 
-  &.swap, &.collect, &.primary {
+  &.swap, &.collect, &.primary, &.blue {
     color: $blue-primary !important;
   }
 
-  &.reward {
+  &.reward, &.yellow {
     color: $yellow-primary !important;
     text-shadow: 0px 0px 1px black;
   }
@@ -162,6 +162,12 @@
 }
 
 .mat-spinner {
+  &.green {
+    circle {
+      stroke: $green-primary;
+    }
+  }
+
   &.tiny {
     width: 16px !important;
     height: 16px !important;
@@ -182,7 +188,7 @@
     }
   }
 
-  &.small {
+  &.medium {
     width: 28px !important;
     height: 28px !important;
 

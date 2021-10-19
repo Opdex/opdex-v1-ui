@@ -121,7 +121,11 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
         switchMap(() => this.validateAllowance())
       ).subscribe();
 
-      this.latestSyncedBlock$ = this._blocksService.getLatestBlock$().subscribe(block => this.latestBlock = block?.height);
+      this.latestSyncedBlock$ = this._blocksService.getLatestBlock$()
+        .pipe(
+          tap(block => this.latestBlock = block?.height),
+          switchMap(_ => this.validateAllowance()))
+        .subscribe();
 
       this.tokens$ = this._platformApi
         .getTokens()
@@ -291,7 +295,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   validateAllowance(): Observable<AllowanceValidation> {
     const spender = environment.routerAddress;
 
-    if (this.tokenIn.value === 'CRS') {
+    if (this.tokenIn.value === 'CRS' || !this.context?.wallet || !this.tokenInAmount.value) {
       return of(null);
     }
 
@@ -342,16 +346,6 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     const blocks = Math.ceil(60 * minutes / 16);
 
     return blocks + this.latestBlock;
-  }
-
-  handleAllowanceApproval(txHash: string) {
-    if (txHash || this.allowance.isApproved || this.allowanceTransaction$) {
-      if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
-    }
-
-    this.allowanceTransaction$ = timer(8000, 8000)
-      .pipe(tap(_ => this.quoteChangeToken()))
-      .subscribe();
   }
 
   destroyContext$() {

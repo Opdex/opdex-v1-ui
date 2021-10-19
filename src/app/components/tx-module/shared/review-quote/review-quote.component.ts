@@ -1,10 +1,9 @@
+import { TransactionsService } from '@sharedServices/platform/transactions.service';
 import { switchMap } from 'rxjs/operators';
 import { tap } from 'rxjs/operators';
-import { JwtService } from '@sharedServices/utility/jwt.service';
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
-import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { SignTxModalComponent } from '@sharedComponents/modals-module/sign-tx-modal/sign-tx-modal.component';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -20,14 +19,13 @@ import { TransactionBroadcastNotificationRequest } from '@sharedModels/platform-
   templateUrl: './review-quote.component.html',
   styleUrls: ['./review-quote.component.scss']
 })
-export class ReviewQuoteComponent implements OnInit, OnDestroy {
+export class ReviewQuoteComponent implements OnInit {
   agree = new FormControl(false);
   txHash: string;
   submitting = false;
   quote$: Observable<ITransactionQuote>;
   quote: ITransactionQuote;
   quoteRequest: any;
-  hubConnection: HubConnection;
   isDevnet: boolean;
   subscription = new Subscription();
   hideErrorsBug = false;
@@ -35,18 +33,21 @@ export class ReviewQuoteComponent implements OnInit, OnDestroy {
   public constructor(
     private _platformApi: PlatformApiService,
     public _bottomSheetRef: MatBottomSheetRef<SignTxModalComponent>,
-    private _jwt: JwtService,
+    private _transactionsService: TransactionsService,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: ITransactionQuote
   ) {
+    this._transactionsService.setQuoteDrawerStatus(true);
     this.subscription.add(
-      this._bottomSheetRef.backdropClick().subscribe(_ => {
-        this._bottomSheetRef.dismiss(this.txHash);
-      }));
+      this._transactionsService.getBroadcastedTransaction$()
+        .subscribe(txHash => this.txHash = txHash));
+
+    this.subscription.add(
+      this._bottomSheetRef.backdropClick()
+        .subscribe(_ => this._bottomSheetRef.dismiss(this.txHash)));
   }
 
   ngOnInit() {
     this.isDevnet = environment.network == Network.Devnet;
-    this.connectToSignalR();
     this.setQuoteRequest(this.data.request);
     this.quote = this.data;
 
@@ -60,27 +61,6 @@ export class ReviewQuoteComponent implements OnInit, OnDestroy {
         take(1),
         tap(q => this.setQuoteRequest(q.request))
       ).subscribe(rsp => this.quote = rsp);
-  }
-
-  private async connectToSignalR(): Promise<void> {
-    this.hubConnection = new HubConnectionBuilder()
-      .withUrl(`${environment.apiUrl}/transactions/socket`, {
-        accessTokenFactory: () => this._jwt.getToken()
-      })
-      .configureLogging(LogLevel.Information)
-      .withAutomaticReconnect()
-      .build();
-
-    this.hubConnection.on('OnTransactionBroadcast', async (txHash: string) => {
-      this.submitting = false;
-      this.txHash = txHash;
-    });
-
-    this.hubConnection.onclose(() => {
-      console.log('closing connection')
-    });
-
-    await this.hubConnection.start();
   }
 
   private setQuoteRequest(request: string) {
@@ -108,17 +88,20 @@ export class ReviewQuoteComponent implements OnInit, OnDestroy {
     const payload: IQuoteReplayRequest = new QuoteReplayRequest({quote: this.quote.request});
     this._platformApi.broadcastQuote(payload)
       .pipe(
-        take(1),
-        switchMap(response => this._platformApi.notifyTransaction(new TransactionBroadcastNotificationRequest({walletAddress: this.quoteRequest.sender, transactionHash: response.txHash})).pipe(take(1))))
-        .subscribe();
+        switchMap(response => {
+          var request = new TransactionBroadcastNotificationRequest({walletAddress: this.quoteRequest.sender, transactionHash: response.txHash})
+          return this._platformApi.notifyTransaction(request).pipe(take(1))
+        }),
+        take(1))
+      .subscribe();
   }
 
   close() {
     this._bottomSheetRef.dismiss(this.txHash);
   }
 
-  async ngOnDestroy() {
-    // stop the connection if one exists
-    if (this.hubConnection && this.hubConnection.connectionId) await this.hubConnection.stop();
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+    this._transactionsService.setQuoteDrawerStatus(false);
   }
 }
