@@ -22,7 +22,7 @@
     <div class="row">
       <div class="col-12 col-lg-8">
         <div class="row">
-          <div class="col-12 col-sm-6">
+          <div class="col-12 col-md-6">
             <opdex-card [fullHeight]="true">
               <div class="row">
                 <div class="{{market.stakingToken ? 'col-6' : 'col-12' }}">
@@ -36,8 +36,8 @@
                     <h2 class="d-inline-block mb-0">{{market.crsToken.symbol}}</h2>
                   </a>
 
-                  <div class="d-flex flex-row mt-2">
-                    <span class="mr-2">${{market.crsToken.summary.price.close | shortNumber}}</span>
+                  <div class="d-flex flex-row mt-2 align-items-end">
+                    <span class="mr-1" style="font-size: 1.2em; line-height: 1em;">${{market.crsToken.summary.price.close | shortNumber}}</span>
                     <opdex-change-indicator [value]="market.crsToken.summary.dailyPriceChange" size="s" *ngIf="market.crsToken.summary.dailyPriceChange !== null && market.crsToken.summary.dailyPriceChange !== undefined"></opdex-change-indicator>
                   </div>
                 </div>
@@ -53,8 +53,8 @@
                     <h2 class="d-inline-block mb-0">{{market.stakingToken.symbol}}</h2>
                   </a>
 
-                  <div class="d-flex flex-row mt-2">
-                    <span class="mr-2">${{market.stakingToken.summary.price.close | shortNumber}}</span>
+                  <div class="d-flex flex-row mt-2 align-items-end">
+                    <span class="mr-1" style="font-size: 1.2em; line-height: 1em;">${{market.stakingToken.summary.price.close | shortNumber}}</span>
                     <opdex-change-indicator [value]="market.stakingToken.summary.dailyPriceChange" size="s" *ngIf="market.stakingToken.summary.dailyPriceChange !== null && market.stakingToken.summary.dailyPriceChange !== undefined"></opdex-change-indicator>
                   </div>
                 </div>
@@ -62,7 +62,7 @@
             </opdex-card>
           </div>
 
-          <div class="col-12 col-sm-6">
+          <div class="col-12 col-md-6">
             <opdex-card [fullHeight]="true">
               <div class="d-flex justify-content-around flex-column h-100">
                 <ng-container *ngFor="let statCard of statCards; let i = index">

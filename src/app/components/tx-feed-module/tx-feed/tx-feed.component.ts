@@ -19,12 +19,11 @@ export class TxFeedComponent implements OnChanges, OnDestroy {
   @Input() transactionRequest: ITransactionsRequest;
   @Input() size: 's' | 'm' | 'l';
   copied: boolean;
-  transactions$: Observable<TransactionReceipt[]>;
   iconSizes = IconSizes;
   icons = Icons;
   nextPage: string = null;
   cursor: string;
-  subscription = new Subscription();
+  subscription: Subscription = new Subscription();
   transactions: TransactionReceipt[] = [];
   newTransactions: TransactionReceipt[] = [];
   refreshAvailable: boolean;
@@ -36,7 +35,20 @@ export class TxFeedComponent implements OnChanges, OnDestroy {
     private _blocksService: BlocksService) { }
 
   ngOnChanges(): void {
-    if (this.transactionRequest && !this.transactions$) {
+    if (this.transactionRequest) {
+
+      // Todo: Improve this, when on a view who's route changes but the view component doesn't,
+      // we need to unsubscribe and clear the current feed, then refresh all based on the new view
+      this.subscription.unsubscribe();
+      this.subscription = new Subscription();
+      this.transactions = [];
+      this.newTransactions = [];
+      this.loading = true;
+
+      if (this.feedContainer) {
+        this.feedContainer.nativeElement.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
+      }
+
       this.subscription.add(
         this._blocksService.getLatestBlock$()
           .pipe(
