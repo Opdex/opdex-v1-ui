@@ -209,6 +209,7 @@ main {
 }
 
 .light-mode {
+  color-scheme: light;
   @include mat.all-component-themes($theme);
 
   $background: map-get($theme, background);
@@ -223,6 +224,7 @@ main {
 }
 
 .dark-mode {
+  color-scheme: dark;
   @include mat.all-component-themes($altTheme);
 
   color: #fff;

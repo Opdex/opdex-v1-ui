@@ -2,7 +2,7 @@
   <opdex-hamburger [isOpen]="menuOpen" (onToggle)="toggleMenu($event)"></opdex-hamburger>
 
   <div class="d-flex flex-row align-items-center justify-content-end w-100">
-    <div *ngIf="context?.wallet">
+    <div *ngIf="context?.wallet && pendingTransactions.length > 0">
       <button mat-icon-button [matMenuTriggerFor]="qMenu" matTooltip="Pending Transactions" color="{{ pendingTransactions.length > 0 ? 'primary' : '' }}" class="tiny">
         <mat-icon>send</mat-icon>
       </button>
