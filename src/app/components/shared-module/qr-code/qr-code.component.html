@@ -1,11 +1,8 @@
 <ng-container *ngIf="data">
   <div class="d-flex justify-content-center mt-3 mb-3">
     <div class="qr-code-wrapper" [cdkCopyToClipboard]="data" (cdkCopyToClipboardCopied)="copyHandler()">
-      <qrcode
-        [qrdata]="data"
-        [width]="250"
-        [margin]="1"
-        [errorCorrectionLevel]="'M'"></qrcode>
+
+      <qr-code [value]="data" size="250" errorCorrectionLevel="M" centerImageSrc="/assets/favicons/favicon-72x72.png" centerImageSize="40" [margin]="2"></qr-code>
 
       <mat-icon>{{copied ? 'check_circle' : 'file_copy'}}</mat-icon>
     </div>

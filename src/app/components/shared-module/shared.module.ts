@@ -19,7 +19,7 @@ import { HelpButtonComponent } from './help-button/help-button.component';
 import { QrCodeComponent } from './qr-code/qr-code.component';
 
 // Other Imports
-import { QRCodeModule } from 'angularx-qrcode';
+import { QrCodeModule } from 'ng-qrcode';
 
 @NgModule({
   declarations: [
@@ -36,7 +36,7 @@ import { QRCodeModule } from 'angularx-qrcode';
     MatButtonModule,
     ClipboardModule,
     SharedPipesModule,
-    QRCodeModule
+    QrCodeModule
   ],
   exports: [
     ChangeIndicatorComponent,

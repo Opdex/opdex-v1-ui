@@ -31,8 +31,8 @@
     </ng-template>
 
     <div class="collapsed" [@collapse]="collapsed">
-      <div class="d-flex flex-row align-items-center justify-content-between icon-container-offset pt-3">
-        <div class="d-flex flex-row align-items-center">
+      <div class="d-flex flex-row align-items-center icon-container-offset pt-3 flex-wrap">
+        <div class="d-flex flex-row align-items-center mr-3" *ngIf="tx.hash?.length > 0">
           <opdex-copy-button
             [tooltip]="tx.hash"
             [value]="tx.hash"
@@ -43,7 +43,7 @@
           <span class="ml-2"><small>{{tx.hash | shortAddress:3}}</small></span>
         </div>
 
-        <div class="d-flex flex-row align-items-center">
+        <div class="d-flex flex-row align-items-center mr-3">
           <opdex-copy-button
             [tooltip]="tx.from"
             [value]="tx.from"
@@ -54,7 +54,7 @@
             <span class="ml-2"><small>{{tx.from | shortAddress:3}}</small></span>
         </div>
 
-        <div class="d-flex flex-row align-items-center justify-content-end">
+        <div class="d-flex flex-row align-items-center">
           <mat-icon class="tiny mr-2 mine">{{icons.gas}}</mat-icon> <small>{{tx.gasUsed | formatNumber:0}}</small>
         </div>
       </div>

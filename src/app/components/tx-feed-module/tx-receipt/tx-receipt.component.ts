@@ -14,9 +14,10 @@ export class TxReceiptComponent {
   @Input() tx: TransactionReceipt;
   @Input() showBottomDivider: boolean = false;
   @Input() showTimeAgo: boolean = true;
+  @Input() collapsed = true;
+
   icons = Icons;
   iconSizes = IconSizes;
-  collapsed = true;
 
   toggleCollapse(): void {
     this.collapsed = !this.collapsed;

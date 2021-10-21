@@ -1,61 +1,72 @@
-<div class="review-tx-quote">
+<div class="review-tx-quote" *ngIf="quoteRequest && quoteReceipt">
   <ng-container *ngIf="!txHash; else success">
-    <h3 class="mb-4">{{quoteRequest?.method ?  quoteRequest.method + ' Quote' : 'Transaction Quote'}}</h3>
+    <h4 class="{{quoteReceipt.success ? 'mb-1' : 'mb-3'}}">Transaction Quote</h4>
 
-    <div *ngIf="quoteRequest">
-      <div class="d-flex justify-content-between d-flex" *ngFor="let param of quoteRequest.parameters">
-        <p class="light">{{param.label}}</p>
-        <p>{{param.value | contractParameter}}</p>
-      </div>
+    <ng-container *ngIf="quoteReceipt.success">
+      <opdex-tx-receipt [tx]="quoteReceipt" [showBottomDivider]="false" [showTimeAgo]="false" [collapsed]="false"></opdex-tx-receipt>
 
-      <div class="d-flex justify-content-between d-flex">
-        <p class="light">Estimated Gas Cost</p>
-        <p>{{(quote?.gasUsed * 100) | coinNotation:8}} CRS</p>
-      </div>
-    </div>
-
-    <mat-divider></mat-divider>
-
-    <ng-container *ngIf="quote?.events?.length">
-      <h4 class="mt-2 mb-3">Quoted Events</h4>
-
-      <ng-container *ngFor="let event of quote?.events; trackBy: transactionLogsTrackBy;">
-        <div class="tx-event" [ngSwitch]="event.eventType">
-          <opdex-nomination-event [txEvent]="event" *ngSwitchCase="'NominationEvent'"></opdex-nomination-event>
-          <opdex-distribution-event [txEvent]="event" *ngSwitchCase="'DistributionEvent'"></opdex-distribution-event>
-          <opdex-enable-mining-event [txEvent]="event" *ngSwitchCase="'EnableMiningEvent'"></opdex-enable-mining-event>
-          <opdex-transfer-event [txEvent]="event" *ngSwitchCase="'TransferEvent'"></opdex-transfer-event>
-          <opdex-approval-event [txEvent]="event" *ngSwitchCase="'ApprovalEvent'"></opdex-approval-event>
-          <opdex-start-staking-event [txEvent]="event" *ngSwitchCase="'StartStakingEvent'"></opdex-start-staking-event>
-          <opdex-stop-staking-event [txEvent]="event" *ngSwitchCase="'StopStakingEvent'"></opdex-stop-staking-event>
-          <opdex-add-liquidity-event [txEvent]="event" *ngSwitchCase="'AddLiquidityEvent'"></opdex-add-liquidity-event>
-          <opdex-swap-event [txEvent]="event" *ngSwitchCase="'SwapEvent'"></opdex-swap-event>
-          <opdex-remove-liquidity-event [txEvent]="event" *ngSwitchCase="'RemoveLiquidityEvent'"></opdex-remove-liquidity-event>
-          <opdex-stop-mining-event [txEvent]="event" *ngSwitchCase="'StopMiningEvent'"></opdex-stop-mining-event>
-          <opdex-start-mining-event [txEvent]="event" *ngSwitchCase="'StartMiningEvent'"></opdex-start-mining-event>
-          <opdex-collect-staking-rewards-event [txEvent]="event" *ngSwitchCase="'CollectStakingRewardsEvent'"></opdex-collect-staking-rewards-event>
-          <opdex-collect-mining-rewards-event [txEvent]="event" *ngSwitchCase="'CollectMiningRewardsEvent'"></opdex-collect-mining-rewards-event>
-          <opdex-create-liquidity-pool-event [txEvent]="event" *ngSwitchCase="'CreateLiquidityPoolEvent'"></opdex-create-liquidity-pool-event>
-          <opdex-set-pending-vault-owner-event [txEvent]="event" *ngSwitchCase="'SetPendingVaultOwnershipEvent'"></opdex-set-pending-vault-owner-event>
-          <opdex-claim-pending-vault-owner-event [txEvent]="event" *ngSwitchCase="'ClaimPendingVaultOwnershipEvent'"></opdex-claim-pending-vault-owner-event>
-          <opdex-create-vault-certificate-event [txEvent]="event" *ngSwitchCase="'CreateVaultCertificateEvent'"></opdex-create-vault-certificate-event>
-          <opdex-redeem-vault-certificate-event [txEvent]="event" *ngSwitchCase="'RedeemVaultCertificateEvent'"></opdex-redeem-vault-certificate-event>
-          <opdex-revoke-vault-certificate-event [txEvent]="event" *ngSwitchCase="'RevokeVaultCertificateEvent'"></opdex-revoke-vault-certificate-event>
-          <opdex-change-market-permission-event [txEvent]="event" *ngSwitchCase="'ChangeMarketPermissionEvent'"></opdex-change-market-permission-event>
-          <opdex-claim-pending-market-owner-event [txEvent]="event" *ngSwitchCase="'ClaimPendingMarketOwnershipEvent'"></opdex-claim-pending-market-owner-event>
-          <opdex-set-pending-market-owner-event [txEvent]="event" *ngSwitchCase="'SetPendingMarketOwnershipEvent'"></opdex-set-pending-market-owner-event>
-          <opdex-claim-pending-deployer-owner-event [txEvent]="event" *ngSwitchCase="'SetPendingDeployerOwnershipEvent'"></opdex-claim-pending-deployer-owner-event>
-          <opdex-create-market-event [txEvent]="event" *ngSwitchCase="'CreateMarketEvent'"></opdex-create-market-event>
-          <opdex-set-pending-deployer-owner-event [txEvent]="event" *ngSwitchCase="'ClaimPendingDeployerOwnershipEvent'"></opdex-set-pending-deployer-owner-event>
-          <opdex-reward-mining-pool-event [txEvent]="event" *ngSwitchCase="'RewardMiningPoolEvent'"></opdex-reward-mining-pool-event>
-          <div *ngSwitchDefault>Uh oh, looks like we can't identify this transaction event's summary.</div>
-        </div>
-      </ng-container>
+      <mat-divider></mat-divider>
     </ng-container>
 
-    <div class="mt-2" *ngIf="quote?.error && !hideErrorsBug">
-      <h4 class="mb-2">Quoted Errors</h4>
-      <p class="error" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">{{quote.error}}</p>
+    <div class="mt-2" *ngIf="quote?.error">
+      <div class="d-flex d-row align-items-center mb-2">
+        <opdex-help-button class="mr-2" [info]="errorHelp" [icon]="icons.error" iconColor="red"></opdex-help-button>
+        <h6 class="mb-0 d-inline">Errors</h6>
+      </div>
+
+      <p>{{quote.error}}</p>
+      <mat-divider></mat-divider>
+    </div>
+
+    <div *ngIf="quoteRequest" class="mt-2">
+      <div class="d-flex d-row justify-content-between align-items-center mb-2">
+        <div class="d-flex d-row align-items-center">
+          <opdex-help-button class="mr-2" [info]="methodDetailsHelp"></opdex-help-button>
+          <h6 class="mb-0 d-inline">Method Details</h6>
+        </div>
+
+        <div class="d-flex justify-content-center">
+          <button mat-icon-button color="primary" class="small" (click)="toggleMethodDetails()">
+            <mat-icon>{{showMethodDetails ? 'remove' : 'add'}}</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <ng-container *ngIf="showMethodDetails">
+        <div class="mb-2">
+          <small class="light d-block">Contract Method</small>
+          <small class="d-block overflow-ellipsis">{{quoteRequest?.method}}</small>
+        </div>
+
+        <div class="mb-2">
+          <small class="light d-block">Contract Address</small>
+          <small class="d-block overflow-ellipsis">{{quoteReceipt?.to}}</small>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="quoteRequest.parameters?.length">
+        <mat-divider></mat-divider>
+
+        <div class="d-flex d-row justify-content-between align-items-center mt-2 mb-2">
+          <div class="d-flex d-row align-items-center">
+            <opdex-help-button class="mr-2" [info]="methodParametersHelp"></opdex-help-button>
+            <h6 class="mb-0 d-inline">Method Parameters</h6>
+          </div>
+
+          <div class="d-flex justify-content-center">
+            <button mat-icon-button color="primary" class="small" (click)="toggleParameterDetails()">
+              <mat-icon>{{showParameterDetails ? 'remove' : 'add'}}</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <ng-container *ngIf="showParameterDetails">
+          <div class="mb-2" *ngFor="let param of quoteRequest.parameters">
+            <small class="light d-block">{{param.label}}</small>
+            <small class="d-block overflow-ellipsis">{{param.value | contractParameter}}</small>
+          </div>
+        </ng-container>
+      </ng-container>
     </div>
 
     <mat-divider></mat-divider>

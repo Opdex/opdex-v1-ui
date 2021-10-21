@@ -8,7 +8,7 @@
   &:hover {
     cursor: pointer;
 
-    .qrcode {
+    canvas {
       opacity: .2 !important;
       transition: opacity .1s ease-in;
     }
@@ -26,7 +26,7 @@
     }
   }
 
-  .qrcode {
+  canvas {
     transition: opacity .1s ease-out;
   }
 
