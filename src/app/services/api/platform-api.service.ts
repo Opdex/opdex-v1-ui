@@ -41,6 +41,7 @@ import { IQuoteReplayRequest } from '@sharedModels/platform-api/requests/transac
 import { ITransactionBroadcastNotificationRequest } from '@sharedModels/platform-api/requests/transactions/transaction-broadcast-notification-request';
 import { ISwapRequest } from '@sharedModels/platform-api/requests/tokens/swap-request';
 import { IProvideAmountIn } from '@sharedModels/platform-api/responses/liquidity-pools/provide-amount-in.interface';
+import { IAddTokenRequest } from '@sharedModels/platform-api/requests/tokens/add-token-request';
 
 @Injectable({
   providedIn: 'root'
@@ -89,6 +90,10 @@ export class PlatformApiService extends RestApiService {
 
   public getToken(address: string): Observable<IToken> {
     return this.get<IToken>(`${this.api}/tokens/${address}`);
+  }
+
+  public addToken(payload: IAddTokenRequest): Observable<IToken> {
+    return this.post<IToken>(`${this.api}/tokens`, payload);
   }
 
   public getTokenHistory(address: string, timeSpan: string = '1Y', candleSpan: string = 'Hourly'): Observable<ITokenSnapshot[]> {

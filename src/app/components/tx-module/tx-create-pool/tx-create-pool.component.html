@@ -2,8 +2,14 @@
   <opdex-card [thin]="true">
     <form [formGroup]="form" name="create-pool-form" id="swap-form" (submit)="submit()">
       <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.link" label="Token" [formControl]="token" placeholder="Token Address..."></opdex-input-control>
-
-      <button mat-flat-button color="primary" class="mt-3 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
+      <button mat-flat-button color="primary" class="my-3 w-100" [disabled]="!form.valid || !context?.wallet || !unknownToken">Quote</button>
+      <ng-container *ngIf="form.valid && unknownToken == false">
+        <div class="row d-flex flex-row align-items-center">
+          <mat-icon color="warn">{{icons.error}}</mat-icon>
+          <span class="ml-2">Unknown token, please validate</span>
+        </div>
+        <button mat-flat-button color="primary" class="mt-3 w-100" [disabled]="!form.valid || !context?.wallet">Validate</button>
+      </ng-container>
     </form>
   </opdex-card>
 </div>

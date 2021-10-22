@@ -1,7 +1,7 @@
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { take, tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { catchError, distinctUntilChanged, switchMap, take} from 'rxjs/operators';
+import { Observable, of, Subscription } from 'rxjs';
 import { Component, Input, Injector } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TransactionView } from '@sharedModels/transaction-view';
@@ -9,6 +9,10 @@ import { Icons } from 'src/app/enums/icons';
 import { debounceTime } from 'rxjs/operators';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { CreateLiquidityPoolRequest, ICreateLiquidityPoolRequest } from '@sharedModels/platform-api/requests/liquidity-pools/create-liquidity-pool-request';
+import { TokensService } from '@sharedServices/platform/tokens.service';
+import { ErrorService } from '@sharedServices/utility/error.service';
+import { AddTokenRequest, IAddTokenRequest } from '@sharedModels/platform-api/requests/tokens/add-token-request';
+import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 
 @Component({
   selector: 'opdex-tx-create-pool',
@@ -22,6 +26,9 @@ export class TxCreatePoolComponent extends TxBase {
   icons = Icons;
   txHash: string;
   token$: Observable<string>;
+  subscription: Subscription = new Subscription();
+  unknownToken: boolean;
+  validToken: boolean;
   context: any;
 
   get token(): FormControl {
@@ -31,7 +38,9 @@ export class TxCreatePoolComponent extends TxBase {
   constructor(
     private _fb: FormBuilder,
     private _platform: PlatformApiService,
-    protected _injector: Injector
+    protected _injector: Injector,
+    private _tokensService: TokensService,
+    private _error: ErrorService
   ) {
     super(_injector);
 
@@ -39,13 +48,22 @@ export class TxCreatePoolComponent extends TxBase {
       token: ['', [Validators.required]]
     });
 
-    this.token$ = this.token.valueChanges
-      .pipe(
-        debounceTime(300),
-        tap((token: string) => {
-          // todo: Should validate the token
+    this.subscription.add(
+      this.token.valueChanges
+        .pipe(
+          distinctUntilChanged(),
+          debounceTime(400),
+          switchMap((value: string) => this._tokensService.getToken(value)),
+          catchError(err => of(null))
+        ).subscribe(token => {
+          if (!token) {
+            this.unknownToken = false;
+          } else {
+            this.unknownToken = true;
+          }
+          console.log(token);
         })
-      );
+    )
   }
 
   submit() {
@@ -53,11 +71,26 @@ export class TxCreatePoolComponent extends TxBase {
       token: this.token.value
     });
 
-    if(payload.isValid){
+    if(payload.isValid && this.unknownToken){
       this._platform
         .createLiquidityPool(payload)
           .pipe(take(1))
           .subscribe((quote: ITransactionQuote) => this.quote(quote));
+    } else if(payload.isValid && !this.unknownToken) {
+      this.validateToken();
+    }
+  }
+
+  validateToken(): void{
+    const payload: IAddTokenRequest = new AddTokenRequest({
+      tokenAddress: this.token.value
+    });
+
+    if (payload.isValid) {
+      this._platform.addToken(payload)
+      .subscribe((token: IToken) => {
+        console.log(token);
+      });
     }
   }
 
@@ -67,5 +100,6 @@ export class TxCreatePoolComponent extends TxBase {
 
   ngOnDestroy() {
     this.destroyContext$();
+    this.subscription.unsubscribe();
   }
 }
