@@ -1,5 +1,5 @@
-<main [ngClass]="theme">
-  <mat-sidenav-container (backdropClick)="closeSidenav()" class="w-100 h-100">
+<main [ngClass]="theme" >
+  <mat-sidenav-container (backdropClick)="closeSidenav()" class="w-100 h-100" *ngIf="!loading">
     <mat-sidenav #sidenav
       (keydown.escape)="closeSidenav()"
       position="end"
@@ -38,6 +38,11 @@
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
+
+  <div class="splash" *ngIf="loading">
+    <img class="loading-logo" src="/assets/logo-light-blue.png" alt="Opdex">
+    <h1>OPDEX</h1>
+  </div>
 </main>
 
 <div class="background"></div>

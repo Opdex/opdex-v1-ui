@@ -2,12 +2,11 @@ import { TransactionReceipt } from './models/transaction-receipt';
 import { ITransactionReceipt } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
 import { catchError, take } from 'rxjs/operators';
 import { TransactionsService } from '@sharedServices/platform/transactions.service';
-import { NotificationService } from './services/utility/notification.service';
 import { JwtService } from '@sharedServices/utility/jwt.service';
 import { environment } from '@environments/environment';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { SidenavService } from './services/utility/sidenav.service';
-import { Component, HostBinding, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, HostBinding, OnInit, ViewChild } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { ThemeService } from './services/utility/theme.service';
 import { MatSidenav } from '@angular/material/sidenav';
@@ -43,6 +42,7 @@ export class AppComponent implements OnInit {
   message: ISidenavMessage;
   sidenavMode: 'over' | 'side' = 'over';
   hubConnection: HubConnection;
+  loading = true;
 
   constructor(
     public overlayContainer: OverlayContainer,
@@ -56,14 +56,21 @@ export class AppComponent implements OnInit {
     private _title: Title,
     private _blocksService: BlocksService,
     private _jwt: JwtService,
-    private _notificationService: NotificationService,
-    private _transactionService: TransactionsService
+    private _transactionService: TransactionsService,
+    private _cdref: ChangeDetectorRef
   ) {
     this.network = environment.network;
     this.context = this._context.getUserContext();
     this.subscription.add(
       this._api.auth(environment.marketAddress, this.context?.wallet)
-        .subscribe(jwt => this._context.setToken(jwt)));
+        .subscribe(jwt => {
+          this._context.setToken(jwt);
+          setTimeout(() => this.loading = false, 1000);
+        }));
+  }
+
+  ngAfterContentChecked() {
+    this._cdref.detectChanges();
   }
 
   async ngOnInit(): Promise<void> {
