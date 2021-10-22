@@ -65,6 +65,7 @@ export class AppComponent implements OnInit {
     this.context = this._context.getUserContext();
 
     if (this._sw.isEnabled) {
+      console.log(this._sw);
       this._sw.available.subscribe(async _ => {
         await this._sw.activateUpdate();
         window.location.reload();
