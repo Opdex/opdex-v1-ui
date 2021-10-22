@@ -15,19 +15,12 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import { QRCodeModule } from 'angularx-qrcode';
 
-import { ConnectWalletModalComponent } from './connect-wallet-modal/connect-wallet-modal.component';
-import { TxBoxSettingsModalComponent } from './tx-box-settings-modal/tx-box-settings-modal.component';
-import { SignTxModalComponent } from './sign-tx-modal/sign-tx-modal.component';
 import { HelpModalComponent } from './help-modal/help-modal.component';
 import { BugReportModalComponent } from './bug-report-modal/bug-report-modal.component';
 
 @NgModule({
   declarations: [
-    ConnectWalletModalComponent,
-    TxBoxSettingsModalComponent,
-    SignTxModalComponent,
     HelpModalComponent,
     BugReportModalComponent
   ],
@@ -45,7 +38,6 @@ import { BugReportModalComponent } from './bug-report-modal/bug-report-modal.com
     MatCheckboxModule,
     MatProgressBarModule,
     MatBottomSheetModule,
-    QRCodeModule,
     SharedModule
   ],
   exports: [

@@ -23,7 +23,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { QRCodeModule } from 'angularx-qrcode';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { TxSwapComponent } from './tx-swap/tx-swap.component';
@@ -90,7 +89,6 @@ import { WalletPreviewComponent } from './shared/wallet-preview/wallet-preview.c
     MatTooltipModule,
     MatBottomSheetModule,
     MatProgressBarModule,
-    QRCodeModule,
     SharedPipesModule,
     ClipboardModule,
     SharedModule,

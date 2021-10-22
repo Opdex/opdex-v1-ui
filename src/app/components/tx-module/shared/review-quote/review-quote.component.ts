@@ -7,7 +7,6 @@ import { switchMap } from 'rxjs/operators';
 import { tap } from 'rxjs/operators';
 import { Component, Inject, OnDestroy } from '@angular/core';
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
-import { SignTxModalComponent } from '@sharedComponents/modals-module/sign-tx-modal/sign-tx-modal.component';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Subscription } from 'rxjs';
@@ -53,7 +52,7 @@ export class ReviewQuoteComponent implements OnDestroy {
 
   public constructor(
     private _platformApi: PlatformApiService,
-    public _bottomSheetRef: MatBottomSheetRef<SignTxModalComponent>,
+    public _bottomSheetRef: MatBottomSheetRef<ReviewQuoteComponent>,
     private _transactionsService: TransactionsService,
     private _blocksService: BlocksService,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: ITransactionQuote
