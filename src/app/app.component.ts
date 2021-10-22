@@ -120,10 +120,10 @@ export class AppComponent implements OnInit {
 
     const overlayClassList = this.overlayContainer.getContainerElement().classList;
     overlayClassList.add(theme);
+    overlayClassList.remove(this.theme);
 
-    if (this.theme) {
-      overlayClassList.remove(this.theme);
-    }
+    document.body.classList.add(theme);
+    document.body.classList.remove(this.theme);
 
     this.componentCssClass = `${theme} root`;
     this.theme = theme;
