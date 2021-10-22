@@ -22,6 +22,7 @@ import { GoogleAnalyticsService } from 'ngx-google-analytics';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { ISidenavMessage } from '@sharedModels/transaction-view';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { SwUpdate } from '@angular/service-worker';
 
 @Component({
   selector: 'opdex-root',
@@ -57,10 +58,19 @@ export class AppComponent implements OnInit {
     private _blocksService: BlocksService,
     private _jwt: JwtService,
     private _transactionService: TransactionsService,
-    private _cdref: ChangeDetectorRef
+    private _cdref: ChangeDetectorRef,
+    private _sw: SwUpdate
   ) {
     this.network = environment.network;
     this.context = this._context.getUserContext();
+
+    if (this._sw.isEnabled) {
+      this._sw.available.subscribe(async _ => {
+        await this._sw.activateUpdate();
+        window.location.reload();
+      });
+    }
+
     this.subscription.add(
       this._api.auth(environment.marketAddress, this.context?.wallet)
         .subscribe(jwt => {
