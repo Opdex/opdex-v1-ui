@@ -58,19 +58,10 @@ export class AppComponent implements OnInit {
     private _blocksService: BlocksService,
     private _jwt: JwtService,
     private _transactionService: TransactionsService,
-    private _cdref: ChangeDetectorRef,
-    private _sw: SwUpdate
+    private _cdref: ChangeDetectorRef
   ) {
     this.network = environment.network;
     this.context = this._context.getUserContext();
-
-    if (this._sw.isEnabled) {
-      console.log(this._sw);
-      this._sw.available.subscribe(async _ => {
-        await this._sw.activateUpdate();
-        window.location.reload();
-      });
-    }
 
     this.subscription.add(
       this._api.auth(environment.marketAddress, this.context?.wallet)
