@@ -29,16 +29,23 @@ export class TokensComponent {
       .pipe(
         take(1),
         map((tokenHistory: any) => {
-          let liquidityPoints: any[] = [];
+          let priceHistory: any[] = [];
 
           tokenHistory.snapshotHistory.forEach(history => {
-            liquidityPoints.push({
+            priceHistory.push({
               time: Date.parse(history.startDate.toString())/1000,
               value: history.price.close
             });
           });
 
-          token.snapshotHistory = liquidityPoints;
+          token.snapshotHistory = priceHistory;
+
+          // Todo: temp hack until we get market tokens endpoints in use
+          if (!token.summary) {
+            token.summary = {
+              priceUsd: priceHistory[priceHistory.length - 1]?.value || '0'
+            }
+          }
 
           return token;
         }));

@@ -37,8 +37,8 @@
                   </a>
 
                   <div class="d-flex flex-row mt-2 align-items-end">
-                    <span class="mr-1" style="font-size: 1.2em; line-height: 1em;">${{market.crsToken.summary.price.close | shortNumber}}</span>
-                    <opdex-change-indicator [value]="market.crsToken.summary.dailyPriceChange" size="s" *ngIf="market.crsToken.summary.dailyPriceChange !== null && market.crsToken.summary.dailyPriceChange !== undefined"></opdex-change-indicator>
+                    <span class="mr-1" style="font-size: 1.2em; line-height: 1em;">${{market.crsToken.summary.priceUsd | shortNumber}}</span>
+                    <opdex-change-indicator [value]="market.crsToken.summary.dailyPriceChangePercent" size="s" *ngIf="market.crsToken.summary.dailyPriceChangePercent !== null && market.crsToken.summary.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
                   </div>
                 </div>
 
@@ -54,8 +54,8 @@
                   </a>
 
                   <div class="d-flex flex-row mt-2 align-items-end">
-                    <span class="mr-1" style="font-size: 1.2em; line-height: 1em;">${{market.stakingToken.summary.price.close | shortNumber}}</span>
-                    <opdex-change-indicator [value]="market.stakingToken.summary.dailyPriceChange" size="s" *ngIf="market.stakingToken.summary.dailyPriceChange !== null && market.stakingToken.summary.dailyPriceChange !== undefined"></opdex-change-indicator>
+                    <span class="mr-1" style="font-size: 1.2em; line-height: 1em;">${{market.stakingToken.summary.priceUsd | shortNumber}}</span>
+                    <opdex-change-indicator [value]="market.stakingToken.summary.dailyPriceChangePercent" size="s" *ngIf="market.stakingToken.summary.dailyPriceChangePercent !== null && market.stakingToken.summary.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
                   </div>
                 </div>
               </div>
