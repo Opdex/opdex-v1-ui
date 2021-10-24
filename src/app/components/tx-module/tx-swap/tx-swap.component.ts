@@ -166,6 +166,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
       this.tokenInDetails = this.data.pool.token.crs;
       this.tokenOutDetails = this.data.pool.token.src;
 
+      this.tokenIn.setValue(this.tokenInDetails.address);
       this.tokenOut.setValue(this.tokenOutDetails.address);
     }
   }
