@@ -1,10 +1,12 @@
+import { TokensService } from '@sharedServices/platform/tokens.service';
+import { ISwapAmountInQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-in-quote-response.interface';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, ElementRef, Input, OnDestroy, ViewChild, Injector } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription, of, Observable, timer } from 'rxjs';
+import { Subscription, of, Observable } from 'rxjs';
 import { debounceTime, take, distinctUntilChanged, switchMap, map, tap, catchError, filter, startWith } from 'rxjs/operators';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { environment } from '@environments/environment';
@@ -16,7 +18,9 @@ import { TxBase } from '../tx-base.component';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { ISwapRequest, SwapRequest } from '@sharedModels/platform-api/requests/tokens/swap-request';
-import { ISwapQuoteRequest } from '@sharedModels/platform-api/requests/quotes/swap-quote-request';
+import { SwapAmountInQuoteRequest } from '@sharedModels/platform-api/requests/tokens/swap-amount-in-quote-request';
+import { SwapAmountOutQuoteRequest } from '@sharedModels/platform-api/requests/tokens/swap-amount-out-quote-request';
+import { ISwapAmountOutQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-out-quote-response.interface';
 
 @Component({
   selector: 'opdex-tx-swap',
@@ -76,7 +80,8 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
     protected _injector: Injector,
-    private _blocksService: BlocksService
+    private _blocksService: BlocksService,
+    private _tokensService: TokensService
   ) {
     super(_injector);
 
@@ -90,7 +95,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
 
     this.form = this._fb.group({
       tokenInAmount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
-      tokenIn: ['CRS', [Validators.required]],
+      tokenIn: [null, [Validators.required]],
       tokenOutAmount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
       tokenOut: [null, [Validators.required]]
     });
@@ -100,9 +105,9 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
         debounceTime(400),
         distinctUntilChanged(),
         tap(_ => this.tokenInExact = true),
-        switchMap((value) => this.amountQuote(value)),
-        filter(quote => quote !== '0'),
-        tap((value: string) => this.tokenOutAmount.setValue(value, { emitEvent: false })),
+        switchMap((value: string) => this.amountOutQuote(value)),
+        filter(quote => quote.amountOut !== '0'),
+        tap((value: ISwapAmountOutQuoteResponse) => this.tokenOutAmount.setValue(value.amountOut, { emitEvent: false })),
         tap(_ => this.calcTolerance()),
         filter(_ => this.context.wallet !== undefined),
         switchMap(() => this.validateAllowance())
@@ -113,9 +118,9 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
         debounceTime(400),
         distinctUntilChanged(),
         tap(_ => this.tokenInExact = false),
-        switchMap((value: string) => this.amountQuote(value)),
-        filter(quote => quote !== '0'),
-        tap((value: string) => this.tokenInAmount.setValue(value, { emitEvent: false })),
+        switchMap((value: string) => this.amountInQuote(value)),
+        filter(quote => quote.amountIn !== '0'),
+        tap((value: ISwapAmountInQuoteResponse) => this.tokenInAmount.setValue(value.amountIn, { emitEvent: false })),
         tap(_ => this.calcTolerance()),
         filter(_ => this.context.wallet !== undefined),
         switchMap(() => this.validateAllowance())
@@ -169,8 +174,11 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     this.changeTokenIn = false;
 
     if ($event) {
-      this.tokenInDetails = this.tokens.find(t => t.address === $event.option.value);
-      this.quoteChangeToken();
+      this._tokensService.getToken($event.option.value).pipe(take(1))
+        .subscribe(token => {
+          this.tokenInDetails = token;
+          this.quoteChangeToken();
+        });
     }
   }
 
@@ -178,25 +186,28 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     this.changeTokenOut = false;
 
     if ($event) {
-      this.tokenOutDetails = this.tokens.find(t => t.address === $event.option.value);
-      this.quoteChangeToken();
+      this._tokensService.getToken($event.option.value).pipe(take(1))
+        .subscribe(token => {
+          this.tokenOutDetails = token;
+          this.quoteChangeToken();
+        });
     }
   }
 
   quoteChangeToken() {
     if (this.tokenInExact) {
-      this.amountQuote(this.tokenInAmount.value)
+      this.amountOutQuote(this.tokenInAmount.value)
         .pipe(
-          filter(quote => quote !== '0'),
-          tap((quote: string) => this.tokenOutAmount.setValue(quote, { emitEvent: false })),
+          filter(quote => quote.amountOut !== '0'),
+          tap((quote: ISwapAmountOutQuoteResponse) => this.tokenOutAmount.setValue(quote.amountOut, { emitEvent: false })),
           tap(_ => this.calcTolerance()),
           switchMap(() => this.validateAllowance()),
           take(1)).subscribe();
     } else {
-      this.amountQuote(this.tokenOutAmount.value)
+      this.amountInQuote(this.tokenOutAmount.value)
         .pipe(
-          filter(quote => quote !== '0'),
-          tap((quote: string) => this.tokenInAmount.setValue(quote, { emitEvent: false })),
+          filter(quote => quote.amountIn !== '0'),
+          tap((quote: ISwapAmountInQuoteResponse) => this.tokenInAmount.setValue(quote.amountIn, { emitEvent: false })),
           tap(_ => this.calcTolerance()),
           switchMap(() => this.validateAllowance()),
           take(1)).subscribe();
@@ -250,10 +261,10 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     if (this.tokenInExact) {
       this.tokenInExact = false;
       this.tokenOutAmount.setValue(tokenInAmount, { emitEvent: false });
-      this.amountQuote(tokenInAmount)
+      this.amountInQuote(tokenInAmount)
         .pipe(
-          filter(quote => quote !== '0'),
-          tap((quote: string) => this.tokenInAmount.setValue(quote, { emitEvent: false })),
+          filter(quote => quote.amountIn !== '0'),
+          tap((quote: ISwapAmountInQuoteResponse) => this.tokenInAmount.setValue(quote.amountIn, { emitEvent: false })),
           tap(_ => this.calcTolerance()),
           switchMap(() => this.validateAllowance()),
           take(1)
@@ -261,10 +272,10 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     } else {
       this.tokenInExact = true;
       this.tokenInAmount.setValue(tokenOutAmount, { emitEvent: false });
-      this.amountQuote(tokenOutAmount)
+      this.amountOutQuote(tokenOutAmount)
         .pipe(
-          filter(quote => quote !== '0'),
-          tap((quote: string) => this.tokenOutAmount.setValue(quote, { emitEvent: false })),
+          filter(quote => quote.amountOut !== '0'),
+          tap((quote: ISwapAmountOutQuoteResponse) => this.tokenOutAmount.setValue(quote.amountOut, { emitEvent: false })),
           tap(_ => this.calcTolerance()),
           switchMap(() => this.validateAllowance()),
           take(1)
@@ -272,24 +283,32 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     }
   }
 
-  amountQuote(value: string): Observable<string> {
-    if (!value || value.replace('0', '') === '.') {
-      return of('0');
-    }
+  amountInQuote(amountOut: string): Observable<ISwapAmountInQuoteResponse> {
+    const fallback = { amountIn: '0' } as ISwapAmountInQuoteResponse;
 
-    const valueDecimals = this.tokenInExact ? this.tokenInDetails.decimals : this.tokenOutDetails.decimals;
-    var fixedDecimalValue = new FixedDecimal(value, valueDecimals);
+    if (!this.tokenInDetails || !this.tokenOutDetails) return of(fallback);
 
-    const payload: ISwapQuoteRequest = {
-      tokenIn: this.tokenInDetails.address,
-      tokenOut: this.tokenOutDetails.address,
-      tokenInAmount: this.tokenInExact ? fixedDecimalValue.formattedValue : null,
-      tokenOutAmount: !this.tokenInExact ? fixedDecimalValue.formattedValue : null
-    };
+    const amountOutFixed = new FixedDecimal(amountOut, this.tokenOutDetails.decimals);
 
-    if (fixedDecimalValue.isZero) return of('0');
+    if (amountOutFixed.isZero) return of(fallback);
 
-    return this._platformApi.getSwapQuote(payload).pipe(catchError(() => of('0')));
+    const payload = new SwapAmountInQuoteRequest(this.tokenOutDetails.address, amountOutFixed.formattedValue);
+
+    return this._platformApi.swapAmountInQuote(this.tokenInDetails.address, payload).pipe(catchError(() => of(fallback)));
+  }
+
+  amountOutQuote(amountIn: string): Observable<ISwapAmountOutQuoteResponse> {
+    const fallback = { amountOut: '0' } as ISwapAmountOutQuoteResponse;
+
+    if (!this.tokenInDetails || !this.tokenOutDetails) return of(fallback);
+
+    const amountInFixed = new FixedDecimal(amountIn, this.tokenInDetails.decimals);
+
+    const payload = new SwapAmountOutQuoteRequest(this.tokenInDetails.address, amountInFixed.formattedValue);
+
+    if (amountInFixed.isZero) return of(fallback);
+
+    return this._platformApi.swapAmountOutQuote(this.tokenOutDetails.address, payload).pipe(catchError(() => of(fallback)));
   }
 
   validateAllowance(): Observable<AllowanceValidation> {
@@ -315,14 +334,14 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     const tokenOutDecimals = this.tokenOutDetails.decimals;
 
     const tokenInAmount = new FixedDecimal(this.tokenInAmount.value, tokenInDecimals);
-    const tokenInPrice = new FixedDecimal(this.tokenInDetails.summary.price.close, 8);
+    const tokenInPrice = new FixedDecimal(this.tokenInDetails.summary.priceUsd, 8);
     const tokenInTolerance = new FixedDecimal((1 + (this.toleranceThreshold / 100)).toFixed(8), 8);
 
     this.tokenInMax = MathService.multiply(tokenInAmount, tokenInTolerance);
     const tokenInMax = new FixedDecimal(this.tokenInMax, tokenInDecimals);
 
     const tokenOutAmount = new FixedDecimal(this.tokenOutAmount.value, tokenOutDecimals);
-    const tokenOutPrice = new FixedDecimal(this.tokenOutDetails.summary.price.close, 8);
+    const tokenOutPrice = new FixedDecimal(this.tokenOutDetails.summary.priceUsd, 8);
     const tokenOutTolerancePercentage = new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8);
     const tokenOutToleranceAmount = MathService.multiply(tokenOutAmount, tokenOutTolerancePercentage);
 

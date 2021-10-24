@@ -36,8 +36,8 @@ export class TokensTableComponent implements OnChanges, AfterViewInit {
         return {
           name: t.name,
           symbol: t.symbol,
-          price: t.summary?.price?.close,
-          change: t.summary?.dailyPriceChange,
+          price: t.summary?.priceUsd,
+          change: t.summary?.dailyPriceChangePercent || 0,
           address: t.address,
           price7d: t.snapshotHistory
         }

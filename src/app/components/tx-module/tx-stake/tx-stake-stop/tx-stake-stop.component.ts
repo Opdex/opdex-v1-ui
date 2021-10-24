@@ -51,7 +51,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
           debounceTime(400),
           distinctUntilChanged())
         .subscribe(amount => {
-          const stakingTokenFiat = new FixedDecimal(this.pool.token.staking.summary.price.close.toString(), 8);
+          const stakingTokenFiat = new FixedDecimal(this.pool.token.staking.summary.priceUsd.toString(), 8);
           const amountDecimal = new FixedDecimal(amount, this.pool.token.staking.decimals);
           this.fiatValue = MathService.multiply(amountDecimal, stakingTokenFiat);
         }));

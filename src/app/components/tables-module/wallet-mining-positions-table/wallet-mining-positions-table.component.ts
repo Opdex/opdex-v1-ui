@@ -44,7 +44,7 @@ export class WalletMiningPositionsTableComponent implements OnChanges {
         decimals: p.pool.token.lp.decimals,
         value: MathService.multiply(
           new FixedDecimal(p.position.amount, p.pool.token.lp.decimals),
-          new FixedDecimal(p.pool.token.lp.summary.price.close.toString(), 8))
+          new FixedDecimal(p.pool.token.lp.summary.priceUsd.toString(), 8))
       }
     });
 

@@ -1,3 +1,4 @@
+import { IMarketToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -11,8 +12,10 @@ export class TokensService extends CacheService {
     super(_injector);
   }
 
-  getToken(address: string, cacheOnly?: boolean): Observable<IToken> {
-    return this.getItem(address, this._platformApi.getToken(address), cacheOnly);
+  getToken(address: string, cacheOnly?: boolean): Observable<IToken | IMarketToken> {
+    return address === 'CRS'
+      ? this.getItem(address, this._platformApi.getToken(address), cacheOnly)
+      : this.getItem(address, this._platformApi.getMarketToken(address), cacheOnly);
   }
 
   getTokens(limit: number = 10, includeLpt: boolean = false): Observable<IToken[]> {

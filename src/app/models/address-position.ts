@@ -44,7 +44,7 @@ export class AddressPosition {
 
     if (this._token) {
       result = MathService.multiply(
-        new FixedDecimal(this._token.summary.price.close.toString(), valueDecimals),
+        new FixedDecimal(this._token.summary.priceUsd.toString(), valueDecimals),
         new FixedDecimal(this._amount.formattedValue, this._token.decimals));
     }
 

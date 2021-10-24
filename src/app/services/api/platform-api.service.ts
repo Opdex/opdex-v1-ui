@@ -1,4 +1,4 @@
-import { ITokenSnapshot } from './../../models/platform-api/responses/tokens/token.interface';
+import { ITokenSnapshot, IMarketToken } from './../../models/platform-api/responses/tokens/token.interface';
 import { IAddressMiningPositions } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
 import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
@@ -27,7 +27,6 @@ import { IMiningQuote } from '@sharedModels/platform-api/requests/mining-pools/m
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { IMiningPools } from '@sharedModels/platform-api/responses/mining-pools/mining-pool.interface';
 import { IVaults, IVault } from '@sharedModels/platform-api/responses/vaults/vault.interface';
-import { ISwapQuoteRequest } from '@sharedModels/platform-api/requests/quotes/swap-quote-request';
 import { IApproveAllowanceRequest } from '@sharedModels/platform-api/requests/tokens/approve-allowance-request';
 import { ICreateLiquidityPoolRequest } from '@sharedModels/platform-api/requests/liquidity-pools/create-liquidity-pool-request';
 import { IStartStakingRequest } from '@sharedModels/platform-api/requests/liquidity-pools/start-staking-request';
@@ -41,6 +40,10 @@ import { IQuoteReplayRequest } from '@sharedModels/platform-api/requests/transac
 import { ITransactionBroadcastNotificationRequest } from '@sharedModels/platform-api/requests/transactions/transaction-broadcast-notification-request';
 import { ISwapRequest } from '@sharedModels/platform-api/requests/tokens/swap-request';
 import { IProvideAmountIn } from '@sharedModels/platform-api/responses/liquidity-pools/provide-amount-in.interface';
+import { ISwapAmountOutQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-out-quote-response.interface';
+import { ISwapAmountInQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-in-quote-response.interface';
+import { SwapAmountInQuoteRequest } from '@sharedModels/platform-api/requests/tokens/swap-amount-in-quote-request';
+import { SwapAmountOutQuoteRequest } from '@sharedModels/platform-api/requests/tokens/swap-amount-out-quote-request';
 
 @Injectable({
   providedIn: 'root'
@@ -80,6 +83,26 @@ export class PlatformApiService extends RestApiService {
   }
 
   ////////////////////////////
+  // Market Tokens
+  ////////////////////////////
+
+  public getMarketToken(address: string): Observable<IMarketToken> {
+    return this.get<IMarketToken>(`${this.api}/market/${environment.marketAddress}/tokens/${address}`);
+  }
+
+  public swapQuote(address: string, payload: ISwapRequest): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/market/${environment.marketAddress}/tokens/${address}/swap`, payload);
+  }
+
+  public swapAmountInQuote(tokenIn: string, payload: SwapAmountInQuoteRequest): Observable<ISwapAmountInQuoteResponse> {
+    return this.post<ISwapAmountInQuoteResponse>(`${this.api}/market/${environment.marketAddress}/tokens/${tokenIn}/swap/amount-in`, payload);
+  }
+
+  public swapAmountOutQuote(tokenOut: string, payload: SwapAmountOutQuoteRequest): Observable<ISwapAmountOutQuoteResponse> {
+    return this.post<ISwapAmountOutQuoteResponse>(`${this.api}/market/${environment.marketAddress}/tokens/${tokenOut}/swap/amount-out`, payload);
+  }
+
+  ////////////////////////////
   // Tokens
   ////////////////////////////
 
@@ -103,9 +126,6 @@ export class PlatformApiService extends RestApiService {
     return this.post<ITransactionQuote>(`${this.api}/tokens/${address}/distribute`, {});
   }
 
-  public swapQuote(address: string, payload: ISwapRequest): Observable<ITransactionQuote> {
-    return this.post<ITransactionQuote>(`${this.api}/tokens/${address}/swap`, payload);
-  }
 
   ////////////////////////////
   // Liquidity Pools
@@ -149,14 +169,6 @@ export class PlatformApiService extends RestApiService {
 
   public quoteAddLiquidity(address: string, payload: IAddLiquidityAmountInQuoteRequest): Observable<IProvideAmountIn> {
     return this.post<IProvideAmountIn>(`${this.api}/liquidity-pools/${address}/add/amount-in`, payload);
-  }
-
-  ////////////////////////////
-  // Ouote
-  ////////////////////////////
-
-  public getSwapQuote(payload: ISwapQuoteRequest): Observable<string> {
-    return this.post<string>(`${this.api}/quote/swap`, payload);
   }
 
   ////////////////////////////

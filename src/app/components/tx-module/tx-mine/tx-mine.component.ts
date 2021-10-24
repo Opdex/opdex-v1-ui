@@ -25,5 +25,6 @@ export class TxMineComponent implements OnChanges {
 
   handlePoolChange(pool: ILiquidityPoolSummary) {
     this.pool = pool;
+    this.data = { pool };
   }
 }
