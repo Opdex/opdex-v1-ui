@@ -2,14 +2,28 @@
   <opdex-card [thin]="true">
     <form [formGroup]="form" name="create-pool-form" id="swap-form" (submit)="submit()">
       <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.link" label="Token" [formControl]="token" placeholder="Token Address..."></opdex-input-control>
-      <button mat-flat-button color="primary" class="my-3 w-100" [disabled]="!form.valid || !context?.wallet || !unknownToken">Quote</button>
-      <ng-container *ngIf="form.valid && unknownToken == false">
-        <div class="row d-flex flex-row align-items-center">
+      <ng-container *ngIf="isTokenKnown && isValidToken">
+        <div class="row d-flex flex-row ml-1 align-items-center">
+          <mat-icon class="green">{{icons.checkOutline}}</mat-icon>
+          <span class="ml-2">{{validatedToken.name}} ({{validatedToken.symbol}})</span>
+        </div>
+        <div class="row d-flex flex-row ml-1 align-items-center">
+          <span class="ml-2 light">{{validatedToken.address}}</span>
+        </div>
+      </ng-container>
+      <button mat-flat-button color="primary" class="my-3 w-100" [disabled]="!form.valid || !context?.wallet || !isTokenKnown">Quote</button>
+      <ng-container *ngIf="form.valid && isTokenKnown == false">
+        <div class="row d-flex flex-row ml-1 align-items-center">
           <mat-icon color="warn">{{icons.error}}</mat-icon>
           <span class="ml-2">Unknown token, please validate</span>
         </div>
-        <button mat-flat-button color="primary" class="mt-3 w-100" [disabled]="!form.valid || !context?.wallet">Validate</button>
+        <button mat-flat-button color="primary" class="my-3 w-100" [disabled]="!form.valid || !context?.wallet">Validate</button>
+        <div *ngIf="isValidToken == false" class="row d-flex flex-row ml-1 align-items-center">
+          <mat-icon color="warn">{{icons.error}}</mat-icon>
+          <span class="ml-2">Invalid Token</span>
+        </div>
       </ng-container>
+
     </form>
   </opdex-card>
 </div>

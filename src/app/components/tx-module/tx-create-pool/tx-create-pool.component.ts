@@ -13,6 +13,7 @@ import { TokensService } from '@sharedServices/platform/tokens.service';
 import { ErrorService } from '@sharedServices/utility/error.service';
 import { AddTokenRequest, IAddTokenRequest } from '@sharedModels/platform-api/requests/tokens/add-token-request';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
+import { Token } from '@angular/compiler';
 
 @Component({
   selector: 'opdex-tx-create-pool',
@@ -27,8 +28,9 @@ export class TxCreatePoolComponent extends TxBase {
   txHash: string;
   token$: Observable<string>;
   subscription: Subscription = new Subscription();
-  unknownToken: boolean;
-  validToken: boolean;
+  isTokenKnown: boolean;
+  isValidToken: boolean;
+  validatedToken: IToken = null;
   context: any;
 
   get token(): FormControl {
@@ -57,11 +59,10 @@ export class TxCreatePoolComponent extends TxBase {
           catchError(err => of(null))
         ).subscribe(token => {
           if (!token) {
-            this.unknownToken = false;
+            this.isTokenKnown = false;
           } else {
-            this.unknownToken = true;
+            this.isTokenKnown = true;
           }
-          console.log(token);
         })
     )
   }
@@ -71,12 +72,12 @@ export class TxCreatePoolComponent extends TxBase {
       token: this.token.value
     });
 
-    if(payload.isValid && this.unknownToken){
+    if(payload.isValid && this.isTokenKnown){
       this._platform
         .createLiquidityPool(payload)
           .pipe(take(1))
           .subscribe((quote: ITransactionQuote) => this.quote(quote));
-    } else if(payload.isValid && !this.unknownToken) {
+    } else if(payload.isValid && !this.isTokenKnown) {
       this.validateToken();
     }
   }
@@ -88,8 +89,17 @@ export class TxCreatePoolComponent extends TxBase {
 
     if (payload.isValid) {
       this._platform.addToken(payload)
+      .pipe(
+        catchError(err => of(null))
+      )
       .subscribe((token: IToken) => {
-        console.log(token);
+        if(!token){
+          this.isValidToken = false;
+        } else {
+          this.isTokenKnown = true;
+          this.isValidToken = true;
+          this.validatedToken = token;
+        }
       });
     }
   }
