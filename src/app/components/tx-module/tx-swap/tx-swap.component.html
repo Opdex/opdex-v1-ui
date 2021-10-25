@@ -1,8 +1,10 @@
-<opdex-wallet-preview [balanceTokens]="[tokenInDetails.address, tokenOutDetails.address]"></opdex-wallet-preview>
+<ng-container *ngIf="tokenInDetails && tokenOutDetails">
+  <opdex-wallet-preview [balanceTokens]="[tokenInDetails.address, tokenOutDetails.address]"></opdex-wallet-preview>
+</ng-container>
 
 <opdex-card class="swap" [thin]="true">
   <form [formGroup]="form" name="swap-form" id="swap-form">
-    <opdex-input-control *ngIf="!changeTokenIn" [prefixIcon]="icons.remove" label="{{tokenInExact ? 'Sell Exactly' : 'Sell'}}" [formControl]="tokenInAmount" [suffix]="tokenInDetails?.symbol || 'CRS'" (handleChangeToken)="changeToken('tokenIn')" [numbersOnly]="true">
+    <opdex-input-control *ngIf="!changeTokenIn" [prefixIcon]="icons.remove" label="{{tokenInExact ? 'Sell Exactly' : 'Sell'}}" [formControl]="tokenInAmount" [suffix]="tokenInDetails?.symbol || 'Select Token'" (handleChangeToken)="changeToken('tokenIn')" [numbersOnly]="true">
       <div class="d-flex flex-row justify-content-between">
         <div class="tolerance-amounts">
           <span *ngIf="tokenInMax && !tokenInExact">Max: {{tokenInMax | shortNumber}}</span>

@@ -52,7 +52,7 @@ export class WalletComponent implements OnInit {
         tap(crsBalance => this.crsBalance = crsBalance),
         switchMap(crsBalance => this._tokensService.getToken(crsBalance.token)),
         tap((token: IToken) => {
-          const costFixed = new FixedDecimal(token.summary.price.close.toString(), 8);
+          const costFixed = new FixedDecimal(token.summary.priceUsd.toString(), 8);
           const crsBalanceFixed = new FixedDecimal(this.crsBalance.balance, 8);
           this.crsBalanceValue = MathService.multiply(crsBalanceFixed, costFixed);
         }),

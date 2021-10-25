@@ -124,8 +124,8 @@ export class AppComponent implements OnInit {
     overlayClassList.add(theme);
     overlayClassList.remove(this.theme);
 
-    document.body.classList.add(theme);
-    document.body.classList.remove(this.theme);
+    document.documentElement.classList.add(theme);
+    document.documentElement.classList.remove(this.theme);
 
     this.componentCssClass = `${theme} root`;
     this.theme = theme;

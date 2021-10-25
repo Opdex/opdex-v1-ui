@@ -198,10 +198,10 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     let srcMinTolerance = MathService.multiply(srcInValue, new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8));
     this.srcInMin = MathService.subtract(srcInValue, new FixedDecimal(srcMinTolerance, this.pool.token.src.decimals));
 
-    this.crsInFiatValue = MathService.multiply(new FixedDecimal(this.amountCrs.value, this.pool.token.crs.decimals), new FixedDecimal(this.pool.token.crs.summary.price.close.toString(), 8));
-    this.crsInMinFiatValue = MathService.multiply(new FixedDecimal(this.crsInMin, this.pool.token.crs.decimals), new FixedDecimal(this.pool.token.crs.summary.price.close.toString(), 8));
-    this.srcInFiatValue = MathService.multiply(new FixedDecimal(this.amountSrc.value, this.pool.token.src.decimals), new FixedDecimal(this.pool.token.src.summary.price.close.toString(), 8));
-    this.srcInMinFiatValue = MathService.multiply(new FixedDecimal(this.srcInMin, this.pool.token.src.decimals), new FixedDecimal(this.pool.token.src.summary.price.close.toString(), 8));
+    this.crsInFiatValue = MathService.multiply(new FixedDecimal(this.amountCrs.value, this.pool.token.crs.decimals), new FixedDecimal(this.pool.token.crs.summary.priceUsd.toString(), 8));
+    this.crsInMinFiatValue = MathService.multiply(new FixedDecimal(this.crsInMin, this.pool.token.crs.decimals), new FixedDecimal(this.pool.token.crs.summary.priceUsd.toString(), 8));
+    this.srcInFiatValue = MathService.multiply(new FixedDecimal(this.amountSrc.value, this.pool.token.src.decimals), new FixedDecimal(this.pool.token.src.summary.priceUsd.toString(), 8));
+    this.srcInMinFiatValue = MathService.multiply(new FixedDecimal(this.srcInMin, this.pool.token.src.decimals), new FixedDecimal(this.pool.token.src.summary.priceUsd.toString(), 8));
   }
 
   toggleShowMore(value: boolean) {

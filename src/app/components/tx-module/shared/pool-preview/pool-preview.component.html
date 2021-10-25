@@ -70,16 +70,16 @@
         <div class="col d-flex flex-row align-items-end">
           <div class="d-flex flex-column align-items-end">
             <small class="light no-wrap">(24hr)</small>
-            <small><opdex-change-indicator [value]="pool.token.crs.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
-            <small><opdex-change-indicator [value]="pool.token.src.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
-            <small><opdex-change-indicator [value]="pool.token.lp.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
+            <small><opdex-change-indicator [value]="pool.token.crs.summary.dailyPriceChangePercent" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
+            <small><opdex-change-indicator [value]="pool.token.src.summary.dailyPriceChangePercent" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
+            <small><opdex-change-indicator [value]="pool.token.lp.summary.dailyPriceChangePercent" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
           </div>
 
           <div class="ml-2">
             <small class="light">Price</small>
-            <small>${{pool.token.crs.summary.price.close | shortNumber}}</small>
-            <small>${{pool.token.src.summary.price.close | shortNumber}}</small>
-            <small>${{pool.token.lp.summary.price.close | shortNumber}}</small>
+            <small>${{pool.token.crs.summary.priceUsd | shortNumber}}</small>
+            <small>${{pool.token.src.summary.priceUsd | shortNumber}}</small>
+            <small>${{pool.token.lp.summary.priceUsd | shortNumber}}</small>
           </div>
         </div>
       </div>
@@ -106,12 +106,12 @@
         <div class="col d-flex flex-row align-items-end">
           <div class="d-flex flex-column align-items-end">
             <small class="light no-wrap">(24hr)</small>
-            <small><opdex-change-indicator [value]="pool.token.staking.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
+            <small><opdex-change-indicator [value]="pool.token.staking.summary.dailyPriceChangePercent" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
           </div>
 
           <div class="ml-2">
             <small class="light">Price</small>
-            <small>${{pool.token.staking.summary.price.close | shortNumber}}</small>
+            <small>${{pool.token.staking.summary.priceUsd | shortNumber}}</small>
           </div>
         </div>
       </div>
@@ -138,12 +138,12 @@
         <div class="col d-flex flex-row align-items-end">
           <div class="d-flex flex-column align-items-end">
             <small class="light no-wrap">(24hr)</small>
-            <small><opdex-change-indicator [value]="pool.token.lp.summary.dailyPriceChange" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
+            <small><opdex-change-indicator [value]="pool.token.lp.summary.dailyPriceChangePercent" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
           </div>
 
           <div class="ml-2">
             <small class="light">Price</small>
-            <small>${{pool.token.lp.summary.price.close | shortNumber}}</small>
+            <small>${{pool.token.lp.summary.priceUsd | shortNumber}}</small>
           </div>
         </div>
       </div>

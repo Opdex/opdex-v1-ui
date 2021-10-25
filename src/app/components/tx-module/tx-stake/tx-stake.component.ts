@@ -8,7 +8,7 @@ import { TransactionView } from '@sharedModels/transaction-view';
   styleUrls: ['./tx-stake.component.scss']
 })
 export class TxStakeComponent {
-  @Input() data: any;
+  @Input() data: any = {};
   pool: ILiquidityPoolSummary;
   view = TransactionView.stake;
   child: number = 1;
@@ -25,5 +25,6 @@ export class TxStakeComponent {
 
   handlePoolChange(pool: ILiquidityPoolSummary) {
     this.pool = pool;
+    this.data = { pool };
   }
 }

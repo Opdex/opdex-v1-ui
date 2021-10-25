@@ -42,7 +42,7 @@ export class WalletBalancesTableComponent implements OnChanges {
         decimals: t.decimals,
         total: MathService.multiply(
           new FixedDecimal(t.balance.balance, t.decimals),
-          new FixedDecimal(t.summary.price.close.toString(), 8))
+          new FixedDecimal(t.summary.priceUsd.toString(), 8))
       }
     });
 

@@ -35,8 +35,8 @@
                     <h2 class=" mb-0 d-inline">
                       <a class="body-default" style="text-decoration: none; font-weight: 300;" href="javascript:void(0)" routerLink="/tokens/{{pool.token.src.address}}">{{pool.token.src.symbol}}</a>
                     </h2>
-                    <span class="ml-3 {{pool.token.src.summary.dailyPriceChange < 0 ? 'red' : 'green'}}">
-                      ${{pool.token.src.summary.price.close | shortNumber}}
+                    <span class="ml-3 {{pool.token.src.summary.dailyPriceChangePercent < 0 ? 'red' : 'green'}}">
+                      ${{pool.token.src.summary.priceUsd | shortNumber}}
                     </span>
                   </div>
 
@@ -62,8 +62,8 @@
                     <h2 class=" mb-0 d-inline">
                       <a class="body-default" style="text-decoration: none; font-weight: 300;" href="javascript:void(0)" routerLink="/tokens/{{pool.token.crs.address}}">{{pool.token.crs.symbol}}</a>
                     </h2>
-                    <span class="ml-3 {{pool.token.crs.summary.dailyPriceChange < 0 ? 'red' : 'green'}}">
-                      ${{pool.token.crs.summary.price.close | shortNumber}}
+                    <span class="ml-3 {{pool.token.crs.summary.dailyPriceChangePercent < 0 ? 'red' : 'green'}}">
+                      ${{pool.token.crs.summary.priceUsd | shortNumber}}
                     </span>
                   </div>
 
