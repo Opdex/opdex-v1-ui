@@ -17,7 +17,6 @@ export class TokensFilter implements ITokensRequest {
 
   constructor(request?: ITokensRequest) {
     if (request === null || request === undefined) {
-      // Set mandatory parameters
       this.limit = 5;
       this.direction = "DESC";
       return;

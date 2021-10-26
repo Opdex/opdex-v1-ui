@@ -134,7 +134,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
         .subscribe();
 
       this.tokens$ = this._platformApi
-        .getTokens(new TokensFilter())
+        .getTokens(new TokensFilter({limit: 25, direction: "DESC"}))
         .pipe(map(tokens => {
           this.tokens = tokens.results;
           return tokens.results;

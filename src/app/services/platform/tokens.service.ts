@@ -21,7 +21,7 @@ export class TokensService extends CacheService {
   }
 
   getTokens(request: TokensFilter): Observable<ITokensResponse> {
-    return this.getItem(`transactions-request-${request.buildQueryString()}`, this._platformApi.getMarketTokens(request));
+    return this.getItem(`tokens-request-${request.buildQueryString()}`, this._platformApi.getMarketTokens(request));
   }
 
   getTokenHistory(address: string, timeSpan: string = "1Y", candleSpan: string = "Hourly"): Observable<any> {
@@ -33,7 +33,7 @@ export class TokensService extends CacheService {
   }
 
   refreshTokens(request: TokensFilter): void {
-    this.refreshItem(`transactions-request-${request.buildQueryString()}`);
+    this.refreshItem(`tokens-request-${request.buildQueryString()}`);
   }
 
   refreshTokenHistory(address: string, timeSpan: string = "1Y", candleSpan: string = "Hourly"): void {
