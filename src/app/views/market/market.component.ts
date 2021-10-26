@@ -5,13 +5,14 @@ import { TokensService } from '@sharedServices/platform/tokens.service';
 import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { Component, OnInit } from '@angular/core';
-import { forkJoin, interval, Observable, Subscription, zip } from 'rxjs';
+import { interval, Observable, Subscription, zip } from 'rxjs';
 import { delay, map, switchMap, take, tap } from 'rxjs/operators';
 import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
 import { MarketsService } from '@sharedServices/platform/markets.service';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
+import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 
 @Component({
   selector: 'opdex-market',
@@ -28,7 +29,6 @@ export class MarketComponent implements OnInit {
   stakingHistory: any[];
   volumeHistory: any[];
   pools: ILiquidityPoolSummary[];
-  tokens: any[];
   miningPools$: Observable<ILiquidityPoolSummary[]>
   transactionRequest: ITransactionsRequest;
   chartData: any[];
@@ -54,15 +54,22 @@ export class MarketComponent implements OnInit {
   ];
   statCards: StatCardInfo[];
   selectedChart = this.chartOptions[0];
+  tokensFilter: TokensFilter;
 
   constructor(
     private _marketsService: MarketsService,
-    private _tokensService: TokensService,
     private _sidebar: SidenavService,
     private _liquidityPoolsService: LiquidityPoolsService
   ) { }
 
   async ngOnInit(): Promise<void> {
+    this.tokensFilter = new TokensFilter({
+      orderBy: 'DailyPriceChangePercent',
+      direction: 'DESC',
+      limit: 5,
+      provisional: 'NonProvisional'
+    });
+
     this.subscription.add(interval(30000)
       .pipe(tap(_ => {
         this._marketsService.refreshMarket();
@@ -70,7 +77,7 @@ export class MarketComponent implements OnInit {
       }))
       .subscribe());
 
-    const combo = [this.getMarketHistory(), this.getPools(), this.getTokens()];
+    const combo = [this.getMarketHistory(), this.getPools()];
 
     // Todo: take(1) stops taking after 1, but without it, _I think_ is mem leak
     this.subscription.add(this.getMarket()
@@ -217,47 +224,6 @@ export class MarketComponent implements OnInit {
           }
         });
       }));
-  }
-
-  private getTokens(): Observable<any[]> {
-    return this._tokensService.getTokens(10, false)
-    .pipe(
-      take(1),
-      switchMap((tokens: any[]) => {
-        const poolArray$: Observable<any>[] = [];
-
-        tokens.forEach(token => poolArray$.push(this.getTokenHistory(token)));
-
-        return forkJoin(poolArray$);
-      }),
-      tap(tokens => this.tokens = tokens));
-  }
-
-  private getTokenHistory(token: any): Observable<any> {
-    return this._tokensService.getTokenHistory(token.address, "1W", "Hourly")
-      .pipe(
-        take(1),
-        map((tokenHistory: any) => {
-          let priceHistory: any[] = [];
-
-          tokenHistory.snapshotHistory.forEach(history => {
-            priceHistory.push({
-              time: Date.parse(history.startDate.toString())/1000,
-              value: history.price.close
-            });
-          });
-
-          token.snapshotHistory = priceHistory;
-
-          // Todo: temp hack until we get market tokens endpoints in use
-          if (!token.summary) {
-            token.summary = {
-              priceUsd: priceHistory[priceHistory.length - 1]?.value || '0'
-            }
-          }
-
-          return token;
-        }));
   }
 
   handleChartTypeChange($event) {
