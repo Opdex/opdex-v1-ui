@@ -66,7 +66,7 @@ export class MarketComponent implements OnInit {
     this.tokensFilter = new TokensFilter({
       orderBy: 'DailyPriceChangePercent',
       direction: 'DESC',
-      limit: 5,
+      limit: 10,
       provisional: 'NonProvisional'
     });
 
