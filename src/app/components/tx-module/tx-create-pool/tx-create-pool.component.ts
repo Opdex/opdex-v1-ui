@@ -10,10 +10,8 @@ import { debounceTime } from 'rxjs/operators';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { CreateLiquidityPoolRequest, ICreateLiquidityPoolRequest } from '@sharedModels/platform-api/requests/liquidity-pools/create-liquidity-pool-request';
 import { TokensService } from '@sharedServices/platform/tokens.service';
-import { ErrorService } from '@sharedServices/utility/error.service';
 import { AddTokenRequest, IAddTokenRequest } from '@sharedModels/platform-api/requests/tokens/add-token-request';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
-import { Token } from '@angular/compiler';
 
 @Component({
   selector: 'opdex-tx-create-pool',
@@ -41,8 +39,7 @@ export class TxCreatePoolComponent extends TxBase {
     private _fb: FormBuilder,
     private _platform: PlatformApiService,
     protected _injector: Injector,
-    private _tokensService: TokensService,
-    private _error: ErrorService
+    private _tokensService: TokensService
   ) {
     super(_injector);
 
@@ -55,13 +52,14 @@ export class TxCreatePoolComponent extends TxBase {
         .pipe(
           distinctUntilChanged(),
           debounceTime(400),
-          switchMap((value: string) => this._tokensService.getToken(value)),
-          catchError(err => of(null))
+          switchMap((value: string) => this._tokensService.getToken(value).pipe(catchError(_ => of(null)))),
         ).subscribe(token => {
           if (!token) {
             this.isTokenKnown = false;
           } else {
             this.isTokenKnown = true;
+            this.isValidToken = true;
+            this.validatedToken = token;
           }
         })
     )
@@ -77,7 +75,7 @@ export class TxCreatePoolComponent extends TxBase {
         .createLiquidityPool(payload)
           .pipe(take(1))
           .subscribe((quote: ITransactionQuote) => this.quote(quote));
-    } else if(payload.isValid && !this.isTokenKnown) {
+    } else if (payload.isValid && !this.isTokenKnown) {
       this.validateToken();
     }
   }
@@ -90,8 +88,8 @@ export class TxCreatePoolComponent extends TxBase {
     if (payload.isValid) {
       this._platform.addToken(payload)
       .pipe(
-        catchError(err => of(null))
-      )
+        catchError(_ => of(null)),
+        take(1))
       .subscribe((token: IToken) => {
         if(!token){
           this.isValidToken = false;
