@@ -21,6 +21,7 @@ import { ISwapRequest, SwapRequest } from '@sharedModels/platform-api/requests/t
 import { SwapAmountInQuoteRequest } from '@sharedModels/platform-api/requests/tokens/swap-amount-in-quote-request';
 import { SwapAmountOutQuoteRequest } from '@sharedModels/platform-api/requests/tokens/swap-amount-out-quote-request';
 import { ISwapAmountOutQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-out-quote-response.interface';
+import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 
 @Component({
   selector: 'opdex-tx-swap',
@@ -133,8 +134,11 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
         .subscribe();
 
       this.tokens$ = this._platformApi
-        .getTokens()
-        .pipe(tap(tokens => this.tokens = tokens));
+        .getTokens(new TokensFilter({limit: 25, direction: "DESC"}))
+        .pipe(map(tokens => {
+          this.tokens = tokens.results;
+          return tokens.results;
+        }));
 
       this.filteredTokenIn$ = this.tokenIn.valueChanges
         .pipe(

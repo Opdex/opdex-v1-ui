@@ -1,3 +1,4 @@
+import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { ITokenSnapshot, IMarketToken } from './../../models/platform-api/responses/tokens/token.interface';
 import { IAddressMiningPositions } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
@@ -45,6 +46,8 @@ import { ISwapAmountOutQuoteResponse } from '@sharedModels/platform-api/response
 import { ISwapAmountInQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-in-quote-response.interface';
 import { SwapAmountInQuoteRequest } from '@sharedModels/platform-api/requests/tokens/swap-amount-in-quote-request';
 import { SwapAmountOutQuoteRequest } from '@sharedModels/platform-api/requests/tokens/swap-amount-out-quote-request';
+import { IMarketTokensResponse } from '@sharedModels/platform-api/responses/tokens/market-tokens-response.interface';
+import { ITokensResponse } from '@sharedModels/platform-api/responses/tokens/tokens-response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -91,6 +94,10 @@ export class PlatformApiService extends RestApiService {
     return this.get<IMarketToken>(`${this.api}/market/${environment.marketAddress}/tokens/${address}`);
   }
 
+  public getMarketTokens(request: TokensFilter): Observable<IMarketTokensResponse> {
+    return this.get<IMarketTokensResponse>(`${this.api}/market/${environment.marketAddress}/tokens${request.buildQueryString()}`);
+  }
+
   public swapQuote(address: string, payload: ISwapRequest): Observable<ITransactionQuote> {
     return this.post<ITransactionQuote>(`${this.api}/market/${environment.marketAddress}/tokens/${address}/swap`, payload);
   }
@@ -107,8 +114,8 @@ export class PlatformApiService extends RestApiService {
   // Tokens
   ////////////////////////////
 
-  public getTokens(limit: number = 10, includeLpt: boolean = false): Observable<IToken[]> {
-    return this.get<IToken[]>(`${this.api}/tokens?take=${limit}&lpToken=${includeLpt}`);
+  public getTokens(request: TokensFilter): Observable<ITokensResponse> {
+    return this.get<ITokensResponse>(`${this.api}/tokens${request.buildQueryString()}`);
   }
 
   public getToken(address: string): Observable<IToken> {

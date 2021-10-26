@@ -1,13 +1,13 @@
-<div id="tokens" class="page-container" *ngIf="tokens$ | async as tokens">
+<div id="tokens" class="page-container">
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-12 col-lg-12 col-xl-10">
+      <div class="col-12 col-xl-10">
         <h1 class="text-shadow mb-3">Tokens</h1>
       </div>
 
-      <div class="col-12 col-lg-12 col-xl-10">
+      <div class="col-12 col-xl-10">
         <opdex-card>
-          <opdex-tokens-table [tokens]="tokens"></opdex-tokens-table>
+          <opdex-tokens-table [filter]="filter"></opdex-tokens-table>
         </opdex-card>
       </div>
     </div>
