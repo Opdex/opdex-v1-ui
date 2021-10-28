@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-card',
@@ -13,6 +14,7 @@ export class CardComponent {
   @Input() closable: boolean = false;
   @Input() noPadding: boolean = false;
   @Input() hasToolbar = false;
+  icons = Icons;
 
   closed: boolean;
 

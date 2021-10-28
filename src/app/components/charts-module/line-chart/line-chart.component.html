@@ -1,7 +1,7 @@
 <div class="chart-toolbar">
   <div class="details">
     <a mat-button [matMenuTriggerFor]="menu">
-      <h4 class="title d-inline">{{title}}</h4> <mat-icon class="ml-2">arrow_drop_down</mat-icon>
+      <h4 class="title d-inline">{{title}}</h4> <mat-icon class="ml-2">{{icons.arrowDropDown}}</mat-icon>
     </a>
 
     <mat-menu #menu="matMenu">
@@ -20,7 +20,7 @@
     </div>
 
     <button mat-icon-button color="primary" class="small mobile-menu" [matMenuTriggerFor]="timeSpanMenu">
-      <mat-icon>more_vert</mat-icon>
+      <mat-icon>{{icons.more}}</mat-icon>
     </button>
 
     <mat-menu #timeSpanMenu="matMenu" xPosition="before" class="w-100">

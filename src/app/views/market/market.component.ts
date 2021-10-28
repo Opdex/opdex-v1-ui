@@ -21,6 +21,7 @@ import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-
 })
 export class MarketComponent implements OnInit {
   iconSizes = IconSizes;
+  icons = Icons;
   subscription = new Subscription();
   theme$: Observable<string>;
   market: any;

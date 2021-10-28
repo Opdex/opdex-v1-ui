@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-change-indicator',
@@ -9,4 +10,6 @@ export class ChangeIndicatorComponent {
   @Input() value: number;
   @Input() size: 's' | 'm' | 'l' = 'l'
   @Input() forceDisplay: boolean = false;
+
+  icons = Icons;
 }

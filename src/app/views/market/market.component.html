@@ -12,7 +12,7 @@
     <div class="row">
       <div class="col-12">
         <h1 class="text-shadow mb-3">
-          <opdex-copy-button [tooltip]="market?.address" [value]="market?.address" icon="link"></opdex-copy-button>
+          <opdex-copy-button [tooltip]="market?.address" [value]="market?.address" [icon]="icons.link"></opdex-copy-button>
           <span>Market Overview</span>
         </h1>
       </div>
@@ -27,7 +27,7 @@
               <div class="row">
                 <div class="{{market.stakingToken ? 'col-6' : 'col-12' }}">
                   <p class="mb-0 light d-flex align-items-center">
-                    <opdex-copy-button [tooltip]="market.crsToken.address" [value]="market.crsToken.address" icon="link" [size]="iconSizes.small"></opdex-copy-button>
+                    <opdex-copy-button [tooltip]="market.crsToken.address" [value]="market.crsToken.address" [icon]="icons.link" [size]="iconSizes.small"></opdex-copy-button>
                     <span class="ml-2 overflow-ellipsis">{{market.crsToken.name}}</span>
                   </p>
 
@@ -44,7 +44,7 @@
 
                 <div class="col-6" *ngIf="market.stakingToken">
                   <p class="mb-0 light d-flex align-items-center">
-                    <opdex-copy-button [tooltip]="market.stakingToken.address" [value]="market.stakingToken.address" icon="link" [size]="iconSizes.small"></opdex-copy-button>
+                    <opdex-copy-button [tooltip]="market.stakingToken.address" [value]="market.stakingToken.address" [icon]="icons.link" [size]="iconSizes.small"></opdex-copy-button>
                     <span class="ml-2 overflow-ellipsis">{{market.stakingToken.name}}</span>
                   </p>
 

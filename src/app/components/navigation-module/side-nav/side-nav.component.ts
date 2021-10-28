@@ -3,6 +3,7 @@ import { ThemeService } from '@sharedServices/utility/theme.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-side-nav',
@@ -16,6 +17,7 @@ export class SideNavComponent implements OnDestroy {
   isPinned: boolean = false;
   theme$: Subscription;
   theme: 'light-mode' | 'dark-mode';
+  icons = Icons;
 
   constructor(
     private _context: UserContextService,

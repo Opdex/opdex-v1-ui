@@ -7,6 +7,7 @@ import { interval, Subscription } from 'rxjs';
 import { tap, switchMap, take } from 'rxjs/operators';
 import { IVault } from '@sharedModels/platform-api/responses/vaults/vault.interface';
 import { IVaultCertificates } from '@sharedModels/platform-api/responses/vaults/vault-certificate.interface';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-vault',
@@ -17,6 +18,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   subscription: Subscription = new Subscription();
   vault: IVault;
   certificates: IVaultCertificates;
+  icons = Icons;
   statCards: StatCardInfo[] = [
     {
       title: 'Locked Tokens',

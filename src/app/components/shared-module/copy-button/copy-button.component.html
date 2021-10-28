@@ -4,5 +4,5 @@
     [matTooltip]="tooltip"
     [cdkCopyToClipboard]="value"
     (click)="copyHandler($event)">
-    <mat-icon [ngClass]="color">{{copied ? 'check_circle' : icon}}</mat-icon>
+    <mat-icon [ngClass]="color">{{copied ? icons.check : icon}}</mat-icon>
 </button>

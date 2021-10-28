@@ -9,6 +9,7 @@ import { Observable, Subscription, interval, of } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-token',
@@ -25,6 +26,7 @@ export class TokenComponent implements OnInit {
   candleHistory: any[] = [];
   chartData: any[];
   iconSizes = IconSizes;
+  icons = Icons;
   chartOptions = [
     {
       type: 'line',

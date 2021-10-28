@@ -29,7 +29,7 @@
 
   <opdex-card class="pool-summary" *ngIf="pool" [thin]="true">
     <h4 class="mb-0">
-      <opdex-copy-button [tooltip]="pool?.address" [value]="pool?.address" icon="link" [size]="iconSizes.small"></opdex-copy-button>
+      <opdex-copy-button [tooltip]="pool?.address" [value]="pool?.address" [icon]="icons.link" [size]="iconSizes.small"></opdex-copy-button>
       <a class="blue ml-1" routerLink="/pools/{{pool?.address}}">{{pool.token.src.symbol}}-{{pool.token.crs.symbol}}</a>
     </h4>
 

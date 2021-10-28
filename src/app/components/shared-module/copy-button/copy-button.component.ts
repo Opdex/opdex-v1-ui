@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { IconSizes } from 'src/app/enums/icon-sizes';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-copy-button',
@@ -11,8 +12,9 @@ export class CopyButtonComponent {
   @Input() tooltip: string;
   @Input() value: any;
   @Input() size: IconSizes;
-  @Input() icon: string;
+  @Input() icon: Icons;
   @Input() stopPropagation = false;
+  icons = Icons;
 
   copied = false;
 

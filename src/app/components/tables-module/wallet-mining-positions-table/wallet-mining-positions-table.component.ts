@@ -6,6 +6,7 @@ import { TransactionView } from '@sharedModels/transaction-view';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-wallet-mining-positions-table',
@@ -19,6 +20,7 @@ export class WalletMiningPositionsTableComponent implements OnChanges {
   @Input() pageSize: number;
   previous: string;
   next: string;
+  icons = Icons;
 
   @Output() onPageChange: EventEmitter<string> = new EventEmitter();
   @ViewChild(MatSort) sort: MatSort;

@@ -4,6 +4,7 @@ import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liqu
 import { TransactionView } from '@sharedModels/transaction-view';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { Observable } from 'rxjs';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-staking-pool-card',
@@ -13,6 +14,7 @@ import { Observable } from 'rxjs';
 export class StakingPoolCardComponent {
   @Input() pool: ILiquidityPoolSummary;
   context$: Observable<any>;
+  icons = Icons;
 
   constructor(private _sidebar: SidenavService, private _context: UserContextService) {
     this.context$ = this._context.getUserContext$();

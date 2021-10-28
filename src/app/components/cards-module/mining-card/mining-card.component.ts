@@ -4,6 +4,7 @@ import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { Component, Input, OnChanges } from '@angular/core';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-mining-card',
@@ -13,6 +14,7 @@ import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liqu
 export class MiningCardComponent implements OnChanges {
   @Input() pool: ILiquidityPoolSummary;
   miningUsd: string;
+  icons = Icons;
 
   constructor(private _sidebar: SidenavService) { }
 
