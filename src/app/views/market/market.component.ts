@@ -9,7 +9,7 @@ import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transa
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { Component, OnInit } from '@angular/core';
 import { Observable, Subscription, zip } from 'rxjs';
-import { map, switchMap, take, tap } from 'rxjs/operators';
+import { delay, map, switchMap, take, tap } from 'rxjs/operators';
 import { LiquidityPoolsFilter, LpOrderBy, MiningFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
 import { MarketsService } from '@sharedServices/platform/markets.service';
@@ -170,6 +170,7 @@ export class MarketComponent implements OnInit {
   private getMarketHistory(timeSpan: string = '1Y'): Observable<void> {
     return this._marketsService.getMarketHistory(timeSpan)
       .pipe(
+        delay(1),
         map((marketHistory: IMarketSnapshot[]) => {
           this.marketHistory = new MarketHistory(marketHistory);
           this.handleChartTypeChange(this.selectedChart.category);
