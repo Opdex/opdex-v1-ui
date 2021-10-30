@@ -35,7 +35,7 @@ export class WalletStakingPositionsTableComponent implements OnChanges {
 
     this.dataSource.data = this.records.positions.map(p => {
       return {
-        name: `${p.pool.token.src.symbol}-${p.pool.token.crs.symbol}`,
+        name: p.pool.name,
         stakingTokenSymbol: p.pool.token.staking.symbol,
         liquidityPoolAddress: p.pool.address,
         position: p.position.amount,

@@ -2,6 +2,7 @@ import { ITokenGroup } from "../tokens/token.interface";
 
 export interface ILiquidityPoolSummary extends ILiquidityPoolSummaryBase {
   address: string;
+  name: string;
   token: ITokenGroup;
   mining: IMiningPool;
   snapshotHistory?: ILiquidityPoolSnapshot[];

@@ -7,7 +7,7 @@
 
   <div class="d-flex align-items-center flex-wrap" *ngIf="pools?.length">
     <div class="mr-2 no-wrap" *ngFor="let pool of pools">
-      <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.token.src.symbol}}/{{pool.token.crs.symbol}}</a>
+      <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.name}}</a>
     </div>
   </div>
 </ng-container>

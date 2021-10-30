@@ -1,8 +1,10 @@
+import { IMarket } from '@sharedModels/platform-api/responses/markets/market.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable, Injector } from '@angular/core';
 import { CacheService } from '@sharedServices/utility/cache.service';
 import { Observable } from 'rxjs';
 import { environment } from '@environments/environment';
+import { IMarketSnapshot } from '@sharedModels/platform-api/responses/markets/market-snapshot.interface';
 
 @Injectable({ providedIn: 'root' })
 export class MarketsService extends CacheService {
@@ -12,11 +14,11 @@ export class MarketsService extends CacheService {
     super(_injector);
   }
 
-  getMarket(): Observable<any> {
+  getMarket(): Observable<IMarket> {
     return this.getItem(this.marketAddress, this._platformApi.getMarketOverview());
   }
 
-  getMarketHistory(timeSpan: string = '1Y'): Observable<any> {
+  getMarketHistory(timeSpan: string = '1Y'): Observable<IMarketSnapshot[]> {
     return this.getItem(`${this.marketAddress}-history-${timeSpan}`, this._platformApi.getMarketHistory(timeSpan));
   }
 

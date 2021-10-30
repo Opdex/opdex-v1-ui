@@ -9,6 +9,7 @@ import { ITokensResponse } from '@sharedModels/platform-api/responses/tokens/tok
 import { Observable, forkJoin, Subscription } from 'rxjs';
 import { switchMap, map, take } from 'rxjs/operators';
 import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-tokens-table',
@@ -22,6 +23,7 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
   paging: ICursor;
   token$: Observable<ITokensResponse>;
   subscription: Subscription;
+  iconSizes = IconSizes;
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -35,7 +37,7 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
       this.subscription = new Subscription();
       this.subscription.add(
         this._blocksService.getLatestBlock$()
-          .pipe(switchMap(_ => this.getTokens$()))
+          .pipe(switchMap(_ => this.getTokens$(this.filter?.cursor)))
           .subscribe())
     }
   }
@@ -97,7 +99,7 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
   }
 
   trackBy(index: number, token: any) {
-    return token.address
+    return token.address // Todo: Should also track by moving targets like price
   }
 
   ngOnDestroy() {

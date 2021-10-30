@@ -1,46 +1,109 @@
-export interface ILiquidityPoolsSearchFilter {
-  nominated?: boolean;
-  staking?: boolean;
-  mining?: boolean;
-  pools?: string[];
+import { environment } from '@environments/environment';
+
+export interface ILiquidityPoolsFilter {
+  keyword?: string;
+  tokens?: string[];
+  liquidityPools?: string[];
+  stakingFilter?: StakingFilter;
+  miningFilter?: MiningFilter;
+  nominationFilter?: NominationFilter;
+  orderBy?: LpOrderBy;
+  limit?: number;
+  direction?: string;
+  cursor?: string
 }
 
-export class LiquidityPoolsSearchQuery {
-  nominated?: boolean;
-  staking?: boolean;
-  mining?: boolean;
-  sortBy: string;
-  orderBy: string;
-  skip: number;
-  take: number;
-  pools: string[];
+export enum StakingFilter {
+  Any = 'Any',
+  Enabled = 'Enabled',
+  Disabled = 'Disabled'
+}
 
-  constructor(sortBy: string, orderBy: string, skip: number, take: number, filter?: ILiquidityPoolsSearchFilter) {
-    this.sortBy = sortBy;
-    this.orderBy = orderBy;
-    this.skip = skip;
-    this.take = take;
-    this.nominated = filter?.nominated;
-    this.staking = filter?.staking;
-    this.mining = filter?.mining;
-    this.pools = filter?.pools || [];
+export enum MiningFilter {
+  Any = 'Any',
+  Enabled = 'Enabled',
+  Disabled = 'Disabled'
+}
+
+export enum NominationFilter {
+  Any = 'Any',
+  Nominated = 'Nominated',
+  NonNominated = 'NonNominated'
+}
+
+export enum LpOrderBy {
+  Default = 'Default',
+  Liquidity = 'Liquidity',
+  Volume = 'Volume',
+  StakingWeight = 'StakingWeight'
+}
+
+export class LiquidityPoolsFilter implements ILiquidityPoolsFilter {
+  keyword: string;
+  tokens?: string[];
+  liquidityPools?: string[];
+  markets?: string[];
+  stakingFilter?: StakingFilter;
+  miningFilter?: MiningFilter;
+  nominationFilter?: NominationFilter;
+  orderBy?: LpOrderBy;
+  limit?: number;
+  direction?: string;
+  cursor?: string
+
+  constructor(filter: ILiquidityPoolsFilter) {
+    if (filter === null || filter === undefined) {
+      this.limit = 5;
+      this.direction = 'DESC';
+      return;
+    };
+
+    this.keyword = filter.keyword;
+    this.tokens = filter.tokens;
+    this.markets = [environment.marketAddress];
+    this.liquidityPools = filter.liquidityPools;
+    this.stakingFilter = filter.stakingFilter;
+    this.miningFilter = filter.miningFilter;
+    this.nominationFilter = filter.nominationFilter;
+    this.orderBy = filter.orderBy;
+    this.limit = filter.limit;
+    this.direction = filter.direction;
+    this.cursor = filter.cursor;
   }
 
-  getQuery(): string {
-    const mining = `mining=${this.mining || ''}`;
-    const staking = `staking=${this.staking || ''}`;
-    const nominated = `nominated=${this.nominated || ''}`;
-    const skip = `skip=${this.skip}`;
-    const take = `take=${this.take}`;
-    const orderBy = `orderBy=${this.orderBy}`;
-    const sortBy = `sortBy=${this.sortBy}`;
+  buildQueryString(): string {
+    if (this.cursor?.length) return `?cursor=${this.cursor}`;
 
-    let pools = ``;
+    let query = '';
 
-    this.pools.forEach(pool => {
-        pools = pools.length > 0 ? `${pools}&pools=${pool}` : `pools=${pool}`;
-    })
+    if (this.tokens?.length > 0) {
+      this.tokens.forEach(contract => query = this.addToQuery(query, 'tokens', contract));
+    }
 
-    return `?${mining}&${staking}&${nominated}&${skip}&${take}&${orderBy}&${sortBy}&${pools}`;
+    if (this.liquidityPools?.length > 0) {
+      this.liquidityPools.forEach(contract => query = this.addToQuery(query, 'liquidityPools', contract));
+    }
+
+    if (this.markets?.length > 0) {
+      this.markets.forEach(contract => query = this.addToQuery(query, 'markets', contract));
+    }
+
+    query = this.addToQuery(query, 'keyword', this.keyword);
+    query = this.addToQuery(query, 'stakingFilter', this.stakingFilter);
+    query = this.addToQuery(query, 'miningFilter', this.miningFilter);
+    query = this.addToQuery(query, 'nominationFilter', this.nominationFilter);
+    query = this.addToQuery(query, 'orderBy', this.orderBy);
+    query = this.addToQuery(query, 'limit', this.limit);
+    query = this.addToQuery(query, 'direction', this.direction);
+
+    return query
+  }
+
+  private addToQuery(query: string, key: string, value: string | number): string {
+    if (value === null || value === undefined) return query;
+
+    const leading = query.length > 0 ? '&' : '?';
+
+    return `${query}${leading}${key}=${value}`;
   }
 }

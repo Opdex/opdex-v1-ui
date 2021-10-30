@@ -34,3 +34,8 @@ export interface ITokenSnapshot {
   startDate: Date;
   endDate: Date;
 }
+
+export interface ITokenSnapshotHistory {
+  address: string,
+  snapshotHistory: ITokenSnapshot[];
+}

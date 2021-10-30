@@ -1,5 +1,5 @@
 <ng-container *ngIf="pool && !error">
-  <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.token.src.symbol}}/{{pool.token.crs.symbol}}</a>
+  <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.name}}</a>
 </ng-container>
 
 <div *ngIf="error" class="d-flex flex-row align-items-center">
