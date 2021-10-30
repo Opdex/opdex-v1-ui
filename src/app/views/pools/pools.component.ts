@@ -7,6 +7,7 @@ import { TransactionView } from '@sharedModels/transaction-view';
 import { map, switchMap } from 'rxjs/operators';
 import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { combineLatest, Observable } from 'rxjs';
+import { Icons } from 'src/app/enums/icons';
 
 interface IPoolsView {
   topVolume: ILiquidityPoolSummary[],
@@ -20,6 +21,7 @@ interface IPoolsView {
 })
 export class PoolsComponent implements OnInit {
   pools$: Observable<IPoolsView>;
+  icons = Icons;
 
   constructor(
     private _sidebar: SidenavService,

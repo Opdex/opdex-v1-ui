@@ -4,5 +4,5 @@
 </ng-container>
 
 <div *ngIf="error" class="d-flex flex-row align-items-center">
-  <mat-icon class="mine tiny mr-2">{{icons.error}}</mat-icon> {{error}}
+  <mat-icon [ngClass]="iconSizes.tiny" class="mine mr-2">{{icons.error}}</mat-icon> {{error}}
 </div>

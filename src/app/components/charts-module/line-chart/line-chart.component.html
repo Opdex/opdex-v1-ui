@@ -13,21 +13,21 @@
 
   <ng-container *ngIf="showTimeSpans">
     <div class="button-group desktop-menu" >
-      <button mat-stroked-button class="small mr-1 pl-1 pr-1" (click)="timeChange('1D')">1D</button>
-      <button mat-stroked-button class="small mr-1 pl-1 pr-1" (click)="timeChange('1W')">1W</button>
-      <button mat-stroked-button class="small mr-1 pl-1 pr-1" (click)="timeChange('1M')">1M</button>
-      <button mat-stroked-button class="small pl-1 pr-1" (click)="timeChange('1Y')">1Y</button>
+      <button mat-stroked-button [ngClass]="iconSizes.small" class="mr-1 pl-1 pr-1" (click)="timeChange('1D')">1D</button>
+      <button mat-stroked-button [ngClass]="iconSizes.small" class="mr-1 pl-1 pr-1" (click)="timeChange('1W')">1W</button>
+      <button mat-stroked-button [ngClass]="iconSizes.small" class="mr-1 pl-1 pr-1" (click)="timeChange('1M')">1M</button>
+      <button mat-stroked-button [ngClass]="iconSizes.small" class="pl-1 pr-1" (click)="timeChange('1Y')">1Y</button>
     </div>
 
-    <button mat-icon-button color="primary" class="small mobile-menu" [matMenuTriggerFor]="timeSpanMenu">
+    <button mat-icon-button color="primary" [ngClass]="iconSizes.small" class="mobile-menu" [matMenuTriggerFor]="timeSpanMenu">
       <mat-icon>{{icons.more}}</mat-icon>
     </button>
 
     <mat-menu #timeSpanMenu="matMenu" xPosition="before" class="w-100">
-      <button mat-menu-item class="small" (click)="timeChange('1D')">1 Day</button>
-      <button mat-menu-item class="small" (click)="timeChange('1W')">1 Week</button>
-      <button mat-menu-item class="small" (click)="timeChange('1M')">1 Month</button>
-      <button mat-menu-item class="small" (click)="timeChange('1Y')">1 Year</button>
+      <button mat-menu-item [ngClass]="iconSizes.small" (click)="timeChange('1D')">1 Day</button>
+      <button mat-menu-item [ngClass]="iconSizes.small" (click)="timeChange('1W')">1 Week</button>
+      <button mat-menu-item [ngClass]="iconSizes.small" (click)="timeChange('1M')">1 Month</button>
+      <button mat-menu-item [ngClass]="iconSizes.small" (click)="timeChange('1Y')">1 Year</button>
     </mat-menu>
   </ng-container>
 </div>

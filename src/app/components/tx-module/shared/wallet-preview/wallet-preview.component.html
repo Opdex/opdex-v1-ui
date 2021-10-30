@@ -2,7 +2,7 @@
   <div class="d-flex justify-content-between align-items-center">
     <h4 class="mb-0">Positions</h4>
     <button mat-icon-button
-      class="small"
+      [ngClass]="iconSizes.small"
       color="primary"
       (click)="toggleVisibility()">
       <mat-icon>{{hide ? icons.add : icons.remove}}</mat-icon>
@@ -31,19 +31,19 @@
       <ng-container *ngFor="let position of positions; let i = index; trackBy: trackPosition">
         <div class="d-flex flex-row align-items-center">
           <div class="col flex-shrink d-flex flex-column justify-content-end">
-            <button type="button" mat-icon-button color="primary" class="tiny" *ngIf="position.position === 'Balance'" (click)="balanceTooltip.toggle()">
+            <button type="button" mat-icon-button color="primary" [class]="iconSizes.tiny" *ngIf="position.position === 'Balance'" (click)="balanceTooltip.toggle()">
               <mat-icon #balanceTooltip="matTooltip" [matTooltip]="position.position">{{icons.tokens}}</mat-icon>
             </button>
 
-            <button type="button" mat-icon-button color="primary" class=" tiny" *ngIf="position.position === 'Providing'" (click)="providingTooltip.toggle()">
+            <button type="button" mat-icon-button color="primary" [class]="iconSizes.tiny" *ngIf="position.position === 'Providing'" (click)="providingTooltip.toggle()">
               <mat-icon class="provide" #providingTooltip="matTooltip" [matTooltip]="position.position">{{icons.provide}}</mat-icon>
             </button>
 
-            <button type="button" mat-icon-button color="primary"  class="tiny" *ngIf="position.position === 'Staking'" (click)="stakingTooltip.toggle()">
+            <button type="button" mat-icon-button color="primary"  [class]="iconSizes.tiny" *ngIf="position.position === 'Staking'" (click)="stakingTooltip.toggle()">
               <mat-icon class="stake" #stakingTooltip="matTooltip" [matTooltip]="position.position">{{icons.staking}}</mat-icon>
             </button>
 
-            <button type="button" mat-icon-button color="primary" class="tiny" (click)="miningTooltip.toggle()" *ngIf="position.position === 'Mining'" >
+            <button type="button" mat-icon-button color="primary" [class]="iconSizes.tiny" (click)="miningTooltip.toggle()" *ngIf="position.position === 'Mining'" >
               <mat-icon class="mine" #miningTooltip="matTooltip" [matTooltip]="position.position">{{icons.mining}}</mat-icon>
             </button>
           </div>

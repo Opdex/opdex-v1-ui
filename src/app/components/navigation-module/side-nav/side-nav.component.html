@@ -6,7 +6,7 @@
     </div>
 
     <div class="stick-nav">
-      <button mat-mini-fab class="small navbar-pin" (click)="togglePin()">
+      <button mat-mini-fab [ngClass]="iconSizes.small" class="navbar-pin" (click)="togglePin()">
         <mat-icon>{{isPinned ? icons.arrowLeft : icons.arrowRight}}</mat-icon>
       </button>
     </div>

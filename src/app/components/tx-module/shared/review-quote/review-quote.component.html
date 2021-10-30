@@ -26,8 +26,8 @@
         </div>
 
         <div class="d-flex justify-content-center">
-          <button mat-icon-button color="primary" class="small" (click)="toggleMethodDetails()">
-            <mat-icon>{{showMethodDetails ? 'remove' : 'add'}}</mat-icon>
+          <button mat-icon-button color="primary" [ngClass]="iconSizes.small" (click)="toggleMethodDetails()">
+            <mat-icon>{{showMethodDetails ? icons.remove : icons.add}}</mat-icon>
           </button>
         </div>
       </div>
@@ -54,8 +54,8 @@
           </div>
 
           <div class="d-flex justify-content-center">
-            <button mat-icon-button color="primary" class="small" (click)="toggleParameterDetails()">
-              <mat-icon>{{showParameterDetails ? 'remove' : 'add'}}</mat-icon>
+            <button mat-icon-button color="primary" [ngClass]="iconSizes.small" (click)="toggleParameterDetails()">
+              <mat-icon>{{showParameterDetails ? icons.remove : icons.add}}</mat-icon>
             </button>
           </div>
         </div>
@@ -85,7 +85,7 @@
     <div class="d-flex flex-column justify-content-center align-items-center" style="min-height: 400px;">
       <span class="check-animation active">
         <span class="check-container">
-          <mat-icon>check</mat-icon>
+          <mat-icon>{{icons.check}}</mat-icon>
         </span>
       </span>
 

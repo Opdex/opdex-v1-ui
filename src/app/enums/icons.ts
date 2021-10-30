@@ -39,7 +39,7 @@ export enum Icons {
     refresh = 'autorenew',
     up = 'arrow_upward',
     down = 'arrow_downward',
-    back = 'arrow_back',
+    previous = 'arrow_back',
     next = 'arrow_forward',
     arrowDown = 'keyboard_arrow_down',
     arrowLeft = 'keyboard_arrow_left',
@@ -50,5 +50,9 @@ export enum Icons {
     donut = 'donut_large',
     send = 'send',
     languages = 'languages',
-    collect = 'local_play'
+    collect = 'local_play',
+    expand = 'unfold_more',
+    collapse = 'unfold_less',
+    bars = 'bar_chart',
+    exit = 'exit_to_app'
 }

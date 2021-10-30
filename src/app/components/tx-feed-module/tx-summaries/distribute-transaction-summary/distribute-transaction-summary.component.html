@@ -1,7 +1,7 @@
 <ng-container *ngIf="token && !error">
 
   <div class="d-flex align-items-center mb-2">
-    <button mat-icon-button color="primary" class="tiny mr-2" routerLink="/governance">
+    <button mat-icon-button color="primary" [ngClass]="iconSizes.tiny" class="mr-2" routerLink="/governance">
       <mat-icon class="swap">{{icons.governance}}</mat-icon>
     </button>
 
@@ -11,7 +11,7 @@
   </div>
 
   <div class="d-flex align-items-center">
-    <button mat-icon-button color="primary" class="tiny mr-2" routerLink="/vault">
+    <button mat-icon-button color="primary" [ngClass]="iconSizes.tiny" class="mr-2" routerLink="/vault">
       <mat-icon class="swap">{{icons.vault}}</mat-icon>
     </button>
 

@@ -32,7 +32,7 @@
                   </p>
 
                   <a class="body-default no-decoration d-inline-flex align-items-center" routerLink="/tokens/{{market.crsToken.address}}" matTooltip="Market Anchor Token">
-                    <mat-icon color="primary" class="mr-2">toll</mat-icon>
+                    <mat-icon color="primary" class="mr-2">{{icons.tokens}}</mat-icon>
                     <h2 class="d-inline-block mb-0">{{market.crsToken.symbol}}</h2>
                   </a>
 
@@ -49,7 +49,7 @@
                   </p>
 
                   <a class="body-default no-decoration d-inline-flex align-items-center" routerLink="/tokens/{{market.stakingToken.address}}" matTooltip="Market Staking Token">
-                    <mat-icon class="stake mr-2">verified_user</mat-icon>
+                    <mat-icon class="stake mr-2">{{icons.staking}}</mat-icon>
                     <h2 class="d-inline-block mb-0">{{market.stakingToken.symbol}}</h2>
                   </a>
 
@@ -107,7 +107,7 @@
       <div class="row" *ngIf="miningPools.length">
         <div class="col-12">
           <h2 class="mb-3 text-shadow d-flex align-items-center">
-            <mat-icon class="mr-2 mine">whatshot</mat-icon>
+            <mat-icon class="mr-2 mine">{{icons.mining}}</mat-icon>
             Liquidity Mining
           </h2>
 
@@ -131,7 +131,7 @@
             </div>
 
             <div class="button-group">
-              <button mat-icon-button color="primary" (click)="createPool()"><mat-icon>add</mat-icon></button>
+              <button mat-icon-button color="primary" (click)="createPool()"><mat-icon>{{icons.add}}</mat-icon></button>
             </div>
           </ng-container>
 

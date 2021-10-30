@@ -4,6 +4,7 @@ import { UserContextService } from '@sharedServices/utility/user-context.service
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Icons } from 'src/app/enums/icons';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-side-nav',
@@ -18,6 +19,7 @@ export class SideNavComponent implements OnDestroy {
   theme$: Subscription;
   theme: 'light-mode' | 'dark-mode';
   icons = Icons;
+  iconSizes = IconSizes;
 
   constructor(
     private _context: UserContextService,

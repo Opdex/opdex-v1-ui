@@ -41,7 +41,7 @@
                   </div>
 
                   <div class="d-flex align-items-center mt-2">
-                    <mat-icon color="primary" class="mr-2 tiny">{{icons.swap}}</mat-icon>
+                    <mat-icon color="primary" [ngClass]="iconSizes.tiny" class="mr-2">{{icons.swap}}</mat-icon>
                     <h5 class="d-flex align-items-center mb-0">
                       <span style="font-weight: 400;">{{pool.cost.crsPerSrc.close | shortNumber }}</span>
                       <small class="ml-1">{{pool.token.crs.symbol}}</small>
@@ -49,7 +49,7 @@
                   </div>
 
                   <div class="d-flex align-items-center mt-2">
-                    <mat-icon color="primary" class="mr-2 tiny">{{icons.lock}}</mat-icon>
+                    <mat-icon color="primary" [ngClass]="iconSizes.tiny" class="mr-2">{{icons.lock}}</mat-icon>
                     <h5 class="d-flex align-items-center mb-0">
                       <span style="font-weight: 400;">{{pool.reserves.src | shortNumber}}</span>
                       <small class="ml-1">{{pool.token.src.symbol}}</small>
@@ -68,7 +68,7 @@
                   </div>
 
                   <div class="d-flex align-items-center mt-2">
-                    <mat-icon color="primary" class="mr-2 tiny">{{icons.swap}}</mat-icon>
+                    <mat-icon color="primary" [ngClass]="iconSizes.tiny" class="mr-2">{{icons.swap}}</mat-icon>
                     <h5 class="d-flex align-items-center mb-0">
                       <span style="font-weight: 400;">{{pool.cost.srcPerCrs.close | shortNumber}}</span>
                       <small class="ml-1">{{pool.token.src.symbol}}</small>
@@ -76,7 +76,7 @@
                   </div>
 
                   <div class="d-flex align-items-center mt-2">
-                    <mat-icon color="primary" class="mr-2 tiny">{{icons.lock}}</mat-icon>
+                    <mat-icon color="primary" [ngClass]="iconSizes.tiny" class="mr-2">{{icons.lock}}</mat-icon>
                     <h5 class="d-flex align-items-center mb-0">
                       <span style="font-weight: 400;">{{pool.reserves.crs | shortNumber}}</span>
                       <small class="ml-1">{{pool.token.crs.symbol}}</small>

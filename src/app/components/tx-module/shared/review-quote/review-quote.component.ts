@@ -16,6 +16,7 @@ import { Network } from 'src/app/enums/networks';
 import { IQuoteReplayRequest, QuoteReplayRequest } from '@sharedModels/platform-api/requests/transactions/quote-replay-request';
 import { TransactionBroadcastNotificationRequest } from '@sharedModels/platform-api/requests/transactions/transaction-broadcast-notification-request';
 import { Icons } from 'src/app/enums/icons';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-review-quote',
@@ -34,6 +35,7 @@ export class ReviewQuoteComponent implements OnDestroy {
   showParameterDetails = true;
   latestBlock: IBlock;
   icons = Icons;
+  iconSizes = IconSizes;
 
   methodParametersHelp = {
     title: 'What are method parameters?',

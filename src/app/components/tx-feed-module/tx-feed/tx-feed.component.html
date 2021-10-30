@@ -22,7 +22,7 @@
           [showBottomDivider]="i < transactions.length - 1"></opdex-tx-receipt>
 
         <div class="d-flex flex-row align-items-center justify-content-center mt-3 mb-3" *ngIf="!endReached && nextPage">
-          <mat-spinner class="tiny mr-2"></mat-spinner> Coming right up...
+          <mat-spinner [ngClass]="iconSizes.tiny" class="mr-2"></mat-spinner> Coming right up...
         </div>
       </ng-container>
       <ng-template #noTransactions>
@@ -34,13 +34,13 @@
 
     <ng-template #loader>
       <div class="d-flex h-100 flex-column align-items-center justify-content-center">
-        <mat-spinner class="small mb-3"></mat-spinner>
+        <mat-spinner [ngClass]="iconSizes.small" class="mb-3"></mat-spinner>
         <p>Magic happening...</p>
       </div>
     </ng-template>
   </div>
 
   <div class="refresh-container" [ngClass]="{'refreshAvailable': refreshAvailable}" >
-    <button mat-flat-button color="primary" (click)="refresh()">Refresh <mat-icon class="tiny">{{icons.refresh}}</mat-icon></button>
+    <button mat-flat-button color="primary" (click)="refresh()">Refresh <mat-icon [class]="iconSizes.tiny">{{icons.refresh}}</mat-icon></button>
   </div>
 </opdex-card>

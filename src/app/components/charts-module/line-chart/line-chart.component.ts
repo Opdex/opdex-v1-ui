@@ -8,6 +8,7 @@ import { createChart, ISeriesApi, IChartApi, LineWidth, DeepPartial } from 'ligh
 import { tap } from 'rxjs/operators';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Icons } from 'src/app/enums/icons';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-line-chart',
@@ -36,6 +37,7 @@ export class LineChartComponent implements OnInit, OnChanges {
   height: number = 400;
   width: number;
   icons = Icons;
+  iconSizes = IconSizes;
 
   constructor(private _theme: ThemeService, private _breakpointObserver: BreakpointObserver, private _shortNumber: ShortNumberPipe) {
     this.subscription.add(this._theme.getTheme()

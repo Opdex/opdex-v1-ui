@@ -4,21 +4,21 @@
       <a href="javascript:void(0)" [routerLink]="['/pools', pool.address]">{{pool.token.src.symbol}}-{{pool.token.crs.symbol}}</a>
     </h3>
 
-    <button mat-icon-button color="primary" class="small" [matMenuTriggerFor]="beforeMenu">
+    <button mat-icon-button color="primary" [ngClass]="iconSizes.small" [matMenuTriggerFor]="beforeMenu">
       <mat-icon>{{icons.more}}</mat-icon>
     </button>
 
     <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
-      <button mat-menu-item class="small" (click)="swap()">
+      <button mat-menu-item [ngClass]="iconSizes.small" (click)="swap()">
         <mat-icon class="swap">{{icons.swap}}</mat-icon> Swap {{pool.token.src?.symbol}}
       </button>
-      <button mat-menu-item class="small" (click)="provide()">
+      <button mat-menu-item [ngClass]="iconSizes.small" (click)="provide()">
         <mat-icon class="provide">{{icons.provide}}</mat-icon> Provide {{pool.token.src?.symbol}}
       </button>
-      <button mat-menu-item class="small" (click)="stake()" *ngIf="pool.staking?.isActive">
+      <button mat-menu-item [ngClass]="iconSizes.small" (click)="stake()" *ngIf="pool.staking?.isActive">
         <mat-icon class="stake">{{icons.staking}}</mat-icon> Stake {{pool.token.staking?.symbol}}
       </button>
-      <button mat-menu-item class="small" (click)="mine()" *ngIf="pool.mining?.isActive">
+      <button mat-menu-item [ngClass]="iconSizes.small" (click)="mine()" *ngIf="pool.mining?.isActive">
         <mat-icon class="mine">{{icons.mining}}</mat-icon> Mine {{pool.token.staking?.symbol}}
       </button>
     </mat-menu>

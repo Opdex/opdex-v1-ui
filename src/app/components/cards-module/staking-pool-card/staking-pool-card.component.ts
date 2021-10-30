@@ -5,6 +5,7 @@ import { TransactionView } from '@sharedModels/transaction-view';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { Observable } from 'rxjs';
 import { Icons } from 'src/app/enums/icons';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-staking-pool-card',
@@ -15,6 +16,7 @@ export class StakingPoolCardComponent {
   @Input() pool: ILiquidityPoolSummary;
   context$: Observable<any>;
   icons = Icons;
+  iconSizes = IconSizes;
 
   constructor(private _sidebar: SidenavService, private _context: UserContextService) {
     this.context$ = this._context.getUserContext$();

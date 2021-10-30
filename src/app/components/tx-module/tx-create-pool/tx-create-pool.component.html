@@ -4,7 +4,7 @@
       <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.link" label="Token" [formControl]="token" placeholder="Token Address..."></opdex-input-control>
       <ng-container *ngIf="isTokenKnown && isValidToken">
         <div class="d-flex flex-row ml-1 align-items-center">
-          <mat-icon class="green tiny">{{icons.checkOutline}}</mat-icon>
+          <mat-icon [ngClass]="iconSizes.tiny" class="green">{{icons.checkOutline}}</mat-icon>
           <span class="ml-2">{{validatedToken.name}} <small class="light">({{validatedToken.symbol}})</small></span>
         </div>
         <div class="d-flex flex-row ml-2 mt-1 align-items-center">
@@ -16,12 +16,12 @@
 
       <ng-container *ngIf="form.valid && isTokenKnown == false">
         <div class="d-flex flex-row ml-1 align-items-center" *ngIf="isValidToken !== false">
-          <mat-icon class="tiny" color="warn">{{icons.error}}</mat-icon>
+          <mat-icon [class]="iconSizes.tiny" color="warn">{{icons.error}}</mat-icon>
           <span class="ml-2">Unknown token, please validate</span>
         </div>
 
         <div *ngIf="isValidToken === false" class="row d-flex flex-row ml-1 align-items-center">
-          <mat-icon class="tiny" color="warn">{{icons.error}}</mat-icon>
+          <mat-icon [class]="iconSizes.tiny" color="warn">{{icons.error}}</mat-icon>
           <span class="ml-2">Invalid Token</span>
         </div>
 

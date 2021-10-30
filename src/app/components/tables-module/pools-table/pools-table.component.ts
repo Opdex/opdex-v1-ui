@@ -7,6 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ILiquidityPoolsSearchFilter, LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { Icons } from 'src/app/enums/icons';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-pools-table',
@@ -22,6 +23,7 @@ export class PoolsTableComponent implements OnChanges, AfterViewInit {
   searchQuery = new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 5);
   pageSizeOptions: number[];
   icons = Icons;
+  iconSizes = IconSizes;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

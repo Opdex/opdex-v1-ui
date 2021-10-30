@@ -4,22 +4,22 @@
       <a href="javascript:void(0)" [routerLink]="['/pools', pool.address]">{{pool.token.src.symbol}}-{{pool.token.crs.symbol}}</a>
     </h3>
 
-    <button mat-icon-button color="primary" class="small" [matMenuTriggerFor]="beforeMenu">
+    <button mat-icon-button color="primary" [ngClass]="iconSizes.small" [matMenuTriggerFor]="beforeMenu">
       <mat-icon>{{icons.more}}</mat-icon>
     </button>
 
     <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
-      <button mat-menu-item class="small" (click)="startMining()">
+      <button mat-menu-item [ngClass]="iconSizes.small" (click)="startMining()">
         <mat-icon class="add">{{icons.add}}</mat-icon>
         Start Mining {{pool.token.staking.symbol}}
       </button>
 
-      <button mat-menu-item class="small" (click)="stopMining()">
+      <button mat-menu-item [ngClass]="iconSizes.small" (click)="stopMining()">
         <mat-icon class="remove">{{icons.remove}}</mat-icon>
         Stop Mining {{pool.token.staking.symbol}}
       </button>
 
-      <button mat-menu-item class="small" (click)="collect()">
+      <button mat-menu-item [ngClass]="iconSizes.small" (click)="collect()">
         <mat-icon class="collect">{{icons.donut}}</mat-icon>
         Collect Mined {{pool.token.staking.symbol}}
       </button>
