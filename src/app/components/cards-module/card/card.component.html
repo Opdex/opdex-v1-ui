@@ -5,7 +5,7 @@
 
   <div class="foreground" [ngClass]="{'warn': warn, 'success': success, 'thin': thin, 'p-0': noPadding, 'has-toolbar': hasToolbar}">
     <ng-container *ngIf="closable">
-      <button mat-icon-button [class]="iconSizes.tiny" style="position: absolute; top: 10px; right: 10px;" (click)="close()"><mat-icon>{{icons.close}}</mat-icon></button>
+      <button mat-icon-button [ngClass]="iconSizes.tiny" style="position: absolute; top: 10px; right: 10px;" (click)="close()"><mat-icon>{{icons.close}}</mat-icon></button>
     </ng-container>
     <ng-content></ng-content>
   </div>

@@ -7,7 +7,7 @@
     </div>
 
     <ng-container *ngIf="pools$ | async as pools">
-      <div class="pools-by-volume" *ngIf="pools.topVolume.length">
+      <div class="pools-by-volume" *ngIf="pools.topVolume.results.length">
         <div class="row">
           <div class="col-12">
             <h2 class="text-shadow d-flex align-items-center">
@@ -17,13 +17,13 @@
         </div>
 
         <div class="scrollable-row">
-          <div class="scrollable-card" *ngFor="let pool of pools.topVolume">
+          <div class="scrollable-card" *ngFor="let pool of pools.topVolume.results">
             <opdex-liquidity-pool-card [pool]="pool"></opdex-liquidity-pool-card>
           </div>
         </div>
       </div>
 
-      <div class="row" *ngIf="pools.mining.length">
+      <div class="row" *ngIf="pools.mining.results.length">
         <div class="col-12">
           <h2 class="text-shadow d-flex align-items-center">
             <mat-icon class="mr-2 mine">{{icons.mining}}</mat-icon>
@@ -31,14 +31,14 @@
           </h2>
 
           <div class="scrollable-row">
-            <div class="scrollable-card" *ngFor="let pool of pools.mining">
+            <div class="scrollable-card" *ngFor="let pool of pools.mining.results">
               <opdex-mining-card [pool]="pool"></opdex-mining-card>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="row" *ngIf="pools.byLiquidity.length">
+      <div class="row">
         <div class="col-12">
           <opdex-card [hasToolbar]="true" [thin]="true">
             <ng-container toolbar>
@@ -49,7 +49,7 @@
               </div>
             </ng-container>
 
-            <opdex-pools-table [pools]="pools.byLiquidity"></opdex-pools-table>
+            <opdex-pools-table [filter]="topPoolsFilter"></opdex-pools-table>
           </opdex-card>
         </div>
       </div>

@@ -1,3 +1,4 @@
+import { TokenHistory } from '@sharedModels/token-history';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { catchError } from 'rxjs/operators';
 import { TokensService } from '@sharedServices/platform/tokens.service';
@@ -8,7 +9,6 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Observable, Subscription, interval, of } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
-import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { Icons } from 'src/app/enums/icons';
 
 @Component({
@@ -21,9 +21,7 @@ export class TokenComponent implements OnInit {
   tokenAddress: string;
   token: any;
   subscription = new Subscription();
-  tokenHistory: any;
-  priceHistory: any[] = [];
-  candleHistory: any[] = [];
+  tokenHistory: TokenHistory;
   chartData: any[];
   iconSizes = IconSizes;
   icons = Icons;
@@ -44,7 +42,6 @@ export class TokenComponent implements OnInit {
   selectedChart = this.chartOptions[0];
   transactionRequest: ITransactionsRequest;
   routerSubscription = new Subscription();
-
 
   constructor(
     private _route: ActivatedRoute,
@@ -122,35 +119,7 @@ export class TokenComponent implements OnInit {
         take(1),
         delay(10),
         tap(tokenHistory => {
-          this.tokenHistory = tokenHistory;
-
-          let priceHistory = [];
-          let candleHistory = [];
-
-          this.tokenHistory.snapshotHistory.forEach(history => {
-            priceHistory.push({
-              time: Date.parse(history.startDate.toString())/1000,
-              value: history.price.close
-            });
-
-            candleHistory.push({
-              time: Date.parse(history.startDate.toString())/1000,
-              open: history.price.open,
-              high: history.price.high,
-              low: history.price.low,
-              close: history.price.close,
-            });
-          });
-
-          this.priceHistory = priceHistory;
-          this.candleHistory = candleHistory;
-
-          // Temporary fix for CRS pricing coming back as 0
-          const tokenPrice = new FixedDecimal(this.token.summary.priceUsd, this.token.decimals);
-          if (tokenPrice.isZero) {
-            this.token.summary.priceUsd = priceHistory[priceHistory.length - 1].value;
-          }
-
+          this.tokenHistory = new TokenHistory(tokenHistory);
           this.handleChartTypeChange(this.selectedChart.category);
         })
       );
@@ -160,9 +129,9 @@ export class TokenComponent implements OnInit {
     this.selectedChart = this.chartOptions.find(options => options.category === $event);
 
     if ($event === 'USD Price') {
-      this.chartData = this.priceHistory;
+      this.chartData = this.tokenHistory.line;
     } else if ($event === 'OHLC USD') {
-      this.chartData = this.candleHistory;
+      this.chartData = this.tokenHistory.candle;
     }
   }
 

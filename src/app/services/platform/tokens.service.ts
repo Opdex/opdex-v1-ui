@@ -1,5 +1,5 @@
 import { ITokensResponse } from '@sharedModels/platform-api/responses/tokens/tokens-response.interface';
-import { IMarketToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
+import { IMarketToken, ITokenSnapshotHistory } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -24,7 +24,7 @@ export class TokensService extends CacheService {
     return this.getItem(`tokens-request-${request.buildQueryString()}`, this._platformApi.getMarketTokens(request));
   }
 
-  getTokenHistory(address: string, timeSpan: string = "1Y", candleSpan: string = "Hourly"): Observable<any> {
+  getTokenHistory(address: string, timeSpan: string = "1Y", candleSpan: string = "Hourly"): Observable<ITokenSnapshotHistory> {
     return this.getItem(`${address}-history-${timeSpan}-${candleSpan}`, this._platformApi.getTokenHistory(address, timeSpan, candleSpan));
   }
 

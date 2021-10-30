@@ -1,7 +1,7 @@
 <opdex-card class="pool-card" *ngIf="pool">
   <div class="top-details">
     <h3 class="title">
-      <a href="javascript:void(0)" [routerLink]="['/pools', pool.address]">{{pool.token.src.symbol}}-{{pool.token.crs.symbol}}</a>
+      <a href="javascript:void(0)" [routerLink]="['/pools', pool.address]">{{pool.name}}</a>
     </h3>
 
     <button mat-icon-button color="primary" [ngClass]="iconSizes.small" [matMenuTriggerFor]="beforeMenu">

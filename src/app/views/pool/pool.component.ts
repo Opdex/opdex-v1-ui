@@ -3,7 +3,6 @@ import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { IconSizes } from './../../enums/icon-sizes';
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
-import { environment } from "@environments/environment";
 import { StatCardInfo } from "@sharedComponents/cards-module/stat-card/stat-card-info";
 import { ITransactionsRequest } from "@sharedModels/platform-api/requests/transactions/transactions-filter";
 import { IAddressBalance } from "@sharedModels/platform-api/responses/wallets/address-balance.interface";
@@ -21,6 +20,7 @@ import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { Title } from '@angular/platform-browser';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
 import { Icons } from 'src/app/enums/icons';
+import { LiquidityPoolHistory } from '@sharedModels/liquidity-pool-history';
 
 @Component({
   selector: 'opdex-pool',
@@ -30,15 +30,10 @@ import { Icons } from 'src/app/enums/icons';
 export class PoolComponent implements OnInit, OnDestroy {
   poolAddress: string;
   pool: ILiquidityPoolSummary;
-  poolHistory: ILiquidityPoolSnapshotHistory;
+  poolHistory: LiquidityPoolHistory;
   crsBalance: IAddressBalance;
   srcBalance$: Observable<IAddressBalance>;
   transactions: any[];
-  liquidityHistory: any[] = [];
-  stakingHistory: any[] = [];
-  volumeHistory: any[] = [];
-  crsPerSrcHistory: any[] = [];
-  srcPerCrsHistory: any[] = [];
   walletBalance: any;
   subscription = new Subscription();
   routerSubscription = new Subscription();
@@ -152,8 +147,6 @@ export class PoolComponent implements OnInit, OnDestroy {
             return;
           }
 
-          const miningGovernance = environment.governanceAddress;
-
           var contracts = [pool.address, pool.token.src.address];
 
           if (pool?.mining?.address) contracts.push(pool.mining.address);
@@ -166,8 +159,8 @@ export class PoolComponent implements OnInit, OnDestroy {
           };
 
           if (this.pool){
-            this._gaService.pageView(this._route.routeConfig.path, `${this.pool.token.src.symbol}-${this.pool.token.crs.symbol} Liquidity Pool`)
-            this._title.setTitle(`${this.pool.token.src.symbol}-${this.pool.token.crs.symbol} Liquidity Pool`);
+            this._gaService.pageView(this._route.routeConfig.path, `${this.pool.name} Liquidity Pool`)
+            this._title.setTitle(`${this.pool.name} Liquidity Pool`);
             this.setPoolStatCards();
 
             this.chartOptions.map(o => {
@@ -317,80 +310,27 @@ export class PoolComponent implements OnInit, OnDestroy {
         delay(10),
         tap(() => {
           this.chartOptions.map(o => {
-            if (o.suffix === 'SRC') {
-              o.suffix = this.pool.token.src.symbol;
-              o.decimals = this.pool.token.src.decimals
-            }
+            if (o.category.includes('/') && o.type === 'candle') {
+              const parts = o.category.split('/');
+              const prefixIsCrs = parts[0].includes('CRS');
 
-            if (o.category.includes('SRC')) {
-              o.category = o.category.replace('SRC', this.pool.token.src.symbol);
-            }
+              if (prefixIsCrs) {
+                o.suffix = this.pool.token.src.symbol;
+                o.decimals = this.pool.token.src.decimals
+              } else {
+                o.suffix = this.pool.token.crs.symbol;
+              }
 
-            if (o.suffix === 'CRS') {
-              o.suffix = this.pool.token.crs.symbol;
-            }
-
-            if (o.category.includes('/')) {
-              var parts = o.category.split('/');
-
-              o.category = parts[0].includes('CRS')
-                ? `${this.pool.token.crs.symbol}/${parts[1]}`
-                : `${parts[0]}/${this.pool.token.crs.symbol}`;
+              o.category = prefixIsCrs
+                ? `${this.pool.token.crs.symbol}/${this.pool.token.src.symbol}`
+                : `${this.pool.token.src.symbol}/${this.pool.token.crs.symbol}`;
             }
 
             return o;
           });
         }),
         tap((poolHistory: ILiquidityPoolSnapshotHistory) => {
-          this.poolHistory = poolHistory;
-
-          let liquidityPoints = [];
-          let volumePoints = [];
-          let stakingPoints = [];
-          let crsPerSrcHistory = [];
-          let srcPerCrsHistory = [];
-
-          this.poolHistory.snapshotHistory.forEach(history => {
-            const time = Date.parse(history.startDate.toString()) / 1000;
-
-            liquidityPoints.push({
-              time,
-              value: history.reserves.usd
-            });
-
-            volumePoints.push({
-              time,
-              value: history.volume.usd
-            });
-
-            stakingPoints.push({
-              time,
-              value: parseFloat(history.staking.weight.split('.')[0])
-            });
-
-            crsPerSrcHistory.push({
-              time,
-              open: history.cost.crsPerSrc.open,
-              high: history.cost.crsPerSrc.high,
-              low: history.cost.crsPerSrc.low,
-              close: history.cost.crsPerSrc.close,
-            });
-
-            srcPerCrsHistory.push({
-              time,
-              open: history.cost.srcPerCrs.open,
-              high: history.cost.srcPerCrs.high,
-              low: history.cost.srcPerCrs.low,
-              close: history.cost.srcPerCrs.close,
-            })
-          });
-
-          this.liquidityHistory = liquidityPoints;
-          this.volumeHistory = volumePoints;
-          this.stakingHistory = stakingPoints;
-          this.crsPerSrcHistory = crsPerSrcHistory;
-          this.srcPerCrsHistory = srcPerCrsHistory;
-
+          this.poolHistory = new LiquidityPoolHistory(poolHistory);
           this.handleChartTypeChange(this.selectedChart.category);
       }));
   }
@@ -399,15 +339,15 @@ export class PoolComponent implements OnInit, OnDestroy {
     this.selectedChart = this.chartOptions.find(options => options.category === $event);
 
     if ($event === 'Liquidity') {
-      this.chartData = this.liquidityHistory;
+      this.chartData = this.poolHistory.liquidity;
     } else if ($event === 'Volume') {
-      this.chartData = this.volumeHistory;
+      this.chartData = this.poolHistory.volume;
     } else if ($event === 'Staking') {
-      this.chartData = this.stakingHistory;
+      this.chartData = this.poolHistory.staking;
     } else if ($event === `${this.pool.token.crs.symbol}/${this.pool.token.src.symbol}`) {
-      this.chartData = this.srcPerCrsHistory;
+      this.chartData = this.poolHistory.srcPerCrs;
     } else if ($event === `${this.pool.token.src.symbol}/${this.pool.token.crs.symbol}`) {
-      this.chartData = this.crsPerSrcHistory;
+      this.chartData = this.poolHistory.crsPerSrc;
     }
   }
 

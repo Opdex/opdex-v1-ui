@@ -1,5 +1,5 @@
 import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
-import { ITokenSnapshot, IMarketToken } from './../../models/platform-api/responses/tokens/token.interface';
+import { IMarketToken, ITokenSnapshotHistory } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IAddressMiningPositions } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
 import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
@@ -18,7 +18,7 @@ import { RestApiService } from './rest-api.service';
 import { ErrorService } from '@sharedServices/utility/error.service';
 import { Observable } from 'rxjs';
 import { ILiquidityPoolSnapshotHistory, ILiquidityPoolSummary, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
-import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
+import { LiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { TransactionRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { ITransactionReceipt, ITransactionReceipts } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
 import { IAddressAllowanceResponse } from '@sharedModels/platform-api/responses/wallets/address-allowance.interface';
@@ -48,6 +48,7 @@ import { SwapAmountInQuoteRequest } from '@sharedModels/platform-api/requests/to
 import { SwapAmountOutQuoteRequest } from '@sharedModels/platform-api/requests/tokens/swap-amount-out-quote-request';
 import { IMarketTokensResponse } from '@sharedModels/platform-api/responses/tokens/market-tokens-response.interface';
 import { ITokensResponse } from '@sharedModels/platform-api/responses/tokens/tokens-response.interface';
+import { ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pools-response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -126,8 +127,8 @@ export class PlatformApiService extends RestApiService {
     return this.post<IToken>(`${this.api}/tokens`, payload);
   }
 
-  public getTokenHistory(address: string, timeSpan: string = '1Y', candleSpan: string = 'Hourly'): Observable<ITokenSnapshot[]> {
-    return this.get<ITokenSnapshot[]>(`${this.api}/tokens/${address}/history?timeSpan=${timeSpan}&candleSpan=${candleSpan}`);
+  public getTokenHistory(address: string, timeSpan: string = '1Y', candleSpan: string = 'Hourly'): Observable<ITokenSnapshotHistory> {
+    return this.get<ITokenSnapshotHistory>(`${this.api}/tokens/${address}/history?timeSpan=${timeSpan}&candleSpan=${candleSpan}`);
   }
 
   public approveAllowanceQuote(address: string, payload: IApproveAllowanceRequest): Observable<ITransactionQuote> {
@@ -151,8 +152,8 @@ export class PlatformApiService extends RestApiService {
     return this.get<ILiquidityPoolSummary>(`${this.api}/liquidity-pools/${address}`);
   }
 
-  public getPools(query?: LiquidityPoolsSearchQuery): Observable<ILiquidityPoolSummary[]> {
-    return this.get<ILiquidityPoolSummary[]>(`${this.api}/liquidity-pools${query?.getQuery() || ''}`);
+  public getLiquidityPools(query?: LiquidityPoolsFilter): Observable<ILiquidityPoolsResponse> {
+    return this.get<ILiquidityPoolsResponse>(`${this.api}/liquidity-pools${query.buildQueryString()}`);
   }
 
   public getPoolHistory(address: string, timeSpan: string = '1Y'): Observable<ILiquidityPoolSnapshotHistory> {
@@ -248,8 +249,8 @@ export class PlatformApiService extends RestApiService {
     return this.get<IMarket>(`${this.api}/markets`);
   }
 
-  public getMarketHistory(timeSpan: string = '1Y'): Observable<IMarketSnapshot> {
-    return this.get<IMarketSnapshot>(`${this.api}/markets/history?timeSpan=${timeSpan}`);
+  public getMarketHistory(timeSpan: string = '1Y'): Observable<IMarketSnapshot[]> {
+    return this.get<IMarketSnapshot[]>(`${this.api}/markets/history?timeSpan=${timeSpan}`);
   }
 
   ////////////////////////////
