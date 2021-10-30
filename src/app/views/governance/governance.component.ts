@@ -1,15 +1,17 @@
+import { NominationFilter } from './../../models/platform-api/requests/liquidity-pools/liquidity-pool-filter';
+import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { GovernancesService } from '@sharedServices/platform/governances.service';
 import { Subscription } from 'rxjs';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { ReviewQuoteComponent } from '@sharedComponents/tx-module/shared/review-quote/review-quote.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { switchMap, take, tap } from 'rxjs/operators';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
+import { LiquidityPoolsFilter, LpOrderBy, MiningFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { Observable, timer } from 'rxjs';
+import { Observable } from 'rxjs';
 import { IGovernance } from '@sharedModels/platform-api/responses/governances/governance.interface';
 import { environment } from '@environments/environment';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
@@ -37,7 +39,8 @@ export class GovernanceComponent implements OnInit, OnDestroy {
     private _bottomSheet: MatBottomSheet,
     private _context: UserContextService,
     private _tokenService: TokensService,
-    private _liquidityPoolsService: LiquidityPoolsService
+    private _liquidityPoolsService: LiquidityPoolsService,
+    private _blocks: BlocksService
   ) { }
 
   nominationsHelpInfo = {
@@ -53,7 +56,7 @@ export class GovernanceComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.context = this._context.getUserContext();
 
-    this.governance$ = timer(0, 20000)
+    this.governance$ = this._blocks.getLatestBlock$()
       .pipe(
         switchMap(_ => {
           return this._governanceService.getGovernance(environment.governanceAddress)
@@ -63,12 +66,14 @@ export class GovernanceComponent implements OnInit, OnDestroy {
               tap(minedToken => this.governance.setMinedToken(minedToken)));
         })).subscribe();
 
-    this.nominatedPools$ = timer(0, 20000).pipe(switchMap(_ => {
-      return this._liquidityPoolsService.getLiquidityPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 4, {nominated: true}));
+    this.nominatedPools$ = this._blocks.getLatestBlock$().pipe(switchMap(_ => {
+      const filter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 4, direction: 'DESC', nominationFilter: NominationFilter.Nominated});
+      return this._liquidityPoolsService.getLiquidityPools(filter).pipe(map(pools => pools.results));
     }));
 
-    this.miningPools$ = timer(0, 20000).pipe(switchMap(_ => {
-      return this._liquidityPoolsService.getLiquidityPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 4, {mining: true}));
+    this.miningPools$ = this._blocks.getLatestBlock$().pipe(switchMap(_ => {
+      const filter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 4, direction: 'DESC', miningFilter: MiningFilter.Enabled});
+      return this._liquidityPoolsService.getLiquidityPools(filter).pipe(map(pools => pools.results));
     }));
   }
 

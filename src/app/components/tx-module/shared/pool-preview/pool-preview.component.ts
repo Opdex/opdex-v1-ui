@@ -6,7 +6,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { TransactionView } from '@sharedModels/transaction-view';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { map, startWith, tap } from 'rxjs/operators';
-import { LiquidityPoolsSearchQuery } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
+import { LiquidityPoolsFilter, LpOrderBy } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Icons } from 'src/app/enums/icons';
 
@@ -37,8 +37,8 @@ export class PoolPreviewComponent {
     });
 
     this.pools$ = this._liquidityPoolsService
-      .getLiquidityPools(new LiquidityPoolsSearchQuery('Liquidity', 'DESC', 0, 10))
-      .pipe(tap(pools => this.pools = pools));
+      .getLiquidityPools(new LiquidityPoolsFilter({limit: 20, orderBy: LpOrderBy.Liquidity}))
+      .pipe(map(pools => pools.results), tap(pools => this.pools = pools));
 
     this.filteredPools$ = this.poolControl.valueChanges
       .pipe(

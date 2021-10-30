@@ -15,7 +15,7 @@
             <ng-container *ngIf="pools$ | async">
               <mat-option *ngFor="let pool of filteredPools$ | async" [value]="pool">
                 <div class="d-flex flex-column">
-                  <small style="font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 20px">{{pool.token.src.symbol}}-{{pool.token.crs.symbol}}</small>
+                  <small style="font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 20px">{{pool.name}}</small>
                   <small class="light" style="font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 16px;">{{pool.address}}</small>
                 </div>
               </mat-option>
@@ -30,7 +30,7 @@
   <opdex-card class="pool-summary" *ngIf="pool" [thin]="true">
     <h4 class="mb-0">
       <opdex-copy-button [tooltip]="pool?.address" [value]="pool?.address" icon="link" [size]="iconSizes.small"></opdex-copy-button>
-      <a class="blue ml-1" routerLink="/pools/{{pool?.address}}">{{pool.token.src.symbol}}-{{pool.token.crs.symbol}}</a>
+      <a class="blue ml-1" routerLink="/pools/{{pool?.address}}">{{pool.name}}</a>
     </h4>
 
     <button mat-icon-button class="exit tiny" (click)="clearPool()">
