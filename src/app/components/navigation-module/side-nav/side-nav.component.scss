@@ -21,6 +21,16 @@
         box-shadow: none !important;
       }
     }
+
+    .secondary {
+      opacity: 1;
+      transition: .15s ease-in;
+    }
+  }
+
+  .secondary {
+    opacity: 0;
+    transition: .15s ease-in;
   }
 
   .foreground {
@@ -125,6 +135,24 @@
   }
 }
 
+.button-group {
+  display: flex;
+
+  a {
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+
+    &:last-of-type {
+      margin-right: 0px;
+    }
+
+    .social-icon {
+      height: 16px;
+    }
+  }
+}
+
 @media (min-width: 320px) { }
 
 @media (min-width: 576px) { }
@@ -137,12 +165,12 @@
   }
 }
 
-@media (min-width: 992px) { }
-
-@media (min-width: 1200px) {
+@media (min-width: 992px) {
   #side-nav {
     .stick-nav {
       display: block;
     }
   }
 }
+
+@media (min-width: 1200px) { }

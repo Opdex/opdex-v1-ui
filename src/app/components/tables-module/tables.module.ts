@@ -9,7 +9,6 @@ import { CommonModule } from '@angular/common';
 
 import { PoolsTableComponent } from './pools-table/pools-table.component';
 import { TokensTableComponent } from './tokens-table/tokens-table.component';
-import { TransactionsTableComponent } from './transactions-table/transactions-table.component';
 import { VaultCertificatesTableComponent } from './vault-certificates-table/vault-certificates-table.component';
 import { WalletBalancesTableComponent } from './wallet-balances-table/wallet-balances-table.component';
 
@@ -28,7 +27,6 @@ import { WalletStakingPositionsTableComponent } from './wallet-staking-positions
   declarations: [
     PoolsTableComponent,
     TokensTableComponent,
-    TransactionsTableComponent,
     VaultCertificatesTableComponent,
     WalletBalancesTableComponent,
     WalletLiquidityPoolPositionTableComponent,
@@ -54,7 +52,6 @@ import { WalletStakingPositionsTableComponent } from './wallet-staking-positions
   exports: [
     PoolsTableComponent,
     TokensTableComponent,
-    TransactionsTableComponent,
     VaultCertificatesTableComponent,
     WalletBalancesTableComponent,
     WalletLiquidityPoolPositionTableComponent,

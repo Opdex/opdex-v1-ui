@@ -68,14 +68,14 @@ export class MarketComponent implements OnInit {
     this.tokensFilter = new TokensFilter({
       orderBy: 'DailyPriceChangePercent',
       direction: 'DESC',
-      limit: 5,
+      limit: 10,
       provisional: 'NonProvisional'
     });
 
     this.liquidityPoolsFilter = new LiquidityPoolsFilter({
       orderBy: LpOrderBy.Liquidity,
       direction: 'DESC',
-      limit: 5
+      limit: 10
     });
 
     const miningFilter = new LiquidityPoolsFilter({
@@ -225,6 +225,10 @@ export class MarketComponent implements OnInit {
 
   handleChartTimeChange($event: string) {
     this.getMarketHistory($event).pipe(take(1)).subscribe();
+  }
+
+  handleTxOption($event: TransactionView) {
+    this._sidebar.openSidenav($event);
   }
 
   createPool() {

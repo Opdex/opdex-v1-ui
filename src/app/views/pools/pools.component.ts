@@ -47,6 +47,10 @@ export class PoolsComponent implements OnInit {
       }));
   }
 
+  handleTxOption($event: TransactionView) {
+    this._sidebar.openSidenav($event);
+  }
+
   createPool() {
     this._sidebar.openSidenav(TransactionView.createPool);
   }

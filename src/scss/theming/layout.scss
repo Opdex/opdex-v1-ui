@@ -1,0 +1,35 @@
+.dark-mode {
+  .standard-section {
+    background: #1b192f;
+
+    .mat-card {
+      background: #141325 !important;
+    }
+  }
+
+  .offset-section {
+    background: #17162b;
+  }
+
+  .header-section {
+    background: #141325;
+  }
+}
+
+.light-mode {
+  .standard-section {
+    background: #fff;
+
+    .mat-card {
+      background: #f4f6f7 !important;
+    }
+  }
+
+  .offset-section {
+    background: #fafafa;
+  }
+
+  .header-section {
+    background: #f4f6f7;
+  }
+}
