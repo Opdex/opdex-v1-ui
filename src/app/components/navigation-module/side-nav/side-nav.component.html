@@ -50,12 +50,52 @@
 
     <div class="space-between"></div>
 
-    <ul class="sidebar-nav">
-      <!-- <li>
-        <a mat-button (click)="toggleTheme()">
-          <mat-icon>{{theme === 'dark-mode' ? 'brightness_3' : 'brightness_5'}}</mat-icon> {{theme === 'dark-mode' ? 'Dark Mode' : 'Light Mode'}}
-        </a>
-      </li> -->
+    <ul class="sidebar-nav secondary">
+      <div class="d-flex flex-row align-items-center no-wrap">
+        <button mat-button class="small d-inline pl-0 pr-0" (click)="networkTooltip.toggle()" *ngIf="latestSyncedBlock$ | async as block">
+          <mat-icon class="mr-2" [matTooltip]="network" #networkTooltip="matTooltip">languages</mat-icon>
+          <small>#{{block.height | formatNumber:0}}</small>
+        </button>
+      </div>
+
+      <div class="d-flex flex-row align-items-center no-wrap" *ngIf="theme">
+        <button mat-button class="small d-inline pl-0 pr-0" (click)="toggleTheme()">
+          <mat-icon class="mr-2">{{theme === 'dark-mode' ? 'brightness_3' : 'brightness_7'}}</mat-icon>
+          <small>{{theme === 'dark-mode' ? 'Dark Mode' : 'Light Mode'}}</small>
+        </button>
+      </div>
+
+      <div class="pl-2">
+        <div class="button-group mt-3">
+          <a href="https://github.com/opdex" target="_blank" rel="noopener" matTooltip="Github">
+            <img class="social-icon" src="assets/social/github-blue.svg" alt="Github Logo">
+          </a>
+
+          <a href="https://twitter.com/OpdexProtocol" target="_blank" rel="noopener" matTooltip="Twitter">
+            <img class="social-icon" src="assets/social/twitter-blue.svg" alt="Twitter Logo">
+          </a>
+
+          <a href="https://discord.gg/TnWVDTTrjf" target="_blank" rel="noreferrer" matTooltip="Discord">
+            <img class="social-icon" src="assets/social/discord-blue.svg" alt="Discord Logo">
+          </a>
+
+          <a href="https://reddit.com/r/opdex" target="_blank" rel="noreferrer" matTooltip="Reddit">
+            <img class="social-icon" src="assets/social/reddit-blue.svg" alt="Reddit Logo">
+          </a>
+
+          <a href="https://t.me/OpdexProtocol" target="_blank" rel="noreferrer" matTooltip="Telegram">
+            <img class="social-icon" src="assets/social/telegram-blue.svg" alt="Telegram Logo">
+          </a>
+
+          <a href="https://linkedin.com/company/opdexinc" target="_blank" rel="noopener" matTooltip="LinkedIn">
+            <img class="social-icon" src="assets/social/linkedin-blue.svg" alt="LinkedIn Logo">
+          </a>
+        </div>
+
+        <a mat-button class="small body-content d-inline pl-0 pr-0" href="https://opdex.com/assets/opdex-platform-ui-terms-of-use.pdf" target="_blank" rel="noopener">Terms & Conditions</a>
+      </div>
+
+
     </ul>
 
     <img class="defi-blocks" src="assets/defi2@2x.png">

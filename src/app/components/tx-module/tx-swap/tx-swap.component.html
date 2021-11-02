@@ -2,7 +2,7 @@
   <opdex-wallet-preview [balanceTokens]="[tokenInDetails.address, tokenOutDetails.address]"></opdex-wallet-preview>
 </ng-container>
 
-<opdex-card class="swap" [thin]="true">
+<opdex-card class="swap">
   <form [formGroup]="form" name="swap-form" id="swap-form">
     <opdex-input-control *ngIf="!changeTokenIn" [prefixIcon]="icons.remove" label="{{tokenInExact ? 'Sell Exactly' : 'Sell'}}" [formControl]="tokenInAmount" [suffix]="tokenInDetails?.symbol || 'Select Token'" (handleChangeToken)="changeToken('tokenIn')" [numbersOnly]="true">
       <div class="d-flex flex-row justify-content-between">

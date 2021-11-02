@@ -1,5 +1,5 @@
 import { ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pools-response.interface';
-import { IconSizes } from './../../../enums/icon-sizes';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Component, Input, OnChanges, ViewChild, OnDestroy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';

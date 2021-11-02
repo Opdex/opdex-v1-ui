@@ -35,5 +35,6 @@ export enum Icons {
     receipt = 'receipt',
     refresh = 'autorenew',
     arrowDown = 'keyboard_arrow_down',
-    block = 'layers'
+    block = 'layers',
+    unlock = 'lock_open'
 }

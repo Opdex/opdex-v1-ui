@@ -20,6 +20,7 @@ export class TxSidebarComponent {
 
   sidenavMode: 'over' | 'side' = 'over';
   transactionTypes = [...TransactionTypes.filter(type => type.view)];
+  @Input() showNavMenu: boolean = true;
   context$: Observable<any>;
   widescreen: boolean;
   subscription = new Subscription();

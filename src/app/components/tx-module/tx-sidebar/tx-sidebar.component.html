@@ -1,5 +1,5 @@
 <div id="tx-sidebar-container">
-  <div class="d-flex align-items-center justify-content-between mb-3">
+  <div class="d-flex align-items-center justify-content-between mb-3" *ngIf="showNavMenu">
     <!-- Empty div on purpose so the transaction type selector is centered even if the below button is hidden.-->
     <div style="width: 22px; height: 22px;">
       <button mat-icon-button color="primary" class="small" (click)="toggleSidenavMode()" *ngIf="widescreen">
@@ -34,7 +34,7 @@
     </button>
   </div>
 
-  <mat-divider class="mb-3"></mat-divider>
+  <mat-divider class="mb-3" *ngIf="showNavMenu"></mat-divider>
 
   <div class="connect-wallet mb-3" *ngIf="!context?.wallet">
     <opdex-connect-wallet-card (onConnectWallet)="handleConnectWallet()"></opdex-connect-wallet-card>

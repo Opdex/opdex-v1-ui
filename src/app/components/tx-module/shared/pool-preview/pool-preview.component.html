@@ -1,6 +1,6 @@
 <div class="pool-details">
   <div class="pool-selection" *ngIf="!pool">
-    <opdex-card [thin]="true">
+    <opdex-card>
       <form [formGroup]="poolForm" name="liquidity-pool-form" id="liquidity-pool-form">
         <mat-form-field floatLabel="always">
           <mat-label>Liquidity Pool</mat-label>
@@ -27,7 +27,7 @@
     </opdex-card>
   </div>
 
-  <opdex-card class="pool-summary" *ngIf="pool" [thin]="true">
+  <opdex-card class="pool-summary" *ngIf="pool">
     <h4 class="mb-0">
       <opdex-copy-button [tooltip]="pool?.address" [value]="pool?.address" icon="link" [size]="iconSizes.small"></opdex-copy-button>
       <a class="blue ml-1" routerLink="/pools/{{pool?.address}}">{{pool.name}}</a>

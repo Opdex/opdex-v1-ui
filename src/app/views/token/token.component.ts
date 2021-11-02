@@ -1,3 +1,4 @@
+import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { TokenHistory } from '@sharedModels/token-history';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { catchError } from 'rxjs/operators';
@@ -9,6 +10,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Observable, Subscription, interval, of } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
+import { TransactionView } from '@sharedModels/transaction-view';
 
 @Component({
   selector: 'opdex-token',
@@ -46,7 +48,8 @@ export class TokenComponent implements OnInit {
     private _tokensService: TokensService,
     private _router: Router,
     private _title: Title,
-    private _gaService: GoogleAnalyticsService
+    private _gaService: GoogleAnalyticsService,
+    private _sidebar: SidenavService
   ) { }
 
   ngOnInit(): void {
@@ -91,6 +94,7 @@ export class TokenComponent implements OnInit {
           }
 
           this.token = token;
+
           this.transactionRequest = {
             limit: 15,
             eventTypes: this.token.address === 'CRS'
@@ -98,7 +102,7 @@ export class TokenComponent implements OnInit {
                           : ['TransferEvent', 'ApprovalEvent', 'DistributionEvent', 'SwapEvent', 'AddLiquidityEvent', 'RemoveLiquidityEvent', 'StartMiningEvent', 'StopMiningEvent'],
             contracts: this.token.address === 'CRS'
                           ? []
-                          : [this.token.address],
+                          : [this.token.address, this.token.liquidityPool],
             direction: 'DESC'
           }
           if (this.token){
@@ -135,6 +139,10 @@ export class TokenComponent implements OnInit {
 
   handleChartTimeChange($event: string) {
     this.getTokenHistory($event).pipe(take(1)).subscribe();
+  }
+
+  handleTxOption($event: TransactionView) {
+    this._sidebar.openSidenav($event);
   }
 
   ngOnDestroy() {

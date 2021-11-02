@@ -1,4 +1,4 @@
-import { NominationFilter } from './../../models/platform-api/requests/liquidity-pools/liquidity-pool-filter';
+import { NominationFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { GovernancesService } from '@sharedServices/platform/governances.service';
 import { Subscription } from 'rxjs';

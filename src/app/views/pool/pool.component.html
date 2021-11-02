@@ -1,177 +1,142 @@
-<div id="pool" class="page-container">
-  <div class="container" *ngIf="pool">
-    <div class="row">
-      <div class="col">
-        <opdex-card [warn]="true" [closable]="true" *ngIf="false">
-          <h4>Liquidity Pool Warning</h4>
-          <p class="mb-0">Anybody can publicly create a liquidity pool between Cirrus token ({{pool.token.crs.symbol}}) and any SRC token. Validate the chosen liquidity pool and SRC token by the SRC token's address.</p>
-        </opdex-card>
-      </div>
-    </div>
+<div class="header-section pt-5 pb-5" style="position: sticky; top: 0;" *ngIf="pool">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-12 col-lg-6 col-xl-8">
+        <p class="mb-2 light d-flex align-items-center">
+          <opdex-copy-button [tooltip]="pool.address" [value]="pool.address" icon="link" [size]="iconSizes.small"></opdex-copy-button>
+          <span class="ml-2">{{pool.token.src.name}} - Cirrus</span>
+        </p>
 
-    <div class="row">
-      <div class="col">
         <div class="chip-group">
           <div class="chip blue">{{pool.transactionFee * 100}}% Fee</div>
           <div class="chip purple" *ngIf="pool.staking?.isNominated"><mat-icon>{{icons.staking}}</mat-icon> Nominated</div>
           <div class="chip red" *ngIf="pool.mining?.isActive"><mat-icon>{{icons.mining}}</mat-icon> Mining</div>
         </div>
       </div>
+
+      <div class="d-none d-lg-block col-lg-6 col-xl-4">
+        <opdex-tx-buttons (onSelectOption)="handleTxOption($event)"></opdex-tx-buttons>
+      </div>
     </div>
 
     <div class="row">
-      <div class="col-12 col-xl-8">
-        <div class="row">
-          <div class="col-12 col-sm-6">
-            <opdex-card [thin]="true">
-              <p class="mb-2 light d-flex align-items-center">
-                <opdex-copy-button [tooltip]="pool.address" [value]="pool.address" icon="link" [size]="iconSizes.small"></opdex-copy-button>
-                <span class="ml-2">{{pool.token.src.name}} - Cirrus</span>
-              </p>
-
-              <div class="row">
-                <div class="col-6">
-                  <div class="d-flex align-items-center">
-                    <h2 class=" mb-0 d-inline">
-                      <a class="body-default" style="text-decoration: none; font-weight: 300;" href="javascript:void(0)" routerLink="/tokens/{{pool.token.src.address}}">{{pool.token.src.symbol}}</a>
-                    </h2>
-                    <span class="ml-3 {{pool.token.src.summary.dailyPriceChangePercent < 0 ? 'red' : 'green'}}">
-                      ${{pool.token.src.summary.priceUsd | shortNumber}}
-                    </span>
-                  </div>
-
-                  <div class="d-flex align-items-center mt-2">
-                    <mat-icon color="primary" class="mr-2 tiny">{{icons.swap}}</mat-icon>
-                    <h5 class="d-flex align-items-center mb-0">
-                      <span style="font-weight: 400;">{{pool.cost.crsPerSrc.close | shortNumber }}</span>
-                      <small class="ml-1">{{pool.token.crs.symbol}}</small>
-                    </h5>
-                  </div>
-
-                  <div class="d-flex align-items-center mt-2">
-                    <mat-icon color="primary" class="mr-2 tiny">{{icons.lock}}</mat-icon>
-                    <h5 class="d-flex align-items-center mb-0">
-                      <span style="font-weight: 400;">{{pool.reserves.src | shortNumber}}</span>
-                      <small class="ml-1">{{pool.token.src.symbol}}</small>
-                    </h5>
-                  </div>
-                </div>
-
-                <div class="col-6">
-                  <div class="d-flex align-items-center">
-                    <h2 class=" mb-0 d-inline">
-                      <a class="body-default" style="text-decoration: none; font-weight: 300;" href="javascript:void(0)" routerLink="/tokens/{{pool.token.crs.address}}">{{pool.token.crs.symbol}}</a>
-                    </h2>
-                    <span class="ml-3 {{pool.token.crs.summary.dailyPriceChangePercent < 0 ? 'red' : 'green'}}">
-                      ${{pool.token.crs.summary.priceUsd | shortNumber}}
-                    </span>
-                  </div>
-
-                  <div class="d-flex align-items-center mt-2">
-                    <mat-icon color="primary" class="mr-2 tiny">{{icons.swap}}</mat-icon>
-                    <h5 class="d-flex align-items-center mb-0">
-                      <span style="font-weight: 400;">{{pool.cost.srcPerCrs.close | shortNumber}}</span>
-                      <small class="ml-1">{{pool.token.src.symbol}}</small>
-                    </h5>
-                  </div>
-
-                  <div class="d-flex align-items-center mt-2">
-                    <mat-icon color="primary" class="mr-2 tiny">{{icons.lock}}</mat-icon>
-                    <h5 class="d-flex align-items-center mb-0">
-                      <span style="font-weight: 400;">{{pool.reserves.crs | shortNumber}}</span>
-                      <small class="ml-1">{{pool.token.crs.symbol}}</small>
-                    </h5>
-                  </div>
-                </div>
-              </div>
-            </opdex-card>
+      <div class="col-12 col-md-6 col-xl-3">
+        <opdex-card>
+          <div class="d-flex align-items-center">
+            <h2 class=" mb-0 d-inline">
+              <a class="body-default" style="text-decoration: none; font-weight: 300;" href="javascript:void(0)" routerLink="/tokens/{{pool.token.src.address}}">{{pool.token.src.symbol}}</a>
+            </h2>
+            <span class="ml-3 {{pool.token.src.summary.dailyPriceChangePercent < 0 ? 'red' : 'green'}}">
+              ${{pool.token.src.summary.priceUsd | shortNumber}}
+            </span>
           </div>
 
-          <div class="col-12 col-sm-6">
-            <opdex-card [fullHeight]="true" [thin]="true">
-              <div class="d-flex justify-content-around flex-column h-100">
-                <ng-container *ngFor="let statCard of statCards; let i = index">
-                  <div *ngIf="statCard.show" class="d-flex justify-content-between w-100">
-                    <div class="d-flex align-items-center">
-                      <opdex-help-button *ngIf="statCard.helpInfo" [info]="statCard.helpInfo" [icon]="statCard.icon" [iconColor]="statCard.iconColor" class="mr-2"></opdex-help-button>
-                      <span>{{statCard.title}} <small *ngIf="statCard.daily">(24hr)</small></span>
-                    </div>
-
-                    <div class="d-flex align-items-center">
-                      <opdex-change-indicator [value]="statCard.change" size="s" *ngIf="statCard.change !== null && statCard.change !== undefined"></opdex-change-indicator>
-                      <span class="ml-2">{{statCard.prefix}}{{statCard.value | shortNumber }} <small class="ml-1">{{statCard.suffix}}</small></span>
-                    </div>
-                  </div>
-                </ng-container>
-              </div>
-
-            </opdex-card>
+          <div class="d-flex align-items-center mt-2">
+            <mat-icon color="primary" class="mr-2 tiny">{{icons.swap}}</mat-icon>
+            <h5 class="d-flex align-items-center mb-0">
+              <span style="font-weight: 400;">{{pool.cost.crsPerSrc.close | shortNumber }}</span>
+              <small class="ml-1">{{pool.token.crs.symbol}}</small>
+            </h5>
           </div>
 
-          <div class="col-12">
-            <div class="row">
-              <div class="col">
-                <opdex-card [noPadding]="true">
-                  <opdex-line-chart
-                    [chartData]="chartData"
-                    [chartOptions]="chartOptions"
-                    [selectedChart]="selectedChart"
-                    title="{{selectedChart.category}}"
-                    *ngIf="chartData"
-                    (onTypeChange)="handleChartTypeChange($event)"
-                    (onTimeChange)="handleChartTimeChange($event)"></opdex-line-chart>
-                </opdex-card>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-3">
-                <button mat-raised-button class="big-button swap-button" (click)="swap()">
-                  <mat-icon>{{icons.swap}}</mat-icon>
-                  <span class="text">Swap</span>
-                </button>
-              </div>
-
-              <div class="col-3">
-                <button mat-raised-button class="big-button provide-button" (click)="provide()">
-                  <mat-icon>{{icons.provide}}</mat-icon>
-                  <span class="text">Provide</span>
-                </button>
-              </div>
-
-              <div class="col-3">
-                <button mat-raised-button class="big-button stake-button" (click)="stake()" [disabled]="!pool.staking?.isActive">
-                  <mat-icon>{{icons.staking}}</mat-icon>
-                  <span class="text">Stake</span>
-                </button>
-              </div>
-
-              <div class="col-3">
-                <button mat-raised-button class="big-button mine-button" (click)="mine()" [disabled]="!pool.mining">
-                  <mat-icon>{{icons.mining}}</mat-icon>
-                  <span class="text">Mine</span>
-                </button>
-              </div>
-            </div>
-
-            <ng-container *ngIf="context$ | async as context">
-              <div class="row" *ngIf="context.wallet">
-                <div class="col-12">
-                  <opdex-card [hasToolbar]="true" [thin]="true">
-                    <ng-container toolbar>
-                      <h4 class="d-inline mb-0">Current Positions</h4>
-                    </ng-container>
-
-                    <opdex-wallet-liquidity-pool-position-table [pool]="pool" [positions]="positions"></opdex-wallet-liquidity-pool-position-table>
-                  </opdex-card>
-                </div>
-              </div>
-            </ng-container>
+          <div class="d-flex align-items-center mt-2">
+            <mat-icon color="primary" class="mr-2 tiny">{{icons.lock}}</mat-icon>
+            <h5 class="d-flex align-items-center mb-0">
+              <span style="font-weight: 400;">{{pool.reserves.src | shortNumber}}</span>
+              <small class="ml-1">{{pool.token.src.symbol}}</small>
+            </h5>
           </div>
-        </div>
+        </opdex-card>
       </div>
 
-      <div class="col-12 col-xl-4">
+      <div class="col-12 col-md-6 col-xl-3">
+        <opdex-card>
+          <div class="d-flex align-items-center">
+            <h2 class=" mb-0 d-inline">
+              <a class="body-default" style="text-decoration: none; font-weight: 300;" href="javascript:void(0)" routerLink="/tokens/{{pool.token.crs.address}}">{{pool.token.crs.symbol}}</a>
+            </h2>
+            <span class="ml-3 {{pool.token.crs.summary.dailyPriceChangePercent < 0 ? 'red' : 'green'}}">
+              ${{pool.token.crs.summary.priceUsd | shortNumber}}
+            </span>
+          </div>
+
+          <div class="d-flex align-items-center mt-2">
+            <mat-icon color="primary" class="mr-2 tiny">{{icons.swap}}</mat-icon>
+            <h5 class="d-flex align-items-center mb-0">
+              <span style="font-weight: 400;">{{pool.cost.srcPerCrs.close | shortNumber}}</span>
+              <small class="ml-1">{{pool.token.src.symbol}}</small>
+            </h5>
+          </div>
+
+          <div class="d-flex align-items-center mt-2">
+            <mat-icon color="primary" class="mr-2 tiny">{{icons.lock}}</mat-icon>
+            <h5 class="d-flex align-items-center mb-0">
+              <span style="font-weight: 400;">{{pool.reserves.crs | shortNumber}}</span>
+              <small class="ml-1">{{pool.token.crs.symbol}}</small>
+            </h5>
+          </div>
+        </opdex-card>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="statCards.length > 0">
+      <ng-container *ngFor="let statCard of statCards; let i = index">
+        <div *ngIf="statCard.show" class="col-sm-12 col-md">
+          <opdex-card>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-inline-flex align-items-center mr-3">
+                <opdex-help-button *ngIf="statCard.helpInfo" [info]="statCard.helpInfo" [icon]="statCard.icon" [iconColor]="statCard.iconColor" class="mr-2"></opdex-help-button>
+                <p class="mb-0 no-wrap"><span *ngIf="statCard.daily">Daily</span> {{statCard.title}}</p>
+              </div>
+
+              <div class="d-inline-flex align-items-center no-wrap">
+                <p class="mr-2 mb-0">{{statCard.prefix}}{{statCard.value | shortNumber }} <small class="ml-1">{{statCard.suffix}}</small></p>
+                <opdex-change-indicator [value]="statCard.change" size="s" *ngIf="statCard.change !== null && statCard.change !== undefined"></opdex-change-indicator>
+              </div>
+            </div>
+          </opdex-card>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="row d-lg-none">
+      <div class="col-12">
+        <opdex-tx-buttons (onSelectOption)="handleTxOption($event)"></opdex-tx-buttons>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="offset-section">
+  <div class="container pb-3 pt-3">
+    <opdex-line-chart
+      [chartData]="chartData"
+      [chartOptions]="chartOptions"
+      [selectedChart]="selectedChart"
+      title="{{selectedChart.category}}"
+      (onTypeChange)="handleChartTypeChange($event)"
+      (onTimeChange)="handleChartTimeChange($event)"></opdex-line-chart>
+  </div>
+</div>
+
+<ng-container *ngIf="context$ | async as context">
+  <div class="standard-section pt-5" *ngIf="context.wallet">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h4 class="d-inline mb-0">Current Positions</h4>
+          <opdex-wallet-liquidity-pool-position-table [pool]="pool" [positions]="positions"></opdex-wallet-liquidity-pool-position-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+
+<div class="standard-section pt-5 pb-3 tx-bg d-flex flex-column justify-content-center" *ngIf="pool">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-6 col-xl-5">
         <opdex-tx-feed [transactionRequest]="transactionsRequest" size="l"></opdex-tx-feed>
       </div>
     </div>

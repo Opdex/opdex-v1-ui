@@ -8,7 +8,7 @@
   <ng-container *ngIf="pool">
     <opdex-wallet-preview [balanceTokens]="[pool.token.crs.address, pool.token.src.address, pool.token.lp.address]"></opdex-wallet-preview>
 
-    <opdex-card [thin]="true">
+    <opdex-card>
       <opdex-tx-provide-add *ngIf="group.value == 1" [pool]="pool"></opdex-tx-provide-add>
       <opdex-tx-provide-remove *ngIf="group.value == 2" [pool]="pool"></opdex-tx-provide-remove>
     </opdex-card>

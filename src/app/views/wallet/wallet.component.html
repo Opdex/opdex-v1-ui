@@ -1,14 +1,20 @@
-<div id="wallet" class="page-container">
+<div class="header-section pt-5 pb-5">
   <div class="container">
     <div class="row">
-      <div class="col">
-        <h1 class="text-shadow mb-3">
-          <opdex-copy-button [tooltip]="wallet.wallet" [value]="wallet.wallet" icon="link"></opdex-copy-button>
-          <span>Wallet</span>
-        </h1>
+      <div class="col-12 col-lg-6 col-xl-8">
+        <h1 class="mb-0">Wallet</h1>
+        <div class="light" style="font-size: 10px;">{{wallet.wallet}}</div>
+      </div>
+
+      <div class="d-none d-lg-block col-lg-6 col-xl-4">
+        <opdex-tx-buttons (onSelectOption)="handleTxOption($event)"></opdex-tx-buttons>
       </div>
     </div>
+  </div>
+</div>
 
+<div class="standard-section pt-5 pb-5">
+  <div class="container">
     <div class="row">
       <div class="col-12 col-lg-6 col-xl-4">
         <opdex-card [hasToolbar]="true">
@@ -21,8 +27,7 @@
 
           <div class="crs mb-2 d-flex flex-row justify-content-between align-items-center" *ngIf="crsBalance">
             <p class="big-balance">{{crsBalance.balance | shortNumber}} <small>CRS</small></p>
-            <!-- API bug returning zero - hiding until resolved -->
-            <!-- <p class="mb-0 positive-value">${{crsBalanceValue | shortNumber}}</p> -->
+            <p class="mb-0 positive-value">${{crsBalanceValue | shortNumber}}</p>
           </div>
 
           <div class="address overflow-ellipsis">
@@ -44,11 +49,11 @@
             <div class="theme mb-3">
               <label class="d-block mb-3">Theme</label>
 
-              <button mat-stroked-button class="mr-2" (click)="toggleTheme('light-mode')" color="{{ wallet.preferences.theme === 'light-mode' ? 'primary' : '' }}" >
+              <button mat-stroked-button class="mr-2 small" (click)="toggleTheme('light-mode')" color="{{ wallet.preferences.theme === 'light-mode' ? 'primary' : '' }}" >
                 <mat-icon>brightness_7</mat-icon> Light Mode
               </button>
 
-              <button mat-stroked-button (click)="toggleTheme('dark-mode')" color="{{ wallet.preferences.theme === 'dark-mode' ? 'primary' : '' }}">
+              <button mat-stroked-button class="small" (click)="toggleTheme('dark-mode')" color="{{ wallet.preferences.theme === 'dark-mode' ? 'primary' : '' }}">
                 <mat-icon>brightness_3</mat-icon> Dark Mode
               </button>
             </div>
@@ -62,35 +67,20 @@
       </div>
 
       <div class="col-12 col-lg-6 col-xl-8">
-        <opdex-card [hasToolbar]="true">
-          <ng-container toolbar>
-            <div class="details">
-              <h4 class="mb-0 d-flex align-items-center"><mat-icon color="primary" class="mr-2">toll</mat-icon>Balances</h4>
-            </div>
-          </ng-container>
-
+        <div class="mb-3">
+          <h4 class="mb-0 d-flex align-items-center"><mat-icon color="primary" class="mr-2">toll</mat-icon>Balances</h4>
           <opdex-wallet-balances-table [records]="walletBalances" (onPageChange)="handleBalancesPageChange($event)"></opdex-wallet-balances-table>
-        </opdex-card>
+        </div>
 
-        <opdex-card [hasToolbar]="true">
-          <ng-container toolbar>
-            <div class="details">
-              <h4 class="mb-0 d-flex align-items-center"><mat-icon color="warn" class="mr-2">whatshot</mat-icon>Mining Positions</h4>
-            </div>
-          </ng-container>
-
+        <div class="mb-3">
+          <h4 class="mb-0 d-flex align-items-center"><mat-icon color="warn" class="mr-2">whatshot</mat-icon>Mining Positions</h4>
           <opdex-wallet-mining-positions-table [records]="miningPositions" (onPageChange)="handleMiningPositionsPageChange($event)"></opdex-wallet-mining-positions-table>
-        </opdex-card>
+        </div>
 
-        <opdex-card [hasToolbar]="true">
-          <ng-container toolbar>
-            <div class="details">
-              <h4 class="mb-0 d-flex align-items-center"><mat-icon class="stake mr-2">verified_user</mat-icon>Staking Positions</h4>
-            </div>
-          </ng-container>
-
+        <div class="mb-3">
+          <h4 class="mb-0 d-flex align-items-center"><mat-icon class="stake mr-2">verified_user</mat-icon>Staking Positions</h4>
           <opdex-wallet-staking-positions-table [records]="stakingPositions" (onPageChange)="handleStakingPositionsPageChange($event)"></opdex-wallet-staking-positions-table>
-        </opdex-card>
+        </div>
       </div>
 
       <div class="col-12 mobile-tx-feed">

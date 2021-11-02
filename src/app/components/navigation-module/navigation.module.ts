@@ -5,7 +5,6 @@ import { RouterModule } from '@angular/router';
 
 import { SideNavComponent } from './side-nav/side-nav.component';
 import { HamburgerComponent } from './hamburger/hamburger.component';
-import { FooterComponent } from './footer/footer.component';
 import { StatusBarComponent } from './status-bar/status-bar.component';
 
 // Material Imports
@@ -21,7 +20,6 @@ import { MatMenuModule } from '@angular/material/menu';
   declarations: [
     SideNavComponent,
     HamburgerComponent,
-    FooterComponent,
     StatusBarComponent
   ],
   imports: [
@@ -39,7 +37,6 @@ import { MatMenuModule } from '@angular/material/menu';
   exports: [
     SideNavComponent,
     HamburgerComponent,
-    FooterComponent,
     StatusBarComponent
   ]
 })

@@ -1,8 +1,13 @@
-import { Router } from '@angular/router';
+import { Network } from 'src/app/enums/networks';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 import { ThemeService } from '@sharedServices/utility/theme.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
+import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
+import { Icons } from 'src/app/enums/icons';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'opdex-side-nav',
@@ -13,16 +18,23 @@ export class SideNavComponent implements OnDestroy {
   @Output() onPinnedToggle = new EventEmitter<boolean>();
   @Output() onRouteChanged = new EventEmitter<string>();
   userContext$: Observable<any>;
-  isPinned: boolean = false;
+  isPinned: boolean = true;
   theme$: Subscription;
   theme: 'light-mode' | 'dark-mode';
+  latestSyncedBlock$: Observable<IBlock>;
+  icons = Icons;
+  iconSizes = IconSizes;
+  network: Network;
 
   constructor(
     private _context: UserContextService,
     private _theme: ThemeService,
+    private _blocksService: BlocksService,
   ) {
     this.userContext$ = this._context.getUserContext$();
     this.theme$ = this._theme.getTheme().subscribe((theme: 'light-mode' | 'dark-mode') => this.theme = theme);
+    this.latestSyncedBlock$ = this._blocksService.getLatestBlock$();
+    this.network = environment.network;
   }
 
   toggleTheme() {

@@ -196,11 +196,21 @@ main {
   }
 
   &.dark-mode {
-    background: #181629;
+    background: #1b192f;
   }
 
   &.light-mode {
-    background: #f4f4f4;
+    background: #ffff;
+  }
+
+
+  .tx-bg {
+    background-image: url('/assets/Bg1@2x.png') !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    background-position: bottom !important;
+    // background-attachment: fixed !important;
+    // min-height: 75vh;
   }
 }
 

@@ -1,3 +1,4 @@
+import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { ThemeService } from '@sharedServices/utility/theme.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
@@ -16,6 +17,7 @@ import { map, switchMap, take, tap } from 'rxjs/operators';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IAddressStaking } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
+import { TransactionView } from '@sharedModels/transaction-view';
 
 @Component({
   selector: 'opdex-wallet',
@@ -40,7 +42,8 @@ export class WalletComponent implements OnInit {
     private _liquidityPoolService: LiquidityPoolsService,
     private _walletsService: WalletsService,
     private _router: Router,
-    private _theme: ThemeService
+    private _theme: ThemeService,
+    private _sidebar: SidenavService
   ) {
     this.wallet = this._context.getUserContext();
     this.getWalletBalances(10);
@@ -165,6 +168,10 @@ export class WalletComponent implements OnInit {
         }),
         take(1)
       ).subscribe(response => this.walletBalances = response);
+  }
+
+  handleTxOption($event: TransactionView) {
+    this._sidebar.openSidenav($event);
   }
 
   ngOnInit(): void {

@@ -1,0 +1,25 @@
+<div class="row justify-content-end">
+  <div class="col">
+    <button mat-raised-button class="big-button swap-button" (click)="selectOption(transactionViews.swap)">
+      <mat-icon>{{icons.swap}}</mat-icon>
+    </button>
+  </div>
+
+  <div class="col">
+    <button mat-raised-button class="big-button provide-button" (click)="selectOption(transactionViews.provide)">
+      <mat-icon>{{icons.provide}}</mat-icon>
+    </button>
+  </div>
+
+  <div class="col" *ngIf="!hideStaking">
+    <button mat-raised-button class="big-button stake-button" (click)="selectOption(transactionViews.stake)" [disabled]="disableStaking">
+      <mat-icon>{{icons.staking}}</mat-icon>
+    </button>
+  </div>
+
+  <div class="col" *ngIf="!hideMining">
+    <button mat-raised-button class="big-button mine-button" (click)="selectOption(transactionViews.mine)" [disabled]="disableMining">
+      <mat-icon>{{icons.mining}}</mat-icon>
+    </button>
+  </div>
+</div>

@@ -22,15 +22,15 @@
 .dark-mode {
   #side-nav {
     border-right: 1px solid #292929;
-    background: $dark-primary;
+    background: #1b192f;
 
     .wallet-indicator {
-      border: .2em solid $dark-primary;
+      border: .2em solid #1b192f;
     }
 
     .navbar-pin {
       &.mat-mini-fab {
-        background: $dark-primary;
+        background: #1b192f;
         border: 1px solid #292929;
         color: #fff;
       }

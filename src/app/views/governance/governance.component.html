@@ -1,15 +1,13 @@
-<div class="governance page-container" *ngIf="governance">
+<div class="header-section pt-5 pb-5">
   <div class="container">
-    <div class="row">
-      <div class="col-4">
-        <h1 class="text-shadow mb-3">
-          <opdex-copy-button [tooltip]="governance?.address" [value]="governance?.address" icon="link"></opdex-copy-button>
-          <span>Governance</span>
-        </h1>
+    <div class="row mb-4">
+      <div class="col-12">
+        <h1 class="mb-0">Governance</h1>
+        <div class="light" style="font-size: 10px;">{{governance?.address}}</div>
       </div>
     </div>
 
-    <div class="row">
+    <div class="row" *ngIf="governance">
       <div class="col-12 col-md-6 col-lg-4 col-xl-3">
         <opdex-card>
           <div class="d-flex flex-column justify-content-between">
@@ -55,11 +53,15 @@
         </opdex-card>
       </div>
     </div>
+  </div>
+</div>
 
+<div class="standard-section pt-5">
+  <div class="container">
     <ng-container *ngIf="nominatedPools$ | async as nominatedPools">
-      <div class="row mt-3" *ngIf="nominatedPools.length">
+      <div class="row" *ngIf="nominatedPools.length">
         <div class="col-12">
-          <h2 class="text-shadow d-flex align-items-center">
+          <h2 class="d-flex align-items-center">
             <mat-icon class="stake mr-2">verified_user</mat-icon>
             Nominated Liquidity Pools
           </h2>
@@ -75,9 +77,9 @@
 
 
     <ng-container *ngIf="miningPools$ | async as miningPools">
-      <div class="row" *ngIf="miningPools.length">
+      <div class="row mt-4" *ngIf="miningPools.length">
         <div class="col-12">
-          <h2 class="text-shadow d-flex align-items-center">
+          <h2 class="d-flex align-items-center">
             <mat-icon class="mine mr-2">whatshot</mat-icon>
             Active Liquidity Mining
           </h2>

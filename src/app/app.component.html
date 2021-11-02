@@ -9,7 +9,9 @@
       [fixedBottomGap]="0"
       [mode]="sidenavMode"
       [autoFocus]="false">
-      <opdex-tx-sidebar (onModeChange)="handleSidenavModeChange($event)" [message]="message"></opdex-tx-sidebar>
+      <div style="padding-top: 25px; padding-left: 10px; padding-right: 10px;">
+        <opdex-tx-sidebar (onModeChange)="handleSidenavModeChange($event)" [message]="message"></opdex-tx-sidebar>
+      </div>
     </mat-sidenav>
 
     <mat-sidenav-content>
@@ -20,8 +22,6 @@
 
         <div class="animation-container" style="min-height: 100vh;">
           <div id="page-content">
-            <opdex-status-bar [menuOpen]="menuOpen" (onMenuToggle)="toggleMobileMenu($event)"></opdex-status-bar>
-
             <div class="mobile-nav" [ngClass]="{'open': menuOpen}">
               <opdex-side-nav (onRouteChanged)="handleRouteChanged($event)"></opdex-side-nav>
             </div>
@@ -30,19 +30,17 @@
               <router-outlet #outlet="outlet"></router-outlet>
             </div>
 
-            <div class="space-between"></div>
-
-            <opdex-footer></opdex-footer>
+            <div class="scroll-to-top show-scroll-top">
+              <opdex-hamburger [isOpen]="menuOpen" (onToggle)="toggleMobileMenu($event)"></opdex-hamburger>
+            </div>
           </div>
         </div>
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
 
-  <div class="splash" *ngIf="loading">
+  <div class="splash header-section" style="background-position: right" *ngIf="loading">
     <img class="loading-logo" src="/assets/logo-light-blue.png" alt="Opdex">
     <h1>OPDEX</h1>
   </div>
 </main>
-
-<div class="background"></div>

@@ -1,4 +1,4 @@
-import { TransactionEventTypes } from './../enums/transaction-events';
+import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { TransactionView } from "@sharedModels/transaction-view";
 import { Icons } from "../enums/icons";
 
