@@ -24,7 +24,7 @@ export class SideNavComponent implements OnDestroy {
   latestSyncedBlock$: Observable<IBlock>;
   icons = Icons;
   iconSizes = IconSizes;
-  network: Network;
+  network: string;
 
   constructor(
     private _context: UserContextService,
