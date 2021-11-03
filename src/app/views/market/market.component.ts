@@ -56,6 +56,7 @@ export class MarketComponent implements OnInit {
   selectedChart = this.chartOptions[0];
   tokensFilter: TokensFilter;
   liquidityPoolsFilter: LiquidityPoolsFilter;
+  icons = Icons;
 
   constructor(
     private _marketsService: MarketsService,

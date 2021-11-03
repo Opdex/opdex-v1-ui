@@ -10,16 +10,14 @@ export class TradeComponent {
   message: ISidenavMessage;
 
   constructor() {
-    this.message = {
-      view: TransactionView.swap,
-      data: { }
-    } as ISidenavMessage;
+    this.setMessage(TransactionView.swap);
   }
 
   handleTxOption($event: TransactionView) {
-    this.message = {
-      view: $event,
-      data: { }
-    } as ISidenavMessage;
+    this.setMessage($event);
+  }
+
+  private setMessage(view: TransactionView) {
+    this.message = { view } as ISidenavMessage;
   }
 }

@@ -7,9 +7,9 @@
       </div>
     </div>
 
-    <div class="scrollable-row">
+    <div class="row">
       <ng-container *ngFor="let statCard of statCards">
-        <div *ngIf="statCard.show" class="scrollable-card">
+        <div *ngIf="statCard.show" class="col-12 col-md-6 col-xl-3">
           <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
         </div>
       </ng-container>

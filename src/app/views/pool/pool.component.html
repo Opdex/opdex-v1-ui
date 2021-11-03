@@ -1,14 +1,14 @@
-<div class="header-section" *ngIf="pool">
+<div class="header-section">
   <div class="container">
     <div class="row align-items-center">
       <div class="col-12 col-lg-6 col-xl-8">
-        <h1 class="mb-0">{{pool.token.src.symbol}}/{{pool.token.crs.symbol}}</h1>
+        <h1 class="mb-0">{{pool?.token?.src?.symbol || 'XYZ'}}/{{pool?.token?.crs?.symbol || 'CRS'}}</h1>
         <div class="light" style="font-size: 10px;">{{pool?.address}}</div>
 
         <div class="chip-group mt-2">
-          <div class="chip blue">{{pool.transactionFee * 100}}% Fee</div>
-          <div class="chip purple" *ngIf="pool.staking?.isNominated"><mat-icon>{{icons.staking}}</mat-icon> Nominated</div>
-          <div class="chip red" *ngIf="pool.mining?.isActive"><mat-icon>{{icons.mining}}</mat-icon> Mining</div>
+          <div class="chip blue">{{pool?.transactionFee * 100}}% Fee</div>
+          <div class="chip purple" *ngIf="pool?.staking?.isNominated"><mat-icon>{{icons.staking}}</mat-icon> Nominated</div>
+          <div class="chip red" *ngIf="pool?.mining?.isActive"><mat-icon>{{icons.mining}}</mat-icon> Mining</div>
         </div>
       </div>
 
@@ -19,73 +19,23 @@
 
     <div class="row">
       <div class="col-12 col-md-6 col-xl-3">
-        <opdex-card>
-          <small class="light">{{pool.token.src.name}}</small>
-          <div class="d-flex align-items-center justify-content-between">
-            <h2 class=" mb-0 d-inline">
-              <a class="body-default" style="text-decoration: none; font-weight: 300;" href="javascript:void(0)" routerLink="/tokens/{{pool.token.src.address}}">{{pool.token.src.symbol}}</a>
-            </h2>
-
-            <div class="d-flex flex-row align-items-end">
-              <h3 class="mb-0 mr-2" style="font-weight: 300;">${{pool.token.src.summary.priceUsd | shortNumber}}</h3>
-              <opdex-change-indicator [value]="pool.token.src.summary.dailyPriceChangePercent" size="s" *ngIf="pool.token.src.summary.dailyPriceChangePercent !== null && pool.token.src.summary.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
-            </div>
-          </div>
-
-          <div class="d-flex flex-row justify-content-between mt-2">
-            <div class="d-flex align-items-center">
-              <mat-icon color="primary" class="mr-2 tiny">{{icons.lock}}</mat-icon>
-              <h5 class="d-flex align-items-end mb-0">
-                <span style="font-weight: 400;">{{pool.reserves.src | shortNumber}}</span>
-              </h5>
-            </div>
-
-            <div class="d-flex align-items-center">
-              <mat-icon color="primary" class="mr-2 tiny">{{icons.swap}}</mat-icon>
-              <h5 class="d-flex align-items-end mb-0">
-                <span style="font-weight: 400;">{{pool.cost.crsPerSrc.close | shortNumber }}</span>
-                <small class="ml-1">{{pool.token.crs.symbol}}</small>
-              </h5>
-            </div>
-          </div>
-        </opdex-card>
+        <opdex-liquidity-pool-token-card
+          [token]="pool?.token?.src"
+          [reserves]="pool?.reserves?.src"
+          [swapRate]="pool?.cost?.crsPerSrc?.close"
+          [swapToken]="pool?.token?.crs"></opdex-liquidity-pool-token-card>
       </div>
 
       <div class="col-12 col-md-6 col-xl-3">
-        <opdex-card>
-          <small class="light">{{pool.token.crs.name}}</small>
-          <div class="d-flex align-items-center justify-content-between">
-            <h2 class=" mb-0 d-inline">
-              <a class="body-default" style="text-decoration: none; font-weight: 300;" href="javascript:void(0)" routerLink="/tokens/{{pool.token.crs.address}}">{{pool.token.crs.symbol}}</a>
-            </h2>
-
-            <div class="d-flex flex-row align-items-end">
-              <h3 class="mb-0 mr-2" style="font-weight: 300;">${{pool.token.crs.summary.priceUsd | shortNumber}}</h3>
-              <opdex-change-indicator [value]="pool.token.crs.summary.dailyPriceChangePercent" size="s" *ngIf="pool.token.crs.summary.dailyPriceChangePercent !== null && pool.token.crs.summary.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
-            </div>
-          </div>
-
-          <div class="d-flex flex-row justify-content-between mt-2">
-            <div class="d-flex align-items-center">
-              <mat-icon color="primary" class="mr-2 tiny">{{icons.lock}}</mat-icon>
-              <h5 class="d-flex align-items-end mb-0">
-                <span style="font-weight: 400;">{{pool.reserves.crs | shortNumber}}</span>
-              </h5>
-            </div>
-
-            <div class="d-flex align-items-center">
-              <mat-icon color="primary" class="mr-2 tiny">{{icons.swap}}</mat-icon>
-              <h5 class="d-flex align-items-end mb-0">
-                <span style="font-weight: 400;">{{pool.cost.srcPerCrs.close | shortNumber}}</span>
-                <small class="ml-1">{{pool.token.src.symbol}}</small>
-              </h5>
-            </div>
-          </div>
-        </opdex-card>
+        <opdex-liquidity-pool-token-card
+          [token]="pool?.token?.crs"
+          [reserves]="pool?.reserves?.crs"
+          [swapRate]="pool?.cost?.srcPerCrs?.close"
+          [swapToken]="pool?.token?.src"></opdex-liquidity-pool-token-card>
       </div>
     </div>
 
-    <div class="row" *ngIf="statCards.length > 0">
+    <div class="row" *ngIf="statCards?.length > 0">
       <ng-container *ngFor="let statCard of statCards; let i = index">
         <div *ngIf="statCard.show" class="col-sm-12 col-md">
           <opdex-card>

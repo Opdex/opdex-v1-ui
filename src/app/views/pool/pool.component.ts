@@ -31,13 +31,8 @@ export class PoolComponent implements OnInit, OnDestroy {
   poolAddress: string;
   pool: ILiquidityPoolSummary;
   poolHistory: LiquidityPoolHistory;
-  crsBalance: IAddressBalance;
-  srcBalance$: Observable<IAddressBalance>;
-  transactions: any[];
-  walletBalance: any;
   subscription = new Subscription();
   routerSubscription = new Subscription();
-  copied: boolean;
   transactionsRequest: ITransactionsRequest;
   chartData: any[];
   positions: any[];

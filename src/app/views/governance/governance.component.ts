@@ -98,11 +98,7 @@ export class GovernanceComponent implements OnInit, OnDestroy {
     this._platformApiService
       .rewardMiningPoolsQuote(this.governance.address, payload)
         .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => {
-          this._bottomSheet.open(ReviewQuoteComponent, {
-            data: quote
-          });
-        });
+        .subscribe((quote: ITransactionQuote) => this._bottomSheet.open(ReviewQuoteComponent, { data: quote }));
   }
 
   ngOnDestroy() {
