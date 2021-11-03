@@ -2,7 +2,7 @@
   <div class="tx-container">
     <div class="d-flex flex-row align-items-center w-100 mb-1">
       <div class="icon-container">
-        <mat-icon [ngClass]="iconSizes.small" [class]="tx.transactionType?.iconColor || 'error'">{{tx.transactionType?.icon || icons.error}}</mat-icon>
+        <mat-icon [ngClass]="[iconSizes.small, tx.transactionType?.iconColor || 'error']">{{tx.transactionType?.icon || icons.error}}</mat-icon>
       </div>
 
       <div class="w-100 d-flex light justify-content-between">

@@ -18,11 +18,11 @@
           <mat-option *ngFor="let key of publicKeys$ | async" [value]="key">
             <div class="d-flex justify-content-between align-items-center">
               <small style="font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{key}}</small>
-              <button mat-icon-button color="warn" [class]="iconSizes.tiny" (click)="deletePublicKey(key)"><mat-icon>{{icons.delete}}</mat-icon></button>
+              <button mat-icon-button color="warn" [ngClass]="iconSizes.tiny" (click)="deletePublicKey(key)"><mat-icon>{{icons.delete}}</mat-icon></button>
             </div>
           </mat-option>
         </mat-autocomplete>
-      </mat-form-field>S
+      </mat-form-field>
 
       <mat-checkbox
         class="mt-3"

@@ -39,7 +39,7 @@
     </mat-form-field>
 
     <div class="switch">
-      <button mat-icon-button [class]="iconSizes.small" (click)="switch()"><mat-icon>{{icons.down}}</mat-icon></button>
+      <button mat-icon-button [ngClass]="iconSizes.small" (click)="switch()"><mat-icon>{{icons.down}}</mat-icon></button>
     </div>
 
     <opdex-input-control *ngIf="!changeTokenOut" [prefixIcon]="icons.add" label="{{!tokenInExact ? 'Buy Exactly' : 'Buy'}}" [formControl]="tokenOutAmount" [suffix]="tokenOutDetails?.symbol || 'Select Token'" (handleChangeToken)="changeToken('tokenOut')" [numbersOnly]="true">

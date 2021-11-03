@@ -41,6 +41,6 @@
   </div>
 
   <div class="refresh-container" [ngClass]="{'refreshAvailable': refreshAvailable}" >
-    <button mat-flat-button color="primary" (click)="refresh()">Refresh <mat-icon [class]="iconSizes.tiny">{{icons.refresh}}</mat-icon></button>
+    <button mat-flat-button color="primary" (click)="refresh()">Refresh <mat-icon [ngClass]="iconSizes.tiny">{{icons.refresh}}</mat-icon></button>
   </div>
 </opdex-card>

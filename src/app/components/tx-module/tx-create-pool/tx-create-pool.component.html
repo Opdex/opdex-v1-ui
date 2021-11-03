@@ -16,12 +16,12 @@
 
       <ng-container *ngIf="form.valid && isTokenKnown == false">
         <div class="d-flex flex-row ml-1 align-items-center" *ngIf="isValidToken !== false">
-          <mat-icon [class]="iconSizes.tiny" color="warn">{{icons.error}}</mat-icon>
+          <mat-icon [ngClass]="iconSizes.tiny" color="warn">{{icons.error}}</mat-icon>
           <span class="ml-2">Unknown token, please validate</span>
         </div>
 
         <div *ngIf="isValidToken === false" class="row d-flex flex-row ml-1 align-items-center">
-          <mat-icon [class]="iconSizes.tiny" color="warn">{{icons.error}}</mat-icon>
+          <mat-icon [ngClass]="iconSizes.tiny" color="warn">{{icons.error}}</mat-icon>
           <span class="ml-2">Invalid Token</span>
         </div>
 

@@ -3,7 +3,7 @@
 
   <div class="d-flex flex-row align-items-center justify-content-end w-100">
     <div *ngIf="context?.wallet && pendingTransactions.length > 0">
-      <button mat-icon-button [matMenuTriggerFor]="qMenu" matTooltip="Pending Transactions" color="{{ pendingTransactions.length > 0 ? 'primary' : '' }}" [class]="iconSizes.tiny">
+      <button mat-icon-button [matMenuTriggerFor]="qMenu" matTooltip="Pending Transactions" color="{{ pendingTransactions.length > 0 ? 'primary' : '' }}" [ngClass]="iconSizes.tiny">
         <mat-icon>{{icons.send}}</mat-icon>
       </button>
 
@@ -25,19 +25,19 @@
     </div>
 
     <ng-container *ngIf="theme$ | async as theme">
-      <button mat-icon-button [class]="iconSizes.small"
+      <button mat-icon-button [ngClass]="iconSizes.small"
         (click)="toggleTheme(theme === 'dark-mode' ? 'light-mode' : 'dark-mode')"
         matTooltip="{{theme === 'dark-mode' ? 'Dark Mode' : 'Light Mode'}}">
         <mat-icon>{{theme === 'dark-mode' ? icons.darkMode : icons.lightMode}}</mat-icon>
       </button>
     </ng-container>
 
-    <button mat-icon-button [class]="iconSizes.small" (click)="networkTooltip.toggle()">
+    <button mat-icon-button [ngClass]="iconSizes.small" (click)="networkTooltip.toggle()">
       <mat-icon [matTooltip]="network" #networkTooltip="matTooltip">{{icons.languages}}</mat-icon>
     </button>
 
     <ng-container *ngIf="latestSyncedBlock$ | async as block">
-      <button mat-icon-button [class]="iconSizes.small" (click)="blockTooltip.toggle()">
+      <button mat-icon-button [ngClass]="iconSizes.small" (click)="blockTooltip.toggle()">
         <mat-icon matTooltip="Block #{{block.height | formatNumber:0}}" #blockTooltip="matTooltip">{{icons.block}}</mat-icon>
       </button>
     </ng-container>
