@@ -9,6 +9,7 @@ import { ITokensResponse } from '@sharedModels/platform-api/responses/tokens/tok
 import { Observable, forkJoin, Subscription } from 'rxjs';
 import { switchMap, map, take } from 'rxjs/operators';
 import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
+import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
@@ -23,6 +24,7 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
   paging: ICursor;
   token$: Observable<ITokensResponse>;
   subscription: Subscription;
+  icons = Icons;
   iconSizes = IconSizes;
 
   @ViewChild(MatSort) sort: MatSort;

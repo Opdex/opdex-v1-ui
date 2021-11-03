@@ -22,6 +22,7 @@ import { SwapAmountInQuoteRequest } from '@sharedModels/platform-api/requests/to
 import { SwapAmountOutQuoteRequest } from '@sharedModels/platform-api/requests/tokens/swap-amount-out-quote-request';
 import { ISwapAmountOutQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-out-quote-response.interface';
 import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-tx-swap',
@@ -34,6 +35,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
 
   @Input() data: any;
   icons = Icons;
+  iconSizes = IconSizes;
   tokenInExact = true;
   form: FormGroup;
   tokenInChanges$: Subscription;

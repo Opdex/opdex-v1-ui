@@ -2,6 +2,7 @@ import { IVaultCertificates } from '@sharedModels/platform-api/responses/vaults/
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-vault-certificates-table',
@@ -14,6 +15,7 @@ export class VaultCertificatesTableComponent implements OnChanges {
   @Input() certificates: IVaultCertificates;
   previous: string;
   next: string;
+  icons = Icons;
 
   @Output() onPageChange: EventEmitter<string> = new EventEmitter();
   @ViewChild(MatSort) sort: MatSort;

@@ -9,6 +9,7 @@ import { Observable, Subscription } from 'rxjs';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Icons } from 'src/app/enums/icons';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-tx-sidebar',
@@ -27,6 +28,7 @@ export class TxSidebarComponent implements OnChanges {
   subscription = new Subscription();
   context: any;
   icons = Icons;
+  iconSizes = IconSizes;
   pool: ILiquidityPoolSummary;
 
   constructor(

@@ -7,6 +7,7 @@ import { TransactionReceipt } from '@sharedModels/transaction-receipt';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { Subscription } from 'rxjs';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-distribute-transaction-summary',
@@ -17,6 +18,7 @@ export class DistributeTransactionSummaryComponent implements OnChanges, OnDestr
   @Input() transaction: TransactionReceipt;
 
   icons = Icons;
+  iconSizes = IconSizes;
   governanceAmount: FixedDecimal;
   vaultAmount: FixedDecimal;
   token: IToken;

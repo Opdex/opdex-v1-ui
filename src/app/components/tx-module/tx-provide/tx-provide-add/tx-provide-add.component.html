@@ -27,7 +27,7 @@
     </opdex-input-control>
 
     <div class="toggle-additional">
-      <button mat-icon-button color="primary" class="small" (click)="toggleShowMore(!showMore)" type="button"><mat-icon>{{showMore ? 'remove' : 'add'}}</mat-icon></button>
+      <button mat-icon-button color="primary" [ngClass]="iconSizes.small" (click)="toggleShowMore(!showMore)" type="button"><mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon></button>
     </div>
 
     <div class="additional" *ngIf="showMore">

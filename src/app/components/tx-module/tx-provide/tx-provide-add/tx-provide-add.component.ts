@@ -20,6 +20,7 @@ import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { IAddLiquidityRequest, AddLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/add-liquidity-request';
 import { IAddLiquidityAmountInQuoteRequest } from '@sharedModels/platform-api/requests/quotes/add-liquidity-amount-in-quote-request';
 import { IProvideAmountIn } from '@sharedModels/platform-api/responses/liquidity-pools/provide-amount-in.interface';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-tx-provide-add',
@@ -29,6 +30,7 @@ import { IProvideAmountIn } from '@sharedModels/platform-api/responses/liquidity
 export class TxProvideAddComponent extends TxBase implements OnInit {
   @Input() pool: ILiquidityPoolSummary;
   icons = Icons;
+  iconSizes = IconSizes;
   txHash: string;
   subscription = new Subscription();
   allowance: AllowanceValidation;

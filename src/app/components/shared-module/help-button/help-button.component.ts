@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { HelpInfo } from '@sharedComponents/modals-module/help-modal/help-info';
 import { HelpModalComponent } from '@sharedComponents/modals-module/help-modal/help-modal.component';
 import { Subscription } from 'rxjs';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
 
 @Component({
@@ -16,6 +17,7 @@ export class HelpButtonComponent {
   @Input() info: HelpInfo = { paragraph: 'Paragraph explaining the statistic', title: 'Help Title' };
   helpIconSubscription: Subscription = new Subscription();
   icons = Icons;
+  iconSizes = IconSizes;
 
   constructor(public dialog: MatDialog) { }
 

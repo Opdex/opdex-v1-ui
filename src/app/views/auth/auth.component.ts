@@ -8,6 +8,8 @@ import { take, catchError, startWith, map } from 'rxjs/operators';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Router } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
+import { Icons } from 'src/app/enums/icons';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-auth',
@@ -23,6 +25,8 @@ export class AuthComponent implements OnInit, OnDestroy {
   publicKeys: string[];
   publicKeys$: Observable<string[]>;
   storageKey: string;
+  icons = Icons;
+  iconSizes = IconSizes;
 
   get publicKey(): FormControl {
     return this.form.get('publicKey') as FormControl;

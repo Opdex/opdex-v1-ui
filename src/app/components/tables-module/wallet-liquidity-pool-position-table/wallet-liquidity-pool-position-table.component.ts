@@ -7,6 +7,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
+import { Icons } from 'src/app/enums/icons';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-wallet-liquidity-pool-position-table',
@@ -16,6 +18,9 @@ import { SidenavService } from '@sharedServices/utility/sidenav.service';
 export class WalletLiquidityPoolPositionTableComponent implements OnChanges, AfterViewInit {
   displayedColumns: string[];
   dataSource: MatTableDataSource<AddressPosition>;
+  icons = Icons;
+  iconSizes = IconSizes;
+
   @Input() positions: AddressPosition[];
   @Input() pool: ILiquidityPoolSummary;
 

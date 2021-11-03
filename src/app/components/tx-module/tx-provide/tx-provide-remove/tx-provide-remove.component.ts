@@ -15,6 +15,7 @@ import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-requi
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { DecimalStringRegex } from '@sharedLookups/regex';
 import { IRemoveLiquidityRequest, RemoveLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/remove-liquidity-request';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-tx-provide-remove',
@@ -24,6 +25,7 @@ import { IRemoveLiquidityRequest, RemoveLiquidityRequest } from '@sharedModels/p
 export class TxProvideRemoveComponent extends TxBase {
   @Input() pool: ILiquidityPoolSummary;
   icons = Icons;
+  iconSizes = IconSizes;
   form: FormGroup;
   context: any;
   allowance$: Subscription;

@@ -11,6 +11,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Observable, Subscription, interval, of } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
+import { Icons } from 'src/app/enums/icons';
 import { TransactionView } from '@sharedModels/transaction-view';
 
 @Component({
@@ -25,6 +26,7 @@ export class TokenComponent implements OnInit {
   tokenHistory: TokenHistory;
   chartData: any[];
   iconSizes = IconSizes;
+  icons = Icons;
   chartOptions = [
     {
       type: 'line',

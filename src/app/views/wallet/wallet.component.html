@@ -21,7 +21,7 @@
           <ng-container toolbar>
             <div class="w-100 justify-content-between d-flex align-items-center">
               <h4 class="mb-0">Summary</h4>
-              <button mat-icon-button (click)="logout()" class="small"><mat-icon class="mine ml-1 small">exit_to_app</mat-icon></button>
+              <button mat-icon-button (click)="logout()" class="small"><mat-icon [ngClass]="iconSizes.small" class="mine ml-1">{{icons.exit}}</mat-icon></button>
             </div>
           </ng-container>
 
@@ -41,7 +41,7 @@
           <div class="preferences">
             <div class="d-flex justify-content-between align-items-center">
               <h5 class="mb-0 light">Preferences</h5>
-              <button mat-icon-button (click)="togglePreferences()" color="primary"><mat-icon>{{showPreferences ? 'remove' : 'add'}}</mat-icon></button>
+              <button mat-icon-button (click)="togglePreferences()" color="primary"><mat-icon>{{showPreferences ? icons.remove : icons.add}}</mat-icon></button>
             </div>
           </div>
 
@@ -50,11 +50,11 @@
               <label class="d-block mb-3">Theme</label>
 
               <button mat-stroked-button class="mr-2 small" (click)="toggleTheme('light-mode')" color="{{ wallet.preferences.theme === 'light-mode' ? 'primary' : '' }}" >
-                <mat-icon>brightness_7</mat-icon> Light Mode
+                <mat-icon>{{icons.lightMode}}</mat-icon> Light Mode
               </button>
 
               <button mat-stroked-button class="small" (click)="toggleTheme('dark-mode')" color="{{ wallet.preferences.theme === 'dark-mode' ? 'primary' : '' }}">
-                <mat-icon>brightness_3</mat-icon> Dark Mode
+                <mat-icon>{{icons.darkMode}}</mat-icon> Dark Mode
               </button>
             </div>
 
@@ -68,12 +68,12 @@
 
       <div class="col-12 col-lg-6 col-xl-8">
         <div class="mb-3">
-          <h4 class="mb-0 d-flex align-items-center"><mat-icon color="primary" class="mr-2">toll</mat-icon>Balances</h4>
+          <h4 class="mb-0 d-flex align-items-center"><mat-icon color="primary" class="mr-2">{{icons.tokens}}</mat-icon>Balances</h4>
           <opdex-wallet-balances-table [records]="walletBalances" (onPageChange)="handleBalancesPageChange($event)"></opdex-wallet-balances-table>
         </div>
 
         <div class="mb-3">
-          <h4 class="mb-0 d-flex align-items-center"><mat-icon class="mine mr-2">whatshot</mat-icon>Mining Positions</h4>
+          <h4 class="mb-0 d-flex align-items-center"><mat-icon class="mine mr-2">{{icons.mining}}</mat-icon>Mining Positions</h4>
           <opdex-wallet-mining-positions-table [records]="miningPositions" (onPageChange)="handleMiningPositionsPageChange($event)"></opdex-wallet-mining-positions-table>
         </div>
 

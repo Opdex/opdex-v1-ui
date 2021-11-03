@@ -19,7 +19,7 @@
     <mat-form-field floatLabel="always" *ngIf="changeTokenIn">
       <mat-label>Sell Token</mat-label>
 
-      <button mat-icon-button matPrefix type="button" class="mr-2" disabled><mat-icon>link</mat-icon></button>
+      <button mat-icon-button matPrefix type="button" class="mr-2" disabled><mat-icon>{{icons.link}}</mat-icon></button>
 
       <input matInput aria-label="Public Key" [matAutocomplete]="tokenInAutoComplete" [formControl]="tokenIn" type="text" #tokenInInput>
 
@@ -39,7 +39,7 @@
     </mat-form-field>
 
     <div class="switch">
-      <button mat-icon-button class="small" (click)="switch()"><mat-icon>arrow_downward</mat-icon></button>
+      <button mat-icon-button [ngClass]="iconSizes.small" (click)="switch()"><mat-icon>{{icons.down}}</mat-icon></button>
     </div>
 
     <opdex-input-control *ngIf="!changeTokenOut" [prefixIcon]="icons.add" label="{{!tokenInExact ? 'Buy Exactly' : 'Buy'}}" [formControl]="tokenOutAmount" [suffix]="tokenOutDetails?.symbol || 'Select Token'" (handleChangeToken)="changeToken('tokenOut')" [numbersOnly]="true">
@@ -57,7 +57,7 @@
     <mat-form-field floatLabel="always" *ngIf="changeTokenOut">
       <mat-label>Buy Token</mat-label>
 
-      <button mat-icon-button matPrefix type="button" class="mr-2" disabled><mat-icon>link</mat-icon></button>
+      <button mat-icon-button matPrefix type="button" class="mr-2" disabled><mat-icon>{{icons.link}}</mat-icon></button>
 
       <input matInput aria-label="Public Key" [matAutocomplete]="tokenOutAutoComplete" [formControl]="tokenOut" type="text" #tokenOutInput>
 
@@ -76,7 +76,7 @@
     </mat-form-field>
 
     <div class="toggle-additional">
-      <button mat-icon-button color="primary" class="small" (click)="toggleShowMore(!showMore)" type="button"><mat-icon>{{showMore ? 'remove' : 'add'}}</mat-icon></button>
+      <button mat-icon-button color="primary" [ngClass]="iconSizes.small" (click)="toggleShowMore(!showMore)" type="button"><mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon></button>
     </div>
 
     <div class="additional" *ngIf="showMore">
