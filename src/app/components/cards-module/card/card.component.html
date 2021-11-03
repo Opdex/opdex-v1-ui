@@ -1,9 +1,9 @@
 <mat-card class="card" [ngClass]="{'hidden': closable && closed, 'h-100': fullHeight}">
-  <div class="chart-toolbar" *ngIf="hasToolbar">
+  <div class="toolbar" *ngIf="hasToolbar">
     <ng-content select="[toolbar]" #toolbar></ng-content>
   </div>
 
-  <div class="foreground" [ngClass]="{'warn': warn, 'success': success, 'thin': thin, 'p-0': noPadding, 'has-toolbar': hasToolbar}">
+  <div class="foreground" [ngClass]="{'warn': warn, 'success': success, 'p-0': noPadding, 'has-toolbar': hasToolbar}">
     <ng-container *ngIf="closable">
       <button mat-icon-button [ngClass]="iconSizes.tiny" style="position: absolute; top: 10px; right: 10px;" (click)="close()"><mat-icon>{{icons.close}}</mat-icon></button>
     </ng-container>

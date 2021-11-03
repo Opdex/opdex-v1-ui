@@ -1,11 +1,9 @@
-<div class="vault page-container">
+<div class="header-section">
   <div class="container">
-    <div class="row">
-      <div class="col">
-        <h1 class="text-shadow mb-3">
-          <opdex-copy-button [tooltip]="vault?.address" [value]="vault?.address" [icon]="icons.link"></opdex-copy-button>
-          <span>Vault</span>
-        </h1>
+    <div class="row mb-4">
+      <div class="col-12">
+        <h1 class="mb-0">Vault</h1>
+        <div class="light" style="font-size: 10px;">{{vault?.address}}</div>
       </div>
     </div>
 
@@ -16,16 +14,16 @@
         </div>
       </ng-container>
     </div>
+  </div>
+</div>
 
+
+<div class="pt-5 pb-4 standard-section">
+  <div class="container">
     <div class="row">
       <div class="col">
-        <opdex-card [hasToolbar]="true" [thin]="true">
-          <ng-container toolbar>
-            <h4 class="d-inline mb-0">Certificates</h4>
-          </ng-container>
-
-          <opdex-vault-certificates-table [certificates]="certificates" (onPageChange)="handlePageChange($event)"></opdex-vault-certificates-table>
-        </opdex-card>
+        <h4 class="d-inline mb-0">Certificates</h4>
+        <opdex-vault-certificates-table [certificates]="certificates" (onPageChange)="handlePageChange($event)"></opdex-vault-certificates-table>
       </div>
     </div>
   </div>

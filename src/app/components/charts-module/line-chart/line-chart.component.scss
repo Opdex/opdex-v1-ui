@@ -1,12 +1,23 @@
 .chart-wrapper {
-  padding: 15px;
+  position: relative;
+  padding: 25px 0px;
+  display: block;
+  min-height: 275px;
+  width: 100%;
 
   .chart-container {
-    height: 275;
+    min-height: 275px;
 
     #chartdiv {
       width: 100%;
-      min-height: 275;
+      min-height: 275px;
+      opacity: 1;
+      transition: .15s ease-in;
+
+      &.loading-chart {
+        opacity: 0;
+        transition: .15s ease-in;
+      }
     }
   }
 }
@@ -18,6 +29,7 @@
   padding: 5px;
   align-items: center;
   justify-content: space-between;
+  height: 50px;
 
   .button-dropdown {
     display: block;
@@ -43,8 +55,23 @@
   }
 }
 
+.lock-overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9;
+}
 
-
+.lock-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
 
 @media (min-width: 320px) { }
 
@@ -68,8 +95,10 @@
   }
 
   .chart-wrapper {
+    min-height: 400px;
+
     .chart-container {
-      height: 400px;
+      min-height: 400px;
 
       #chartdiv {
         min-height: 400px;
@@ -78,4 +107,16 @@
   }
 }
 
-@media (min-width: 1200px) { }
+@media (min-width: 1440px) {
+  .chart-wrapper {
+    min-height: 500px;
+
+    .chart-container {
+      min-height: 500px;
+
+      #chartdiv {
+        min-height: 500px;
+      }
+    }
+  }
+}

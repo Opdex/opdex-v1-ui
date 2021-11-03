@@ -1,13 +1,13 @@
 import { AddressPosition } from '@sharedModels/address-position';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
-import { IconSizes } from './../../enums/icon-sizes';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { StatCardInfo } from "@sharedComponents/cards-module/stat-card/stat-card-info";
 import { ITransactionsRequest } from "@sharedModels/platform-api/requests/transactions/transactions-filter";
 import { IAddressBalance } from "@sharedModels/platform-api/responses/wallets/address-balance.interface";
 import { ILiquidityPoolSummary, ILiquidityPoolSnapshotHistory } from "@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface";
-import { TransactionView } from "@sharedModels/transaction-view";
+import { ISidenavMessage, TransactionView } from "@sharedModels/transaction-view";
 import { LiquidityPoolsService } from "@sharedServices/platform/liquidity-pools.service";
 import { SidenavService } from "@sharedServices/utility/sidenav.service";
 import { UserContextService } from "@sharedServices/utility/user-context.service";
@@ -78,6 +78,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   selectedChart = this.chartOptions[0];
   statCards: StatCardInfo[];
   context$: Observable<any>;
+  message: ISidenavMessage;
 
   constructor(
     private _route: ActivatedRoute,
@@ -88,7 +89,14 @@ export class PoolComponent implements OnInit, OnDestroy {
     private _title: Title,
     private _gaService: GoogleAnalyticsService,
     private _walletService: WalletsService
-  ) { }
+  ) {
+    // Listen to tx sidenav events
+    this.subscription.add(
+      this._sidenav.getStatus()
+        .subscribe(async (message: ISidenavMessage) => {
+          this.message = message;
+        }));
+  }
 
   async ngOnInit(): Promise<void> {
     this.init();
@@ -188,7 +196,7 @@ export class PoolComponent implements OnInit, OnDestroy {
         }
       },
       {
-        title: 'Staking Weight',
+        title: 'Staking',
         value: this.pool.staking?.weight,
         suffix: this.pool.token.staking?.symbol,
         change: this.pool.staking?.weightDailyChange || 0,
@@ -227,7 +235,7 @@ export class PoolComponent implements OnInit, OnDestroy {
         }
       },
       {
-        title: 'Liquidity Mining',
+        title: 'Mining',
         value: this.pool.mining?.tokensMining,
         suffix: this.pool.token.lp.symbol,
         show: this.pool.mining != null && (this.pool.mining?.isActive || this.pool.mining?.tokensMining !== '0.00000000'),
@@ -351,25 +359,12 @@ export class PoolComponent implements OnInit, OnDestroy {
     }
   }
 
-
   handleChartTimeChange($event: string) {
     this.getPoolHistory($event).pipe(take(1)).subscribe();
   }
 
-  provide() {
-    this._sidenav.openSidenav(TransactionView.provide, {pool: this.pool});
-  }
-
-  swap() {
-    this._sidenav.openSidenav(TransactionView.swap, {pool: this.pool});
-  }
-
-  stake() {
-    this._sidenav.openSidenav(TransactionView.stake, {pool: this.pool});
-  }
-
-  mine() {
-    this._sidenav.openSidenav(TransactionView.mine, {pool: this.pool});
+  handleTxOption($event: TransactionView) {
+    this._sidenav.openSidenav($event, {pool: this.pool});
   }
 
   ngOnDestroy() {

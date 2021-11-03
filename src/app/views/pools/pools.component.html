@@ -1,16 +1,20 @@
-<div id="pools" class="page-container">
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <h1 class="text-shadow mb-3">Liquidity Pools</h1>
-      </div>
-    </div>
+<div id="pools" *ngIf="pools$ | async as pools">
+  <div class="header-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-6 col-xl-8">
+          <h1 class="mb-0">Liquidity Pools</h1>
+        </div>
 
-    <ng-container *ngIf="pools$ | async as pools">
-      <div class="pools-by-volume" *ngIf="pools.topVolume.results.length">
+        <div class="d-none d-lg-block col-lg-6 col-xl-4">
+          <opdex-tx-buttons (onSelectOption)="handleTxOption($event)"></opdex-tx-buttons>
+        </div>
+      </div>
+
+      <div class="pools-by-volume mt-4 mb-4" *ngIf="pools.topVolume.results.length">
         <div class="row">
           <div class="col-12">
-            <h2 class="text-shadow d-flex align-items-center">
+            <h2 class="d-flex align-items-center">
               <mat-icon class="mr-2 primary">{{icons.bars}}</mat-icon> Top Volume
             </h2>
           </div>
@@ -25,9 +29,8 @@
 
       <div class="row" *ngIf="pools.mining.results.length">
         <div class="col-12">
-          <h2 class="text-shadow d-flex align-items-center">
-            <mat-icon class="mr-2 mine">{{icons.mining}}</mat-icon>
-            Liquidity Mining
+          <h2 class="d-flex align-items-center">
+            <mat-icon class="mr-2 mine">{{icons.mining}}</mat-icon> Liquidity Mining
           </h2>
 
           <div class="scrollable-row">
@@ -38,21 +41,29 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row d-lg-none mt-3">
         <div class="col-12">
-          <opdex-card [hasToolbar]="true" [thin]="true">
-            <ng-container toolbar>
-              <h4 class="d-inline mb-0">Liquidity Pools</h4>
-
-              <div class="button-group">
-                <button mat-icon-button color="primary" (click)="createPool()"><mat-icon>{{icons.add}}</mat-icon></button>
-              </div>
-            </ng-container>
-
-            <opdex-pools-table [filter]="topPoolsFilter"></opdex-pools-table>
-          </opdex-card>
+          <opdex-tx-buttons (onSelectOption)="handleTxOption($event)"></opdex-tx-buttons>
         </div>
       </div>
-    </ng-container>
+    </div>
+  </div>
+
+  <div class="standard-section pt-5 pm-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="d-flex flex-row align-items-center justify-content-between">
+            <h4 class="d-inline mb-0">Liquidity Pools</h4>
+
+            <div class="button-group">
+              <button mat-icon-button color="primary" (click)="createPool()"><mat-icon>{{icons.add}}</mat-icon></button>
+            </div>
+          </div>
+
+          <opdex-pools-table [filter]="topPoolsFilter"></opdex-pools-table>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

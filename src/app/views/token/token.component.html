@@ -1,22 +1,28 @@
-<div id="token" class="page-container">
-  <div class="container" *ngIf="token">
+<div class="header-section" *ngIf="token">
+  <div class="container">
+    <div class="row mb-3 justify-content-between align-items-center">
+      <div class="col-12 col-lg-6 col-xl-8">
+        <h1 class="mb-0">{{token.name}}</h1>
+        <div class="light" style="font-size: 10px;" *ngIf="token.address !== 'CRS'">{{token.address}}</div>
+      </div>
+
+      <div class="d-none d-lg-block col-lg-6 col-xl-4">
+        <opdex-tx-buttons (onSelectOption)="handleTxOption($event)" [hideStaking]="true" [hideMining]="true"></opdex-tx-buttons>
+      </div>
+    </div>
+
     <div class="row">
       <div class="col-12 col-xl-4">
         <opdex-card>
-          <p class="mb-2 light d-flex align-items-center">
-            <opdex-copy-button [tooltip]="token.address" [value]="token.address" [icon]="icons.link" [size]="iconSizes.small"></opdex-copy-button>
-            <span class="ml-2">{{token.name}}</span>
-          </p>
-
           <div class="d-flex justify-content-between">
             <div class="left">
-              <h1 class="text-shadow mb-0">
+              <h3 class="mb-0">
                 <span>{{token.symbol}}</span>
-              </h1>
+              </h3>
             </div>
 
             <div class="right d-flex flex-row align-items-end">
-              <h2 class="mb-0 mr-2">${{token.summary.priceUsd | shortNumber}}</h2>
+              <h4 class="mb-0 mr-2">${{token.summary.priceUsd | shortNumber}}</h4>
               <opdex-change-indicator style="padding-bottom: 2px;" [value]="token.summary.dailyPriceChangePercent" size="s" *ngIf="token.summary.dailyPriceChangePercent !== null && token.summary.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
             </div>
           </div>
@@ -24,22 +30,31 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-12 col-xl-8">
-        <opdex-card [noPadding]="true">
-          <opdex-line-chart
-                [chartData]="chartData"
-                [chartOptions]="chartOptions"
-                [selectedChart]="selectedChart"
-                title="{{selectedChart.category}}"
-                *ngIf="chartData"
-                (onTypeChange)="handleChartTypeChange($event)"
-                (onTimeChange)="handleChartTimeChange($event)"></opdex-line-chart>
-        </opdex-card>
+    <div class="row d-lg-none">
+      <div class="col-12">
+        <opdex-tx-buttons (onSelectOption)="handleTxOption($event)" [hideStaking]="true" [hideMining]="true"></opdex-tx-buttons>
       </div>
+    </div>
+  </div>
+</div>
 
-      <div class="col-12 col-xl-4">
-        <opdex-tx-feed [transactionRequest]="transactionRequest" size="s"></opdex-tx-feed>
+<div class="offset-section pb-3 pt-3">
+  <div class="container">
+    <opdex-line-chart
+      [chartData]="chartData"
+      [chartOptions]="chartOptions"
+      [selectedChart]="selectedChart"
+      title="{{selectedChart.category}}"
+      (onTypeChange)="handleChartTypeChange($event)"
+      (onTimeChange)="handleChartTimeChange($event)"></opdex-line-chart>
+  </div>
+</div>
+
+<div class="standard-section pt-5 pb-5 tx-bg blend-cards">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-6 col-xl-5">
+        <opdex-tx-feed [transactionRequest]="transactionRequest" size="l"></opdex-tx-feed>
       </div>
     </div>
   </div>

@@ -1,5 +1,5 @@
 <div id="tx-sidebar-container">
-  <div class="d-flex align-items-center justify-content-between mb-3">
+  <div class="d-flex align-items-center justify-content-between mb-3" *ngIf="showNavMenu">
     <!-- Empty div on purpose so the transaction type selector is centered even if the below button is hidden.-->
     <div style="width: 22px; height: 22px;">
       <button mat-icon-button color="primary" [ngClass]="iconSizes.small" (click)="toggleSidenavMode()" *ngIf="widescreen">
@@ -34,7 +34,7 @@
     </button>
   </div>
 
-  <mat-divider class="mb-3"></mat-divider>
+  <mat-divider class="mb-3" *ngIf="showNavMenu"></mat-divider>
 
   <div class="connect-wallet mb-3" *ngIf="!context?.wallet">
     <opdex-connect-wallet-card (onConnectWallet)="handleConnectWallet()"></opdex-connect-wallet-card>
@@ -42,9 +42,9 @@
 
   <div [ngSwitch]="message?.view">
     <opdex-tx-swap *ngSwitchCase="1" [data]="message?.data"></opdex-tx-swap>
-    <opdex-tx-provide *ngSwitchCase="2" [data]="message?.data"></opdex-tx-provide>
-    <opdex-tx-stake *ngSwitchCase="3" [data]="message?.data"></opdex-tx-stake>
-    <opdex-tx-mine *ngSwitchCase="4" [data]="message?.data"></opdex-tx-mine>
+    <opdex-tx-provide *ngSwitchCase="2" [data]="message?.data" (onPoolSelection)="handlePoolSelection($event)"></opdex-tx-provide>
+    <opdex-tx-stake *ngSwitchCase="3" [data]="message?.data" (onPoolSelection)="handlePoolSelection($event)"></opdex-tx-stake>
+    <opdex-tx-mine *ngSwitchCase="4" [data]="message?.data" (onPoolSelection)="handlePoolSelection($event)"></opdex-tx-mine>
     <opdex-tx-allowance *ngSwitchCase="5" [data]="message?.data"></opdex-tx-allowance>
     <opdex-tx-create-pool *ngSwitchCase="6" [data]="message?.data"></opdex-tx-create-pool>
   </div>

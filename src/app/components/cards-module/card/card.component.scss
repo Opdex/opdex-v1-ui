@@ -11,7 +11,7 @@
     height: 0px;
   }
 
-  .chart-toolbar {
+  .toolbar {
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -36,10 +36,6 @@
     &.success {
       background: rgb(43 255 0 / 23%);
       border: 1px solid $green-primary;
-    }
-
-    &.thin {
-      padding: 15px;
     }
   }
 

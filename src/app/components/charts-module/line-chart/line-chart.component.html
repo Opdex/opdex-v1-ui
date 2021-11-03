@@ -1,6 +1,6 @@
 <div class="chart-toolbar">
   <div class="details">
-    <a mat-button [matMenuTriggerFor]="menu">
+    <a mat-button [matMenuTriggerFor]="menu" class="pl-0 pr-0 mr-2">
       <h4 class="title d-inline">{{title}}</h4> <mat-icon class="ml-2">{{icons.arrowDropDown}}</mat-icon>
     </a>
 
@@ -33,8 +33,12 @@
 </div>
 
 <div class="chart-wrapper">
+  <div class="lock-overlay" *ngIf="locked"></div>
+  <button mat-icon-button (click)="toggleLock()" class="lock-button">
+    <mat-icon class="{{locked ? 'mine' : 'swap'}}">{{locked ? icons.lock : icons.unlock}}</mat-icon>
+  </button>
+
   <div #chartContainer class="chart-container w-100" (resized)="onResized($event)">
-    <div id="chartdiv" [hidden]="loading"></div>
+    <div id="chartdiv" [ngClass]="{'loading-chart': loading}"></div>
   </div>
 </div>
-

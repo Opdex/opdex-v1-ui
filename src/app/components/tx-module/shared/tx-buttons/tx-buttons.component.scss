@@ -1,0 +1,63 @@
+@import 'src/scss/colors';
+
+.big-button {
+  width: 100%;
+  padding: 5px;
+  border-radius: 8px;
+  min-width: auto;
+  transition: background .25s ease;
+
+  &:disabled {
+    .mat-icon {
+      opacity: .5;
+    }
+  }
+
+  &.swap-button {
+    background: rgba($blue-primary, .2) !important;
+
+    &:hover {
+      background: rgba($blue-primary, .4) !important;
+    }
+
+    .mat-icon {
+      color: $blue-primary;
+    }
+  }
+
+  &.provide-button {
+    background: rgba($green-primary, .2) !important;
+
+    &:hover {
+      background: rgba($green-primary, .4) !important;
+    }
+
+    .mat-icon {
+      color: $green-primary;
+    }
+  }
+
+  &.stake-button {
+    background: rgba($purple-primary, .2) !important;
+
+    &:hover {
+      background: rgba($purple-primary, .4) !important;
+    }
+
+    .mat-icon {
+      color: $purple-primary;
+    }
+  }
+
+  &.mine-button {
+    background: rgba($red-primary, .2) !important;
+
+    &:hover {
+      background: rgba($red-primary, .4) !important;
+    }
+
+    .mat-icon {
+      color: $red-primary;
+    }
+  }
+}

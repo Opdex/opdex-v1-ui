@@ -9,7 +9,7 @@ import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transa
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { Component, OnInit } from '@angular/core';
 import { Observable, Subscription, zip } from 'rxjs';
-import { map, switchMap, take, tap } from 'rxjs/operators';
+import { delay, map, switchMap, take, tap } from 'rxjs/operators';
 import { LiquidityPoolsFilter, LpOrderBy, MiningFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
 import { MarketsService } from '@sharedServices/platform/markets.service';
@@ -69,14 +69,14 @@ export class MarketComponent implements OnInit {
     this.tokensFilter = new TokensFilter({
       orderBy: 'DailyPriceChangePercent',
       direction: 'DESC',
-      limit: 5,
+      limit: 10,
       provisional: 'NonProvisional'
     });
 
     this.liquidityPoolsFilter = new LiquidityPoolsFilter({
       orderBy: LpOrderBy.Liquidity,
       direction: 'DESC',
-      limit: 5
+      limit: 10
     });
 
     const miningFilter = new LiquidityPoolsFilter({
@@ -171,6 +171,7 @@ export class MarketComponent implements OnInit {
   private getMarketHistory(timeSpan: string = '1Y'): Observable<void> {
     return this._marketsService.getMarketHistory(timeSpan)
       .pipe(
+        delay(1),
         map((marketHistory: IMarketSnapshot[]) => {
           this.marketHistory = new MarketHistory(marketHistory);
           this.handleChartTypeChange(this.selectedChart.category);
@@ -225,6 +226,10 @@ export class MarketComponent implements OnInit {
 
   handleChartTimeChange($event: string) {
     this.getMarketHistory($event).pipe(take(1)).subscribe();
+  }
+
+  handleTxOption($event: TransactionView) {
+    this._sidebar.openSidenav($event);
   }
 
   createPool() {

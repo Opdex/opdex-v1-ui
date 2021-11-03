@@ -22,7 +22,6 @@ import { GoogleAnalyticsService } from 'ngx-google-analytics';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { ISidenavMessage } from '@sharedModels/transaction-view';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
-import { SwUpdate } from '@angular/service-worker';
 
 @Component({
   selector: 'opdex-root',
@@ -39,7 +38,7 @@ export class AppComponent implements OnInit {
   context: any;
   network: string;
   menuOpen = false;
-  isPinned = false;
+  isPinned = true;
   message: ISidenavMessage;
   sidenavMode: 'over' | 'side' = 'over';
   hubConnection: HubConnection;
@@ -67,7 +66,7 @@ export class AppComponent implements OnInit {
       this._api.auth(environment.marketAddress, this.context?.wallet)
         .subscribe(jwt => {
           this._context.setToken(jwt);
-          setTimeout(() => this.loading = false, 1000);
+          setTimeout(() => this.loading = false, 1500);
         }));
   }
 

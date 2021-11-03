@@ -58,6 +58,7 @@ import { environment } from '@environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NotificationsModule } from '@sharedComponents/notifications-module/notifications.module';
+import { TradeComponent } from './views/trade/trade.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { NotificationsModule } from '@sharedComponents/notifications-module/noti
     WalletComponent,
     GovernanceComponent,
     VaultComponent,
-    AuthComponent
+    AuthComponent,
+    TradeComponent
   ],
   imports: [
     BrowserModule,

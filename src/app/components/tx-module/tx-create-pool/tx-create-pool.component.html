@@ -1,5 +1,5 @@
 <div class="create-pool">
-  <opdex-card [thin]="true">
+  <opdex-card>
     <form [formGroup]="form" name="create-pool-form" id="swap-form" (submit)="submit()">
       <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.link" label="Token" [formControl]="token" placeholder="Token Address..."></opdex-input-control>
       <ng-container *ngIf="isTokenKnown && isValidToken">

@@ -16,7 +16,7 @@ import { IconSizes } from 'src/app/enums/icon-sizes';
   styleUrls: ['./line-chart.component.scss'],
   providers: [ShortNumberPipe]
 })
-export class LineChartComponent implements OnInit, OnChanges {
+export class LineChartComponent implements OnChanges, OnInit {
   @ViewChild('chartContainer') container: ElementRef;
   @Input() title: string;
   @Input() chartData: any;
@@ -38,6 +38,7 @@ export class LineChartComponent implements OnInit, OnChanges {
   width: number;
   icons = Icons;
   iconSizes = IconSizes;
+  locked = true;
 
   constructor(private _theme: ThemeService, private _breakpointObserver: BreakpointObserver, private _shortNumber: ShortNumberPipe) {
     this.subscription.add(this._theme.getTheme()
@@ -51,9 +52,16 @@ export class LineChartComponent implements OnInit, OnChanges {
 
       this.subscription.add(
         this._breakpointObserver
-          .observe(['(min-width: 992px)'])
+          .observe(['(min-width: 992px)', '(min-width: 1440px)'])
           .subscribe((result: BreakpointState) => {
-            this.height = result.matches ? 400 : 275;
+
+            if (result.breakpoints['(min-width: 1440px)']) {
+              this.height = 500;
+            } else if (result.breakpoints['(min-width: 992px)']) {
+              this.height = 400;
+            } else {
+              this.height = 275;
+            }
 
             if (this.chart) {
               this.chart.resize(this.width, this.height);
@@ -62,39 +70,47 @@ export class LineChartComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.ngOnInit();
+    if (this.chartData !== null && this.chartData !== undefined && this.selectedChart) {
+      // Timeouts required for smooth loading w/ fade
+      setTimeout(() => {
+        if (this.chartOptions && this.selectedChart.type === 'line') {
+          this.clearSeries();
+          this.addLineSeries();
+          this.lineSeries.setData(this.chartData);
+        } else if (this.chartOptions && this.selectedChart.type === 'bar') {
+          this.clearSeries();
+          this.addVolumeSeries();
+          this.volumeSeries.setData(this.chartData);
+        } else if (this.chartOptions && this.selectedChart.type === 'candle') {
+          this.clearSeries();
+          this.addCandleStickSeries();
+          this.candleSeries.setData(this.chartData);
+        }
 
-    if (this.chartData && this.chartOptions) {
-      if (this.chartOptions && this.selectedChart.type === 'line') {
-        this.clearSeries();
-        this.addLineSeries();
-        this.lineSeries.setData(this.chartData);
-      } else if (this.chartOptions && this.selectedChart.type === 'bar') {
-        this.clearSeries();
-        this.addVolumeSeries();
-        this.volumeSeries.setData(this.chartData);
-      } else if (this.chartOptions && this.selectedChart.type === 'candle') {
-        this.clearSeries();
-        this.addCandleStickSeries();
-        this.candleSeries.setData(this.chartData);
-      }
+        this.applyChartOptions();
 
-      this.applyChartOptions();
+        if (this.loading) {
+          this.chart.timeScale().fitContent();
+          // this.chart.subscribeCrosshairMove(params => this.crosshairMovedHandler(params));
+        }
 
-      if (this.loading) {
-        // this.chart.subscribeCrosshairMove(params => this.crosshairMovedHandler(params));
-      }
-
-      this.setLastBarText();
-      this.chart.timeScale().fitContent()
-      this.loading = false;
+        this.setLastBarText();
+        this.loading = false;
+      });
     }
   }
 
   ngOnInit(): void {
-    if (!this.chart) {
-      this.chart = createChart('chartdiv');
-    }
+    // Timeouts required for smooth loading w/ fade
+    setTimeout(() => {
+      if (!this.chart) {
+        this.chart = createChart('chartdiv', this.options);
+      }
+    })
+  }
+
+  toggleLock() {
+    this.locked = !this.locked;
   }
 
   switchChartType(value: string) {
@@ -103,6 +119,7 @@ export class LineChartComponent implements OnInit, OnChanges {
 
   timeChange(value: string) {
     this.onTimeChange.emit(value);
+    this.loading = true;
   }
 
   private clearSeries() {
@@ -127,10 +144,9 @@ export class LineChartComponent implements OnInit, OnChanges {
 
   private addLineSeries() {
     this.lineSeries = this.chart.addAreaSeries({
-      lineColor: 'rgba(71, 188, 235, .7)',
-      lineWidth: <DeepPartial<LineWidth>>6,
-      topColor: 'transparent',
-      bottomColor: 'transparent',
+      lineColor: 'rgba(71, 188, 235, .6)',
+      lineWidth: <DeepPartial<LineWidth>>4,
+      topColor: 'rgba(71, 188, 235, .5)',
       priceLineVisible: true,
       lastValueVisible: false,
       priceFormat: {
@@ -177,20 +193,8 @@ export class LineChartComponent implements OnInit, OnChanges {
     return `${this.selectedChart.prefix || ''}${shortNumber}`;
   }
 
-  // crosshairMovedHandler(param: MouseEventParams): void {
-  //   if (param === undefined || param.time === undefined || param.point.x < 0 || param.point.y < 0) {
-  //     this.setLastBarText();
-  //   } else {
-  //     const data = param.seriesPrices.values().next().value;
-  //     const value = data?.close !== undefined ? data.close : data;
-  //     const decimals = this.selectedChart.decimals > 8 ? 8 : this.selectedChart.decimals
-
-  //     this.value = this.nFormatter(value,  decimals);
-  //   }
-  // }
-
   onResized(event: ResizedEvent) {
-    if (this.chart) {
+    if (this.chart !== undefined) {
       this.width = event.newWidth;
       this.chart.resize(event.newWidth, this.height);
       this.chart.timeScale().fitContent();
@@ -207,13 +211,25 @@ export class LineChartComponent implements OnInit, OnChanges {
   }
 
   private applyChartOptions() {
-    this.chart.applyOptions({
+    this.chart.applyOptions(this.options);
+
+    if (this.lineSeries) {
+      this.lineSeries.applyOptions({
+        bottomColor: this.theme === 'light-mode' ? 'rgba(255, 255, 255, .4)' : 'rgba(0, 0, 0, .1)',
+      })
+    }
+  }
+
+  public get options() {
+    return {
       grid: {
         vertLines: {
-          visible: false,
+          visible: true,
+          color: this.theme === 'light-mode' ? '#f1f1f1' : '#111125'
         },
         horzLines: {
-          visible: false,
+          visible: true,
+          color: this.theme === 'light-mode' ? '#f1f1f1' : '#111125'
         },
       },
       layout: {
@@ -232,14 +248,26 @@ export class LineChartComponent implements OnInit, OnChanges {
         borderVisible: false,
         alignLabels: true,
       },
-      handleScroll: false,
-      handleScale: false
-    });
+      handleScroll: true,
+      handleScale: true
+    }
   }
+
+  // crosshairMovedHandler(param: MouseEventParams): void {
+  //   if (param === undefined || param.time === undefined || param.point.x < 0 || param.point.y < 0) {
+  //     this.setLastBarText();
+  //   } else {
+  //     const data = param.seriesPrices.values().next().value;
+  //     const value = data?.close !== undefined ? data.close : data;
+  //     const decimals = this.selectedChart.decimals > 8 ? 8 : this.selectedChart.decimals
+
+  //     this.value = this.nFormatter(value,  decimals);
+  //   }
+  // }
 
   ngOnDestroy() {
     this.chart.remove();
-    // this.chart.unsubscribeCrosshairMove(this.crosshairMovedHandler);
     this.subscription.unsubscribe();
+    // this.chart.unsubscribeCrosshairMove(this.crosshairMovedHandler);
   }
 }

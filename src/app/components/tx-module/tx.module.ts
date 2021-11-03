@@ -47,6 +47,7 @@ import { ReviewQuoteComponent } from './shared/review-quote/review-quote.compone
 import { TxCreatePoolComponent } from './tx-create-pool/tx-create-pool.component';
 import { TxSidebarComponent } from './tx-sidebar/tx-sidebar.component';
 import { WalletPreviewComponent } from './shared/wallet-preview/wallet-preview.component';
+import { TxButtonsComponent } from './shared/tx-buttons/tx-buttons.component';
 
 
 @NgModule({
@@ -69,7 +70,8 @@ import { WalletPreviewComponent } from './shared/wallet-preview/wallet-preview.c
     ReviewQuoteComponent,
     TxCreatePoolComponent,
     TxSidebarComponent,
-    WalletPreviewComponent
+    WalletPreviewComponent,
+    TxButtonsComponent
   ],
   imports: [
     CommonModule,
@@ -105,7 +107,8 @@ import { WalletPreviewComponent } from './shared/wallet-preview/wallet-preview.c
     TxStakeComponent,
     TxAllowanceComponent,
     TxCreatePoolComponent,
-    TxSidebarComponent
+    TxSidebarComponent,
+    TxButtonsComponent
   ]
 })
 export class TransactionModule { }
