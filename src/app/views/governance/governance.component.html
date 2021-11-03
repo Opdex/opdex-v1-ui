@@ -41,7 +41,7 @@
                 <opdex-help-button class="mr-2" [info]="rewardsHelpInfo"></opdex-help-button> Rewards
               </h4>
 
-              <p class="rewards d-flex flex-row align-items-center" style="font-weight: 400;"><mat-icon color="warn" [ngClass]="iconSizes.small" class="mr-1">{{icons.mining}}</mat-icon>{{governance.totalRewardsPerPeriod | shortNumber}} {{governance.minedToken?.symbol}}</p>
+              <p class="rewards d-flex flex-row align-items-center" style="font-weight: 400;"><mat-icon [ngClass]="iconSizes.small" class="mine mr-1">{{icons.mining}}</mat-icon>{{governance.totalRewardsPerPeriod | shortNumber}} {{governance.minedToken?.symbol}}</p>
             </div>
 
             <mat-progress-bar mode="determinate" value="{{ ((12 - governance.periodsUntilRewardReset) / 12) * 100 }}"></mat-progress-bar>

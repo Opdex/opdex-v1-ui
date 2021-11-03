@@ -3,6 +3,7 @@
   flex-direction: column;
   height: 100vh;
   width: 100%;
+  overflow-y: auto;
 
   &:hover, &.pinned {
     .defi-blocks {

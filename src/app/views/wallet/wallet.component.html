@@ -21,7 +21,7 @@
           <ng-container toolbar>
             <div class="w-100 justify-content-between d-flex align-items-center">
               <h4 class="mb-0">Summary</h4>
-              <button mat-button (click)="logout()" [ngClass]="iconSizes.small" color="warn">Logout <mat-icon [ngClass]="iconSizes.small" class="ml-1">{{icons.exit}}</mat-icon></button>
+              <button mat-icon-button (click)="logout()" class="small"><mat-icon [ngClass]="iconSizes.small" class="mine ml-1">{{icons.exit}}</mat-icon></button>
             </div>
           </ng-container>
 
@@ -73,7 +73,7 @@
         </div>
 
         <div class="mb-3">
-          <h4 class="mb-0 d-flex align-items-center"><mat-icon color="warn" class="mr-2">{{icons.mining}}</mat-icon>Mining Positions</h4>
+          <h4 class="mb-0 d-flex align-items-center"><mat-icon class="mine mr-2">{{icons.mining}}</mat-icon>Mining Positions</h4>
           <opdex-wallet-mining-positions-table [records]="miningPositions" (onPageChange)="handleMiningPositionsPageChange($event)"></opdex-wallet-mining-positions-table>
         </div>
 

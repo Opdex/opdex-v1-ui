@@ -153,20 +153,6 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
           map((token: string) => token ? this._filterPublicKeys(token) : this.tokens.slice()));
   }
 
-  private _filterPublicKeys(value: string): IToken[] {
-    if (!value) [];
-
-    const filterValue = value.toString().toLowerCase();
-
-    return this.tokens.filter(token => {
-      var addressMatch = token.address.toLowerCase().includes(filterValue);
-      var symbolMatch = token.symbol.toLowerCase().includes(filterValue);
-      var nameMatch = token.name.toLowerCase().includes(filterValue);
-
-      return addressMatch || nameMatch || symbolMatch;
-    });
-  }
-
   ngOnChanges() {
     if (this.data?.pool) {
       this.tokenInDetails = this.data.pool.token.crs;
@@ -290,7 +276,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     }
   }
 
-  amountInQuote(amountOut: string): Observable<ISwapAmountInQuoteResponse> {
+  private amountInQuote(amountOut: string): Observable<ISwapAmountInQuoteResponse> {
     const fallback = { amountIn: '0' } as ISwapAmountInQuoteResponse;
 
     if (!this.tokenInDetails || !this.tokenOutDetails) return of(fallback);
@@ -304,7 +290,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     return this._platformApi.swapAmountInQuote(this.tokenInDetails.address, payload).pipe(catchError(() => of(fallback)));
   }
 
-  amountOutQuote(amountIn: string): Observable<ISwapAmountOutQuoteResponse> {
+  private amountOutQuote(amountIn: string): Observable<ISwapAmountOutQuoteResponse> {
     const fallback = { amountOut: '0' } as ISwapAmountOutQuoteResponse;
 
     if (!this.tokenInDetails || !this.tokenOutDetails) return of(fallback);
@@ -318,10 +304,11 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     return this._platformApi.swapAmountOutQuote(this.tokenOutDetails.address, payload).pipe(catchError(() => of(fallback)));
   }
 
-  validateAllowance(): Observable<AllowanceValidation> {
+  private validateAllowance(): Observable<AllowanceValidation> {
     const spender = environment.routerAddress;
 
     if (this.tokenIn.value === 'CRS' || !this.context?.wallet || !this.tokenInAmount.value) {
+      this.allowance = null;
       return of(null);
     }
 
@@ -329,6 +316,20 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
       .pipe(
         map(allowanceResponse => new AllowanceValidation(allowanceResponse, this.tokenInAmount.value, this.tokenInDetails)),
         tap((rsp: AllowanceValidation) => this.allowance = rsp));
+  }
+
+  private _filterPublicKeys(value: string): IToken[] {
+    if (!value) [];
+
+    const filterValue = value.toString().toLowerCase();
+
+    return this.tokens.filter(token => {
+      var addressMatch = token.address.toLowerCase().includes(filterValue);
+      var symbolMatch = token.symbol.toLowerCase().includes(filterValue);
+      var nameMatch = token.name.toLowerCase().includes(filterValue);
+
+      return addressMatch || nameMatch || symbolMatch;
+    });
   }
 
   calcTolerance(tolerance?: number) {

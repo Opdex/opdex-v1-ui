@@ -21,20 +21,12 @@ $fontConfig: (
 @include mat.core($fontConfig);
 
 .light-mode {
-  .text-shadow {
-    text-shadow: none;
-  }
-
   label {
     color: rgba(68, 68, 68, 0.7); // Match Angular Material
   }
 }
 
 .dark-mode {
-  .text-shadow {
-    text-shadow: 1px 1px 1px black;
-  }
-
   label {
     color: rgba(255, 255, 255, 0.7);
   }
