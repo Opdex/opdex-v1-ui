@@ -5,7 +5,7 @@
         <mat-form-field floatLabel="always">
           <mat-label>Liquidity Pool</mat-label>
 
-          <button mat-icon-button matPrefix type="button" class="mr-2" disabled><mat-icon>waves</mat-icon></button>
+          <button mat-icon-button matPrefix type="button" class="mr-2" disabled><mat-icon>{{icons.liquidityPool}}</mat-icon></button>
 
           <input matInput aria-label="Public Key" [matAutocomplete]="auto" [formControl]="poolControl" type="text">
 
@@ -29,26 +29,26 @@
 
   <opdex-card class="pool-summary" *ngIf="pool">
     <h4 class="mb-0">
-      <opdex-copy-button [tooltip]="pool?.address" [value]="pool?.address" icon="link" [size]="iconSizes.small"></opdex-copy-button>
+      <opdex-copy-button [tooltip]="pool?.address" [value]="pool?.address" [icon]="icons.link" [size]="iconSizes.small"></opdex-copy-button>
       <a class="blue ml-1" routerLink="/pools/{{pool?.address}}">{{pool.name}}</a>
     </h4>
 
-    <button mat-icon-button class="exit tiny" (click)="clearPool()">
-      <mat-icon>close</mat-icon>
+    <button mat-icon-button [ngClass]="iconSizes.tiny" class="exit" (click)="clearPool()">
+      <mat-icon>{{icons.close}}</mat-icon>
     </button>
 
     <ng-container *ngIf="showReserves">
       <div class="pool-details-section">
         <div class="col flex-shrink d-flex flex-column justify-content-end">
-          <button type="button" mat-icon-button color="primary" class="tiny d-block" (click)="srcToggle.toggle()">
+          <button type="button" mat-icon-button color="primary" [ngClass]="iconSizes.tiny" class="d-block" (click)="srcToggle.toggle()">
             <mat-icon #srcToggle="matTooltip" matTooltip="Reserves">{{icons.tokens}}</mat-icon>
           </button>
 
-          <button type="button" mat-icon-button color="primary" class="tiny d-block" (click)="crsToggle.toggle()">
+          <button type="button" mat-icon-button color="primary" [ngClass]="iconSizes.tiny" class="d-block" (click)="crsToggle.toggle()">
             <mat-icon #crsToggle="matTooltip" matTooltip="Reserves">{{icons.tokens}}</mat-icon>
           </button>
 
-          <button type="button" mat-icon-button color="primary" class="tiny d-block" (click)="lpToggle.toggle()">
+          <button type="button" mat-icon-button color="primary" [ngClass]="iconSizes.tiny" class="d-block" (click)="lpToggle.toggle()">
             <mat-icon class="provide" #lpToggle="matTooltip" matTooltip="Liquidity Pool Token Supply">{{icons.provide}}</mat-icon>
           </button>
         </div>
@@ -88,7 +88,7 @@
     <ng-container *ngIf="pool.token?.staking && showStaking">
       <div class="pool-details-section" >
         <div class="col flex-shrink d-flex flex-column justify-content-end">
-          <button type="button" mat-icon-button color="primary" class="tiny d-block" (click)="stakingToggle.toggle()">
+          <button type="button" mat-icon-button color="primary" [ngClass]="iconSizes.tiny" class="d-block" (click)="stakingToggle.toggle()">
             <mat-icon class="stake" #stakingToggle="matTooltip" matTooltip="Staking Weight">{{icons.staking}}</mat-icon>
           </button>
         </div>
@@ -120,7 +120,7 @@
     <ng-container *ngIf="pool.mining?.tokensMining && showMining">
       <div class="pool-details-section">
         <div class="col flex-shrink d-flex flex-column justify-content-end">
-          <button type="button" mat-icon-button color="primary" class="tiny d-block" (click)="miningToggle.toggle()">
+          <button type="button" mat-icon-button color="primary" [ngClass]="iconSizes.tiny" class="d-block" (click)="miningToggle.toggle()">
             <mat-icon class="mine" #miningToggle="matTooltip" matTooltip="Mining">{{icons.mining}}</mat-icon>
           </button>
         </div>

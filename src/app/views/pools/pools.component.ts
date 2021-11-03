@@ -6,6 +6,7 @@ import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { map, switchMap } from 'rxjs/operators';
 import { combineLatest, Observable } from 'rxjs';
+import { Icons } from 'src/app/enums/icons';
 import { LiquidityPoolsFilter, LpOrderBy, MiningFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 
 interface IPoolsView {
@@ -19,6 +20,7 @@ interface IPoolsView {
 })
 export class PoolsComponent implements OnInit {
   pools$: Observable<IPoolsView>;
+  icons = Icons;
   topPoolsFilter: LiquidityPoolsFilter;
 
   constructor(

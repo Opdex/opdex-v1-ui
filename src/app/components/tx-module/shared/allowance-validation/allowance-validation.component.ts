@@ -12,6 +12,7 @@ import { ReviewQuoteComponent } from '../review-quote/review-quote.component';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { take } from 'rxjs/operators';
 import { ApproveAllowanceRequest } from '@sharedModels/platform-api/requests/tokens/approve-allowance-request';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-allowance-validation',
@@ -25,6 +26,7 @@ export class AllowanceValidationComponent implements OnChanges, OnDestroy {
   transactionTypes = AllowanceRequiredTransactionTypes;
   waiting: boolean;
   icons = Icons;
+  iconSizes = IconSizes;
   subscription = new Subscription();
 
   constructor(

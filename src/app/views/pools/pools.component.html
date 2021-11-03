@@ -15,7 +15,7 @@
         <div class="row">
           <div class="col-12">
             <h2 class="d-flex align-items-center">
-              <mat-icon class="mr-2 primary">bar_chart</mat-icon> Top Volume
+              <mat-icon class="mr-2 primary">{{icons.bars}}</mat-icon> Top Volume
             </h2>
           </div>
         </div>
@@ -30,8 +30,7 @@
       <div class="row" *ngIf="pools.mining.results.length">
         <div class="col-12">
           <h2 class="d-flex align-items-center">
-            <mat-icon class="mr-2 mine">whatshot</mat-icon>
-            Liquidity Mining
+            <mat-icon class="mr-2 mine">{{icons.mining}}</mat-icon> Liquidity Mining
           </h2>
 
           <div class="scrollable-row">
@@ -58,7 +57,7 @@
             <h4 class="d-inline mb-0">Liquidity Pools</h4>
 
             <div class="button-group">
-              <button mat-icon-button color="primary" (click)="createPool()"><mat-icon>add</mat-icon></button>
+              <button mat-icon-button color="primary" (click)="createPool()"><mat-icon>{{icons.add}}</mat-icon></button>
             </div>
           </div>
 

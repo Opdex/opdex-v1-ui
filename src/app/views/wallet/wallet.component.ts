@@ -17,6 +17,8 @@ import { map, switchMap, take, tap } from 'rxjs/operators';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IAddressStaking } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
+import { Icons } from 'src/app/enums/icons';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 import { TransactionView } from '@sharedModels/transaction-view';
 
 @Component({
@@ -34,6 +36,8 @@ export class WalletComponent implements OnInit {
   crsBalanceValue: string;
   showPreferences: boolean;
   block = 1;
+  icons = Icons;
+  iconSizes = IconSizes;
 
   constructor(
     private _context: UserContextService,

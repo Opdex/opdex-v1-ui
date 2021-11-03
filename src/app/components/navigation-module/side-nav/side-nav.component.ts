@@ -1,4 +1,3 @@
-import { Network } from 'src/app/enums/networks';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { ThemeService } from '@sharedServices/utility/theme.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';

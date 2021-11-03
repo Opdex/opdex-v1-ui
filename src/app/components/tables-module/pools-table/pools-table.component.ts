@@ -1,17 +1,18 @@
 import { ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pools-response.interface';
-import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Component, Input, OnChanges, ViewChild, OnDestroy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { MatSort } from '@angular/material/sort';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
 import { LiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { Observable, Subscription } from 'rxjs';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { switchMap, take, tap } from 'rxjs/operators';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-pools-table',
@@ -22,6 +23,7 @@ export class PoolsTableComponent implements OnChanges, OnDestroy {
   @Input() filter: LiquidityPoolsFilter;
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
+  icons = Icons;
   pool$: Observable<ILiquidityPoolsResponse>;
   subscription: Subscription;
   paging: ICursor;

@@ -24,6 +24,7 @@ import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-
 })
 export class MarketComponent implements OnInit {
   iconSizes = IconSizes;
+  icons = Icons;
   subscription = new Subscription();
   theme$: Observable<string>;
   market: IMarket;
@@ -56,7 +57,6 @@ export class MarketComponent implements OnInit {
   selectedChart = this.chartOptions[0];
   tokensFilter: TokensFilter;
   liquidityPoolsFilter: LiquidityPoolsFilter;
-  icons = Icons;
 
   constructor(
     private _marketsService: MarketsService,

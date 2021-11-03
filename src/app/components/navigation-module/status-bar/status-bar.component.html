@@ -3,13 +3,13 @@
 
   <div class="d-flex flex-row align-items-center justify-content-end w-100">
     <div *ngIf="context?.wallet && pendingTransactions.length > 0">
-      <button mat-icon-button [matMenuTriggerFor]="qMenu" matTooltip="Pending Transactions" color="{{ pendingTransactions.length > 0 ? 'primary' : '' }}" class="tiny">
-        <mat-icon>send</mat-icon>
+      <button mat-icon-button [matMenuTriggerFor]="qMenu" matTooltip="Pending Transactions" color="{{ pendingTransactions.length > 0 ? 'primary' : '' }}" [ngClass]="iconSizes.tiny">
+        <mat-icon>{{icons.send}}</mat-icon>
       </button>
 
       <mat-menu #qMenu="matMenu" class="queue-panel pl-2 pr-2 pb-0 pt-0" style="min-height: auto">
         <div class="d-flex flex-row align-items-center mb-1" *ngIf="pendingTransactions.length > 0; else noTransactions">
-          <mat-icon class="green tiny mr-2">check_outline</mat-icon>
+          <mat-icon [ngClass]="iconSizes.tiny" class="green mr-2">{{icons.checkOutline}}</mat-icon>
           <small>Pending Transactions</small>
         </div>
 
@@ -25,23 +25,23 @@
     </div>
 
     <ng-container *ngIf="theme$ | async as theme">
-      <button mat-icon-button class="small"
+      <button mat-icon-button [ngClass]="iconSizes.small"
         (click)="toggleTheme(theme === 'dark-mode' ? 'light-mode' : 'dark-mode')"
         matTooltip="{{theme === 'dark-mode' ? 'Dark Mode' : 'Light Mode'}}">
-        <mat-icon>{{theme === 'dark-mode' ? 'brightness_3' : 'brightness_7'}}</mat-icon>
+        <mat-icon>{{theme === 'dark-mode' ? icons.darkMode : icons.lightMode}}</mat-icon>
       </button>
     </ng-container>
 
-    <button mat-icon-button class="small" (click)="networkTooltip.toggle()">
-      <mat-icon [matTooltip]="network" #networkTooltip="matTooltip">languages</mat-icon>
+    <button mat-icon-button [ngClass]="iconSizes.small" (click)="networkTooltip.toggle()">
+      <mat-icon [matTooltip]="network" #networkTooltip="matTooltip">{{icons.languages}}</mat-icon>
     </button>
 
     <ng-container *ngIf="latestSyncedBlock$ | async as block">
-      <button mat-icon-button class="small" (click)="blockTooltip.toggle()">
+      <button mat-icon-button [ngClass]="iconSizes.small" (click)="blockTooltip.toggle()">
         <mat-icon matTooltip="Block #{{block.height | formatNumber:0}}" #blockTooltip="matTooltip">{{icons.block}}</mat-icon>
       </button>
     </ng-container>
 
-    <button mat-icon-button matTooltip="Report Bug" (click)="openBugReport()" class="mine small"><mat-icon>bug_report</mat-icon></button>
+    <button mat-icon-button matTooltip="Report Bug" (click)="openBugReport()" class="mine small"><mat-icon>{{icons.bug}}</mat-icon></button>
   </div>
 </div>

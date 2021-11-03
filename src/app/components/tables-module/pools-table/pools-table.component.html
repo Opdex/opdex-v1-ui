@@ -4,7 +4,7 @@
       <th mat-header-cell *matHeaderCellDef> Name </th>
       <td mat-cell *matCellDef="let element">
         <div class="no-wrap d-flex align-items-center">
-          <!-- <opdex-copy-button [tooltip]="element.address" [value]="element.address" icon="link" [size]="iconSizes.small"></opdex-copy-button> -->
+          <!-- <opdex-copy-button [tooltip]="element.address" [value]="element.address" [icon]="icons.link" [size]="iconSizes.small"></opdex-copy-button> -->
           <a class="no-decoration b-500" href="javascript:void(0)" (click)="navigate(element.address)">{{element.name}}</a>
         </div>
       </td>
@@ -51,22 +51,22 @@
     <ng-container matColumnDef="options" stickyEnd>
       <th mat-header-cell *matHeaderCellDef class="empty"> </th>
       <td mat-cell *matCellDef="let element">
-        <button mat-icon-button color="primary" class="small float-right" [matMenuTriggerFor]="beforeMenu">
-          <mat-icon>more_vert</mat-icon>
+        <button mat-icon-button color="primary" [ngClass]="iconSizes.small" class="float-right" [matMenuTriggerFor]="beforeMenu">
+          <mat-icon>{{icons.more}}</mat-icon>
         </button>
 
         <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
-          <button mat-menu-item class="small" (click)="swap(element)">
-            <mat-icon class="swap">swap_horiz</mat-icon> Swap {{element.token.src?.symbol}}
+          <button mat-menu-item [ngClass]="iconSizes.small" (click)="swap(element)">
+            <mat-icon class="swap">{{icons.swap}}</mat-icon> Swap {{element.token.src?.symbol}}
           </button>
-          <button mat-menu-item class="small" (click)="provide(element)">
-            <mat-icon class="provide">control_point_duplicate</mat-icon> Provide {{element.token.src?.symbol}}
+          <button mat-menu-item [ngClass]="iconSizes.small" (click)="provide(element)">
+            <mat-icon class="provide">{{icons.provide}}</mat-icon> Provide {{element.token.src?.symbol}}
           </button>
-          <button mat-menu-item class="small" (click)="stake(element)" *ngIf="element.staking?.isActive">
-            <mat-icon class="stake">verified_user</mat-icon> Stake {{element.token.staking?.symbol}}
+          <button mat-menu-item [ngClass]="iconSizes.small" (click)="stake(element)" *ngIf="element.staking?.isActive">
+            <mat-icon class="stake">{{icons.staking}}</mat-icon> Stake {{element.token.staking?.symbol}}
           </button>
-          <button mat-menu-item class="small" (click)="mine(element)" *ngIf="element.mining?.isActive">
-            <mat-icon class="mine">whatshot</mat-icon> Mine {{element.token.staking?.symbol}}
+          <button mat-menu-item [ngClass]="iconSizes.small" (click)="mine(element)" *ngIf="element.mining?.isActive">
+            <mat-icon class="mine">{{icons.mining}}</mat-icon> Mine {{element.token.staking?.symbol}}
           </button>
         </mat-menu>
       </td>

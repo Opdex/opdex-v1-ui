@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-wallet-balances-table',
@@ -19,6 +20,7 @@ export class WalletBalancesTableComponent implements OnChanges {
   @Input() pageSize: number;
   previous: string;
   next: string;
+  icons = Icons;
 
   @Output() onPageChange: EventEmitter<string> = new EventEmitter();
 

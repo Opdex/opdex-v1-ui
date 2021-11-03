@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Icons } from 'src/app/enums/icons';
 
 @Component({
   selector: 'opdex-bug-report-modal',
@@ -6,8 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./bug-report-modal.component.scss']
 })
 export class BugReportModalComponent implements OnInit {
-
-  constructor() { }
+  icons = Icons;
 
   ngOnInit(): void {
   }

@@ -18,6 +18,8 @@ import { ITransactionQuote } from '@sharedModels/platform-api/responses/transact
 import { Governance } from '@sharedModels/governance';
 import { IRewardMiningPoolsRequest } from '@sharedModels/platform-api/requests/governances/reward-mining-pools-request';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
+import { Icons } from 'src/app/enums/icons';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-governance',
@@ -32,6 +34,8 @@ export class GovernanceComponent implements OnInit, OnDestroy {
   submitting: boolean;
   nominationPeriodEndDate: string;
   context: any;
+  icons = Icons;
+  iconSizes = IconSizes;
 
   constructor(
     private _platformApiService: PlatformApiService,

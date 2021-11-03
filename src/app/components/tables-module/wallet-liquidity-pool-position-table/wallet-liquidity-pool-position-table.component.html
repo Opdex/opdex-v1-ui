@@ -5,7 +5,7 @@
         <th mat-header-cell *matHeaderCellDef> Token </th>
         <td mat-cell *matCellDef="let element" class="no-wrap">
           <div class="no-wrap d-flex align-items-center">
-            <opdex-copy-button [tooltip]="element.token.address" [value]="element.token.address" icon="link"></opdex-copy-button>
+            <opdex-copy-button [tooltip]="element.token.address" [value]="element.token.address" [icon]="icons.link"></opdex-copy-button>
             <a class="no-decoration b-500" href="javascript:void(0)" (click)="navigate(element.token.address)">{{element.token.symbol}}</a>
           </div>
         </td>
@@ -29,45 +29,45 @@
       <ng-container matColumnDef="actions" stickyEnd>
         <th mat-header-cell *matHeaderCellDef>  </th>
         <td mat-cell *matCellDef="let element">
-          <button mat-icon-button color="primary" class="small float-right" [matMenuTriggerFor]="beforeMenu">
-            <mat-icon>more_vert</mat-icon>
+          <button mat-icon-button color="primary" [ngClass]="iconSizes.small" class="float-right" [matMenuTriggerFor]="beforeMenu">
+            <mat-icon>{{icons.more}}</mat-icon>
           </button>
 
           <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
-            <button mat-menu-item class="small d-flex align-items-center justify-content-start" (click)="swap()" *ngIf="element.position === 'Balance' && element.token.address !== pool.token?.staking?.address">
-              <mat-icon class="swap">swap_horiz</mat-icon> Swap {{element.token.symbol}}
+            <button mat-menu-item [ngClass]="iconSizes.small" class="d-flex align-items-center justify-content-start" (click)="swap()" *ngIf="element.position === 'Balance' && element.token.address !== pool.token?.staking?.address">
+              <mat-icon class="swap">{{icons.swap}}</mat-icon> Swap {{element.token.symbol}}
             </button>
 
-            <button mat-menu-item class="small d-flex align-items-center justify-content-start" (click)="provide('add')" *ngIf="element.position === 'Balance' && element.token.address !== pool.token?.staking?.address">
-              <mat-icon class="provide">control_point_duplicate</mat-icon> Provide {{element.token.symbol}}
+            <button mat-menu-item [ngClass]="iconSizes.small" class="d-flex align-items-center justify-content-start" (click)="provide('add')" *ngIf="element.position === 'Balance' && element.token.address !== pool.token?.staking?.address">
+              <mat-icon class="provide">{{icons.provide}}</mat-icon> Provide {{element.token.symbol}}
             </button>
 
-            <button mat-menu-item class="small d-flex align-items-center justify-content-start" (click)="provide('remove')" *ngIf="element.position === 'Providing'">
-              <mat-icon class="provide">remove</mat-icon> Remove Liquidity
+            <button mat-menu-item [ngClass]="iconSizes.small" class="d-flex align-items-center justify-content-start" (click)="provide('remove')" *ngIf="element.position === 'Providing'">
+              <mat-icon class="provide">{{icons.remove}}</mat-icon> Remove Liquidity
             </button>
 
-            <button mat-menu-item class="small d-flex align-items-center justify-content-start" (click)="stake('start')" *ngIf="element.position === 'Balance' && element.token.address === pool.token?.staking?.address">
-              <mat-icon class="stake">verified_user</mat-icon> Start Staking
+            <button mat-menu-item [ngClass]="iconSizes.small" class="d-flex align-items-center justify-content-start" (click)="stake('start')" *ngIf="element.position === 'Balance' && element.token.address === pool.token?.staking?.address">
+              <mat-icon class="stake">{{icons.staking}}</mat-icon> Start Staking
             </button>
 
-            <button mat-menu-item class="small d-flex align-items-center justify-content-start" (click)="stake('stop')" *ngIf="element.position === 'Staking'">
-              <mat-icon class="stake">remove</mat-icon> Stop Staking
+            <button mat-menu-item [ngClass]="iconSizes.small" class="d-flex align-items-center justify-content-start" (click)="stake('stop')" *ngIf="element.position === 'Staking'">
+              <mat-icon class="stake">{{icons.remove}}</mat-icon> Stop Staking
             </button>
 
-            <button mat-menu-item class="small d-flex align-items-center justify-content-start" (click)="stake('collect')" *ngIf="element.position === 'Staking'">
-              <mat-icon class="stake">local_play</mat-icon> Collect Staking Rewards
+            <button mat-menu-item [ngClass]="iconSizes.small" class="d-flex align-items-center justify-content-start" (click)="stake('collect')" *ngIf="element.position === 'Staking'">
+              <mat-icon class="stake">{{icons.collect}}</mat-icon> Collect Staking Rewards
             </button>
 
-            <button mat-menu-item class="small d-flex align-items-center justify-content-start" (click)="mine('start')" *ngIf="element.position === 'Providing'">
-              <mat-icon class="mine">whatshot</mat-icon> Start Mining
+            <button mat-menu-item [ngClass]="iconSizes.small" class="d-flex align-items-center justify-content-start" (click)="mine('start')" *ngIf="element.position === 'Providing'">
+              <mat-icon class="mine">{{icons.mining}}</mat-icon> Start Mining
             </button>
 
-            <button mat-menu-item class="small d-flex align-items-center justify-content-start" (click)="mine('stop')" *ngIf="element.position === 'Mining'">
-              <mat-icon class="mine">remove</mat-icon> Stop Mining
+            <button mat-menu-item [ngClass]="iconSizes.small" class="d-flex align-items-center justify-content-start" (click)="mine('stop')" *ngIf="element.position === 'Mining'">
+              <mat-icon class="mine">{{icons.remove}}</mat-icon> Stop Mining
             </button>
 
-            <button mat-menu-item class="small d-flex align-items-center justify-content-start" (click)="mine('collect')" *ngIf="element.position === 'Mining'">
-              <mat-icon class="mine">local_play</mat-icon> Collect Mining Rewards
+            <button mat-menu-item [ngClass]="iconSizes.small" class="d-flex align-items-center justify-content-start" (click)="mine('collect')" *ngIf="element.position === 'Mining'">
+              <mat-icon class="mine">{{icons.collect}}</mat-icon> Collect Mining Rewards
             </button>
           </mat-menu>
         </td>

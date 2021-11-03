@@ -3,6 +3,7 @@ import { Component, Inject } from '@angular/core';
 import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
 import { Icons } from 'src/app/enums/icons';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-transaction-mined-notification',
@@ -12,6 +13,7 @@ import { CollapseAnimation } from '@sharedServices/animations/collapse';
 })
 export class TransactionMinedNotificationComponent {
   icons = Icons;
+  iconSizes = IconSizes
   transaction: TransactionReceipt;
   collapsed: boolean = true;
 

@@ -41,7 +41,7 @@
                 <opdex-help-button class="mr-2" [info]="rewardsHelpInfo"></opdex-help-button> Rewards
               </h4>
 
-              <p class="rewards d-flex flex-row align-items-center" style="font-weight: 400;"><mat-icon class="mine mr-1 small">whatshot</mat-icon>{{governance.totalRewardsPerPeriod | shortNumber}} {{governance.minedToken?.symbol}}</p>
+              <p class="rewards d-flex flex-row align-items-center" style="font-weight: 400;"><mat-icon [ngClass]="iconSizes.small" class="mine mr-1">{{icons.mining}}</mat-icon>{{governance.totalRewardsPerPeriod | shortNumber}} {{governance.minedToken?.symbol}}</p>
             </div>
 
             <mat-progress-bar mode="determinate" value="{{ ((12 - governance.periodsUntilRewardReset) / 12) * 100 }}"></mat-progress-bar>
@@ -62,7 +62,7 @@
       <div class="row" *ngIf="nominatedPools.length">
         <div class="col-12">
           <h2 class="d-flex align-items-center">
-            <mat-icon class="stake mr-2">verified_user</mat-icon>
+            <mat-icon class="stake mr-2">{{icons.staking}}</mat-icon>
             Nominated Liquidity Pools
           </h2>
         </div>
@@ -80,7 +80,7 @@
       <div class="row mt-4" *ngIf="miningPools.length">
         <div class="col-12">
           <h2 class="d-flex align-items-center">
-            <mat-icon class="mine mr-2">whatshot</mat-icon>
+            <mat-icon class="mine mr-2">{{icons.mining}}</mat-icon>
             Active Liquidity Mining
           </h2>
         </div>

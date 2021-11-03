@@ -10,6 +10,7 @@ import { BugReportModalComponent } from '@sharedComponents/modals-module/bug-rep
 import { Observable, Subscription } from 'rxjs';
 import { environment } from '@environments/environment';
 import { Icons } from 'src/app/enums/icons';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-status-bar',
@@ -24,6 +25,7 @@ export class StatusBarComponent implements OnDestroy {
   network: string;
   subscription = new Subscription();
   pendingTransactions: string[] = [];
+  iconSizes = IconSizes;
   icons = Icons;
   context: any;
 

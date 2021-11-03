@@ -7,6 +7,7 @@ import { TransactionReceipt } from '@sharedModels/transaction-receipt';
 import { Subscription } from 'rxjs';
 import { Icons } from 'src/app/enums/icons';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-allowance-transaction-summary',
@@ -17,6 +18,7 @@ export class AllowanceTransactionSummaryComponent implements OnChanges, OnDestro
   @Input() transaction: TransactionReceipt;
 
   icons = Icons;
+  iconSizes = IconSizes;
   token: IToken;
   amount: FixedDecimal;
   to: string;

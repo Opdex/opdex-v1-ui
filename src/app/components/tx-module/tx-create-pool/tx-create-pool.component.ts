@@ -12,6 +12,7 @@ import { CreateLiquidityPoolRequest, ICreateLiquidityPoolRequest } from '@shared
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { AddTokenRequest, IAddTokenRequest } from '@sharedModels/platform-api/requests/tokens/add-token-request';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-tx-create-pool',
@@ -23,6 +24,7 @@ export class TxCreatePoolComponent extends TxBase {
   view = TransactionView.createPool;
   form: FormGroup;
   icons = Icons;
+  iconSizes = IconSizes;
   txHash: string;
   token$: Observable<string>;
   subscription: Subscription = new Subscription();
