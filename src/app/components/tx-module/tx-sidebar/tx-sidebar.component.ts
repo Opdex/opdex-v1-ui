@@ -1,7 +1,8 @@
+import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { Router } from '@angular/router';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
 import { TransactionTypes } from '@sharedLookups/transaction-types.lookup';
 import { ISidenavMessage } from '@sharedModels/transaction-view';
 import { Observable, Subscription } from 'rxjs';
@@ -14,18 +15,19 @@ import { Icons } from 'src/app/enums/icons';
   templateUrl: './tx-sidebar.component.html',
   styleUrls: ['./tx-sidebar.component.scss']
 })
-export class TxSidebarComponent {
-  @Input() message:ISidenavMessage;
+export class TxSidebarComponent implements OnChanges {
+  @Input() message: ISidenavMessage;
+  @Input() showNavMenu: boolean = true;
   @Output() onModeChange = new EventEmitter<'over' | 'side'>();
 
   sidenavMode: 'over' | 'side' = 'over';
   transactionTypes = [...TransactionTypes.filter(type => type.view)];
-  @Input() showNavMenu: boolean = true;
   context$: Observable<any>;
   widescreen: boolean;
   subscription = new Subscription();
   context: any;
   icons = Icons;
+  pool: ILiquidityPoolSummary;
 
   constructor(
     private _breakpointObserver: BreakpointObserver,
@@ -44,6 +46,12 @@ export class TxSidebarComponent {
           // Todo: When NOT widescreen, route changes should close the sidebar
           // Closing sidebar wipes its state, consider implementing a service that can preserve state
         }));
+  }
+
+  ngOnChanges() {
+    if (this.message && !this.message?.data?.pool && this.pool) {
+      this.message.data = { pool: this.pool };
+    }
   }
 
   toggleSidenavMode() {
@@ -68,5 +76,10 @@ export class TxSidebarComponent {
 
   closeSidenav() {
     this._sidenav.closeSidenav();
+  }
+
+  handlePoolSelection($event: ILiquidityPoolSummary) {
+    this.pool = $event;
+    this.message.data = { pool: this.pool };
   }
 }

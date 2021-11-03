@@ -42,9 +42,9 @@
 
   <div [ngSwitch]="message?.view">
     <opdex-tx-swap *ngSwitchCase="1" [data]="message?.data"></opdex-tx-swap>
-    <opdex-tx-provide *ngSwitchCase="2" [data]="message?.data"></opdex-tx-provide>
-    <opdex-tx-stake *ngSwitchCase="3" [data]="message?.data"></opdex-tx-stake>
-    <opdex-tx-mine *ngSwitchCase="4" [data]="message?.data"></opdex-tx-mine>
+    <opdex-tx-provide *ngSwitchCase="2" [data]="message?.data" (onPoolSelection)="handlePoolSelection($event)"></opdex-tx-provide>
+    <opdex-tx-stake *ngSwitchCase="3" [data]="message?.data" (onPoolSelection)="handlePoolSelection($event)"></opdex-tx-stake>
+    <opdex-tx-mine *ngSwitchCase="4" [data]="message?.data" (onPoolSelection)="handlePoolSelection($event)"></opdex-tx-mine>
     <opdex-tx-allowance *ngSwitchCase="5" [data]="message?.data"></opdex-tx-allowance>
     <opdex-tx-create-pool *ngSwitchCase="6" [data]="message?.data"></opdex-tx-create-pool>
   </div>

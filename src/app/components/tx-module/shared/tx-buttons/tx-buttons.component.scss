@@ -4,16 +4,10 @@
   width: 100%;
   padding: 5px;
   border-radius: 8px;
-  box-shadow: 0px 2px 5px rgba(37, 37, 37, 0.2) !important;
   min-width: auto;
-
-  &:hover {
-    box-shadow: 0px 2px 1px rgba(0,0,0,0.1) !important;
-  }
+  transition: background .25s ease;
 
   &:disabled {
-    box-shadow: 0px 2px 5px rgba(37, 37, 37, 0.2) !important;
-
     .mat-icon {
       opacity: .5;
     }

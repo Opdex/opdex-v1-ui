@@ -2,6 +2,12 @@
   .standard-section {
     background: #1b192f;
 
+    &.blend-cards {
+      .mat-card {
+        background: #1b192f !important
+      }
+    }
+
     .mat-card {
       background: #141325 !important;
     }
@@ -20,8 +26,14 @@
   .standard-section {
     background: #fff;
 
+    &.blend-cards {
+      .mat-card {
+        background: #fff !important
+      }
+    }
+
     .mat-card {
-      background: #f4f6f7 !important;
+      background: #f4f6f7 !important
     }
   }
 

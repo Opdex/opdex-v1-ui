@@ -1,4 +1,4 @@
-<div class="header-section pt-5 pb-5">
+<div class="header-section">
   <div class="container" *ngIf="market">
     <div class="row mb-3 justify-content-between align-items-center">
       <div class="col-12 col-lg-6 col-xl-8">
@@ -14,36 +14,35 @@
     <div class="row">
       <div class="col-12 col-md-6 col-xl-3">
         <opdex-card>
-          <p class="mb-2  light d-flex align-items-center">
-            <small class="overflow-ellipsis">Market Primary Token</small>
-          </p>
+          <small class="light">{{market.crsToken.name}}</small>
+          <div class="d-flex align-items-center justify-content-between">
+            <a class="body-default no-decoration d-inline-flex align-items-center" routerLink="/tokens/{{market.crsToken.address}}">
+              <mat-icon color="primary" class="mr-2">toll</mat-icon>
+              <h2 class="d-inline-block mb-0">{{market.crsToken.symbol}}</h2>
+            </a>
 
-          <a class="body-default no-decoration d-inline-flex align-items-center" routerLink="/tokens/{{market.crsToken.address}}">
-            <mat-icon color="primary" class="mr-2">toll</mat-icon>
-            <h2 class="d-inline-block mb-0">{{market.crsToken.name}}</h2>
-          </a>
-
-          <div class="d-flex flex-row mt-3 align-items-end justify-content-between">
-            <span class="mr-1" style="font-size: 1.4em; line-height: 1em;">${{market.crsToken.summary.priceUsd | shortNumber}} <small>{{market.crsToken.symbol}}</small></span>
-            <opdex-change-indicator [value]="market.crsToken.summary.dailyPriceChangePercent" size="s" *ngIf="market.crsToken.summary.dailyPriceChangePercent !== null && market.crsToken.summary.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
+            <div class="d-flex flex-row align-items-end">
+              <h3 class="mb-0 mr-2" style="font-weight: 300;">${{market.crsToken.summary.priceUsd | shortNumber}}</h3>
+              <opdex-change-indicator [value]="market.crsToken.summary.dailyPriceChangePercent" size="s" *ngIf="market.crsToken.summary.dailyPriceChangePercent !== null && market.crsToken.summary.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
+            </div>
           </div>
+
         </opdex-card>
       </div>
 
       <div class="col-12 col-md-6 col-xl-3" *ngIf="market.stakingToken">
         <opdex-card>
-          <p class="mb-2 light d-flex align-items-center">
-            <small class="overflow-ellipsis">Market Staking Token</small>
-          </p>
+          <small class="light">{{market.stakingToken.name}}</small>
+          <div class="d-flex align-items-center justify-content-between">
+            <a class="body-default no-decoration d-inline-flex align-items-center" routerLink="/tokens/{{market.stakingToken.address}}">
+              <mat-icon class="stake mr-2">verified_user</mat-icon>
+              <h2 class="d-inline-block mb-0">{{market.stakingToken.symbol}}</h2>
+            </a>
 
-          <a class="body-default no-decoration d-inline-flex align-items-center" routerLink="/tokens/{{market.stakingToken.address}}">
-            <mat-icon class="stake mr-2">verified_user</mat-icon>
-            <h2 class="d-inline-block mb-0">{{market.stakingToken.name}}</h2>
-          </a>
-
-          <div class="d-flex flex-row mt-3 align-items-end justify-content-between">
-            <span class="mr-1" style="font-size: 1.4em; line-height: 1em;">${{market.stakingToken.summary.priceUsd | shortNumber}} <small>{{market.stakingToken.symbol}}</small></span>
-            <opdex-change-indicator [value]="market.stakingToken.summary.dailyPriceChangePercent" size="s" *ngIf="market.stakingToken.summary.dailyPriceChangePercent !== null && market.stakingToken.summary.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
+            <div class="d-flex flex-row align-items-end">
+              <h3 class="mb-0 mr-2" style="font-weight: 300;">${{market.stakingToken.summary.priceUsd | shortNumber}}</h3>
+              <opdex-change-indicator [value]="market.stakingToken.summary.dailyPriceChangePercent" size="s" *ngIf="market.stakingToken.summary.dailyPriceChangePercent !== null && market.stakingToken.summary.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
+            </div>
           </div>
         </opdex-card>
       </div>

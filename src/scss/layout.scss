@@ -1,0 +1,33 @@
+.standard-section {
+  padding: 20px 0px;
+}
+
+.offset-section {
+  padding: 20px 0px;
+}
+
+.header-section {
+  padding: 20px 0px;
+}
+
+@media (min-width: 320px) { }
+
+@media (min-width: 576px) { }
+
+@media (min-width: 768px) { }
+
+@media (min-width: 992px) {
+  .standard-section {
+    padding: 50px 0px;
+  }
+
+  .offset-section {
+    padding: 50px 0px;
+  }
+
+  .header-section {
+    padding: 50px 0px;
+  }
+}
+
+@media (min-width: 1440px) { }
