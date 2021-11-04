@@ -95,8 +95,8 @@ export class MarketComponent implements OnInit {
           switchMap(_ => zip(...combo)))
         .subscribe());
 
-    this.miningPools$ = this._liquidityPoolsService.getLiquidityPools(miningFilter)
-      .pipe(map(pools => pools.results));
+    this.miningPools$ = this._blocksService.getLatestBlock$()
+      .pipe(switchMap(_ => this._liquidityPoolsService.getLiquidityPools(miningFilter).pipe(map(pools => pools.results))));
   }
 
   private getMarket(): Observable<any> {
@@ -234,6 +234,14 @@ export class MarketComponent implements OnInit {
 
   createPool() {
     this._sidebar.openSidenav(TransactionView.createPool);
+  }
+
+  poolsTrackBy(index: number, pool: ILiquidityPoolSummary) {
+    return `${index}-${pool.address}-${pool.cost.crsPerSrc.close}-${pool.mining?.tokensMining}-${pool.staking?.weight}`;
+  }
+
+  statCardTrackBy(index: number, statCard: StatCardInfo) {
+    return `${index}-${statCard.title}-${statCard.value}`;
   }
 
   ngOnDestroy() {

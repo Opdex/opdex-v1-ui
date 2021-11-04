@@ -21,7 +21,6 @@ export class AuthComponent implements OnInit, OnDestroy {
   submitting: boolean;
   subscription = new Subscription();
   error: boolean;
-  copied: boolean;
   publicKeys: string[];
   publicKeys$: Observable<string[]>;
   storageKey: string;
@@ -72,11 +71,6 @@ export class AuthComponent implements OnInit, OnDestroy {
             this._router.navigateByUrl('/');
           }
         }));
-  }
-
-  copyHandler() {
-    this.copied = true;
-    setTimeout(() => this.copied = false, 1000);
   }
 
   submit(): void {

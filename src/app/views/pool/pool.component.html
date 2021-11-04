@@ -36,7 +36,7 @@
     </div>
 
     <div class="row" *ngIf="statCards?.length > 0">
-      <ng-container *ngFor="let statCard of statCards; let i = index">
+      <ng-container *ngFor="let statCard of statCards; let i = index; trackBy: statCardTrackBy">
         <div *ngIf="statCard.show" class="col-sm-12 col-md">
           <opdex-card>
             <div class="d-flex justify-content-between align-items-center">

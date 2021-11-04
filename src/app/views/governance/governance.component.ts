@@ -105,6 +105,10 @@ export class GovernanceComponent implements OnInit, OnDestroy {
         .subscribe((quote: ITransactionQuote) => this._bottomSheet.open(ReviewQuoteComponent, { data: quote }));
   }
 
+  poolsTrackBy(index: number, pool: ILiquidityPoolSummary) {
+    return `${index}-${pool.address}-${pool.cost.crsPerSrc.close}-${pool.mining?.tokensMining}-${pool.staking?.weight}`;
+  }
+
   ngOnDestroy() {
     if (this.governance$) this.governance$.unsubscribe();
   }

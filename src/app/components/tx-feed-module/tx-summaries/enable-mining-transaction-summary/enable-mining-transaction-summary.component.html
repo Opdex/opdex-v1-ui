@@ -6,7 +6,7 @@
   </div>
 
   <div class="d-flex align-items-center flex-wrap" *ngIf="pools?.length">
-    <div class="mr-2 no-wrap" *ngFor="let pool of pools">
+    <div class="mr-2 no-wrap" *ngFor="let pool of pools; trackBy: poolsTrackBy">
       <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.name}}</a>
     </div>
   </div>

@@ -23,6 +23,7 @@ import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { ISidenavMessage } from '@sharedModels/transaction-view';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { Icons } from './enums/icons';
+import { SwUpdate } from '@angular/service-worker';
 
 @Component({
   selector: 'opdex-root',
@@ -59,10 +60,19 @@ export class AppComponent implements OnInit {
     private _blocksService: BlocksService,
     private _jwt: JwtService,
     private _transactionService: TransactionsService,
-    private _cdref: ChangeDetectorRef
+    private _cdref: ChangeDetectorRef,
+    private _appUpdate: SwUpdate
   ) {
     window.addEventListener('resize', this.appHeight);
     this.appHeight();
+
+    // This could nad probably should alert the user to click Ok to reload
+    // For resolving current caching issues, attempting auto refresh
+    //
+    // Todo - this may be problematic due to environment variable injections in the pipeline
+    // after the build. The initial build generates versions as hashes of the app, altering code after
+    // the fact might always result in an invalid version, potentially causing wasted reloads.
+    this._appUpdate.available.subscribe(_ => document.location.reload());
 
     this.network = environment.network;
     this.context = this._context.getUserContext();

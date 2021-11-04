@@ -50,6 +50,20 @@ export class WalletComponent implements OnInit {
     private _sidebar: SidenavService
   ) {
     this.wallet = this._context.getUserContext();
+
+    if (!this.wallet || !this.wallet.wallet) {
+      this._router.navigateByUrl('/auth');
+    }
+
+    this.transactionsRequest = {
+      limit: 15,
+      direction: "DESC",
+      eventTypes: [],
+      wallet: this.wallet.wallet
+    };
+  }
+
+  ngOnInit(): void {
     this.getWalletBalances(10);
     this.getMiningPositions(10);
     this.getStakingPositions(10);
@@ -98,7 +112,7 @@ export class WalletComponent implements OnInit {
     this.getStakingPositions(null, cursor);
   }
 
-  getMiningPositions(limit?: number, cursor?: string) {
+  private getMiningPositions(limit?: number, cursor?: string) {
     this._walletsService.getMiningPositions(this.wallet.wallet, limit, cursor)
       .pipe(
         switchMap(response => {
@@ -107,22 +121,18 @@ export class WalletComponent implements OnInit {
           response.results.forEach(position => {
             const miningPositionDetails$: Observable<any> =
               this._liquidityPoolService.getLiquidityPool(position.miningToken)
-                .pipe(
-                  take(1),
-                  map(pool => { return { pool, position }; }));
+                .pipe(take(1), map(pool => { return { pool, position } }));
 
             positions$.push(miningPositionDetails$);
           })
 
-          return forkJoin(positions$).pipe(map(positions => {
-            return { paging: response.paging, positions }
-          }));
+          return forkJoin(positions$).pipe(map(positions => { return { paging: response.paging, positions } }));
         }),
         take(1)
       ).subscribe(response => this.miningPositions = response);
   }
 
-  getStakingPositions(limit?: number, cursor?: string) {
+  private getStakingPositions(limit?: number, cursor?: string) {
     this._walletsService.getStakingPositions(this.wallet.wallet, limit, cursor)
       .pipe(
         switchMap(response => {
@@ -146,7 +156,7 @@ export class WalletComponent implements OnInit {
       ).subscribe(response => this.stakingPositions = response);
   }
 
-  getWalletBalances(limit?: number, cursor?: string) {
+  private getWalletBalances(limit?: number, cursor?: string) {
     this._walletsService.getWalletBalances(this.wallet.wallet, limit, cursor)
       .pipe(
         switchMap(response => {
@@ -176,15 +186,6 @@ export class WalletComponent implements OnInit {
 
   handleTxOption($event: TransactionView) {
     this._sidebar.openSidenav($event);
-  }
-
-  ngOnInit(): void {
-    this.transactionsRequest = {
-      limit: 15,
-      direction: "DESC",
-      eventTypes: [],
-      wallet: this.wallet.wallet
-    };
   }
 
   logout() {

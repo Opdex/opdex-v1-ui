@@ -1,13 +1,13 @@
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { VaultsService } from '@sharedServices/platform/vaults.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { interval, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { tap, switchMap, take } from 'rxjs/operators';
 import { IVault } from '@sharedModels/platform-api/responses/vaults/vault.interface';
 import { IVaultCertificates } from '@sharedModels/platform-api/responses/vaults/vault-certificate.interface';
 import { Icons } from 'src/app/enums/icons';
+import { BlocksService } from '@sharedServices/platform/blocks.service';
 
 @Component({
   selector: 'opdex-vault',
@@ -45,31 +45,26 @@ export class VaultComponent implements OnInit, OnDestroy {
   constructor(
     private _vaultsService: VaultsService,
     private _tokensService: TokensService,
-    private _platformApi: PlatformApiService
+    private _blocksService: BlocksService
   ) { }
 
   ngOnInit(): void {
-    this.subscription.add(interval(30000)
-      .pipe(tap(_ => {
-        this._vaultsService.refreshVault();
-      }))
-      .subscribe());
+    this.subscription.add(
+      this._blocksService.getLatestBlock$().pipe(switchMap(_ => this._vaultsService.getVault()
+        .pipe(
+          tap(vault => this.vault = vault),
+          switchMap(() => this._tokensService.getToken(this.vault.lockedToken?.address || this.vault.lockedToken)),
+          tap(token => this.vault.lockedToken = token),
+          tap(_ => {
+            const vaultTokenSymbol = this.vault.lockedToken.symbol;
 
-    this.subscription.add(this._vaultsService.getVault()
-      .pipe(
-        tap(vault => this.vault = vault),
-        switchMap(() => this._tokensService.getToken(this.vault.lockedToken?.address || this.vault.lockedToken)),
-        tap(token => this.vault.lockedToken = token),
-        tap(_ => {
-          const vaultTokenSymbol = this.vault.lockedToken.symbol;
+            this.statCards[0].value = this.vault.tokensLocked;
+            this.statCards[0].suffix = vaultTokenSymbol;
 
-          this.statCards[0].value = this.vault.tokensLocked;
-          this.statCards[0].suffix = vaultTokenSymbol;
-
-          this.statCards[1].value = this.vault.tokensUnassigned;
-          this.statCards[1].suffix = vaultTokenSymbol;
-        }))
-      .subscribe());
+            this.statCards[1].value = this.vault.tokensUnassigned;
+            this.statCards[1].suffix = vaultTokenSymbol;
+          })))
+        ).subscribe());
 
       this.getVaultCertificates(10);
   }
@@ -82,6 +77,10 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   handlePageChange(cursor: string) {
     this.getVaultCertificates(null, cursor);
+  }
+
+  statCardTrackBy(index: number, statCard: StatCardInfo) {
+    return `${index}-${statCard.title}-${statCard.value}`;
   }
 
   ngOnDestroy() {

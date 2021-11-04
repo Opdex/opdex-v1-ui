@@ -47,6 +47,10 @@ export class EnableMiningTransactionSummaryComponent implements OnChanges, OnDes
         }));
   }
 
+  poolsTrackBy(index: number, pool: ILiquidityPoolSummary) {
+    return `${index}-${pool.address}-${pool.cost.crsPerSrc.close}-${pool.mining?.tokensMining}-${pool.staking?.weight}`;
+  }
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }

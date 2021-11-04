@@ -69,7 +69,7 @@
       </div>
 
       <div class="scrollable-row">
-        <div class="scrollable-card" *ngFor="let pool of nominatedPools">
+        <div class="scrollable-card" *ngFor="let pool of nominatedPools; trackBy: poolsTrackBy">
           <opdex-staking-pool-card [pool]="pool"></opdex-staking-pool-card>
         </div>
       </div>
@@ -86,7 +86,7 @@
         </div>
       </div>
       <div class="scrollable-row">
-        <div class="scrollable-card" *ngFor="let pool of miningPools">
+        <div class="scrollable-card" *ngFor="let pool of miningPools; trackBy: poolsTrackBy">
           <opdex-mining-card [pool]="pool"></opdex-mining-card>
         </div>
       </div>

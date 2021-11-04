@@ -39,6 +39,10 @@ export class TokensComponent {
         );
   }
 
+  poolsTrackBy(index: number, pool: ILiquidityPoolSummary) {
+    return `${index}-${pool.address}-${pool.cost.crsPerSrc.close}-${pool.mining?.tokensMining}-${pool.staking?.weight}`;
+  }
+
   handleTxOption($event: TransactionView) {
     this._sidebar.openSidenav($event);
   }

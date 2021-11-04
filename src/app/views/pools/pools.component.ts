@@ -8,6 +8,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { combineLatest, Observable } from 'rxjs';
 import { Icons } from 'src/app/enums/icons';
 import { LiquidityPoolsFilter, LpOrderBy, MiningFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
+import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 
 interface IPoolsView {
   topVolume: ILiquidityPoolsResponse,
@@ -55,5 +56,9 @@ export class PoolsComponent implements OnInit {
 
   createPool() {
     this._sidebar.openSidenav(TransactionView.createPool);
+  }
+
+  poolsTrackBy(index: number, pool: ILiquidityPoolSummary) {
+    return `${index}-${pool.address}-${pool.cost.crsPerSrc.close}-${pool.mining?.tokensMining}-${pool.staking?.weight}`;
   }
 }

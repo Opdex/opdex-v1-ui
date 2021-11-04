@@ -58,7 +58,7 @@ export class WalletPreviewComponent implements OnDestroy {
     this.hide = !this.hide;
   }
 
-  public trackPosition(index: number, transactionLog: AddressPosition) {
+  trackPosition(index: number, transactionLog: AddressPosition) {
     return `${index}-${transactionLog.position}-${transactionLog.token.address}-${transactionLog.value}`;
   }
 

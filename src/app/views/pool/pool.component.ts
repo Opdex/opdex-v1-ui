@@ -1,3 +1,4 @@
+import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { AddressPosition } from '@sharedModels/address-position';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { IconSizes } from 'src/app/enums/icon-sizes';
@@ -11,7 +12,7 @@ import { ISidenavMessage, TransactionView } from "@sharedModels/transaction-view
 import { LiquidityPoolsService } from "@sharedServices/platform/liquidity-pools.service";
 import { SidenavService } from "@sharedServices/utility/sidenav.service";
 import { UserContextService } from "@sharedServices/utility/user-context.service";
-import { Observable, Subscription, zip, of, interval } from "rxjs";
+import { Observable, Subscription, zip, of } from "rxjs";
 import { tap, switchMap, catchError, take, map, delay } from "rxjs/operators";
 import { IAddressMining } from "@sharedModels/platform-api/responses/wallets/address-mining.interface";
 import { IToken } from "@sharedModels/platform-api/responses/tokens/token.interface";
@@ -83,17 +84,15 @@ export class PoolComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _title: Title,
     private _gaService: GoogleAnalyticsService,
-    private _walletService: WalletsService
+    private _walletService: WalletsService,
+    private _blocksService: BlocksService
   ) {
-    // Listen to tx sidenav events
     this.subscription.add(
       this._sidenav.getStatus()
-        .subscribe(async (message: ISidenavMessage) => {
-          this.message = message;
-        }));
+        .subscribe((message: ISidenavMessage) => this.message = message));
   }
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
     this.init();
     this.context$ = this._userContext.getUserContext$();
 
@@ -113,21 +112,12 @@ export class PoolComponent implements OnInit, OnDestroy {
       this.subscription = new Subscription();
     }
 
-    this.subscription.add(interval(30000)
-      .pipe(
-        tap(_ => {
-          this._liquidityPoolsService.refreshPool(this.poolAddress);
-          this._liquidityPoolsService.refreshPoolHistory(this.poolAddress);
-        }))
-      .subscribe());
-
-    // Todo: take(1) stops taking after 1, but without it, _I think_ is mem leak
-    this.subscription.add(this.getLiquidityPool()
-      .pipe(
-        switchMap(() => this.getPoolHistory()),
-        switchMap(_ => this.getWalletSummary()),
-        take(1))
-      .subscribe());
+    this.subscription.add(
+      this._blocksService.getLatestBlock$().pipe(
+        switchMap(_ => this.getLiquidityPool()),
+        switchMap(_ => this.getPoolHistory()),
+        switchMap(_ => this.getWalletSummary())
+      ).subscribe())
   }
 
   openTransactionSidebar(view: TransactionView, childView: string = null) {
@@ -146,7 +136,7 @@ export class PoolComponent implements OnInit, OnDestroy {
         tap(pool => this.pool = pool),
         map((pool) => {
           if (pool === null) {
-            this._router.navigateByUrl('/not-found');
+            this._router.navigateByUrl('/pools');
             return;
           }
 
@@ -360,6 +350,10 @@ export class PoolComponent implements OnInit, OnDestroy {
 
   handleTxOption($event: TransactionView) {
     this._sidenav.openSidenav($event, {pool: this.pool});
+  }
+
+  statCardTrackBy(index: number, statCard: StatCardInfo) {
+    return `${index}-${statCard.title}-${statCard.value}`;
   }
 
   ngOnDestroy() {

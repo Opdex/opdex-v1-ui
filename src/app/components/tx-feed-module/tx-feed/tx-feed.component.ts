@@ -133,7 +133,7 @@ export class TxFeedComponent implements OnChanges, OnDestroy {
   }
 
   public transactionLogsTrackBy(index: number, transactionLog: any) {
-    return transactionLog.sortOrder;
+    return `${index}-${transactionLog.sortOrder}`;
   }
 
   copyHandler($event) {

@@ -1,3 +1,4 @@
+import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { TokenHistory } from '@sharedModels/token-history';
 import { IconSizes } from 'src/app/enums/icon-sizes';
@@ -7,7 +8,7 @@ import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transa
 import { delay, switchMap, take, tap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { Observable, Subscription, interval, of } from 'rxjs';
+import { Observable, Subscription, of } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
 import { Icons } from 'src/app/enums/icons';
@@ -50,7 +51,8 @@ export class TokenComponent implements OnInit {
     private _router: Router,
     private _title: Title,
     private _gaService: GoogleAnalyticsService,
-    private _sidebar: SidenavService
+    private _sidebar: SidenavService,
+    private _blocksService: BlocksService
   ) { }
 
   ngOnInit(): void {
@@ -72,16 +74,12 @@ export class TokenComponent implements OnInit {
       this.subscription = new Subscription();
     }
 
-    this.subscription.add(interval(30000)
-      .pipe(tap(_ => {
-        this._tokensService.refreshToken(this.tokenAddress);
-        this._tokensService.refreshTokenHistory(this.tokenAddress);
-      }))
-      .subscribe());
-
-    this.subscription.add(this.getToken()
-      .pipe(switchMap(() => this.getTokenHistory()))
-      .subscribe());
+    this.subscription.add(
+      this._blocksService.getLatestBlock$()
+        .pipe(
+          switchMap(_ => this.getToken()),
+          switchMap(_ => this.getTokenHistory()))
+        .subscribe());
   }
 
   private getToken(): Observable<any> {
@@ -90,7 +88,7 @@ export class TokenComponent implements OnInit {
         catchError(_ => of(null)),
         tap(token => {
           if (token === null) {
-            this._router.navigateByUrl('/not-found');
+            this._router.navigateByUrl('/tokens');
             return;
           }
 
