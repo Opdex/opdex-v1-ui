@@ -32,8 +32,8 @@ $sidebar-width: 100px;
       flex: 1;
 
       .page-content-container {
-        // padding-bottom: 50px;
-        // padding-bottom: calc(50px + env(safe-area-inset-bottom, 0));
+        padding-bottom: 50px;
+        padding-bottom: calc(50px + env(safe-area-inset-bottom, 0));
       }
     }
   }

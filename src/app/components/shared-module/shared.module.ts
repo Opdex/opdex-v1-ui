@@ -15,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 // Opdex Component Imports
 import { ChangeIndicatorComponent } from './change-indicator/change-indicator.component';
 import { CopyButtonComponent } from './copy-button/copy-button.component';
+import { CopyAddressComponent } from './copy-address/copy-address.component';
 import { HelpButtonComponent } from './help-button/help-button.component';
 import { QrCodeComponent } from './qr-code/qr-code.component';
 
@@ -26,7 +27,8 @@ import { QrCodeModule } from 'ng-qrcode';
     ChangeIndicatorComponent,
     CopyButtonComponent,
     HelpButtonComponent,
-    QrCodeComponent
+    QrCodeComponent,
+    CopyAddressComponent
   ],
   imports: [
     CommonModule,
@@ -45,7 +47,8 @@ import { QrCodeModule } from 'ng-qrcode';
     MatButtonModule,
     ChangeIndicatorComponent,
     HelpButtonComponent,
-    QrCodeComponent
+    QrCodeComponent,
+    CopyAddressComponent
   ]
 })
 export class SharedModule { }

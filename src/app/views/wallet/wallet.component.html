@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-12 col-lg-6 col-xl-8">
         <h1 class="mb-0">Wallet</h1>
-        <div class="light" style="font-size: 10px;">{{wallet.wallet}}</div>
+        <opdex-copy-address [address]="wallet?.wallet"></opdex-copy-address>
       </div>
 
       <div class="d-none d-lg-block col-lg-6 col-xl-4">
@@ -13,7 +13,7 @@
   </div>
 </div>
 
-<div class="standard-section pt-5 pb-5">
+<div class="standard-section pt-5 pb-3">
   <div class="container">
     <div class="row">
       <div class="col-12 col-lg-6 col-xl-4">

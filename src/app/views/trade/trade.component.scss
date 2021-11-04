@@ -1,6 +1,6 @@
 #trade {
   display: flex;
-  min-height: var(--app-height);
+  min-height: calc(var(--app-height) - (env(safe-area-inset-bottom, 0) + 50px));
   justify-content: center;
 }
 

@@ -1,0 +1,28 @@
+.copy-address {
+  font-size: 10px;
+  color: #979797 !important;
+  display: flex;
+  align-items: center;
+
+  mat-icon {
+    transition: .1s ease;
+    opacity: 0;
+    height: 10px !important;
+    width: 10px !important;
+    line-height: 10px !important;
+    font-size: 10px !important;
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    .address {
+      text-decoration: underline;
+    }
+
+    mat-icon {
+      opacity: 1;
+      transition: .1s ease;
+    }
+  }
+}

@@ -3,7 +3,7 @@
     <div class="row mb-4">
       <div class="col-12">
         <h1 class="mb-0">Governance</h1>
-        <div class="light" style="font-size: 10px;">{{governance?.address}}</div>
+        <opdex-copy-address [address]="governance?.address"></opdex-copy-address>
       </div>
     </div>
 
@@ -56,7 +56,7 @@
   </div>
 </div>
 
-<div class="standard-section pt-5">
+<div class="standard-section pt-5 pb-3">
   <div class="container">
     <ng-container *ngIf="nominatedPools$ | async as nominatedPools">
       <div class="row" *ngIf="nominatedPools.length">

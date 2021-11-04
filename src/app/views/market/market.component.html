@@ -3,7 +3,7 @@
     <div class="row mb-3 justify-content-between align-items-center">
       <div class="col-12 col-lg-6 col-xl-8">
         <h1 class="mb-0">Market Overview</h1>
-        <div class="light" style="font-size: 10px;">{{market?.address}}</div>
+        <opdex-copy-address [address]="market?.address"></opdex-copy-address>
       </div>
 
       <div class="d-none d-lg-block col-lg-6 col-xl-4">
@@ -62,7 +62,7 @@
   </div>
 </div>
 
-<div class="standard-section pt-5 pb-5">
+<div class="standard-section pt-5 pb-3">
   <div class="container">
     <ng-container *ngIf="miningPools$ | async as miningPools">
       <div class="row mb-5" *ngIf="miningPools.length">

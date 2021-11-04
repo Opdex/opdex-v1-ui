@@ -3,7 +3,7 @@
     <div class="row align-items-center">
       <div class="col-12 col-lg-6 col-xl-8">
         <h1 class="mb-0">{{pool?.token?.src?.symbol || 'XYZ'}}/{{pool?.token?.crs?.symbol || 'CRS'}}</h1>
-        <div class="light" style="font-size: 10px;">{{pool?.address}}</div>
+        <opdex-copy-address [address]="pool?.address"></opdex-copy-address>
 
         <div class="chip-group mt-2">
           <div class="chip blue">{{pool?.transactionFee * 100}}% Fee</div>

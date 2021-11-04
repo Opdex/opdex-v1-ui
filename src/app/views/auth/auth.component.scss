@@ -1,5 +1,5 @@
 #auth {
-  min-height: var(--app-height);
+  min-height: calc(var(--app-height) - (env(safe-area-inset-bottom, 0) + 50px));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -21,5 +21,12 @@
     width: 75px;
     margin: 0px auto 15px;
     display: block;
+  }
+}
+
+
+@media (min-width: 992px) {
+  #auth {
+    padding: 0px;
   }
 }

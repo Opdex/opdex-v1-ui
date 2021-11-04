@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: var(--app-height);
+  min-height: calc(var(--app-height) - (env(safe-area-inset-bottom, 0) + 50px));
 
   opdex-card {
     display: block;

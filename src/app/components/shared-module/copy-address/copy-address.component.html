@@ -1,0 +1,6 @@
+<a class="copy-address light"
+  [cdkCopyToClipboard]="address"
+  (click)="copyHandler($event)">
+  <span class="address">{{address}}</span>
+  <mat-icon class="ml-2">{{copied ? icons.check : icons.copy}}</mat-icon>
+</a>

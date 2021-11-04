@@ -3,7 +3,7 @@
     <div class="row mb-3 justify-content-between align-items-center">
       <div class="col-12 col-lg-6 col-xl-8">
         <h1 class="mb-0">{{token.name}}</h1>
-        <div class="light" style="font-size: 10px;" *ngIf="token.address !== 'CRS'">{{token.address}}</div>
+        <opdex-copy-address [address]="token?.address"></opdex-copy-address>
       </div>
 
       <div class="d-none d-lg-block col-lg-6 col-xl-4">
@@ -46,7 +46,7 @@
   </div>
 </div>
 
-<div class="standard-section pt-5 pb-5 tx-bg blend-cards">
+<div class="standard-section pt-5 pb-3 tx-bg blend-cards">
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-12 col-lg-6 col-xl-5">
