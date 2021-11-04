@@ -9,3 +9,9 @@
     align-items: center;
   }
 }
+
+@media (min-width: 992px) {
+  #trade {
+    min-height: var(--app-height);
+  }
+}

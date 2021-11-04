@@ -23,3 +23,9 @@
     display: block;
   }
 }
+
+@media (min-width: 992px) {
+  #not-found {
+    min-height: var(--app-height);
+  }
+}

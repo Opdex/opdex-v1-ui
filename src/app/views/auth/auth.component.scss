@@ -24,9 +24,8 @@
   }
 }
 
-
 @media (min-width: 992px) {
   #auth {
-    padding: 0px;
+    min-height: var(--app-height);
   }
 }
