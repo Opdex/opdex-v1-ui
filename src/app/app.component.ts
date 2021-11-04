@@ -22,6 +22,7 @@ import { GoogleAnalyticsService } from 'ngx-google-analytics';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { ISidenavMessage } from '@sharedModels/transaction-view';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { Icons } from './enums/icons';
 
 @Component({
   selector: 'opdex-root',
@@ -43,6 +44,7 @@ export class AppComponent implements OnInit {
   sidenavMode: 'over' | 'side' = 'over';
   hubConnection: HubConnection;
   loading = true;
+  icons = Icons;
 
   constructor(
     public overlayContainer: OverlayContainer,
@@ -59,6 +61,9 @@ export class AppComponent implements OnInit {
     private _transactionService: TransactionsService,
     private _cdref: ChangeDetectorRef
   ) {
+    window.addEventListener('resize', this.appHeight);
+    this.appHeight();
+
     this.network = environment.network;
     this.context = this._context.getUserContext();
 
@@ -72,6 +77,16 @@ export class AppComponent implements OnInit {
 
   ngAfterContentChecked() {
     this._cdref.detectChanges();
+  }
+
+  private appHeightRecorded: number;
+  private appHeight() {
+    const height = window.innerHeight;
+
+    if (height !== this.appHeightRecorded) {
+      this.appHeightRecorded = height;
+      document.documentElement.style.setProperty('--app-height', `${height}px`);
+    }
   }
 
   async ngOnInit(): Promise<void> {
@@ -145,8 +160,8 @@ export class AppComponent implements OnInit {
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData.animation;
   }
 
-  toggleMobileMenu(event: boolean) {
-    this.menuOpen = event;
+  handleToggleMenu() {
+    this.menuOpen = !this.menuOpen;
   }
 
   handlePinnedToggle(event: boolean) {

@@ -62,7 +62,7 @@
 
     <div class="space-between"></div>
 
-    <ul class="sidebar-nav secondary">
+    <ul class="sidebar-nav secondary mb-2">
       <div class="d-flex flex-row align-items-center no-wrap">
         <button mat-button class="small d-inline pl-0 pr-0" (click)="networkTooltip.toggle()" *ngIf="latestSyncedBlock$ | async as block">
           <mat-icon class="mr-2" [matTooltip]="network" #networkTooltip="matTooltip">languages</mat-icon>

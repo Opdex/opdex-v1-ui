@@ -20,18 +20,21 @@
           <opdex-side-nav (onPinnedToggle)="handlePinnedToggle($event)"></opdex-side-nav>
         </aside>
 
-        <div class="animation-container" style="min-height: 100vh;">
+        <div class="animation-container">
           <div id="page-content">
             <div class="mobile-nav" [ngClass]="{'open': menuOpen}">
               <opdex-side-nav (onRouteChanged)="handleRouteChanged($event)"></opdex-side-nav>
+              <button mat-icon-button class="small" (click)="handleToggleMenu()" style="position: fixed; right: 20px; bottom: 20px; z-index: 10" *ngIf="menuOpen">
+                <mat-icon>{{icons.close}}</mat-icon>
+              </button>
             </div>
 
             <div class="page-content-container" [@fadeAnimation]="prepareRoute(outlet)">
               <router-outlet #outlet="outlet"></router-outlet>
             </div>
 
-            <div class="scroll-to-top show-scroll-top">
-              <opdex-hamburger [isOpen]="menuOpen" (onToggle)="toggleMobileMenu($event)"></opdex-hamburger>
+            <div class="mobile-navbar">
+              <opdex-mobile-nav (onToggleMenu)="handleToggleMenu()"></opdex-mobile-nav>
             </div>
           </div>
         </div>

@@ -4,7 +4,6 @@ $sidebar-width: 100px;
 
 .main-content-container {
   #desktop-sidenav {
-    height: 100vh;
     width: $sidebar-width;
     position: fixed;
     z-index: 9999;
@@ -31,6 +30,11 @@ $sidebar-width: 100px;
       display: flex;
       flex-direction: column;
       flex: 1;
+
+      .page-content-container {
+        // padding-bottom: 50px;
+        // padding-bottom: calc(50px + env(safe-area-inset-bottom, 0));
+      }
     }
   }
 }
@@ -45,13 +49,21 @@ $sidebar-width: 100px;
   border-left: 0px !important;
 }
 
+.mobile-navbar {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: 4;
+}
+
 .mobile-nav {
   position: fixed;
   width: 100%;
   max-width: 400px;
   z-index: 999;
   transform: translateX(-100vw);
-  min-height: calc(100vh - 40px);
+  min-height: var(--app-height);
   transition: transform .2s ease-out;
   left: 0;
 
@@ -72,8 +84,8 @@ $sidebar-width: 100px;
 }
 
 .splash {
-  height: 100vh;
-  width: 100vw;
+  min-height: var(--app-height);
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -150,7 +162,7 @@ $sidebar-width: 100px;
 @media (min-width: 992px) {
   .scroll-to-top { display: none; }
 
-  .mobile-nav {
+  .mobile-nav, .mobile-navbar {
     display: none;
   }
 
@@ -162,11 +174,11 @@ $sidebar-width: 100px;
 
       .animation-container {
         margin-left: 260px;
-      }
-    }
 
-    .page-content-container {
-      margin-top: 0px;
+        .page-content-container {
+          padding-bottom: 0px !important;
+        }
+      }
     }
 
     .animation-container {

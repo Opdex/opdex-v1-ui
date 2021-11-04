@@ -15,12 +15,14 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatMenuModule } from '@angular/material/menu';
+import { MobileNavComponent } from './mobile-nav/mobile-nav.component';
 
 @NgModule({
   declarations: [
     SideNavComponent,
     HamburgerComponent,
-    StatusBarComponent
+    StatusBarComponent,
+    MobileNavComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +39,8 @@ import { MatMenuModule } from '@angular/material/menu';
   exports: [
     SideNavComponent,
     HamburgerComponent,
-    StatusBarComponent
+    StatusBarComponent,
+    MobileNavComponent
   ]
 })
 export class NavigationModule { }

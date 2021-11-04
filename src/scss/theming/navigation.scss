@@ -1,13 +1,13 @@
 @import 'src/scss/colors';
 
 .light-mode {
+  .wallet-indicator {
+    border: .2em solid #fff;
+  }
+
   #side-nav {
     border-right: 1px solid #ccc;
     background: #fff;
-
-    .wallet-indicator {
-      border: .2em solid #fff;
-    }
 
     .navbar-pin {
       &.mat-mini-fab {
@@ -17,16 +17,21 @@
       }
     }
   }
+
+  .mobile-navbar {
+    border-top: 1px solid #f4f4f4;
+    background: #fff;
+  }
 }
 
 .dark-mode {
+  .wallet-indicator {
+    border: .2em solid #1b192f;
+  }
+
   #side-nav {
     border-right: 1px solid #292929;
     background: #1b192f;
-
-    .wallet-indicator {
-      border: .2em solid #1b192f;
-    }
 
     .navbar-pin {
       &.mat-mini-fab {
@@ -35,5 +40,10 @@
         color: #fff;
       }
     }
+  }
+
+  .mobile-navbar {
+    border-top: 1px solid #292929;
+    background: #1b192f;
   }
 }

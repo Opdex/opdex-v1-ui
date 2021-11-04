@@ -2,12 +2,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: var(--app-height);
 
   opdex-card {
+    display: block;
     width: 100%;
     max-width: 500px;
-    margin-bottom: 0px !important;
+    margin: 0 auto;
 
     h2 {
       text-align: center;

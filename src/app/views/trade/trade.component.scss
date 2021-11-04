@@ -1,6 +1,11 @@
 #trade {
   display: flex;
+  min-height: var(--app-height);
   justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+}
+
+@media (min-height: 1081px) {
+  #trade {
+    align-items: center;
+  }
 }

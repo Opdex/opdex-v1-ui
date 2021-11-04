@@ -1,4 +1,3 @@
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { TokenHistory } from '@sharedModels/token-history';
 import { IconSizes } from 'src/app/enums/icon-sizes';

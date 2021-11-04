@@ -1,0 +1,27 @@
+<div class="mobile-navbar">
+  <div class="button-group d-flex flex-row justify-content-around align-items-center">
+    <button mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <mat-icon>{{icons.market}}</mat-icon>
+    </button>
+
+    <button mat-button routerLink="/trade" routerLinkActive="active">
+      <mat-icon>{{icons.swap}}</mat-icon>
+    </button>
+
+    <button mat-button
+      routerLink="{{!context?.wallet ? '/auth' : '/wallet'}}"
+      routerLinkActive="active">
+
+      <span class="wallet-indicator {{context?.wallet ? 'valid' : 'invalid'}}"></span>
+      <mat-icon>{{icons.wallet}}</mat-icon>
+    </button>
+
+    <button mat-button routerLink="/pools" routerLinkActive="active">
+      <mat-icon>{{icons.liquidityPool}}</mat-icon>
+    </button>
+
+    <button mat-button (click)="toggleMenu()">
+      <mat-icon>{{icons.more}}</mat-icon>
+    </button>
+  </div>
+</div>

@@ -76,7 +76,7 @@
 
 .mat-drawer {
   z-index: 1000;
-  min-height: 100vh;
+  min-height: var(--app-height);
   overscroll-behavior: contain;
 }
 

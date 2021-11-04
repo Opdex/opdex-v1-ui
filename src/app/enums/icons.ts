@@ -21,7 +21,7 @@ export enum Icons {
     checkOutline = 'check_circle_outline',
     checkBox = 'check_box',
     checkBoxBlank = 'check_box_outline_blank',
-    check = 'check_circle',
+    check = 'check',
     close = 'close',
     tokens = 'toll',
     rewards = 'star',
