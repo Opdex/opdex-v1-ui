@@ -4,7 +4,7 @@
       <ng-container matColumnDef="token" sticky>
         <th mat-header-cell *matHeaderCellDef> Token </th>
         <td mat-cell *matCellDef="let element" class="no-wrap">
-          <div class="no-wrap d-flex align-items-center">
+          <div class="no-wrap flex-row-center">
             <!-- <opdex-copy-button [tooltip]="element.token.address" [value]="element.token.address" [icon]="icons.link"></opdex-copy-button> -->
             <a class="no-decoration b-400" href="javascript:void(0)" (click)="navigate(element.token.address)">{{element.token.symbol}}</a>
           </div>

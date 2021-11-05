@@ -21,7 +21,7 @@
           [tx]="tx"
           [showBottomDivider]="i < transactions.length - 1"></opdex-tx-receipt>
 
-        <div class="d-flex flex-row align-items-center justify-content-center mt-3 mb-3" *ngIf="!endReached && nextPage">
+        <div class="flex-row-center justify-content-center mt-3 mb-3" *ngIf="!endReached && nextPage">
           <mat-spinner [ngClass]="iconSizes.tiny" class="mr-2"></mat-spinner> Coming right up...
         </div>
       </ng-container>
@@ -33,7 +33,7 @@
     </ng-container>
 
     <ng-template #loader>
-      <div class="d-flex h-100 flex-column align-items-center justify-content-center">
+      <div class="flex-column-center justify-content-center h-100">
         <mat-spinner [ngClass]="iconSizes.small" class="mb-3"></mat-spinner>
         <p>Magic happening...</p>
       </div>

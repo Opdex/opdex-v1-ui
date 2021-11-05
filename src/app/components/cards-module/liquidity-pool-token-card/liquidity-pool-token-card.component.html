@@ -1,26 +1,26 @@
 <opdex-card>
   <ng-container *ngIf="swapToken && token; else loading">
     <small class="light">{{token.name}}</small>
-    <div class="d-flex align-items-center justify-content-between">
+    <div class="flex-row-center-between">
       <h2 class=" mb-0 d-inline">
-        <a class="body-default" style="text-decoration: none; font-weight: 300;" href="javascript:void(0)" routerLink="/tokens/{{token.address}}">{{token.symbol}}</a>
+        <a class="body-default b-300 no-decoration" href="javascript:void(0)" routerLink="/tokens/{{token.address}}">{{token.symbol}}</a>
       </h2>
 
-      <div class="d-flex flex-row align-items-end">
-        <h3 class="mb-0 mr-2" style="font-weight: 300;">${{token.summary.priceUsd | shortNumber}}</h3>
+      <div class="flex-row-end">
+        <h3 class="mb-0 mr-2 b-300">${{token.summary.priceUsd | shortNumber}}</h3>
         <opdex-change-indicator [value]="token.summary.dailyPriceChangePercent" size="s" *ngIf="token.summary.dailyPriceChangePercent !== null && token.summary.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
       </div>
     </div>
 
-    <div class="d-flex flex-row justify-content-between mt-2">
-      <div class="d-flex align-items-center">
+    <div class="flex-row-center-between mt-2">
+      <div class="flex-row-center">
         <mat-icon color="primary" class="mr-2 tiny">{{icons.lock}}</mat-icon>
         <h5 class="mb-0">{{reserves | shortNumber}}</h5>
       </div>
 
-      <div class="d-flex align-items-center">
+      <div class="flex-row-center">
         <mat-icon color="primary" class="mr-2 tiny">{{icons.swap}}</mat-icon>
-        <h5 class="d-flex align-items-end mb-0">
+        <h5 class="flex-row-end mb-0">
           <span>{{swapRate | shortNumber }}</span>
           <small class="ml-1">{{swapToken.symbol}}</small>
         </h5>
@@ -31,13 +31,13 @@
   <ng-template #loading>
     <div class="skeleton-bg w-50 mb-1"></div>
 
-    <div class="d-flex flex-row justify-content-between">
+    <div class="flex-row-center">
       <div class="w-50">
         <div class="skeleton-bg w-50 mb-1"></div>
         <div class="skeleton-bg w-50 mb-1"></div>
       </div>
 
-      <div class="w-50 d-flex flex-column align-items-end">
+      <div class="w-50 flex-column-end">
         <div class="skeleton-bg w-50 mb-1"></div>
         <div class="skeleton-bg w-50 mb-1"></div>
       </div>

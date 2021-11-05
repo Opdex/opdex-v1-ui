@@ -19,13 +19,13 @@
       <div class="col-12 col-lg-6 col-xl-4">
         <opdex-card [hasToolbar]="true">
           <ng-container toolbar>
-            <div class="w-100 justify-content-between d-flex align-items-center">
+            <div class="w-100 justify-content-between flex-row-center">
               <h4 class="mb-0">Summary</h4>
               <button mat-icon-button (click)="logout()" class="small"><mat-icon [ngClass]="iconSizes.small" class="mine ml-1">{{icons.exit}}</mat-icon></button>
             </div>
           </ng-container>
 
-          <div class="crs mb-2 d-flex flex-row justify-content-between align-items-center" *ngIf="crsBalance">
+          <div class="crs mb-2 flex-row-center-between" *ngIf="crsBalance">
             <p class="big-balance">{{crsBalance.balance | shortNumber}} <small>CRS</small></p>
             <p class="mb-0 positive-value">${{crsBalanceValue | shortNumber}}</p>
           </div>
@@ -39,7 +39,7 @@
           </div>
 
           <div class="preferences">
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="flex-row-center-between">
               <h5 class="mb-0 light">Preferences</h5>
               <button mat-icon-button (click)="togglePreferences()" color="primary"><mat-icon>{{showPreferences ? icons.remove : icons.add}}</mat-icon></button>
             </div>
@@ -68,17 +68,17 @@
 
       <div class="col-12 col-lg-6 col-xl-8">
         <div class="mb-3">
-          <h4 class="mb-0 d-flex align-items-center"><mat-icon color="primary" class="mr-2">{{icons.tokens}}</mat-icon>Balances</h4>
+          <h4 class="mb-0 flex-row-center"><mat-icon color="primary" class="mr-2">{{icons.tokens}}</mat-icon>Balances</h4>
           <opdex-wallet-balances-table [records]="walletBalances" (onPageChange)="handleBalancesPageChange($event)"></opdex-wallet-balances-table>
         </div>
 
         <div class="mb-3">
-          <h4 class="mb-0 d-flex align-items-center"><mat-icon class="mine mr-2">{{icons.mining}}</mat-icon>Mining Positions</h4>
+          <h4 class="mb-0 flex-row-center"><mat-icon class="mine mr-2">{{icons.mining}}</mat-icon>Mining Positions</h4>
           <opdex-wallet-mining-positions-table [records]="miningPositions" (onPageChange)="handleMiningPositionsPageChange($event)"></opdex-wallet-mining-positions-table>
         </div>
 
         <div class="mb-3">
-          <h4 class="mb-0 d-flex align-items-center"><mat-icon class="stake mr-2">verified_user</mat-icon>Staking Positions</h4>
+          <h4 class="mb-0 flex-row-center"><mat-icon class="stake mr-2">verified_user</mat-icon>Staking Positions</h4>
           <opdex-wallet-staking-positions-table [records]="stakingPositions" (onPageChange)="handleStakingPositionsPageChange($event)"></opdex-wallet-staking-positions-table>
         </div>
       </div>

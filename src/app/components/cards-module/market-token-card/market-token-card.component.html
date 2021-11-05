@@ -1,14 +1,14 @@
 <opdex-card>
   <ng-container *ngIf="token; else loading">
     <small class="light">{{token.name}}</small>
-    <div class="d-flex align-items-center justify-content-between">
+    <div class="flex-row-center-between">
       <a class="body-default no-decoration d-inline-flex align-items-center" routerLink="/tokens/{{token.address}}">
         <mat-icon class="{{iconColor}} mr-2">{{icon}}</mat-icon>
         <h2 class="d-inline-block mb-0">{{token.symbol}}</h2>
       </a>
 
-      <div class="d-flex flex-row align-items-end">
-        <h3 class="mb-0 mr-2" style="font-weight: 300;">${{token.summary.priceUsd | shortNumber}}</h3>
+      <div class="flex-row-end">
+        <h3 class="mb-0 mr-2 b-300">${{token.summary.priceUsd | shortNumber}}</h3>
         <opdex-change-indicator [value]="token.summary.dailyPriceChangePercent" size="s" *ngIf="token.summary.dailyPriceChangePercent !== null && token.summary.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
       </div>
     </div>
@@ -17,12 +17,12 @@
   <ng-template #loading>
     <div class="skeleton-bg w-50 mb-1"></div>
 
-    <div class="d-flex flex-row justify-content-between">
+    <div class="flex-row-center">
       <div class="w-50">
         <div class="skeleton-bg w-75"></div>
       </div>
 
-      <div class="w-50 d-flex flex-column align-items-end">
+      <div class="w-50 flex-column-end">
         <div class="skeleton-bg w-75"></div>
       </div>
     </div>

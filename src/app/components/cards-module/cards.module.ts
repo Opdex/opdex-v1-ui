@@ -21,6 +21,7 @@ import { StatCardComponent } from './stat-card/stat-card.component';
 import { ConnectWalletCardComponent } from './connect-wallet-card/connect-wallet-card.component';
 import { LiquidityPoolTokenCardComponent } from './liquidity-pool-token-card/liquidity-pool-token-card.component';
 import { MarketTokenCardComponent } from './market-token-card/market-token-card.component';
+import { WalletPositionCardComponent } from './wallet-position-card/wallet-position-card.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { MarketTokenCardComponent } from './market-token-card/market-token-card.
     StatCardComponent,
     ConnectWalletCardComponent,
     LiquidityPoolTokenCardComponent,
-    MarketTokenCardComponent
+    MarketTokenCardComponent,
+    WalletPositionCardComponent
   ],
   imports: [
     CommonModule,
@@ -53,7 +55,8 @@ import { MarketTokenCardComponent } from './market-token-card/market-token-card.
     StatCardComponent,
     ConnectWalletCardComponent,
     LiquidityPoolTokenCardComponent,
-    MarketTokenCardComponent
+    MarketTokenCardComponent,
+    WalletPositionCardComponent
   ]
 })
 export class CardsModule { }

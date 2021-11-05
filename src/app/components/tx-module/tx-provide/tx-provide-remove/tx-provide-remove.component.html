@@ -1,7 +1,7 @@
 <div class="remove-liquidity">
   <form [formGroup]="form" name="remove-liquidity-form" id="remove-liquidity-form" (submit)="submit()">
     <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.remove" label="Liquidate" [formControl]="liquidity" [suffix]="pool.token.lp.symbol" [numbersOnly]="true">
-      <div class="d-flex flex-row justify-content-between">
+      <div class="flex-row-center-between">
         <div class="tolerance-amounts">
           <span *ngIf="crsOutMin && srcOutMin">Min: {{crsOutMin | shortNumber}} {{pool.token.crs.symbol}} <span style="opacity: .5">|</span> {{srcOutMin | shortNumber}} {{pool.token.src.symbol}}</span>
         </div>

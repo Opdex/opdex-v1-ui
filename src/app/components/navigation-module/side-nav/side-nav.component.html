@@ -63,14 +63,14 @@
     <div class="space-between"></div>
 
     <ul class="sidebar-nav secondary mb-2">
-      <div class="d-flex flex-row align-items-center no-wrap">
+      <div class="flex-row-center no-wrap">
         <button mat-button class="small d-inline pl-0 pr-0" (click)="networkTooltip.toggle()" *ngIf="latestSyncedBlock$ | async as block">
           <mat-icon class="mr-2" [matTooltip]="network" #networkTooltip="matTooltip">languages</mat-icon>
           <small>#{{block.height | formatNumber:0}}</small>
         </button>
       </div>
 
-      <div class="d-flex flex-row align-items-center no-wrap" *ngIf="theme">
+      <div class="flex-row-center no-wrap" *ngIf="theme">
         <button mat-button class="small d-inline pl-0 pr-0" (click)="toggleTheme()">
           <mat-icon class="mr-2">{{theme === 'dark-mode' ? 'brightness_3' : 'brightness_7'}}</mat-icon>
           <small>{{theme === 'dark-mode' ? 'Dark Mode' : 'Light Mode'}}</small>

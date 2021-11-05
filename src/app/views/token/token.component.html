@@ -14,10 +14,10 @@
     <div class="row">
       <div class="col-12 col-md-6 col-xl-3">
         <opdex-card>
-          <div class="d-flex justify-content-between">
+          <div class="flex-row-center-between">
             <h3 class="mb-0">{{token.symbol}}</h3>
 
-            <div class="d-flex flex-row align-items-end">
+            <div class="flex-row-end">
               <h4 class="mb-0 mr-2">${{token.summary.priceUsd | shortNumber}}</h4>
               <opdex-change-indicator style="padding-bottom: 2px;" [value]="token.summary.dailyPriceChangePercent" size="s" *ngIf="token.summary.dailyPriceChangePercent !== null && token.summary.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
             </div>

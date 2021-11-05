@@ -25,7 +25,7 @@
       <ng-container *ngFor="let statCard of statCards; let i = index; trackBy: statCardTrackBy">
         <div *ngIf="statCard.show" class="col-sm-12 col-md">
           <opdex-card>
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="flex-row-center-between">
               <div class="d-inline-flex align-items-center mr-3">
                 <opdex-help-button *ngIf="statCard.helpInfo" [info]="statCard.helpInfo" [icon]="statCard.icon" [iconColor]="statCard.iconColor" class="mr-2"></opdex-help-button>
                 <p class="mb-0 no-wrap"><span *ngIf="statCard.daily">Daily</span> {{statCard.title}}</p>
@@ -71,7 +71,7 @@
     <ng-container *ngIf="miningPools$ | async as miningPools">
       <div class="row mb-5" *ngIf="miningPools.length">
         <div class="col-12">
-          <h2 class="mb-3 d-flex align-items-center">
+          <h2 class="mb-3 flex-row-center">
             <mat-icon class="mr-2 mine">{{icons.mining}}</mat-icon> Liquidity Mining
           </h2>
 

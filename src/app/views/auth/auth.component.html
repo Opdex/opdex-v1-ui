@@ -17,8 +17,8 @@
 
           <mat-autocomplete #auto="matAutocomplete">
             <mat-option *ngFor="let key of publicKeys$ | async" [value]="key">
-              <div class="d-flex justify-content-between align-items-center">
-                <small style="font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{key}}</small>
+              <div class="flex-row-center-between">
+                <small class="overflow-ellipsis" style="font-size: 15px;">{{key}}</small>
                 <button mat-icon-button class="tiny" (click)="deletePublicKey(key)"><mat-icon class="mine">{{icons.delete}}</mat-icon></button>
               </div>
             </mat-option>

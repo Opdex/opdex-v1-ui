@@ -1,11 +1,11 @@
 <div class="transaction-receipt row-hoverable" *ngIf="tx" (click)="toggleCollapse()">
   <div class="tx-container">
-    <div class="d-flex flex-row align-items-center w-100 mb-1">
+    <div class="flex-row-center w-100 mb-1">
       <div class="icon-container">
         <mat-icon [ngClass]="[iconSizes.small, (tx.transactionType?.iconColor || 'error')]">{{tx.transactionType?.icon || icons.error}}</mat-icon>
       </div>
 
-      <div class="w-100 d-flex light justify-content-between">
+      <div class="flex-row-center-between w-100">
         <small>{{tx?.transactionSummary}}</small>
         <small *ngIf="showTimeAgo">{{tx?.block?.medianTime | timeago}}</small>
       </div>
@@ -25,14 +25,14 @@
     </div>
 
     <ng-template #invalid>
-      <div class="icon-container-offset d-flex flex-row align-items-center">
+      <div class="icon-container-offset flex-row-center">
         Unable to read transaction summary.
       </div>
     </ng-template>
 
     <div class="collapsed" [@collapse]="collapsed">
-      <div class="d-flex flex-row align-items-center icon-container-offset pt-3 flex-wrap">
-        <div class="d-flex flex-row align-items-center mr-3" *ngIf="tx.hash?.length > 0">
+      <div class="flex-row-center icon-container-offset pt-3 flex-wrap">
+        <div class="flex-row-center mr-3" *ngIf="tx.hash?.length > 0">
           <opdex-copy-button
             [tooltip]="tx.hash"
             [value]="tx.hash"
@@ -43,7 +43,7 @@
           <span class="ml-2"><small>{{tx.hash | shortAddress:3}}</small></span>
         </div>
 
-        <div class="d-flex flex-row align-items-center mr-3">
+        <div class="flex-row-center mr-3">
           <opdex-copy-button
             [tooltip]="tx.from"
             [value]="tx.from"
@@ -54,7 +54,7 @@
             <span class="ml-2"><small>{{tx.from | shortAddress:3}}</small></span>
         </div>
 
-        <div class="d-flex flex-row align-items-center">
+        <div class="flex-row-center">
           <mat-icon [ngClass]="iconSizes.tiny" class="mr-2 mine">{{icons.gas}}</mat-icon> <small>{{tx.gasUsed | formatNumber:0}}</small>
         </div>
       </div>

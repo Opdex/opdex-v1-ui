@@ -1,0 +1,36 @@
+<opdex-card>
+  <div class="flex-row-center-between" *ngIf="position?.value !== null && position?.value !== undefined; else loadingPositions">
+    <div>
+      <small class="light mb-1">{{position.position}}</small>
+      <h4 class="mb-0 flex-row-center">
+        <ng-container [ngSwitch]="position.position">
+          <mat-icon [ngClass]="iconSizes.small" class="swap mr-2" *ngSwitchCase="'Balance'">{{icons.tokens}}</mat-icon>
+          <mat-icon [ngClass]="iconSizes.small" class="provide mr-2" *ngSwitchCase="'Providing'">{{icons.provide}}</mat-icon>
+          <mat-icon [ngClass]="iconSizes.small" class="stake mr-2" *ngSwitchCase="'Staking'">{{icons.staking}}</mat-icon>
+          <mat-icon [ngClass]="iconSizes.small" class="mine mr-2" *ngSwitchCase="'Mining'">{{icons.mining}}</mat-icon>
+        </ng-container>
+
+        {{position.token.symbol}}
+      </h4>
+    </div>
+
+    <div class="flex-column-end justify-content-end">
+      <small class="light mb-1" >${{position.value.formattedValue | shortNumber}}</small>
+      <p class="mb-0" style="font-size: 1.2em;">{{position.amount.formattedValue | shortNumber}}</p>
+    </div>
+  </div>
+
+  <ng-template #loadingPositions>
+    <div class="w-100">
+      <div class="flex-row-center mb-1">
+        <div class="skeleton-bg w-25"></div>
+        <div class="skeleton-bg w-25"></div>
+      </div>
+
+      <div class="flex-row-center">
+        <div class="skeleton-bg w-25"></div>
+        <div class="skeleton-bg w-25"></div>
+      </div>
+    </div>
+  </ng-template>
+</opdex-card>
