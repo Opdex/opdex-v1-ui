@@ -87,9 +87,13 @@ export class PoolComponent implements OnInit, OnDestroy {
     private _walletService: WalletsService,
     private _blocksService: BlocksService
   ) {
+    this.setPoolStatCards();
+
     this.subscription.add(
       this._sidenav.getStatus()
         .subscribe((message: ISidenavMessage) => this.message = message));
+
+    this.positions = [ null, null, null, null ];
   }
 
   ngOnInit(): void {
@@ -169,9 +173,9 @@ export class PoolComponent implements OnInit, OnDestroy {
     this.statCards = [
       {
         title: 'Liquidity',
-        value: this.pool.reserves.usd.toString(),
+        value: this.pool?.reserves?.usd?.toString(),
         prefix: '$',
-        change: this.pool.reserves.usdDailyChange,
+        change: this.pool?.reserves?.usdDailyChange,
         show: true,
         icon: Icons.liquidityPool,
         iconColor: 'primary',
@@ -182,10 +186,10 @@ export class PoolComponent implements OnInit, OnDestroy {
       },
       {
         title: 'Staking',
-        value: this.pool.staking?.weight,
-        suffix: this.pool.token.staking?.symbol,
-        change: this.pool.staking?.weightDailyChange || 0,
-        show: true,
+        value: this.pool?.staking?.weight,
+        suffix: this.pool?.token?.staking?.symbol,
+        change: this.pool?.staking?.weightDailyChange || 0,
+        show: this.pool?.staking !== null && this.pool?.staking !== undefined,
         icon: Icons.staking,
         iconColor: 'stake',
         helpInfo: {
@@ -195,7 +199,7 @@ export class PoolComponent implements OnInit, OnDestroy {
       },
       {
         title: 'Volume',
-        value: this.pool.volume.usd.toString(),
+        value: this.pool?.volume?.usd?.toString(),
         prefix: '$',
         daily: true,
         show: true,
@@ -208,7 +212,7 @@ export class PoolComponent implements OnInit, OnDestroy {
       },
       {
         title: 'Rewards',
-        value: this.pool.rewards.totalUsd.toString(),
+        value: this.pool?.rewards?.totalUsd?.toString(),
         daily: true,
         prefix: '$',
         show: true,
@@ -221,9 +225,9 @@ export class PoolComponent implements OnInit, OnDestroy {
       },
       {
         title: 'Mining',
-        value: this.pool.mining?.tokensMining,
-        suffix: this.pool.token.lp.symbol,
-        show: this.pool.mining != null && (this.pool.mining?.isActive || this.pool.mining?.tokensMining !== '0.00000000'),
+        value: this.pool?.mining?.tokensMining,
+        suffix: this.pool?.token?.lp?.symbol,
+        show: (this.pool?.mining !== null && this.pool?.mining !== undefined) && (this.pool?.mining?.isActive || this.pool?.mining?.tokensMining !== '0.00000000'),
         icon: Icons.mining,
         iconColor: 'mine',
         helpInfo: {
@@ -272,9 +276,9 @@ export class PoolComponent implements OnInit, OnDestroy {
         this.getTokenBalance(context.wallet, srcToken),
       ];
 
-      if (stakingToken) {
-        combo.push(this.getTokenBalance(context.wallet, stakingToken));
-      }
+      // if (stakingToken) {
+      //   combo.push(this.getTokenBalance(context.wallet, stakingToken));
+      // }
 
       // Yes, this can be added to the initial array, but this order is better for UX
       combo.push(this.getTokenBalance(context.wallet, lpToken));

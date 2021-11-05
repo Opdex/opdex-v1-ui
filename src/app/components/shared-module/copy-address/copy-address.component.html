@@ -1,6 +1,11 @@
 <a class="copy-address light"
   [cdkCopyToClipboard]="address"
-  (click)="copyHandler($event)">
+  (click)="copyHandler($event)"
+  *ngIf="address?.length > 0; else loading">
   <span class="address">{{address}}</span>
   <mat-icon class="ml-2">{{copied ? icons.check : icons.copy}}</mat-icon>
 </a>
+
+<ng-template #loading>
+  <div class="skeleton-bg" style="max-width: 200px;"></div>
+</ng-template>

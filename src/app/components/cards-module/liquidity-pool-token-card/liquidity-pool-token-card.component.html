@@ -1,5 +1,5 @@
 <opdex-card>
-  <ng-container *ngIf="swapToken && token">
+  <ng-container *ngIf="swapToken && token; else loading">
     <small class="light">{{token.name}}</small>
     <div class="d-flex align-items-center justify-content-between">
       <h2 class=" mb-0 d-inline">
@@ -27,4 +27,20 @@
       </div>
     </div>
   </ng-container>
+
+  <ng-template #loading>
+    <div class="skeleton-bg w-50 mb-1"></div>
+
+    <div class="d-flex flex-row justify-content-between">
+      <div class="w-50">
+        <div class="skeleton-bg w-50 mb-1"></div>
+        <div class="skeleton-bg w-50 mb-1"></div>
+      </div>
+
+      <div class="w-50 d-flex flex-column align-items-end">
+        <div class="skeleton-bg w-50 mb-1"></div>
+        <div class="skeleton-bg w-50 mb-1"></div>
+      </div>
+    </div>
+  </ng-template>
 </opdex-card>

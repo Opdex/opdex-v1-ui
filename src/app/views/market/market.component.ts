@@ -63,7 +63,9 @@ export class MarketComponent implements OnInit {
     private _sidebar: SidenavService,
     private _liquidityPoolsService: LiquidityPoolsService,
     private _blocksService: BlocksService
-  ) { }
+  ) {
+    this.setMarketStatCards();
+  }
 
   ngOnInit(): void {
     this.tokensFilter = new TokensFilter({
@@ -115,9 +117,9 @@ export class MarketComponent implements OnInit {
     this.statCards = [
       {
         title: 'Liquidity',
-        value: this.market.summary.liquidity.toString(),
+        value: this.market?.summary?.liquidity?.toString(),
         prefix: '$',
-        change: this.market.summary.liquidityDailyChange,
+        change: this.market?.summary?.liquidityDailyChange,
         show: true,
         icon: Icons.liquidityPool,
         iconColor: 'primary',
@@ -128,9 +130,9 @@ export class MarketComponent implements OnInit {
       },
       {
         title: 'Staking',
-        value: this.market.summary.staking.weight,
-        suffix: this.market.stakingToken.symbol,
-        change: this.market.summary.staking.weightDailyChange,
+        value: this.market?.summary?.staking?.weight,
+        suffix: this.market?.stakingToken?.symbol,
+        change: this.market?.summary?.staking?.weightDailyChange,
         show: true,
         icon: Icons.staking,
         iconColor: 'stake',
@@ -141,7 +143,7 @@ export class MarketComponent implements OnInit {
       },
       {
         title: 'Volume',
-        value: this.market.summary.volume.toString(),
+        value: this.market?.summary?.volume?.toString(),
         prefix: '$',
         daily: true,
         show: true,
@@ -154,7 +156,7 @@ export class MarketComponent implements OnInit {
       },
       {
         title: 'Rewards',
-        value: this.market.summary.rewards.totalUsd,
+        value: this.market?.summary?.rewards?.totalUsd,
         daily: true,
         prefix: '$',
         show: true,

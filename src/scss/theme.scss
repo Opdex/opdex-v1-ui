@@ -49,8 +49,8 @@ $light-focused: rgba(white, 0.12);
 
 mat.$dark-theme-foreground-palette: (
   base:              $light-text,
-  divider:           rgba(white, 0.12),
-  dividers:          rgba(white, 0.12),
+  divider:           rgba(white, 0.08),
+  dividers:          rgba(white, 0.08),
   disabled:          rgba(white, 0.5),
   disabled-button:   rgba($light-text, 0.3),
   disabled-text:     rgba(white, 0.5),
@@ -173,6 +173,7 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   overscroll-behavior-y: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 main {

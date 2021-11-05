@@ -1,11 +1,11 @@
 import { ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pools-response.interface';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { map, switchMap } from 'rxjs/operators';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { Icons } from 'src/app/enums/icons';
 import { LiquidityPoolsFilter, LpOrderBy, MiningFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
@@ -19,10 +19,11 @@ interface IPoolsView {
   templateUrl: './pools.component.html',
   styleUrls: ['./pools.component.scss']
 })
-export class PoolsComponent implements OnInit {
-  pools$: Observable<IPoolsView>;
+export class PoolsComponent implements OnInit, OnDestroy {
+  pools: IPoolsView;
   icons = Icons;
   topPoolsFilter: LiquidityPoolsFilter;
+  subscription = new Subscription();
 
   constructor(
     private _sidebar: SidenavService,
@@ -30,24 +31,33 @@ export class PoolsComponent implements OnInit {
     private _blocksService: BlocksService
   ) {
     this.topPoolsFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 10, direction: 'DESC'});
+
+    // Initialize dummy results for skeleton placeholders
+    this.pools = {
+      topVolume: {
+        results: [null, null, null, null],
+        paging: null
+      },
+      mining: null
+    }
   }
 
   ngOnInit(): void {
     const miningFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 4, direction: 'DESC', miningFilter: MiningFilter.Enabled});
     const volumeFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Volume, limit: 4, direction: 'DESC'});
 
-    this.pools$ = this._blocksService.getLatestBlock$()
+    this.subscription.add(this._blocksService.getLatestBlock$()
       .pipe(switchMap(_ => {
         return combineLatest([
           this._liquidityPoolsService.getLiquidityPools(volumeFilter),
           this._liquidityPoolsService.getLiquidityPools(miningFilter)
         ]).pipe(map((summaries: ILiquidityPoolsResponse[]) => {
-          return {
+          this.pools = {
             topVolume: summaries[0],
             mining: summaries[1]
           }
         }));
-      }));
+      })).subscribe());
   }
 
   handleTxOption($event: TransactionView) {
@@ -59,6 +69,11 @@ export class PoolsComponent implements OnInit {
   }
 
   poolsTrackBy(index: number, pool: ILiquidityPoolSummary) {
+    if (pool === null || pool === undefined) return index;
     return `${index}-${pool.address}-${pool.cost.crsPerSrc.close}-${pool.mining?.tokensMining}-${pool.staking?.weight}`;
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

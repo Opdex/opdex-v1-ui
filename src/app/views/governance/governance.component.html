@@ -7,35 +7,52 @@
       </div>
     </div>
 
-    <div class="row" *ngIf="governance">
+    <div class="row">
       <div class="col-12 col-md-6 col-lg-4 col-xl-3">
         <opdex-card>
-          <div class="d-flex flex-column justify-content-between">
-            <h4 class="d-flex flex-row align-items-center justify-content-between">
-              <span class="text d-flex flex-row align-items-center">
-                <opdex-help-button class="mr-2" [info]="nominationsHelpInfo"></opdex-help-button> Nominations
-              </span>
+          <ng-container *ngIf="governance; else loadingFirstSkeleton">
 
-              <span class="badge {{governance.periodRemainingBlocks > 0 ? 'success' : 'warn'}}">{{governance.periodRemainingBlocks > 0 ? 'Ongoing' : 'Awaiting Distribution'}}</span>
-            </h4>
+            <div class="d-flex flex-column justify-content-between">
+              <h4 class="d-flex flex-row align-items-center justify-content-between">
+                <span class="text d-flex flex-row align-items-center">
+                  <opdex-help-button class="mr-2" [info]="nominationsHelpInfo"></opdex-help-button> Nominations
+                </span>
 
-            <h5 class="mb-0" *ngIf="governance.periodRemainingBlocks > 0">
-              <mat-progress-bar mode="determinate" value="{{((governance.periodBlockDuration - governance.periodRemainingBlocks) / governance.periodBlockDuration) * 100}}"></mat-progress-bar>
+                <span class="badge {{governance.periodRemainingBlocks > 0 ? 'success' : 'warn'}}">{{governance.periodRemainingBlocks > 0 ? 'Ongoing' : 'Awaiting Distribution'}}</span>
+              </h4>
 
-              <div class="mt-2 d-flex flex-row justify-content-between align-items-center">
-                <small class="light">{{(governance.periodBlockDuration - governance.periodRemainingBlocks) | formatNumber:0}} of {{governance.periodBlockDuration | formatNumber:0}} blocks</small>
-                <small class="light float-right">{{governance.nominationPeriodEndDate | timeago}}</small>
+              <h5 class="mb-0" *ngIf="governance.periodRemainingBlocks > 0">
+                <mat-progress-bar mode="determinate" value="{{((governance.periodBlockDuration - governance.periodRemainingBlocks) / governance.periodBlockDuration) * 100}}"></mat-progress-bar>
+
+                <div class="mt-2 d-flex flex-row justify-content-between align-items-center">
+                  <small class="light">{{(governance.periodBlockDuration - governance.periodRemainingBlocks) | formatNumber:0}} of {{governance.periodBlockDuration | formatNumber:0}} blocks</small>
+                  <small class="light float-right">{{governance.nominationPeriodEndDate | timeago}}</small>
+                </div>
+              </h5>
+            </div>
+
+            <button mat-flat-button color="primary" class="w-100 mt-2" *ngIf="governance.periodRemainingBlocks === 0" [disabled]="submitting || !context.wallet" (click)="quoteDistribution()">Distribute Rewards</button>
+          </ng-container>
+
+          <ng-template #loadingFirstSkeleton>
+            <div class="w-100">
+              <div class="d-flex flex-row justify-content-between mb-3">
+                <div class="skeleton-bg w-25"></div>
+                <div class="skeleton-bg w-25"></div>
               </div>
-            </h5>
-          </div>
 
-          <button mat-flat-button color="primary" class="w-100 mt-2" *ngIf="governance.periodRemainingBlocks === 0" [disabled]="submitting || !context.wallet" (click)="quoteDistribution()">Distribute Rewards</button>
+              <div class="d-flex flex-row justify-content-between">
+                <div class="skeleton-bg w-25"></div>
+                <div class="skeleton-bg w-25"></div>
+              </div>
+            </div>
+          </ng-template>
         </opdex-card>
       </div>
 
       <div class="col-12 col-md-6 col-lg-4 col-xl-3">
         <opdex-card [fullHeight]="true">
-          <div class="d-flex flex-column justify-content-between h-100">
+          <div class="d-flex flex-column justify-content-between h-100" *ngIf="governance; else loadingSecondSkeleton">
             <div class="d-flex flex-row align-items-center justify-content-between">
               <h4 class="text d-flex flex-row align-items-center">
                 <opdex-help-button class="mr-2" [info]="rewardsHelpInfo"></opdex-help-button> Rewards
@@ -50,6 +67,20 @@
               <small class="light">Resets in {{governance.periodsUntilRewardReset}} Nomination Period{{governance.periodsUntilRewardReset === 1 ? '' : 's'}}</small>
             </div>
           </div>
+
+          <ng-template #loadingSecondSkeleton>
+            <div class="w-100">
+              <div class="d-flex flex-row justify-content-between mb-3">
+                <div class="skeleton-bg w-25"></div>
+                <div class="skeleton-bg w-25"></div>
+              </div>
+
+              <div class="d-flex flex-row justify-content-between">
+                <div class="skeleton-bg w-25"></div>
+                <div class="skeleton-bg w-25"></div>
+              </div>
+            </div>
+          </ng-template>
         </opdex-card>
       </div>
     </div>

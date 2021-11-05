@@ -1,4 +1,4 @@
-<div id="pools" *ngIf="pools$ | async as pools">
+<div id="pools">
   <div class="header-section">
     <div class="container">
       <div class="row align-items-center">
@@ -11,7 +11,7 @@
         </div>
       </div>
 
-      <div class="pools-by-volume mt-4 mb-4" *ngIf="pools.topVolume.results.length">
+      <div class="pools-by-volume mt-4 mb-4">
         <div class="row">
           <div class="col-12">
             <h2 class="d-flex align-items-center">
@@ -21,13 +21,13 @@
         </div>
 
         <div class="scrollable-row">
-          <div class="scrollable-card" *ngFor="let pool of pools.topVolume.results; trackBy: poolsTrackBy">
+          <div class="scrollable-card" *ngFor="let pool of pools?.topVolume?.results; trackBy: poolsTrackBy">
             <opdex-liquidity-pool-card [pool]="pool"></opdex-liquidity-pool-card>
           </div>
         </div>
       </div>
 
-      <div class="row" *ngIf="pools.mining.results.length">
+      <div class="row" *ngIf="pools?.mining?.results?.length">
         <div class="col-12">
           <h2 class="d-flex align-items-center">
             <mat-icon class="mr-2 mine">{{icons.mining}}</mat-icon> Liquidity Mining
