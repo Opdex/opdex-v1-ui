@@ -3,7 +3,6 @@ import { ITransactionReceipt } from '@sharedModels/platform-api/responses/transa
 import { catchError, take } from 'rxjs/operators';
 import { TransactionsService } from '@sharedServices/platform/transactions.service';
 import { JwtService } from '@sharedServices/utility/jwt.service';
-import { environment } from '@environments/environment';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { SidenavService } from './services/utility/sidenav.service';
 import { ChangeDetectorRef, Component, HostBinding, OnInit, ViewChild } from '@angular/core';
@@ -24,6 +23,7 @@ import { ISidenavMessage } from '@sharedModels/transaction-view';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { Icons } from './enums/icons';
 import { SwUpdate } from '@angular/service-worker';
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 
 @Component({
   selector: 'opdex-root',
@@ -61,7 +61,8 @@ export class AppComponent implements OnInit {
     private _jwt: JwtService,
     private _transactionService: TransactionsService,
     private _cdref: ChangeDetectorRef,
-    private _appUpdate: SwUpdate
+    private _appUpdate: SwUpdate,
+    private _env: EnvironmentsService
   ) {
     window.addEventListener('resize', this.appHeight);
     this.appHeight();
@@ -74,11 +75,11 @@ export class AppComponent implements OnInit {
     // the fact might always result in an invalid version, potentially causing wasted reloads.
     this._appUpdate.available.subscribe(_ => document.location.reload());
 
-    this.network = environment.network;
+    this.network = this._env.network;
     this.context = this._context.getUserContext();
 
     this.subscription.add(
-      this._api.auth(environment.marketAddress, this.context?.wallet)
+      this._api.auth(this.context?.wallet)
         .subscribe(jwt => {
           this._context.setToken(jwt);
           setTimeout(() => this.loading = false, 1500);
@@ -191,7 +192,7 @@ export class AppComponent implements OnInit {
 
   private async connectToSignalR(): Promise<void> {
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(`${environment.apiUrl}/transactions/socket`, { accessTokenFactory: () => this._jwt.getToken() })
+      .withUrl(`${this._env.apiUrl}/transactions/socket`, { accessTokenFactory: () => this._jwt.getToken() })
       .configureLogging(LogLevel.Warning)
       .withAutomaticReconnect()
       .build();

@@ -13,7 +13,6 @@ import { Router } from '@angular/router';
 import { JwtService } from '@sharedServices/utility/jwt.service';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '@environments/environment';
 import { RestApiService } from './rest-api.service';
 import { ErrorService } from '@sharedServices/utility/error.service';
 import { Observable } from 'rxjs';
@@ -49,34 +48,38 @@ import { SwapAmountOutQuoteRequest } from '@sharedModels/platform-api/requests/t
 import { IMarketTokensResponse } from '@sharedModels/platform-api/responses/tokens/market-tokens-response.interface';
 import { ITokensResponse } from '@sharedModels/platform-api/responses/tokens/tokens-response.interface';
 import { ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pools-response.interface';
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlatformApiService extends RestApiService {
   private api: string;
+  private marketAddress: string;
 
   constructor(
     protected _http: HttpClient,
     protected _error: ErrorService,
     protected _jwt: JwtService,
     protected _router: Router,
+    private _env: EnvironmentsService
   ) {
     super(_http, _error, _jwt, _router);
-    this.api = environment.apiUrl;
+    this.api = this._env.apiUrl;
+    this.marketAddress = this._env.marketAddress;
   }
 
   ////////////////////////////
   // Auth
   ////////////////////////////
 
-  public auth(market: string, wallet: string): Observable<string> {
+  public auth(wallet: string): Observable<string> {
     let walletParam = '&wallet='
     if (wallet) {
       walletParam = `${walletParam}${wallet}`;
     }
 
-    return this.post(`${this.api}/auth/authorize?market=${market}${walletParam}`, {}, { responseType: 'text' });
+    return this.post(`${this.api}/auth/authorize?market=${this.marketAddress}${walletParam}`, {}, { responseType: 'text' });
   }
 
   ////////////////////////////
@@ -92,23 +95,23 @@ export class PlatformApiService extends RestApiService {
   ////////////////////////////
 
   public getMarketToken(address: string): Observable<IMarketToken> {
-    return this.get<IMarketToken>(`${this.api}/market/${environment.marketAddress}/tokens/${address}`);
+    return this.get<IMarketToken>(`${this.api}/market/${this.marketAddress}/tokens/${address}`);
   }
 
   public getMarketTokens(request: TokensFilter): Observable<IMarketTokensResponse> {
-    return this.get<IMarketTokensResponse>(`${this.api}/market/${environment.marketAddress}/tokens${request.buildQueryString()}`);
+    return this.get<IMarketTokensResponse>(`${this.api}/market/${this.marketAddress}/tokens${request.buildQueryString()}`);
   }
 
   public swapQuote(address: string, payload: ISwapRequest): Observable<ITransactionQuote> {
-    return this.post<ITransactionQuote>(`${this.api}/market/${environment.marketAddress}/tokens/${address}/swap`, payload);
+    return this.post<ITransactionQuote>(`${this.api}/market/${this.marketAddress}/tokens/${address}/swap`, payload);
   }
 
   public swapAmountInQuote(tokenIn: string, payload: SwapAmountInQuoteRequest): Observable<ISwapAmountInQuoteResponse> {
-    return this.post<ISwapAmountInQuoteResponse>(`${this.api}/market/${environment.marketAddress}/tokens/${tokenIn}/swap/amount-in`, payload);
+    return this.post<ISwapAmountInQuoteResponse>(`${this.api}/market/${this.marketAddress}/tokens/${tokenIn}/swap/amount-in`, payload);
   }
 
   public swapAmountOutQuote(tokenOut: string, payload: SwapAmountOutQuoteRequest): Observable<ISwapAmountOutQuoteResponse> {
-    return this.post<ISwapAmountOutQuoteResponse>(`${this.api}/market/${environment.marketAddress}/tokens/${tokenOut}/swap/amount-out`, payload);
+    return this.post<ISwapAmountOutQuoteResponse>(`${this.api}/market/${this.marketAddress}/tokens/${tokenOut}/swap/amount-out`, payload);
   }
 
   ////////////////////////////

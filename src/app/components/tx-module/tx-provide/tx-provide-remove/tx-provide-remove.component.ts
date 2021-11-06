@@ -1,7 +1,7 @@
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
-import { environment } from '@environments/environment';
 import { Component, Input, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
@@ -57,6 +57,7 @@ export class TxProvideRemoveComponent extends TxBase {
     private _platformApi: PlatformApiService,
     protected _injector: Injector,
     private _blocksService: BlocksService,
+    private _env: EnvironmentsService
   ) {
     super(_injector);
 
@@ -91,7 +92,7 @@ export class TxProvideRemoveComponent extends TxBase {
 
   getAllowance$(amount?: string):Observable<any> {
     amount = amount || this.liquidity.value;
-    const spender = environment.routerAddress;
+    const spender = this._env.routerAddress;
     const token = this.pool?.token?.lp?.address;
 
     if (!amount) return of(null);

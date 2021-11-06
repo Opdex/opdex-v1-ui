@@ -1,3 +1,4 @@
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { NominationFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { GovernancesService } from '@sharedServices/platform/governances.service';
@@ -13,7 +14,6 @@ import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liqu
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable } from 'rxjs';
 import { IGovernance } from '@sharedModels/platform-api/responses/governances/governance.interface';
-import { environment } from '@environments/environment';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { Governance } from '@sharedModels/governance';
 import { IRewardMiningPoolsRequest } from '@sharedModels/platform-api/requests/governances/reward-mining-pools-request';
@@ -45,7 +45,8 @@ export class GovernanceComponent implements OnInit, OnDestroy {
     private _context: UserContextService,
     private _tokenService: TokensService,
     private _liquidityPoolsService: LiquidityPoolsService,
-    private _blocks: BlocksService
+    private _blocks: BlocksService,
+    private _env: EnvironmentsService
   ) {
     this.nominatedPools = [ null, null, null, null ];
   }
@@ -66,7 +67,7 @@ export class GovernanceComponent implements OnInit, OnDestroy {
     this.governance$ = this._blocks.getLatestBlock$()
       .pipe(
         switchMap(_ => {
-          return this._governanceService.getGovernance(environment.governanceAddress)
+          return this._governanceService.getGovernance(this._env.governanceAddress)
             .pipe(
               tap((rsp: IGovernance) => this.governance = new Governance(rsp)),
               switchMap(governance => this._tokenService.getToken(governance.minedToken)),

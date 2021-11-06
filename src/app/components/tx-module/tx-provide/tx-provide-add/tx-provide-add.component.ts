@@ -1,8 +1,8 @@
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { DecimalStringRegex } from '@sharedLookups/regex';
 import { Component, Input, OnInit, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { environment } from '@environments/environment';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -65,7 +65,8 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
     protected _injector: Injector,
-    private _blocksService: BlocksService
+    private _blocksService: BlocksService,
+    private _env: EnvironmentsService
   ) {
     super(_injector);
 
@@ -130,7 +131,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   }
 
   getAllowance$():Observable<AllowanceValidation> {
-    const spender = environment.routerAddress;
+    const spender = this._env.routerAddress;
     const token = this.pool?.token?.src?.address;
 
     if (!this.amountSrc.value) return of(null);

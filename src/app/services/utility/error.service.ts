@@ -3,7 +3,6 @@ import { NotificationService } from './notification.service';
 import { OpdexErrorStatus } from '@sharedModels/errors/opdex-error';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LoggerService } from './logger.service';
-import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -20,10 +19,6 @@ export class ErrorService {
 
   logHttpError(error: HttpErrorResponse, endpoint: string, body?: any): void {
     this._log.error(endpoint);
-
-    if (body && !environment.production) {
-      this._log.error(JSON.stringify(body));
-    }
 
     this._log.error(error.error || error.message);
   }

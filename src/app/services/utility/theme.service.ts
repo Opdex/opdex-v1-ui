@@ -1,8 +1,8 @@
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { environment } from '@environments/environment';
 import { StorageService } from './storage.service';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'

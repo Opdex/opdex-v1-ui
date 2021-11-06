@@ -12,35 +12,13 @@ jobs:
       runOnce:
         deploy:
           steps:
-            - task: replacetokens@3
-              displayName: 'Replace Variables'
-              inputs:
-                targetFiles: '$(Pipeline.Workspace)/$(ARTIFACT_NAME)/**/main*.js'
-                encoding: 'auto'
-                writeBOM: true
-                verbosity: 'detailed'
-                actionOnMissing: 'warn'
-                keepToken: false
-                tokenPrefix: '#{'
-                tokenSuffix: '}#'
-                useLegacyPattern: false
-                enableTelemetry: true
-
-            - task: ArchiveFiles@2
-              displayName: 'Archive files'
-              inputs:
-                rootFolderOrFile: '$(Pipeline.Workspace)/$(ARTIFACT_NAME)'
-                includeRootFolder: false
-                archiveType: zip
-                archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-                replaceExistingArchive: true
-
             - task: AzureWebApp@1
               inputs:
                 azureSubscription: $(azureSubscription)
                 appType: 'webApp'
                 appName: 'app-opdex-${{ parameters.environment }}-app'
-                package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+                # package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+                package: '$(Pipeline.Workspace)/$(ARTIFACT_NAME)'
                 deploymentMethod: 'auto'
                 deployToSlotOrASE: true
                 slotName: 'staging'

@@ -3,7 +3,6 @@ import { StorageService } from '@sharedServices/utility/storage.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { environment } from '@environments/environment';
 import { take, catchError, startWith, map } from 'rxjs/operators';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Router } from '@angular/router';
@@ -78,7 +77,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.error = false;
     const publicKey = this.publicKey.value; // Make copy, prevents changes during loading
 
-    this._api.auth(environment.marketAddress, publicKey)
+    this._api.auth(publicKey)
       .pipe(take(1))
       .pipe(catchError(() => {
         this.error = true;

@@ -1,5 +1,5 @@
+import { EnvironmentsService } from './environments.service';
 import { Injectable } from '@angular/core';
-import { environment } from '@environments/environment';
 import { Network } from 'src/app/enums/networks';
 
 @Injectable({
@@ -8,10 +8,12 @@ import { Network } from 'src/app/enums/networks';
 export class StorageService {
   keyPrefix: string;
 
-  constructor() {
-    const network = environment.network === Network.Devnet
-      ? environment.network.substring(0, 3).toLowerCase()
-      : environment.network.substring(0, 4).toLowerCase();
+  constructor(private _env: EnvironmentsService) {
+    const isDevnet = this._env.network === Network.Devnet;
+
+    const network = isDevnet
+      ? this._env.network.substring(0, 3).toLowerCase()
+      : this._env.network.substring(0, 4).toLowerCase();
 
     this.keyPrefix = `odx-${network}-`;
   }

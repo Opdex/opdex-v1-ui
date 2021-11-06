@@ -1,3 +1,4 @@
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { ISwapAmountInQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-in-quote-response.interface';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
@@ -9,7 +10,6 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Subscription, of, Observable } from 'rxjs';
 import { debounceTime, take, distinctUntilChanged, switchMap, map, tap, catchError, filter, startWith } from 'rxjs/operators';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
-import { environment } from '@environments/environment';
 import { Icons } from 'src/app/enums/icons';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
 import { DecimalStringRegex } from '@sharedLookups/regex';
@@ -88,7 +88,8 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     private _platformApi: PlatformApiService,
     protected _injector: Injector,
     private _blocksService: BlocksService,
-    private _tokensService: TokensService
+    private _tokensService: TokensService,
+    private _env: EnvironmentsService
   ) {
     super(_injector);
 
@@ -314,7 +315,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   }
 
   private validateAllowance(): Observable<AllowanceValidation> {
-    const spender = environment.routerAddress;
+    const spender = this._env.routerAddress;
 
     if (this.tokenIn.value === 'CRS' || !this.context?.wallet || !this.tokenInAmount.value) {
       this.allowance = null;

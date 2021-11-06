@@ -1,3 +1,4 @@
+import { EnvironmentsService } from './../../../services/utility/environments.service';
 import { Router } from '@angular/router';
 import { PlatformApiService } from './../../../services/api/platform-api.service';
 import { TransactionsService } from '@sharedServices/platform/transactions.service';
@@ -40,12 +41,13 @@ export class SideNavComponent implements OnDestroy {
     private _blocksService: BlocksService,
     private _transactionsService: TransactionsService,
     private _platformApiService: PlatformApiService,
-    private _router: Router
+    private _router: Router,
+    private _env: EnvironmentsService
   ) {
     this.userContext$ = this._context.getUserContext$();
     this.theme$ = this._theme.getTheme().subscribe((theme: 'light-mode' | 'dark-mode') => this.theme = theme);
     this.latestSyncedBlock$ = this._blocksService.getLatestBlock$();
-    this.network = environment.network;
+    this.network = this._env.network;
     this.subscription.add(this._transactionsService.getBroadcastedTransactions$().subscribe(txs => this.pendingTransactions = txs));
   }
 
@@ -68,7 +70,7 @@ export class SideNavComponent implements OnDestroy {
   }
 
   logout() {
-    this._platformApiService.auth(environment.marketAddress, null)
+    this._platformApiService.auth(null)
       .pipe(
         tap(token => this._context.setToken(token)),
         tap(_ => this._router.navigateByUrl('/')),

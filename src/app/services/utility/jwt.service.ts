@@ -1,4 +1,4 @@
-import { environment } from '@environments/environment';
+import { EnvironmentsService } from './environments.service';
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { StorageService } from './storage.service';
@@ -9,7 +9,11 @@ const _jwt = new JwtHelperService();
 export class JwtService {
   private storageKey = 'jwt';
 
-  constructor(private _storage: StorageService) { }
+  constructor(private _storage: StorageService, private _env: EnvironmentsService) { }
+
+  public getAllowedDomain(): string {
+    return this._env.apiUrl.replace('https://', '').replace('http://', '');
+  }
 
   /**
    * @summary Decodes the current users JWT
@@ -74,6 +78,6 @@ export class JwtService {
 export function jwtOptionsFactory(jwtService: JwtService) {
   return {
     tokenGetter: () => jwtService.getToken(),
-    allowedDomains: [environment.apiUrl.replace('https://', '').replace('http://', '')]
+    allowedDomains: [jwtService.getAllowedDomain()]
   }
 }

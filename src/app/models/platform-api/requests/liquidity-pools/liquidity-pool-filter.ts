@@ -1,9 +1,8 @@
-import { environment } from '@environments/environment';
-
 export interface ILiquidityPoolsFilter {
   keyword?: string;
   tokens?: string[];
   liquidityPools?: string[];
+  markets?: string[];
   stakingFilter?: StakingFilter;
   miningFilter?: MiningFilter;
   nominationFilter?: NominationFilter;
@@ -59,9 +58,9 @@ export class LiquidityPoolsFilter implements ILiquidityPoolsFilter {
     };
 
     this.keyword = filter.keyword;
-    this.tokens = filter.tokens;
-    this.markets = [environment.marketAddress];
-    this.liquidityPools = filter.liquidityPools;
+    this.tokens = filter.tokens || [];
+    this.markets = filter.markets || [];
+    this.liquidityPools = filter.liquidityPools || [];
     this.stakingFilter = filter.stakingFilter;
     this.miningFilter = filter.miningFilter;
     this.nominationFilter = filter.nominationFilter;

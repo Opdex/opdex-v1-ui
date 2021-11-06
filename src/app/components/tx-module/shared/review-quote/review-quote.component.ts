@@ -1,3 +1,4 @@
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
 import { ITransactionReceipt } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
@@ -11,7 +12,6 @@ import { ITransactionQuote } from '@sharedModels/platform-api/responses/transact
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { environment } from '@environments/environment';
 import { Network } from 'src/app/enums/networks';
 import { IQuoteReplayRequest, QuoteReplayRequest } from '@sharedModels/platform-api/requests/transactions/quote-replay-request';
 import { TransactionBroadcastNotificationRequest } from '@sharedModels/platform-api/requests/transactions/transaction-broadcast-notification-request';
@@ -59,10 +59,11 @@ export class ReviewQuoteComponent implements OnDestroy {
     public _bottomSheetRef: MatBottomSheetRef<ReviewQuoteComponent>,
     private _transactionsService: TransactionsService,
     private _blocksService: BlocksService,
+    private _env: EnvironmentsService,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: ITransactionQuote
   ) {
     this.quote = this.data;
-    this.isDevnet = environment.network == Network.Devnet;
+    this.isDevnet = this._env.network === Network.Devnet;
     this._transactionsService.setQuoteDrawerStatus(true);
 
     this.setQuoteRequest(this.data.request);

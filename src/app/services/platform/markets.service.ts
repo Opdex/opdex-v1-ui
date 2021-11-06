@@ -3,15 +3,16 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable, Injector } from '@angular/core';
 import { CacheService } from '@sharedServices/utility/cache.service';
 import { Observable } from 'rxjs';
-import { environment } from '@environments/environment';
 import { IMarketSnapshot } from '@sharedModels/platform-api/responses/markets/market-snapshot.interface';
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 
 @Injectable({ providedIn: 'root' })
 export class MarketsService extends CacheService {
-  private readonly marketAddress = environment.marketAddress;
+  private marketAddress: string;
 
-  constructor(private _platformApi: PlatformApiService, protected _injector: Injector) {
+  constructor(private _platformApi: PlatformApiService, private _env: EnvironmentsService, protected _injector: Injector) {
     super(_injector);
+    this.marketAddress = this._env.marketAddress;
   }
 
   getMarket(): Observable<IMarket> {
