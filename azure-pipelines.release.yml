@@ -18,7 +18,7 @@ jobs:
                 appType: 'webApp'
                 appName: 'app-opdex-${{ parameters.environment }}-app'
                 # package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-                package: '$(Pipeline.Workspace)/$(ARTIFACT_NAME)'
+                package: '$(Pipeline.Workspace)/$(ARTIFACT_NAME)/*.zip'
                 deploymentMethod: 'auto'
                 deployToSlotOrASE: true
                 slotName: 'staging'
