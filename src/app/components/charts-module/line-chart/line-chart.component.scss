@@ -1,3 +1,5 @@
+@import 'src/scss/bootstrap-grid';
+
 .chart-wrapper {
   position: relative;
   padding: 25px 0px;
@@ -73,13 +75,7 @@
   z-index: 3;
 }
 
-@media (min-width: 320px) { }
-
-@media (min-width: 576px) { }
-
-@media (min-width: 768px) { }
-
-@media (min-width: 992px) {
+@media (min-width: map_get($grid-breakpoints, md)) {
   .chart-toolbar {
     .mobile-menu {
       display: none;
@@ -107,7 +103,7 @@
   }
 }
 
-@media (min-width: 1440px) {
+@media (min-width: map_get($grid-breakpoints, xl)) {
   .chart-wrapper {
     min-height: 500px;
 

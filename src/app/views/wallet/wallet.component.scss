@@ -1,5 +1,7 @@
+@import 'src/scss/bootstrap-grid';
+
 .big-balance {
-  font-size: 2.2em;
+  font-size: 1.4em;
   font-weight: 400;
   margin-bottom: 0px;
   line-height: 1em;
@@ -17,15 +19,7 @@
   display: none;
 }
 
-@media (min-width: 320px) { }
-
-@media (min-width: 576px) { }
-
-@media (min-width: 768px) { }
-
-@media (min-width: 992px) { }
-
-@media (min-width: 1200px) {
+@media (min-width: map_get($grid-breakpoints, lg)) {
   .mobile-tx-feed {
     display: none;
   }

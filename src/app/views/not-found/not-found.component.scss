@@ -1,7 +1,6 @@
+@import 'src/scss/bootstrap-grid';
+
 #not-found {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: calc(var(--app-height) - (env(safe-area-inset-bottom, 0) + 50px));
 
   opdex-card {
@@ -9,12 +8,6 @@
     width: 100%;
     max-width: 500px;
     margin: 0 auto;
-
-    h2 {
-      text-align: center;
-      margin: 0px auto 30px;
-      max-width: 300px;
-    }
   }
 
   .logo {

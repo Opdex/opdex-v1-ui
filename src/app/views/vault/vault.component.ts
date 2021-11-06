@@ -1,4 +1,4 @@
-import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
+import { StatCardInfo } from '@sharedModels/stat-card-info';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { VaultsService } from '@sharedServices/platform/vaults.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
@@ -21,8 +21,8 @@ export class VaultComponent implements OnInit, OnDestroy {
   icons = Icons;
   statCards: StatCardInfo[] = [
     {
-      title: 'Locked Tokens',
-      value: '0',
+      title: 'Locked',
+      value: null,
       suffix: 'XYZ',
       helpInfo: {
         title: 'Locked Tokens',
@@ -31,8 +31,8 @@ export class VaultComponent implements OnInit, OnDestroy {
       show: true
     },
     {
-      title: 'Unassigned Tokens',
-      value: '0',
+      title: 'Unassigned',
+      value: null,
       suffix: 'XYZ',
       helpInfo: {
         title: 'Unassigned Tokens',

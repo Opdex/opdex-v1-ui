@@ -21,11 +21,13 @@ import { IAddLiquidityRequest, AddLiquidityRequest } from '@sharedModels/platfor
 import { IAddLiquidityAmountInQuoteRequest } from '@sharedModels/platform-api/requests/quotes/add-liquidity-amount-in-quote-request';
 import { IProvideAmountIn } from '@sharedModels/platform-api/responses/liquidity-pools/provide-amount-in.interface';
 import { IconSizes } from 'src/app/enums/icon-sizes';
+import { CollapseAnimation } from '@sharedServices/animations/collapse';
 
 @Component({
   selector: 'opdex-tx-provide-add',
   templateUrl: './tx-provide-add.component.html',
-  styleUrls: ['./tx-provide-add.component.scss']
+  styleUrls: ['./tx-provide-add.component.scss'],
+  animations: [CollapseAnimation]
 })
 export class TxProvideAddComponent extends TxBase implements OnInit {
   @Input() pool: ILiquidityPoolSummary;
@@ -48,6 +50,8 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   allowanceTransaction$: Subscription;
   latestSyncedBlock$: Subscription;
   latestBlock: number;
+  crsPercentageSelected: string;
+  srcPercentageSelected: string;
 
   get amountCrs(): FormControl {
     return this.form.get('amountCrs') as FormControl;
@@ -144,6 +148,8 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
       throwError('Invalid token');
     }
 
+    if (!value) return of('');
+
     if (!this.pool.reserves?.crs || this.pool.reserves.crs === '0.00000000') return of('');
 
     // Technically the input should be made invalid in this case using form validations, cannot end with decimal point
@@ -215,6 +221,18 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     const blocks = Math.ceil(60 * minutes / 16);
 
     return blocks + this.latestBlock;
+  }
+
+  handlePercentageSelect(field: string, value: any) {
+    if (field === 'crs') {
+      this.crsPercentageSelected = value.percentageOption;
+      this.srcPercentageSelected = null;
+      this.amountCrs.setValue(value.result, {emitEvent: true});
+    } else {
+      this.crsPercentageSelected = null;
+      this.srcPercentageSelected = value.percentageOption;
+      this.amountSrc.setValue(value.result, {emitEvent: true});
+    }
   }
 
   destroyContext$() {

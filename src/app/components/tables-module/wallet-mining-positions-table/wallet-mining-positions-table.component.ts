@@ -21,6 +21,7 @@ export class WalletMiningPositionsTableComponent implements OnChanges {
   previous: string;
   next: string;
   icons = Icons;
+  loading = true;
 
   @Output() onPageChange: EventEmitter<string> = new EventEmitter();
   @ViewChild(MatSort) sort: MatSort;
@@ -32,6 +33,7 @@ export class WalletMiningPositionsTableComponent implements OnChanges {
 
   ngOnChanges() {
     if (!this.records) return;
+    else this.loading = false;
 
     if (!this.records.positions?.length) return;
 

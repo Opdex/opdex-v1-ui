@@ -26,16 +26,16 @@
 
 .dark-mode {
   .wallet-indicator {
-    border: .2em solid #1b192f;
+    border: .2em solid $dark-primary;
   }
 
   #side-nav {
     border-right: 1px solid #292929;
-    background: #1b192f;
+    background: $dark-primary;
 
     .navbar-pin {
       &.mat-mini-fab {
-        background: #1b192f;
+        background: $dark-primary;
         border: 1px solid #292929;
         color: #fff;
       }
@@ -44,6 +44,6 @@
 
   .mobile-navbar {
     border-top: 1px solid #292929;
-    background: #1b192f;
+    background: $dark-primary;
   }
 }

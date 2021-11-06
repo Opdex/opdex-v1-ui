@@ -23,11 +23,13 @@ import { SwapAmountOutQuoteRequest } from '@sharedModels/platform-api/requests/t
 import { ISwapAmountOutQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-out-quote-response.interface';
 import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { IconSizes } from 'src/app/enums/icon-sizes';
+import { CollapseAnimation } from '@sharedServices/animations/collapse';
 
 @Component({
   selector: 'opdex-tx-swap',
   templateUrl: './tx-swap.component.html',
-  styleUrls: ['./tx-swap.component.scss']
+  styleUrls: ['./tx-swap.component.scss'],
+  animations: [CollapseAnimation]
 })
 export class TxSwapComponent extends TxBase implements OnDestroy {
   @ViewChild('tokenInInput') tokenInInput: ElementRef;
@@ -62,6 +64,8 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   allowanceTransaction$: Subscription;
   latestSyncedBlock$: Subscription;
   latestBlock: number;
+  tokenAmountInPercentageSelected: string;
+  tokenAmountOutPercentageSelected: string;
 
   get tokenInAmount(): FormControl {
     return this.form.get('tokenInAmount') as FormControl;
@@ -135,7 +139,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
           switchMap(_ => this.validateAllowance()))
         .subscribe();
 
-      this.tokens$ = this._platformApi
+      this.tokens$ = this._tokensService
         .getTokens(new TokensFilter({limit: 25, direction: "DESC"}))
         .pipe(map(tokens => {
           this.tokens = tokens.results;
@@ -244,9 +248,14 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     const tokenOut = this.tokenOut.value;
     const tokenInDetails = this.tokenInDetails;
     const tokenOutDetails = this.tokenOutDetails;
+    const tokenInPercentageSelection = this.tokenAmountInPercentageSelected;
+    const tokenOutPercentageSelection = this.tokenAmountOutPercentageSelected;
 
     this.tokenInDetails = tokenOutDetails;
     this.tokenOutDetails = tokenInDetails;
+
+    this.tokenAmountOutPercentageSelected = tokenInPercentageSelection;
+    this.tokenAmountInPercentageSelected = tokenOutPercentageSelection;
 
     this.tokenIn.setValue(tokenOut, { emitEvent: false });
     this.tokenOut.setValue(tokenIn, { emitEvent: false });
@@ -373,6 +382,18 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     const blocks = Math.ceil(60 * minutes / 16);
 
     return blocks + this.latestBlock;
+  }
+
+  handlePercentageSelect(field: string, value: any) {
+    if (field === 'amountIn') {
+      this.tokenAmountOutPercentageSelected = null;
+      this.tokenAmountInPercentageSelected = value.percentageOption;
+      this.tokenInAmount.setValue(value.result, {emitEvent: true});
+    } else {
+      this.tokenAmountOutPercentageSelected = value.percentageOption;
+      this.tokenAmountInPercentageSelected = null;
+      this.tokenOutAmount.setValue(value.result, {emitEvent: true});
+    }
   }
 
   destroyContext$() {

@@ -1,7 +1,7 @@
 <div class="header-section">
   <div class="container">
     <div class="row align-items-center">
-      <div class="col-12 col-lg-6 col-xl-8">
+      <div class="col-12 col-sm-6 col-xl-8">
         <h1 class="mb-0">{{pool?.token?.src?.symbol || 'XYZ'}}/{{pool?.token?.crs?.symbol || 'CRS'}}</h1>
         <opdex-copy-address [address]="pool?.address"></opdex-copy-address>
 
@@ -12,13 +12,13 @@
         </div>
       </div>
 
-      <div class="d-none d-lg-block col-lg-6 col-xl-4">
+      <div class="d-none d-sm-block col-sm-6 col-xl-4">
         <opdex-tx-buttons (onSelectOption)="handleTxOption($event)"></opdex-tx-buttons>
       </div>
     </div>
 
     <div class="row">
-      <div class="col-12 col-md-6 col-xl-3">
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
         <opdex-liquidity-pool-token-card
           [token]="pool?.token?.src"
           [reserves]="pool?.reserves?.src"
@@ -26,7 +26,7 @@
           [swapToken]="pool?.token?.crs"></opdex-liquidity-pool-token-card>
       </div>
 
-      <div class="col-12 col-md-6 col-xl-3">
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
         <opdex-liquidity-pool-token-card
           [token]="pool?.token?.crs"
           [reserves]="pool?.reserves?.crs"
@@ -37,29 +37,13 @@
 
     <div class="row">
       <ng-container *ngFor="let statCard of statCards; let i = index; trackBy: statCardTrackBy">
-        <div *ngIf="statCard.show" class="col-sm-12 col-md">
-          <opdex-card>
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="d-inline-flex align-items-center mr-3">
-                <opdex-help-button *ngIf="statCard.helpInfo" [info]="statCard.helpInfo" [icon]="statCard.icon" [iconColor]="statCard.iconColor" class="mr-2"></opdex-help-button>
-                <p class="mb-0 no-wrap"><span *ngIf="statCard.daily">Daily</span> {{statCard.title}}</p>
-              </div>
-
-              <div class="d-inline-flex align-items-center no-wrap" *ngIf="statCard.value !== null && statCard.value !== undefined; else loadingStatValue">
-                <p class="mr-2 mb-0">{{statCard.prefix}}{{statCard.value | shortNumber }} <small class="ml-1">{{statCard.suffix}}</small></p>
-                <opdex-change-indicator [value]="statCard.change" size="s" *ngIf="statCard.change !== null && statCard.change !== undefined"></opdex-change-indicator>
-              </div>
-
-              <ng-template #loadingStatValue>
-                <div class="skeleton-bg w-50"></div>
-              </ng-template>
-            </div>
-          </opdex-card>
+        <div *ngIf="statCard.show" class="col-xs-12 col-sm">
+          <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
         </div>
       </ng-container>
     </div>
 
-    <div class="row d-lg-none">
+    <div class="row d-sm-none">
       <div class="col-12">
         <opdex-tx-buttons (onSelectOption)="handleTxOption($event)"></opdex-tx-buttons>
       </div>
@@ -91,46 +75,13 @@
       <div class="scrollable-row">
         <ng-container *ngFor="let position of positions">
           <div class="scrollable-card">
-            <opdex-card>
-              <div class="d-flex flex-row justify-content-between align-items-center" *ngIf="position?.value !== null && position?.value !== undefined; else loadingPositions">
-                <div>
-                  <small class="light mb-1">{{position.position}}</small>
-                  <h4 class="mb-0 d-flex align-items-center">
-                    <mat-icon [ngClass]="iconSizes.small" class="swap mr-2" *ngIf="position.position === 'Balance'">{{icons.tokens}}</mat-icon>
-                    <mat-icon [ngClass]="iconSizes.small" class="provide mr-2" *ngIf="position.position === 'Providing'">{{icons.provide}}</mat-icon>
-                    <mat-icon [ngClass]="iconSizes.small" class="stake mr-2" *ngIf="position.position === 'Staking'">{{icons.staking}}</mat-icon>
-                    <mat-icon [ngClass]="iconSizes.small" class="mine mr-2" *ngIf="position.position === 'Mining'">{{icons.mining}}</mat-icon>
-                    {{position.token.symbol}}
-                  </h4>
-                </div>
-
-                <div class="d-flex flex-column align-items-end justify-content-end">
-                  <small class="light mb-1" >${{position.value.formattedValue | shortNumber}}</small>
-                  <p class="mb-0" style="font-size: 1.2em;">{{position.amount.formattedValue | shortNumber}}</p>
-                </div>
-              </div>
-
-              <ng-template #loadingPositions>
-                <div class="w-100">
-                  <div class="d-flex flex-row justify-content-between mb-1">
-                    <div class="skeleton-bg w-25"></div>
-                    <div class="skeleton-bg w-25"></div>
-                  </div>
-
-                  <div class="d-flex flex-row justify-content-between">
-                    <div class="skeleton-bg w-25"></div>
-                    <div class="skeleton-bg w-25"></div>
-                  </div>
-                </div>
-              </ng-template>
-            </opdex-card>
+            <opdex-wallet-position-card [position]="position"></opdex-wallet-position-card>
           </div>
         </ng-container>
       </div>
     </div>
   </div>
 </ng-container>
-
 
 <div class="standard-section blend-cards pt-5 pb-3 tx-bg">
   <div class="container">

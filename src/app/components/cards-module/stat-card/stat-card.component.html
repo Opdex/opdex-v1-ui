@@ -1,16 +1,17 @@
-<div class="stat-card">
-  <opdex-card>
-    <h4 class="stat-header">
-      <opdex-help-button *ngIf="statInfo.helpInfo" [info]="statInfo.helpInfo" class="mr-1"></opdex-help-button>
-      {{statInfo.title}} <small class="ml-2" *ngIf="statInfo.daily">(24hr)</small>
-    </h4>
-
-    <div class="stat">
-      <p class="stat-value">
-        {{statInfo.prefix}}{{statInfo.value | shortNumber }} {{statInfo.suffix}}
-      </p>
-
-      <opdex-change-indicator [value]="statInfo.change" size="m" *ngIf="statInfo.change !== null && statInfo.change !== undefined"></opdex-change-indicator>
+<opdex-card>
+  <div class="flex-row-center-between">
+    <div class="d-inline-flex align-items-center mr-3">
+      <opdex-help-button *ngIf="statInfo.helpInfo" [info]="statInfo.helpInfo" [icon]="statInfo.icon" [iconColor]="statInfo.iconColor" class="mr-2"></opdex-help-button>
+      <p class="mb-0 no-wrap"><span *ngIf="statInfo.daily">Daily</span> {{statInfo.title}}</p>
     </div>
-  </opdex-card>
-</div>
+
+    <div class="d-inline-flex align-items-center no-wrap" *ngIf="statInfo.value !== null && statInfo.value !== undefined; else loadingStatValue">
+      <p class="mr-2 mb-0">{{statInfo.prefix}}{{statInfo.value | shortNumber }} <small class="ml-1">{{statInfo.suffix}}</small></p>
+      <opdex-change-indicator [value]="statInfo.change" size="s" *ngIf="statInfo.change !== null && statInfo.change !== undefined"></opdex-change-indicator>
+    </div>
+
+    <ng-template #loadingStatValue>
+      <div class="skeleton-bg w-50"></div>
+    </ng-template>
+  </div>
+</opdex-card>

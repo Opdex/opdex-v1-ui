@@ -19,9 +19,9 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { WalletLiquidityPoolPositionTableComponent } from './wallet-liquidity-pool-position-table/wallet-liquidity-pool-position-table.component';
 import { WalletMiningPositionsTableComponent } from './wallet-mining-positions-table/wallet-mining-positions-table.component';
 import { WalletStakingPositionsTableComponent } from './wallet-staking-positions-table/wallet-staking-positions-table.component';
+import { SkeletonTableComponent } from './skeleton-table/skeleton-table.component';
 
 @NgModule({
   declarations: [
@@ -29,9 +29,9 @@ import { WalletStakingPositionsTableComponent } from './wallet-staking-positions
     TokensTableComponent,
     VaultCertificatesTableComponent,
     WalletBalancesTableComponent,
-    WalletLiquidityPoolPositionTableComponent,
     WalletMiningPositionsTableComponent,
-    WalletStakingPositionsTableComponent
+    WalletStakingPositionsTableComponent,
+    SkeletonTableComponent
   ],
   imports: [
     CommonModule,
@@ -54,7 +54,6 @@ import { WalletStakingPositionsTableComponent } from './wallet-staking-positions
     TokensTableComponent,
     VaultCertificatesTableComponent,
     WalletBalancesTableComponent,
-    WalletLiquidityPoolPositionTableComponent,
     WalletMiningPositionsTableComponent,
     WalletStakingPositionsTableComponent
   ]

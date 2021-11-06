@@ -14,9 +14,9 @@
           <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectPool($event)">
             <ng-container *ngIf="pools$ | async">
               <mat-option *ngFor="let pool of filteredPools$ | async" [value]="pool">
-                <div class="d-flex flex-column">
-                  <small style="font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 20px">{{pool.name}}</small>
-                  <small class="light" style="font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 16px;">{{pool.address}}</small>
+                <div class="flex-column">
+                  <small class="overflow-ellipsis" style="font-size: 15px; line-height: 20px">{{pool.name}}</small>
+                  <small class="overflow-ellipsis light" style="font-size: 12px; line-height: 16px;">{{pool.address}}</small>
                 </div>
               </mat-option>
             </ng-container>
@@ -39,7 +39,7 @@
 
     <ng-container *ngIf="showReserves">
       <div class="pool-details-section">
-        <div class="col flex-shrink d-flex flex-column justify-content-end">
+        <div class="col flex-shrink flex-column justify-content-end">
           <button type="button" mat-icon-button color="primary" [ngClass]="iconSizes.tiny" class="d-block" (click)="srcToggle.toggle()">
             <mat-icon #srcToggle="matTooltip" matTooltip="Reserves">{{icons.tokens}}</mat-icon>
           </button>
@@ -67,8 +67,8 @@
           <small>{{pool.token.lp.totalSupply | shortNumber}}</small>
         </div>
 
-        <div class="col d-flex flex-row align-items-end">
-          <div class="d-flex flex-column align-items-end">
+        <div class="col flex-row-end">
+          <div class="flex-column-end">
             <small class="light no-wrap">(24hr)</small>
             <small><opdex-change-indicator [value]="pool.token.crs.summary.dailyPriceChangePercent" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
             <small><opdex-change-indicator [value]="pool.token.src.summary.dailyPriceChangePercent" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
@@ -87,7 +87,7 @@
 
     <ng-container *ngIf="pool.token?.staking && showStaking">
       <div class="pool-details-section" >
-        <div class="col flex-shrink d-flex flex-column justify-content-end">
+        <div class="col flex-shrink flex-column justify-content-end">
           <button type="button" mat-icon-button color="primary" [ngClass]="iconSizes.tiny" class="d-block" (click)="stakingToggle.toggle()">
             <mat-icon class="stake" #stakingToggle="matTooltip" matTooltip="Staking Weight">{{icons.staking}}</mat-icon>
           </button>
@@ -103,8 +103,8 @@
           <small>{{pool.staking.weight | shortNumber}}</small>
         </div>
 
-        <div class="col d-flex flex-row align-items-end">
-          <div class="d-flex flex-column align-items-end">
+        <div class="col flex-row-end">
+          <div class="flex-column-end">
             <small class="light no-wrap">(24hr)</small>
             <small><opdex-change-indicator [value]="pool.token.staking.summary.dailyPriceChangePercent" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
           </div>
@@ -119,7 +119,7 @@
 
     <ng-container *ngIf="pool.mining?.tokensMining && showMining">
       <div class="pool-details-section">
-        <div class="col flex-shrink d-flex flex-column justify-content-end">
+        <div class="col flex-shrink flex-column justify-content-end">
           <button type="button" mat-icon-button color="primary" [ngClass]="iconSizes.tiny" class="d-block" (click)="miningToggle.toggle()">
             <mat-icon class="mine" #miningToggle="matTooltip" matTooltip="Mining">{{icons.mining}}</mat-icon>
           </button>
@@ -135,8 +135,8 @@
           <small>{{pool.mining?.tokensMining | shortNumber}}</small>
         </div>
 
-        <div class="col d-flex flex-row align-items-end">
-          <div class="d-flex flex-column align-items-end">
+        <div class="col flex-row-end">
+          <div class="flex-column-end">
             <small class="light no-wrap">(24hr)</small>
             <small><opdex-change-indicator [value]="pool.token.lp.summary.dailyPriceChangePercent" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
           </div>

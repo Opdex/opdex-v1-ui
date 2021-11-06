@@ -1,10 +1,17 @@
 <div class="stop-staking">
   <form [formGroup]="form" name="stop-staking-form" id="stop-staking-form" (submit)="submit()">
     <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.remove" label="Stop Staking" [formControl]="amount" [suffix]="pool.token.staking.symbol" [numbersOnly]="true">
-      <div class="d-flex flex-row justify-content-end">
+      <div class="flex-row-center-end">
         <span class="success" *ngIf="fiatValue">${{fiatValue | shortNumber}}</span>
       </div>
     </opdex-input-control>
+
+    <opdex-percentage-amount-buttons
+      [contract]="pool.address"
+      [token]="pool.token.staking"
+      positionType="Staking"
+      [selected]="percentageSelected"
+      (onPercentageSelect)="handlePercentageSelect($event)"></opdex-percentage-amount-buttons>
 
     <mat-checkbox
       formControlName="liquidate"

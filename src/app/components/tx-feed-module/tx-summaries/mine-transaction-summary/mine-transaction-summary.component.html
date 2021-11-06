@@ -1,12 +1,12 @@
 <ng-container *ngIf="pool && !error">
-  <div class="d-flex align-items-center" *ngIf="!lptAmount.isZero" [ngClass]="{'mb-2': !collectAmount.isZero}">
-    <div class="col no-wrap">
+  <div class="flex-row-center" *ngIf="!lptAmount.isZero" [ngClass]="{'mb-2': !collectAmount.isZero}">
+    <div class="no-wrap">
       {{isAddition ? '+' : '-'}}{{lptAmount.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.name}}</a> <a class="ml-1 no-decoration" routerLink="/tokens/{{pool.address}}">{{pool.token.lp.symbol}}</a>
     </div>
   </div>
 
-  <div class="d-flex align-items-center" *ngIf="!collectAmount.isZero">
-    <div class="col">
+  <div class="flex-row-center" *ngIf="!collectAmount.isZero">
+    <div class="no-wrap">
       {{isAddition ? '-' : '+'}}{{collectAmount.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/tokens/{{pool.token.staking.address}}">{{pool.token.staking.symbol}}</a>
     </div>
   </div>

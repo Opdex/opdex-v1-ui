@@ -1,11 +1,11 @@
 <ng-container *ngIf="poolAmount && !error">
-  <div class="d-flex align-items-center mb-2">
-    <div class="col no-wrap">
+  <div class="flex-row-center mb-2">
+    <div class="no-wrap">
       +{{poolAmount.formattedValue | shortNumber}} <a class="ml-1 no-decoration" routerLink="/tokens/{{stakingToken.address}}">{{stakingToken.symbol}}</a>
     </div>
   </div>
 
-  <div class="d-flex align-items-center flex-wrap" *ngIf="pools?.length">
+  <div class="flex-row-center flex-wrap" *ngIf="pools?.length">
     <div class="mr-2 no-wrap" *ngFor="let pool of pools; trackBy: poolsTrackBy">
       <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.name}}</a>
     </div>

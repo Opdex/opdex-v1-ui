@@ -11,7 +11,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, Subscription, zip } from 'rxjs';
 import { delay, map, switchMap, take, tap } from 'rxjs/operators';
 import { LiquidityPoolsFilter, LpOrderBy, MiningFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
-import { StatCardInfo } from '@sharedComponents/cards-module/stat-card/stat-card-info';
+import { StatCardInfo } from '@sharedModels/stat-card-info';
 import { MarketsService } from '@sharedServices/platform/markets.service';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
@@ -98,7 +98,8 @@ export class MarketComponent implements OnInit {
         .subscribe());
 
     this.miningPools$ = this._blocksService.getLatestBlock$()
-      .pipe(switchMap(_ => this._liquidityPoolsService.getLiquidityPools(miningFilter).pipe(map(pools => pools.results))));
+      .pipe(
+        switchMap(_ => this._liquidityPoolsService.getLiquidityPools(miningFilter).pipe(map(pools => pools.results))));
   }
 
   private getMarket(): Observable<any> {

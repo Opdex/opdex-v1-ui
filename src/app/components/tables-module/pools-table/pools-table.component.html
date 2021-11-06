@@ -1,86 +1,91 @@
-<div class="table-container">
-  <table mat-table [dataSource]="dataSource" matSort [trackBy]="trackBy" class="w-100">
-    <ng-container matColumnDef="name" sticky>
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element">
-        <div class="no-wrap d-flex align-items-center">
-          <!-- <opdex-copy-button [tooltip]="element.address" [value]="element.address" [icon]="icons.link" [size]="iconSizes.small"></opdex-copy-button> -->
-          <a class="no-decoration b-400" href="javascript:void(0)" (click)="navigate(element.address)">{{element.name}}</a>
-        </div>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="liquidity">
-      <th mat-header-cell *matHeaderCellDef> Liquidity </th>
-      <td mat-cell *matCellDef="let element">
-        <div class="no-wrap d-flex align-items-center">
-          <opdex-change-indicator [value]="element.reserves.usdDailyChange" size="s" class="mr-2"></opdex-change-indicator>
-          ${{element.reserves.usd | shortNumber}}
-        </div>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="stakingWeight">
-      <th mat-header-cell *matHeaderCellDef> Staking </th>
-      <td mat-cell *matCellDef="let element">
-        <ng-container *ngIf="element.staking; else stakingDisabled">
-          <div class="no-wrap d-flex align-items-center">
-            <opdex-change-indicator [value]="element.staking?.weightDailyChange" size="s" class="mr-2" [forceDisplay]="true"></opdex-change-indicator>
-            <span class="d-flex align-items-baseline">
-              {{element.staking?.weight | shortNumber}}
-              <small class="ml-1">{{element.token.staking.symbol}}</small>
-            </span>
+<ng-container *ngIf="dataSource?.data?.length; else loading">
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource" matSort [trackBy]="trackBy" class="w-100">
+      <ng-container matColumnDef="name" sticky>
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="no-wrap flex-row-center">
+            <!-- <opdex-copy-button [tooltip]="element.address" [value]="element.address" [icon]="icons.link" [size]="iconSizes.small"></opdex-copy-button> -->
+            <a class="no-decoration b-400" href="javascript:void(0)" (click)="navigate(element.address)">{{element.name}}</a>
           </div>
-        </ng-container>
-        <ng-template #stakingDisabled>
-          <span class="disabled-badge">Disabled</span>
-        </ng-template>
-      </td>
-    </ng-container>
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="volumeDaily">
-      <th mat-header-cell *matHeaderCellDef> Volume</th>
-      <td mat-cell *matCellDef="let element"> ${{element.volume.usd | shortNumber}} </td>
-    </ng-container>
+      <ng-container matColumnDef="liquidity">
+        <th mat-header-cell *matHeaderCellDef> Liquidity </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="no-wrap flex-row-center">
+            <opdex-change-indicator [value]="element.reserves.usdDailyChange" size="s" class="mr-2"></opdex-change-indicator>
+            ${{element.reserves.usd | shortNumber}}
+          </div>
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="rewards">
-      <th mat-header-cell *matHeaderCellDef> Rewards </th>
-      <td mat-cell *matCellDef="let element"> ${{ (element.rewards.providerUsd + element.rewards.marketUsd) | shortNumber}} </td>
-    </ng-container>
+      <ng-container matColumnDef="stakingWeight">
+        <th mat-header-cell *matHeaderCellDef> Staking </th>
+        <td mat-cell *matCellDef="let element">
+          <ng-container *ngIf="element.staking; else stakingDisabled">
+            <div class="no-wrap flex-row-center">
+              <opdex-change-indicator [value]="element.staking?.weightDailyChange" size="s" class="mr-2" [forceDisplay]="true"></opdex-change-indicator>
+              <span class="d-flex align-items-baseline">
+                {{element.staking?.weight | shortNumber}}
+                <small class="ml-1">{{element.token.staking.symbol}}</small>
+              </span>
+            </div>
+          </ng-container>
+          <ng-template #stakingDisabled>
+            <span class="disabled-badge">Disabled</span>
+          </ng-template>
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="options" stickyEnd>
-      <th mat-header-cell *matHeaderCellDef class="empty"> </th>
-      <td mat-cell *matCellDef="let element">
-        <button mat-icon-button color="primary" [ngClass]="iconSizes.small" class="float-right" [matMenuTriggerFor]="beforeMenu">
-          <mat-icon>{{icons.more}}</mat-icon>
-        </button>
+      <ng-container matColumnDef="volumeDaily">
+        <th mat-header-cell *matHeaderCellDef> Volume</th>
+        <td mat-cell *matCellDef="let element"> ${{element.volume.usd | shortNumber}} </td>
+      </ng-container>
 
-        <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
-          <button mat-menu-item [ngClass]="iconSizes.small" (click)="swap(element)">
-            <mat-icon class="swap">{{icons.swap}}</mat-icon> Swap {{element.token.src?.symbol}}
+      <ng-container matColumnDef="rewards">
+        <th mat-header-cell *matHeaderCellDef> Rewards </th>
+        <td mat-cell *matCellDef="let element"> ${{ (element.rewards.providerUsd + element.rewards.marketUsd) | shortNumber}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="options" stickyEnd>
+        <th mat-header-cell *matHeaderCellDef class="empty"> </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="primary" [ngClass]="iconSizes.small" class="float-right" [matMenuTriggerFor]="beforeMenu">
+            <mat-icon>{{icons.more}}</mat-icon>
           </button>
-          <button mat-menu-item [ngClass]="iconSizes.small" (click)="provide(element)">
-            <mat-icon class="provide">{{icons.provide}}</mat-icon> Provide {{element.token.src?.symbol}}
-          </button>
-          <button mat-menu-item [ngClass]="iconSizes.small" (click)="stake(element)" *ngIf="element.staking?.isActive">
-            <mat-icon class="stake">{{icons.staking}}</mat-icon> Stake {{element.token.staking?.symbol}}
-          </button>
-          <button mat-menu-item [ngClass]="iconSizes.small" (click)="mine(element)" *ngIf="element.mining?.isActive">
-            <mat-icon class="mine">{{icons.mining}}</mat-icon> Mine {{element.token.staking?.symbol}}
-          </button>
-        </mat-menu>
-      </td>
-    </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-</div>
+          <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
+            <button mat-menu-item [ngClass]="iconSizes.small" (click)="swap(element)">
+              <mat-icon class="swap">{{icons.swap}}</mat-icon> Swap {{element.token.src?.symbol}}
+            </button>
+            <button mat-menu-item [ngClass]="iconSizes.small" (click)="provide(element)">
+              <mat-icon class="provide">{{icons.provide}}</mat-icon> Provide {{element.token.src?.symbol}}
+            </button>
+            <button mat-menu-item [ngClass]="iconSizes.small" (click)="stake(element)" *ngIf="element.staking?.isActive">
+              <mat-icon class="stake">{{icons.staking}}</mat-icon> Stake {{element.token.staking?.symbol}}
+            </button>
+            <button mat-menu-item [ngClass]="iconSizes.small" (click)="mine(element)" *ngIf="element.mining?.isActive">
+              <mat-icon class="mine">{{icons.mining}}</mat-icon> Mine {{element.token.staking?.symbol}}
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
 
-<div class="paginator">
-  <div class="d-flex justify-content-center">
-    <button mat-icon-button [disabled]="!paging?.previous" (click)="pageChange(paging?.previous)"><mat-icon>arrow_back</mat-icon></button>
-    <button mat-icon-button [disabled]="!paging?.next" (click)="pageChange(paging?.next)"><mat-icon>arrow_forward</mat-icon></button>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
   </div>
-</div>
 
+  <div class="paginator">
+    <div class="flex-row-center-center">
+      <button mat-icon-button [disabled]="!paging?.previous" (click)="pageChange(paging?.previous)"><mat-icon>arrow_back</mat-icon></button>
+      <button mat-icon-button [disabled]="!paging?.next" (click)="pageChange(paging?.next)"><mat-icon>arrow_forward</mat-icon></button>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #loading>
+  <opdex-skeleton-table></opdex-skeleton-table>
+</ng-template>

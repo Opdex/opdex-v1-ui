@@ -1,4 +1,5 @@
 @import 'src/scss/colors';
+@import 'src/scss/bootstrap-grid';
 
 $sidebar-width: 100px;
 
@@ -71,6 +72,13 @@ $sidebar-width: 100px;
     transform: translateX(0);
     transition: transform .2s ease-out;
   }
+
+  .close-button {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 10
+  }
 }
 
 .loading {
@@ -135,33 +143,7 @@ $sidebar-width: 100px;
   }
 }
 
-.scroll-to-top {
-  position: fixed;
-  bottom: 15px;
-  right: 15px;
-  opacity: 1;
-  transition: all .2s ease-in-out;
-  z-index: 999;
-  background: #1ca7dc;
-  border-radius: 50%;
-  padding: 5px;
-  height: 40px;
-  width: 40px;
-  display:flex;
-  justify-content: center;
-  align-items: center;
-}
-
-@media (min-width: 320px) { }
-
-@media (min-width: 576px) { }
-
-@media (min-width: 768px) {
-}
-
-@media (min-width: 992px) {
-  .scroll-to-top { display: none; }
-
+@media (min-width: map_get($grid-breakpoints, md)) {
   .mobile-nav, .mobile-navbar {
     display: none;
   }
@@ -190,5 +172,3 @@ $sidebar-width: 100px;
     }
   }
 }
-
-@media (min-width: 1200px) { }

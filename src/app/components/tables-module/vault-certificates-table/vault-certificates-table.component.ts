@@ -10,17 +10,20 @@ import { Icons } from 'src/app/enums/icons';
   styleUrls: ['./vault-certificates-table.component.scss']
 })
 export class VaultCertificatesTableComponent implements OnChanges {
+  @Input() certificates: IVaultCertificates;
+
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
-  @Input() certificates: IVaultCertificates;
   previous: string;
   next: string;
   icons = Icons;
+  loading: boolean;
 
   @Output() onPageChange: EventEmitter<string> = new EventEmitter();
   @ViewChild(MatSort) sort: MatSort;
 
   constructor() {
+    this.loading = true;
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['owner', 'amount', 'revoked', 'redeemed', 'vestingStart', 'vestingEnd'];
   }
@@ -30,6 +33,7 @@ export class VaultCertificatesTableComponent implements OnChanges {
       this.dataSource.data = this.certificates.results;
       this.next = this.certificates.paging.next;
       this.previous = this.certificates.paging.previous;
+      this.loading = false;
     }
   }
 

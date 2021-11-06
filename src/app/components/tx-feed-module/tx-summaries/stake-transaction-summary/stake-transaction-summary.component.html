@@ -1,13 +1,13 @@
 <ng-container *ngIf="pool && !error">
-  <div class="d-flex align-items-center" *ngIf="!stakingAmount.isZero" [ngClass]="{'mb-2': isCollection}">
-    <div class="col no-wrap">
+  <div class="flex-row-center" *ngIf="!stakingAmount.isZero" [ngClass]="{'mb-2': isCollection}">
+    <div class="no-wrap">
       {{isAddition ? '+' : '-'}}{{stakingAmount.formattedValue | shortNumber}}
       <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.name}}</a>
       <a class="ml-1 no-decoration" routerLink="/tokens/{{pool.token.staking.address}}">{{pool.token.staking.symbol}}</a>
     </div>
   </div>
 
-  <div class="d-flex align-items-center" *ngIf="isCollection">
+  <div class="flex-row-center" *ngIf="isCollection">
     <div class="col no-wrap flex-shrink">
       +{{collectAmountOne.formattedValue | shortNumber}}
       <a class="no-decoration" routerLink="/pools/{{pool.address}}" *ngIf="!collectionLiquidatedRewards">{{pool.name}}</a>

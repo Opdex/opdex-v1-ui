@@ -12,19 +12,21 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { Component, OnInit } from '@angular/core';
-import { forkJoin, Observable } from 'rxjs';
-import { map, switchMap, take, tap } from 'rxjs/operators';
+import { forkJoin, Observable, of } from 'rxjs';
+import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IAddressStaking } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { TransactionView } from '@sharedModels/transaction-view';
+import { CollapseAnimation } from '@sharedServices/animations/collapse';
 
 @Component({
   selector: 'opdex-wallet',
   templateUrl: './wallet.component.html',
-  styleUrls: ['./wallet.component.scss']
+  styleUrls: ['./wallet.component.scss'],
+  animations: [CollapseAnimation]
 })
 export class WalletComponent implements OnInit {
   transactionsRequest: ITransactionsRequest;
@@ -116,6 +118,8 @@ export class WalletComponent implements OnInit {
     this._walletsService.getMiningPositions(this.wallet.wallet, limit, cursor)
       .pipe(
         switchMap(response => {
+          if (response.results.length === 0) return of(response);
+
           const positions$: Observable<IAddressMining>[] = [];
 
           response.results.forEach(position => {
@@ -136,6 +140,8 @@ export class WalletComponent implements OnInit {
     this._walletsService.getStakingPositions(this.wallet.wallet, limit, cursor)
       .pipe(
         switchMap(response => {
+          if (response.results.length === 0) return of(response);
+
           const positions$: Observable<IAddressStaking>[] = [];
 
           response.results.forEach(position => {
@@ -160,6 +166,8 @@ export class WalletComponent implements OnInit {
     this._walletsService.getWalletBalances(this.wallet.wallet, limit, cursor)
       .pipe(
         switchMap(response => {
+          if (response.results.length === 0) return of(response);
+
           const balances$: Observable<IToken>[] = [];
 
           response.results.forEach(balance => {
@@ -186,14 +194,5 @@ export class WalletComponent implements OnInit {
 
   handleTxOption($event: TransactionView) {
     this._sidebar.openSidenav($event);
-  }
-
-  logout() {
-    this._platform.auth(environment.marketAddress, null)
-      .pipe(
-        tap(token => this._context.setToken(token)),
-        tap(_ => this._router.navigateByUrl('/')),
-        take(1))
-      .subscribe();
   }
 }

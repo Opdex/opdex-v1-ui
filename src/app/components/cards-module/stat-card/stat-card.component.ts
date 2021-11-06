@@ -1,5 +1,5 @@
 import { Component, Input} from '@angular/core';
-import { StatCardInfo } from './stat-card-info';
+import { StatCardInfo } from '@sharedModels/stat-card-info';
 
 @Component({
   selector: 'opdex-stat-card',
@@ -8,6 +8,4 @@ import { StatCardInfo } from './stat-card-info';
 })
 export class StatCardComponent{
   @Input() statInfo: StatCardInfo;
-
-  constructor(){}
 }

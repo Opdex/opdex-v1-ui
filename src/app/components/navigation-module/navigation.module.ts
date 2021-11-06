@@ -4,8 +4,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { SideNavComponent } from './side-nav/side-nav.component';
-import { HamburgerComponent } from './hamburger/hamburger.component';
-import { StatusBarComponent } from './status-bar/status-bar.component';
 
 // Material Imports
 import { MatIconModule } from '@angular/material/icon';
@@ -20,8 +18,6 @@ import { MobileNavComponent } from './mobile-nav/mobile-nav.component';
 @NgModule({
   declarations: [
     SideNavComponent,
-    HamburgerComponent,
-    StatusBarComponent,
     MobileNavComponent
   ],
   imports: [
@@ -38,8 +34,6 @@ import { MobileNavComponent } from './mobile-nav/mobile-nav.component';
   ],
   exports: [
     SideNavComponent,
-    HamburgerComponent,
-    StatusBarComponent,
     MobileNavComponent
   ]
 })

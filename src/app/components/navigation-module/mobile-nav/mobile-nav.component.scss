@@ -1,8 +1,4 @@
-.divider {
-  height: 100%;
-  width: 1px;
-  background: black;
-}
+@import 'src/scss/colors';
 
 .mobile-navbar {
   padding-bottom: 0;
@@ -12,7 +8,7 @@
     min-height: 50px;
 
     .active {
-      color: #1ca7dc;
+      color: $blue-primary;
     }
   }
 }

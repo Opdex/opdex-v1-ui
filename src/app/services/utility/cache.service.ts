@@ -58,7 +58,7 @@ export abstract class CacheService {
   }
 
   /**
-   * @summary Method to force a cached item by key
+   * @summary Force a refresh to a cached item by key
    * @param key The cached items unique identifier
    */
   protected refreshItem(key: string): void {

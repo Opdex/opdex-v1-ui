@@ -10,13 +10,119 @@
   padding: 20px 0px;
 }
 
-@media (min-width: 320px) { }
 
-@media (min-width: 576px) { }
+////////////////////////////////
+// Flex Row
+////////////////////////////////
 
-@media (min-width: 768px) { }
+%flexRow {
+  display: flex;
+  flex-direction: row;
+}
 
-@media (min-width: 992px) {
+%flexRowCenter {
+  @extend %flexRow;
+  align-items: center;
+}
+
+%flexRowEnd {
+  @extend %flexRow;
+  align-items: end;
+}
+
+// Classes
+
+.flex-row {
+  @extend %flexRow;
+}
+
+.flex-row-center {
+  @extend %flexRowCenter;
+}
+
+.flex-row-end {
+  @extend %flexRowEnd;
+}
+
+// Flex Row Align Center Justify Content
+.flex-row-center-between {
+  @extend %flexRowCenter;
+  justify-content: space-between;
+}
+
+.flex-row-center-end {
+  @extend %flexRowCenter;
+  justify-content: end;
+}
+
+.flex-row-center-start {
+  @extend %flexRowCenter;
+  justify-content: start;
+}
+
+.flex-row-center-center {
+  @extend %flexRowCenter;
+  justify-content: center;
+}
+
+.flex-row-center-around {
+  @extend %flexRowCenter;
+  justify-content: space-around;
+}
+
+// Flex Row Align End Justify Content
+.flex-row-end-between {
+  @extend %flexRowEnd;
+  justify-content: space-between;
+}
+
+.flex-row-end-end {
+  @extend %flexRowEnd;
+  justify-content: end;
+}
+
+.flex-row-end-start {
+  @extend %flexRowEnd;
+  justify-content: start;
+}
+
+////////////////////////////////
+// Flex Column
+////////////////////////////////
+
+%flexColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+%flexColumnCenter {
+  @extend %flexColumn;
+  align-items: center;
+}
+
+%flexColumnEnd {
+  @extend %flexColumn;
+  align-items: end;
+}
+
+// Classes
+.flex-column {
+  @extend %flexColumn;
+}
+
+.flex-column-center {
+  @extend %flexColumnCenter;
+}
+
+.flex-column-end {
+  @extend %flexColumnEnd;
+}
+
+////////////////////////////////
+// Media Queries
+////////////////////////////////
+
+@media (min-width: map_get($grid-breakpoints, md)) {
   .standard-section {
     padding: 50px 0px;
   }
@@ -29,5 +135,3 @@
     padding: 50px 0px;
   }
 }
-
-@media (min-width: 1440px) { }

@@ -9,7 +9,7 @@
       [fixedBottomGap]="0"
       [mode]="sidenavMode"
       [autoFocus]="false">
-      <div style="padding-top: 25px; padding-left: 10px; padding-right: 10px;">
+      <div class="container pt-3">
         <opdex-tx-sidebar (onModeChange)="handleSidenavModeChange($event)" [message]="message"></opdex-tx-sidebar>
       </div>
     </mat-sidenav>
@@ -24,7 +24,7 @@
           <div id="page-content">
             <div class="mobile-nav" [ngClass]="{'open': menuOpen}">
               <opdex-side-nav (onRouteChanged)="handleRouteChanged($event)"></opdex-side-nav>
-              <button mat-icon-button class="small" (click)="handleToggleMenu()" style="position: fixed; right: 20px; bottom: 20px; z-index: 10" *ngIf="menuOpen">
+              <button mat-icon-button class="small close-button" (click)="handleToggleMenu()" *ngIf="menuOpen">
                 <mat-icon>{{icons.close}}</mat-icon>
               </button>
             </div>
@@ -42,7 +42,7 @@
     </mat-sidenav-content>
   </mat-sidenav-container>
 
-  <div class="splash header-section" style="background-position: right" *ngIf="loading">
+  <div class="splash header-section" *ngIf="loading">
     <img class="loading-logo" src="/assets/logo-light-blue.png" alt="Opdex">
     <h1>OPDEX</h1>
   </div>

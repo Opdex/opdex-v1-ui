@@ -1,5 +1,5 @@
 <div id="side-nav" [ngClass]="{'pinned': isPinned}">
-  <div class="foreground">
+  <div class="foreground" *ngIf="userContext$ | async as context">
     <div class="logo" routerLink="/">
       <img src="/assets/logo-light-blue.png" alt="Opdex Logo">
       <p class="opdex">OPDEX</p>
@@ -11,7 +11,7 @@
       </button>
     </div>
 
-    <ul class="sidebar-nav" *ngIf="userContext$ | async as context">
+    <ul class="sidebar-nav">
       <li>
         <a mat-button (click)="emitRouteChange('/')" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
           <mat-icon>{{icons.market}}</mat-icon>
@@ -63,17 +63,54 @@
     <div class="space-between"></div>
 
     <ul class="sidebar-nav secondary mb-2">
-      <div class="d-flex flex-row align-items-center no-wrap">
+      <div class="flex-row-center no-wrap" *ngIf="pendingTransactions?.length > 0">
+        <button mat-button [matMenuTriggerFor]="qMenu" class="small d-inline pl-0 pr-0">
+          <mat-icon class="swap mr-2">{{icons.send}}</mat-icon>
+          <small>Pending Transactions</small>
+        </button>
+
+        <mat-menu #qMenu="matMenu" class="queue-panel pl-2 pr-2 pb-0 pt-0" style="min-height: auto">
+          <div class="flex-row-center mb-1" *ngIf="pendingTransactions.length > 0; else noTransactions">
+            <mat-icon [ngClass]="iconSizes.tiny" class="green mr-2">{{icons.checkOutline}}</mat-icon>
+            <small>Pending Transactions</small>
+          </div>
+
+          <ng-template #noTransactions>
+            <small>No Pending Transactions</small>
+          </ng-template>
+
+          <div class="queue-item flex-column" *ngFor="let tx of pendingTransactions; let i = index">
+            <small class="light pt-1 pb-1 overflow-ellipsis">{{tx}}</small>
+            <mat-divider style="position: relative;" *ngIf="i + 1 < pendingTransactions.length"></mat-divider>
+          </div>
+        </mat-menu>
+      </div>
+
+      <div class="flex-row-center no-wrap">
         <button mat-button class="small d-inline pl-0 pr-0" (click)="networkTooltip.toggle()" *ngIf="latestSyncedBlock$ | async as block">
           <mat-icon class="mr-2" [matTooltip]="network" #networkTooltip="matTooltip">languages</mat-icon>
           <small>#{{block.height | formatNumber:0}}</small>
         </button>
       </div>
 
-      <div class="d-flex flex-row align-items-center no-wrap" *ngIf="theme">
+      <div class="flex-row-center no-wrap" *ngIf="theme">
         <button mat-button class="small d-inline pl-0 pr-0" (click)="toggleTheme()">
           <mat-icon class="mr-2">{{theme === 'dark-mode' ? 'brightness_3' : 'brightness_7'}}</mat-icon>
           <small>{{theme === 'dark-mode' ? 'Dark Mode' : 'Light Mode'}}</small>
+        </button>
+      </div>
+
+      <div class="flex-row-center no-wrap">
+        <button mat-button class="small d-inline pl-0 pr-0" (click)="openBugReport()">
+          <mat-icon class="mr-2">{{icons.bug}}</mat-icon>
+          <small>Report Issue</small>
+        </button>
+      </div>
+
+      <div class="flex-row-center no-wrap" *ngIf="context?.wallet">
+        <button mat-button class="small d-inline pl-0 pr-0" (click)="logout()">
+          <mat-icon class="mr-2">{{icons.exit}}</mat-icon>
+          <small>Logout</small>
         </button>
       </div>
 

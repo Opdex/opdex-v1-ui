@@ -26,15 +26,7 @@ export class MiningCardComponent implements OnChanges {
       new FixedDecimal(this.pool.token.lp.summary.priceUsd.toString(), 8));
   }
 
-  startMining() {
-    this._sidebar.openSidenav(TransactionView.mine, {pool: this.pool, child: 'start'});
-  }
-
-  stopMining() {
-    this._sidebar.openSidenav(TransactionView.mine, {pool: this.pool, child: 'stop'});
-  }
-
-  collect() {
-    this._sidebar.openSidenav(TransactionView.mine, {pool: this.pool, child: 'collect'});
+  transact(childView: string) {
+    this._sidebar.openSidenav(TransactionView.mine, {pool: this.pool, child: childView});
   }
 }

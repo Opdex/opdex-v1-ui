@@ -2,13 +2,13 @@
 
 .dark-mode {
   .skeleton-bg {
-    background: linear-gradient(270deg, #1b192f, #100f1d);
+    background: linear-gradient(270deg, $dark-primary, #100f1d);
   }
 }
 
 .light-mode {
   .skeleton-bg {
-    background: linear-gradient(270deg, #fff, #eeeeee);
+    background: linear-gradient(270deg, #fff, #e7e7e7);
   }
 }
 

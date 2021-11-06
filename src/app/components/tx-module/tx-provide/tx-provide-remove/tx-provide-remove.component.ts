@@ -16,11 +16,13 @@ import { ITransactionQuote } from '@sharedModels/platform-api/responses/transact
 import { DecimalStringRegex } from '@sharedLookups/regex';
 import { IRemoveLiquidityRequest, RemoveLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/remove-liquidity-request';
 import { IconSizes } from 'src/app/enums/icon-sizes';
+import { CollapseAnimation } from '@sharedServices/animations/collapse';
 
 @Component({
   selector: 'opdex-tx-provide-remove',
   templateUrl: './tx-provide-remove.component.html',
-  styleUrls: ['./tx-provide-remove.component.scss']
+  styleUrls: ['./tx-provide-remove.component.scss'],
+  animations: [CollapseAnimation]
 })
 export class TxProvideRemoveComponent extends TxBase {
   @Input() pool: ILiquidityPoolSummary;
@@ -44,6 +46,7 @@ export class TxProvideRemoveComponent extends TxBase {
   allowance: AllowanceValidation;
   latestSyncedBlock$: Subscription;
   latestBlock: number;
+  percentageSelected: string;
 
   get liquidity(): FormControl {
     return this.form.get('liquidity') as FormControl;
@@ -169,6 +172,11 @@ export class TxProvideRemoveComponent extends TxBase {
     const blocks = Math.ceil(60 * minutes / 16);
 
     return blocks + this.latestBlock;
+  }
+
+  handlePercentageSelect(value: any) {
+    this.percentageSelected = value.percentageOption;
+    this.liquidity.setValue(value.result, {emitEvent: true});
   }
 
   destroyContext$() {

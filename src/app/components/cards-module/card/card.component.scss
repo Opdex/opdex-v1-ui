@@ -1,4 +1,4 @@
-@import '/src/scss/colors.scss';
+@import '/src/scss/colors';
 
 .card {
   margin-bottom: 15px;
@@ -51,14 +51,3 @@
     }
   }
 }
-
-
-@media (min-width: 320px) { }
-
-@media (min-width: 576px) { }
-
-@media (min-width: 768px) { }
-
-@media (min-width: 992px) { }
-
-@media (min-width: 1200px) { }

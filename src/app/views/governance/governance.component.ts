@@ -27,7 +27,7 @@ import { IconSizes } from 'src/app/enums/icon-sizes';
   styleUrls: ['./governance.component.scss']
 })
 export class GovernanceComponent implements OnInit, OnDestroy {
-  nominatedPools$: Observable<ILiquidityPoolSummary[]>;
+  nominatedPools: ILiquidityPoolSummary[];
   miningPools$: Observable<ILiquidityPoolSummary[]>;
   governance$: Subscription;
   governance: Governance;
@@ -36,6 +36,7 @@ export class GovernanceComponent implements OnInit, OnDestroy {
   context: any;
   icons = Icons;
   iconSizes = IconSizes;
+  subscription = new Subscription();
 
   constructor(
     private _platformApiService: PlatformApiService,
@@ -45,7 +46,9 @@ export class GovernanceComponent implements OnInit, OnDestroy {
     private _tokenService: TokensService,
     private _liquidityPoolsService: LiquidityPoolsService,
     private _blocks: BlocksService
-  ) { }
+  ) {
+    this.nominatedPools = [ null, null, null, null ];
+  }
 
   nominationsHelpInfo = {
     title: 'What are nominations?',
@@ -70,30 +73,17 @@ export class GovernanceComponent implements OnInit, OnDestroy {
               tap(minedToken => this.governance.setMinedToken(minedToken)));
         })).subscribe();
 
-    this.nominatedPools$ = this._blocks.getLatestBlock$().pipe(switchMap(_ => {
-      const filter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 4, direction: 'DESC', nominationFilter: NominationFilter.Nominated});
-      return this._liquidityPoolsService.getLiquidityPools(filter).pipe(map(pools => pools.results));
-    }));
+    const nominationFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 4, direction: 'DESC', nominationFilter: NominationFilter.Nominated});
+
+    this.subscription.add(
+      this._blocks.getLatestBlock$()
+        .pipe(switchMap(_ => this._liquidityPoolsService.getLiquidityPools(nominationFilter)))
+        .subscribe(pools => this.nominatedPools = pools.results));
 
     this.miningPools$ = this._blocks.getLatestBlock$().pipe(switchMap(_ => {
       const filter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 4, direction: 'DESC', miningFilter: MiningFilter.Enabled});
       return this._liquidityPoolsService.getLiquidityPools(filter).pipe(map(pools => pools.results));
     }));
-  }
-
-  secondsToDhms(seconds) {
-    seconds = Number(seconds);
-    var d = Math.floor(seconds / (3600 * 24));
-    var h = Math.floor(seconds % (3600 * 24) / 3600);
-    var m = Math.floor(seconds % 3600 / 60);
-    var s = Math.floor(seconds % 60);
-
-    var dDisplay = d > 0 ? d + "D " : "";
-    var hDisplay = h > 0 ? h + "h " : "";
-    var mDisplay = m > 0 ? m + "m " : "";
-    var sDisplay = s > 0 ? s + "s" : "";
-
-    return dDisplay + hDisplay + mDisplay + sDisplay;
   }
 
   quoteDistribution(): void {
@@ -106,10 +96,12 @@ export class GovernanceComponent implements OnInit, OnDestroy {
   }
 
   poolsTrackBy(index: number, pool: ILiquidityPoolSummary) {
+    if (pool === null || pool === undefined) return index;
     return `${index}-${pool.address}-${pool.cost.crsPerSrc.close}-${pool.mining?.tokensMining}-${pool.staking?.weight}`;
   }
 
   ngOnDestroy() {
     if (this.governance$) this.governance$.unsubscribe();
+    this.subscription.unsubscribe();
   }
 }

@@ -24,6 +24,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
   pool: ILiquidityPoolSummary;
   subscription = new Subscription();
   fiatValue: string;
+  percentageSelected: string;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -74,6 +75,11 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
       .stopStakingQuote(this.pool.address, payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote));
+  }
+
+  handlePercentageSelect(value: any) {
+    this.percentageSelected = value.percentageOption;
+    this.amount.setValue(value.result, {emitEvent: true});
   }
 
   destroyContext$() {

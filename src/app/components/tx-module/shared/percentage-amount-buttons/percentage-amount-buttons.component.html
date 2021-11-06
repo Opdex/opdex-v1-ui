@@ -1,0 +1,8 @@
+<div class="flex-row-center mt-2 mb-3" *ngIf="context?.wallet">
+  <button mat-stroked-button
+    type="button"
+    class="percentage-button tiny w-100 pl-0 pr-0 b-300"
+    *ngFor="let option of percentages"
+    (click)="selectPercentage(option)"
+    color="{{selected === option ? 'primary' : ''}}"><small>{{option}}%</small></button>
+</div>
