@@ -232,7 +232,7 @@ export class PoolComponent implements OnInit, OnDestroy {
         iconColor: 'mine',
         helpInfo: {
           title: 'What is Liquidity Mining?',
-          paragraph: 'Liquidity mining is when new governance tokens are mined when liquidity is provided and staked in mining pools. This indicator displays the totals current being used for mining within the liquidity pool whether liquidity mining is currently active or not.'
+          paragraph: 'Liquidity mining is when new governance tokens are mined, from liquidity that is provided and staked in mining pools. This indicator displays the totals currently used for mining within the liquidity pool, whether liquidity mining is currently active or not.'
         }
       }
     ];

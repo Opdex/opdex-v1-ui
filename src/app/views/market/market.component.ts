@@ -152,7 +152,7 @@ export class MarketComponent implements OnInit {
         iconColor: 'provide',
         helpInfo: {
           title: 'What is Volume?',
-          paragraph: 'Volume is the total USD value of tokens swapped and is usually displayed on a daily time frame. Volume tracks the value of tokens input to the protocol during swaps including transaction fees.'
+          paragraph: 'Volume is the total USD value of tokens swapped and is usually displayed on a daily time frame. Volume tracks the value of tokens input to the protocol during swaps, plus transaction fees.'
         }
       },
       {
