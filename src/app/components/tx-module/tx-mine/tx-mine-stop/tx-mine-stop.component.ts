@@ -25,6 +25,7 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
   pool: ILiquidityPoolSummary;
   subscription = new Subscription();
   fiatValue: string;
+  percentageSelected: string;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -69,6 +70,11 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
       .stopMiningQuote(this.pool.mining.address, payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote));
+  }
+
+  handlePercentageSelect(value: any) {
+    this.percentageSelected = value.percentageOption;
+    this.amount.setValue(value.result, {emitEvent: true});
   }
 
   destroyContext$() {

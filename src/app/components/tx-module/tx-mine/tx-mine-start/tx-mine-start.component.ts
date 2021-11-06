@@ -31,6 +31,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
   allowance: AllowanceValidation;
   allowanceTransaction$ = new Subscription();
   latestSyncedBlock$: Subscription;
+  percentageSelected: string;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -101,6 +102,11 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
       .startMiningQuote(this.pool.mining.address, payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote));
+  }
+
+  handlePercentageSelect(value: any) {
+    this.percentageSelected = value.percentageOption;
+    this.amount.setValue(value.result, {emitEvent: true});
   }
 
   destroyContext$() {

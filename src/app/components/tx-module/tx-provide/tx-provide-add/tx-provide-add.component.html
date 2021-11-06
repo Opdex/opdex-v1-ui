@@ -1,6 +1,6 @@
 <div class="add-liquidity">
   <form [formGroup]="form" name="add-liquidity-form" id="swap-form" (submit)="submit()">
-    <div class="mb-3">
+    <div class="mb-4">
       <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Add {{pool.token.crs.symbol}}" [formControl]="amountCrs" [suffix]="pool.token.crs.symbol" [numbersOnly]="true">
         <div class="flex-row-center-between">
           <div class="tolerance-amounts">
@@ -12,6 +12,13 @@
           </div>
         </div>
       </opdex-input-control>
+
+      <opdex-percentage-amount-buttons
+        [contract]="pool.token.crs.address"
+        [token]="pool.token.crs"
+        positionType="Balance"
+        [selected]="crsPercentageSelected"
+        (onPercentageSelect)="handlePercentageSelect('crs', $event)"></opdex-percentage-amount-buttons>
     </div>
 
     <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Add {{pool.token.src.symbol}}" [formControl]="amountSrc" [suffix]="pool.token.src.symbol" [numbersOnly]="true">
@@ -25,6 +32,13 @@
         </div>
       </div>
     </opdex-input-control>
+
+    <opdex-percentage-amount-buttons
+      [contract]="pool.token.src.address"
+      [token]="pool.token.src"
+      positionType="Balance"
+      [selected]="srcPercentageSelected"
+      (onPercentageSelect)="handlePercentageSelect('src', $event)"></opdex-percentage-amount-buttons>
 
     <div class="flex-row-center-end">
       <button mat-icon-button color="primary" [ngClass]="iconSizes.small" (click)="toggleShowMore(!showMore)" type="button"><mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon></button>

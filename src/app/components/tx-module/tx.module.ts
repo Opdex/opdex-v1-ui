@@ -48,6 +48,7 @@ import { TxCreatePoolComponent } from './tx-create-pool/tx-create-pool.component
 import { TxSidebarComponent } from './tx-sidebar/tx-sidebar.component';
 import { WalletPreviewComponent } from './shared/wallet-preview/wallet-preview.component';
 import { TxButtonsComponent } from './shared/tx-buttons/tx-buttons.component';
+import { PercentageAmountButtonsComponent } from './shared/percentage-amount-buttons/percentage-amount-buttons.component';
 
 
 @NgModule({
@@ -71,7 +72,8 @@ import { TxButtonsComponent } from './shared/tx-buttons/tx-buttons.component';
     TxCreatePoolComponent,
     TxSidebarComponent,
     WalletPreviewComponent,
-    TxButtonsComponent
+    TxButtonsComponent,
+    PercentageAmountButtonsComponent
   ],
   imports: [
     CommonModule,

@@ -6,6 +6,13 @@
       </div>
     </opdex-input-control>
 
+    <opdex-percentage-amount-buttons
+      [contract]="pool.address"
+      [token]="pool.token.staking"
+      positionType="Staking"
+      [selected]="percentageSelected"
+      (onPercentageSelect)="handlePercentageSelect($event)"></opdex-percentage-amount-buttons>
+
     <mat-checkbox
       formControlName="liquidate"
       color="primary"

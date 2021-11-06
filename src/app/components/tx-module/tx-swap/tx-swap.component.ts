@@ -64,6 +64,8 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   allowanceTransaction$: Subscription;
   latestSyncedBlock$: Subscription;
   latestBlock: number;
+  tokenAmountInPercentageSelected: string;
+  tokenAmountOutPercentageSelected: string;
 
   get tokenInAmount(): FormControl {
     return this.form.get('tokenInAmount') as FormControl;
@@ -246,9 +248,14 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     const tokenOut = this.tokenOut.value;
     const tokenInDetails = this.tokenInDetails;
     const tokenOutDetails = this.tokenOutDetails;
+    const tokenInPercentageSelection = this.tokenAmountInPercentageSelected;
+    const tokenOutPercentageSelection = this.tokenAmountOutPercentageSelected;
 
     this.tokenInDetails = tokenOutDetails;
     this.tokenOutDetails = tokenInDetails;
+
+    this.tokenAmountOutPercentageSelected = tokenInPercentageSelection;
+    this.tokenAmountInPercentageSelected = tokenOutPercentageSelection;
 
     this.tokenIn.setValue(tokenOut, { emitEvent: false });
     this.tokenOut.setValue(tokenIn, { emitEvent: false });
@@ -375,6 +382,18 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     const blocks = Math.ceil(60 * minutes / 16);
 
     return blocks + this.latestBlock;
+  }
+
+  handlePercentageSelect(field: string, value: any) {
+    if (field === 'amountIn') {
+      this.tokenAmountOutPercentageSelected = null;
+      this.tokenAmountInPercentageSelected = value.percentageOption;
+      this.tokenInAmount.setValue(value.result, {emitEvent: true});
+    } else {
+      this.tokenAmountOutPercentageSelected = value.percentageOption;
+      this.tokenAmountInPercentageSelected = null;
+      this.tokenOutAmount.setValue(value.result, {emitEvent: true});
+    }
   }
 
   destroyContext$() {
