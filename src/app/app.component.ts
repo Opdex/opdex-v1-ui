@@ -1,3 +1,4 @@
+import { AppUpdateModalComponent } from './components/modals-module/app-update-modal/app-update-modal.component';
 import { TransactionReceipt } from './models/transaction-receipt';
 import { ITransactionReceipt } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
 import { catchError, take } from 'rxjs/operators';
@@ -67,13 +68,7 @@ export class AppComponent implements OnInit {
     window.addEventListener('resize', this.appHeight);
     this.appHeight();
 
-    // This could nad probably should alert the user to click Ok to reload
-    // For resolving current caching issues, attempting auto refresh
-    //
-    // Todo - this may be problematic due to environment variable injections in the pipeline
-    // after the build. The initial build generates versions as hashes of the app, altering code after
-    // the fact might always result in an invalid version, potentially causing wasted reloads.
-    this._appUpdate.available.subscribe(_ => document.location.reload());
+    this._appUpdate.available.subscribe(_ => this.openAppUpdate());
 
     this.network = this._env.network;
     this.context = this._context.getUserContext();
@@ -186,6 +181,12 @@ export class AppComponent implements OnInit {
 
   openBugReport(): void {
     this.dialog.open(BugReportModalComponent, {
+      width: '500px'
+    });
+  }
+
+  openAppUpdate(): void {
+    this.dialog.open(AppUpdateModalComponent, {
       width: '500px'
     });
   }

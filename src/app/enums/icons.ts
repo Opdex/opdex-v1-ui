@@ -55,5 +55,6 @@ export enum Icons {
     collapse = 'unfold_less',
     bars = 'bar_chart',
     exit = 'exit_to_app',
-    unlock = 'lock_open'
+    unlock = 'lock_open',
+    update = 'system_update'
 }

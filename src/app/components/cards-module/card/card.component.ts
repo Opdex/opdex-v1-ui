@@ -16,7 +16,6 @@ export class CardComponent {
   @Input() hasToolbar = false;
   iconSizes = IconSizes;
   icons = Icons;
-
   closed: boolean;
 
   close() {

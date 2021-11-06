@@ -1,0 +1,14 @@
+<h2 class="flex-row-center">
+  <mat-icon class="swap mr-2">{{icons.update}}</mat-icon> Update Available
+</h2>
+
+<mat-dialog-content>
+  <p>There is an updated version of the app available. How would you like to proceed?</p>
+</mat-dialog-content>
+
+<mat-dialog-actions class="flex-row-center-between">
+  <div class="flex-row-center w-100">
+    <button mat-stroked-button mat-dialog-close color="warn" class="w-100 mr-3">Ignore</button>
+    <button mat-flat-button cdkFocusInitial color="primary" (click)="update()" class="w-100">Update</button>
+  </div>
+</mat-dialog-actions>

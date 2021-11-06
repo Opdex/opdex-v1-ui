@@ -17,7 +17,6 @@ jobs:
                 azureSubscription: $(azureSubscription)
                 appType: 'webApp'
                 appName: 'app-opdex-${{ parameters.environment }}-app'
-                # package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
                 package: '$(Pipeline.Workspace)/$(ARTIFACT_NAME)/*.zip'
                 deploymentMethod: 'auto'
                 deployToSlotOrASE: true

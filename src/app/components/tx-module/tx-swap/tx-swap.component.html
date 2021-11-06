@@ -43,7 +43,8 @@
       [token]="tokenInDetails"
       positionType="Balance"
       [selected]="tokenAmountInPercentageSelected"
-      (onPercentageSelect)="handlePercentageSelect('amountIn', $event)"></opdex-percentage-amount-buttons>
+      (onPercentageSelect)="handlePercentageSelect('amountIn', $event)"
+      *ngIf="tokenInDetails"></opdex-percentage-amount-buttons>
 
     <div class="flex-row-center-around">
       <button mat-icon-button [ngClass]="iconSizes.small" (click)="switch()"><mat-icon>{{icons.down}}</mat-icon></button>
@@ -87,7 +88,8 @@
       [token]="tokenOutDetails"
       positionType="Balance"
       [selected]="tokenAmountOutPercentageSelected"
-      (onPercentageSelect)="handlePercentageSelect('amountOut', $event)"></opdex-percentage-amount-buttons>
+      (onPercentageSelect)="handlePercentageSelect('amountOut', $event)"
+      *ngIf="tokenOutDetails"></opdex-percentage-amount-buttons>
 
     <div class="flex-row-center-end">
       <button mat-icon-button color="primary" [ngClass]="iconSizes.small" (click)="toggleShowMore(!showMore)" type="button"><mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon></button>
