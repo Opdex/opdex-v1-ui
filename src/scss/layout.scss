@@ -52,7 +52,7 @@
 
 .flex-row-center-end {
   @extend %flexRowCenter;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .flex-row-center-start {
@@ -78,7 +78,7 @@
 
 .flex-row-end-end {
   @extend %flexRowEnd;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .flex-row-end-start {
