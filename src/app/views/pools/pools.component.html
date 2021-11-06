@@ -53,12 +53,8 @@
     <div class="container">
       <div class="row">
         <div class="col-12">
-          <div class="flex-row-center-between">
-            <h4 class="d-inline mb-0">Liquidity Pools</h4>
-
-            <div class="button-group">
-              <button mat-icon-button color="primary" (click)="createPool()"><mat-icon>{{icons.add}}</mat-icon></button>
-            </div>
+          <div class="flex-row-center-end">
+            <button mat-button color="primary" (click)="createPool()"><mat-icon>{{icons.add}}</mat-icon> Create Pool</button>
           </div>
 
           <opdex-pools-table [filter]="topPoolsFilter"></opdex-pools-table>

@@ -1,7 +1,7 @@
 <div class="header-section">
   <div class="container">
     <div class="row align-items-center">
-      <div class="col-12 col-lg-6 col-xl-8">
+      <div class="col-12 col-sm-6 col-xl-8">
         <h1 class="mb-0">{{pool?.token?.src?.symbol || 'XYZ'}}/{{pool?.token?.crs?.symbol || 'CRS'}}</h1>
         <opdex-copy-address [address]="pool?.address"></opdex-copy-address>
 
@@ -12,13 +12,13 @@
         </div>
       </div>
 
-      <div class="d-none d-lg-block col-lg-6 col-xl-4">
+      <div class="d-none d-sm-block col-sm-6 col-xl-4">
         <opdex-tx-buttons (onSelectOption)="handleTxOption($event)"></opdex-tx-buttons>
       </div>
     </div>
 
     <div class="row">
-      <div class="col-12 col-md-6 col-xl-3">
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
         <opdex-liquidity-pool-token-card
           [token]="pool?.token?.src"
           [reserves]="pool?.reserves?.src"
@@ -26,7 +26,7 @@
           [swapToken]="pool?.token?.crs"></opdex-liquidity-pool-token-card>
       </div>
 
-      <div class="col-12 col-md-6 col-xl-3">
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
         <opdex-liquidity-pool-token-card
           [token]="pool?.token?.crs"
           [reserves]="pool?.reserves?.crs"
@@ -37,29 +37,13 @@
 
     <div class="row">
       <ng-container *ngFor="let statCard of statCards; let i = index; trackBy: statCardTrackBy">
-        <div *ngIf="statCard.show" class="col-sm-12 col-md">
-          <opdex-card>
-            <div class="flex-row-center-between">
-              <div class="d-inline-flex align-items-center mr-3">
-                <opdex-help-button *ngIf="statCard.helpInfo" [info]="statCard.helpInfo" [icon]="statCard.icon" [iconColor]="statCard.iconColor" class="mr-2"></opdex-help-button>
-                <p class="mb-0 no-wrap"><span *ngIf="statCard.daily">Daily</span> {{statCard.title}}</p>
-              </div>
-
-              <div class="d-inline-flex align-items-center no-wrap" *ngIf="statCard.value !== null && statCard.value !== undefined; else loadingStatValue">
-                <p class="mr-2 mb-0">{{statCard.prefix}}{{statCard.value | shortNumber }} <small class="ml-1">{{statCard.suffix}}</small></p>
-                <opdex-change-indicator [value]="statCard.change" size="s" *ngIf="statCard.change !== null && statCard.change !== undefined"></opdex-change-indicator>
-              </div>
-
-              <ng-template #loadingStatValue>
-                <div class="skeleton-bg w-50"></div>
-              </ng-template>
-            </div>
-          </opdex-card>
+        <div *ngIf="statCard.show" class="col-xs-12 col-sm">
+          <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
         </div>
       </ng-container>
     </div>
 
-    <div class="row d-lg-none">
+    <div class="row d-sm-none">
       <div class="col-12">
         <opdex-tx-buttons (onSelectOption)="handleTxOption($event)"></opdex-tx-buttons>
       </div>

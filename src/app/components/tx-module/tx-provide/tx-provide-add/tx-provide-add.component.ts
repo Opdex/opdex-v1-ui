@@ -21,11 +21,13 @@ import { IAddLiquidityRequest, AddLiquidityRequest } from '@sharedModels/platfor
 import { IAddLiquidityAmountInQuoteRequest } from '@sharedModels/platform-api/requests/quotes/add-liquidity-amount-in-quote-request';
 import { IProvideAmountIn } from '@sharedModels/platform-api/responses/liquidity-pools/provide-amount-in.interface';
 import { IconSizes } from 'src/app/enums/icon-sizes';
+import { CollapseAnimation } from '@sharedServices/animations/collapse';
 
 @Component({
   selector: 'opdex-tx-provide-add',
   templateUrl: './tx-provide-add.component.html',
-  styleUrls: ['./tx-provide-add.component.scss']
+  styleUrls: ['./tx-provide-add.component.scss'],
+  animations: [CollapseAnimation]
 })
 export class TxProvideAddComponent extends TxBase implements OnInit {
   @Input() pool: ILiquidityPoolSummary;

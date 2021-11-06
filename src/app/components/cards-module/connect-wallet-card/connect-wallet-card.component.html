@@ -5,12 +5,12 @@
       Connect Wallet
     </h5>
     <button mat-icon-button color="primary" [ngClass]="iconSizes.small" (click)="toggleConnectMessage()">
-      <mat-icon>{{ hideConnectMessage ? icons.add : icons.remove }}</mat-icon>
+      <mat-icon>{{ collapsed ? icons.add : icons.remove }}</mat-icon>
     </button>
   </div>
 
-  <div class="mt-3" *ngIf="!hideConnectMessage">
-    <p>Provide your wallet public key to review your quotes, history and token balances.</p>
+  <div [@collapse]="collapsed">
+    <p class="pt-3">Provide your wallet public key to review transaction quotes, history and token balances.</p>
     <button mat-stroked-button color="primary" class="w-100 flex-row-center" (click)="connectWallet()">
       Connect
     </button>

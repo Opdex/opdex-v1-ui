@@ -23,11 +23,13 @@ import { SwapAmountOutQuoteRequest } from '@sharedModels/platform-api/requests/t
 import { ISwapAmountOutQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-out-quote-response.interface';
 import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { IconSizes } from 'src/app/enums/icon-sizes';
+import { CollapseAnimation } from '@sharedServices/animations/collapse';
 
 @Component({
   selector: 'opdex-tx-swap',
   templateUrl: './tx-swap.component.html',
-  styleUrls: ['./tx-swap.component.scss']
+  styleUrls: ['./tx-swap.component.scss'],
+  animations: [CollapseAnimation]
 })
 export class TxSwapComponent extends TxBase implements OnDestroy {
   @ViewChild('tokenInInput') tokenInInput: ElementRef;
@@ -135,7 +137,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
           switchMap(_ => this.validateAllowance()))
         .subscribe();
 
-      this.tokens$ = this._platformApi
+      this.tokens$ = this._tokensService
         .getTokens(new TokensFilter({limit: 25, direction: "DESC"}))
         .pipe(map(tokens => {
           this.tokens = tokens.results;

@@ -32,7 +32,7 @@
         </div>
       </div>
 
-      <ng-container *ngIf="showMethodDetails">
+      <div [@collapse]="!showMethodDetails">
         <div class="mb-2">
           <small class="light d-block">Contract Method</small>
           <small class="d-block overflow-ellipsis">{{quoteRequest?.method}}</small>
@@ -42,7 +42,7 @@
           <small class="light d-block">Contract Address</small>
           <small class="d-block overflow-ellipsis">{{quoteReceipt?.to}}</small>
         </div>
-      </ng-container>
+      </div>
 
       <ng-container *ngIf="quoteRequest.parameters?.length">
         <mat-divider></mat-divider>
@@ -60,12 +60,12 @@
           </div>
         </div>
 
-        <ng-container *ngIf="showParameterDetails">
+        <div [@collapse]="!showParameterDetails">
           <div class="mb-2" *ngFor="let param of quoteRequest.parameters">
             <small class="light d-block">{{param.label}}</small>
             <small class="d-block overflow-ellipsis">{{param.value | contractParameter}}</small>
           </div>
-        </ng-container>
+        </div>
       </ng-container>
     </div>
 

@@ -9,6 +9,7 @@
 
 // Fonts
 @import 'font';
+@import 'colors';
 
 // Foreground Elements
 
@@ -95,7 +96,7 @@ mat.$light-theme-background-palette: (
 );
 
 // Dark bg
-$dark-background:     #1B192F;
+$dark-background:     $dark-primary;
 $dark-bg-lighter-5:   lighten($dark-background, 5%);
 $dark-bg-lighter-10:  lighten($dark-background, 10%);
 $dark-bg-lighter-20:  lighten($dark-background, 20%);
@@ -137,10 +138,10 @@ $mat-primary: (
 $theme-primary: mat.define-palette($mat-primary, main, lighter, darker);
 
 $mat-accent: (
-  main: #1B192F,
+  main: $dark-primary,
   lighter: #252342,
   darker: #11101d,
-  200: #1B192F, // For slide toggle,
+  200: $dark-primary, // For slide toggle,
   contrast : (
     main: white,
     lighter: white,
@@ -150,9 +151,9 @@ $mat-accent: (
 $theme-accent: mat.define-palette($mat-accent, main, lighter, darker);
 
 $mat-warn: (
-  main: #e25a39,
-  lighter: #f5876c,
-  darker: #cf4f2f,
+  main: $red-primary,
+  lighter: lighten($red-primary, 10%),
+  darker: darken($red-primary, 10%),
   200: #e21d1d, // For slide toggle,
   contrast : (
     main: white,
@@ -187,7 +188,7 @@ main {
   }
 
   &.dark-mode {
-    background: #1b192f;
+    background: $dark-primary;
   }
 
   &.light-mode {

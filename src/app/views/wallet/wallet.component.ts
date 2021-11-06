@@ -20,11 +20,13 @@ import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { TransactionView } from '@sharedModels/transaction-view';
+import { CollapseAnimation } from '@sharedServices/animations/collapse';
 
 @Component({
   selector: 'opdex-wallet',
   templateUrl: './wallet.component.html',
-  styleUrls: ['./wallet.component.scss']
+  styleUrls: ['./wallet.component.scss'],
+  animations: [CollapseAnimation]
 })
 export class WalletComponent implements OnInit {
   transactionsRequest: ITransactionsRequest;
@@ -186,14 +188,5 @@ export class WalletComponent implements OnInit {
 
   handleTxOption($event: TransactionView) {
     this._sidebar.openSidenav($event);
-  }
-
-  logout() {
-    this._platform.auth(environment.marketAddress, null)
-      .pipe(
-        tap(token => this._context.setToken(token)),
-        tap(_ => this._router.navigateByUrl('/')),
-        take(1))
-      .subscribe();
   }
 }

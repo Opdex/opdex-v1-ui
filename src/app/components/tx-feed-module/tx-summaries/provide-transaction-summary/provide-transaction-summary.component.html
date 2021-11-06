@@ -1,6 +1,6 @@
 <ng-container *ngIf="pool && !error">
   <div class="flex-row-center mb-2">
-    <div class="col no-wrap">
+    <div class="no-wrap">
       {{isAddition ? '+' : '-'}}{{lptAmount.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.name}}</a> <a class="ml-1 no-decoration" routerLink="/tokens/{{pool.address}}">{{pool.token.lp.symbol}}</a>
     </div>
   </div>

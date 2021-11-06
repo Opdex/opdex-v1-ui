@@ -16,11 +16,13 @@ import { IAddressStaking } from '@sharedModels/platform-api/responses/wallets/ad
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { catchError, map, skip, switchMap, take, tap } from 'rxjs/operators';
 import { ILiquidityPoolSummary, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { CollapseAnimation } from '@sharedServices/animations/collapse';
 
 @Component({
   selector: 'opdex-wallet-preview',
   templateUrl: './wallet-preview.component.html',
-  styleUrls: ['./wallet-preview.component.scss']
+  styleUrls: ['./wallet-preview.component.scss'],
+  animations: [CollapseAnimation]
 })
 export class WalletPreviewComponent implements OnDestroy {
   @Input() balanceTokens: string[] = [];

@@ -1,38 +1,56 @@
 <opdex-card class="pool-card">
-  <div class="top-details">
-    <h3 class="title">
-      <a href="javascript:void(0)" [routerLink]="['/pools', pool.address]">{{pool.name}}</a>
-    </h3>
+  <ng-container *ngIf="pool !== null && pool !== undefined; else loading">
+    <div class="top-details">
+      <h3 class="title">
+        <a href="javascript:void(0)" [routerLink]="['/pools', pool.address]">{{pool.name}}</a>
+      </h3>
 
-    <button mat-icon-button color="primary" [ngClass]="iconSizes.small" [matMenuTriggerFor]="beforeMenu">
-      <mat-icon>{{icons.more}}</mat-icon>
-    </button>
+      <button mat-icon-button color="primary" [ngClass]="iconSizes.small" [matMenuTriggerFor]="beforeMenu">
+        <mat-icon>{{icons.more}}</mat-icon>
+      </button>
 
-    <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
-      <button mat-menu-item [ngClass]="iconSizes.small" (click)="swap()">
-        <mat-icon class="swap">{{icons.swap}}</mat-icon> Swap {{pool.token.src?.symbol}}
-      </button>
-      <button mat-menu-item [ngClass]="iconSizes.small" (click)="provide()">
-        <mat-icon class="provide">{{icons.provide}}</mat-icon> Provide {{pool.token.src?.symbol}}
-      </button>
-      <button mat-menu-item [ngClass]="iconSizes.small" (click)="stake()" *ngIf="pool.staking?.isActive">
-        <mat-icon class="stake">{{icons.staking}}</mat-icon> Stake {{pool.token.staking?.symbol}}
-      </button>
-      <button mat-menu-item [ngClass]="iconSizes.small" (click)="mine()" *ngIf="pool.mining?.isActive">
-        <mat-icon class="mine">{{icons.mining}}</mat-icon> Mine {{pool.token.staking?.symbol}}
-      </button>
-    </mat-menu>
-  </div>
-
-  <div class="bottom-details">
-    <div class="left">
-      <p class="sub-heading">Staking</p>
-      <p class="value">{{pool.staking.weight | shortNumber}} {{pool.token.staking.symbol}}</p>
+      <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
+        <button mat-menu-item [ngClass]="iconSizes.small" (click)="swap()">
+          <mat-icon class="swap">{{icons.swap}}</mat-icon> Swap {{pool.token.src?.symbol}}
+        </button>
+        <button mat-menu-item [ngClass]="iconSizes.small" (click)="provide()">
+          <mat-icon class="provide">{{icons.provide}}</mat-icon> Provide {{pool.token.src?.symbol}}
+        </button>
+        <button mat-menu-item [ngClass]="iconSizes.small" (click)="stake()" *ngIf="pool.staking?.isActive">
+          <mat-icon class="stake">{{icons.staking}}</mat-icon> Stake {{pool.token.staking?.symbol}}
+        </button>
+        <button mat-menu-item [ngClass]="iconSizes.small" (click)="mine()" *ngIf="pool.mining?.isActive">
+          <mat-icon class="mine">{{icons.mining}}</mat-icon> Mine {{pool.token.staking?.symbol}}
+        </button>
+      </mat-menu>
     </div>
 
-    <div class="right">
-      <p class="sub-heading">Liquidity</p>
-      <p class="value">${{pool.reserves.usd | shortNumber}}</p>
+    <div class="bottom-details">
+      <div class="left">
+        <p class="sub-heading">Staking</p>
+        <p class="value">{{pool.staking.weight | shortNumber}} {{pool.token.staking.symbol}}</p>
+      </div>
+
+      <div class="right">
+        <p class="sub-heading">Liquidity</p>
+        <p class="value">${{pool.reserves.usd | shortNumber}}</p>
+      </div>
     </div>
-  </div>
+  </ng-container>
+
+  <ng-template #loading>
+    <div class="skeleton-bg w-50 mb-3"></div>
+
+    <div class="flex-row-center">
+      <div class="w-50">
+        <div class="skeleton-bg w-50 mb-1"></div>
+        <div class="skeleton-bg w-50 mb-1"></div>
+      </div>
+
+      <div class="w-50 flex-column-end">
+        <div class="skeleton-bg w-50 mb-1"></div>
+        <div class="skeleton-bg w-50 mb-1"></div>
+      </div>
+    </div>
+  </ng-template>
 </opdex-card>

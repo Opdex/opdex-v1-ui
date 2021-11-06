@@ -17,11 +17,13 @@ import { IQuoteReplayRequest, QuoteReplayRequest } from '@sharedModels/platform-
 import { TransactionBroadcastNotificationRequest } from '@sharedModels/platform-api/requests/transactions/transaction-broadcast-notification-request';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
+import { CollapseAnimation } from '@sharedServices/animations/collapse';
 
 @Component({
   selector: 'opdex-review-quote',
   templateUrl: './review-quote.component.html',
-  styleUrls: ['./review-quote.component.scss']
+  styleUrls: ['./review-quote.component.scss'],
+  animations: [CollapseAnimation]
 })
 export class ReviewQuoteComponent implements OnDestroy {
   txHash: string;

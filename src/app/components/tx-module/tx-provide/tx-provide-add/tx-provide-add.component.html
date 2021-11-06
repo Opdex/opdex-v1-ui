@@ -26,11 +26,11 @@
       </div>
     </opdex-input-control>
 
-    <div class="toggle-additional">
+    <div class="flex-row-center-end">
       <button mat-icon-button color="primary" [ngClass]="iconSizes.small" (click)="toggleShowMore(!showMore)" type="button"><mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon></button>
     </div>
 
-    <div class="additional" *ngIf="showMore">
+    <div [@collapse]="!showMore">
       <opdex-tolerance [value]="toleranceThreshold" (onToleranceChange)="calcTolerance($event)"></opdex-tolerance>
 
       <div class="mt-2">

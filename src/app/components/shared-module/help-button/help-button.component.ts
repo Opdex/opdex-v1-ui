@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { HelpInfo } from '@sharedComponents/modals-module/help-modal/help-info';
+import { HelpInfo } from '@sharedModels/help-info';
 import { HelpModalComponent } from '@sharedComponents/modals-module/help-modal/help-modal.component';
 import { Subscription } from 'rxjs';
 import { IconSizes } from 'src/app/enums/icon-sizes';

@@ -1,3 +1,6 @@
+@import 'src/scss/colors';
+@import 'src/scss/bootstrap-grid';
+
 #side-nav {
   display: flex;
   flex-direction: column;
@@ -47,10 +50,6 @@
     text-align: left;
   }
 
-  h1 {
-    text-align: center;
-  }
-
   .logo {
     display: flex;
     align-items: center;
@@ -86,7 +85,7 @@
 
       a {
         &.active, &:hover {
-          color: #1ca7dc;
+          color: $blue-primary;
         }
       }
 
@@ -155,24 +154,14 @@
   }
 }
 
-@media (min-width: 320px) { }
-
-@media (min-width: 576px) { }
-
-@media (min-width: 768px) {
+@media (min-width: map_get($grid-breakpoints, md)) {
   #side-nav {
     .defi-blocks {
       display: block;
     }
-  }
-}
 
-@media (min-width: 992px) {
-  #side-nav {
     .stick-nav {
       display: block;
     }
   }
 }
-
-@media (min-width: 1200px) { }

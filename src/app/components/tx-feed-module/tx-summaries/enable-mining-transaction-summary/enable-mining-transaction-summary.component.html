@@ -1,6 +1,6 @@
 <ng-container *ngIf="poolAmount && !error">
   <div class="flex-row-center mb-2">
-    <div class="col no-wrap">
+    <div class="no-wrap">
       +{{poolAmount.formattedValue | shortNumber}} <a class="ml-1 no-decoration" routerLink="/tokens/{{stakingToken.address}}">{{stakingToken.symbol}}</a>
     </div>
   </div>

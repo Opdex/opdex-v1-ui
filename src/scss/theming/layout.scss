@@ -1,10 +1,10 @@
 .dark-mode {
   .standard-section {
-    background: #1b192f;
+    background: $dark-primary;
 
     &.blend-cards {
       .mat-card {
-        background: #1b192f !important
+        background: $dark-primary !important
       }
     }
 

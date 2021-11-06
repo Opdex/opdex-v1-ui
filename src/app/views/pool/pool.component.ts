@@ -4,7 +4,7 @@ import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
-import { StatCardInfo } from "@sharedComponents/cards-module/stat-card/stat-card-info";
+import { StatCardInfo } from "@sharedModels/stat-card-info";
 import { ITransactionsRequest } from "@sharedModels/platform-api/requests/transactions/transactions-filter";
 import { IAddressBalance } from "@sharedModels/platform-api/responses/wallets/address-balance.interface";
 import { ILiquidityPoolSummary, ILiquidityPoolSnapshotHistory } from "@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface";

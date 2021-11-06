@@ -1,5 +1,5 @@
 import { Icons } from 'src/app/enums/icons';
-import { HelpInfo } from "@sharedComponents/modals-module/help-modal/help-info";
+import { HelpInfo } from "@sharedModels/help-info";
 
 export class StatCardInfo {
     daily?: boolean;

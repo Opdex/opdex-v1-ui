@@ -16,11 +16,13 @@ import { ITransactionQuote } from '@sharedModels/platform-api/responses/transact
 import { DecimalStringRegex } from '@sharedLookups/regex';
 import { IRemoveLiquidityRequest, RemoveLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/remove-liquidity-request';
 import { IconSizes } from 'src/app/enums/icon-sizes';
+import { CollapseAnimation } from '@sharedServices/animations/collapse';
 
 @Component({
   selector: 'opdex-tx-provide-remove',
   templateUrl: './tx-provide-remove.component.html',
-  styleUrls: ['./tx-provide-remove.component.scss']
+  styleUrls: ['./tx-provide-remove.component.scss'],
+  animations: [CollapseAnimation]
 })
 export class TxProvideRemoveComponent extends TxBase {
   @Input() pool: ILiquidityPoolSummary;

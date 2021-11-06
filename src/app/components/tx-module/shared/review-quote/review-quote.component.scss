@@ -1,6 +1,5 @@
 @import 'src/scss/colors';
 
-
 .review-tx-quote {
   padding-top: 15px;
   overflow-x: hidden;
@@ -36,19 +35,6 @@
       text-align: right;
     }
   }
-}
-
-.tx-event {
-  min-height: 30px;
-
-  p {
-    margin-bottom: 0px;
-  }
-}
-
-
-.check-containerbox {
-  display: none;
 }
 
 .check-container {

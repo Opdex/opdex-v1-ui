@@ -1,8 +1,7 @@
+@import 'src/scss/bootstrap-grid';
+
 #auth {
   min-height: calc(var(--app-height) - (env(safe-area-inset-bottom, 0) + 50px));
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
   opdex-card {
     display: block;
