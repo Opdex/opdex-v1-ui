@@ -54,17 +54,17 @@
       </div>
 
       <div class="col-12 col-lg-6 col-xl-8">
-        <div class="mb-3">
+        <div class="mb-5">
           <h4 class="mb-0 flex-row-center"><mat-icon color="primary" class="mr-2">{{icons.tokens}}</mat-icon>Balances</h4>
           <opdex-wallet-balances-table [records]="walletBalances" (onPageChange)="handleBalancesPageChange($event)"></opdex-wallet-balances-table>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-5">
           <h4 class="mb-0 flex-row-center"><mat-icon class="mine mr-2">{{icons.mining}}</mat-icon>Mining Positions</h4>
           <opdex-wallet-mining-positions-table [records]="miningPositions" (onPageChange)="handleMiningPositionsPageChange($event)"></opdex-wallet-mining-positions-table>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-5">
           <h4 class="mb-0 flex-row-center"><mat-icon class="stake mr-2">verified_user</mat-icon>Staking Positions</h4>
           <opdex-wallet-staking-positions-table [records]="stakingPositions" (onPageChange)="handleStakingPositionsPageChange($event)"></opdex-wallet-staking-positions-table>
         </div>

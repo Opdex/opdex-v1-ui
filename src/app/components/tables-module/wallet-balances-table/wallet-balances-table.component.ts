@@ -21,6 +21,7 @@ export class WalletBalancesTableComponent implements OnChanges {
   previous: string;
   next: string;
   icons = Icons;
+  loading = true;
 
   @Output() onPageChange: EventEmitter<string> = new EventEmitter();
 
@@ -33,6 +34,8 @@ export class WalletBalancesTableComponent implements OnChanges {
 
   ngOnChanges() {
     if (!this.records) return;
+    else this.loading = false;
+
     if (!this.records.balances?.length) return;
 
     this.dataSource.data = this.records.balances.map(t => {

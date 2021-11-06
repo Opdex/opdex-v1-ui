@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Icons } from 'src/app/enums/icons';
 
 @Component({
@@ -6,10 +6,6 @@ import { Icons } from 'src/app/enums/icons';
   templateUrl: './bug-report-modal.component.html',
   styleUrls: ['./bug-report-modal.component.scss']
 })
-export class BugReportModalComponent implements OnInit {
+export class BugReportModalComponent {
   icons = Icons;
-
-  ngOnInit(): void {
-  }
-
 }

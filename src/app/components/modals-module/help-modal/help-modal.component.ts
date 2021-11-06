@@ -1,6 +1,6 @@
 import { Component, Inject} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { HelpInfo } from '../../../models/help-info';
+import { HelpInfo } from '@sharedModels/help-info';
 
 @Component({
   selector: 'opdex-help-modal',
