@@ -5,15 +5,13 @@ import { MathService } from '@sharedServices/utility/math.service';
 import { IAddressBalance } from '@sharedModels/platform-api/responses/wallets/address-balance.interface';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
-import { environment } from '@environments/environment';
 import { Router } from '@angular/router';
 import { TokensService } from '@sharedServices/platform/tokens.service';
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, Observable, of } from 'rxjs';
-import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IAddressStaking } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
@@ -43,7 +41,6 @@ export class WalletComponent implements OnInit {
 
   constructor(
     private _context: UserContextService,
-    private _platform: PlatformApiService,
     private _tokensService: TokensService,
     private _liquidityPoolService: LiquidityPoolsService,
     private _walletsService: WalletsService,

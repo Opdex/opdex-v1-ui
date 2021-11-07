@@ -16,27 +16,7 @@
       </div>
     </opdex-input-control>
 
-    <mat-form-field floatLabel="always" *ngIf="changeTokenIn">
-      <mat-label>Sell Token</mat-label>
-
-      <button mat-icon-button matPrefix type="button" class="mr-2" disabled><mat-icon>{{icons.link}}</mat-icon></button>
-
-      <input matInput aria-label="Public Key" [matAutocomplete]="tokenInAutoComplete" [formControl]="tokenIn" type="text" #tokenInInput>
-
-      <mat-hint>Select a token</mat-hint>
-
-      <mat-autocomplete #tokenInAutoComplete="matAutocomplete" (optionSelected)="selectInputToken($event)" (closed)="selectInputToken()">
-        <ng-container *ngIf="tokens$ | async">
-          <mat-option *ngFor="let token of filteredTokenIn$ | async" [value]="token.address">
-            <div class="flex-column">
-              <small class="overflow-ellipsis" style="font-size: 15px; line-height: 20px">{{token.symbol}} - {{token.name}}</small>
-              <small class="overflow-ellipsis light" style="font-size: 12px; line-height: 16px;">{{token.address}}</small>
-            </div>
-          </mat-option>
-        </ng-container>
-
-      </mat-autocomplete>
-    </mat-form-field>
+    <opdex-token-keyword-filter-control *ngIf="changeTokenIn" (onTokenSelect)="selectInputToken($event)"></opdex-token-keyword-filter-control>
 
     <opdex-percentage-amount-buttons
       [contract]="tokenInDetails?.address"
@@ -47,7 +27,7 @@
       *ngIf="tokenInDetails"></opdex-percentage-amount-buttons>
 
     <div class="flex-row-center-around">
-      <button mat-icon-button [ngClass]="iconSizes.small" (click)="switch()"><mat-icon>{{icons.down}}</mat-icon></button>
+      <button mat-icon-button [ngClass]="iconSizes.small" (click)="switch()" type="button"><mat-icon>{{icons.down}}</mat-icon></button>
     </div>
 
     <opdex-input-control *ngIf="!changeTokenOut" [prefixIcon]="icons.add" label="{{!tokenInExact ? 'Buy Exactly' : 'Buy'}}" [formControl]="tokenOutAmount" [suffix]="tokenOutDetails?.symbol || 'Select Token'" (handleChangeToken)="changeToken('tokenOut')" [numbersOnly]="true">
@@ -62,26 +42,7 @@
       </div>
     </opdex-input-control>
 
-    <mat-form-field floatLabel="always" *ngIf="changeTokenOut">
-      <mat-label>Buy Token</mat-label>
-
-      <button mat-icon-button matPrefix type="button" class="mr-2" disabled><mat-icon>{{icons.link}}</mat-icon></button>
-
-      <input matInput aria-label="Public Key" [matAutocomplete]="tokenOutAutoComplete" [formControl]="tokenOut" type="text" #tokenOutInput>
-
-      <mat-hint>Select a token</mat-hint>
-
-      <mat-autocomplete #tokenOutAutoComplete="matAutocomplete" (optionSelected)="selectOutputToken($event)" (closed)="selectOutputToken()">
-        <ng-container *ngIf="tokens$ | async">
-          <mat-option *ngFor="let token of filteredTokenOut$ | async" [value]="token.address">
-            <div class="flex-column">
-              <small class="overflow-ellipsis" style="font-size: 15px; line-height: 20px">{{token.symbol}} - {{token.name}}</small>
-              <small class="overflow-ellipsis light" style="font-size: 12px; line-height: 16px;">{{token.address}}</small>
-            </div>
-          </mat-option>
-        </ng-container>
-      </mat-autocomplete>
-    </mat-form-field>
+    <opdex-token-keyword-filter-control *ngIf="changeTokenOut" (onTokenSelect)="selectOutputToken($event)"></opdex-token-keyword-filter-control>
 
     <opdex-percentage-amount-buttons
       [contract]="tokenOutDetails?.address"
