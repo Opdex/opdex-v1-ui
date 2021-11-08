@@ -5,73 +5,9 @@
 @import 'slider';
 @import 'bottom-drawer';
 @import 'tooltip';
-
-
-.mat-form-field {
-  &:not(.mat-paginator-page-size-select) {
-    width: 100% !important;
-  }
-
-  &.hide-label {
-    .mat-form-field-label {
-      margin-top: .4em !important;
-    }
-  }
-
-  &.ng-invalid.ng-touched {
-    color: $red-primary;
-
-    button {
-      color: $red-primary !important;
-    }
-
-    .mat-form-field-ripple {
-      background: $red-primary !important;
-      opacity: 1 !important;
-      transform: none !important;
-    }
-  }
-
-  &.active {
-    &:not(.ng-invalid) {
-      color: $blue-primary;
-
-      button {
-        color: $blue-primary !important;
-      }
-
-      .mat-form-field-ripple {
-        background: $blue-primary !important;
-        opacity: 1 !important;
-        transform: none !important;
-      }
-    }
-  }
-}
-
-
-.mat-form-field-infix {
-  border-top: 1.2em solid transparent;
-  width: 100% !important;
-
-  .mat-form-field-appearance-legacy .mat-form-field-label {
-    top: 1.2em;
-  }
-
-  .mat-form-field-label-wrapper {
-    top: -1.2em;
-    padding-top: 1.2em;
-
-    mat-label {
-      font-size: 1.4em !important;
-      font-weight: 400 !important;
-    }
-
-    .mat-placeholder-required {
-      display: none;
-    }
-  }
-}
+@import 'forms';
+@import 'icons';
+@import 'progress-spinner';
 
 
 .mat-drawer {

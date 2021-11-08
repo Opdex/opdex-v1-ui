@@ -1,0 +1,38 @@
+<mat-form-field floatLabel="always">
+  <mat-label>Select Token</mat-label>
+
+  <button mat-icon-button matPrefix type="button" class="mr-1" disabled>
+    <mat-icon>{{icons.tokens}}</mat-icon>
+  </button>
+
+  <input matInput
+    aria-label="Token Keyword Search"
+    [matAutocomplete]="filterInputAutoComplete"
+    [formControl]="control"
+    type="text"
+    #filterInput
+    autocomplete="off">
+
+  <mat-autocomplete
+    #filterInputAutoComplete="matAutocomplete"
+    (optionSelected)="selectToken($event)"
+    (closed)="selectToken()">
+    <ng-container *ngIf="tokens?.length > 0; else noTokens">
+      <mat-option *ngFor="let token of tokens" [value]="token">
+        <div class="flex-column" *ngIf="token !== null; else loading">
+          <small class="overflow-ellipsis token-name">{{token.symbol}} - {{token.name}}</small>
+          <small class="overflow-ellipsis light token-address">{{token.address}}</small>
+        </div>
+        <ng-template #loading>
+          <div class="skeleton-bg mb-1 w-100"></div>
+        </ng-template>
+      </mat-option>
+    </ng-container>
+
+    <ng-template #noTokens>
+      <mat-option>
+        <small class="no-results">No results</small>
+      </mat-option>
+    </ng-template>
+  </mat-autocomplete>
+</mat-form-field>

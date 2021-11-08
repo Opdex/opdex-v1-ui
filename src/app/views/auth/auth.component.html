@@ -13,8 +13,6 @@
 
           <input matInput aria-label="Public Key" [matAutocomplete]="auto" [formControl]="publicKey" type="text">
 
-          <mat-hint>Enter your public wallet address to continue</mat-hint>
-
           <mat-autocomplete #auto="matAutocomplete">
             <mat-option *ngFor="let key of publicKeys$ | async" [value]="key">
               <div class="flex-row-center-between">

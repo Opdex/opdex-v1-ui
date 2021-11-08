@@ -38,14 +38,6 @@
   float: right;
 }
 
-.text-align-right {
-  text-align: right;
-}
-
-.text-align-left {
-  text-align: left;
-}
-
 .scrollable-card {
   min-width: 310px;
   width: 310px;
@@ -97,9 +89,6 @@
   margin-top: 20px;
 }
 
-@include media-breakpoint-up(sm) {
-
-}
 @include media-breakpoint-up(md) {
   .scrollable-card {
     width: 100%;
@@ -110,45 +99,6 @@
 @include media-breakpoint-up(lg) {
   .page-container {
     margin-top: 40px;
-  }
-}
-@include media-breakpoint-up(xl) {}
-
-
-.mat-icon {
-  &.provide, &.add, &.green {
-    color: $green-primary !important;
-  }
-
-  &.mine, &.remove, &.red {
-    color: $red-primary !important;
-  }
-
-  &.stake, &.purple {
-    color: $purple-primary !important;
-  }
-
-  &.swap, &.collect, &.primary, &.blue {
-    color: $blue-primary !important;
-  }
-
-  &.reward, &.yellow {
-    color: $yellow-primary !important;
-    text-shadow: 0px 0px 1px black;
-  }
-
-  &.small {
-    font-size: 22px;
-    height: 22px;
-    width: 22px;
-    line-height: 22px;
-  }
-
-  &.tiny {
-    font-size: 16px;
-    height: 16px;
-    width: 16px;
-    line-height: 16px;
   }
 }
 
@@ -162,40 +112,3 @@
   white-space: nowrap;
 }
 
-.mat-spinner {
-  &.green {
-    circle {
-      stroke: $green-primary;
-    }
-  }
-
-  &.tiny {
-    width: 16px !important;
-    height: 16px !important;
-
-    svg {
-      width: 16px !important;
-      height: 16px !important;
-    }
-  }
-
-  &.small {
-    width: 22px !important;
-    height: 22px !important;
-
-    svg {
-      width: 22px !important;
-      height: 22px !important;
-    }
-  }
-
-  &.medium {
-    width: 28px !important;
-    height: 28px !important;
-
-    svg {
-      width: 28px !important;
-      height: 28px !important;
-    }
-  }
-}

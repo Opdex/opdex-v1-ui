@@ -28,6 +28,7 @@
 %flexRowEnd {
   @extend %flexRow;
   align-items: end;
+  align-items: flex-end;
 }
 
 // Classes
@@ -78,6 +79,7 @@
 
 .flex-row-end-end {
   @extend %flexRowEnd;
+  justify-content: end;
   justify-content: flex-end;
 }
 

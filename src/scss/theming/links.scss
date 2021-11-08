@@ -6,6 +6,10 @@ a {
   &.no-decoration {
     text-decoration: none;
   }
+
+  &.error {
+    color: $red-primary !important;
+  }
 }
 
 .light-mode {

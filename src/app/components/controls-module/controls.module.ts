@@ -7,18 +7,22 @@ import { MatFormFieldModule} from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 // Opdex Component Imports
 import { DeadlineComponent } from './deadline/deadline.component';
 import { InputControlComponent } from './input-control/input-control.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ToleranceComponent } from './tolerance/tolerance.component';
+import { TokenKeywordFilterControlComponent } from './token-keyword-filter-control/token-keyword-filter-control.component';
 
 @NgModule({
   declarations: [
     DeadlineComponent,
     InputControlComponent,
-    ToleranceComponent
+    ToleranceComponent,
+    TokenKeywordFilterControlComponent
   ],
   imports: [
     CommonModule,
@@ -26,12 +30,15 @@ import { ToleranceComponent } from './tolerance/tolerance.component';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatSelectModule,
+    MatAutocompleteModule
   ],
   exports: [
     DeadlineComponent,
     InputControlComponent,
-    ToleranceComponent
+    ToleranceComponent,
+    TokenKeywordFilterControlComponent
   ]
 })
 export class ControlsModule { }
