@@ -1,3 +1,4 @@
+import { ITokensResponse } from '@sharedModels/platform-api/responses/tokens/tokens-response.interface';
 import { OnInit, OnDestroy } from '@angular/core';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { debounceTime, distinctUntilChanged, map, switchMap, take, tap } from 'rxjs/operators';
@@ -19,7 +20,7 @@ export class TokenKeywordFilterControlComponent implements OnInit, OnDestroy {
   @ViewChild('filterInput') filterInput: ElementRef;
 
   @Input() includeProvisional = false;
-  @Output() onTokenSelect = new EventEmitter<string>();
+  @Output() onTokenSelect = new EventEmitter<IToken>();
 
   control: FormControl;
   filter: TokensFilter;
@@ -30,6 +31,8 @@ export class TokenKeywordFilterControlComponent implements OnInit, OnDestroy {
   crs: IToken;
 
   constructor(private _tokensService: TokensService) {
+    // init loader w/ fake tokens
+    this.tokens = [null, null, null, null, null];
     this.control = new FormControl('');
 
     this.filter = new TokensFilter({
@@ -49,6 +52,8 @@ export class TokenKeywordFilterControlComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    setTimeout(() => this.filterInput.nativeElement.focus());
+
     // Only taking 1, no need to refresh or unsub
     this._tokensService.getToken('CRS', true)
       .pipe(
@@ -56,27 +61,22 @@ export class TokenKeywordFilterControlComponent implements OnInit, OnDestroy {
         switchMap(_ => this.getTokens$(null)),
         take(1))
       .subscribe();
-
-    setTimeout(() => this.filterInput.nativeElement.focus());
   }
 
   selectToken(event$?: MatAutocompleteSelectedEvent): void {
-    this.control.setValue('');
-    this.onTokenSelect.emit(event$?.option?.value || '');
+    this.onTokenSelect.emit(event$?.option?.value);
   }
 
-  getTokens$(keyword: string): Observable<IToken[]> {
+  getTokens$(keyword: string): Observable<void> {
     this.filter.keyword = keyword;
 
     return this._tokensService.getTokens(this.filter)
-      .pipe(map(response => {
+      .pipe(map((response: ITokensResponse) => {
         this.tokens = [...response.results];
 
         if (!keyword || 'crs'.includes(keyword.toLowerCase()) && this.crs) {
           this.tokens.unshift({...this.crs});
         }
-
-        return this.tokens;
       }));
   }
 

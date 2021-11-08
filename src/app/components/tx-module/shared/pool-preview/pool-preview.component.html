@@ -9,8 +9,6 @@
 
           <input matInput aria-label="Public Key" [matAutocomplete]="auto" [formControl]="poolControl" type="text">
 
-          <mat-hint>Select a liquidity pool.</mat-hint>
-
           <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectPool($event)">
             <ng-container *ngIf="pools$ | async">
               <mat-option *ngFor="let pool of filteredPools$ | async" [value]="pool">

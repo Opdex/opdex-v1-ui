@@ -1,0 +1,92 @@
+// Combined with bottom position changes, resets the wrapper position back to normal
+.mat-form-field {
+  width: 100%;
+
+  &.hide-label {
+    .mat-form-field-label {
+      margin-top: .4em !important;
+    }
+  }
+
+  &.ng-invalid.ng-touched {
+    color: $red-primary;
+
+    button, mat-icon {
+      color: $red-primary !important;
+    }
+
+    .mat-form-field-ripple {
+      background: $red-primary !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  &.mat-focused {
+    &:not(.ng-invalid) {
+      color: $blue-primary;
+
+      button, mat-icon {
+        color: $blue-primary !important;
+      }
+
+      .mat-form-field-ripple {
+        background: $blue-primary !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+  }
+
+  .mat-form-field-wrapper {
+    padding-bottom: 0px !important;
+
+    // Removes bottom form field padding, pulling hint up, pushing border below
+    .mat-form-field-underline {
+      bottom: 0 !important;
+    }
+
+    // Padding around the actual input, includes the prefix, suffix and input, between the label and hint
+    .mat-form-field-infix {
+      padding: 5px 0 0;
+      width: 100%;
+      border-top: 1.2em solid transparent;
+
+      .mat-form-field-label-wrapper {
+        top: -1.2em;
+        padding-top: 1.2em;
+
+        .mat-form-field-label {
+          top: 1.2em;
+
+          mat-label {
+            font-size: 1.3em !important;
+            font-weight: 400 !important;
+          }
+        }
+
+        .mat-placeholder-required {
+          display: none;
+        }
+      }
+    }
+
+    .mat-form-field-subscript-wrapper {
+      margin-top: 0;
+      position: relative;
+      padding-top: 2px;
+      padding-bottom: 3px;
+
+      .mat-form-field-hint-spacer {
+        display: none;
+      }
+    }
+
+    .mat-form-field-suffix {
+      .mat-button {
+        line-height: 20px;
+        padding: 0 5px;
+      }
+    }
+  }
+}

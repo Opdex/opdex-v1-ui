@@ -34,8 +34,6 @@
     </button>
   </div>
 
-  <mat-divider class="mb-3" *ngIf="showNavMenu"></mat-divider>
-
   <div class="connect-wallet mb-3" *ngIf="!context?.wallet">
     <opdex-connect-wallet-card (onConnectWallet)="handleConnectWallet()"></opdex-connect-wallet-card>
   </div>
