@@ -8,11 +8,6 @@ export interface ILiquidityPoolSummary extends ILiquidityPoolSummaryBase {
   snapshotHistory?: ILiquidityPoolSnapshot[];
 }
 
-export interface ILiquidityPoolSnapshotHistory {
-  address: string,
-  snapshotHistory: ILiquidityPoolSnapshot[];
-}
-
 export interface ILiquidityPoolSummaryBase {
   transactionCount: number;
   transactionFee: number;
@@ -24,8 +19,7 @@ export interface ILiquidityPoolSummaryBase {
 }
 
 export interface ILiquidityPoolSnapshot extends ILiquidityPoolSummaryBase {
-  startDate: Date;
-  endDate: Date;
+  timestamp: Date;
 }
 
 export interface IOhlc {

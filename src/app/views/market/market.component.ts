@@ -8,7 +8,7 @@ import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { Component, OnInit } from '@angular/core';
-import { Observable, Subscription, zip } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { delay, map, switchMap, take, tap } from 'rxjs/operators';
 import { LiquidityPoolsFilter, LpOrderBy, MiningFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { StatCardInfo } from '@sharedModels/stat-card-info';
@@ -26,10 +26,8 @@ export class MarketComponent implements OnInit {
   iconSizes = IconSizes;
   icons = Icons;
   subscription = new Subscription();
-  theme$: Observable<string>;
   market: IMarket;
   marketHistory: MarketHistory;
-  pools: ILiquidityPoolSummary[];
   miningPools$: Observable<ILiquidityPoolSummary[]>
   transactionRequest: ITransactionsRequest;
   chartData: any[];
@@ -88,18 +86,13 @@ export class MarketComponent implements OnInit {
       miningFilter: MiningFilter.Enabled
     });
 
-    const combo = [this.getMarketHistory(), this.getPools()];
-
     this.subscription.add(
       this._blocksService.getLatestBlock$()
         .pipe(
           switchMap(_ => this.getMarket()),
-          switchMap(_ => zip(...combo)))
+          switchMap(_ => this.getMarketHistory()),
+          tap(_ => this.miningPools$ = this._liquidityPoolsService.getLiquidityPools(miningFilter).pipe(map(pools => pools.results))))
         .subscribe());
-
-    this.miningPools$ = this._blocksService.getLatestBlock$()
-      .pipe(
-        switchMap(_ => this._liquidityPoolsService.getLiquidityPools(miningFilter).pipe(map(pools => pools.results))));
   }
 
   private getMarket(): Observable<any> {
@@ -179,36 +172,6 @@ export class MarketComponent implements OnInit {
           this.marketHistory = new MarketHistory(marketHistory);
           this.handleChartTypeChange(this.selectedChart.category);
         }));
-  }
-
-  private getPools(): Observable<void> {
-    return this._liquidityPoolsService.getLiquidityPools(this.liquidityPoolsFilter)
-      .pipe(
-        map(pools => {
-        this.pools = pools.results;
-
-        this.transactionRequest = {
-          limit: 15,
-          eventTypes: ['CreateLiquidityPoolEvent', 'DistributionEvent', 'SwapEvent', 'AddLiquidityEvent', 'RemoveLiquidityEvent', 'StartStakingEvent', 'StopStakingEvent', 'StartMiningEvent', 'StopMiningEvent', 'CollectStakingRewardsEvent', 'CollectMiningRewardsEvent', 'NominationEvent'],
-          direction: 'DESC'
-        }
-
-        if (!this.transactionRequest?.contracts?.length) return;
-
-        this.pools.forEach(pool => {
-          if (!this.transactionRequest.contracts.includes(pool.address)) {
-            this.transactionRequest.contracts.push(pool.address);
-          }
-
-          if (pool.mining?.address && !this.transactionRequest.contracts.includes(pool.mining.address)) {
-            this.transactionRequest.contracts.push(pool.mining.address);
-          }
-
-          if (pool.token?.staking?.address && !this.transactionRequest.contracts.includes(pool.token.staking.address)) {
-            this.transactionRequest.contracts.push(pool.token.staking.address);
-          }
-        });
-      }));
   }
 
   handleChartTypeChange($event) {

@@ -1,3 +1,4 @@
+import { ILiquidityPoolHistoryResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-history-response.interface';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { AddressPosition } from '@sharedModels/address-position';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
@@ -7,7 +8,7 @@ import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { StatCardInfo } from "@sharedModels/stat-card-info";
 import { ITransactionsRequest } from "@sharedModels/platform-api/requests/transactions/transactions-filter";
 import { IAddressBalance } from "@sharedModels/platform-api/responses/wallets/address-balance.interface";
-import { ILiquidityPoolSummary, ILiquidityPoolSnapshotHistory } from "@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface";
+import { ILiquidityPoolSummary } from "@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface";
 import { ISidenavMessage, TransactionView } from "@sharedModels/transaction-view";
 import { LiquidityPoolsService } from "@sharedServices/platform/liquidity-pools.service";
 import { SidenavService } from "@sharedServices/utility/sidenav.service";
@@ -22,6 +23,7 @@ import { Title } from '@angular/platform-browser';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
 import { Icons } from 'src/app/enums/icons';
 import { LiquidityPoolHistory } from '@sharedModels/liquidity-pool-history';
+import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
 
 @Component({
   selector: 'opdex-pool',
@@ -75,6 +77,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   statCards: StatCardInfo[];
   context$: Observable<any>;
   message: ISidenavMessage;
+  historyFilter: HistoryFilter;
 
   constructor(
     private _route: ActivatedRoute,
@@ -119,6 +122,12 @@ export class PoolComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this._blocksService.getLatestBlock$().pipe(
         switchMap(_ => this.getLiquidityPool()),
+        tap(_ => {
+          if (!this.historyFilter) return;
+          const daysDifference = (this.historyFilter.endDateTime.getTime() - this.historyFilter.startDateTime.getTime()) / 1000 / 60 / 60 / 24;
+          this.historyFilter.endDateTime = new Date();
+          this.historyFilter.startDateTime = HistoryFilter.historicalDate(new Date(), daysDifference);
+        }),
         switchMap(_ => this.getPoolHistory()),
         switchMap(_ => this.getWalletSummary())
       ).subscribe())
@@ -276,10 +285,6 @@ export class PoolComponent implements OnInit, OnDestroy {
         this.getTokenBalance(context.wallet, srcToken),
       ];
 
-      // if (stakingToken) {
-      //   combo.push(this.getTokenBalance(context.wallet, stakingToken));
-      // }
-
       // Yes, this can be added to the initial array, but this order is better for UX
       combo.push(this.getTokenBalance(context.wallet, lpToken));
 
@@ -298,10 +303,14 @@ export class PoolComponent implements OnInit, OnDestroy {
     return of([]);
   }
 
-  private getPoolHistory(timeSpan: string = '1Y'): Observable<ILiquidityPoolSnapshotHistory> {
+  private getPoolHistory(): Observable<ILiquidityPoolHistoryResponse> {
     if (!this.pool) return of(null);
 
-    return this._liquidityPoolsService.getLiquidityPoolHistory(this.poolAddress, timeSpan)
+    if (!this.historyFilter) {
+      this.historyFilter = new HistoryFilter(HistoryFilter.historicalDate(new Date(), 365), new Date(), HistoryInterval.Daily);
+    }
+
+    return this._liquidityPoolsService.getLiquidityPoolHistory(this.poolAddress, this.historyFilter)
       .pipe(
         take(1),
         delay(10),
@@ -326,13 +335,13 @@ export class PoolComponent implements OnInit, OnDestroy {
             return o;
           });
         }),
-        tap((poolHistory: ILiquidityPoolSnapshotHistory) => {
+        tap((poolHistory: ILiquidityPoolHistoryResponse) => {
           this.poolHistory = new LiquidityPoolHistory(poolHistory);
           this.handleChartTypeChange(this.selectedChart.category);
       }));
   }
 
-  handleChartTypeChange($event: string) {
+  handleChartTypeChange($event: string): void {
     this.selectedChart = this.chartOptions.find(options => options.category === $event);
 
     if ($event === 'Liquidity') {
@@ -348,19 +357,37 @@ export class PoolComponent implements OnInit, OnDestroy {
     }
   }
 
-  handleChartTimeChange($event: string) {
-    this.getPoolHistory($event).pipe(take(1)).subscribe();
+  handleChartTimeChange(timeSpan: string): void {
+    let startDate = new Date();
+    let endDate = new Date();
+    let interval = HistoryInterval.Daily;
+
+    if (timeSpan === '1M') {
+      startDate = HistoryFilter.historicalDate(startDate, 30);
+    } else if (timeSpan === '1W') {
+      startDate = HistoryFilter.historicalDate(startDate, 7);
+      interval = HistoryInterval.Hourly;
+    } else if (timeSpan === '1D') {
+      startDate = HistoryFilter.historicalDate(startDate, 1);
+      interval = HistoryInterval.Hourly;
+    } else {
+      startDate = HistoryFilter.historicalDate(startDate, 365);
+    }
+
+    this.historyFilter = new HistoryFilter(startDate, endDate, interval);
+
+    this.getPoolHistory().pipe(take(1)).subscribe();
   }
 
-  handleTxOption($event: TransactionView) {
+  handleTxOption($event: TransactionView): void {
     this._sidenav.openSidenav($event, {pool: this.pool});
   }
 
-  statCardTrackBy(index: number, statCard: StatCardInfo) {
+  statCardTrackBy(index: number, statCard: StatCardInfo): string {
     return `${index}-${statCard.title}-${statCard.value}`;
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe();
     this.routerSubscription.unsubscribe();
   }
