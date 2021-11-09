@@ -1,5 +1,7 @@
+import { HistoryFilter } from '@sharedModels/platform-api/requests/history-filter';
+import { ILiquidityPoolHistoryResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-history-response.interface';
 import { ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pools-response.interface';
-import { ILiquidityPoolSummary, ILiquidityPoolSnapshotHistory } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -18,12 +20,12 @@ export class LiquidityPoolsService extends CacheService {
     return this.getItem(address, this._platformApi.getPool(address), cacheOnly);
   }
 
-  getLiquidityPoolHistory(address: string, timeSpan: string = '1Y'): Observable<ILiquidityPoolSnapshotHistory> {
-    return this.getItem(`${address}-history-${timeSpan}`, this._platformApi.getPoolHistory(address, timeSpan));
+  getLiquidityPoolHistory(address: string, request: HistoryFilter): Observable<ILiquidityPoolHistoryResponse> {
+    return this.getItem(`${address}-history-${request.buildQueryString()}`, this._platformApi.getLiquidityPoolHistory(address, request));
   }
 
   getLiquidityPools(request: LiquidityPoolsFilter): Observable<ILiquidityPoolsResponse> {
-    const market: string = this._env.marketAddress;
+    const market = this._env.marketAddress;
 
     if (request.markets.find(m => m === market) === undefined) {
       request.markets.push(market);
@@ -40,7 +42,7 @@ export class LiquidityPoolsService extends CacheService {
     this.refreshItem(`liquidity-pools-${request.buildQueryString()}`);
   }
 
-  refreshPoolHistory(address: string, timeSpan: string = '1Y'): void {
-    this.refreshItem(`${address}-history-${timeSpan}`);
+  refreshPoolHistory(address: string, request: HistoryFilter): void {
+    this.refreshItem(`${address}-history-${request.buildQueryString()}`);
   }
 }

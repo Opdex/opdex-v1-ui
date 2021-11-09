@@ -2,11 +2,9 @@ name: Notifications
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
   watch:
-    types: [started, closed, merged]
-
-on:
+    types: [started]
   issues:
     types: [opened, closed]
 

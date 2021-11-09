@@ -1,3 +1,4 @@
+import { ILiquidityPoolHistoryResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-history-response.interface';
 import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { IMarketToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IAddressMiningPositions } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
@@ -16,7 +17,7 @@ import { HttpClient } from '@angular/common/http';
 import { RestApiService } from './rest-api.service';
 import { ErrorService } from '@sharedServices/utility/error.service';
 import { Observable } from 'rxjs';
-import { ILiquidityPoolSnapshotHistory, ILiquidityPoolSummary, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolSummary, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
 import { LiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { TransactionRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { ITransactionReceipt, ITransactionReceipts } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
@@ -165,8 +166,8 @@ export class PlatformApiService extends RestApiService {
     return this.get<ILiquidityPoolsResponse>(`${this.api}/liquidity-pools${query.buildQueryString()}`);
   }
 
-  public getPoolHistory(address: string, timeSpan: string = '1Y'): Observable<ILiquidityPoolSnapshotHistory> {
-    return this.get<ILiquidityPoolSnapshotHistory>(`${this.api}/liquidity-pools/${address}/history?timeSpan=${timeSpan}&candleSpan=Hourly`);
+  public getLiquidityPoolHistory(address: string, request: HistoryFilter): Observable<ILiquidityPoolHistoryResponse> {
+    return this.get<ILiquidityPoolHistoryResponse>(`${this.api}/liquidity-pools/${address}/history${request.buildQueryString()}`);
   }
 
   public startStakingQuote(address: string, payload: IStartStakingRequest): Observable<ITransactionQuote> {

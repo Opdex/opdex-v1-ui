@@ -136,14 +136,14 @@ export class TokenComponent implements OnInit {
       );
   }
 
-  handleChartTypeChange($event) {
+  handleChartTypeChange($event): void {
     this.selectedChart = this.chartOptions.find(options => options.category === $event);
 
     if ($event === 'Line USD') this.chartData = this.tokenHistory.line;
     else if ($event === 'OHLC USD') this.chartData = this.tokenHistory.candle;
   }
 
-  handleChartTimeChange(timeSpan: string) {
+  handleChartTimeChange(timeSpan: string): void {
     let startDate = new Date();
     let endDate = new Date();
     let interval = HistoryInterval.Daily;
@@ -165,11 +165,11 @@ export class TokenComponent implements OnInit {
     this.getTokenHistory().pipe(take(1)).subscribe();
   }
 
-  handleTxOption($event: TransactionView) {
+  handleTxOption($event: TransactionView): void {
     this._sidebar.openSidenav($event);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe();
     this.routerSubscription.unsubscribe();
   }
