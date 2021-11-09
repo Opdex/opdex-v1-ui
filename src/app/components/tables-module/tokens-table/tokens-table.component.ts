@@ -1,3 +1,4 @@
+import { ITokenHistoryResponse } from '@sharedModels/platform-api/responses/tokens/token-history-response.interface';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { Component, Input, OnChanges, ViewChild, OnDestroy } from '@angular/core';
@@ -11,6 +12,8 @@ import { switchMap, map, take } from 'rxjs/operators';
 import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
+import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
+import { TokenHistory } from '@sharedModels/token-history';
 
 @Component({
   selector: 'opdex-tokens-table',
@@ -31,7 +34,7 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
 
   constructor(private _router: Router, private _tokensService: TokensService, private _blocksService: BlocksService) {
     this.dataSource = new MatTableDataSource<any>();
-    this.displayedColumns = ['token', 'name', 'price'];
+    this.displayedColumns = ['token', 'name', 'price', 'history'];
   }
 
   ngOnChanges() {
@@ -74,20 +77,16 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
   }
 
   private getTokenHistory$(token: any): Observable<any> {
-    return this._tokensService.getTokenHistory(token.address, "1W")
+    const now = new Date();
+    // 30 Days worth of data for the table preview
+    const start = HistoryFilter.historicalDate(new Date(), 30);
+
+    return this._tokensService.getTokenHistory(token.address, new HistoryFilter(start, now, HistoryInterval.Daily))
       .pipe(
         take(1),
-        map((tokenHistory: any) => {
-          let priceHistory: any[] = [];
-
-          tokenHistory.snapshotHistory.forEach(history => {
-            priceHistory.push({
-              time: Date.parse(history.startDate.toString())/1000,
-              value: history.price.close
-            });
-          });
-
-          token.snapshotHistory = priceHistory;
+        map((tokenHistory: ITokenHistoryResponse) => {
+          const history = new TokenHistory(tokenHistory);
+          token.snapshotHistory = history.line;
           return token;
         }));
   }

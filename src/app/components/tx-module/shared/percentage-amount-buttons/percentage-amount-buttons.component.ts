@@ -48,7 +48,7 @@ export class PercentageAmountButtonsComponent implements OnChanges {
       }
       else if (this.positionType === 'Staking') {
         balance$ = this._walletService.getStakingPosition(this.context.wallet, this.contract)
-          .pipe(map(result => result.amount), tap(result => console.log(result)));
+          .pipe(map(result => result.amount));
       }
       else {
         balance$ = this._walletService.getMiningPosition(this.context.wallet, this.contract)
