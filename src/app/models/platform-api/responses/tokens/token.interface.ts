@@ -31,11 +31,5 @@ export interface IToken {
 
 export interface ITokenSnapshot {
   price: IOhlc;
-  startDate: Date;
-  endDate: Date;
-}
-
-export interface ITokenSnapshotHistory {
-  address: string,
-  snapshotHistory: ITokenSnapshot[];
+  timestamp: Date;
 }

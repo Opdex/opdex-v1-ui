@@ -1,5 +1,5 @@
 import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
-import { IMarketToken, ITokenSnapshotHistory } from '@sharedModels/platform-api/responses/tokens/token.interface';
+import { IMarketToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IAddressMiningPositions } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
 import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
@@ -49,6 +49,8 @@ import { IMarketTokensResponse } from '@sharedModels/platform-api/responses/toke
 import { ITokensResponse } from '@sharedModels/platform-api/responses/tokens/tokens-response.interface';
 import { ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pools-response.interface';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
+import { ITokenHistoryResponse } from '@sharedModels/platform-api/responses/tokens/token-history-response.interface';
+import { HistoryFilter } from '@sharedModels/platform-api/requests/history-filter';
 
 @Injectable({
   providedIn: 'root'
@@ -102,6 +104,10 @@ export class PlatformApiService extends RestApiService {
     return this.get<IMarketTokensResponse>(`${this.api}/market/${this.marketAddress}/tokens${request.buildQueryString()}`);
   }
 
+  public getMarketTokenHistory(tokenAddress: string, request: HistoryFilter): Observable<ITokenHistoryResponse> {
+    return this.get<ITokenHistoryResponse>(`${this.api}/market/${this.marketAddress}/tokens/${tokenAddress}/history${request.buildQueryString()}`);
+  }
+
   public swapQuote(address: string, payload: ISwapRequest): Observable<ITransactionQuote> {
     return this.post<ITransactionQuote>(`${this.api}/market/${this.marketAddress}/tokens/${address}/swap`, payload);
   }
@@ -130,8 +136,8 @@ export class PlatformApiService extends RestApiService {
     return this.post<IToken>(`${this.api}/tokens`, payload);
   }
 
-  public getTokenHistory(address: string, timeSpan: string = '1Y', candleSpan: string = 'Hourly'): Observable<ITokenSnapshotHistory> {
-    return this.get<ITokenSnapshotHistory>(`${this.api}/tokens/${address}/history?timeSpan=${timeSpan}&candleSpan=${candleSpan}`);
+  public getTokenHistory(tokenAddress: string, request: HistoryFilter): Observable<ITokenHistoryResponse> {
+    return this.get<ITokenHistoryResponse>(`${this.api}/tokens/${tokenAddress}/history${request.buildQueryString()}`);
   }
 
   public approveAllowanceQuote(address: string, payload: IApproveAllowanceRequest): Observable<ITransactionQuote> {

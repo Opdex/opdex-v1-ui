@@ -33,15 +33,14 @@ export class EnvironmentsService {
   }
 
   constructor() {
-    const isLocalHost = window.location.href.includes('localhost');
     const isDevnet = window.location.href.includes('dev-app');
     const isTestnet = window.location.href.includes('test-app');
 
-    let env;
+    let env: IEnvironment;
 
-    if (isLocalHost) {
+    if (!environment.production) {
       env = this._find(environment.networkOverride);
-      env.api = environment.apiOverride;
+      env.apiUrl = environment.apiOverride;
     }
     else if (isDevnet) env = this._find(Network.Devnet);
     else if (isTestnet) env = this._find(Network.Testnet);
@@ -50,8 +49,7 @@ export class EnvironmentsService {
     this._env = {...env};
   }
 
-
   private _find(network: Network) {
-    return environments.find(e => e.network === network);
+    return {...environments.find(e => e.network === network)};
   }
 }
