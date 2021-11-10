@@ -1,7 +1,7 @@
+import { IMarketHistoryResponse } from '@sharedModels/platform-api/responses/markets/market-history-response.interface';
 import { IMarket } from '@sharedModels/platform-api/responses/markets/market.interface';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { MarketHistory } from '@sharedModels/market-history';
-import { IMarketSnapshot } from '@sharedModels/platform-api/responses/markets/market-snapshot.interface';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
@@ -16,6 +16,7 @@ import { MarketsService } from '@sharedServices/platform/markets.service';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
+import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
 
 @Component({
   selector: 'opdex-market',
@@ -55,6 +56,7 @@ export class MarketComponent implements OnInit {
   selectedChart = this.chartOptions[0];
   tokensFilter: TokensFilter;
   liquidityPoolsFilter: LiquidityPoolsFilter;
+  historyFilter: HistoryFilter;
 
   constructor(
     private _marketsService: MarketsService,
@@ -90,6 +92,12 @@ export class MarketComponent implements OnInit {
       this._blocksService.getLatestBlock$()
         .pipe(
           switchMap(_ => this.getMarket()),
+          tap(_ => {
+            if (!this.historyFilter) return;
+            const daysDifference = (this.historyFilter.endDateTime.getTime() - this.historyFilter.startDateTime.getTime()) / 1000 / 60 / 60 / 24;
+            this.historyFilter.endDateTime = new Date();
+            this.historyFilter.startDateTime = HistoryFilter.historicalDate(new Date(), daysDifference);
+          }),
           switchMap(_ => this.getMarketHistory()),
           tap(_ => this.miningPools$ = this._liquidityPoolsService.getLiquidityPools(miningFilter).pipe(map(pools => pools.results))))
         .subscribe());
@@ -164,11 +172,15 @@ export class MarketComponent implements OnInit {
     ];
   }
 
-  private getMarketHistory(timeSpan: string = '1Y'): Observable<void> {
-    return this._marketsService.getMarketHistory(timeSpan)
+  private getMarketHistory(): Observable<void> {
+    if (!this.historyFilter) {
+      this.historyFilter = new HistoryFilter(HistoryFilter.historicalDate(new Date(), 365), new Date(), HistoryInterval.Daily);
+    }
+
+    return this._marketsService.getMarketHistory(this.historyFilter)
       .pipe(
         delay(1),
-        map((marketHistory: IMarketSnapshot[]) => {
+        map((marketHistory: IMarketHistoryResponse) => {
           this.marketHistory = new MarketHistory(marketHistory);
           this.handleChartTypeChange(this.selectedChart.category);
         }));
@@ -190,8 +202,26 @@ export class MarketComponent implements OnInit {
     }
   }
 
-  handleChartTimeChange($event: string) {
-    this.getMarketHistory($event).pipe(take(1)).subscribe();
+  handleChartTimeChange(timeSpan: string) {
+    let startDate = new Date();
+    let endDate = new Date();
+    let interval = HistoryInterval.Daily;
+
+    if (timeSpan === '1M') {
+      startDate = HistoryFilter.historicalDate(startDate, 30);
+    } else if (timeSpan === '1W') {
+      startDate = HistoryFilter.historicalDate(startDate, 7);
+      interval = HistoryInterval.Hourly;
+    } else if (timeSpan === '1D') {
+      startDate = HistoryFilter.historicalDate(startDate, 1);
+      interval = HistoryInterval.Hourly;
+    } else {
+      startDate = HistoryFilter.historicalDate(startDate, 365);
+    }
+
+    this.historyFilter = new HistoryFilter(startDate, endDate, interval);
+
+    this.getMarketHistory().pipe(take(1)).subscribe();
   }
 
   handleTxOption($event: TransactionView) {

@@ -1,17 +1,17 @@
-import { IMarketSnapshot } from './platform-api/responses/markets/market-snapshot.interface';
+import { IMarketHistoryResponse } from './platform-api/responses/markets/market-history-response.interface';
 
 export class MarketHistory {
   liquidity: any;
   volume: any;
   staking: any;
 
-  constructor(history: IMarketSnapshot[]) {
+  constructor(history: IMarketHistoryResponse) {
     const liquidity = [];
     const volume = [];
     const staking = [];
 
-    history.forEach(history => {
-      const time = Date.parse(history.startDate.toString()) / 1000;
+    history.results.forEach(history => {
+      const time = Date.parse(history.timestamp.toString()) / 1000;
 
       liquidity.push({ time, value: history.liquidity });
 
