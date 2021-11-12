@@ -80,12 +80,7 @@ export class TokenComponent implements OnInit {
       this._blocksService.getLatestBlock$()
         .pipe(
           switchMap(_ => this.getToken()),
-          tap(_ => {
-            if (!this.historyFilter) return;
-            const daysDifference = (this.historyFilter.endDateTime.getTime() - this.historyFilter.startDateTime.getTime()) / 1000 / 60 / 60 / 24;
-            this.historyFilter.endDateTime = new Date();
-            this.historyFilter.startDateTime = HistoryFilter.historicalDate(new Date(), daysDifference);
-          }),
+          tap(_ => this.historyFilter?.refresh()),
           switchMap(_ => this.getTokenHistory()))
         .subscribe());
   }
@@ -122,9 +117,7 @@ export class TokenComponent implements OnInit {
   private getTokenHistory(): Observable<any> {
     if (!this.token) return of(null);
 
-    if (!this.historyFilter) {
-      this.historyFilter = new HistoryFilter(HistoryFilter.historicalDate(new Date(), 365), new Date(), HistoryInterval.Daily);
-    }
+    if (!this.historyFilter) this.historyFilter = new HistoryFilter();
 
     return this._tokensService.getTokenHistory(this.tokenAddress, this.historyFilter)
       .pipe(
@@ -144,8 +137,8 @@ export class TokenComponent implements OnInit {
   }
 
   handleChartTimeChange(timeSpan: string): void {
-    let startDate = new Date();
-    let endDate = new Date();
+    let startDate = HistoryFilter.startOfDay(new Date());
+    let endDate = HistoryFilter.endOfDay(new Date());
     let interval = HistoryInterval.Daily;
 
     if (timeSpan === '1M') {

@@ -1,4 +1,4 @@
-import { take, tap } from 'rxjs/operators';
+import { take, tap, filter } from 'rxjs/operators';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -16,7 +16,7 @@ export class BlocksService {
   }
 
   getLatestBlock$(): Observable<any> {
-    return this.block$.asObservable();
+    return this.block$.asObservable().pipe(filter(block => !!block));
   }
 
   refreshLatestBlock(): void {

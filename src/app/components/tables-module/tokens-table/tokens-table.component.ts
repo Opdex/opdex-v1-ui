@@ -77,11 +77,11 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
   }
 
   private getTokenHistory$(token: any): Observable<any> {
-    const now = new Date();
-    // 30 Days worth of data for the table preview
-    const start = HistoryFilter.historicalDate(new Date(), 30);
+    const startDate = HistoryFilter.historicalDate(HistoryFilter.startOfDay(new Date()), 30);;
+    const endDate = HistoryFilter.endOfDay(new Date());
+    const historyFilter = new HistoryFilter(startDate, endDate, HistoryInterval.Daily);
 
-    return this._tokensService.getTokenHistory(token.address, new HistoryFilter(start, now, HistoryInterval.Daily))
+    return this._tokensService.getTokenHistory(token.address, historyFilter)
       .pipe(
         take(1),
         map((tokenHistory: ITokenHistoryResponse) => {

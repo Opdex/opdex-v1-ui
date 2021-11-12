@@ -11,7 +11,11 @@ export class HistoryFilter {
   direction: string;
   cursor?: string;
 
-  constructor(startDateTime: Date, endDateTime: Date, interval: HistoryInterval, limit = 750, direction = 'ASC') {
+  constructor(startDateTime: Date = HistoryFilter.historicalDate(HistoryFilter.startOfDay(new Date()), 365),
+              endDateTime: Date = HistoryFilter.endOfDay(new Date()),
+              interval: HistoryInterval = HistoryInterval.Daily,
+              limit = 750,
+              direction = 'ASC') {
     this.startDateTime = startDateTime;
     this.endDateTime = endDateTime;
     this.interval = interval;
@@ -33,9 +37,31 @@ export class HistoryFilter {
     return query
   }
 
+  refresh() {
+    if (this.endDateTime < new Date()) {
+      const daysDifference = this.daysDifference();
+      this.endDateTime = HistoryFilter.endOfDay(new Date());
+      this.startDateTime = HistoryFilter.startOfDay(HistoryFilter.historicalDate(new Date(), daysDifference));
+    }
+  }
+
   static historicalDate(date: Date, daysAgo: number) {
     const historicalDate = date.getTime() - (1000 * 60 * 60 * 24 * daysAgo);
     return new Date(historicalDate);
+  }
+
+  static startOfDay(date: Date): Date {
+    date.setUTCHours(0,0,0,0);
+    return date;
+  }
+
+  static endOfDay(date: Date): Date {
+    date.setUTCHours(23,59,59,999);
+    return date;
+  }
+
+  daysDifference(): number {
+    return Math.floor((this.endDateTime.getTime() - this.startDateTime.getTime()) / 1000 / 60 / 60 / 24);
   }
 
   private addToQuery(query: string, key: string, value: string | number): string {

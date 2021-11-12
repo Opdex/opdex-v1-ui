@@ -260,7 +260,7 @@ export class PlatformApiService extends RestApiService {
   }
 
   public getMarketHistory(request: HistoryFilter): Observable<IMarketHistoryResponse> {
-    return this.get<IMarketHistoryResponse>(`${this.api}/markets/history${request.buildQueryString()}`);
+    return this.get<IMarketHistoryResponse>(`${this.api}/markets/${this.marketAddress}/history${request.buildQueryString()}`);
   }
 
   ////////////////////////////

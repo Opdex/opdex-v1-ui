@@ -7,7 +7,7 @@ import { IconSizes } from 'src/app/enums/icon-sizes';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { delay, map, switchMap, take, tap } from 'rxjs/operators';
 import { LiquidityPoolsFilter, LpOrderBy, MiningFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
@@ -23,13 +23,12 @@ import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/reque
   templateUrl: './market.component.html',
   styleUrls: ['./market.component.scss']
 })
-export class MarketComponent implements OnInit {
+export class MarketComponent implements OnInit, OnDestroy {
   iconSizes = IconSizes;
   icons = Icons;
   subscription = new Subscription();
   market: IMarket;
   marketHistory: MarketHistory;
-  miningPools$: Observable<ILiquidityPoolSummary[]>
   transactionRequest: ITransactionsRequest;
   chartData: any[];
   chartOptions = [
@@ -56,7 +55,9 @@ export class MarketComponent implements OnInit {
   selectedChart = this.chartOptions[0];
   tokensFilter: TokensFilter;
   liquidityPoolsFilter: LiquidityPoolsFilter;
+  miningFilter: LiquidityPoolsFilter;
   historyFilter: HistoryFilter;
+  poolsWithEnabledMining: ILiquidityPoolSummary[];
 
   constructor(
     private _marketsService: MarketsService,
@@ -71,17 +72,17 @@ export class MarketComponent implements OnInit {
     this.tokensFilter = new TokensFilter({
       orderBy: 'DailyPriceChangePercent',
       direction: 'DESC',
-      limit: 10,
+      limit: 5,
       provisional: 'NonProvisional'
     });
 
     this.liquidityPoolsFilter = new LiquidityPoolsFilter({
       orderBy: LpOrderBy.Liquidity,
       direction: 'DESC',
-      limit: 10
+      limit: 5
     });
 
-    const miningFilter = new LiquidityPoolsFilter({
+    this.miningFilter = new LiquidityPoolsFilter({
       orderBy: LpOrderBy.Liquidity,
       limit: 4,
       direction: 'DESC',
@@ -92,14 +93,9 @@ export class MarketComponent implements OnInit {
       this._blocksService.getLatestBlock$()
         .pipe(
           switchMap(_ => this.getMarket()),
-          tap(_ => {
-            if (!this.historyFilter) return;
-            const daysDifference = (this.historyFilter.endDateTime.getTime() - this.historyFilter.startDateTime.getTime()) / 1000 / 60 / 60 / 24;
-            this.historyFilter.endDateTime = new Date();
-            this.historyFilter.startDateTime = HistoryFilter.historicalDate(new Date(), daysDifference);
-          }),
+          tap(_ => this.historyFilter?.refresh()),
           switchMap(_ => this.getMarketHistory()),
-          tap(_ => this.miningPools$ = this._liquidityPoolsService.getLiquidityPools(miningFilter).pipe(map(pools => pools.results))))
+          switchMap(_ => this.getLiquidityPoolsWithMining()))
         .subscribe());
   }
 
@@ -173,17 +169,23 @@ export class MarketComponent implements OnInit {
   }
 
   private getMarketHistory(): Observable<void> {
-    if (!this.historyFilter) {
-      this.historyFilter = new HistoryFilter(HistoryFilter.historicalDate(new Date(), 365), new Date(), HistoryInterval.Daily);
-    }
+    if (!this.historyFilter) this.historyFilter = new HistoryFilter();
 
     return this._marketsService.getMarketHistory(this.historyFilter)
       .pipe(
-        delay(1),
+        delay(10),
         map((marketHistory: IMarketHistoryResponse) => {
           this.marketHistory = new MarketHistory(marketHistory);
           this.handleChartTypeChange(this.selectedChart.category);
         }));
+  }
+
+  private getLiquidityPoolsWithMining(): Observable<void> {
+    return this._liquidityPoolsService.getLiquidityPools(this.miningFilter)
+      .pipe(map(pools => {
+        this.poolsWithEnabledMining = pools?.results || [];
+        return;
+      }));
   }
 
   handleChartTypeChange($event) {
@@ -203,23 +205,15 @@ export class MarketComponent implements OnInit {
   }
 
   handleChartTimeChange(timeSpan: string) {
-    let startDate = new Date();
-    let endDate = new Date();
-    let interval = HistoryInterval.Daily;
+    let startDate = HistoryFilter.startOfDay(new Date());
+    let endDate = HistoryFilter.endOfDay(new Date());
 
-    if (timeSpan === '1M') {
-      startDate = HistoryFilter.historicalDate(startDate, 30);
-    } else if (timeSpan === '1W') {
-      startDate = HistoryFilter.historicalDate(startDate, 7);
-      interval = HistoryInterval.Hourly;
-    } else if (timeSpan === '1D') {
-      startDate = HistoryFilter.historicalDate(startDate, 1);
-      interval = HistoryInterval.Hourly;
-    } else {
-      startDate = HistoryFilter.historicalDate(startDate, 365);
-    }
+    if (timeSpan === '1M') startDate = HistoryFilter.historicalDate(startDate, 30);
+    else if (timeSpan === '1W') startDate = HistoryFilter.historicalDate(startDate, 7);
+    else if (timeSpan === '1D') startDate = HistoryFilter.historicalDate(startDate, 1);
+    else startDate = HistoryFilter.historicalDate(startDate, 365);
 
-    this.historyFilter = new HistoryFilter(startDate, endDate, interval);
+    this.historyFilter = new HistoryFilter(startDate, endDate, HistoryInterval.Daily);
 
     this.getMarketHistory().pipe(take(1)).subscribe();
   }
