@@ -4,7 +4,7 @@ import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { Component, OnDestroy } from '@angular/core';
-import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
+import { TokenOrderByTypes, TokenProvisionalTypes, TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { LiquidityPoolsFilter, LpOrderBy } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { switchMap } from 'rxjs/operators';
@@ -18,6 +18,8 @@ import { Subscription } from 'rxjs';
 export class TokensComponent implements OnDestroy {
   filter: TokensFilter;
   subscription = new Subscription();
+  tokenOrderByTypes = TokenOrderByTypes;
+  tokenProvisionalTypes = TokenProvisionalTypes;
   poolsByVolume: ILiquidityPoolSummary[] = [];
 
   constructor(
@@ -29,10 +31,10 @@ export class TokensComponent implements OnDestroy {
     this.poolsByVolume = [ null, null, null, null ];
 
     this.filter = new TokensFilter({
-      orderBy: 'DailyPriceChangePercent',
+      orderBy: this.tokenOrderByTypes.DailyPriceChangePercent,
       direction: 'DESC',
       limit: 10,
-      provisional: 'NonProvisional'
+      provisional: this.tokenProvisionalTypes.NonProvisional
     });
 
     const volumeFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Volume, limit: 4, direction: 'DESC'});

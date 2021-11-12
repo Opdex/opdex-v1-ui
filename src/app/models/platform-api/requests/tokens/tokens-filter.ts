@@ -8,6 +8,20 @@ export interface ITokensRequest {
   keyword?: string;
 }
 
+export enum TokenOrderByTypes {
+  Name = 'Name',
+  Symbol = 'Symbol',
+  Default = 'Default',
+  PriceUsd = 'PriceUsd',
+  DailyPriceChangePercent = 'DailyPriceChangePercent'
+}
+
+export enum TokenProvisionalTypes {
+  All = 'All',
+  Provisional = 'Provisional',
+  NonProvisional = 'NonProvisional'
+}
+
 export class TokensFilter implements ITokensRequest {
   keyword?: string;
   tokens?: string[];

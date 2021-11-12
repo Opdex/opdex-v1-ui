@@ -5,7 +5,7 @@ import { debounceTime, distinctUntilChanged, map, switchMap, take, tap } from 'r
 import { FormControl } from '@angular/forms';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
-import { TokensFilter, ITokensRequest } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
+import { TokensFilter, ITokensRequest, TokenOrderByTypes, TokenProvisionalTypes } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { Component, ElementRef, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
@@ -26,6 +26,8 @@ export class TokenKeywordFilterControlComponent implements OnInit, OnDestroy {
   filter: TokensFilter;
   icons = Icons;
   IconSizes = IconSizes;
+  tokenOrderByTypes = TokenOrderByTypes;
+  tokenProvisionalTypes = TokenProvisionalTypes;
   subscription = new Subscription();
   tokens: IToken[];
   crs: IToken;
@@ -36,10 +38,10 @@ export class TokenKeywordFilterControlComponent implements OnInit, OnDestroy {
     this.control = new FormControl('');
 
     this.filter = new TokensFilter({
-      orderBy: 'DailyPriceChangePercent',
+      orderBy: this.tokenOrderByTypes.DailyPriceChangePercent,
       direction: 'DESC',
       limit: 10,
-      provisional: this.includeProvisional ? 'All' : 'NonProvisional'
+      provisional: this.includeProvisional ? this.tokenProvisionalTypes.All : this.tokenProvisionalTypes.NonProvisional
     } as ITokensRequest);
 
     this.subscription.add(

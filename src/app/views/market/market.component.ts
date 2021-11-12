@@ -15,7 +15,7 @@ import { StatCardInfo } from '@sharedModels/stat-card-info';
 import { MarketsService } from '@sharedServices/platform/markets.service';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
-import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
+import { TokenOrderByTypes, TokenProvisionalTypes, TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 
 @Component({
   selector: 'opdex-market',
@@ -25,6 +25,8 @@ import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-
 export class MarketComponent implements OnInit {
   iconSizes = IconSizes;
   icons = Icons;
+  tokenOrderByTypes = TokenOrderByTypes;
+  tokenProvisionalTypes = TokenProvisionalTypes;
   subscription = new Subscription();
   market: IMarket;
   marketHistory: MarketHistory;
@@ -67,10 +69,10 @@ export class MarketComponent implements OnInit {
 
   ngOnInit(): void {
     this.tokensFilter = new TokensFilter({
-      orderBy: 'DailyPriceChangePercent',
+      orderBy: this.tokenOrderByTypes.DailyPriceChangePercent,
       direction: 'DESC',
       limit: 10,
-      provisional: 'NonProvisional'
+      provisional: this.tokenProvisionalTypes.NonProvisional
     });
 
     this.liquidityPoolsFilter = new LiquidityPoolsFilter({
