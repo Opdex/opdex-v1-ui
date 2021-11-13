@@ -29,7 +29,7 @@ export class MarketComponent implements OnInit {
   market: IMarket;
   marketHistory: MarketHistory;
   miningPools$: Observable<ILiquidityPoolSummary[]>
-  transactionRequest: ITransactionsRequest;
+  transactionsRequest: ITransactionsRequest;
   chartData: any[];
   chartOptions = [
     {
