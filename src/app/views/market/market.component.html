@@ -44,7 +44,6 @@
       [chartOptions]="chartOptions"
       [selectedChart]="selectedChart"
       title="{{selectedChart.category}}"
-      [showTimeSpans]="false"
       (onTypeChange)="handleChartTypeChange($event)"
       (onTimeChange)="handleChartTimeChange($event)"></opdex-line-chart>
   </div>
@@ -52,23 +51,21 @@
 
 <div class="standard-section pt-5 pb-3">
   <div class="container">
-    <ng-container *ngIf="miningPools$ | async as miningPools">
-      <div class="row mb-5" *ngIf="miningPools.length">
-        <div class="col-12">
-          <h2 class="mb-3 flex-row-center">
-            <mat-icon class="mr-2 mine">{{icons.mining}}</mat-icon> Liquidity Mining
-          </h2>
+    <div class="row mb-5" *ngIf="poolsWithEnabledMining?.length">
+      <div class="col-12">
+        <h2 class="mb-3 flex-row-center">
+          <mat-icon class="mr-2 mine">{{icons.mining}}</mat-icon> Liquidity Mining
+        </h2>
 
-          <div class="scrollable-row">
-            <ng-container *ngFor="let pool of miningPools; trackBy: poolsTrackBy">
-              <div class="scrollable-card">
-                <opdex-mining-card [pool]="pool"></opdex-mining-card>
-              </div>
-            </ng-container>
-          </div>
+        <div class="scrollable-row">
+          <ng-container *ngFor="let pool of poolsWithEnabledMining; trackBy: poolsTrackBy">
+            <div class="scrollable-card">
+              <opdex-mining-card [pool]="pool"></opdex-mining-card>
+            </div>
+          </ng-container>
         </div>
       </div>
-    </ng-container>
+    </div>
 
     <div class="row justify-content-center">
       <div class="col-12">

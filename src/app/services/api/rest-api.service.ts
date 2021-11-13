@@ -6,6 +6,11 @@ import { throwError, Observable, of } from 'rxjs';
 import { catchError, delay, map, mergeMap, retryWhen } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
+// Retryable error codes
+// Note 404 is excluded intentionally due to checking of wallet balances primarily in liquidity pools
+// The check will always be made, likely often will fail and are not *expecting* it to succeed.
+const retryableErrors = [401, 429, 500]
+
 @Injectable({
   providedIn: 'root'
 })
@@ -25,8 +30,7 @@ export class RestApiService {
           let retries = 0;
 
           return err.pipe(
-            // only retry 5xx errors
-            mergeMap((error) => (error.status < 500 && error.status !== 401) ? throwError(error) : of(error)),
+            mergeMap((error) => retryableErrors.includes(error.status) ? of(error) : throwError(error)),
             delay(1000),
             map(error => {
               if (retries++ === 2) {

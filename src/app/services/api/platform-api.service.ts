@@ -6,7 +6,6 @@ import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interf
 import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { IAddressStaking, IAddressStakingPositions } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { ITransactionBroadcast } from '@sharedModels/platform-api/responses/transactions/transaction-broadcast.interface';
-import { IMarketSnapshot } from '@sharedModels/platform-api/responses/markets/market-snapshot.interface';
 import { IMarket } from '@sharedModels/platform-api/responses/markets/market.interface';
 import { IGovernance, IGovernances } from '@sharedModels/platform-api/responses/governances/governance.interface';
 import { IAddressBalance, IAddressBalances } from '@sharedModels/platform-api/responses/wallets/address-balance.interface';
@@ -52,6 +51,7 @@ import { ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/li
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { ITokenHistoryResponse } from '@sharedModels/platform-api/responses/tokens/token-history-response.interface';
 import { HistoryFilter } from '@sharedModels/platform-api/requests/history-filter';
+import { IMarketHistoryResponse } from '@sharedModels/platform-api/responses/markets/market-history-response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -98,27 +98,27 @@ export class PlatformApiService extends RestApiService {
   ////////////////////////////
 
   public getMarketToken(address: string): Observable<IMarketToken> {
-    return this.get<IMarketToken>(`${this.api}/market/${this.marketAddress}/tokens/${address}`);
+    return this.get<IMarketToken>(`${this.api}/markets/${this.marketAddress}/tokens/${address}`);
   }
 
   public getMarketTokens(request: TokensFilter): Observable<IMarketTokensResponse> {
-    return this.get<IMarketTokensResponse>(`${this.api}/market/${this.marketAddress}/tokens${request.buildQueryString()}`);
+    return this.get<IMarketTokensResponse>(`${this.api}/markets/${this.marketAddress}/tokens${request.buildQueryString()}`);
   }
 
   public getMarketTokenHistory(tokenAddress: string, request: HistoryFilter): Observable<ITokenHistoryResponse> {
-    return this.get<ITokenHistoryResponse>(`${this.api}/market/${this.marketAddress}/tokens/${tokenAddress}/history${request.buildQueryString()}`);
+    return this.get<ITokenHistoryResponse>(`${this.api}/markets/${this.marketAddress}/tokens/${tokenAddress}/history${request.buildQueryString()}`);
   }
 
   public swapQuote(address: string, payload: ISwapRequest): Observable<ITransactionQuote> {
-    return this.post<ITransactionQuote>(`${this.api}/market/${this.marketAddress}/tokens/${address}/swap`, payload);
+    return this.post<ITransactionQuote>(`${this.api}/markets/${this.marketAddress}/tokens/${address}/swap`, payload);
   }
 
   public swapAmountInQuote(tokenIn: string, payload: SwapAmountInQuoteRequest): Observable<ISwapAmountInQuoteResponse> {
-    return this.post<ISwapAmountInQuoteResponse>(`${this.api}/market/${this.marketAddress}/tokens/${tokenIn}/swap/amount-in`, payload);
+    return this.post<ISwapAmountInQuoteResponse>(`${this.api}/markets/${this.marketAddress}/tokens/${tokenIn}/swap/amount-in`, payload);
   }
 
   public swapAmountOutQuote(tokenOut: string, payload: SwapAmountOutQuoteRequest): Observable<ISwapAmountOutQuoteResponse> {
-    return this.post<ISwapAmountOutQuoteResponse>(`${this.api}/market/${this.marketAddress}/tokens/${tokenOut}/swap/amount-out`, payload);
+    return this.post<ISwapAmountOutQuoteResponse>(`${this.api}/markets/${this.marketAddress}/tokens/${tokenOut}/swap/amount-out`, payload);
   }
 
   ////////////////////////////
@@ -256,11 +256,11 @@ export class PlatformApiService extends RestApiService {
   ////////////////////////////
 
   public getMarketOverview(): Observable<IMarket> {
-    return this.get<IMarket>(`${this.api}/markets`);
+    return this.get<IMarket>(`${this.api}/markets/${this.marketAddress}`);
   }
 
-  public getMarketHistory(timeSpan: string = '1Y'): Observable<IMarketSnapshot[]> {
-    return this.get<IMarketSnapshot[]>(`${this.api}/markets/history?timeSpan=${timeSpan}`);
+  public getMarketHistory(request: HistoryFilter): Observable<IMarketHistoryResponse> {
+    return this.get<IMarketHistoryResponse>(`${this.api}/markets/${this.marketAddress}/history${request.buildQueryString()}`);
   }
 
   ////////////////////////////

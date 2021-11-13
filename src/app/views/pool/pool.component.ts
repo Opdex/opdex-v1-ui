@@ -124,15 +124,10 @@ export class PoolComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this._blocksService.getLatestBlock$().pipe(
         switchMap(_ => this.getLiquidityPool()),
-        tap(_ => {
-          if (!this.historyFilter) return;
-          const daysDifference = (this.historyFilter.endDateTime.getTime() - this.historyFilter.startDateTime.getTime()) / 1000 / 60 / 60 / 24;
-          this.historyFilter.endDateTime = new Date();
-          this.historyFilter.startDateTime = HistoryFilter.historicalDate(new Date(), daysDifference);
-        }),
+        tap(_ => this.historyFilter?.refresh()),
         switchMap(_ => this.getPoolHistory()),
         switchMap(_ => this.getWalletSummary())
-      ).subscribe())
+      ).subscribe());
   }
 
   openTransactionSidebar(view: TransactionView, childView: string = null) {
@@ -320,9 +315,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   private getPoolHistory(): Observable<ILiquidityPoolHistoryResponse> {
     if (!this.pool) return of(null);
 
-    if (!this.historyFilter) {
-      this.historyFilter = new HistoryFilter(HistoryFilter.historicalDate(new Date(), 365), new Date(), HistoryInterval.Daily);
-    }
+    if (!this.historyFilter) this.historyFilter = new HistoryFilter();
 
     return this._liquidityPoolsService.getLiquidityPoolHistory(this.poolAddress, this.historyFilter)
       .pipe(
@@ -372,8 +365,8 @@ export class PoolComponent implements OnInit, OnDestroy {
   }
 
   handleChartTimeChange(timeSpan: string): void {
-    let startDate = new Date();
-    let endDate = new Date();
+    let startDate = HistoryFilter.startOfDay(new Date());
+    let endDate = HistoryFilter.endOfDay(new Date());
     let interval = HistoryInterval.Daily;
 
     if (timeSpan === '1M') {
