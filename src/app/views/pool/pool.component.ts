@@ -24,6 +24,7 @@ import { GoogleAnalyticsService } from 'ngx-google-analytics';
 import { Icons } from 'src/app/enums/icons';
 import { LiquidityPoolHistory } from '@sharedModels/liquidity-pool-history';
 import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
+import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 
 @Component({
   selector: 'opdex-pool',
@@ -37,6 +38,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   subscription = new Subscription();
   routerSubscription = new Subscription();
   transactionsRequest: ITransactionsRequest;
+  transactionEventTypes = TransactionEventTypes;
   chartData: any[];
   positions: any[];
   iconSizes = IconSizes;
@@ -156,7 +158,19 @@ export class PoolComponent implements OnInit, OnDestroy {
             limit: 15,
             direction: "DESC",
             contracts: contracts,
-            eventTypes: ['SwapEvent', 'StartStakingEvent', 'StopStakingEvent', 'CollectStakingRewardsEvent', 'StartMiningEvent', 'StopMiningEvent', 'AddLiquidityEvent', 'RemoveLiquidityEvent', 'CollectMiningRewardsEvent', 'EnableMiningEvent', 'NominationEvent',]
+            eventTypes: [
+              this.transactionEventTypes.SwapEvent,
+              this.transactionEventTypes.StartStakingEvent,
+              this.transactionEventTypes.StopStakingEvent,
+              this.transactionEventTypes.CollectStakingRewardsEvent,
+              this.transactionEventTypes.StartMiningEvent,
+              this.transactionEventTypes.StopMiningEvent,
+              this.transactionEventTypes.AddLiquidityEvent,
+              this.transactionEventTypes.RemoveLiquidityEvent,
+              this.transactionEventTypes.CollectMiningRewardsEvent,
+              this.transactionEventTypes.EnableMiningEvent,
+              this.transactionEventTypes.NominationEvent
+            ],
           };
 
           if (this.pool){

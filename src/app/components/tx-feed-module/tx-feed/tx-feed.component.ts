@@ -16,7 +16,7 @@ import { Icons } from 'src/app/enums/icons';
 })
 export class TxFeedComponent implements OnChanges, OnDestroy {
   @ViewChild('feedContainer') feedContainer: ElementRef;
-  @Input() transactionRequest: ITransactionsRequest;
+  @Input() transactionsRequest: ITransactionsRequest;
   @Input() size: 's' | 'm' | 'l';
   copied: boolean;
   iconSizes = IconSizes;
@@ -35,7 +35,7 @@ export class TxFeedComponent implements OnChanges, OnDestroy {
     private _blocksService: BlocksService) { }
 
   ngOnChanges(): void {
-    if (this.transactionRequest) {
+    if (this.transactionsRequest) {
 
       // Todo: Improve this, when on a view who's route changes but the view component doesn't,
       // we need to unsubscribe and clear the current feed, then refresh all based on the new view
@@ -52,8 +52,8 @@ export class TxFeedComponent implements OnChanges, OnDestroy {
       this.subscription.add(
         this._blocksService.getLatestBlock$()
           .pipe(
-            tap(_ => this.transactionRequest.cursor = null), // reset the cursor
-            switchMap(_ => this.getTransactions(this.transactionRequest)))
+            tap(_ => this.transactionsRequest.cursor = null), // reset the cursor
+            switchMap(_ => this.getTransactions(this.transactionsRequest)))
           .subscribe((transactions: TransactionReceipt[]) => {
             this.loading = false;
             if (this.transactions.length === 0) {
@@ -118,8 +118,8 @@ export class TxFeedComponent implements OnChanges, OnDestroy {
   more() {
     if (this.endReached) return;
 
-    this.transactionRequest.cursor = this.nextPage;
-    this.getTransactions(this.transactionRequest)
+    this.transactionsRequest.cursor = this.nextPage;
+    this.getTransactions(this.transactionsRequest)
       .pipe(take(1))
       .subscribe((transactions: TransactionReceipt[]) => this.transactions.push(...transactions));
   }

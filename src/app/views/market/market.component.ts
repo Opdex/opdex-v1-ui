@@ -29,7 +29,8 @@ export class MarketComponent implements OnInit, OnDestroy {
   subscription = new Subscription();
   market: IMarket;
   marketHistory: MarketHistory;
-  transactionRequest: ITransactionsRequest;
+  miningPools$: Observable<ILiquidityPoolSummary[]>
+  transactionsRequest: ITransactionsRequest;
   chartData: any[];
   chartOptions = [
     {
