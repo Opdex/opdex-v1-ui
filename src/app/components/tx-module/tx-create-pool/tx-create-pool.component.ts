@@ -1,3 +1,4 @@
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { catchError, distinctUntilChanged, switchMap, take} from 'rxjs/operators';
@@ -41,7 +42,8 @@ export class TxCreatePoolComponent extends TxBase {
     private _fb: FormBuilder,
     private _platform: PlatformApiService,
     protected _injector: Injector,
-    private _tokensService: TokensService
+    private _tokensService: TokensService,
+    private _env: EnvironmentsService
   ) {
     super(_injector);
 
@@ -69,7 +71,8 @@ export class TxCreatePoolComponent extends TxBase {
 
   submit() {
     const payload: ICreateLiquidityPoolRequest = new CreateLiquidityPoolRequest({
-      token: this.token.value
+      token: this.token.value,
+      market: this._env.marketAddress
     });
 
     if(payload.isValid && this.isTokenKnown){
