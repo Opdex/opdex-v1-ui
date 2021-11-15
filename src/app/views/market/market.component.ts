@@ -15,7 +15,7 @@ import { StatCardInfo } from '@sharedModels/stat-card-info';
 import { MarketsService } from '@sharedServices/platform/markets.service';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
-import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
+import { TokenOrderByTypes, TokenProvisionalTypes, TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
 
 @Component({
@@ -71,10 +71,10 @@ export class MarketComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.tokensFilter = new TokensFilter({
-      orderBy: 'DailyPriceChangePercent',
+      orderBy: TokenOrderByTypes.DailyPriceChangePercent,
       direction: 'DESC',
       limit: 5,
-      provisional: 'NonProvisional'
+      provisional: TokenProvisionalTypes.NonProvisional
     });
 
     this.liquidityPoolsFilter = new LiquidityPoolsFilter({
