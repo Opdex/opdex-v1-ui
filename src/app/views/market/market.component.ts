@@ -25,8 +25,6 @@ import { TokenOrderByTypes, TokenProvisionalTypes, TokensFilter } from '@sharedM
 export class MarketComponent implements OnInit {
   iconSizes = IconSizes;
   icons = Icons;
-  tokenOrderByTypes = TokenOrderByTypes;
-  tokenProvisionalTypes = TokenProvisionalTypes;
   subscription = new Subscription();
   market: IMarket;
   marketHistory: MarketHistory;
@@ -69,10 +67,10 @@ export class MarketComponent implements OnInit {
 
   ngOnInit(): void {
     this.tokensFilter = new TokensFilter({
-      orderBy: this.tokenOrderByTypes.DailyPriceChangePercent,
+      orderBy: TokenOrderByTypes.DailyPriceChangePercent,
       direction: 'DESC',
       limit: 10,
-      provisional: this.tokenProvisionalTypes.NonProvisional
+      provisional: TokenProvisionalTypes.NonProvisional
     });
 
     this.liquidityPoolsFilter = new LiquidityPoolsFilter({

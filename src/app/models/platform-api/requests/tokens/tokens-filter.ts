@@ -1,13 +1,3 @@
-export interface ITokensRequest {
-  tokens?: string[];
-  provisional?: string;
-  orderBy?: string;
-  limit?: number;
-  direction?: string;
-  cursor?: string;
-  keyword?: string;
-}
-
 export enum TokenOrderByTypes {
   Name = 'Name',
   Symbol = 'Symbol',
@@ -22,14 +12,24 @@ export enum TokenProvisionalTypes {
   NonProvisional = 'NonProvisional'
 }
 
+export interface ITokensRequest {
+  tokens?: string[];
+  provisional?: TokenProvisionalTypes;
+  orderBy?: TokenOrderByTypes;
+  limit?: number;
+  direction?: string;
+  cursor?: string;
+  keyword?: string;
+}
+
 export class TokensFilter implements ITokensRequest {
   keyword?: string;
   tokens?: string[];
-  provisional?: string;
-  orderBy?: string;
+  provisional?: TokenProvisionalTypes;
+  orderBy?: TokenOrderByTypes;
   limit?: number;
   direction?: string;
-  cursor?: string
+  cursor?: string;
 
   constructor(request?: ITokensRequest) {
     if (request === null || request === undefined) {

@@ -18,8 +18,6 @@ import { Subscription } from 'rxjs';
 export class TokensComponent implements OnDestroy {
   filter: TokensFilter;
   subscription = new Subscription();
-  tokenOrderByTypes = TokenOrderByTypes;
-  tokenProvisionalTypes = TokenProvisionalTypes;
   poolsByVolume: ILiquidityPoolSummary[] = [];
 
   constructor(
@@ -31,10 +29,10 @@ export class TokensComponent implements OnDestroy {
     this.poolsByVolume = [ null, null, null, null ];
 
     this.filter = new TokensFilter({
-      orderBy: this.tokenOrderByTypes.DailyPriceChangePercent,
+      orderBy: TokenOrderByTypes.DailyPriceChangePercent,
       direction: 'DESC',
       limit: 10,
-      provisional: this.tokenProvisionalTypes.NonProvisional
+      provisional: TokenProvisionalTypes.NonProvisional
     });
 
     const volumeFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Volume, limit: 4, direction: 'DESC'});
