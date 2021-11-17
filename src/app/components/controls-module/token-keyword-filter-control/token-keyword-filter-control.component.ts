@@ -37,7 +37,7 @@ export class TokenKeywordFilterControlComponent implements OnInit, OnDestroy {
       orderBy: TokenOrderByTypes.DailyPriceChangePercent,
       direction: 'DESC',
       limit: 10,
-      provisional: this.includeProvisional ? TokenProvisionalTypes.All : TokenProvisionalTypes.NonProvisional
+      tokenType: this.includeProvisional ? TokenProvisionalTypes.All : TokenProvisionalTypes.NonProvisional
     } as ITokensRequest);
 
     this.subscription.add(
