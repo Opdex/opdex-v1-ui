@@ -20,8 +20,8 @@ export class WalletsService extends CacheService {
     this.refreshItem(`wallet-balance-${wallet}-${token}`);
   }
 
-  getWalletBalances(wallet: string, limit?: number, cursor?: string): Observable<IAddressBalances> {
-    return this.getItem(`wallet-balances-${wallet}-${limit}-${cursor}`, this._platformApi.getWalletBalances(wallet, limit, cursor));
+  getWalletBalances(wallet: string, tokenType = 'All', limit?: number, cursor?: string): Observable<IAddressBalances> {
+    return this.getItem(`wallet-balances-${wallet}-${limit}-${cursor}`, this._platformApi.getWalletBalances(wallet, tokenType, limit, cursor));
   }
 
   refreshBalances(wallet: string, limit?: number, cursor?: string): void {

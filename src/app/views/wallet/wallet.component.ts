@@ -160,7 +160,7 @@ export class WalletComponent implements OnInit {
   }
 
   private getWalletBalances(limit?: number, cursor?: string) {
-    this._walletsService.getWalletBalances(this.wallet.wallet, limit, cursor)
+    this._walletsService.getWalletBalances(this.wallet.wallet, 'NonProvisional', limit, cursor)
       .pipe(
         switchMap(response => {
           if (response.results.length === 0) return of(response);

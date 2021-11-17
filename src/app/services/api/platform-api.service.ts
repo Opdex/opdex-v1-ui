@@ -290,8 +290,8 @@ export class PlatformApiService extends RestApiService {
   ////////////////////////////////////////////////////////
 
   // Balances
-  public getWalletBalances(wallet: string, limit?: number, cursor?: string): Observable<IAddressBalances> {
-    let query = cursor ? `?cursor=${cursor}` : `?limit=${limit}&direction=ASC&includeLpTokens=false`;
+  public getWalletBalances(wallet: string, tokenType = 'All', limit?: number, cursor?: string): Observable<IAddressBalances> {
+    let query = cursor ? `?cursor=${cursor}` : `?limit=${limit}&direction=ASC&tokenType=${tokenType}`;
 
     return this.get<IAddressBalances>(`${this.api}/wallets/${wallet}/balance${query}`);
   }
