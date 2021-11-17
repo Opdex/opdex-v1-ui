@@ -21,11 +21,11 @@ export class WalletsService extends CacheService {
   }
 
   getWalletBalances(wallet: string, tokenType = 'All', limit?: number, cursor?: string): Observable<IAddressBalances> {
-    return this.getItem(`wallet-balances-${wallet}-${limit}-${cursor}`, this._platformApi.getWalletBalances(wallet, tokenType, limit, cursor));
+    return this.getItem(`wallet-balances-${wallet}-${tokenType}-${limit}-${cursor}`, this._platformApi.getWalletBalances(wallet, tokenType, limit, cursor));
   }
 
-  refreshBalances(wallet: string, limit?: number, cursor?: string): void {
-    this.refreshItem(`wallet-balances-${wallet}-${limit}-${cursor}`);
+  refreshBalances(wallet: string, tokenType = 'All', limit?: number, cursor?: string): void {
+    this.refreshItem(`wallet-balances-${wallet}-${tokenType}-${limit}-${cursor}`);
   }
 
   getStakingPosition(wallet: string, liquidityPool: string): Observable<IAddressStaking> {
