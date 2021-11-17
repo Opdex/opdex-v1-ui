@@ -32,7 +32,7 @@ export class TokensComponent implements OnDestroy {
       orderBy: TokenOrderByTypes.DailyPriceChangePercent,
       direction: 'DESC',
       limit: 10,
-      provisional: TokenProvisionalTypes.NonProvisional
+      tokenType: TokenProvisionalTypes.NonProvisional
     });
 
     const volumeFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Volume, limit: 4, direction: 'DESC'});

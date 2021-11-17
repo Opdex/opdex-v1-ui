@@ -74,7 +74,7 @@ export class MarketComponent implements OnInit, OnDestroy {
       orderBy: TokenOrderByTypes.DailyPriceChangePercent,
       direction: 'DESC',
       limit: 5,
-      provisional: TokenProvisionalTypes.NonProvisional
+      tokenType: TokenProvisionalTypes.NonProvisional
     });
 
     this.liquidityPoolsFilter = new LiquidityPoolsFilter({

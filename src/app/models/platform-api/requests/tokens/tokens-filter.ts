@@ -14,7 +14,7 @@ export enum TokenProvisionalTypes {
 
 export interface ITokensRequest {
   tokens?: string[];
-  provisional?: TokenProvisionalTypes;
+  tokenType?: TokenProvisionalTypes;
   orderBy?: TokenOrderByTypes;
   limit?: number;
   direction?: string;
@@ -25,7 +25,7 @@ export interface ITokensRequest {
 export class TokensFilter implements ITokensRequest {
   keyword?: string;
   tokens?: string[];
-  provisional?: TokenProvisionalTypes;
+  tokenType?: TokenProvisionalTypes;
   orderBy?: TokenOrderByTypes;
   limit?: number;
   direction?: string;
@@ -40,7 +40,7 @@ export class TokensFilter implements ITokensRequest {
 
     this.keyword = request.keyword;
     this.tokens = request.tokens;
-    this.provisional = request.provisional;
+    this.tokenType = request.tokenType;
     this.orderBy = request.orderBy;
     this.cursor = request.cursor;
     this.limit = request.limit;
@@ -57,7 +57,7 @@ export class TokensFilter implements ITokensRequest {
     }
 
     query = this.addToQuery(query, 'keyword', this.keyword);
-    query = this.addToQuery(query, 'provisional', this.provisional);
+    query = this.addToQuery(query, 'tokenType', this.tokenType);
     query = this.addToQuery(query, 'orderBy', this.orderBy);
     query = this.addToQuery(query, 'limit', this.limit);
     query = this.addToQuery(query, 'direction', this.direction);
