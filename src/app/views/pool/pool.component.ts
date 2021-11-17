@@ -24,6 +24,7 @@ import { GoogleAnalyticsService } from 'ngx-google-analytics';
 import { Icons } from 'src/app/enums/icons';
 import { LiquidityPoolHistory } from '@sharedModels/liquidity-pool-history';
 import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
+import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 
 @Component({
   selector: 'opdex-pool',
@@ -37,6 +38,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   subscription = new Subscription();
   routerSubscription = new Subscription();
   transactionsRequest: ITransactionsRequest;
+  transactionEventTypes = TransactionEventTypes;
   chartData: any[];
   positions: any[];
   iconSizes = IconSizes;
@@ -122,15 +124,10 @@ export class PoolComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this._blocksService.getLatestBlock$().pipe(
         switchMap(_ => this.getLiquidityPool()),
-        tap(_ => {
-          if (!this.historyFilter) return;
-          const daysDifference = (this.historyFilter.endDateTime.getTime() - this.historyFilter.startDateTime.getTime()) / 1000 / 60 / 60 / 24;
-          this.historyFilter.endDateTime = new Date();
-          this.historyFilter.startDateTime = HistoryFilter.historicalDate(new Date(), daysDifference);
-        }),
+        tap(_ => this.historyFilter?.refresh()),
         switchMap(_ => this.getPoolHistory()),
         switchMap(_ => this.getWalletSummary())
-      ).subscribe())
+      ).subscribe());
   }
 
   openTransactionSidebar(view: TransactionView, childView: string = null) {
@@ -161,7 +158,19 @@ export class PoolComponent implements OnInit, OnDestroy {
             limit: 15,
             direction: "DESC",
             contracts: contracts,
-            eventTypes: ['SwapEvent', 'StartStakingEvent', 'StopStakingEvent', 'CollectStakingRewardsEvent', 'StartMiningEvent', 'StopMiningEvent', 'AddLiquidityEvent', 'RemoveLiquidityEvent', 'CollectMiningRewardsEvent', 'EnableMiningEvent', 'NominationEvent',]
+            eventTypes: [
+              this.transactionEventTypes.SwapEvent,
+              this.transactionEventTypes.StartStakingEvent,
+              this.transactionEventTypes.StopStakingEvent,
+              this.transactionEventTypes.CollectStakingRewardsEvent,
+              this.transactionEventTypes.StartMiningEvent,
+              this.transactionEventTypes.StopMiningEvent,
+              this.transactionEventTypes.AddLiquidityEvent,
+              this.transactionEventTypes.RemoveLiquidityEvent,
+              this.transactionEventTypes.CollectMiningRewardsEvent,
+              this.transactionEventTypes.EnableMiningEvent,
+              this.transactionEventTypes.NominationEvent
+            ],
           };
 
           if (this.pool){
@@ -306,9 +315,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   private getPoolHistory(): Observable<ILiquidityPoolHistoryResponse> {
     if (!this.pool) return of(null);
 
-    if (!this.historyFilter) {
-      this.historyFilter = new HistoryFilter(HistoryFilter.historicalDate(new Date(), 365), new Date(), HistoryInterval.Daily);
-    }
+    if (!this.historyFilter) this.historyFilter = new HistoryFilter();
 
     return this._liquidityPoolsService.getLiquidityPoolHistory(this.poolAddress, this.historyFilter)
       .pipe(
@@ -358,8 +365,8 @@ export class PoolComponent implements OnInit, OnDestroy {
   }
 
   handleChartTimeChange(timeSpan: string): void {
-    let startDate = new Date();
-    let endDate = new Date();
+    let startDate = HistoryFilter.startOfDay(new Date());
+    let endDate = HistoryFilter.endOfDay(new Date());
     let interval = HistoryInterval.Daily;
 
     if (timeSpan === '1M') {

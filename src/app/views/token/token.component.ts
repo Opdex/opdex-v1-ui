@@ -14,6 +14,7 @@ import { GoogleAnalyticsService } from 'ngx-google-analytics';
 import { Icons } from 'src/app/enums/icons';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
+import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 
 @Component({
   selector: 'opdex-token',
@@ -25,6 +26,7 @@ export class TokenComponent implements OnInit {
   token: any;
   subscription = new Subscription();
   tokenHistory: TokenHistory;
+  transactionEventTypes = TransactionEventTypes;
   chartData: any[];
   iconSizes = IconSizes;
   icons = Icons;
@@ -43,7 +45,7 @@ export class TokenComponent implements OnInit {
     }
   ]
   selectedChart = this.chartOptions[0];
-  transactionRequest: ITransactionsRequest;
+  transactionsRequest: ITransactionsRequest;
   routerSubscription = new Subscription();
   historyFilter: HistoryFilter;
 
@@ -80,12 +82,7 @@ export class TokenComponent implements OnInit {
       this._blocksService.getLatestBlock$()
         .pipe(
           switchMap(_ => this.getToken()),
-          tap(_ => {
-            if (!this.historyFilter) return;
-            const daysDifference = (this.historyFilter.endDateTime.getTime() - this.historyFilter.startDateTime.getTime()) / 1000 / 60 / 60 / 24;
-            this.historyFilter.endDateTime = new Date();
-            this.historyFilter.startDateTime = HistoryFilter.historicalDate(new Date(), daysDifference);
-          }),
+          tap(_ => this.historyFilter?.refresh()),
           switchMap(_ => this.getTokenHistory()))
         .subscribe());
   }
@@ -102,11 +99,12 @@ export class TokenComponent implements OnInit {
 
           this.token = token;
 
-          this.transactionRequest = {
+          this.transactionsRequest = {
             limit: 15,
             eventTypes: this.token.address === 'CRS'
-                          ? ['SwapEvent', 'AddLiquidityEvent', 'RemoveLiquidityEvent']
-                          : ['TransferEvent', 'ApprovalEvent', 'DistributionEvent', 'SwapEvent', 'AddLiquidityEvent', 'RemoveLiquidityEvent', 'StartMiningEvent', 'StopMiningEvent'],
+                          ? [this.transactionEventTypes.SwapEvent, this.transactionEventTypes.AddLiquidityEvent, this.transactionEventTypes.RemoveLiquidityEvent]
+                          : [this.transactionEventTypes.TransferEvent, this.transactionEventTypes.ApprovalEvent, this.transactionEventTypes.DistributionEvent, this.transactionEventTypes.SwapEvent,
+                          this.transactionEventTypes.AddLiquidityEvent, this.transactionEventTypes.RemoveLiquidityEvent, this.transactionEventTypes.StartMiningEvent, this.transactionEventTypes.StopMiningEvent],
             contracts: this.token.address === 'CRS' ? [] : [this.token.address, this.token.liquidityPool],
             direction: 'DESC'
           }
@@ -122,9 +120,7 @@ export class TokenComponent implements OnInit {
   private getTokenHistory(): Observable<any> {
     if (!this.token) return of(null);
 
-    if (!this.historyFilter) {
-      this.historyFilter = new HistoryFilter(HistoryFilter.historicalDate(new Date(), 365), new Date(), HistoryInterval.Daily);
-    }
+    if (!this.historyFilter) this.historyFilter = new HistoryFilter();
 
     return this._tokensService.getTokenHistory(this.tokenAddress, this.historyFilter)
       .pipe(
@@ -144,8 +140,8 @@ export class TokenComponent implements OnInit {
   }
 
   handleChartTimeChange(timeSpan: string): void {
-    let startDate = new Date();
-    let endDate = new Date();
+    let startDate = HistoryFilter.startOfDay(new Date());
+    let endDate = HistoryFilter.endOfDay(new Date());
     let interval = HistoryInterval.Daily;
 
     if (timeSpan === '1M') {

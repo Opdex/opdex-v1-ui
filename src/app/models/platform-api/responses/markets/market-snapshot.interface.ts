@@ -4,6 +4,5 @@ export interface IMarketSnapshot {
   volume: number;
   staking: any;
   rewards: any;
-  startDate: Date;
-  endDate: Date;
+  timestamp: Date;
 }

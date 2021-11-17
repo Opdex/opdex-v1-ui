@@ -11,7 +11,8 @@
     <h4 class="d-inline mb-0">{{selectedChart.prefix}}{{value | shortNumber}} {{selectedChart.suffix}}</h4>
   </div>
 
-  <ng-container *ngIf="showTimeSpans">
+  <!-- Removing temporarily logic is efficient re-using history to scroll back and only appending going forward -->
+  <!-- <ng-container *ngIf="showTimeSpans">
     <div class="button-group desktop-menu" >
       <button mat-stroked-button [ngClass]="iconSizes.small" class="mr-1 pl-1 pr-1" (click)="timeChange('1D')">1D</button>
       <button mat-stroked-button [ngClass]="iconSizes.small" class="mr-1 pl-1 pr-1" (click)="timeChange('1W')">1W</button>
@@ -29,7 +30,7 @@
       <button mat-menu-item [ngClass]="iconSizes.small" (click)="timeChange('1M')">1 Month</button>
       <button mat-menu-item [ngClass]="iconSizes.small" (click)="timeChange('1Y')">1 Year</button>
     </mat-menu>
-  </ng-container>
+  </ng-container> -->
 </div>
 
 <div class="chart-wrapper">

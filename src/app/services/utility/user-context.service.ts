@@ -53,7 +53,6 @@ export class UserContextService {
     }
 
     return {
-      market: data.market,
       wallet: data.wallet,
       preferences
     };
