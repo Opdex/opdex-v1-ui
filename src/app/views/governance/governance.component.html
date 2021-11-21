@@ -14,7 +14,7 @@
             <div class="flex-column justify-content-between">
               <h4 class="flex-row-center-between">
                 <span class="text flex-row-center">
-                  <opdex-help-button class="mr-2" [info]="nominationsHelpInfo"></opdex-help-button> Nominations
+                  <opdex-help-button class="mr-2" [info]="governanceStatCardsInfo.nominationsHelpInfo"></opdex-help-button> Nominations
                 </span>
 
                 <span class="badge {{governance.periodRemainingBlocks > 0 ? 'success' : 'warn'}}">{{governance.periodRemainingBlocks > 0 ? 'Ongoing' : 'Paused'}}</span>
@@ -54,7 +54,7 @@
           <div class="flex-column justify-content-between h-100" *ngIf="governance; else loadingSecondSkeleton">
             <div class="flex-row-center-between">
               <h4 class="text flex-row-center">
-                <opdex-help-button class="mr-2" [info]="rewardsHelpInfo"></opdex-help-button> Rewards
+                <opdex-help-button class="mr-2" [info]="governanceStatCardsInfo.rewardsHelpInfo"></opdex-help-button> Rewards
               </h4>
 
               <p class="rewards flex-row-center b-400"><mat-icon [ngClass]="iconSizes.small" class="mine mr-1">{{icons.mining}}</mat-icon>{{governance.totalRewardsPerPeriod | shortNumber}} {{governance.minedToken?.symbol}}</p>
