@@ -26,7 +26,10 @@ export class VaultComponent implements OnInit, OnDestroy {
     private _vaultsService: VaultsService,
     private _tokensService: TokensService,
     private _blocksService: BlocksService
-  ) { }
+  ) {
+    // Init with null to get default/loading animations
+    this.statCards = VaultStatCardsLookup.getStatCards(null);
+  }
 
   ngOnInit(): void {
     this.subscription.add(

@@ -93,6 +93,9 @@ export class PoolComponent implements OnInit, OnDestroy {
     private _walletService: WalletsService,
     private _blocksService: BlocksService
   ) {
+    // init stat cards with null for loading/default animations
+    this.statCards = PoolStatCardsLookup.getStatCards(this.pool);
+
     this.subscription.add(
       this._sidenav.getStatus()
         .subscribe((message: ISidenavMessage) => this.message = message));

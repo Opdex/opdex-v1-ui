@@ -66,7 +66,10 @@ export class MarketComponent implements OnInit, OnDestroy {
     private _sidebar: SidenavService,
     private _liquidityPoolsService: LiquidityPoolsService,
     private _blocksService: BlocksService
-  ) {}
+  ) {
+    // Initialize with null to get the default/loading animations
+    this.statCards = MarketStatCardsLookup.getStatCards(null);
+  }
 
   ngOnInit(): void {
     this.tokensFilter = new TokensFilter({
