@@ -17,7 +17,7 @@ import { TransactionView } from '@sharedModels/transaction-view';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { TokenOrderByTypes, TokenProvisionalTypes, TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
-import { StatCardLookup } from '@sharedLookups/stat-cards.lookup';
+import { MarketStatCardsLookup } from '@sharedLookups/market-stat-cards.lookup';
 
 @Component({
   selector: 'opdex-market',
@@ -103,7 +103,7 @@ export class MarketComponent implements OnInit, OnDestroy {
     return this._marketsService.getMarket()
       .pipe(tap(market => {
         this.market = market;
-        this.statCards = new StatCardLookup(this.market).statCardInfo;
+        this.statCards = MarketStatCardsLookup.GetStatCards(this.market);
         this.chartOptions.map(o => {
           if (o.category === 'Staking') o.suffix = this.market.stakingToken.symbol;
           return 0;

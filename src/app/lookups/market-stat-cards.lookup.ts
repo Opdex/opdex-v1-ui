@@ -2,22 +2,14 @@ import { IMarket } from "@sharedModels/platform-api/responses/markets/market.int
 import { StatCardInfo } from "@sharedModels/stat-card-info";
 import { Icons } from "../enums/icons";
 
-export class StatCardLookup {
-  constructor(market?: IMarket) {
-    console.log(market);
-    const info = market;
-    this.setStatCardInfo(info);
-  }
-
-  statCardInfo: StatCardInfo[];
-
-  private setStatCardInfo(info: IMarket): void {
-    this.statCardInfo = [
+export class MarketStatCardsLookup {
+  public static GetStatCards(market: IMarket): StatCardInfo[] {
+    return [
       {
         title: 'Liquidity',
-        value: info?.summary?.liquidity?.toString(),
+        value: market?.summary?.liquidity?.toString(),
         prefix: '$',
-        change: info?.summary?.liquidityDailyChange,
+        change: market?.summary?.liquidityDailyChange,
         show: true,
         icon: Icons.liquidityPool,
         iconColor: 'primary',
@@ -28,9 +20,9 @@ export class StatCardLookup {
       },
       {
         title: 'Staking',
-        value: info?.summary?.staking?.weight,
-        suffix: info?.stakingToken?.symbol,
-        change: info?.summary?.staking?.weightDailyChange,
+        value: market?.summary?.staking?.weight,
+        suffix: market?.stakingToken?.symbol,
+        change: market?.summary?.staking?.weightDailyChange,
         show: true,
         icon: Icons.staking,
         iconColor: 'stake',
@@ -41,7 +33,7 @@ export class StatCardLookup {
       },
       {
         title: 'Volume',
-        value: info?.summary?.volume?.toString(),
+        value: market?.summary?.volume?.toString(),
         prefix: '$',
         daily: true,
         show: true,
@@ -54,7 +46,7 @@ export class StatCardLookup {
       },
       {
         title: 'Rewards',
-        value: info?.summary?.rewards?.totalUsd,
+        value: market?.summary?.rewards?.totalUsd,
         daily: true,
         prefix: '$',
         show: true,
