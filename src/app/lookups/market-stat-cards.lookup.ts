@@ -3,7 +3,7 @@ import { StatCardInfo } from "@sharedModels/stat-card-info";
 import { Icons } from "../enums/icons";
 
 export class MarketStatCardsLookup {
-  public static GetStatCards(market: IMarket): StatCardInfo[] {
+  public static getStatCards(market: IMarket): StatCardInfo[] {
     return [
       {
         title: 'Liquidity',
