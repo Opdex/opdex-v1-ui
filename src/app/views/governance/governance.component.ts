@@ -20,6 +20,7 @@ import { IRewardMiningPoolsRequest } from '@sharedModels/platform-api/requests/g
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
+import { GovernanceStatCardsLookup } from '@sharedLookups/governance-stat-cards.lookup';
 
 @Component({
   selector: 'opdex-governance',
@@ -37,6 +38,7 @@ export class GovernanceComponent implements OnInit, OnDestroy {
   icons = Icons;
   iconSizes = IconSizes;
   subscription = new Subscription();
+  governanceStatCardsInfo = GovernanceStatCardsLookup.getStatCards();
 
   constructor(
     private _platformApiService: PlatformApiService,
@@ -49,16 +51,6 @@ export class GovernanceComponent implements OnInit, OnDestroy {
     private _env: EnvironmentsService
   ) {
     this.nominatedPools = [ null, null, null, null ];
-  }
-
-  nominationsHelpInfo = {
-    title: 'What are nominations?',
-    paragraph: 'Every month (164,250 blocks), the top 4 liquidity pools by staking weight at the end of the nomination period will have liquidity mining enabled.'
-  }
-
-  rewardsHelpInfo = {
-    title: 'What are rewards?',
-    paragraph: 'Rewards are the mined tokens distributed to mining pools after successful nominations. Every 12 periods, the number of mining tokens per nomination adjusts with the governance token distribution schedule.'
   }
 
   ngOnInit(): void {
