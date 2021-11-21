@@ -8,6 +8,7 @@ import { IVault } from '@sharedModels/platform-api/responses/vaults/vault.interf
 import { IVaultCertificates } from '@sharedModels/platform-api/responses/vaults/vault-certificate.interface';
 import { Icons } from 'src/app/enums/icons';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { VaultStatCardsLookup } from '@sharedLookups/vault-stat-cards.lookup';
 
 @Component({
   selector: 'opdex-vault',
@@ -19,28 +20,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   vault: IVault;
   certificates: IVaultCertificates;
   icons = Icons;
-  statCards: StatCardInfo[] = [
-    {
-      title: 'Locked',
-      value: null,
-      suffix: 'XYZ',
-      helpInfo: {
-        title: 'Locked Tokens',
-        paragraph: 'The locked tokens indicator displays how many governance tokens are currently locked within the vault contract. As certificates are redeemed and tokens are collected, the supply will be reduced accordingly.'
-      },
-      show: true
-    },
-    {
-      title: 'Unassigned',
-      value: null,
-      suffix: 'XYZ',
-      helpInfo: {
-        title: 'Unassigned Tokens',
-        paragraph: 'Unassigned tokens is the balance of tokens not currently assigned to active certificates. As certificates are created and assigned to wallets, the amount of unassigned tokens is reduced accordingly.'
-      },
-      show: true
-    }
-  ];
+  statCards: StatCardInfo[];
 
   constructor(
     private _vaultsService: VaultsService,
@@ -56,13 +36,7 @@ export class VaultComponent implements OnInit, OnDestroy {
           switchMap(() => this._tokensService.getToken(this.vault.lockedToken?.address || this.vault.lockedToken)),
           tap(token => this.vault.lockedToken = token),
           tap(_ => {
-            const vaultTokenSymbol = this.vault.lockedToken.symbol;
-
-            this.statCards[0].value = this.vault.tokensLocked;
-            this.statCards[0].suffix = vaultTokenSymbol;
-
-            this.statCards[1].value = this.vault.tokensUnassigned;
-            this.statCards[1].suffix = vaultTokenSymbol;
+            this.statCards = VaultStatCardsLookup.getStatCards(this.vault);
           })))
         ).subscribe());
 
