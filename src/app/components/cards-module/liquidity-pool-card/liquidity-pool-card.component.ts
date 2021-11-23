@@ -1,6 +1,6 @@
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Component, Input, OnInit } from '@angular/core';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { Observable } from 'rxjs';
@@ -13,7 +13,7 @@ import { IconSizes } from 'src/app/enums/icon-sizes';
   styleUrls: ['./liquidity-pool-card.component.scss']
 })
 export class LiquidityPoolCardComponent {
-  @Input() pool: ILiquidityPoolSummary;
+  @Input() pool: ILiquidityPoolResponse;
   context$: Observable<any>;
   icons = Icons;
   iconSizes = IconSizes;

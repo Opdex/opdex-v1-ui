@@ -1,7 +1,7 @@
 import { Icons } from 'src/app/enums/icons';
 import { ICreateLiquidityPoolEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/markets/create-liquidity-pool-event.interface';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { TransactionReceipt } from '@sharedModels/transaction-receipt';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Subscription } from 'rxjs';
@@ -16,7 +16,7 @@ export class CreatePoolTransactionSummaryComponent implements OnChanges, OnDestr
   @Input() transaction: TransactionReceipt;
 
   icons = Icons;
-  pool: ILiquidityPoolSummary;
+  pool: ILiquidityPoolResponse;
   subscription = new Subscription();
   error: string;
   eventTypes = [
@@ -39,7 +39,7 @@ export class CreatePoolTransactionSummaryComponent implements OnChanges, OnDestr
     this.subscription.add(
       this._liquidityPoolService.getLiquidityPool(createEvents[0].liquidityPool, true)
         .subscribe(
-          (pool: ILiquidityPoolSummary) => this.pool = pool,
+          (pool: ILiquidityPoolResponse) => this.pool = pool,
           (error: string) => this.error = 'Oops, something is wrong.'));
   }
 

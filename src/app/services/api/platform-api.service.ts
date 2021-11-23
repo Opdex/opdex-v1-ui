@@ -1,4 +1,3 @@
-import { ILiquidityPoolHistoryResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-history-response.interface';
 import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { IMarketToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IAddressMiningPositions } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
@@ -16,7 +15,7 @@ import { HttpClient } from '@angular/common/http';
 import { RestApiService } from './rest-api.service';
 import { ErrorService } from '@sharedServices/utility/error.service';
 import { Observable } from 'rxjs';
-import { ILiquidityPoolSummary, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolsResponse, ILiquidityPoolResponse, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { LiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { TransactionRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { ITransactionReceipt, ITransactionReceipts } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
@@ -39,7 +38,6 @@ import { IRewardMiningPoolsRequest } from '@sharedModels/platform-api/requests/g
 import { IQuoteReplayRequest } from '@sharedModels/platform-api/requests/transactions/quote-replay-request';
 import { ITransactionBroadcastNotificationRequest } from '@sharedModels/platform-api/requests/transactions/transaction-broadcast-notification-request';
 import { ISwapRequest } from '@sharedModels/platform-api/requests/tokens/swap-request';
-import { IProvideAmountIn } from '@sharedModels/platform-api/responses/liquidity-pools/provide-amount-in.interface';
 import { IAddTokenRequest } from '@sharedModels/platform-api/requests/tokens/add-token-request';
 import { ISwapAmountOutQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-out-quote-response.interface';
 import { ISwapAmountInQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-in-quote-response.interface';
@@ -47,11 +45,12 @@ import { SwapAmountInQuoteRequest } from '@sharedModels/platform-api/requests/to
 import { SwapAmountOutQuoteRequest } from '@sharedModels/platform-api/requests/tokens/swap-amount-out-quote-request';
 import { IMarketTokensResponse } from '@sharedModels/platform-api/responses/tokens/market-tokens-response.interface';
 import { ITokensResponse } from '@sharedModels/platform-api/responses/tokens/tokens-response.interface';
-import { ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pools-response.interface';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { ITokenHistoryResponse } from '@sharedModels/platform-api/responses/tokens/token-history-response.interface';
 import { HistoryFilter } from '@sharedModels/platform-api/requests/history-filter';
 import { IMarketHistoryResponse } from '@sharedModels/platform-api/responses/markets/market-history-response.interface';
+import { ILiquidityPoolSnapshotHistoryResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-snapshots-responses.interface';
+import { IProvideAmountInResponse } from '@sharedModels/platform-api/responses/liquidity-pools/provide-amount-in-response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -156,16 +155,16 @@ export class PlatformApiService extends RestApiService {
     return this.post<ITransactionQuote>(`${this.api}/liquidity-pools`, payload);
   }
 
-  public getPool(address: string): Observable<ILiquidityPoolSummary> {
-    return this.get<ILiquidityPoolSummary>(`${this.api}/liquidity-pools/${address}`);
+  public getPool(address: string): Observable<ILiquidityPoolResponse> {
+    return this.get<ILiquidityPoolResponse>(`${this.api}/liquidity-pools/${address}`);
   }
 
   public getLiquidityPools(query?: LiquidityPoolsFilter): Observable<ILiquidityPoolsResponse> {
     return this.get<ILiquidityPoolsResponse>(`${this.api}/liquidity-pools${query.buildQueryString()}`);
   }
 
-  public getLiquidityPoolHistory(address: string, request: HistoryFilter): Observable<ILiquidityPoolHistoryResponse> {
-    return this.get<ILiquidityPoolHistoryResponse>(`${this.api}/liquidity-pools/${address}/history${request.buildQueryString()}`);
+  public getLiquidityPoolHistory(address: string, request: HistoryFilter): Observable<ILiquidityPoolSnapshotHistoryResponse> {
+    return this.get<ILiquidityPoolSnapshotHistoryResponse>(`${this.api}/liquidity-pools/${address}/history${request.buildQueryString()}`);
   }
 
   public startStakingQuote(address: string, payload: IStartStakingRequest): Observable<ITransactionQuote> {
@@ -188,8 +187,8 @@ export class PlatformApiService extends RestApiService {
     return this.post<ITransactionQuote>(`${this.api}/liquidity-pools/${address}/remove`, payload);
   }
 
-  public quoteAddLiquidity(address: string, payload: IAddLiquidityAmountInQuoteRequest): Observable<IProvideAmountIn> {
-    return this.post<IProvideAmountIn>(`${this.api}/liquidity-pools/${address}/add/amount-in`, payload);
+  public quoteAddLiquidity(address: string, payload: IAddLiquidityAmountInQuoteRequest): Observable<IProvideAmountInResponse> {
+    return this.post<IProvideAmountInResponse>(`${this.api}/liquidity-pools/${address}/add/amount-in`, payload);
   }
 
   ////////////////////////////

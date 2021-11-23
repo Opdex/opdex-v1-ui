@@ -10,14 +10,15 @@ export class MarketHistory {
     const volume = [];
     const staking = [];
 
+    console.log(history)
     history.results.forEach(history => {
       const time = Date.parse(history.timestamp.toString()) / 1000;
 
-      liquidity.push({ time, value: history.liquidity });
+      liquidity.push({ time, value: history.liquidityUsd.close });
 
-      volume.push({ time, value: history.volume });
+      volume.push({ time, value: history.volumeUsd });
 
-      staking.push({ time, value: parseFloat(history.staking.weight.split('.')[0]) });
+      staking.push({ time, value: parseFloat(history.staking.weight.close.split('.')[0]) });
     });
 
     this.liquidity = liquidity;

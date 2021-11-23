@@ -15,7 +15,7 @@ import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/add
 import { IAddressStaking } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { catchError, map, skip, switchMap, take, tap } from 'rxjs/operators';
-import { ILiquidityPoolSummary, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
 
 @Component({
@@ -103,12 +103,12 @@ export class WalletPreviewComponent implements OnDestroy {
 
     return combineLatest(combo)
       .pipe(
-        map(([liquidityPool, result]: [ILiquidityPoolSummary, IAddressStaking]) => {
+        map(([liquidityPool, result]: [ILiquidityPoolResponse, IAddressStaking]) => {
           // Governance token does not have staking, return null
-          if (!liquidityPool.staking?.isActive) return null as AddressPosition;
+          if (!liquidityPool.summary.staking) return null as AddressPosition;
 
-          const amount = new FixedDecimal(result.amount, liquidityPool.token.staking.decimals);
-          return new AddressPosition(walletAddress, liquidityPool.token.staking, 'Staking', amount);
+          const amount = new FixedDecimal(result.amount, liquidityPool.summary.staking?.token.decimals);
+          return new AddressPosition(walletAddress, liquidityPool.summary.staking?.token, 'Staking', amount);
         }),
         take(1));
   }

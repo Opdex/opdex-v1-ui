@@ -1,4 +1,3 @@
-import { ILiquidityPoolHistoryResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-history-response.interface';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { AddressPosition } from '@sharedModels/address-position';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
@@ -8,7 +7,7 @@ import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { StatCardInfo } from "@sharedModels/stat-card-info";
 import { ITransactionsRequest } from "@sharedModels/platform-api/requests/transactions/transactions-filter";
 import { IAddressBalance } from "@sharedModels/platform-api/responses/wallets/address-balance.interface";
-import { ILiquidityPoolSummary } from "@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface";
+import { ILiquidityPoolResponse } from "@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface";
 import { ISidenavMessage, TransactionView } from "@sharedModels/transaction-view";
 import { LiquidityPoolsService } from "@sharedServices/platform/liquidity-pools.service";
 import { SidenavService } from "@sharedServices/utility/sidenav.service";
@@ -26,6 +25,7 @@ import { LiquidityPoolHistory } from '@sharedModels/liquidity-pool-history';
 import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { PoolStatCardsLookup } from '@sharedLookups/pool-stat-cards.lookup';
+import { ILiquidityPoolSnapshotHistoryResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-snapshots-responses.interface';
 
 @Component({
   selector: 'opdex-pool',
@@ -34,7 +34,7 @@ import { PoolStatCardsLookup } from '@sharedLookups/pool-stat-cards.lookup';
 })
 export class PoolComponent implements OnInit, OnDestroy {
   poolAddress: string;
-  pool: ILiquidityPoolSummary;
+  pool: ILiquidityPoolResponse;
   poolHistory: LiquidityPoolHistory;
   subscription = new Subscription();
   routerSubscription = new Subscription();
@@ -154,7 +154,7 @@ export class PoolComponent implements OnInit, OnDestroy {
 
           var contracts = [pool.address, pool.token.src.address];
 
-          if (pool?.mining?.address) contracts.push(pool.mining.address);
+          if (pool?.summary?.miningPool?.address) contracts.push(pool.summary.miningPool.address);
 
           this.transactionsRequest = {
             limit: 15,
@@ -219,11 +219,11 @@ export class PoolComponent implements OnInit, OnDestroy {
       const crsToken = this.pool.token.crs;
       const srcToken = this.pool.token.src;
       const lpToken = this.pool.token.lp;
-      const stakingToken = this.pool.token.staking;
+      const stakingToken = this.pool.summary.staking?.token;
 
       const combo = [
         this.getTokenBalance(context.wallet, crsToken),
-        this.getTokenBalance(context.wallet, srcToken),
+        this.getTokenBalance(context.wallet, srcToken)
       ];
 
       // Yes, this can be added to the initial array, but this order is better for UX
@@ -234,8 +234,8 @@ export class PoolComponent implements OnInit, OnDestroy {
         combo.push(this.getStakingPosition(context.wallet, this.poolAddress, stakingToken));
       }
 
-      if (this.pool.mining) {
-        combo.push(this.getMiningPosition(context.wallet, this.pool.mining.address, lpToken));
+      if (this.pool.summary.miningPool) {
+        combo.push(this.getMiningPosition(context.wallet, this.pool.summary.miningPool.address, lpToken));
       }
 
       return zip(...combo).pipe(take(1), tap(results => this.positions = results));
@@ -244,7 +244,7 @@ export class PoolComponent implements OnInit, OnDestroy {
     return of([]);
   }
 
-  private getPoolHistory(): Observable<ILiquidityPoolHistoryResponse> {
+  private getPoolHistory(): Observable<ILiquidityPoolSnapshotHistoryResponse> {
     if (!this.pool) return of(null);
 
     if (!this.historyFilter) this.historyFilter = new HistoryFilter();
@@ -274,7 +274,7 @@ export class PoolComponent implements OnInit, OnDestroy {
             return o;
           });
         }),
-        tap((poolHistory: ILiquidityPoolHistoryResponse) => {
+        tap((poolHistory: ILiquidityPoolSnapshotHistoryResponse) => {
           this.poolHistory = new LiquidityPoolHistory(poolHistory);
           this.handleChartTypeChange(this.selectedChart.category);
       }));

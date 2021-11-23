@@ -1,5 +1,5 @@
+import { IMarketSummaryResponse } from './market-summary-response.interface';
 import { IToken } from "../tokens/token.interface";
-import { IMarketSnapshot } from "./market-snapshot.interface";
 
 export interface IMarket {
   address: string;
@@ -11,5 +11,5 @@ export interface IMarket {
   authProviders: boolean;
   marketFeeEnabled: boolean;
   transactionFee: number;
-  summary: IMarketSnapshot;
+  summary: IMarketSummaryResponse;
 }

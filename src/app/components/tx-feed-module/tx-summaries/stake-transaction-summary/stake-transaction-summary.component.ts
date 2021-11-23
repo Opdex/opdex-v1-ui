@@ -1,6 +1,6 @@
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IRemoveLiquidityEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/liquidity-pools/remove-liquidity-event.interface';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
 import { ICollectStakingRewardsEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/liquidity-pools/staking/collect-staking-rewards.interface';
 import { IStartStakingEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/liquidity-pools/staking/start-staking-event.interface';
@@ -27,7 +27,7 @@ export class StakeTransactionSummaryComponent implements OnChanges, OnDestroy {
   amountTwoToken: IToken;
   collectAmountOne: FixedDecimal; // Could be OLPT, or if liquidated, CRS
   collectAmountTwo: FixedDecimal; // If liquidated, SRC
-  pool: ILiquidityPoolSummary;
+  pool: ILiquidityPoolResponse;
   subscription = new Subscription();
   error: string;
   eventTypes = [
@@ -64,11 +64,11 @@ export class StakeTransactionSummaryComponent implements OnChanges, OnDestroy {
 
     this.subscription.add(
       this._liquidityPoolService.getLiquidityPool(startEvent?.contract || stopEvent?.contract || collectEvent?.contract, true)
-        .subscribe((liquidityPool: ILiquidityPoolSummary) => {
+        .subscribe((liquidityPool: ILiquidityPoolResponse) => {
           this.pool = liquidityPool;
 
           const stakingAmount = startEvent?.amount || stopEvent?.amount || '0';
-          this.stakingAmount = new FixedDecimal(stakingAmount, liquidityPool.token.staking.decimals);
+          this.stakingAmount = new FixedDecimal(stakingAmount, liquidityPool.summary.staking?.token.decimals);
 
           if (this.isCollection) {
             if (this.collectionLiquidatedRewards) {

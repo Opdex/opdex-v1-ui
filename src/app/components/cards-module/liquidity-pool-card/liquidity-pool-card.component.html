@@ -16,11 +16,11 @@
         <button mat-menu-item [ngClass]="iconSizes.small" (click)="provide()">
           <mat-icon class="provide">{{icons.provide}}</mat-icon> Provide {{pool.token.src?.symbol}}
         </button>
-        <button mat-menu-item [ngClass]="iconSizes.small" (click)="stake()" *ngIf="pool.staking?.isActive">
-          <mat-icon class="stake">{{icons.staking}}</mat-icon> Stake {{pool.token.staking?.symbol}}
+        <button mat-menu-item [ngClass]="iconSizes.small" (click)="stake()" *ngIf="pool.summary.staking">
+          <mat-icon class="stake">{{icons.staking}}</mat-icon> Stake {{pool.summary.staking?.token?.symbol}}
         </button>
-        <button mat-menu-item [ngClass]="iconSizes.small" (click)="mine()" *ngIf="pool.mining?.isActive">
-          <mat-icon class="mine">{{icons.mining}}</mat-icon> Mine {{pool.token.staking?.symbol}}
+        <button mat-menu-item [ngClass]="iconSizes.small" (click)="mine()" *ngIf="pool.summary.miningPool?.isActive">
+          <mat-icon class="mine">{{icons.mining}}</mat-icon> Mine {{pool.summary.staking?.token?.symbol}}
         </button>
       </mat-menu>
     </div>
@@ -28,12 +28,12 @@
     <div class="bottom-details">
       <div class="left">
         <p class="sub-heading">Volume</p>
-        <p class="value">${{pool.volume.usd | shortNumber}}</p>
+        <p class="value">${{pool.summary.volume.dailyUsd | shortNumber}}</p>
       </div>
 
       <div class="right">
         <p class="sub-heading">Liquidity</p>
-        <p class="value">${{pool.reserves.usd | shortNumber}}</p>
+        <p class="value">${{pool.summary.reserves.usd | shortNumber}}</p>
       </div>
     </div>
   </ng-container>

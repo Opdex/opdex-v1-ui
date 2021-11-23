@@ -1,5 +1,5 @@
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { ISwapEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/liquidity-pools/swap-event.interface';
 import { combineLatest, Subscription } from 'rxjs';
@@ -42,7 +42,7 @@ export class SwapTransactionSummaryComponent implements OnChanges, OnDestroy {
 
       this.subscription.add(
         this._liquidityPoolService.getLiquidityPool(event.contract, true)
-          .pipe(tap((pool: ILiquidityPoolSummary) => {
+          .pipe(tap((pool: ILiquidityPoolResponse) => {
             const crsIn = new FixedDecimal(event.amountCrsIn, 8);
 
             this.tokenIn = crsIn.isZero ? pool.token.src : pool.token.crs;
@@ -62,7 +62,7 @@ export class SwapTransactionSummaryComponent implements OnChanges, OnDestroy {
         combineLatest([
           this._liquidityPoolService.getLiquidityPool(firstEvent.contract, true),
           this._liquidityPoolService.getLiquidityPool(secondEvent.contract, true)
-        ]).subscribe(([firstPool, secondPool]: [ILiquidityPoolSummary, ILiquidityPoolSummary]) => {
+        ]).subscribe(([firstPool, secondPool]: [ILiquidityPoolResponse, ILiquidityPoolResponse]) => {
           this.tokenIn = firstPool.token.src;
           this.tokenOut = secondPool.token.src;
           this.tokenInAmount = new FixedDecimal(firstEvent.amountSrcIn, this.tokenIn.decimals);

@@ -1,7 +1,7 @@
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IRewardMiningPoolEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/governances/reward-mining-pool-event.interface';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { TransactionReceipt } from '@sharedModels/transaction-receipt';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
@@ -17,7 +17,7 @@ export class EnableMiningTransactionSummaryComponent implements OnChanges, OnDes
   @Input() transaction: TransactionReceipt;
 
   poolAmount: FixedDecimal;
-  pools: ILiquidityPoolSummary[];
+  pools: ILiquidityPoolResponse[];
   stakingToken: IToken;
   subscription = new Subscription();
   error: string;
@@ -40,15 +40,16 @@ export class EnableMiningTransactionSummaryComponent implements OnChanges, OnDes
 
     this.subscription.add(
       combineLatest(rewardEvents.map(event => this._liquidityPoolService.getLiquidityPool(event.stakingPool, true)))
-        .subscribe((pools: ILiquidityPoolSummary[]) => {
+        .subscribe((pools: ILiquidityPoolResponse[]) => {
           this.pools = pools;
-          this.poolAmount = new FixedDecimal(rewardEvents[0].amount, pools[0].token.staking?.decimals);
-          this.stakingToken = pools[0].token.staking;
+          this.poolAmount = new FixedDecimal(rewardEvents[0].amount, pools[0].summary?.staking?.token?.decimals);
+          this.stakingToken = pools[0].summary.staking?.token;
         }));
   }
 
-  poolsTrackBy(index: number, pool: ILiquidityPoolSummary) {
-    return `${index}-${pool.address}-${pool.cost.crsPerSrc.close}-${pool.mining?.tokensMining}-${pool.staking?.weight}`;
+  poolsTrackBy(index: number, pool: ILiquidityPoolResponse) {
+    if (pool === null || pool === undefined) return index;
+    return `${index}-${pool.address}-${pool.summary.cost.crsPerSrc}-${pool.summary.miningPool?.tokensMining}-${pool.summary.staking?.weight}`;
   }
 
   ngOnDestroy(): void {

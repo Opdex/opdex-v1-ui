@@ -1,4 +1,3 @@
-import { ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pools-response.interface';
 import { Component, Input, OnChanges, ViewChild, OnDestroy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -13,6 +12,7 @@ import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { switchMap, take, tap } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
+import { ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 
 @Component({
   selector: 'opdex-pools-table',

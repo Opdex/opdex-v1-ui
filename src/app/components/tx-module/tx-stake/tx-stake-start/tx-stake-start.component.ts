@@ -5,7 +5,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { DecimalStringRegex } from '@sharedLookups/regex';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -24,7 +24,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
   @Input() data;
   icons = Icons;
   form: FormGroup;
-  pool: ILiquidityPoolSummary;
+  pool: ILiquidityPoolResponse;
   allowance$: Subscription;
   transactionTypes = AllowanceRequiredTransactionTypes;
   fiatValue: string;
@@ -69,8 +69,8 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
   }
 
   private setFiatValue(amount: string) {
-    const stakingTokenFiat = new FixedDecimal(this.pool.token.staking.summary.priceUsd.toString(), 8);
-    const amountDecimal = new FixedDecimal(amount, this.pool.token.staking.decimals);
+    const stakingTokenFiat = new FixedDecimal(this.pool.summary.staking?.token.summary.priceUsd.toString(), 8);
+    const amountDecimal = new FixedDecimal(amount, this.pool.summary.staking?.token.decimals);
 
     this.fiatValue = MathService.multiply(amountDecimal, stakingTokenFiat);
   }
@@ -86,7 +86,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
     return this._platformApi
       .getAllowance(this.context.wallet, spender, token)
       .pipe(
-        map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, this.data.pool.token.staking)),
+        map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, this.data.pool.summary.staking?.token)),
         tap(allowance => this.allowance = allowance));
   }
 

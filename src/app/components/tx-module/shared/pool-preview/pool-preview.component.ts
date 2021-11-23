@@ -1,6 +1,6 @@
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { IconSizes } from 'src/app/enums/icon-sizes';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { Observable } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TransactionView } from '@sharedModels/transaction-view';
@@ -16,16 +16,16 @@ import { Icons } from 'src/app/enums/icons';
   styleUrls: ['./pool-preview.component.scss']
 })
 export class PoolPreviewComponent {
-  @Input() pool: ILiquidityPoolSummary;
+  @Input() pool: ILiquidityPoolResponse;
   @Input() view: TransactionView;
   poolForm: FormGroup;
-  pools: ILiquidityPoolSummary[];
-  filteredPools$: Observable<ILiquidityPoolSummary[]>;
-  pools$: Observable<ILiquidityPoolSummary[]>;
+  pools: ILiquidityPoolResponse[];
+  filteredPools$: Observable<ILiquidityPoolResponse[]>;
+  pools$: Observable<ILiquidityPoolResponse[]>;
   iconSizes = IconSizes;
   icons = Icons;
 
-  @Output() onPoolChange: EventEmitter<ILiquidityPoolSummary> = new EventEmitter();
+  @Output() onPoolChange: EventEmitter<ILiquidityPoolResponse> = new EventEmitter();
 
   get poolControl(): FormControl {
     return this.poolForm.get('poolControl') as FormControl;
@@ -46,7 +46,7 @@ export class PoolPreviewComponent {
         map((poolAddress: string) => poolAddress ? this._filterPublicKeys(poolAddress) : this.pools.slice()));
   }
 
-  private _filterPublicKeys(value: string): ILiquidityPoolSummary[] {
+  private _filterPublicKeys(value: string): ILiquidityPoolResponse[] {
     if (!value) [];
 
     const filterValue = value.toString().toLowerCase();

@@ -1,5 +1,5 @@
 import { Component, Injector, Input } from '@angular/core';
-import { ILiquidityPoolSummary, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { ICollectMiningRewardsEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/mining-pools/collect-mining-rewards-event.interface';
 import { ITransactionEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/transaction-event.interface';
 import { MiningPoolsService } from '@sharedServices/platform/mining-pools.service';
@@ -15,7 +15,7 @@ import { TxEventBaseComponent } from '../../tx-event-base.component';
 export class CollectMiningRewardsEventComponent extends TxEventBaseComponent {
   @Input() txEvent: ITransactionEvent;
   event: ICollectMiningRewardsEvent;
-  pool$: Observable<ILiquidityPoolSummary>;
+  pool$: Observable<ILiquidityPoolResponse>;
 
   constructor(protected injector: Injector, private _miningPoolService: MiningPoolsService) {
     super(injector);

@@ -3,7 +3,7 @@ import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { of, Subscription } from 'rxjs';
 import { debounceTime, map, switchMap, take, distinctUntilChanged, tap, filter } from 'rxjs/operators';
@@ -24,7 +24,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
   @Input() data;
   form: FormGroup;
   icons = Icons;
-  pool: ILiquidityPoolSummary;
+  pool: ILiquidityPoolResponse;
   allowance$ = new Subscription();
   transactionTypes = AllowanceRequiredTransactionTypes;
   fiatValue: string;
@@ -78,7 +78,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
   private getAllowance$(amount?: string) {
     amount = amount || this.amount.value;
 
-    const spender = this.data?.pool?.mining?.address;
+    const spender = this.data?.pool?.summary?.miningPool?.address;
     const token = this.data?.pool?.token?.lp?.address;
 
     if (!amount) return of(null);
@@ -99,7 +99,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
     }
 
     this._platformApi
-      .startMiningQuote(this.pool.mining.address, payload)
+      .startMiningQuote(this.pool.summary.miningPool.address, payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }

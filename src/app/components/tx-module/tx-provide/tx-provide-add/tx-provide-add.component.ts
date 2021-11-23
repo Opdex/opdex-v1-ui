@@ -4,7 +4,7 @@ import { DecimalStringRegex } from '@sharedLookups/regex';
 import { Component, Input, OnInit, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, throwError } from 'rxjs';
 import { Subscription } from 'rxjs';
@@ -19,9 +19,9 @@ import { MathService } from '@sharedServices/utility/math.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { IAddLiquidityRequest, AddLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/add-liquidity-request';
 import { IAddLiquidityAmountInQuoteRequest } from '@sharedModels/platform-api/requests/quotes/add-liquidity-amount-in-quote-request';
-import { IProvideAmountIn } from '@sharedModels/platform-api/responses/liquidity-pools/provide-amount-in.interface';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
+import { IProvideAmountInResponse } from '@sharedModels/platform-api/responses/liquidity-pools/provide-amount-in-response.interface';
 
 @Component({
   selector: 'opdex-tx-provide-add',
@@ -30,7 +30,7 @@ import { CollapseAnimation } from '@sharedServices/animations/collapse';
   animations: [CollapseAnimation]
 })
 export class TxProvideAddComponent extends TxBase implements OnInit {
-  @Input() pool: ILiquidityPoolSummary;
+  @Input() pool: ILiquidityPoolResponse;
   icons = Icons;
   iconSizes = IconSizes;
   txHash: string;
@@ -151,7 +151,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
 
     if (!value) return of('');
 
-    if (!this.pool.reserves?.crs || this.pool.reserves.crs === '0.00000000') return of('');
+    if (!this.pool.summary.reserves?.crs || this.pool.summary.reserves.crs === '0.00000000') return of('');
 
     // Technically the input should be made invalid in this case using form validations, cannot end with decimal point
     if (value.endsWith('.')) value = `${value}00`;
@@ -163,7 +163,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
 
     return this._platformApi.quoteAddLiquidity(this.pool.address, payload)
       .pipe(
-        map((response: IProvideAmountIn) => response?.amountIn || ''),
+        map((response: IProvideAmountInResponse) => response?.amountIn || ''),
         catchError(() => of('')));
   }
 

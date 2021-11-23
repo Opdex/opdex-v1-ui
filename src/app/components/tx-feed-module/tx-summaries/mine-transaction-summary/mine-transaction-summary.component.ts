@@ -3,7 +3,7 @@ import { IStartMiningEvent } from '@sharedModels/platform-api/responses/transact
 import { ICollectMiningRewardsEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/mining-pools/collect-mining-rewards-event.interface';
 import { MiningPoolsService } from '@sharedServices/platform/mining-pools.service';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
-import { ILiquidityPoolSummary, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { TransactionReceipt } from '@sharedModels/transaction-receipt';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
@@ -22,7 +22,7 @@ export class MineTransactionSummaryComponent implements OnChanges, OnDestroy {
   isAddition: boolean;
   lptAmount: FixedDecimal;
   collectAmount: FixedDecimal;
-  pool: ILiquidityPoolSummary;
+  pool: ILiquidityPoolResponse;
   subscription = new Subscription();
   error: string;
   eventTypes = [
@@ -54,11 +54,11 @@ export class MineTransactionSummaryComponent implements OnChanges, OnDestroy {
     this.subscription.add(
       this._miningPoolService.getMiningPool(startEvent?.contract || stopEvent?.contract || collectEvent?.contract)
         .pipe(switchMap((miningPool: IMiningPool) => this._liquidityPoolService.getLiquidityPool(miningPool.liquidityPool, true)))
-        .subscribe((liquidityPool: ILiquidityPoolSummary) => {
+        .subscribe((liquidityPool: ILiquidityPoolResponse) => {
           this.pool = liquidityPool;
 
           const collectAmount = collectEvent === undefined ? '0' : collectEvent.amount;
-          this.collectAmount = new FixedDecimal(collectAmount, liquidityPool.token.staking.decimals);
+          this.collectAmount = new FixedDecimal(collectAmount, liquidityPool.summary.staking?.token.decimals);
 
           let lptAmount = new FixedDecimal('0', liquidityPool.token.lp.decimals);
 

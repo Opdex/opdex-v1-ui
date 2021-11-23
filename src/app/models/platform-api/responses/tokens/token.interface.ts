@@ -1,4 +1,4 @@
-import { IOhlc } from "../liquidity-pools/liquidity-pool.interface";
+import { IOhlcNumber } from './../Ohlc.interface';
 
 export interface ITokenGroup {
   crs: IToken;
@@ -30,6 +30,6 @@ export interface IToken {
 }
 
 export interface ITokenSnapshot {
-  price: IOhlc;
+  price: IOhlcNumber;
   timestamp: Date;
 }

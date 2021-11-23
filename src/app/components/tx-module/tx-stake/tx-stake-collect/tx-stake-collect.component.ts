@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ICollectStakingRewardsRequest } from '@sharedModels/platform-api/requests/liquidity-pools/collect-staking-rewards-request';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { take } from 'rxjs/operators';
@@ -14,7 +14,7 @@ import { take } from 'rxjs/operators';
 })
 export class TxStakeCollectComponent extends TxBase implements OnChanges {
   @Input() data;
-  pool: ILiquidityPoolSummary;
+  pool: ILiquidityPoolResponse;
   form: FormGroup;
 
   get liquidate(): FormControl {

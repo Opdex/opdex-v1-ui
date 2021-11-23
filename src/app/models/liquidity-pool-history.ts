@@ -1,4 +1,4 @@
-import { ILiquidityPoolHistoryResponse } from "./platform-api/responses/liquidity-pools/liquidity-pool-history-response.interface";
+import { ILiquidityPoolSnapshotHistoryResponse } from "./platform-api/responses/liquidity-pools/liquidity-pool-snapshots-responses.interface";
 
 export class LiquidityPoolHistory {
   liquidity: any;
@@ -7,7 +7,7 @@ export class LiquidityPoolHistory {
   crsPerSrc: any;
   srcPerCrs: any;
 
-  constructor(history: ILiquidityPoolHistoryResponse) {
+  constructor(history: ILiquidityPoolSnapshotHistoryResponse) {
     const liquidity = [];
     const volume = [];
     const staking = [];
@@ -17,11 +17,11 @@ export class LiquidityPoolHistory {
     history.results.forEach(history => {
       const time = Date.parse(history.timestamp.toString()) / 1000;
 
-      liquidity.push({ time, value: history.reserves.usd });
+      liquidity.push({ time, value: history.reserves.usd.close });
 
       volume.push({ time, value: history.volume.usd });
 
-      staking.push({ time, value: parseFloat(history.staking.weight.split('.')[0]) });
+      staking.push({ time, value: parseFloat(history.staking.weight.close.split('.')[0]) });
 
       crsPerSrc.push({
         time,

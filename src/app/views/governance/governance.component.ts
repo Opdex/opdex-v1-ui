@@ -10,7 +10,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LiquidityPoolsFilter, LpOrderBy, MiningFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable } from 'rxjs';
 import { IGovernance } from '@sharedModels/platform-api/responses/governances/governance.interface';
@@ -28,8 +28,8 @@ import { GovernanceStatCardsLookup } from '@sharedLookups/governance-stat-cards.
   styleUrls: ['./governance.component.scss']
 })
 export class GovernanceComponent implements OnInit, OnDestroy {
-  nominatedPools: ILiquidityPoolSummary[];
-  miningPools$: Observable<ILiquidityPoolSummary[]>;
+  nominatedPools: ILiquidityPoolResponse[];
+  miningPools$: Observable<ILiquidityPoolResponse[]>;
   governance$: Subscription;
   governance: Governance;
   submitting: boolean;
@@ -88,9 +88,9 @@ export class GovernanceComponent implements OnInit, OnDestroy {
         .subscribe((quote: ITransactionQuote) => this._bottomSheet.open(ReviewQuoteComponent, { data: quote }));
   }
 
-  poolsTrackBy(index: number, pool: ILiquidityPoolSummary) {
+  poolsTrackBy(index: number, pool: ILiquidityPoolResponse) {
     if (pool === null || pool === undefined) return index;
-    return `${index}-${pool.address}-${pool.cost.crsPerSrc.close}-${pool.mining?.tokensMining}-${pool.staking?.weight}`;
+    return `${index}-${pool.address}-${pool.summary.cost.crsPerSrc}-${pool.summary.miningPool?.tokensMining}-${pool.summary.staking?.weight}`;
   }
 
   ngOnDestroy() {
