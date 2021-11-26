@@ -79,7 +79,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
     amount = amount || this.amount.value;
 
     const spender = this.data?.pool?.address;
-    const token = this.data?.pool?.token?.staking?.address;
+    const token = this.data?.pool?.summary?.staking?.token?.address;
 
     if (!amount) return of(null);
 

@@ -10,7 +10,6 @@ export class MarketHistory {
     const volume = [];
     const staking = [];
 
-    console.log(history)
     history.results.forEach(history => {
       const time = Date.parse(history.timestamp.toString()) / 1000;
 
