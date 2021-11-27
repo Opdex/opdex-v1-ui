@@ -20,7 +20,8 @@ const routes: Routes = [
   { path: 'tokens', component: TokensComponent, data: { animation: 'TokensView', title: 'Tokens'} },
   { path: 'tokens/:token', component: TokenComponent, data: { animation: 'TokenView', title: 'SRC Token'} },
   { path: 'wallet', component: WalletComponent, data: { animation: 'WalletView', title: 'Wallet Summary'} },
-  { path: 'governance', component: MiningGovernanceComponent, data: { animation: 'GovernanceView', title: 'Mining Governance'} },
+  { path: 'governance', redirectTo: '/mining-governance' }, // Redirect for a while, twitter feed recently referenced this URL as of 11/25/21
+  { path: 'mining-governance', component: MiningGovernanceComponent, data: { animation: 'MiningGovernanceView', title: 'Mining Governance'} },
   { path: 'vault', component: VaultComponent, data: { animation: 'VaultView', title: 'Vault'} },
   { path: 'auth', component: AuthComponent, data: { animation: 'AuthView', title: 'Connect'} },
   { path: 'trade', component: TradeComponent, data: { animation: 'TradeView', title: 'Trade'} },
