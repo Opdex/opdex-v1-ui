@@ -1,7 +1,7 @@
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
-import { IGovernance } from '@sharedModels/platform-api/responses/governances/governance.interface';
+import { IMiningGovernance } from '@sharedModels/platform-api/responses/mining-governances/mining-governance.interface';
 
-export class Governance {
+export class MiningGovernance {
   private _address: string;
   private _periodEndBlock: number;
   private _periodRemainingBlocks: number;
@@ -48,7 +48,7 @@ export class Governance {
     return this._nominationPeriodEndDate;
   }
 
-  constructor (governance: IGovernance) {
+  constructor (governance: IMiningGovernance) {
     this._address = governance.address;
     this._periodEndBlock = governance.periodEndBlock;
     this._periodRemainingBlocks = governance.periodRemainingBlocks;

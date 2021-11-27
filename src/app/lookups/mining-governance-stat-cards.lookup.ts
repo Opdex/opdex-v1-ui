@@ -1,8 +1,4 @@
-import { HelpInfo } from "@sharedModels/help-info";
-import { IGovernance } from "@sharedModels/platform-api/responses/governances/governance.interface";
-import { StatCardInfo } from "@sharedModels/stat-card-info";
-
-export class GovernanceStatCardsLookup {
+export class MiningGovernanceStatCardsLookup {
   public static getStatCards(){
     return {
       nominationsHelpInfo: {

@@ -1,20 +1,20 @@
 // import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-// import { GovernanceComponent } from './governance.component';
+// import { MiningGovernanceComponent } from './governance.component';
 
-// describe('GovernanceComponent', () => {
-//   let component: GovernanceComponent;
-//   let fixture: ComponentFixture<GovernanceComponent>;
+// describe('MiningGovernanceComponent', () => {
+//   let component: MiningGovernanceComponent;
+//   let fixture: ComponentFixture<MiningGovernanceComponent>;
 
 //   beforeEach(async () => {
 //     await TestBed.configureTestingModule({
-//       declarations: [ GovernanceComponent ]
+//       declarations: [ MiningGovernanceComponent ]
 //     })
 //     .compileComponents();
 //   });
 
 //   beforeEach(() => {
-//     fixture = TestBed.createComponent(GovernanceComponent);
+//     fixture = TestBed.createComponent(MiningGovernanceComponent);
 //     component = fixture.componentInstance;
 //     fixture.detectChanges();
 //   });

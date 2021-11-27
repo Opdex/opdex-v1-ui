@@ -1,7 +1,7 @@
 import { TradeComponent } from './views/trade/trade.component';
 import { AuthComponent } from './views/auth/auth.component';
 import { VaultComponent } from './views/vault/vault.component';
-import { GovernanceComponent } from './views/governance/governance.component';
+import { MiningGovernanceComponent } from './views/mining-governance/mining-governance.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -20,7 +20,7 @@ const routes: Routes = [
   { path: 'tokens', component: TokensComponent, data: { animation: 'TokensView', title: 'Tokens'} },
   { path: 'tokens/:token', component: TokenComponent, data: { animation: 'TokenView', title: 'SRC Token'} },
   { path: 'wallet', component: WalletComponent, data: { animation: 'WalletView', title: 'Wallet Summary'} },
-  { path: 'governance', component: GovernanceComponent, data: { animation: 'GovernanceView', title: 'Governance'} },
+  { path: 'governance', component: MiningGovernanceComponent, data: { animation: 'GovernanceView', title: 'Mining Governance'} },
   { path: 'vault', component: VaultComponent, data: { animation: 'VaultView', title: 'Vault'} },
   { path: 'auth', component: AuthComponent, data: { animation: 'AuthView', title: 'Connect'} },
   { path: 'trade', component: TradeComponent, data: { animation: 'TradeView', title: 'Trade'} },

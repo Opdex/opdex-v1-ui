@@ -3,34 +3,34 @@
     <div class="row mb-4">
       <div class="col-12">
         <h1 class="mb-0">Governance</h1>
-        <opdex-copy-address [address]="governance?.address"></opdex-copy-address>
+        <opdex-copy-address [address]="miningGovernance?.address"></opdex-copy-address>
       </div>
     </div>
 
     <div class="row">
       <div class="ccol-12 col-sm-6 col-lg-4 col-xl-3">
         <opdex-card>
-          <ng-container *ngIf="governance; else loadingFirstSkeleton">
+          <ng-container *ngIf="miningGovernance; else loadingFirstSkeleton">
             <div class="flex-column justify-content-between">
               <h4 class="flex-row-center-between">
                 <span class="text flex-row-center">
-                  <opdex-help-button class="mr-2" [info]="governanceStatCardsInfo.nominationsHelpInfo"></opdex-help-button> Nominations
+                  <opdex-help-button class="mr-2" [info]="miningGovernanceStatCardsInfo.nominationsHelpInfo"></opdex-help-button> Nominations
                 </span>
 
-                <span class="badge {{governance.periodRemainingBlocks > 0 ? 'success' : 'warn'}}">{{governance.periodRemainingBlocks > 0 ? 'Ongoing' : 'Paused'}}</span>
+                <span class="badge {{miningGovernance.periodRemainingBlocks > 0 ? 'success' : 'warn'}}">{{miningGovernance.periodRemainingBlocks > 0 ? 'Ongoing' : 'Paused'}}</span>
               </h4>
 
-              <h5 class="mb-0" *ngIf="governance.periodRemainingBlocks > 0">
-                <mat-progress-bar mode="determinate" value="{{((governance.periodBlockDuration - governance.periodRemainingBlocks) / governance.periodBlockDuration) * 100}}"></mat-progress-bar>
+              <h5 class="mb-0" *ngIf="miningGovernance.periodRemainingBlocks > 0">
+                <mat-progress-bar mode="determinate" value="{{((miningGovernance.periodBlockDuration - miningGovernance.periodRemainingBlocks) / miningGovernance.periodBlockDuration) * 100}}"></mat-progress-bar>
 
                 <div class="mt-2 flex-row-center-between">
-                  <small class="light">{{(governance.periodBlockDuration - governance.periodRemainingBlocks) | formatNumber:0}} of {{governance.periodBlockDuration | formatNumber:0}} blocks</small>
-                  <small class="light float-right">{{governance.nominationPeriodEndDate | timeago}}</small>
+                  <small class="light">{{(miningGovernance.periodBlockDuration - miningGovernance.periodRemainingBlocks) | formatNumber:0}} of {{miningGovernance.periodBlockDuration | formatNumber:0}} blocks</small>
+                  <small class="light float-right">{{miningGovernance.nominationPeriodEndDate | timeago}}</small>
                 </div>
               </h5>
             </div>
 
-            <button mat-flat-button color="primary" class="w-100 mt-2" *ngIf="governance.periodRemainingBlocks === 0" [disabled]="submitting || !context.wallet" (click)="quoteDistribution()">Distribute Rewards</button>
+            <button mat-flat-button color="primary" class="w-100 mt-2" *ngIf="miningGovernance.periodRemainingBlocks === 0" [disabled]="submitting || !context.wallet" (click)="quoteDistribution()">Distribute Rewards</button>
           </ng-container>
 
           <ng-template #loadingFirstSkeleton>
@@ -51,19 +51,19 @@
 
       <div class="ccol-12 col-sm-6 col-lg-4 col-xl-3">
         <opdex-card [fullHeight]="true">
-          <div class="flex-column justify-content-between h-100" *ngIf="governance; else loadingSecondSkeleton">
+          <div class="flex-column justify-content-between h-100" *ngIf="miningGovernance; else loadingSecondSkeleton">
             <div class="flex-row-center-between">
               <h4 class="text flex-row-center">
-                <opdex-help-button class="mr-2" [info]="governanceStatCardsInfo.rewardsHelpInfo"></opdex-help-button> Rewards
+                <opdex-help-button class="mr-2" [info]="miningGovernanceStatCardsInfo.rewardsHelpInfo"></opdex-help-button> Rewards
               </h4>
 
-              <p class="rewards flex-row-center b-400"><mat-icon [ngClass]="iconSizes.small" class="mine mr-1">{{icons.mining}}</mat-icon>{{governance.totalRewardsPerPeriod | shortNumber}} {{governance.minedToken?.symbol}}</p>
+              <p class="rewards flex-row-center b-400"><mat-icon [ngClass]="iconSizes.small" class="mine mr-1">{{icons.mining}}</mat-icon>{{miningGovernance.totalRewardsPerPeriod | shortNumber}} {{miningGovernance.minedToken?.symbol}}</p>
             </div>
 
-            <mat-progress-bar mode="determinate" value="{{ ((12 - governance.periodsUntilRewardReset) / 12) * 100 }}"></mat-progress-bar>
+            <mat-progress-bar mode="determinate" value="{{ ((12 - miningGovernance.periodsUntilRewardReset) / 12) * 100 }}"></mat-progress-bar>
 
             <div class="mt-2">
-              <small class="light">Resets in {{governance.periodsUntilRewardReset}} Nomination Period{{governance.periodsUntilRewardReset === 1 ? '' : 's'}}</small>
+              <small class="light">Resets in {{miningGovernance.periodsUntilRewardReset}} Nomination Period{{miningGovernance.periodsUntilRewardReset === 1 ? '' : 's'}}</small>
             </div>
           </div>
 

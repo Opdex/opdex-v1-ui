@@ -29,7 +29,7 @@ export enum Icons {
     copy = 'file_copy',
     error = 'error_outline',
     gas = 'local_gas_station',
-    governance = 'gavel',
+    miningGovernance = 'gavel',
     vault = 'lock',
     approve = 'person_add',
     transfer = 'arrow_forward',

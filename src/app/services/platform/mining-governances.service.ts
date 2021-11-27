@@ -4,17 +4,17 @@ import { CacheService } from '@sharedServices/utility/cache.service';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class GovernancesService extends CacheService {
+export class MiningGovernancesService extends CacheService {
 
   constructor(private _platformApi: PlatformApiService, protected _injector: Injector) {
     super(_injector);
   }
 
-  getGovernance(address: string): Observable<any> {
-    return this.getItem(address, this._platformApi.getGovernance(address));
+  getMiningGovernance(address: string): Observable<any> {
+    return this.getItem(address, this._platformApi.getMiningGovernance(address));
   }
 
-  refreshGovernance(address: string): void {
+  refreshMiningGovernance(address: string): void {
     this.refreshItem(address);
   }
 }
