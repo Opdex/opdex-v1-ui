@@ -1,14 +1,14 @@
 <div class="start-staking">
   <form [formGroup]="form" name="start-staking-form" id="start-staking-form" (submit)="submit()">
-    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Stake" [formControl]="amount" [suffix]="pool.token.staking.symbol" [numbersOnly]="true">
+    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Stake" [formControl]="amount" [suffix]="pool.summary.staking?.token.symbol" [numbersOnly]="true">
       <div class="flex-row-center-end">
         <span class="success" *ngIf="fiatValue">${{fiatValue | shortNumber}}</span>
       </div>
     </opdex-input-control>
 
     <opdex-percentage-amount-buttons
-      [contract]="pool.token.staking.address"
-      [token]="pool.token.staking"
+      [contract]="pool.summary.staking?.token.address"
+      [token]="pool.summary.staking?.token"
       positionType="Balance"
       [selected]="percentageSelected"
       (onPercentageSelect)="handlePercentageSelect($event)"></opdex-percentage-amount-buttons>

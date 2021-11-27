@@ -44,7 +44,7 @@ export class WalletMiningPositionsTableComponent implements OnChanges {
         liquidityPoolAddress: p.pool.address,
         miningPoolAddress: p.position.miningPool,
         position: p.position.amount,
-        isActive: p.pool.mining?.isActive === true,
+        isActive: p.pool.summary.miningPool?.isActive === true,
         decimals: p.pool.token.lp.decimals,
         value: MathService.multiply(
           new FixedDecimal(p.position.amount, p.pool.token.lp.decimals),

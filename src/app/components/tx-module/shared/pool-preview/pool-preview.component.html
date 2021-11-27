@@ -60,8 +60,8 @@
 
         <div class="col">
           <small class="light no-wrap">Reserves</small>
-          <small>{{pool.reserves.crs | shortNumber}}</small>
-          <small>{{pool.reserves.src | shortNumber}}</small>
+          <small>{{pool.summary.reserves.crs | shortNumber}}</small>
+          <small>{{pool.summary.reserves.src | shortNumber}}</small>
           <small>{{pool.token.lp.totalSupply | shortNumber}}</small>
         </div>
 
@@ -93,29 +93,29 @@
 
         <div class="col">
           <small class="light no-wrap">Token</small>
-          <small>{{pool.token.staking.symbol}}</small>
+          <small>{{pool.summary.staking?.token.symbol}}</small>
         </div>
 
         <div class="col">
           <small class="light no-wrap">Weight</small>
-          <small>{{pool.staking.weight | shortNumber}}</small>
+          <small>{{pool.summary.staking.weight | shortNumber}}</small>
         </div>
 
         <div class="col flex-row-end">
           <div class="flex-column-end">
             <small class="light no-wrap">(24hr)</small>
-            <small><opdex-change-indicator [value]="pool.token.staking.summary.dailyPriceChangePercent" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
+            <small><opdex-change-indicator [value]="pool.summary.staking?.token.summary.dailyPriceChangePercent" size="s" [forceDisplay]="true"></opdex-change-indicator></small>
           </div>
 
           <div class="ml-2">
             <small class="light">Price</small>
-            <small>${{pool.token.staking.summary.priceUsd | shortNumber}}</small>
+            <small>${{pool.summary.staking?.token.summary.priceUsd | shortNumber}}</small>
           </div>
         </div>
       </div>
     </ng-container>
 
-    <ng-container *ngIf="pool.mining?.tokensMining && showMining">
+    <ng-container *ngIf="pool.summary.miningPool?.tokensMining && showMining">
       <div class="pool-details-section">
         <div class="col flex-shrink flex-column justify-content-end">
           <button type="button" mat-icon-button color="primary" [ngClass]="iconSizes.tiny" class="d-block" (click)="miningToggle.toggle()">
@@ -130,7 +130,7 @@
 
         <div class="col">
           <small class="light no-wrap">Weight</small>
-          <small>{{pool.mining?.tokensMining | shortNumber}}</small>
+          <small>{{pool.summary.miningPool?.tokensMining | shortNumber}}</small>
         </div>
 
         <div class="col flex-row-end">

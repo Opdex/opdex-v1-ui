@@ -4,7 +4,7 @@ import { Injector, OnChanges, OnDestroy } from '@angular/core';
 import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Icons } from 'src/app/enums/icons';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
@@ -22,7 +22,7 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
   @Input() data;
   icons = Icons;
   form: FormGroup;
-  pool: ILiquidityPoolSummary;
+  pool: ILiquidityPoolResponse;
   subscription = new Subscription();
   fiatValue: string;
   percentageSelected: string;
@@ -67,7 +67,7 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
     }
 
     this._platformApi
-      .stopMiningQuote(this.pool.mining.address, payload)
+      .stopMiningQuote(this.pool.summary.miningPool.address, payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }

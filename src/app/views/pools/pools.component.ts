@@ -1,4 +1,3 @@
-import { ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pools-response.interface';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -8,7 +7,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { combineLatest, Subscription } from 'rxjs';
 import { Icons } from 'src/app/enums/icons';
 import { LiquidityPoolsFilter, LpOrderBy, MiningFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolsResponse, ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 
 interface IPoolsView {
   topVolume: ILiquidityPoolsResponse,
@@ -68,9 +67,9 @@ export class PoolsComponent implements OnInit, OnDestroy {
     this._sidebar.openSidenav(TransactionView.createPool);
   }
 
-  poolsTrackBy(index: number, pool: ILiquidityPoolSummary) {
+  poolsTrackBy(index: number, pool: ILiquidityPoolResponse) {
     if (pool === null || pool === undefined) return index;
-    return `${index}-${pool.address}-${pool.cost.crsPerSrc.close}-${pool.mining?.tokensMining}-${pool.staking?.weight}`;
+    return `${index}-${pool.address}-${pool.summary.cost.crsPerSrc}-${pool.summary.miningPool?.tokensMining}-${pool.summary.staking?.weight}`;
   }
 
   ngOnDestroy() {

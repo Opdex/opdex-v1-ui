@@ -1,7 +1,8 @@
+import { IOhlcNumber } from './../Ohlc.interface';
+
 export interface IMarketSnapshot {
-  liquidity: number;
-  liquidityDailyChange?: number;
-  volume: number;
+  liquidityUsd: IOhlcNumber;
+  volumeUsd: number;
   staking: any;
   rewards: any;
   timestamp: Date;

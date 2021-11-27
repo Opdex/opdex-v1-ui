@@ -1,6 +1,6 @@
 <p class="mb-0" *ngIf="pool$ | async as pool; else loading;">
   Started staking
-  <strong>{{event.amount | shortNumber}} </strong> <a class="no-decoration" routerLink="/tokens/{{pool.token.staking.address}}">{{pool.token.staking.symbol}}</a>.
+  <strong>{{event.amount | shortNumber}} </strong> <a class="no-decoration" routerLink="/tokens/{{pool.summary.staking?.token.address}}">{{pool.summary.staking?.token.symbol}}</a>.
 </p>
 
 <ng-template #loading>Started staking <strong>{{event.amount | shortNumber}}</strong> XYZ.</ng-template>

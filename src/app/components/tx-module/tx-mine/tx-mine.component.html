@@ -8,11 +8,11 @@
   <ng-container *ngIf="pool">
     <opdex-wallet-preview
       [balanceTokens]="[pool.token.lp.address]"
-      [positionMining]="[pool.mining?.address]"></opdex-wallet-preview>
+      [positionMining]="[pool.summary.miningPool?.address]"></opdex-wallet-preview>
 
     <!-- We're specifically checking staking capabilities here for right now. In the staking market
       if the liquidity pool does not have staking, then it cannot ever have liquidity mining. -->
-    <opdex-card *ngIf="pool?.staking?.isActive; else noStaking">
+    <opdex-card *ngIf="pool?.summary?.staking; else noStaking">
       <opdex-tx-mine-start [data]="data" *ngIf="group.value == 1"></opdex-tx-mine-start>
       <opdex-tx-mine-stop [data]="data" *ngIf="group.value == 2"></opdex-tx-mine-stop>
       <opdex-tx-mine-collect [data]="data" *ngIf="group.value == 3"></opdex-tx-mine-collect>

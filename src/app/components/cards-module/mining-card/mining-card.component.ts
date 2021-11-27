@@ -3,7 +3,7 @@ import { MathService } from '@sharedServices/utility/math.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { Component, Input, OnChanges } from '@angular/core';
 import { TransactionView } from '@sharedModels/transaction-view';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 
@@ -13,7 +13,7 @@ import { IconSizes } from 'src/app/enums/icon-sizes';
   styleUrls: ['./mining-card.component.scss']
 })
 export class MiningCardComponent implements OnChanges {
-  @Input() pool: ILiquidityPoolSummary;
+  @Input() pool: ILiquidityPoolResponse;
   miningUsd: string;
   icons = Icons;
   iconSizes = IconSizes;
@@ -22,7 +22,7 @@ export class MiningCardComponent implements OnChanges {
 
   ngOnChanges() {
     this.miningUsd = MathService.multiply(
-      new FixedDecimal(this.pool.mining.tokensMining, this.pool.token.lp.decimals),
+      new FixedDecimal(this.pool.summary.miningPool.tokensMining, this.pool.token.lp.decimals),
       new FixedDecimal(this.pool.token.lp.summary.priceUsd.toString(), 8));
   }
 

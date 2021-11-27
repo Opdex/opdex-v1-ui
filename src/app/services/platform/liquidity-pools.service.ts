@@ -1,13 +1,12 @@
 import { HistoryFilter } from '@sharedModels/platform-api/requests/history-filter';
-import { ILiquidityPoolHistoryResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-history-response.interface';
-import { ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pools-response.interface';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolsResponse, ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CacheService } from '../utility/cache.service';
 import { LiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
+import { ILiquidityPoolSnapshotHistoryResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-snapshots-responses.interface';
 
 @Injectable({providedIn: 'root'})
 export class LiquidityPoolsService extends CacheService {
@@ -16,11 +15,11 @@ export class LiquidityPoolsService extends CacheService {
     super(_injector);
   }
 
-  getLiquidityPool(address: string, cacheOnly?: boolean): Observable<ILiquidityPoolSummary> {
+  getLiquidityPool(address: string, cacheOnly?: boolean): Observable<ILiquidityPoolResponse> {
     return this.getItem(address, this._platformApi.getPool(address), cacheOnly);
   }
 
-  getLiquidityPoolHistory(address: string, request: HistoryFilter): Observable<ILiquidityPoolHistoryResponse> {
+  getLiquidityPoolHistory(address: string, request: HistoryFilter): Observable<ILiquidityPoolSnapshotHistoryResponse> {
     return this.getItem(`${address}-history-${request.buildQueryString()}`, this._platformApi.getLiquidityPoolHistory(address, request));
   }
 

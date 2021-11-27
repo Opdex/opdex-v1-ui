@@ -1,14 +1,14 @@
-import { ILiquidityPoolSummary } from "@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface";
+import { ILiquidityPoolResponse } from "@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface";
 import { Icons } from "../enums/icons";
 
 export class PoolStatCardsLookup {
-  public static getStatCards(pool:ILiquidityPoolSummary){
+  public static getStatCards(pool:ILiquidityPoolResponse){
     return [
       {
         title: 'Liquidity',
-        value: pool?.reserves?.usd?.toString(),
+        value: pool?.summary?.reserves?.usd?.toString(),
         prefix: '$',
-        change: pool?.reserves?.usdDailyChange,
+        change: pool?.summary?.reserves?.dailyUsdChangePercent,
         show: true,
         icon: Icons.liquidityPool,
         iconColor: 'primary',
@@ -19,10 +19,10 @@ export class PoolStatCardsLookup {
       },
       {
         title: 'Staking',
-        value: pool?.staking?.weight,
-        suffix: pool?.token?.staking?.symbol,
-        change: pool?.staking?.weightDailyChange || 0,
-        show: pool?.staking !== null && pool?.staking !== undefined,
+        value: pool?.summary?.staking?.weight,
+        suffix: pool?.summary?.staking?.token?.symbol,
+        change: pool?.summary?.staking?.dailyWeightChangePercent || 0,
+        show: pool?.summary?.staking !== null && pool?.summary?.staking !== undefined,
         icon: Icons.staking,
         iconColor: 'stake',
         helpInfo: {
@@ -32,7 +32,7 @@ export class PoolStatCardsLookup {
       },
       {
         title: 'Volume',
-        value: pool?.volume?.usd?.toString(),
+        value: pool?.summary?.volume?.dailyUsd?.toString(),
         prefix: '$',
         daily: true,
         show: true,
@@ -45,7 +45,7 @@ export class PoolStatCardsLookup {
       },
       {
         title: 'Rewards',
-        value: pool?.rewards?.totalUsd?.toString(),
+        value: pool?.summary?.rewards?.totalDailyUsd?.toString(),
         daily: true,
         prefix: '$',
         show: true,
@@ -58,9 +58,9 @@ export class PoolStatCardsLookup {
       },
       {
         title: 'Mining',
-        value: pool?.mining?.tokensMining,
+        value: pool?.summary?.miningPool?.tokensMining,
         suffix: pool?.token?.lp?.symbol,
-        show: (pool?.mining !== null && pool?.mining !== undefined) && (pool?.mining?.isActive || pool?.mining?.tokensMining !== '0.00000000'),
+        show: (pool?.summary?.miningPool !== null && pool?.summary?.miningPool !== undefined) && (pool?.summary?.miningPool?.isActive || pool?.summary?.miningPool?.tokensMining !== '0.00000000'),
         icon: Icons.mining,
         iconColor: 'mine',
         helpInfo: {

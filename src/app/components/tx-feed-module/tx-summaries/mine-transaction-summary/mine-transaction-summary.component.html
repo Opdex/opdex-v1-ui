@@ -7,7 +7,7 @@
 
   <div class="flex-row-center" *ngIf="!collectAmount.isZero">
     <div class="no-wrap">
-      {{isAddition ? '-' : '+'}}{{collectAmount.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/tokens/{{pool.token.staking.address}}">{{pool.token.staking.symbol}}</a>
+      {{isAddition ? '-' : '+'}}{{collectAmount.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/tokens/{{pool.summary.staking?.token.address}}">{{pool.summary.staking?.token.symbol}}</a>
     </div>
   </div>
 </ng-container>

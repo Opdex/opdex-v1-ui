@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { take } from 'rxjs/operators';
@@ -12,7 +12,7 @@ import { take } from 'rxjs/operators';
 })
 export class TxMineCollectComponent extends TxBase implements OnChanges {
   @Input() data: any;
-  pool: ILiquidityPoolSummary;
+  pool: ILiquidityPoolResponse;
 
   constructor(
     private _platformApi: PlatformApiService,
@@ -27,7 +27,7 @@ export class TxMineCollectComponent extends TxBase implements OnChanges {
 
   submit(): void {
     this._platformApi
-      .collectMiningRewardsQuote(this.pool.mining.address)
+      .collectMiningRewardsQuote(this.pool.summary.miningPool.address)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }

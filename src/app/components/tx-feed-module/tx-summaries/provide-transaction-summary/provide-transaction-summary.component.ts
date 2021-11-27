@@ -1,4 +1,4 @@
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { IRemoveLiquidityEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/liquidity-pools/remove-liquidity-event.interface';
 import { IAddLiquidityEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/liquidity-pools/add-liquidity-event.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
@@ -20,7 +20,7 @@ export class ProvideTransactionSummaryComponent implements OnChanges, OnDestroy 
   lptAmount: FixedDecimal;
   crsAmount: FixedDecimal;
   srcAmount: FixedDecimal;
-  pool: ILiquidityPoolSummary;
+  pool: ILiquidityPoolResponse;
   subscription = new Subscription();
   error: string;
   transactionSummary: string;
@@ -46,7 +46,7 @@ export class ProvideTransactionSummaryComponent implements OnChanges, OnDestroy 
 
     this.subscription.add(
       this._liquidityPoolService.getLiquidityPool(provideEvents[0].contract, true)
-      .subscribe((pool: ILiquidityPoolSummary) => {
+      .subscribe((pool: ILiquidityPoolResponse) => {
         if (provideEvents[0].eventType === TransactionEventTypes.AddLiquidityEvent) {
           const event = provideEvents[0] as IAddLiquidityEvent;
           this.isAddition = true;

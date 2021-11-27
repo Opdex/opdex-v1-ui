@@ -1,6 +1,6 @@
 import { Component, Injector, Input } from '@angular/core';
 import { TxEventBaseComponent } from '../../tx-event-base.component';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { Observable } from 'rxjs';
 import { ICollectStakingRewardsEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/liquidity-pools/staking/collect-staking-rewards.interface';
 import { ITransactionEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/transaction-event.interface';
@@ -13,7 +13,7 @@ import { ITransactionEvent } from '@sharedModels/platform-api/responses/transact
 export class CollectStakingRewardsEventComponent extends TxEventBaseComponent {
   @Input() txEvent: ITransactionEvent;
   event: ICollectStakingRewardsEvent;
-  pool$: Observable<ILiquidityPoolSummary>;
+  pool$: Observable<ILiquidityPoolResponse>;
 
   constructor(protected injector: Injector) {
     super(injector);

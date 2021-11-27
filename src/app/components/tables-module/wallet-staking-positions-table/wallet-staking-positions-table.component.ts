@@ -40,14 +40,14 @@ export class WalletStakingPositionsTableComponent implements OnChanges {
     this.dataSource.data = this.records.positions.map(p => {
       return {
         name: p.pool.name,
-        stakingTokenSymbol: p.pool.token.staking.symbol,
+        stakingTokenSymbol: p.pool.summary.staking?.token.symbol,
         liquidityPoolAddress: p.pool.address,
         position: p.position.amount,
         decimals: p.pool.token.lp.decimals,
-        isNominated: p.pool?.staking?.isNominated === true,
+        isNominated: p.pool?.summary?.staking.isNominated === true,
         value: MathService.multiply(
-          new FixedDecimal(p.position.amount, p.pool.token.staking.decimals),
-          new FixedDecimal(p.pool.token.staking.summary.priceUsd.toString(), 8))
+          new FixedDecimal(p.position.amount, p.pool.summary.staking?.token.decimals),
+          new FixedDecimal(p.pool.summary.staking?.token.summary.priceUsd.toString(), 8))
       }
     });
 

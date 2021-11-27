@@ -6,7 +6,7 @@ import { Component, Input, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { switchMap, map, take, filter, debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { Observable, of, Subscription } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
@@ -25,7 +25,7 @@ import { CollapseAnimation } from '@sharedServices/animations/collapse';
   animations: [CollapseAnimation]
 })
 export class TxProvideRemoveComponent extends TxBase {
-  @Input() pool: ILiquidityPoolSummary;
+  @Input() pool: ILiquidityPoolResponse;
   icons = Icons;
   iconSizes = IconSizes;
   form: FormGroup;
@@ -139,9 +139,9 @@ export class TxProvideRemoveComponent extends TxBase {
 
     const crsDecimals = this.pool.token.crs.decimals;
     const srcDecimals = this.pool.token.src.decimals;
-    const reservesUsd = new FixedDecimal(this.pool.reserves.usd.toFixed(8), 8);
-    const reserveCrs = new FixedDecimal(this.pool.reserves.crs, crsDecimals);
-    const reserveSrc = new FixedDecimal(this.pool.reserves.src, srcDecimals);
+    const reservesUsd = new FixedDecimal(this.pool.summary.reserves.usd.toFixed(8), 8);
+    const reserveCrs = new FixedDecimal(this.pool.summary.reserves.crs, crsDecimals);
+    const reserveSrc = new FixedDecimal(this.pool.summary.reserves.src, srcDecimals);
 
     const percentageLiquidity = new FixedDecimal(MathService.divide(liquidityValue, totalSupply), 8);
 

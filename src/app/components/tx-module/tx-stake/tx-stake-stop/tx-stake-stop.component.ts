@@ -4,7 +4,7 @@ import { debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Icons } from 'src/app/enums/icons';
 import { DecimalStringRegex } from '@sharedLookups/regex';
@@ -21,7 +21,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
   @Input() data;
   icons = Icons;
   form: FormGroup;
-  pool: ILiquidityPoolSummary;
+  pool: ILiquidityPoolResponse;
   subscription = new Subscription();
   fiatValue: string;
   percentageSelected: string;
@@ -52,8 +52,8 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
           debounceTime(400),
           distinctUntilChanged())
         .subscribe(amount => {
-          const stakingTokenFiat = new FixedDecimal(this.pool.token.staking.summary.priceUsd.toString(), 8);
-          const amountDecimal = new FixedDecimal(amount, this.pool.token.staking.decimals);
+          const stakingTokenFiat = new FixedDecimal(this.pool.summary.staking?.token.summary.priceUsd.toString(), 8);
+          const amountDecimal = new FixedDecimal(amount, this.pool.summary.staking?.token.decimals);
           this.fiatValue = MathService.multiply(amountDecimal, stakingTokenFiat);
         }));
   }

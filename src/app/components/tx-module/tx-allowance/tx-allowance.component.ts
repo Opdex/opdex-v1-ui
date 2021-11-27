@@ -2,7 +2,7 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { OnChanges, Injector } from '@angular/core';
 import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { ILiquidityPoolSummary } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool.interface';
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { TxBase } from '../tx-base.component';
 import { Icons } from 'src/app/enums/icons';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
@@ -18,7 +18,7 @@ import { ApproveAllowanceRequest, IApproveAllowanceRequest } from '@sharedModels
 export class TxAllowanceComponent extends TxBase implements OnChanges {
   @Input() data: any;
   icons = Icons;
-  pool: ILiquidityPoolSummary;
+  pool: ILiquidityPoolResponse;
   txHash: string;
 
   form: FormGroup;

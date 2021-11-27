@@ -30,13 +30,13 @@
     <div class="bottom-details">
       <div class="left">
         <p class="sub-heading">Mining</p>
-        <!--{{ pool.mining?.tokensMining | shortNumber}} -->
+        <!--{{ pool.summary.miningPool?.tokensMining | shortNumber}} -->
         <p class="value"><span class="b-400">${{ miningUsd | shortNumber}}</span> <small> {{pool.token.lp.symbol}}</small></p>
       </div>
 
       <div class="right">
         <p class="sub-heading">Reward per Block</p>
-        <p class="value">{{ pool.mining?.rewardPerBlock | shortNumber}} <small>{{pool.token.staking.symbol}}</small></p>
+        <p class="value">{{ pool.summary.miningPool?.rewardPerBlock | shortNumber}} <small>{{pool.summary.staking?.token.symbol}}</small></p>
       </div>
     </div>
   </ng-container>
