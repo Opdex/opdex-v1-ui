@@ -45,7 +45,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ClipboardModule } from '@angular/cdk/clipboard';
-import { GovernanceComponent } from './views/governance/governance.component';
+import { MiningGovernanceComponent } from './views/mining-governance/mining-governance.component';
 import { VaultComponent } from './views/vault/vault.component';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { jwtOptionsFactory } from '@sharedServices/utility/jwt.service';
@@ -70,7 +70,7 @@ import { TradeComponent } from './views/trade/trade.component';
     TokensComponent,
     TokenComponent,
     WalletComponent,
-    GovernanceComponent,
+    MiningGovernanceComponent,
     VaultComponent,
     AuthComponent,
     TradeComponent

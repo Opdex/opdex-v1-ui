@@ -1,6 +1,6 @@
 import { IPaging } from "../paging.interface";
 
-export interface IGovernance {
+export interface IMiningGovernance {
   address: string;
   periodEndBlock: number;
   periodRemainingBlocks: number;
@@ -11,4 +11,4 @@ export interface IGovernance {
   minedToken: string;
 }
 
-export interface IGovernances extends IPaging<IGovernance> { }
+export interface IMiningGovernances extends IPaging<IMiningGovernance> { }

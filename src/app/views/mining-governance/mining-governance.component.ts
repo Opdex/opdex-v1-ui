@@ -1,7 +1,7 @@
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { NominationFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
-import { GovernancesService } from '@sharedServices/platform/governances.service';
+import { MiningGovernancesService } from '@sharedServices/platform/mining-governances.service';
 import { Subscription } from 'rxjs';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
@@ -13,36 +13,36 @@ import { LiquidityPoolsFilter, LpOrderBy, MiningFilter } from '@sharedModels/pla
 import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable } from 'rxjs';
-import { IGovernance } from '@sharedModels/platform-api/responses/governances/governance.interface';
+import { IMiningGovernance } from '@sharedModels/platform-api/responses/mining-governances/mining-governance.interface';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
-import { Governance } from '@sharedModels/governance';
+import { MiningGovernance } from '@sharedModels/mining-governance';
 import { IRewardMiningPoolsRequest } from '@sharedModels/platform-api/requests/governances/reward-mining-pools-request';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
-import { GovernanceStatCardsLookup } from '@sharedLookups/governance-stat-cards.lookup';
+import { MiningGovernanceStatCardsLookup } from '@sharedLookups/mining-governance-stat-cards.lookup';
 
 @Component({
-  selector: 'opdex-governance',
-  templateUrl: './governance.component.html',
-  styleUrls: ['./governance.component.scss']
+  selector: 'opdex-mining-governance',
+  templateUrl: './mining-governance.component.html',
+  styleUrls: ['./mining-governance.component.scss']
 })
-export class GovernanceComponent implements OnInit, OnDestroy {
+export class MiningGovernanceComponent implements OnInit, OnDestroy {
   nominatedPools: ILiquidityPoolResponse[];
   miningPools$: Observable<ILiquidityPoolResponse[]>;
-  governance$: Subscription;
-  governance: Governance;
+  miningGovernance$: Subscription;
+  miningGovernance: MiningGovernance;
   submitting: boolean;
   nominationPeriodEndDate: string;
   context: any;
   icons = Icons;
   iconSizes = IconSizes;
   subscription = new Subscription();
-  governanceStatCardsInfo = GovernanceStatCardsLookup.getStatCards();
+  miningGovernanceStatCardsInfo = MiningGovernanceStatCardsLookup.getStatCards();
 
   constructor(
     private _platformApiService: PlatformApiService,
-    private _governanceService: GovernancesService,
+    private _miningGovernanceService: MiningGovernancesService,
     private _bottomSheet: MatBottomSheet,
     private _context: UserContextService,
     private _tokenService: TokensService,
@@ -56,14 +56,14 @@ export class GovernanceComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.context = this._context.getUserContext();
 
-    this.governance$ = this._blocks.getLatestBlock$()
+    this.miningGovernance$ = this._blocks.getLatestBlock$()
       .pipe(
         switchMap(_ => {
-          return this._governanceService.getGovernance(this._env.governanceAddress)
+          return this._miningGovernanceService.getMiningGovernance(this._env.governanceAddress)
             .pipe(
-              tap((rsp: IGovernance) => this.governance = new Governance(rsp)),
+              tap((rsp: IMiningGovernance) => this.miningGovernance = new MiningGovernance(rsp)),
               switchMap(governance => this._tokenService.getToken(governance.minedToken)),
-              tap(minedToken => this.governance.setMinedToken(minedToken)));
+              tap(minedToken => this.miningGovernance.setMinedToken(minedToken)));
         })).subscribe();
 
     const nominationFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 4, direction: 'DESC', nominationFilter: NominationFilter.Nominated});
@@ -83,7 +83,7 @@ export class GovernanceComponent implements OnInit, OnDestroy {
     const payload: IRewardMiningPoolsRequest = { fullDistribution: true };
 
     this._platformApiService
-      .rewardMiningPoolsQuote(this.governance.address, payload)
+      .rewardMiningPoolsQuote(this.miningGovernance.address, payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this._bottomSheet.open(ReviewQuoteComponent, { data: quote }));
   }
@@ -94,7 +94,7 @@ export class GovernanceComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.governance$) this.governance$.unsubscribe();
+    if (this.miningGovernance$) this.miningGovernance$.unsubscribe();
     this.subscription.unsubscribe();
   }
 }

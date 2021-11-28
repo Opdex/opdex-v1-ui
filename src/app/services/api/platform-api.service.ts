@@ -6,7 +6,7 @@ import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/add
 import { IAddressStaking, IAddressStakingPositions } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { ITransactionBroadcast } from '@sharedModels/platform-api/responses/transactions/transaction-broadcast.interface';
 import { IMarket } from '@sharedModels/platform-api/responses/markets/market.interface';
-import { IGovernance, IGovernances } from '@sharedModels/platform-api/responses/governances/governance.interface';
+import { IMiningGovernance, IMiningGovernances } from '@sharedModels/platform-api/responses/mining-governances/mining-governance.interface';
 import { IAddressBalance, IAddressBalances } from '@sharedModels/platform-api/responses/wallets/address-balance.interface';
 import { Router } from '@angular/router';
 import { JwtService } from '@sharedServices/utility/jwt.service';
@@ -216,19 +216,19 @@ export class PlatformApiService extends RestApiService {
   }
 
   ////////////////////////////
-  // Governances
+  // Mining Governances
   ////////////////////////////
 
-  public getGovernances(): Observable<IGovernances> {
-    return this.get<IGovernances>(`${this.api}/governances`);
+  public getMiningGovernances(): Observable<IMiningGovernances> {
+    return this.get<IMiningGovernances>(`${this.api}/mining-governances`);
   }
 
-  public getGovernance(address: string): Observable<IGovernance> {
-    return this.get<IGovernance>(`${this.api}/governances/${address}`);
+  public getMiningGovernance(address: string): Observable<IMiningGovernance> {
+    return this.get<IMiningGovernance>(`${this.api}/mining-governances/${address}`);
   }
 
   public rewardMiningPoolsQuote(address: string, payload: IRewardMiningPoolsRequest): Observable<ITransactionQuote> {
-    return this.post<ITransactionQuote>(`${this.api}/governances/${address}/reward-mining-pools`, payload);
+    return this.post<ITransactionQuote>(`${this.api}/mining-governances/${address}/reward-mining-pools`, payload);
   }
 
   ////////////////////////////

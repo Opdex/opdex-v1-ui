@@ -19,7 +19,7 @@ export class DistributeTransactionSummaryComponent implements OnChanges, OnDestr
 
   icons = Icons;
   iconSizes = IconSizes;
-  governanceAmount: FixedDecimal;
+  miningGovernanceAmount: FixedDecimal;
   vaultAmount: FixedDecimal;
   token: IToken;
   subscription = new Subscription();
@@ -47,7 +47,7 @@ export class DistributeTransactionSummaryComponent implements OnChanges, OnDestr
       this._tokenService.getToken(event.contract, true)
         .subscribe(token => {
           this.token = token;
-          this.governanceAmount = new FixedDecimal(event.governanceAmount, this.token.decimals);
+          this.miningGovernanceAmount = new FixedDecimal(event.miningGovernanceAmount, this.token.decimals);
           this.vaultAmount = new FixedDecimal(event.vaultAmount, this.token.decimals);
         }));
   }

@@ -1,10 +1,10 @@
 <ng-container *ngIf="token && !error">
   <div class="flex-row-center mb-2">
     <button mat-icon-button color="primary" [ngClass]="iconSizes.tiny" class="mr-2" routerLink="/governance">
-      <mat-icon class="swap">{{icons.governance}}</mat-icon>
+      <mat-icon class="swap">{{icons.miningGovernance}}</mat-icon>
     </button>
 
-    +{{governanceAmount.formattedValue | shortNumber}}
+    +{{miningGovernanceAmount.formattedValue | shortNumber}}
 
     <a class="ml-1 no-decoration" routerLink="/tokens/{{token.address}}">{{token.symbol}}</a>
   </div>
