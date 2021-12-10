@@ -11,6 +11,8 @@ import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { HttpTransportType, HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
+import { Network } from 'src/app/enums/networks';
+import { JwtService } from '@sharedServices/utility/jwt.service';
 
 @Component({
   selector: 'opdex-auth',
@@ -28,6 +30,8 @@ export class AuthComponent implements OnInit, OnDestroy {
   icons = Icons;
   iconSizes = IconSizes;
   hubConnection: HubConnection;
+  sid: string;
+  isDevnet: boolean;
 
   get publicKey(): FormControl {
     return this.form.get('publicKey') as FormControl;
@@ -44,8 +48,10 @@ export class AuthComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _storage: StorageService,
     private _theme: ThemeService,
-    private _env: EnvironmentsService
+    private _env: EnvironmentsService,
+    private _jwt: JwtService
   ) {
+    this.isDevnet = this._env.network !== Network.Devnet;
     this.storageKey = 'public-keys';
     this.form = this._fb.group({
       publicKey: ['', [Validators.required, Validators.minLength(32), Validators.maxLength(36)]],
@@ -60,20 +66,18 @@ export class AuthComponent implements OnInit, OnDestroy {
         map(key => key ? this._filterPublicKeys(key) : this.publicKeys.slice()));
   }
 
-  private _filterPublicKeys(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.publicKeys.filter(key => key.toLowerCase().includes(filterValue));
-  }
-
   async ngOnInit() {
     this.subscription.add(
       this._context.getUserContext$()
         .subscribe(async context => {
           if (context?.wallet) {
+            if (context.preferences?.theme) {
+              this._theme.setTheme(context.preferences.theme);
+            }
+
             this._router.navigateByUrl('/');
-          } else {
-            // if (!this.hubConnection) await this.connectToSignalR();
+          } else if (!this.hubConnection) {
+            await this.connectToSignalR();
           }
         }));
   }
@@ -83,6 +87,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.error = false;
     const publicKey = this.publicKey.value; // Make copy, prevents changes during loading
 
+    // Todo: Sign Message / POST to /auth w/ signature and pub key
     this._api.auth(publicKey)
       .pipe(take(1))
       .pipe(catchError(() => {
@@ -97,12 +102,6 @@ export class AuthComponent implements OnInit, OnDestroy {
           }
 
           this._context.setToken(token);
-
-          const context = this._context.getUserContext();
-          if (context.preferences?.theme) {
-            this._theme.setTheme(context.preferences.theme);
-          }
-
           this.error = false;
         }
 
@@ -110,24 +109,24 @@ export class AuthComponent implements OnInit, OnDestroy {
       });
   }
 
-  deletePublicKey(key: string) {
+  deleteDevnetPublicKey(key: string) {
     const updatedKeys = this.publicKeys.filter(publicKey => publicKey !== key);
-
     this._storage.setLocalStorage(this.storageKey, updatedKeys, true);
-
     this.publicKeys = updatedKeys;
-
     // Set timeout to clear the input after the option is selected.
     // Delete button is within a select option, so that action also gets triggered
     setTimeout(() => this.publicKey.setValue(''));
   }
 
+  private _filterPublicKeys(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.publicKeys.filter(key => key.toLowerCase().includes(filterValue));
+  }
+
   private async connectToSignalR(): Promise<void> {
+    console.log(this._jwt.getToken())
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(`${this._env.apiUrl}/socket`, {
-        skipNegotiation: true,
-        transport: HttpTransportType.WebSockets
-      })
+      .withUrl(`${this._env.apiUrl}/socket`,  { accessTokenFactory: () => this._jwt.getToken() })
       .configureLogging(LogLevel.Warning)
       .withAutomaticReconnect()
       .build();
@@ -138,8 +137,14 @@ export class AuthComponent implements OnInit, OnDestroy {
 
     await this.hubConnection.start();
 
-    const result = await this.hubConnection.invoke('GetStratisId');
-    console.log(result)
+    this.sid = await this.hubConnection.invoke('GetStratisId');
+
+    console.log(this.hubConnection.connectionId);
+
+    this.hubConnection.on('OnAuthenticated', (token: string) => {
+      console.log('onAuthenticated: ' + token);
+      this._context.setToken(token);
+    });
   }
 
   private async stopHubConnection(): Promise<void> {

@@ -5,7 +5,13 @@
 
       <h2>Connect</h2>
 
-      <form [formGroup]="form" name="auth-form" id="auth-form" (submit)="submit()">
+      <div class="authenticate" *ngIf="sid || publicKey.value">
+        <opdex-qr-code [data]="sid || publicKey.value"></opdex-qr-code>
+
+
+      </div>
+
+      <form [formGroup]="form" name="auth-form" id="auth-form" (submit)="submit()" *ngIf="isDevnet">
         <mat-form-field floatLabel="always">
           <mat-label>Public Key</mat-label>
 
@@ -17,7 +23,7 @@
             <mat-option *ngFor="let key of publicKeys$ | async" [value]="key">
               <div class="flex-row-center-between">
                 <small class="overflow-ellipsis" style="font-size: 15px;">{{key}}</small>
-                <button mat-icon-button class="tiny" (click)="deletePublicKey(key)"><mat-icon class="mine">{{icons.delete}}</mat-icon></button>
+                <button mat-icon-button class="tiny" (click)="deleteDevnetPublicKey(key)"><mat-icon class="mine">{{icons.delete}}</mat-icon></button>
               </div>
             </mat-option>
           </mat-autocomplete>
@@ -33,15 +39,11 @@
           Remember Me
         </mat-checkbox>
 
-        <div class="authenticate" *ngIf="publicKey.value">
-          <opdex-qr-code [data]="publicKey.value"></opdex-qr-code>
+        <button mat-flat-button color="primary" class="w-100 mt-3" [disabled]="!form.valid || submitting">Sign and Continue</button>
 
-          <button mat-button color="primary" class="w-100" [disabled]="!form.valid || submitting">Continue</button>
+        <mat-progress-bar mode="indeterminate" *ngIf="submitting" class="mt-3"></mat-progress-bar>
 
-          <mat-progress-bar mode="indeterminate" *ngIf="submitting" class="mt-3"></mat-progress-bar>
-
-          <p class="error mt-3 bold mb-0" *ngIf="error">Invalid public key</p>
-        </div>
+        <p class="error mt-3 bold mb-0" *ngIf="error">Invalid public key</p>
       </form>
     </opdex-card>
   </div>
