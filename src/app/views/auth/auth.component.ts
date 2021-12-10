@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
+import { HttpTransportType, HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 
 @Component({
   selector: 'opdex-auth',
@@ -25,6 +27,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   storageKey: string;
   icons = Icons;
   iconSizes = IconSizes;
+  hubConnection: HubConnection;
 
   get publicKey(): FormControl {
     return this.form.get('publicKey') as FormControl;
@@ -40,7 +43,8 @@ export class AuthComponent implements OnInit, OnDestroy {
     private _context: UserContextService,
     private _router: Router,
     private _storage: StorageService,
-    private _theme: ThemeService
+    private _theme: ThemeService,
+    private _env: EnvironmentsService
   ) {
     this.storageKey = 'public-keys';
     this.form = this._fb.group({
@@ -62,12 +66,14 @@ export class AuthComponent implements OnInit, OnDestroy {
     return this.publicKeys.filter(key => key.toLowerCase().includes(filterValue));
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.subscription.add(
       this._context.getUserContext$()
-        .subscribe(context => {
+        .subscribe(async context => {
           if (context?.wallet) {
             this._router.navigateByUrl('/');
+          } else {
+            // if (!this.hubConnection) await this.connectToSignalR();
           }
         }));
   }
@@ -116,7 +122,35 @@ export class AuthComponent implements OnInit, OnDestroy {
     setTimeout(() => this.publicKey.setValue(''));
   }
 
-  ngOnDestroy() {
+  private async connectToSignalR(): Promise<void> {
+    this.hubConnection = new HubConnectionBuilder()
+      .withUrl(`${this._env.apiUrl}/socket`, {
+        skipNegotiation: true,
+        transport: HttpTransportType.WebSockets
+      })
+      .configureLogging(LogLevel.Warning)
+      .withAutomaticReconnect()
+      .build();
+
+    this.hubConnection.onclose(() => {
+      console.log('closing connection')
+    });
+
+    await this.hubConnection.start();
+
+    const result = await this.hubConnection.invoke('GetStratisId');
+    console.log(result)
+  }
+
+  private async stopHubConnection(): Promise<void> {
+    if (this.hubConnection && this.hubConnection.connectionId) {
+      await this.hubConnection.stop();
+      this.hubConnection = null;
+    }
+  }
+
+  async ngOnDestroy() {
     this.subscription.unsubscribe();
+    await this.stopHubConnection();
   }
 }
