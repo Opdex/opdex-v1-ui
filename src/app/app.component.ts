@@ -193,7 +193,7 @@ export class AppComponent implements OnInit {
 
   private async connectToSignalR(): Promise<void> {
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(`${this._env.apiUrl}/transactions/socket`, { accessTokenFactory: () => this._jwt.getToken() })
+      .withUrl(`${this._env.apiUrl}/socket`, { accessTokenFactory: () => this._jwt.getToken() })
       .configureLogging(LogLevel.Warning)
       .withAutomaticReconnect()
       .build();
