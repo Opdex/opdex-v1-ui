@@ -1,4 +1,5 @@
 import { Network } from "../enums/networks";
+
 export interface IEnvironment {
   apiUrl: string;
   marketAddress: string;

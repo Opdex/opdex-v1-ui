@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
-import { HttpTransportType, HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { Network } from 'src/app/enums/networks';
 import { JwtService } from '@sharedServices/utility/jwt.service';
@@ -20,18 +20,18 @@ import { JwtService } from '@sharedServices/utility/jwt.service';
   styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent implements OnInit, OnDestroy {
+  private _storageKey = 'devnet-public-keys';
+  devnetPublicKeys: string[];
+  devnetPublicKeys$: Observable<string[]>;
+  isDevnet: boolean;
   form: FormGroup;
   submitting: boolean;
   subscription = new Subscription();
   error: boolean;
-  publicKeys: string[];
-  publicKeys$: Observable<string[]>;
-  storageKey: string;
   icons = Icons;
   iconSizes = IconSizes;
   hubConnection: HubConnection;
   sid: string;
-  isDevnet: boolean;
 
   get publicKey(): FormControl {
     return this.form.get('publicKey') as FormControl;
@@ -51,19 +51,17 @@ export class AuthComponent implements OnInit, OnDestroy {
     private _env: EnvironmentsService,
     private _jwt: JwtService
   ) {
-    this.isDevnet = this._env.network !== Network.Devnet;
-    this.storageKey = 'public-keys';
+    this.isDevnet = this._env.network === Network.Devnet;
     this.form = this._fb.group({
       publicKey: ['', [Validators.required, Validators.minLength(32), Validators.maxLength(36)]],
       rememberMe: [false]
     });
 
-    this.publicKeys = this._storage.getLocalStorage(this.storageKey, true) || [];
-
-    this.publicKeys$ = this.publicKey.valueChanges
+    this.devnetPublicKeys = this._storage.getLocalStorage(this._storageKey, true) || [];
+    this.devnetPublicKeys$ = this.publicKey.valueChanges
       .pipe(
         startWith(''),
-        map(key => key ? this._filterPublicKeys(key) : this.publicKeys.slice()));
+        map(key => key ? this._filterDevnetPublicKeys(key) : this.devnetPublicKeys.slice()));
   }
 
   async ngOnInit() {
@@ -82,7 +80,7 @@ export class AuthComponent implements OnInit, OnDestroy {
         }));
   }
 
-  submit(): void {
+  submitDevnetAuth(): void {
     this.submitting = true;
     this.error = false;
     const publicKey = this.publicKey.value; // Make copy, prevents changes during loading
@@ -96,9 +94,9 @@ export class AuthComponent implements OnInit, OnDestroy {
       }))
       .subscribe((token: string) => {
         if (token !== null) {
-          if (this.rememberMe.value === true && this.publicKeys.indexOf(publicKey) < 0) {
-            this.publicKeys.push(publicKey);
-            this._storage.setLocalStorage(this.storageKey, this.publicKeys, true);
+          if (this.rememberMe.value === true && this.devnetPublicKeys.indexOf(publicKey) < 0) {
+            this.devnetPublicKeys.push(publicKey);
+            this._storage.setLocalStorage(this._storageKey, this.devnetPublicKeys, true);
           }
 
           this._context.setToken(token);
@@ -110,45 +108,40 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   deleteDevnetPublicKey(key: string) {
-    const updatedKeys = this.publicKeys.filter(publicKey => publicKey !== key);
-    this._storage.setLocalStorage(this.storageKey, updatedKeys, true);
-    this.publicKeys = updatedKeys;
+    const updatedKeys = this.devnetPublicKeys.filter(publicKey => publicKey !== key);
+    this._storage.setLocalStorage(this._storageKey, updatedKeys, true);
+    this.devnetPublicKeys = updatedKeys;
     // Set timeout to clear the input after the option is selected.
     // Delete button is within a select option, so that action also gets triggered
     setTimeout(() => this.publicKey.setValue(''));
   }
 
-  private _filterPublicKeys(value: string): string[] {
+  private _filterDevnetPublicKeys(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.publicKeys.filter(key => key.toLowerCase().includes(filterValue));
+    return this.devnetPublicKeys.filter(key => key.toLowerCase().includes(filterValue));
   }
 
   private async connectToSignalR(): Promise<void> {
-    console.log(this._jwt.getToken())
     this.hubConnection = new HubConnectionBuilder()
       .withUrl(`${this._env.apiUrl}/socket`,  { accessTokenFactory: () => this._jwt.getToken() })
-      .configureLogging(LogLevel.Warning)
+      .configureLogging(LogLevel.Error)
       .withAutomaticReconnect()
       .build();
 
-    this.hubConnection.onclose(() => {
-      console.log('closing connection')
-    });
+    this.hubConnection.onclose(_ => console.log('closing connection'));
 
     await this.hubConnection.start();
 
     this.sid = await this.hubConnection.invoke('GetStratisId');
 
-    console.log(this.hubConnection.connectionId);
-
-    this.hubConnection.on('OnAuthenticated', (token: string) => {
-      console.log('onAuthenticated: ' + token);
+    this.hubConnection.on('OnAuthenticated', async (token: string) => {
+      await this.stopHubConnection();
       this._context.setToken(token);
     });
   }
 
   private async stopHubConnection(): Promise<void> {
-    if (this.hubConnection && this.hubConnection.connectionId) {
+    if (this.hubConnection) {
       await this.hubConnection.stop();
       this.hubConnection = null;
     }

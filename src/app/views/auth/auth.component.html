@@ -5,13 +5,9 @@
 
       <h2>Connect</h2>
 
-      <div class="authenticate" *ngIf="sid || publicKey.value">
-        <opdex-qr-code [data]="sid || publicKey.value"></opdex-qr-code>
+      <opdex-qr-code [data]="sid"></opdex-qr-code>
 
-
-      </div>
-
-      <form [formGroup]="form" name="auth-form" id="auth-form" (submit)="submit()" *ngIf="isDevnet">
+      <form [formGroup]="form" name="auth-form" id="auth-form" (submit)="submitDevnetAuth()" *ngIf="isDevnet">
         <mat-form-field floatLabel="always">
           <mat-label>Public Key</mat-label>
 
@@ -20,7 +16,7 @@
           <input matInput aria-label="Public Key" [matAutocomplete]="auto" [formControl]="publicKey" type="text">
 
           <mat-autocomplete #auto="matAutocomplete">
-            <mat-option *ngFor="let key of publicKeys$ | async" [value]="key">
+            <mat-option *ngFor="let key of devnetPublicKeys$ | async" [value]="key">
               <div class="flex-row-center-between">
                 <small class="overflow-ellipsis" style="font-size: 15px;">{{key}}</small>
                 <button mat-icon-button class="tiny" (click)="deleteDevnetPublicKey(key)"><mat-icon class="mine">{{icons.delete}}</mat-icon></button>

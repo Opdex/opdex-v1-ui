@@ -24,7 +24,7 @@
     "@angular/router": "^12.2.8",
     "@angular/service-worker": "^12.2.8",
     "@auth0/angular-jwt": "^5.0.2",
-    "@microsoft/signalr": "^5.0.10",
+    "@microsoft/signalr": "^6.0.0",
     "angular-resize-event": "^2.1.0",
     "bootstrap-4-grid": "^3.4.0",
     "lightweight-charts": "^3.6.1",
