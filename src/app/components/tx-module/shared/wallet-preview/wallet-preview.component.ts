@@ -82,7 +82,7 @@ export class WalletPreviewComponent implements OnDestroy {
 
   private getTokenBalance(walletAddress: string, tokenAddress: string): Observable<AddressPosition> {
     const combo = [
-      this._tokenService.getToken(tokenAddress),
+      this._tokenService.getMarketToken(tokenAddress),
       this._walletService.getBalance(walletAddress, tokenAddress).pipe(catchError(_ => of({ balance: '0' })))
     ];
 
@@ -122,7 +122,7 @@ export class WalletPreviewComponent implements OnDestroy {
     return combineLatest(combo)
       .pipe(
         switchMap(([miningPool, result]: [IMiningPool, IAddressMining]) => {
-          return this._tokenService.getToken(miningPool.liquidityPool)
+          return this._tokenService.getMarketToken(miningPool.liquidityPool)
             .pipe(map(token => {
               const amount = new FixedDecimal(result.amount, token.decimals);
               return new AddressPosition(walletAddress, token, 'Mining', amount);

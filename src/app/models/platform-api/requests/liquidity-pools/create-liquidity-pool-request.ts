@@ -13,5 +13,6 @@ export class CreateLiquidityPoolRequest implements ICreateLiquidityPoolRequest {
     if(!request.token) this.isValid = false;
 
     this.token = request.token;
+    this.market = request.market;
   }
 }

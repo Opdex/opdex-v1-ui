@@ -16,10 +16,14 @@ export class TokensService extends CacheService {
     super(_injector);
   }
 
-  getToken(address: string, cacheOnly?: boolean): Observable<IToken | IMarketToken> {
+  getToken(address: string, cacheOnly?: boolean): Observable<IToken> {
+    return this.getItem(`token-${address}`, this._platformApi.getToken(address), cacheOnly)
+  }
+
+  getMarketToken(address: string, cacheOnly?: boolean): Observable<IToken | IMarketToken> {
     return address === 'CRS'
-      ? this.getItem(address, this._platformApi.getToken(address), cacheOnly)
-      : this.getItem(address, this._platformApi.getMarketToken(address), cacheOnly);
+      ? this.getToken(address, cacheOnly)
+      : this.getItem(`market-token-${address}`, this._platformApi.getMarketToken(address), cacheOnly);
   }
 
   getTokens(request: TokensFilter): Observable<ITokensResponse> {

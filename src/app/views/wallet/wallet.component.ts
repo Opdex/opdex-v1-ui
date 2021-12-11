@@ -70,7 +70,7 @@ export class WalletComponent implements OnInit {
     this._walletsService.getBalance(this.wallet.wallet, 'CRS')
       .pipe(
         tap(crsBalance => this.crsBalance = crsBalance),
-        switchMap(crsBalance => this._tokensService.getToken(crsBalance.token)),
+        switchMap(crsBalance => this._tokensService.getMarketToken(crsBalance.token)),
         tap((token: IToken) => {
           const costFixed = new FixedDecimal(token.summary.priceUsd.toString(), 8);
           const crsBalanceFixed = new FixedDecimal(this.crsBalance.balance, 8);
@@ -169,7 +169,7 @@ export class WalletComponent implements OnInit {
 
           response.results.forEach(balance => {
             const tokenDetails$: Observable<IToken> =
-              this._tokensService.getToken(balance.token)
+              this._tokensService.getMarketToken(balance.token)
                 .pipe(
                   take(1),
                   map(token => {

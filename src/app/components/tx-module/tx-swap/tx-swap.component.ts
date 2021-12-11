@@ -321,7 +321,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   private refreshToken(address: string): void {
     if (address === null || address === undefined) return;
 
-    this._tokensService.getToken(address)
+    this._tokensService.getMarketToken(address)
       .pipe(
         tap(token => {
           if (token.address === this.tokenIn?.address) this.tokenIn = token as IMarketToken;
