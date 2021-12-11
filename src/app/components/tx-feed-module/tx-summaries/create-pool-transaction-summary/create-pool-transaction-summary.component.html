@@ -2,6 +2,10 @@
   <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.name}}</a>
 </ng-container>
 
+<ng-container *ngIf="crs && src && !error">
+  {{src.symbol}}-{{crs.symbol}}
+</ng-container>
+
 <div *ngIf="error" class="flex-row-center">
   {{error}}
 </div>

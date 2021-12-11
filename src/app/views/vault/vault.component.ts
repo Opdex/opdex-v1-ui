@@ -36,7 +36,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       this._blocksService.getLatestBlock$().pipe(switchMap(_ => this._vaultsService.getVault()
         .pipe(
           tap(vault => this.vault = vault),
-          switchMap(() => this._tokensService.getToken(this.vault.lockedToken?.address || this.vault.lockedToken)),
+          switchMap(() => this._tokensService.getMarketToken(this.vault.lockedToken?.address || this.vault.lockedToken)),
           tap(token => this.vault.lockedToken = token),
           tap(_ => {
             this.statCards = VaultStatCardsLookup.getStatCards(this.vault);

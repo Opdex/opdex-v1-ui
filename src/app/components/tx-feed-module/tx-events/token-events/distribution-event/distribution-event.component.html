@@ -2,7 +2,7 @@
   Distributed
   <strong>{{event.miningGovernanceAmount | shortNumber}} </strong>
   <a class="no-decoration" routerLink="/tokens/{{token.address}}">{{token.symbol}}</a> to the
-  <a class="no-decoration" routerLink="/governance">governance</a> contract<ng-container *ngIf="event.vaultAmount == '0.00000000'; else vaultDetails">.</ng-container>
+  <a class="no-decoration" routerLink="/mining-governance">governance</a> contract<ng-container *ngIf="event.vaultAmount == '0.00000000'; else vaultDetails">.</ng-container>
 
   <ng-template #vaultDetails>
     and

@@ -88,7 +88,7 @@ export class TokenComponent implements OnInit {
   }
 
   private getToken(): Observable<any> {
-    return this._tokensService.getToken(this.tokenAddress)
+    return this._tokensService.getMarketToken(this.tokenAddress)
       .pipe(
         catchError(_ => of(null)),
         tap(token => {
