@@ -1,14 +1,18 @@
-<ng-container *ngIf="qr">
-  <div class="flex-row-center-center mt-3 mb-3">
-    <div class="qr-code-wrapper" [cdkCopyToClipboard]="qr" (cdkCopyToClipboardCopied)="copyHandler()">
+<div class="flex-row-center-center mt-3 mb-3" *ngIf="qr; else loading">
+  <div class="qr-code-wrapper" [cdkCopyToClipboard]="qr" (cdkCopyToClipboardCopied)="copyHandler()">
 
-      <qr-code [value]="qr" size="250" errorCorrectionLevel="M" centerImageSrc="/assets/favicons/favicon-72x72.png" centerImageSize="40" [margin]="2"></qr-code>
+    <qr-code [value]="qr" size="250" errorCorrectionLevel="M" centerImageSrc="/assets/favicons/favicon-72x72.png" centerImageSize="40" [margin]="2"></qr-code>
 
-      <mat-icon>{{copied ? icons.check : icons.copy}}</mat-icon>
-    </div>
+    <mat-icon>{{copied ? icons.check : icons.copy}}</mat-icon>
   </div>
+</div>
 
-  <div class="mb-3 flex-row-center-center">
-    <small class="light d-flex"><opdex-help-button [info]="helpInfo" class="mr-1"></opdex-help-button> Help</small>
+<ng-template #loading>
+  <div class="flex-row-center-center">
+    <div class="skeleton-bg mt-3 mb-3" style="width: 250px; height: 250px;"></div>
   </div>
-</ng-container>
+</ng-template>
+
+<div class="mb-3 flex-row-center-center" *ngIf="helpInfo">
+  <small class="light d-flex"><opdex-help-button [info]="helpInfo" class="mr-1"></opdex-help-button> Help</small>
+</div>

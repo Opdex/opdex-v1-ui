@@ -51,6 +51,7 @@ import { HistoryFilter } from '@sharedModels/platform-api/requests/history-filte
 import { IMarketHistoryResponse } from '@sharedModels/platform-api/responses/markets/market-history-response.interface';
 import { ILiquidityPoolSnapshotHistoryResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-snapshots-responses.interface';
 import { IProvideAmountInResponse } from '@sharedModels/platform-api/responses/liquidity-pools/provide-amount-in-response.interface';
+import { IStratisSignatureAuthRequest } from '@sharedModels/platform-api/requests/auth/stratis-signature-auth-request.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -80,6 +81,14 @@ export class PlatformApiService extends RestApiService {
     if (wallet) walletParam = `${walletParam}${wallet}`;
 
     return this.post(`${this.api}/auth/authorize${walletParam}`, {}, { responseType: 'text' });
+  }
+
+  public authCallback(payload: IStratisSignatureAuthRequest): Observable<void> {
+    return this.post(`${this.api}/auth`, payload);
+  }
+
+  public signMessage(payload: IStratisSignatureAuthRequest): Observable<void> {
+    return this.post(`${this.api}/auth/sign-message`, payload);
   }
 
   ////////////////////////////

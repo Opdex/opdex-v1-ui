@@ -19,7 +19,7 @@ export class QrCodeComponent implements OnChanges {
 
   ngOnChanges() {
     // Make sure the data is safe for QR codes
-    this.qr = JSON.stringify(this.data);
+    this.qr = typeof this.data === 'string' ? this.data : JSON.stringify(this.data);
   }
 
   copyHandler() {
