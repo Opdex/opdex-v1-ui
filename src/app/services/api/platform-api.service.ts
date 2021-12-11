@@ -258,6 +258,66 @@ export class PlatformApiService extends RestApiService {
   }
 
   ////////////////////////////
+  // Vault Governances
+  ////////////////////////////
+
+  public getVaultGovernance(address: string): Observable<any> {
+    return this.get<any>(`${this.api}/vault-governances/${address}`);
+  }
+
+  public redeemVaultCertificate(vault: string, payload: any): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/certificates/redeem`, payload);
+  }
+
+  public getVaultProposal(address: string, proposalId: number): Observable<any> {
+    return this.get<any>(`${this.api}/vault-governances/${address}/proposals/${proposalId}`);
+  }
+
+  public createCertificateVaultProposal(vault: string, payload: any): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/create-certificate`, payload);
+  }
+
+  public revokeCertificateVaultProposal(vault: string, payload: any): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/revoke-certificate`, payload);
+  }
+
+  public minimumPledgeVaultProposal(vault: string, payload: any): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/minimum-pledge`, payload);
+  }
+
+  public minimumVoteVaultProposal(vault: string, payload: any): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/minimum-vote`, payload);
+  }
+
+  public completeVaultProposal(vault: string, proposalId: number, payload: any): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/${proposalId}/complete`, payload);
+  }
+
+  public getVaultProposalPledge(address: string, proposalId: number, pledger: string): Observable<any> {
+    return this.get<any>(`${this.api}/vault-governances/${address}/proposals/${proposalId}/pledges/${pledger}`);
+  }
+
+  public pledgeToVaultProposal(vault: string, proposalId: number, payload: any): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/${proposalId}/pledges`, payload);
+  }
+
+  public withdrawVaultProposalPledge(vault: string, proposalId: number, payload: any): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/${proposalId}/pledges/withdraw`, payload);
+  }
+
+  public getVaultProposalVote(address: string, proposalId: number, voter: string): Observable<any> {
+    return this.get<any>(`${this.api}/vault-governances/${address}/proposals/${proposalId}/votes/${voter}`);
+  }
+
+  public voteOnVaultProposal(vault: string, proposalId: number, payload: any): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/${proposalId}/votes`, payload);
+  }
+
+  public withdrawVaultProposalVote(vault: string, proposalId: number, payload: any): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/${proposalId}/votes/withdraw`, payload);
+  }
+
+  ////////////////////////////
   // Markets
   ////////////////////////////
 

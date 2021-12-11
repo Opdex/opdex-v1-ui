@@ -43,7 +43,7 @@
         </a>
       </li>
       <li>
-        <a mat-button (click)="emitRouteChange('/vault')" routerLink="/vault" routerLinkActive="active">
+        <a mat-button (click)="emitRouteChange(usesVaultGovernance ? '/vault-governance' : '/vault')" routerLink="{{usesVaultGovernance ? '/vault-governance' : '/vault'}}" routerLinkActive="active">
           <mat-icon>{{icons.vault}}</mat-icon>
           <span class="secondary">Vault</span>
         </a>

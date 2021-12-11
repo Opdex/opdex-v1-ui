@@ -20,8 +20,12 @@ export class EnvironmentsService {
     return this._env.routerAddress;
   }
 
-  public get governanceAddress(): string {
-    return this._env.governanceAddress;
+  public get miningGovernanceAddress(): string {
+    return this._env.miningGovernanceAddress;
+  }
+
+  public get vaultGovernanceAddress(): string {
+    return this._env.vaultGovernanceAddress;
   }
 
   public get vaultAddress(): string {

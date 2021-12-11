@@ -59,6 +59,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NotificationsModule } from '@sharedComponents/notifications-module/notifications.module';
 import { TradeComponent } from './views/trade/trade.component';
+import { VaultGovernanceComponent } from './views/vault-governance/vault-governance.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { TradeComponent } from './views/trade/trade.component';
     MiningGovernanceComponent,
     VaultComponent,
     AuthComponent,
-    TradeComponent
+    TradeComponent,
+    VaultGovernanceComponent
   ],
   imports: [
     BrowserModule,
