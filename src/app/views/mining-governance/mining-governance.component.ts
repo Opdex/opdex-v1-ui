@@ -62,7 +62,7 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
           return this._miningGovernanceService.getMiningGovernance(this._env.governanceAddress)
             .pipe(
               tap((rsp: IMiningGovernance) => this.miningGovernance = new MiningGovernance(rsp)),
-              switchMap(governance => this._tokenService.getToken(governance.minedToken)),
+              switchMap(governance => this._tokenService.getMarketToken(governance.minedToken)),
               tap(minedToken => this.miningGovernance.setMinedToken(minedToken)));
         })).subscribe();
 
