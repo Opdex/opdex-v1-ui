@@ -1,6 +1,6 @@
 import { ITransactionEvent } from "../transaction-event.interface";
 
 export interface ICompleteVaultProposalEvent extends ITransactionEvent {
-  proposalId: string;
+  proposalId: number;
   approved: boolean;
 }

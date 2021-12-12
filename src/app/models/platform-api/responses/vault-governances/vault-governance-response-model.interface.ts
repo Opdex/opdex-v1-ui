@@ -5,5 +5,5 @@ export interface IVaultGovernanceResponseModel {
   tokensProposed: string;
   totalPledgeMinimum: string;
   totalVoteMinimum: string;
-  vestingDuration: string;
+  vestingDuration: number;
 }

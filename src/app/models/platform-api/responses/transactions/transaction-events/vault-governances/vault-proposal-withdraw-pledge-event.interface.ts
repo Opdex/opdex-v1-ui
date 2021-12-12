@@ -1,7 +1,7 @@
 import { ITransactionEvent } from "../transaction-event.interface";
 
 export interface IVaultProposalWithdrawPledgeEvent extends ITransactionEvent {
-  proposalId: string;
+  proposalId: number;
   voter: string;
   withdrawAmount: string;
   pledgerAmount: string;
