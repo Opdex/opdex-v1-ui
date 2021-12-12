@@ -42,8 +42,14 @@
           <span class="secondary">Mining</span>
         </a>
       </li>
-      <li>
+      <li *ngIf="usesVault">
         <a mat-button (click)="emitRouteChange('/vault')" routerLink="/vault" routerLinkActive="active">
+          <mat-icon>{{icons.vault}}</mat-icon>
+          <span class="secondary">Vault</span>
+        </a>
+      </li>
+      <li *ngIf="usesVaultGovernance">
+        <a mat-button (click)="emitRouteChange('/vault-governance')" routerLink="/vault-governance" routerLinkActive="active">
           <mat-icon>{{icons.vault}}</mat-icon>
           <span class="secondary">Vault</span>
         </a>

@@ -1,3 +1,4 @@
+import { VaultGovernanceComponent } from './views/vault-governance/vault-governance.component';
 import { TradeComponent } from './views/trade/trade.component';
 import { AuthComponent } from './views/auth/auth.component';
 import { VaultComponent } from './views/vault/vault.component';
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'wallet', component: WalletComponent, data: { animation: 'WalletView', title: 'Wallet Summary'} },
   { path: 'governance', redirectTo: '/mining-governance' }, // Redirect for a while, twitter feed recently referenced this URL as of 11/25/21
   { path: 'mining-governance', component: MiningGovernanceComponent, data: { animation: 'MiningGovernanceView', title: 'Mining Governance'} },
+  { path: 'vault-governance', component: VaultGovernanceComponent, data: { animation: 'VaultGovernanceView', title: 'Vault Governance'} },
   { path: 'vault', component: VaultComponent, data: { animation: 'VaultView', title: 'Vault'} },
   { path: 'auth', component: AuthComponent, data: { animation: 'AuthView', title: 'Connect'} },
   { path: 'trade', component: TradeComponent, data: { animation: 'TradeView', title: 'Trade'} },

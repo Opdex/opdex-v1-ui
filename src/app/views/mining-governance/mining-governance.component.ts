@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
 import { IMiningGovernance } from '@sharedModels/platform-api/responses/mining-governances/mining-governance.interface';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { MiningGovernance } from '@sharedModels/mining-governance';
-import { IRewardMiningPoolsRequest } from '@sharedModels/platform-api/requests/governances/reward-mining-pools-request';
+import { IRewardMiningPoolsRequest } from '@sharedModels/platform-api/requests/mining-governances/reward-mining-pools-request';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
@@ -59,7 +59,7 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
     this.miningGovernance$ = this._blocks.getLatestBlock$()
       .pipe(
         switchMap(_ => {
-          return this._miningGovernanceService.getMiningGovernance(this._env.governanceAddress)
+          return this._miningGovernanceService.getMiningGovernance(this._env.miningGovernanceAddress)
             .pipe(
               tap((rsp: IMiningGovernance) => this.miningGovernance = new MiningGovernance(rsp)),
               switchMap(governance => this._tokenService.getMarketToken(governance.minedToken)),

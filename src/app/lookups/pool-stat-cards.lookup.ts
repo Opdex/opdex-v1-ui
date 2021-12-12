@@ -6,7 +6,7 @@ export class PoolStatCardsLookup {
     return [
       {
         title: 'Liquidity',
-        value: pool?.summary?.reserves?.usd?.toString(),
+        value: pool?.summary?.reserves?.usd?.toFixed(8),
         prefix: '$',
         change: pool?.summary?.reserves?.dailyUsdChangePercent,
         show: true,
@@ -32,7 +32,7 @@ export class PoolStatCardsLookup {
       },
       {
         title: 'Volume',
-        value: pool?.summary?.volume?.dailyUsd?.toString(),
+        value: pool?.summary?.volume?.dailyUsd?.toFixed(8),
         prefix: '$',
         daily: true,
         show: true,
@@ -45,7 +45,7 @@ export class PoolStatCardsLookup {
       },
       {
         title: 'Rewards',
-        value: pool?.summary?.rewards?.totalDailyUsd?.toString(),
+        value: pool?.summary?.rewards?.totalDailyUsd?.toFixed(8),
         daily: true,
         prefix: '$',
         show: true,

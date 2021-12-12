@@ -34,7 +34,7 @@ import { ICollectStakingRewardsRequest } from '@sharedModels/platform-api/reques
 import { IAddLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/add-liquidity-request';
 import { IRemoveLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/remove-liquidity-request';
 import { IAddLiquidityAmountInQuoteRequest } from '@sharedModels/platform-api/requests/quotes/add-liquidity-amount-in-quote-request';
-import { IRewardMiningPoolsRequest } from '@sharedModels/platform-api/requests/governances/reward-mining-pools-request';
+import { IRewardMiningPoolsRequest } from '@sharedModels/platform-api/requests/mining-governances/reward-mining-pools-request';
 import { IQuoteReplayRequest } from '@sharedModels/platform-api/requests/transactions/quote-replay-request';
 import { ITransactionBroadcastNotificationRequest } from '@sharedModels/platform-api/requests/transactions/transaction-broadcast-notification-request';
 import { ISwapRequest } from '@sharedModels/platform-api/requests/tokens/swap-request';
@@ -52,6 +52,18 @@ import { IMarketHistoryResponse } from '@sharedModels/platform-api/responses/mar
 import { ILiquidityPoolSnapshotHistoryResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-snapshots-responses.interface';
 import { IProvideAmountInResponse } from '@sharedModels/platform-api/responses/liquidity-pools/provide-amount-in-response.interface';
 import { IStratisSignatureAuthRequest } from '@sharedModels/platform-api/requests/auth/stratis-signature-auth-request.interface';
+import { IMinimumPledgeVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/minimum-plege-vault-proposal-quote-request.interface';
+import { IMinimumVoteVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/minimum-vote-vault-proposal-quote-request.interface';
+import { IVaultProposalWithdrawPledgeQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-widthraw-pledge-quote-request.interface';
+import { IVaultProposalWithdrawVoteQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-widthraw-vote-quote-request.interface';
+import { IVaultProposalVoteQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-vote-quote-request.interface';
+import { IVaultProposalPledgeQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-pledge-quote-request.interface';
+import { IRevokeCertificateVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/revoke-certificate-vault-proposal-quote-request.interface';
+import { ICreateCertificateVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/create-certificate-vault-proposal-quote-request.interface';
+import { IVaultGovernanceResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-governance-response-model.interface';
+import { IVaultProposalResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-response-model.interface';
+import { IVaultProposalPledgeResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-pledge-response-model.interface';
+import { IVaultProposalVoteResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-vote-response-model.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -255,6 +267,66 @@ export class PlatformApiService extends RestApiService {
   public getVaultCertificates(address: string, limit?: number, cursor?: string): Observable<IVaultCertificates> {
     let query = cursor ? `?cursor=${cursor}` : `?limit=${limit}&direction=ASC`;
     return this.get<IVaultCertificates>(`${this.api}/vaults/${address}/certificates${query}`);
+  }
+
+  ////////////////////////////
+  // Vault Governances
+  ////////////////////////////
+
+  public getVaultGovernance(address: string): Observable<IVaultGovernanceResponseModel> {
+    return this.get<IVaultGovernanceResponseModel>(`${this.api}/vault-governances/${address}`);
+  }
+
+  public redeemVaultCertificate(vault: string): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/certificates/redeem`, {});
+  }
+
+  public getVaultProposal(address: string, proposalId: number): Observable<IVaultProposalResponseModel> {
+    return this.get<IVaultProposalResponseModel>(`${this.api}/vault-governances/${address}/proposals/${proposalId}`);
+  }
+
+  public createCertificateVaultProposal(vault: string, payload: ICreateCertificateVaultProposalQuoteRequest): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/create-certificate`, payload);
+  }
+
+  public revokeCertificateVaultProposal(vault: string, payload: IRevokeCertificateVaultProposalQuoteRequest): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/revoke-certificate`, payload);
+  }
+
+  public minimumPledgeVaultProposal(vault: string, payload: IMinimumPledgeVaultProposalQuoteRequest): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/minimum-pledge`, payload);
+  }
+
+  public minimumVoteVaultProposal(vault: string, payload: IMinimumVoteVaultProposalQuoteRequest): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/minimum-vote`, payload);
+  }
+
+  public completeVaultProposal(vault: string, proposalId: number): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/${proposalId}/complete`, {});
+  }
+
+  public getVaultProposalPledge(address: string, proposalId: number, pledger: string): Observable<IVaultProposalPledgeResponseModel> {
+    return this.get<IVaultProposalPledgeResponseModel>(`${this.api}/vault-governances/${address}/proposals/${proposalId}/pledges/${pledger}`);
+  }
+
+  public pledgeToVaultProposal(vault: string, proposalId: number, payload: IVaultProposalPledgeQuoteRequest): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/${proposalId}/pledges`, payload);
+  }
+
+  public withdrawVaultProposalPledge(vault: string, proposalId: number, payload: IVaultProposalWithdrawPledgeQuoteRequest): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/${proposalId}/pledges/withdraw`, payload);
+  }
+
+  public getVaultProposalVote(address: string, proposalId: number, voter: string): Observable<IVaultProposalVoteResponseModel> {
+    return this.get<IVaultProposalVoteResponseModel>(`${this.api}/vault-governances/${address}/proposals/${proposalId}/votes/${voter}`);
+  }
+
+  public voteOnVaultProposal(vault: string, proposalId: number, payload: IVaultProposalVoteQuoteRequest): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/${proposalId}/votes`, payload);
+  }
+
+  public withdrawVaultProposalVote(vault: string, proposalId: number, payload: IVaultProposalWithdrawVoteQuoteRequest): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/${proposalId}/votes/withdraw`, payload);
   }
 
   ////////////////////////////

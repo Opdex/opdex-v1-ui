@@ -1,6 +1,6 @@
-import { EnvironmentsService } from './../../../services/utility/environments.service';
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { Router } from '@angular/router';
-import { PlatformApiService } from './../../../services/api/platform-api.service';
+import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { TransactionsService } from '@sharedServices/platform/transactions.service';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { ThemeService } from '@sharedServices/utility/theme.service';
@@ -10,7 +10,6 @@ import { Observable, Subscription } from 'rxjs';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
 import { Icons } from 'src/app/enums/icons';
-import { environment } from '@environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { BugReportModalComponent } from '@sharedComponents/modals-module/bug-report-modal/bug-report-modal.component';
 import { take, tap } from 'rxjs/operators';
@@ -33,6 +32,8 @@ export class SideNavComponent implements OnDestroy {
   network: string;
   subscription = new Subscription();
   pendingTransactions: string[] = [];
+  usesVaultGovernance: boolean;
+  usesVault: boolean;
 
   constructor(
     public dialog: MatDialog,
@@ -49,6 +50,8 @@ export class SideNavComponent implements OnDestroy {
     this.latestSyncedBlock$ = this._blocksService.getLatestBlock$();
     this.network = this._env.network;
     this.subscription.add(this._transactionsService.getBroadcastedTransactions$().subscribe(txs => this.pendingTransactions = txs));
+    this.usesVaultGovernance = this._env.vaultGovernanceAddress?.length > 0;
+    this.usesVault = this._env.vaultAddress?.length > 0;
   }
 
   toggleTheme() {
