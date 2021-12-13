@@ -41,8 +41,8 @@ import { ISwapRequest } from '@sharedModels/platform-api/requests/tokens/swap-re
 import { IAddTokenRequest } from '@sharedModels/platform-api/requests/tokens/add-token-request';
 import { ISwapAmountOutQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-out-quote-response.interface';
 import { ISwapAmountInQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-in-quote-response.interface';
-import { SwapAmountInQuoteRequest } from '@sharedModels/platform-api/requests/tokens/swap-amount-in-quote-request';
-import { SwapAmountOutQuoteRequest } from '@sharedModels/platform-api/requests/tokens/swap-amount-out-quote-request';
+import { ISwapAmountInQuoteRequest } from '@sharedModels/platform-api/requests/tokens/swap-amount-in-quote-request';
+import { ISwapAmountOutQuoteRequest } from '@sharedModels/platform-api/requests/tokens/swap-amount-out-quote-request';
 import { IMarketTokensResponse } from '@sharedModels/platform-api/responses/tokens/market-tokens-response.interface';
 import { ITokensResponse } from '@sharedModels/platform-api/responses/tokens/tokens-response.interface';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
@@ -131,11 +131,11 @@ export class PlatformApiService extends RestApiService {
     return this.post<ITransactionQuote>(`${this.api}/markets/${this.marketAddress}/tokens/${address}/swap`, payload);
   }
 
-  public swapAmountInQuote(tokenIn: string, payload: SwapAmountInQuoteRequest): Observable<ISwapAmountInQuoteResponse> {
+  public swapAmountInQuote(tokenIn: string, payload: ISwapAmountInQuoteRequest): Observable<ISwapAmountInQuoteResponse> {
     return this.post<ISwapAmountInQuoteResponse>(`${this.api}/markets/${this.marketAddress}/tokens/${tokenIn}/swap/amount-in`, payload);
   }
 
-  public swapAmountOutQuote(tokenOut: string, payload: SwapAmountOutQuoteRequest): Observable<ISwapAmountOutQuoteResponse> {
+  public swapAmountOutQuote(tokenOut: string, payload: ISwapAmountOutQuoteRequest): Observable<ISwapAmountOutQuoteResponse> {
     return this.post<ISwapAmountOutQuoteResponse>(`${this.api}/markets/${this.marketAddress}/tokens/${tokenOut}/swap/amount-out`, payload);
   }
 

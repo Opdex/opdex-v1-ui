@@ -1,26 +1,27 @@
+import { TokensService } from '@sharedServices/platform/tokens.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { OnChanges, Injector } from '@angular/core';
+import { Injector } from '@angular/core';
 import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { TxBase } from '../tx-base.component';
 import { Icons } from 'src/app/enums/icons';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
-import { take } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs/operators';
 import { DecimalStringRegex } from '@sharedLookups/regex';
-import { ApproveAllowanceRequest, IApproveAllowanceRequest } from '@sharedModels/platform-api/requests/tokens/approve-allowance-request';
+import { ApproveAllowanceRequest } from '@sharedModels/platform-api/requests/tokens/approve-allowance-request';
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 
 @Component({
   selector: 'opdex-tx-allowance',
   templateUrl: './tx-allowance.component.html',
   styleUrls: ['./tx-allowance.component.scss']
 })
-export class TxAllowanceComponent extends TxBase implements OnChanges {
+export class TxAllowanceComponent extends TxBase {
   @Input() data: any;
   icons = Icons;
   pool: ILiquidityPoolResponse;
   txHash: string;
-
   form: FormGroup;
 
   get token(): FormControl {
@@ -38,7 +39,8 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
   constructor(
     private _fb: FormBuilder,
     protected _injector: Injector,
-    private _platformApiService: PlatformApiService
+    private _platformApiService: PlatformApiService,
+    private _tokenService: TokensService
   ) {
     super(_injector);
 
@@ -49,33 +51,15 @@ export class TxAllowanceComponent extends TxBase implements OnChanges {
     });
   }
 
-  ngOnChanges() {
-    this.pool = this.data?.pool;
-
-    this.form.patchValue({
-      token: this.data?.token,
-      spender: this.data?.spender,
-      amount: this.data?.amount || ''
-    });
-  }
-
   submit() {
-    let amount = this.amount.value.toString().replace(/,/g, '');
-    if (!amount.includes('.')) amount = `${amount}.00`;
-
-    const payload: IApproveAllowanceRequest = new ApproveAllowanceRequest(
-      {
-        amount: amount,
-        spender: this.spender.value
-      }
-    )
-
-    if(payload.isValid){
-      this._platformApiService
-        .approveAllowanceQuote(this.token.value, payload)
-          .pipe(take(1))
-          .subscribe((quote: ITransactionQuote) => this.quote(quote));
-    }
+    this._tokenService.getToken(this.token.value)
+      .pipe(
+        switchMap(token => {
+          const request = new ApproveAllowanceRequest(new FixedDecimal(this.amount.value, token.decimals), this.spender.value);
+          return this._platformApiService.approveAllowanceQuote(this.token.value, request.payload);
+        }),
+        take(1))
+      .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }
 
   destroyContext$() {

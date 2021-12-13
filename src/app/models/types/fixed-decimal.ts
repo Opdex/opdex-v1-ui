@@ -40,8 +40,11 @@ export class FixedDecimal {
   }
 
   constructor(value: string, decimals: number) {
+    // Todo: Potentially throw
+    if (value === null || value === undefined) value = '0';
+
      // TS/JS suck, strings can still be interpreted as numbers
-    value = value.toString();
+    value = value.toString().replace(/,/g, '');
 
     this._originalValue = value;
     this._decimals = decimals;

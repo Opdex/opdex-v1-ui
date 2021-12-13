@@ -12,7 +12,7 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, of, Subscription } from 'rxjs';
 import { debounceTime, switchMap, tap, map, take, distinctUntilChanged, filter } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
-import { IStartStakingRequest } from '@sharedModels/platform-api/requests/liquidity-pools/start-staking-request';
+import { StartStakingRequest } from '@sharedModels/platform-api/requests/liquidity-pools/start-staking-request';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
 
 @Component({
@@ -91,15 +91,10 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
   }
 
   submit(): void {
-    let amount = this.amount.value.toString().replace(/,/g, '');
-    if (!amount.includes('.')) amount = `${amount}.00`;
-
-    const payload: IStartStakingRequest = {
-      amount: amount
-    }
+    const request = new StartStakingRequest(new FixedDecimal(this.amount.value, this.pool.summary.staking.token.decimals));
 
     this._platformApi
-      .startStakingQuote(this.pool.address, payload)
+      .startStakingQuote(this.pool.address, request.payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }

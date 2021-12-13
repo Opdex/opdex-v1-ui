@@ -1,3 +1,5 @@
+import { FixedDecimal } from "@sharedModels/types/fixed-decimal";
+
 export interface IAddLiquidityRequest {
   amountCrs: string;
   amountSrc: string;
@@ -5,28 +7,34 @@ export interface IAddLiquidityRequest {
   amountCrsMin: string;
   recipient: string;
   deadline: number;
-  isValid?: boolean;
 }
 
-export class AddLiquidityRequest implements IAddLiquidityRequest {
-  amountCrs: string;
-  amountSrc: string;
-  amountSrcMin: string;
-  amountCrsMin: string;
-  recipient: string;
-  deadline: number;
-  isValid?: boolean = true;
+export class AddLiquidityRequest {
+  private _amountCrs: FixedDecimal;
+  private _amountSrc: FixedDecimal;
+  private _amountSrcMin: FixedDecimal;
+  private _amountCrsMin: FixedDecimal;
+  private _recipient: string;
+  private _deadline: number;
 
-  constructor(request: IAddLiquidityRequest) {
-    if(!request.recipient) {
-      this.isValid = false;
+  public get payload(): IAddLiquidityRequest {
+    return {
+      amountCrs: this._amountCrs.formattedValue,
+      amountSrc: this._amountSrc.formattedValue,
+      amountSrcMin: this._amountSrcMin.formattedValue,
+      amountCrsMin: this._amountCrsMin.formattedValue,
+      recipient: this._recipient,
+      deadline: this._deadline,
     }
+  }
 
-    this.amountCrs = request.amountCrs;
-    this.amountSrc = request.amountSrc;
-    this.amountSrcMin = request.amountSrcMin;
-    this.amountCrsMin = request.amountCrsMin;
-    this.recipient = request.recipient;
-    this.deadline = request.deadline;
+  constructor(amountCrs: FixedDecimal, amountSrc: FixedDecimal, amountSrcMin: FixedDecimal,
+              amountCrsMin: FixedDecimal, recipient: string, deadline: number) {
+    this._amountCrs = amountCrs;
+    this._amountSrc = amountSrc;
+    this._amountSrcMin = amountSrcMin;
+    this._amountCrsMin = amountCrsMin;
+    this._recipient = recipient;
+    this._deadline = deadline;
   }
 }

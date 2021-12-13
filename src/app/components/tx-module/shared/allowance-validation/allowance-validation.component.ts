@@ -58,24 +58,23 @@ export class AllowanceValidationComponent implements OnChanges, OnDestroy {
     if (this.allowance.isApproved) this.waiting = false;
   }
 
-  approveAllowance(amount: string, spender: string, token: string) {
-    const payload = new ApproveAllowanceRequest({ amount: amount, spender: spender })
+  approveAllowance() {
+    if (!this.allowance) return;
 
-    if(payload.isValid) {
+    const request = new ApproveAllowanceRequest(this.allowance.requestToSpend, this.allowance.spender);
 
-      this._platformApi.approveAllowanceQuote(token, payload)
-        .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => {
-          this.waiting = true;
+    this._platformApi.approveAllowanceQuote(this.allowance.token.address, request.payload)
+      .pipe(take(1))
+      .subscribe((quote: ITransactionQuote) => {
+        this.waiting = true;
 
-          this._bottomSheet.open(ReviewQuoteComponent, { data: quote })
-            .afterDismissed()
-            .pipe(take(1))
-            .subscribe((txHash: string) => {
-              if (!txHash) this.waiting = false;
-            });
-        });
-    }
+        this._bottomSheet.open(ReviewQuoteComponent, { data: quote })
+          .afterDismissed()
+          .pipe(take(1))
+          .subscribe((txHash: string) => {
+            if (!txHash) this.waiting = false;
+          });
+      });
   }
 
   setIgnore(value: boolean) {
