@@ -9,9 +9,9 @@ import { TransactionView } from '@sharedModels/transaction-view';
 import { Icons } from 'src/app/enums/icons';
 import { debounceTime } from 'rxjs/operators';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
-import { CreateLiquidityPoolRequest, ICreateLiquidityPoolRequest } from '@sharedModels/platform-api/requests/liquidity-pools/create-liquidity-pool-request';
+import { CreateLiquidityPoolRequest } from '@sharedModels/platform-api/requests/liquidity-pools/create-liquidity-pool-request';
 import { TokensService } from '@sharedServices/platform/tokens.service';
-import { AddTokenRequest, IAddTokenRequest } from '@sharedModels/platform-api/requests/tokens/add-token-request';
+import { AddTokenRequest } from '@sharedModels/platform-api/requests/tokens/add-token-request';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 
@@ -70,28 +70,23 @@ export class TxCreatePoolComponent extends TxBase {
   }
 
   submit() {
-    const payload: ICreateLiquidityPoolRequest = new CreateLiquidityPoolRequest({
-      token: this.token.value,
-      market: this._env.marketAddress
-    });
+    const request = new CreateLiquidityPoolRequest(this.token.value, this._env.marketAddress);
 
-    if(payload.isValid && this.isTokenKnown){
-      this._platform
-        .createLiquidityPool(payload)
-          .pipe(take(1))
-          .subscribe((quote: ITransactionQuote) => this.quote(quote));
-    } else if (payload.isValid && !this.isTokenKnown) {
+    if (!this.isTokenKnown) {
       this.validateToken();
+      return;
     }
+
+    this._platform
+      .createLiquidityPool(request.payload)
+        .pipe(take(1))
+        .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }
 
   validateToken(): void{
-    const payload: IAddTokenRequest = new AddTokenRequest({
-      tokenAddress: this.token.value
-    });
+    const request = new AddTokenRequest(this.token.value);
 
-    if (payload.isValid) {
-      this._platform.addToken(payload)
+    this._platform.addToken(request.payload)
       .pipe(
         catchError(_ => of(null)),
         take(1))
@@ -104,7 +99,6 @@ export class TxCreatePoolComponent extends TxBase {
           this.validatedToken = token;
         }
       });
-    }
   }
 
   destroyContext$() {

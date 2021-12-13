@@ -1,16 +1,17 @@
 export interface ISkimRequest {
   recipient: string;
-  isValid?: boolean;
 }
 
-export class SkimRequest implements ISkimRequest{
-  recipient: string;
-  isValid?: boolean = true;
+export class SkimRequest {
+  private _recipient: string;
 
-  constructor(request: ISkimRequest){
-    if(!request.recipient)
-      this.isValid;
+  public get payload(): ISkimRequest {
+    return {
+      recipient: this._recipient
+    }
+  }
 
-    this.recipient = request.recipient;
+  constructor(recipient: string){
+    this._recipient = recipient;
   }
 }

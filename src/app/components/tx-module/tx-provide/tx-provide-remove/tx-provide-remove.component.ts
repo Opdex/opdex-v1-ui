@@ -14,7 +14,7 @@ import { Icons } from 'src/app/enums/icons';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { DecimalStringRegex } from '@sharedLookups/regex';
-import { IRemoveLiquidityRequest, RemoveLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/remove-liquidity-request';
+import { RemoveLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/remove-liquidity-request';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
 
@@ -105,26 +105,18 @@ export class TxProvideRemoveComponent extends TxBase {
   }
 
   submit(): void {
-    let liquidity = this.liquidity.value.toString().replace(/,/g, '');
-    if (!liquidity.includes('.')) liquidity = `${liquidity}.00`;
+    const request = new RemoveLiquidityRequest(
+      new FixedDecimal(this.liquidity.value, this.pool.token.lp.decimals),
+      new FixedDecimal(this.crsOutMin, this.pool.token.crs.decimals),
+      new FixedDecimal(this.srcOutMin, this.pool.token.src.decimals),
+      this.context.wallet,
+      this.calcDeadline(this.deadlineThreshold)
+    );
 
-    const payload: IRemoveLiquidityRequest = new RemoveLiquidityRequest({
-      liquidity: liquidity,
-      amountCrsMin: this.crsOutMin,
-      amountSrcMin: this.srcOutMin,
-      liquidityPool: this.pool.address,
-      recipient: this.context.wallet,
-      deadline: this.calcDeadline(this.deadlineThreshold)
-    });
-
-    if(payload.isValid){
-      this._platformApi
-        .removeLiquidityQuote(payload.liquidityPool, payload)
-          .pipe(take(1))
-          .subscribe((quote: ITransactionQuote) => {
-            this.quote(quote);
-          });
-    }
+    this._platformApi
+      .removeLiquidityQuote(this.pool.address, request.payload)
+        .pipe(take(1))
+        .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }
 
   calcTolerance(tolerance?: number) {

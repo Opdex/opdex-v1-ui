@@ -1,7 +1,7 @@
+import { CollectStakingRewardsRequest } from '@sharedModels/platform-api/requests/liquidity-pools/collect-staking-rewards-request';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { ICollectStakingRewardsRequest } from '@sharedModels/platform-api/requests/liquidity-pools/collect-staking-rewards-request';
 import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -38,12 +38,10 @@ export class TxStakeCollectComponent extends TxBase implements OnChanges {
   }
 
   submit(): void {
-    const payload: ICollectStakingRewardsRequest = {
-      liquidate: this.liquidate.value
-    };
+    const request = new CollectStakingRewardsRequest(this.liquidate.value);
 
     this._platformApi
-      .collectStakingRewardsQuote(this.pool.address, payload)
+      .collectStakingRewardsQuote(this.pool.address, request.payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }

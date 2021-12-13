@@ -1,18 +1,21 @@
 export interface ICreateLiquidityPoolRequest {
   token: string;
   market: string;
-  isValid?: boolean;
 }
 
-export class CreateLiquidityPoolRequest implements ICreateLiquidityPoolRequest {
-  token: string;
-  market: string;
-  isValid?: boolean = true;
+export class CreateLiquidityPoolRequest {
+  private _token: string;
+  private _market: string;
 
-  constructor(request: ICreateLiquidityPoolRequest) {
-    if(!request.token) this.isValid = false;
+  public get payload(): ICreateLiquidityPoolRequest {
+    return {
+      token: this._token,
+      market: this._market
+    }
+  }
 
-    this.token = request.token;
-    this.market = request.market;
+  constructor(token: string, market: string) {
+    this._token = token;
+    this._market = market;
   }
 }

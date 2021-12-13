@@ -12,7 +12,7 @@ import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-requi
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { DecimalStringRegex } from '@sharedLookups/regex';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
-import { IMiningQuote } from '@sharedModels/platform-api/requests/mining-pools/mining-quote';
+import { MiningQuote } from '@sharedModels/platform-api/requests/mining-pools/mining-quote';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 
 @Component({
@@ -91,15 +91,10 @@ export class TxMineStartComponent extends TxBase implements OnChanges {
   }
 
   submit(): void {
-    let amount = this.amount.value.toString().replace(/,/g, '');
-    if (!amount.includes('.')) amount = `${amount}.00`;
-
-    const payload: IMiningQuote = {
-      amount: amount
-    }
+    const request = new MiningQuote(new FixedDecimal(this.amount.value, this.pool.token.lp.decimals));
 
     this._platformApi
-      .startMiningQuote(this.pool.summary.miningPool.address, payload)
+      .startMiningQuote(this.pool.summary.miningPool.address, request.payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }

@@ -19,7 +19,7 @@ import { DecimalStringRegex } from '@sharedLookups/regex';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { TxBase } from '../tx-base.component';
 import { IMarketToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
-import { ISwapRequest, SwapRequest } from '@sharedModels/platform-api/requests/tokens/swap-request';
+import { SwapRequest } from '@sharedModels/platform-api/requests/tokens/swap-request';
 import { SwapAmountInQuoteRequest } from '@sharedModels/platform-api/requests/tokens/swap-amount-in-quote-request';
 import { SwapAmountOutQuoteRequest } from '@sharedModels/platform-api/requests/tokens/swap-amount-out-quote-request';
 import { ISwapAmountOutQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-out-quote-response.interface';
@@ -156,23 +156,21 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   }
 
   submit() {
-    const payload: ISwapRequest = new SwapRequest({
-      tokenOut: this.tokenOut.address,
-      tokenInAmount: this.tokenInAmount.value,
-      tokenOutAmount: this.tokenOutAmount.value,
-      tokenInExactAmount: this.tokenInExact,
-      recipient: this.context.wallet,
-      tokenInMaximumAmount: this.tokenInMax,
-      tokenOutMinimumAmount: this.tokenOutMin,
-      deadline: this.calcDeadline(this.deadlineThreshold)
-    });
+    const request = new SwapRequest(
+      this.tokenOut.address,
+      new FixedDecimal(this.tokenInAmount.value, this.tokenIn.decimals),
+      new FixedDecimal(this.tokenOutAmount.value, this.tokenOut.decimals),
+      new FixedDecimal(this.tokenInMax, this.tokenIn.decimals),
+      new FixedDecimal(this.tokenOutMin, this.tokenOut.decimals),
+      this.tokenInExact,
+      this.context.wallet,
+      this.calcDeadline(this.deadlineThreshold)
+    );
 
-    if(payload.isValid){
-      this._platformApi
-        .swapQuote(this.tokenIn.address, payload)
-          .pipe(take(1))
-          .subscribe((quote: ITransactionQuote) => this.quote(quote));
-    }
+    this._platformApi
+      .swapQuote(this.tokenIn.address, request.payload)
+        .pipe(take(1))
+        .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }
 
   switch() {
@@ -270,10 +268,10 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
       return of(false);
     }
 
-    const payload = new SwapAmountInQuoteRequest(this.tokenOut.address, amountOutFixed.formattedValue);
+    const request = new SwapAmountInQuoteRequest(this.tokenOut.address, amountOutFixed);
 
     return this._platformApi
-      .swapAmountInQuote(this.tokenIn.address, payload)
+      .swapAmountInQuote(this.tokenIn.address, request.payload)
       .pipe(
         catchError(() => of()),
         filter(quote => quote !== null && quote !== undefined),
@@ -293,9 +291,9 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
       return of(false);
     }
 
-    const payload = new SwapAmountOutQuoteRequest(this.tokenIn.address, amountInFixed.formattedValue);
+    const request = new SwapAmountOutQuoteRequest(this.tokenIn.address, amountInFixed);
 
-    return this._platformApi.swapAmountOutQuote(this.tokenOut.address, payload)
+    return this._platformApi.swapAmountOutQuote(this.tokenOut.address, request.payload)
       .pipe(
         catchError(() => of()),
         filter(quote => quote !== null && quote !== undefined),

@@ -1,19 +1,23 @@
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
+
 export interface ICollectMarketFeesQuoteRequest {
   token: string;
   amount: string;
-  isValid?: boolean;
 }
 
-export class CollectMarketFeesQuoteRequest implements ICollectMarketFeesQuoteRequest {
-  token: string;
-  amount: string;
-  isValid?: boolean = true;
+export class CollectMarketFeesQuoteRequest {
+  private _token: string;
+  private _amount: FixedDecimal;
 
-  constructor(request: ICollectMarketFeesQuoteRequest){
-    if (!request.amount || !request.token)
-      this.isValid = false;
+  public get payload(): ICollectMarketFeesQuoteRequest {
+    return {
+      token: this._token,
+      amount: this._amount.formattedValue
+    }
+  }
 
-    this.token = request.token;
-    this.amount = request.amount;
+  constructor(token: string, amount: FixedDecimal){
+    this._token = token;
+    this._amount = amount;
   }
 }

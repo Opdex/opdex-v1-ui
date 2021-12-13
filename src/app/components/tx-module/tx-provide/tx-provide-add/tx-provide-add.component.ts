@@ -17,7 +17,7 @@ import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-requi
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { MathService } from '@sharedServices/utility/math.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
-import { IAddLiquidityRequest, AddLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/add-liquidity-request';
+import { AddLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/add-liquidity-request';
 import { IAddLiquidityAmountInQuoteRequest } from '@sharedModels/platform-api/requests/quotes/add-liquidity-amount-in-quote-request';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
@@ -168,29 +168,19 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   }
 
   submit(): void {
-    let crsValue = this.amountCrs.value.toString().replace(/,/g, '');
-    if (!crsValue.includes('.')) crsValue = `${crsValue}.00`;
+    const request = new AddLiquidityRequest(
+      new FixedDecimal(this.amountCrs.value, this.pool.token.crs.decimals),
+      new FixedDecimal(this.amountSrc.value, this.pool.token.src.decimals),
+      new FixedDecimal(this.crsInMin, this.pool.token.crs.decimals),
+      new FixedDecimal(this.srcInMin, this.pool.token.src.decimals),
+      this.context.wallet,
+      this.calcDeadline(this.deadlineThreshold)
+    );
 
-    let srcValue = this.amountSrc.value.toString().replace(/,/g, '');
-    if (!srcValue.includes('.')) srcValue = `${srcValue}.00`;
-
-    const payload: IAddLiquidityRequest = new AddLiquidityRequest({
-      amountCrs: crsValue,
-      amountSrc: srcValue,
-      recipient: this.context.wallet,
-      amountCrsMin: this.crsInMin,
-      amountSrcMin: this.srcInMin,
-      deadline: this.calcDeadline(this.deadlineThreshold)
-    });
-
-    if(payload.isValid){
-      this._platformApi
-        .addLiquidityQuote(this.pool.address, payload)
-          .pipe(take(1))
-          .subscribe((quote: ITransactionQuote) => {
-            this.quote(quote);
-          });
-    }
+    this._platformApi
+      .addLiquidityQuote(this.pool.address, request.payload)
+        .pipe(take(1))
+        .subscribe((quote: ITransactionQuote) => this.quote(quote));
   }
 
   calcTolerance(tolerance?: number) {

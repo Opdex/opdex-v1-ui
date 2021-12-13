@@ -27,6 +27,6 @@
       <p *ngSwitchDefault class="mb-3">In order to stake {{allowance.requestToSpend.formattedValue}} {{allowance.token.symbol}}, the liquidity pool must have an approved allowance of at least that much.</p>
     </ng-container>
 
-    <button mat-stroked-button class="w-100" color="primary" (click)="approveAllowance(allowance.requestToSpend.formattedValue, allowance.spender, allowance.token.address)">Begin Approval</button>
+    <button mat-stroked-button class="w-100" color="primary" (click)="approveAllowance()">Begin Approval</button>
   </div>
 </ng-container>

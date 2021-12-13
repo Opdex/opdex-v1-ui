@@ -1,38 +1,48 @@
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
+
 export interface ISwapRequest {
-  tokenOut: string;
+  tokenOut: string,
   tokenInAmount: string;
   tokenOutAmount: string;
-  tokenInExactAmount: boolean;
   tokenInMaximumAmount: string;
   tokenOutMinimumAmount: string;
+  tokenInExactAmount: boolean;
   recipient: string;
   deadline: number;
-  isValid?: boolean;
 }
 
-export class SwapRequest implements ISwapRequest {
-  tokenOut: string;
-  tokenInAmount: string;
-  tokenOutAmount: string;
-  tokenInExactAmount: boolean;
-  tokenInMaximumAmount: string;
-  tokenOutMinimumAmount: string;
-  recipient: string;
-  deadline: number;
-  isValid?: boolean = true;
+export class SwapRequest {
+  private _tokenOut: string;
+  private _tokenInAmount: FixedDecimal;
+  private _tokenOutAmount: FixedDecimal;
+  private _tokenInMaximumAmount: FixedDecimal;
+  private _tokenOutMinimumAmount: FixedDecimal;
+  private _tokenInExactAmount: boolean;
+  private _recipient: string;
+  private _deadline: number;
 
-  constructor(request: ISwapRequest){
-    if (!request.tokenOut || !request.recipient) {
-      this.isValid = false;
+  public get payload(): ISwapRequest {
+    return {
+      tokenOut: this._tokenOut,
+      tokenInAmount: this._tokenInAmount.formattedValue,
+      tokenOutAmount: this._tokenOutAmount.formattedValue,
+      tokenInMaximumAmount: this._tokenInMaximumAmount.formattedValue,
+      tokenOutMinimumAmount: this._tokenOutMinimumAmount.formattedValue,
+      tokenInExactAmount: this._tokenInExactAmount,
+      recipient: this._recipient,
+      deadline: this._deadline
     }
+  }
 
-    this.tokenOut = request.tokenOut;
-    this.tokenInAmount = request.tokenInAmount;
-    this.tokenOutAmount = request.tokenOutAmount;
-    this.tokenInExactAmount = request.tokenInExactAmount;
-    this.tokenInMaximumAmount = request.tokenInMaximumAmount;
-    this.tokenOutMinimumAmount = request.tokenOutMinimumAmount;
-    this.recipient = request.recipient;
-    this.deadline = request.deadline;
+  constructor(tokenOut: string, tokenInAmount: FixedDecimal, tokenOutAmount: FixedDecimal, tokenInMaximumAmount: FixedDecimal,
+              tokenOutMinimumAmount: FixedDecimal, tokenInExactAmount: boolean, recipient: string, deadline: number) {
+    this._tokenOut = tokenOut;
+    this._tokenInAmount = tokenInAmount;
+    this._tokenOutAmount = tokenOutAmount;
+    this._tokenInExactAmount = tokenInExactAmount;
+    this._tokenInMaximumAmount = tokenInMaximumAmount;
+    this._tokenOutMinimumAmount = tokenOutMinimumAmount;
+    this._recipient = recipient;
+    this._deadline = deadline;
   }
 }

@@ -1,16 +1,17 @@
 export interface IAddTokenRequest {
   tokenAddress: string;
-  isValid?: boolean;
 }
 
-export class AddTokenRequest implements IAddTokenRequest {
-  tokenAddress: string;
-  isValid?: boolean = true;
+export class AddTokenRequest {
+  private _tokenAddress: string;
 
-  constructor(request: IAddTokenRequest) {
-    if(!request.tokenAddress)
-      this.isValid = true;
+  public get payload(): IAddTokenRequest {
+    return {
+      tokenAddress: this._tokenAddress
+    }
+  }
 
-    this.tokenAddress = request.tokenAddress;
+  constructor(tokenAddress: string) {
+    this._tokenAddress = tokenAddress;
   }
 }
