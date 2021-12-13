@@ -6,6 +6,7 @@ import { TransactionView } from '@sharedModels/transaction-view';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
 
 @Component({
@@ -21,6 +22,7 @@ export class WalletStakingPositionsTableComponent implements OnChanges {
   previous: string;
   next: string;
   icons = Icons;
+  iconSizes = IconSizes;
   loading = true;
 
   @Output() onPageChange: EventEmitter<string> = new EventEmitter();

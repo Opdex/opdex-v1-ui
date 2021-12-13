@@ -4,7 +4,6 @@ export interface ITokenGroup {
   crs: IToken;
   src: IMarketToken;
   lp: IMarketToken;
-  staking?: IMarketToken;
 }
 
 export interface ITokenSummary {

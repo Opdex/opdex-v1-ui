@@ -206,7 +206,7 @@ export class LineChartComponent implements OnChanges, OnInit {
       const data = this.chartData[this.chartData.length - 1]
       const value = data?.close !== undefined ? data.close : data.value;
 
-      this.value = value.toFixed(this.selectedChart.decimals);
+      this.value = typeof value === 'number' ? value.toFixed(this.selectedChart.decimals) : value;
     }
   }
 

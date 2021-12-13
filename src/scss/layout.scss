@@ -10,6 +10,30 @@
   padding: 20px 0px;
 }
 
+.scrollable-row {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-wrap: nowrap;
+  margin-left: -10px; // 10px bootstrap container
+  margin-right: -10px; // 10px bootstrap container
+
+  .scrollable-card {
+    min-width: 310px;
+    width: 310px;
+    padding-right: 20px;
+    flex: 0 0 auto;
+
+    &:first-of-type {
+      padding-left: 10px; // 10px bootstrap container
+    }
+
+    &:last-of-type {
+      padding-right: 10px; // 10px bootstrap container
+    }
+  }
+}
+
 
 ////////////////////////////////
 // Flex Row
@@ -126,14 +150,33 @@
 
 @media (min-width: map_get($grid-breakpoints, md)) {
   .standard-section {
-    padding: 50px 0px;
+    padding: 50px 30px;
   }
 
   .offset-section {
-    padding: 50px 0px;
+    padding: 50px 30px;
   }
 
   .header-section {
-    padding: 50px 0px;
+    padding: 50px 30px;
+  }
+
+  .scrollable-row {
+    margin-left: -40px; // 30px padding + 10px bootstrap container
+    margin-right: -40px; // 30px padding + 10px bootstrap container
+
+    .scrollable-card {
+      width: 100%;
+      max-width: 500px;
+      flex: 0 1 auto;
+
+      &:first-of-type {
+        margin-left: 40px; // 30px padding + 10px bootstrap container
+      }
+
+      &:last-of-type {
+        margin-right: 40px; // 30px padding + 10px bootstrap container
+      }
+    }
   }
 }

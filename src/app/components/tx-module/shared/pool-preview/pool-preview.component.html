@@ -83,7 +83,7 @@
       </div>
     </ng-container>
 
-    <ng-container *ngIf="pool.token?.staking && showStaking">
+    <ng-container *ngIf="pool.summary.staking?.token && showStaking">
       <div class="pool-details-section" >
         <div class="col flex-shrink flex-column justify-content-end">
           <button type="button" mat-icon-button color="primary" [ngClass]="iconSizes.tiny" class="d-block" (click)="stakingToggle.toggle()">

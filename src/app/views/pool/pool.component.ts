@@ -180,7 +180,7 @@ export class PoolComponent implements OnInit, OnDestroy {
             this._title.setTitle(`${this.pool.name} Liquidity Pool`);
             this.statCards = PoolStatCardsLookup.getStatCards(this.pool);
             this.chartOptions.map(o => {
-              if (o.category === 'Staking') o.suffix = pool.token?.staking?.symbol;
+              if (o.category === 'Staking') o.suffix = pool.summary.staking?.token?.symbol;
               return 0;
             });
           }

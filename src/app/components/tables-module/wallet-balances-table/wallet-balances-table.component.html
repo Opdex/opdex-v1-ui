@@ -6,20 +6,20 @@
           <th mat-header-cell *matHeaderCellDef> Token </th>
           <td mat-cell *matCellDef="let element" class="token-identity no-wrap">
             <div class="no-wrap flex-row-center">
-              <opdex-copy-button [tooltip]="element.address" [value]="element.address" [icon]="icons.link"></opdex-copy-button>
-              <a class="no-decoration b-400" href="javascript:void(0)" (click)="navigate(element.address)">{{element.symbol}}</a>
+              <opdex-copy-button [tooltip]="element.address" [value]="element.address" [icon]="icons.link" [size]="iconSizes.tiny"></opdex-copy-button>
+              <a class="no-decoration b-400 ml-2" href="javascript:void(0)" (click)="navigate(element.address)">{{element.symbol}}</a>
             </div>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>  </th>
+          <th mat-header-cell *matHeaderCellDef> Name </th>
           <td mat-cell *matCellDef="let element"> <span class="no-wrap">{{element.name}}</span> </td>
         </ng-container>
 
         <ng-container matColumnDef="balance">
           <th mat-header-cell *matHeaderCellDef> Balance </th>
-          <td mat-cell *matCellDef="let element"> <span class="b-400">{{element.balance | shortNumber}}</span> </td>
+          <td mat-cell *matCellDef="let element"> <span class="no-wrap">{{element.balance | formatNumber:element.decimals}}</span> </td>
         </ng-container>
 
         <ng-container matColumnDef="total">

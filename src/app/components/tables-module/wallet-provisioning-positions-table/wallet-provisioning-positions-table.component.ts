@@ -1,20 +1,20 @@
-import { MathService } from '@sharedServices/utility/math.service';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TransactionView } from '@sharedModels/transaction-view';
-import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
+import { MathService } from '@sharedServices/utility/math.service';
+import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { Icons } from 'src/app/enums/icons';
-import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
-  selector: 'opdex-wallet-balances-table',
-  templateUrl: './wallet-balances-table.component.html',
-  styleUrls: ['./wallet-balances-table.component.scss']
+  selector: 'opdex-wallet-provisioning-positions-table',
+  templateUrl: './wallet-provisioning-positions-table.component.html',
+  styleUrls: ['./wallet-provisioning-positions-table.component.scss']
 })
-export class WalletBalancesTableComponent implements OnChanges {
+export class WalletProvisioningPositionsTableComponent implements OnChanges {
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
   @Input() records: any;
@@ -31,7 +31,7 @@ export class WalletBalancesTableComponent implements OnChanges {
 
   constructor(private _router: Router, private _sidebar: SidenavService) {
     this.dataSource = new MatTableDataSource<any>();
-    this.displayedColumns = ['token', 'name', 'balance', 'total', 'actions'];
+    this.displayedColumns = ['pool', 'token', 'balance', 'total', 'actions'];
   }
 
   ngOnChanges() {
@@ -42,8 +42,8 @@ export class WalletBalancesTableComponent implements OnChanges {
 
     this.dataSource.data = this.records.balances.map(t => {
       return {
-        name: t.name,
-        symbol: t.symbol,
+        pool: t.name,
+        token: t.symbol,
         address: t.address,
         balance: t.balance.balance,
         decimals: t.decimals,

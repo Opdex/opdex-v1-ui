@@ -11,7 +11,7 @@ import { UserContextService } from '@sharedServices/utility/user-context.service
 import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, Observable, of } from 'rxjs';
-import { map, switchMap, take, tap } from 'rxjs/operators';
+import { map, switchMap, take, tap, catchError } from 'rxjs/operators';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IAddressStaking } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
@@ -28,6 +28,7 @@ import { CollapseAnimation } from '@sharedServices/animations/collapse';
 })
 export class WalletComponent implements OnInit {
   transactionsRequest: ITransactionsRequest;
+  walletProvisions: any;
   walletBalances: any;
   miningPositions: any;
   stakingPositions: any;
@@ -63,9 +64,10 @@ export class WalletComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getWalletBalances(10);
-    this.getMiningPositions(10);
-    this.getStakingPositions(10);
+    this.getWalletBalances(5);
+    this.getMiningPositions(5);
+    this.getStakingPositions(5);
+    this.getProvisionalPositions(5);
 
     this._walletsService.getBalance(this.wallet.wallet, 'CRS')
       .pipe(
@@ -109,6 +111,10 @@ export class WalletComponent implements OnInit {
 
   handleStakingPositionsPageChange(cursor: string) {
     this.getStakingPositions(null, cursor);
+  }
+
+  handleProvisionalPositionsPageChange(cursor: string) {
+    this.getProvisionalPositions(null, cursor);
   }
 
   private getMiningPositions(limit?: number, cursor?: string) {
@@ -171,6 +177,9 @@ export class WalletComponent implements OnInit {
             const tokenDetails$: Observable<IToken> =
               this._tokensService.getMarketToken(balance.token)
                 .pipe(
+                  // Fallback to tokens when necessary
+                  // Todo: Backend really should return average token prices
+                  catchError(_ => this._tokensService.getToken(balance.token)),
                   take(1),
                   map(token => {
                     token.balance = balance;
@@ -187,6 +196,38 @@ export class WalletComponent implements OnInit {
         }),
         take(1)
       ).subscribe(response => this.walletBalances = response);
+  }
+
+  private getProvisionalPositions(limit?: number, cursor?: string) {
+    this._walletsService.getWalletBalances(this.wallet.wallet, 'Provisional', limit, cursor)
+      .pipe(
+        switchMap(response => {
+          if (response.results.length === 0) return of(response);
+
+          const balances$: Observable<IToken>[] = [];
+
+          response.results.forEach(balance => {
+            const poolDetail$: Observable<IToken> =
+              this._liquidityPoolService.getLiquidityPool(balance.token)
+                .pipe(
+                  take(1),
+                  map(pool => {
+                    let token = pool.token.lp;
+                    token.name = pool.name
+                    token.balance = balance;
+                    return token;
+                  })
+                );
+
+            balances$.push(poolDetail$);
+          })
+
+          return forkJoin(balances$).pipe(map(balances => {
+            return { paging: response.paging, balances }
+          }));
+        }),
+        take(1)
+      ).subscribe(response => this.walletProvisions = response);
   }
 
   handleTxOption($event: TransactionView) {

@@ -1,0 +1,34 @@
+@import 'src/scss/colors';
+
+.provide {
+  background: $green-primary;
+  color: $dark-primary;
+  font-weight: 500;
+}
+
+.mine {
+  background: $red-primary;
+  color: $dark-primary;
+  font-weight: 500;
+}
+
+.stake {
+  background: $purple-primary;
+  color: $dark-primary;
+  font-weight: 500;
+}
+
+.swap {
+  background: $blue-primary;
+  color: $dark-primary;
+  font-weight: 500;
+}
+
+.token-identity {
+  max-width: 200px !important;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 150px !important;
+  padding-right: 30px;
+}

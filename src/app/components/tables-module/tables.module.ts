@@ -21,6 +21,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { WalletMiningPositionsTableComponent } from './wallet-mining-positions-table/wallet-mining-positions-table.component';
 import { WalletStakingPositionsTableComponent } from './wallet-staking-positions-table/wallet-staking-positions-table.component';
+import { WalletProvisioningPositionsTableComponent } from './wallet-provisioning-positions-table/wallet-provisioning-positions-table.component';
 import { SkeletonTableComponent } from './skeleton-table/skeleton-table.component';
 
 @NgModule({
@@ -31,6 +32,7 @@ import { SkeletonTableComponent } from './skeleton-table/skeleton-table.componen
     WalletBalancesTableComponent,
     WalletMiningPositionsTableComponent,
     WalletStakingPositionsTableComponent,
+    WalletProvisioningPositionsTableComponent,
     SkeletonTableComponent
   ],
   imports: [
@@ -55,7 +57,8 @@ import { SkeletonTableComponent } from './skeleton-table/skeleton-table.componen
     VaultCertificatesTableComponent,
     WalletBalancesTableComponent,
     WalletMiningPositionsTableComponent,
-    WalletStakingPositionsTableComponent
+    WalletStakingPositionsTableComponent,
+    WalletProvisioningPositionsTableComponent
   ]
 })
 export class TablesModule { }

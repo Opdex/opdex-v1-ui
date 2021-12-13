@@ -1,4 +1,6 @@
 <div class="review-tx-quote" *ngIf="quoteRequest && quoteReceipt">
+  <button mat-icon-button class="close-button" (click)="close()" [ngClass]="iconSizes.tiny"><mat-icon>{{icons.close}}</mat-icon></button>
+
   <ng-container *ngIf="!txHash; else success">
     <h4 class="{{quoteReceipt.success ? 'mb-1' : 'mb-3'}}">Transaction Quote</h4>
 
@@ -71,9 +73,9 @@
 
     <mat-divider></mat-divider>
 
-    <opdex-qr-code [data]="quoteRequest"></opdex-qr-code>
-
-    <button mat-stroked-button class="w-100 mt-2" (click)="close()">Close</button>
+    <div class="mt-4">
+      <opdex-qr-code [data]="quoteRequest"></opdex-qr-code>
+    </div>
 
     <ng-container *ngIf="isDevnet">
       <button mat-flat-button color="primary" class="w-100 mt-3 ml-0" (click)="submit()" [disabled]="submitting" cdkFocusInitial>{{!submitting ? 'Local Submit' : 'Submitting'}}</button>

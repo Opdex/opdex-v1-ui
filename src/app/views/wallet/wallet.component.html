@@ -60,6 +60,11 @@
         </div>
 
         <div class="mb-5">
+          <h4 class="mb-0 flex-row-center"><mat-icon class="provide mr-2">{{icons.provide}}</mat-icon>Provisional Positions</h4>
+          <opdex-wallet-provisioning-positions-table [records]="walletProvisions" (onPageChange)="handleProvisionalPositionsPageChange($event)"></opdex-wallet-provisioning-positions-table>
+        </div>
+
+        <div class="mb-5">
           <h4 class="mb-0 flex-row-center"><mat-icon class="mine mr-2">{{icons.mining}}</mat-icon>Mining Positions</h4>
           <opdex-wallet-mining-positions-table [records]="miningPositions" (onPageChange)="handleMiningPositionsPageChange($event)"></opdex-wallet-mining-positions-table>
         </div>
