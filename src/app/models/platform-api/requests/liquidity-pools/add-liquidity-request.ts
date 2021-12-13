@@ -28,8 +28,8 @@ export class AddLiquidityRequest {
     }
   }
 
-  constructor(amountCrs: FixedDecimal, amountSrc: FixedDecimal, amountSrcMin: FixedDecimal,
-              amountCrsMin: FixedDecimal, recipient: string, deadline: number) {
+  constructor(amountCrs: FixedDecimal, amountSrc: FixedDecimal, amountCrsMin: FixedDecimal,
+              amountSrcMin: FixedDecimal, recipient: string, deadline: number) {
     this._amountCrs = amountCrs;
     this._amountSrc = amountSrc;
     this._amountSrcMin = amountSrcMin;
