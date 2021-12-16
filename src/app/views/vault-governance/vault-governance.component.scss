@@ -1,0 +1,42 @@
+
+@import 'src/scss/colors';
+
+.badge {
+  font-size: .9em;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: #fff;
+
+  &.blue {
+    background: $blue-primary;
+  }
+
+  &.purple {
+    background: $purple-primary;
+  }
+
+  &.red {
+    background: $red-primary;
+  }
+
+  &.green {
+    background: $green-primary;
+  }
+}
+
+.vote-bar {
+  font-size: .8em;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: 400;
+  display: inline-block;
+
+  &.yes {
+    background: $green-primary;
+  }
+
+  &.no {
+    background: $red-primary;
+  }
+}

@@ -1,3 +1,4 @@
+import { CreateCertificateVaultProposalQuoteRequest } from './platform-api/requests/vault-governances/create-certificate-vault-proposal-quote-request.interface';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { Block } from "./block";
 import { IBlock } from "./platform-api/responses/blocks/block.interface";
@@ -108,6 +109,7 @@ export class TransactionReceipt {
       case 'Distribute': return 'Distribute';
       case 'Permissions': return 'Set Permission';
       case 'Allowance': return 'Approve Allowance';
+      case 'Vault Proposal': return this.getVaultProposalSummary();
       default: return 'Unknown';
     }
   }
@@ -142,5 +144,15 @@ export class TransactionReceipt {
     if (this.eventTypeExists(TransactionEventTypes.CreateVaultCertificateEvent)) return 'Create Vault Certificate';
     else if (this.eventTypeExists(TransactionEventTypes.RedeemVaultCertificateEvent)) return 'Redeem Vault Certificate';
     else return 'Revoke Vault Certificate';
+  }
+
+  private getVaultProposalSummary(): string {
+    if (this.eventTypeExists(TransactionEventTypes.CreateVaultProposalEvent)) return 'Create Vault Proposal';
+    else if (this.eventTypeExists(TransactionEventTypes.CompleteVaultProposalEvent)) return 'Complete Vault Proposal';
+    else if (this.eventTypeExists(TransactionEventTypes.VaultProposalPledgeEvent)) return 'Vault Proposal Pledge';
+    else if (this.eventTypeExists(TransactionEventTypes.VaultProposalWithdrawPledgeEvent)) return 'Vault Proposal Pledge Withdrawal';
+    else if (this.eventTypeExists(TransactionEventTypes.VaultProposalVoteEvent)) return 'Vault Proposal Vote';
+    else if (this.eventTypeExists(TransactionEventTypes.VaultProposalWithdrawVoteEvent)) return 'Vault Proposal Vote Withdrawal';
+    else return 'Vault Proposal';
   }
 }

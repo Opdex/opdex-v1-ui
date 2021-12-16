@@ -7,7 +7,7 @@ export class VaultGovernanceStatCardsLookup {
     return  [
       {
         title: 'Locked',
-        value: '0',
+        value: vault?.tokensLocked,
         suffix: token?.symbol,
         helpInfo: {
           title: 'Locked Tokens',

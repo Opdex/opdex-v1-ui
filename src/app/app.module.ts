@@ -35,6 +35,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { WalletComponent } from './views/wallet/wallet.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -99,6 +100,7 @@ import { VaultGovernanceComponent } from './views/vault-governance/vault-governa
     MatButtonToggleModule,
     MatTooltipModule,
     MatIconModule,
+    MatProgressSpinnerModule,
     MatSidenavModule,
     MatBottomSheetModule,
     MatTabsModule,

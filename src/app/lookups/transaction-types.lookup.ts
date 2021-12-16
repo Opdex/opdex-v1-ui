@@ -97,6 +97,21 @@ export const TransactionTypes: ITransactionType[] = [
   },
   {
     priority: 8,
+    title: 'Vault Proposal',
+    view: TransactionView.vaultProposal,
+    icon: Icons.proposal,
+    iconColor: 'stake',
+    targetEvents: [
+      TransactionEventTypes.CreateVaultProposalEvent,
+      TransactionEventTypes.CompleteVaultProposalEvent,
+      TransactionEventTypes.VaultProposalPledgeEvent,
+      TransactionEventTypes.VaultProposalWithdrawPledgeEvent,
+      TransactionEventTypes.VaultProposalVoteEvent,
+      TransactionEventTypes.VaultProposalWithdrawVoteEvent
+    ]
+  },
+  {
+    priority: 9,
     title: 'Ownership',
     view: null,
     icon: Icons.owner,
@@ -111,7 +126,7 @@ export const TransactionTypes: ITransactionType[] = [
     ]
   },
   {
-    priority: 9,
+    priority: 10,
     title: 'Permissions',
     view: null,
     icon: Icons.permissions,
@@ -119,7 +134,7 @@ export const TransactionTypes: ITransactionType[] = [
     targetEvents: [TransactionEventTypes.ChangeMarketPermissionEvent]
   },
   {
-    priority: 10,
+    priority: 11,
     title: 'Allowance',
     view: TransactionView.allowance,
     icon: Icons.approve,

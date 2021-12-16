@@ -1,0 +1,9 @@
+<ng-container *ngIf="pledgeOrVote || createOrComplete">
+  <div *ngIf="pledgeOrVote">
+    #{{proposalId}} {{pledgeOrVoteWithdrawal ? '-' : '+' }}{{pledgeOrVoteAmount.formattedValue | shortNumber}} {{crs?.symbol}}
+  </div>
+
+  <div *ngIf="createOrComplete">
+    #{{proposalId}} {{createOrCompleteType || 'ProposalType'}} {{createOrCompleteAmount.formattedValue | shortNumber}} <span *ngIf="isCompleteProposal">{{createOrCompletePass}}</span>
+  </div>
+</ng-container>

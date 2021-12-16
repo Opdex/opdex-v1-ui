@@ -38,7 +38,15 @@ export enum TransactionEventTypes {
   RevokeVaultCertificateEvent = 'RevokeVaultCertificateEvent',
   RedeemVaultCertificateEvent = 'RedeemVaultCertificateEvent',
   SetPendingVaultOwnershipEvent = 'SetPendingVaultOwnershipEvent',
-  ClaimPendingVaultOwnershipEvent = 'ClaimPendingVaultOwnershipEvent'
+  ClaimPendingVaultOwnershipEvent = 'ClaimPendingVaultOwnershipEvent',
+
+  // Vault Governance
+  CreateVaultProposalEvent = 'CreateVaultProposalEvent',
+  CompleteVaultProposalEvent = 'CompleteVaultProposalEvent',
+  VaultProposalPledgeEvent = 'VaultProposalPledgeEvent',
+  VaultProposalWithdrawPledgeEvent = 'VaultProposalWithdrawPledgeEvent',
+  VaultProposalVoteEvent = 'VaultProposalVoteEvent',
+  VaultProposalWithdrawVoteEvent = 'VaultProposalWithdrawVoteEvent',
 }
 
 export function txEventConverter(value: string): TransactionEventTypes {

@@ -48,6 +48,10 @@ import { TxSidebarComponent } from './tx-sidebar/tx-sidebar.component';
 import { WalletPreviewComponent } from './shared/wallet-preview/wallet-preview.component';
 import { TxButtonsComponent } from './shared/tx-buttons/tx-buttons.component';
 import { PercentageAmountButtonsComponent } from './shared/percentage-amount-buttons/percentage-amount-buttons.component';
+import { TxVaultProposalComponent } from './tx-vault-proposal/tx-vault-proposal.component';
+import { TxVaultProposalCreateComponent } from './tx-vault-proposal/tx-vault-proposal-create/tx-vault-proposal-create.component';
+import { TxVaultProposalVoteComponent } from './tx-vault-proposal/tx-vault-proposal-vote/tx-vault-proposal-vote.component';
+import { TxVaultProposalPledgeComponent } from './tx-vault-proposal/tx-vault-proposal-pledge/tx-vault-proposal-pledge.component';
 
 
 @NgModule({
@@ -72,7 +76,11 @@ import { PercentageAmountButtonsComponent } from './shared/percentage-amount-but
     TxSidebarComponent,
     WalletPreviewComponent,
     TxButtonsComponent,
-    PercentageAmountButtonsComponent
+    PercentageAmountButtonsComponent,
+    TxVaultProposalComponent,
+    TxVaultProposalCreateComponent,
+    TxVaultProposalVoteComponent,
+    TxVaultProposalPledgeComponent
   ],
   imports: [
     CommonModule,

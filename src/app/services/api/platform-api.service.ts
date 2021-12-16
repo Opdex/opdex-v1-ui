@@ -64,6 +64,10 @@ import { IVaultGovernanceResponseModel } from '@sharedModels/platform-api/respon
 import { IVaultProposalResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-response-model.interface';
 import { IVaultProposalPledgeResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-pledge-response-model.interface';
 import { IVaultProposalVoteResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-vote-response-model.interface';
+import { VaultProposalsFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposals-filter';
+import { IVaultProposalsResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposals-response-model.interface';
+import { IVaultProposalPledgesResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-pledges-response-model.interface';
+import { IVaultProposalVotesResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-votes-response-model.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -279,6 +283,18 @@ export class PlatformApiService extends RestApiService {
 
   public redeemVaultCertificate(vault: string): Observable<ITransactionQuote> {
     return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/certificates/redeem`, {});
+  }
+
+  public getVaultProposals(address: string, request: VaultProposalsFilter): Observable<IVaultProposalsResponseModel> {
+    return this.get<IVaultProposalsResponseModel>(`${this.api}/vault-governances/${address}/proposals${request.buildQueryString()}`);
+  }
+
+  public getVaultPledges(address: string, request: any): Observable<IVaultProposalPledgesResponseModel> {
+    return this.get<IVaultProposalPledgesResponseModel>(`${this.api}/vault-governances/${address}/pledges${request.buildQueryString()}`);
+  }
+
+  public getVaultVotes(address: string, request: any): Observable<IVaultProposalVotesResponseModel> {
+    return this.get<IVaultProposalVotesResponseModel>(`${this.api}/vault-governances/${address}/votes${request.buildQueryString()}`);
   }
 
   public getVaultProposal(address: string, proposalId: number): Observable<IVaultProposalResponseModel> {

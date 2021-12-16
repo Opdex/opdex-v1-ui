@@ -56,5 +56,6 @@ export enum Icons {
     bars = 'bar_chart',
     exit = 'exit_to_app',
     unlock = 'lock_open',
-    update = 'system_update'
+    update = 'system_update',
+    proposal = 'ballot'
 }

@@ -1,3 +1,4 @@
+import { OnDestroy } from '@angular/core';
 import { MathService } from '@sharedServices/utility/math.service';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
@@ -20,7 +21,7 @@ import { BlocksService } from '@sharedServices/platform/blocks.service';
   templateUrl: './tx-mine-start.component.html',
   styleUrls: ['./tx-mine-start.component.scss']
 })
-export class TxMineStartComponent extends TxBase implements OnChanges {
+export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy {
   @Input() data;
   form: FormGroup;
   icons = Icons;

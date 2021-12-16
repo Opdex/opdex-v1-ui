@@ -28,6 +28,7 @@ import { StakeTransactionSummaryComponent } from './tx-summaries/stake-transacti
 import { SwapTransactionSummaryComponent } from './tx-summaries/swap-transaction-summary/swap-transaction-summary.component';
 import { VaultCertificateTransactionSummaryComponent } from './tx-summaries/vault-certificate-transaction-summary/vault-certificate-transaction-summary.component';
 import { TxReceiptComponent } from './tx-receipt/tx-receipt.component';
+import { VaultProposalTransactionSummaryComponent } from './tx-summaries/vault-proposal-transaction-summary/vault-proposal-transaction-summary.component';
 
 // Events
 // Currently unused but may be again in the future, keep them around for now
@@ -75,6 +76,7 @@ import { TxReceiptComponent } from './tx-receipt/tx-receipt.component';
     PermissionsTransactionSummaryComponent,
     AllowanceTransactionSummaryComponent,
     TxReceiptComponent,
+    VaultProposalTransactionSummaryComponent,
     // SwapEventComponent,
     // CollectStakingRewardsEventComponent,
     // CollectMiningRewardsEventComponent,
