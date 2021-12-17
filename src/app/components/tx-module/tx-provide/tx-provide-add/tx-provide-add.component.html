@@ -1,7 +1,7 @@
 <div class="add-liquidity">
   <form [formGroup]="form" name="add-liquidity-form" id="swap-form" (submit)="submit()">
     <div class="mb-4">
-      <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Add {{pool.token.crs.symbol}}" [formControl]="amountCrs" [suffix]="pool.token.crs.symbol" [numbersOnly]="true">
+      <opdex-input-control [suffixDisabled]="true" [prefixIcon]="icons.add" label="Add {{pool.token.crs.symbol}}" [formControl]="amountCrs" [suffix]="pool.token.crs.symbol" [numbersOnly]="true">
         <div class="flex-row-center-between">
           <div class="tolerance-amounts">
             <span *ngIf="crsInMin">Min: {{crsInMin | shortNumber}}</span>
@@ -21,7 +21,7 @@
         (onPercentageSelect)="handlePercentageSelect('crs', $event)"></opdex-percentage-amount-buttons>
     </div>
 
-    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Add {{pool.token.src.symbol}}" [formControl]="amountSrc" [suffix]="pool.token.src.symbol" [numbersOnly]="true">
+    <opdex-input-control [suffixDisabled]="true" [prefixIcon]="icons.add" label="Add {{pool.token.src.symbol}}" [formControl]="amountSrc" [suffix]="pool.token.src.symbol" [numbersOnly]="true">
       <div class="flex-row-center-between">
         <div class="tolerance-amounts">
           <span *ngIf="srcInMin">Min: {{srcInMin | shortNumber}}</span>

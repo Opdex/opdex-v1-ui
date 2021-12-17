@@ -9,8 +9,8 @@
 
     <opdex-card>
       <opdex-tx-vault-proposal-create *ngIf="group.value == 1"></opdex-tx-vault-proposal-create>
-      <opdex-tx-vault-proposal-pledge *ngIf="group.value == 2"></opdex-tx-vault-proposal-pledge>
-      <opdex-tx-vault-proposal-vote *ngIf="group.value == 3"></opdex-tx-vault-proposal-vote>
+      <opdex-tx-vault-proposal-pledge [data]="data" *ngIf="group.value == 2"></opdex-tx-vault-proposal-pledge>
+      <opdex-tx-vault-proposal-vote [data]="data" *ngIf="group.value == 3"></opdex-tx-vault-proposal-vote>
     </opdex-card>
   </ng-container>
 </div>

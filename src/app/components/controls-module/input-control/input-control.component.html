@@ -1,13 +1,13 @@
 <mat-form-field [floatLabel]="showLabel ? 'always' : 'never'" [ngClass]="{'hide-label': !showLabel, 'active': active}">
   <mat-label *ngIf="showLabel">{{label}}</mat-label>
 
-  <button mat-icon-button matPrefix disabled *ngIf="prefixIcon">
+  <button mat-icon-button matPrefix [disabled]="prefixIconDisabled" *ngIf="prefixIcon" (click)="clickPrefix()" type="button">
     <mat-icon matPrefix>{{prefixIcon}}</mat-icon>
   </button>
 
   <input matInput type="text" [formControl]="formControl" [placeholder]="placeholder" autocomplete="off" (keydown)="decimalNumberKeyValidator($event)" [attr.aria-label]="label">
 
-  <button *ngIf="suffix" mat-button matSuffix (click)="changeToken()" [disabled]="buttonDisabled" style="min-width: auto;">
+  <button *ngIf="suffix" mat-button matSuffix (click)="changeToken()" [disabled]="suffixDisabled" style="min-width: auto;" type="button">
     {{suffix}}
   </button>
 

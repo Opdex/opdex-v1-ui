@@ -1,0 +1,75 @@
+<opdex-card [fullHeight]="true">
+  <ng-container *ngIf="proposal; else loading">
+    <div class="flex-row-center-between flex-wrap">
+      <a routerLink="/vault-governance/proposal/{{proposal.proposalId}}" class="no-decoration">
+        <h4 class="d-flex no-wrap mb-0">
+          Proposal #{{proposal.proposalId}}
+        </h4>
+      </a>
+
+      <span class="badge" *ngIf="proposal.status === 'Pledge' || proposal.status === 'Vote'" [ngClass]="{
+        'blue': proposal.status === 'Pledge',
+        'purple': proposal.status === 'Vote'}">{{proposal.status}}</span>
+
+      <span class="badge" *ngIf="proposal.status === 'Complete'" [ngClass]="{
+        'green': proposal.status === 'Complete' && proposal.approved,
+        'red': proposal.status === 'Complete' && !proposal.approved}">{{proposal.approved ? 'Approved' : 'Denied'}}</span>
+    </div>
+
+    <div class="flex-row-center mb-2">
+      <h5 class="mr-2 mb-0" *ngIf="proposal.type === 'Create'">New Certificate</h5>
+      <h5 class="mr-2 mb-0" *ngIf="proposal.type === 'Revoke'">Revoke Certificate</h5>
+      <h5 class="mr-2 mb-0" *ngIf="proposal.type === 'TotalPledgeMinimum'">Change Pledge Minimum</h5>
+      <h5 class="mr-2 mb-0" *ngIf="proposal.type === 'TotalVoteMinimum'">Change Vote Minimum</h5>
+    </div>
+
+    <div class="flex-row-center-between flex-wrap mb-2">
+      <p class="mb-2" style="font-size: 2em; line-height: 1.2em" *ngIf="proposal.type !== 'Revoke'">
+        <span class="b-400 mr-2">{{proposal.amount | shortNumber}}</span>
+        <small *ngIf="proposal.type === 'Create'">ODX</small>
+        <small *ngIf="proposal.type !== 'Create'">CRS</small>
+      </p>
+
+      <div class="w-100 flex-row-center-between" style="flex-grow: 1">
+        <small><span class="light">Pledged: </span> {{proposal.pledgeAmount | shortNumber}}</small>
+        <small><span class="light">Yes: </span> {{proposal.yesAmount | shortNumber}}</small>
+        <small><span class="light">No: </span> {{proposal.noAmount | shortNumber}}</small>
+      </div>
+    </div>
+
+    <div class="space-between"></div>
+
+    <mat-progress-bar [color]="proposal.expiration >= latestBlock.height ? 'primary' : 'warn'" mode="determinate" [value]="getExpirationPercentage()"></mat-progress-bar>
+
+    <div class="mt-2 flex-row-center-between">
+      <small class="light" *ngIf="proposal.expiration >= latestBlock.height">{{proposal.expiration - latestBlock.height | formatNumber:0}} blocks remaining</small>
+      <!-- <small class="light float-right">{{miningGovernance.nominationPeriodEndDate | timeago}}</small> -->
+      <small class="light" *ngIf="proposal.expiration < latestBlock.height">Closed</small>
+    </div>
+  </ng-container>
+
+  <ng-template #loading>
+    <div class="w-100">
+      <div class="flex-row-center-between mb-1">
+        <div class="skeleton-bg w-25"></div>
+        <div class="skeleton-bg w-25"></div>
+      </div>
+
+      <div class="skeleton-bg w-25 mb-1"></div>
+
+      <!-- extra big, no spacing intentionally -->
+      <div class="mb-1">
+        <div class="skeleton-bg w-50"></div>
+        <div class="skeleton-bg w-50"></div>
+      </div>
+
+      <div class="flex-row-center-between mb-1">
+        <div class="skeleton-bg w-25"></div>
+        <div class="skeleton-bg w-25"></div>
+        <div class="skeleton-bg w-25"></div>
+      </div>
+
+      <div class="skeleton-bg w-100"></div>
+    </div>
+  </ng-template>
+</opdex-card>

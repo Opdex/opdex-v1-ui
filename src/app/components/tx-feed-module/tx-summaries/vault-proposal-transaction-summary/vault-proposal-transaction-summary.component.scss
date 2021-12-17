@@ -1,0 +1,41 @@
+@import '/src/scss/colors';
+
+.flex-row-center {
+  .col {
+    &:first-of-type {
+      padding-left: 0;
+    }
+
+    &:last-of-type {
+      padding-right: 0;
+    }
+  }
+}
+
+.flex-shrink {
+  flex-grow: 0;
+  flex-shrink: 1;
+}
+
+.badge {
+  font-size: .8em;
+  padding: 3px 7px;
+  border-radius: 4px;
+  color: #fff;
+
+  &.blue {
+    background: $blue-primary;
+  }
+
+  &.purple {
+    background: $purple-primary;
+  }
+
+  &.red {
+    background: $red-primary;
+  }
+
+  &.green {
+    background: $green-primary;
+  }
+}

@@ -1,6 +1,5 @@
-import { ITransactionEvent } from "../transaction-event.interface";
+import { IVaultProposalBaseEvent } from "./vault-proposal-base-event.interface";
 
-export interface ICompleteVaultProposalEvent extends ITransactionEvent {
-  proposalId: number;
+export interface ICompleteVaultProposalEvent extends IVaultProposalBaseEvent {
   approved: boolean;
 }

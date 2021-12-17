@@ -55,7 +55,7 @@ import { IStratisSignatureAuthRequest } from '@sharedModels/platform-api/request
 import { IMinimumPledgeVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/minimum-plege-vault-proposal-quote-request.interface';
 import { IMinimumVoteVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/minimum-vote-vault-proposal-quote-request.interface';
 import { IVaultProposalWithdrawPledgeQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-widthraw-pledge-quote-request.interface';
-import { IVaultProposalWithdrawVoteQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-widthraw-vote-quote-request.interface';
+import { IVaultProposalWithdrawVoteQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-withdraw-vote-quote-request.interface';
 import { IVaultProposalVoteQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-vote-quote-request.interface';
 import { IVaultProposalPledgeQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-pledge-quote-request.interface';
 import { IRevokeCertificateVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/revoke-certificate-vault-proposal-quote-request.interface';
@@ -289,11 +289,11 @@ export class PlatformApiService extends RestApiService {
     return this.get<IVaultProposalsResponseModel>(`${this.api}/vault-governances/${address}/proposals${request.buildQueryString()}`);
   }
 
-  public getVaultPledges(address: string, request: any): Observable<IVaultProposalPledgesResponseModel> {
+  public getVaultProposalPledges(address: string, request: any): Observable<IVaultProposalPledgesResponseModel> {
     return this.get<IVaultProposalPledgesResponseModel>(`${this.api}/vault-governances/${address}/pledges${request.buildQueryString()}`);
   }
 
-  public getVaultVotes(address: string, request: any): Observable<IVaultProposalVotesResponseModel> {
+  public getVaultProposalVotes(address: string, request: any): Observable<IVaultProposalVotesResponseModel> {
     return this.get<IVaultProposalVotesResponseModel>(`${this.api}/vault-governances/${address}/votes${request.buildQueryString()}`);
   }
 

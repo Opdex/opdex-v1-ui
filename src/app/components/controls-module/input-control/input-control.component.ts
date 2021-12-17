@@ -19,14 +19,21 @@ export class InputControlComponent extends ValueAccessor {
 
   @Input() formControl: FormControl;
   @Input() suffix: string;
+  @Input() suffixDisabled: boolean = false;
   @Input() prefixIcon: Icons;
+  @Input() prefixIconDisabled = true;
   @Input() label: string;
   @Input() showLabel: boolean = true;
   @Input() placeholder: string = "0.00";
-  @Input() buttonDisabled: boolean = false;
   @Input() numbersOnly: boolean = false;
   @Input() active: boolean = false;
   @Output() handleChangeToken: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onPrefixClick: EventEmitter<any> = new EventEmitter<any>();
+
+  clickPrefix(): void {
+    console.log('hit')
+    this.onPrefixClick.emit();
+  }
 
   changeToken(): void {
     this.handleChangeToken.emit();

@@ -1,6 +1,6 @@
-import { MinimumPledgeVaultProposalQuoteRequest } from './../../../../models/platform-api/requests/vault-governances/minimum-plege-vault-proposal-quote-request.interface';
-import { CreateCertificateVaultProposalQuoteRequest } from './../../../../models/platform-api/requests/vault-governances/create-certificate-vault-proposal-quote-request.interface';
-import { RevokeCertificateVaultProposalQuoteRequest } from './../../../../models/platform-api/requests/vault-governances/revoke-certificate-vault-proposal-quote-request.interface';
+import { MinimumPledgeVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/minimum-plege-vault-proposal-quote-request.interface';
+import { CreateCertificateVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/create-certificate-vault-proposal-quote-request.interface';
+import { RevokeCertificateVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/revoke-certificate-vault-proposal-quote-request.interface';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { OnDestroy } from '@angular/core';
 import { Component, Injector, Input } from '@angular/core';
@@ -9,7 +9,6 @@ import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { DecimalStringRegex } from '@sharedLookups/regex';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
@@ -65,7 +64,6 @@ export class TxVaultProposalCreateComponent extends TxBase implements OnDestroy 
     protected _injector: Injector,
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
-    private _blocksService: BlocksService,
     private _env: EnvironmentsService
   ) {
     super(_injector);

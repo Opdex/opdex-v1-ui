@@ -1,0 +1,130 @@
+<div class="header-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="mb-1">Proposal #{{proposal?.proposalId}}</h1>
+        <!-- <opdex-copy-address [address]="vault?.vault"></opdex-copy-address> -->
+      </div>
+
+      <div class="col-12" *ngIf="proposal">
+        <div class="flex-row-center flex-wrap mb-3">
+          <h4 class="d-flex no-wrap mb-0 mr-2">
+            <span *ngIf="proposal.type === 'Create'">New Certificate</span>
+            <span *ngIf="proposal.type === 'Revoke'">Revoke Certificate</span>
+            <span *ngIf="proposal.type === 'TotalPledgeMinimum'">Change Pledge Minimum</span>
+            <span *ngIf="proposal.type === 'TotalVoteMinimum'">Change Vote Minimum</span>
+          </h4>
+
+          <span class="badge" *ngIf="proposal.status === 'Pledge' || proposal.status === 'Vote'" [ngClass]="{
+            'blue': proposal.status === 'Pledge',
+            'purple': proposal.status === 'Vote'}">{{proposal.status}}</span>
+
+          <span class="badge" *ngIf="proposal.status === 'Complete'" [ngClass]="{
+            'green': proposal.status === 'Complete' && proposal.approved,
+            'red': proposal.status === 'Complete' && !proposal.approved}">{{proposal.approved ? 'Approved' : 'Denied'}}</span>
+        </div>
+
+        <div class="flex-row-center-between flex-wrap">
+          <div class="pr-3 mb-3">
+            <p class="mb-0" style="font-size: 2.4em; line-height: 1.3em" *ngIf="proposal.type !== 'Revoke'">
+              <span class="b-400 mr-2">{{proposal.amount | shortNumber}}</span>
+              <small *ngIf="proposal.type === 'Create'">ODX</small>
+              <small *ngIf="proposal.type !== 'Create'">CRS</small>
+            </p>
+
+            <p class="mb-0 flex-row align-items-end">
+              <small class="mr-2">By</small> <opdex-copy-address [address]="proposal.creator"></opdex-copy-address>
+            </p>
+
+            <p class="mb-0 flex-row align-items-end" *ngIf="proposal.type === 'Create' || proposal.type === 'Revoke'">
+              <small class="mr-2" *ngIf="proposal.type === 'Create'">For</small>
+              <small class="mr-2" *ngIf="proposal.type === 'Revoke'">Holder</small>
+              <opdex-copy-address [address]="proposal.wallet"></opdex-copy-address>
+            </p>
+          </div>
+
+          <div class="w-100 flex-row-center-center mb-3" style="max-width: 30%">
+            <ng-container *ngIf="proposal.status === 'Pledge'">
+              <div style="position: relative;" class="d-flex align-items-center">
+                <mat-progress-spinner style="position: relative; z-index: 1"
+                  color="primary"
+                  mode="determinate"
+                  [value]="getPledgePercentage(proposal)">
+                </mat-progress-spinner>
+                <mat-progress-spinner style="position: absolute; z-index: 0; stroke: #f4f4f4"
+                color="accent"
+                mode="determinate"
+                value="100">
+              </mat-progress-spinner>
+
+                <p style="font-size: .8em; position: absolute; left: 0; right: 0; margin: 0; text-align: center;">{{proposal.pledgeAmount | shortNumber}} <small>CRS</small></p>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="proposal.status === 'Vote'">
+              <div class="flex-column-center-center w-100">
+                <div class="vote-bar-container">
+                  <div class="vote-bar yes mb-1 no-wrap" [ngStyle]="{'min-width': getVotePercentage(proposal.yesAmount, proposal.noAmount) + '%' }">
+                    {{proposal.yesAmount | shortNumber}} <small>CRS</small>
+                  </div>
+                </div>
+
+                <div class="vote-bar-container">
+                  <div class="vote-bar no no-wrap" [ngStyle]="{'min-width': getVotePercentage(proposal.noAmount, proposal.yesAmount) + '%' }">
+                    {{proposal.noAmount | shortNumber}} <small>CRS</small>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="proposal.status === 'Complete'">
+              <!-- {{proposal.approved ? 'Approved' : 'Denied'}} -->
+            </ng-container>
+          </div>
+        </div>
+
+        <p class="mb-3">{{proposal.description}}</p>
+
+        <div *ngIf="proposal.expiration >= latestBlock.height" style="max-width: 600px;">
+          <mat-progress-bar color="primary" mode="determinate" [value]="getExpirationPercentage(proposal)"></mat-progress-bar>
+
+          <div class="mt-2 flex-row-center-between">
+            <small class="light">Expires in {{proposal.expiration - latestBlock.height | formatNumber:0}} blocks</small>
+            <!-- <small class="light float-right">{{miningGovernance.nominationPeriodEndDate | timeago}}</small> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="pt-5 pb-3 standard-section" *ngIf="proposal">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="flex-row-center-between">
+          <h4 class="d-inline mb-0">Pledges</h4>
+
+          <div class="btn-group flex-row-center-end w-100">
+            <button mat-stroked-button color="primary" (click)="openTransactionView('Pledge', true)">Withdraw</button>
+            <button mat-flat-button color="primary" class="ml-3" (click)="openTransactionView('Pledge', false)" *ngIf="proposal.status === 'Pledge' && proposal.expiration >= latestBlock.height">Pledge</button>
+          </div>
+        </div>
+        <opdex-vault-proposal-pledges-table [filter]="pledgesFilter"></opdex-vault-proposal-pledges-table>
+      </div>
+
+      <div class="col-12 mt-3" *ngIf="proposal.status !== 'Pledge'">
+        <div class="flex-row-center-between">
+          <h4 class="d-inline mb-0">Votes</h4>
+
+          <div class="button-group flex-row-center-end w-100">
+            <button mat-stroked-button color="primary" (click)="openTransactionView('Vote', true)">Withdraw</button>
+            <button mat-flat-button color="primary" class="ml-3" (click)="openTransactionView('Vote', false)" *ngIf="proposal.status === 'Vote' && proposal.expiration >= latestBlock.height">Vote</button>
+          </div>
+        </div>
+        <opdex-vault-proposal-votes-table [filter]="votesFilter"></opdex-vault-proposal-votes-table>
+      </div>
+    </div>
+  </div>
+</div>

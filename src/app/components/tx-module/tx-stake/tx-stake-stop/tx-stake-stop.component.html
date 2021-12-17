@@ -1,6 +1,6 @@
 <div class="stop-staking">
   <form [formGroup]="form" name="stop-staking-form" id="stop-staking-form" (submit)="submit()">
-    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.remove" label="Stop Staking" [formControl]="amount" [suffix]="pool.summary.staking?.token.symbol" [numbersOnly]="true">
+    <opdex-input-control [suffixDisabled]="true" [prefixIcon]="icons.remove" label="Stop Staking" [formControl]="amount" [suffix]="pool.summary.staking?.token.symbol" [numbersOnly]="true">
       <div class="flex-row-center-end">
         <span class="success" *ngIf="fiatValue">${{fiatValue | shortNumber}}</span>
       </div>

@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 // Module Components
 import { CardComponent } from './card/card.component';
@@ -22,6 +23,7 @@ import { ConnectWalletCardComponent } from './connect-wallet-card/connect-wallet
 import { LiquidityPoolTokenCardComponent } from './liquidity-pool-token-card/liquidity-pool-token-card.component';
 import { MarketTokenCardComponent } from './market-token-card/market-token-card.component';
 import { WalletPositionCardComponent } from './wallet-position-card/wallet-position-card.component';
+import { VaultProposalCardComponent } from './vault-proposal-card/vault-proposal-card.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { WalletPositionCardComponent } from './wallet-position-card/wallet-posit
     ConnectWalletCardComponent,
     LiquidityPoolTokenCardComponent,
     MarketTokenCardComponent,
-    WalletPositionCardComponent
+    WalletPositionCardComponent,
+    VaultProposalCardComponent
   ],
   imports: [
     CommonModule,
@@ -45,7 +48,8 @@ import { WalletPositionCardComponent } from './wallet-position-card/wallet-posit
     MatMenuModule,
     SharedPipesModule,
     SharedModule,
-    ModalsModule
+    ModalsModule,
+    MatProgressBarModule
   ],
   exports: [
     CardComponent,
@@ -56,7 +60,8 @@ import { WalletPositionCardComponent } from './wallet-position-card/wallet-posit
     ConnectWalletCardComponent,
     LiquidityPoolTokenCardComponent,
     MarketTokenCardComponent,
-    WalletPositionCardComponent
+    WalletPositionCardComponent,
+    VaultProposalCardComponent
   ]
 })
 export class CardsModule { }

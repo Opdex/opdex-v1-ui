@@ -61,6 +61,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NotificationsModule } from '@sharedComponents/notifications-module/notifications.module';
 import { TradeComponent } from './views/trade/trade.component';
 import { VaultGovernanceComponent } from './views/vault-governance/vault-governance.component';
+import { VaultGovernanceProposalComponent } from './views/vault-governance-proposal/vault-governance-proposal.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import { VaultGovernanceComponent } from './views/vault-governance/vault-governa
     VaultComponent,
     AuthComponent,
     TradeComponent,
-    VaultGovernanceComponent
+    VaultGovernanceComponent,
+    VaultGovernanceProposalComponent
   ],
   imports: [
     BrowserModule,

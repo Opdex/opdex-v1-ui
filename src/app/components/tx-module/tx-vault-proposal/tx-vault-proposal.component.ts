@@ -1,5 +1,4 @@
-import { Component, OnInit, OnChanges, Input } from '@angular/core';
-import { TransactionView } from '@sharedModels/transaction-view';
+import { Component, OnChanges, Input } from '@angular/core';
 
 @Component({
   selector: 'opdex-tx-vault-proposal',
@@ -8,7 +7,6 @@ import { TransactionView } from '@sharedModels/transaction-view';
 })
 export class TxVaultProposalComponent implements OnChanges {
   @Input() data: any;
-  // @Output() onPoolSelection = new EventEmitter<ILiquidityPoolResponse>();
   child: number = 1;
   txOptions = [
     { action: 'Create', value: 1 },
@@ -17,8 +15,6 @@ export class TxVaultProposalComponent implements OnChanges {
   ];
 
   ngOnChanges() {
-    console.log(this.data)
     this.child = this.txOptions.find(o => o.action.toLowerCase() == this.data?.child?.toLowerCase())?.value || 1;
-    console.log(this.child)
   }
 }

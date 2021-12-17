@@ -1,23 +1,19 @@
 <div class="vault-proposal-vote">
   <form [formGroup]="form" name="vault-proposal-vote-form" id="vault-proposal-vote-form" (submit)="submit()">
-
     <div class="mb-3">
-      <mat-form-field appearance="legacy" floatLabel="always">
-        <mat-label>Add Or Withdraw</mat-label>
-        <mat-select formControlName="type">
-          <mat-option *ngFor="let option of types" [value]="option.value">
-            {{option.label}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <opdex-input-control placeholder="" [suffixDisabled]="true" label="Proposal #" [formControl]="proposalId"></opdex-input-control>
     </div>
 
     <div class="mb-3">
-      <opdex-input-control placeholder="" [buttonDisabled]="true" label="Proposal ID" [formControl]="proposalId"></opdex-input-control>
-    </div>
-
-    <div class="mb-3">
-      <opdex-input-control [buttonDisabled]="true" label="Amount" [formControl]="amount" [numbersOnly]="true">
+      <opdex-input-control
+        [prefixIcon]="isWithdrawal ? icons.remove : icons.add"
+        [prefixIconDisabled]="false"
+        (onPrefixClick)="handleAddRemoveStatus()"
+        [suffixDisabled]="true"
+        [label]="isWithdrawal ? 'Withdraw' : 'Vote'"
+        [formControl]="amount"
+        [numbersOnly]="true"
+        suffix="CRS">
         <div class="flex-row-center-end">
           <span class="success" *ngIf="fiatValue">${{fiatValue | shortNumber}}</span>
         </div>
@@ -25,7 +21,7 @@
     </div>
 
     <mat-checkbox
-      *ngIf="type.value === 1"
+      *ngIf="!isWithdrawal"
       formControlName="inFavor"
       color="primary"
       name="inFavor"

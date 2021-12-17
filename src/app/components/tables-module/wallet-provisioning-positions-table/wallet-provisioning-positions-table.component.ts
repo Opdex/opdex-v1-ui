@@ -82,7 +82,7 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges {
   }
 
   navigate(name: string) {
-    this._router.navigateByUrl(`/tokens/${name}`);
+    this._router.navigateByUrl(`/pools/${name}`);
   }
 
   trackBy(index: number, pool: any) {

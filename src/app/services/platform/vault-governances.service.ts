@@ -6,6 +6,13 @@ import { EnvironmentsService } from "@sharedServices/utility/environments.servic
 import { Observable } from "rxjs";
 import { VaultProposalsFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposals-filter';
 import { IVaultProposalsResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposals-response-model.interface';
+import { IVaultProposalVotesResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-votes-response-model.interface';
+import { VaultProposalVotesFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-votes-filter';
+import { VaultProposalPledgesFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-pledges-filter';
+import { IVaultProposalPledgesResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-pledges-response-model.interface';
+import { IVaultProposalVoteResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-vote-response-model.interface';
+import { IVaultProposalResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-response-model.interface';
+import { IVaultProposalPledgeResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-pledge-response-model.interface';
 
 @Injectable({ providedIn: 'root' })
 export class VaultGovernancesService extends CacheService {
@@ -25,34 +32,32 @@ export class VaultGovernancesService extends CacheService {
     return this.getItem(vault, this._platformApi.getVaultGovernance(vault));
   }
 
-  getVaults() {
-
-  }
-
-  getProposal(proposalId: number, vault?: string) {
+  getProposal(proposalId: number, vault?: string): Observable<IVaultProposalResponseModel> {
     vault = vault || this.vaultAddress;
-    return this.getItem(vault, this._platformApi.getVaultProposal(vault, proposalId));
+    return this.getItem(`vault-${vault}-proposal-${proposalId}`, this._platformApi.getVaultProposal(vault, proposalId));
   }
 
   getProposals(request: VaultProposalsFilter, vault?: string): Observable<IVaultProposalsResponseModel> {
     vault = vault || this.vaultAddress;
-    return this.getItem(`vault-proposal-pledges-${vault}-${request.buildQueryString()}`, this._platformApi.getVaultProposals(vault, request));
+    return this.getItem(`vault-${vault}-proposals-${request.buildQueryString()}`, this._platformApi.getVaultProposals(vault, request));
   }
 
-  getVotes() {
-
+  getVotes(request: VaultProposalVotesFilter, vault?: string): Observable<IVaultProposalVotesResponseModel> {
+    vault = vault || this.vaultAddress;
+    return this.getItem(`vault-${vault}-proposal-votes-${request.buildQueryString()}`, this._platformApi.getVaultProposalVotes(vault, request));
   }
 
-  getVote(proposalId: number, voter: string, vault?: string) {
+  getVote(proposalId: number, voter: string, vault?: string): Observable<IVaultProposalVoteResponseModel> {
     vault = vault || this.vaultAddress;
     return this.getItem(vault, this._platformApi.getVaultProposalVote(vault, proposalId, voter));
   }
 
-  getPledges() {
-
+  getPledges(request: VaultProposalPledgesFilter, vault?: string): Observable<IVaultProposalPledgesResponseModel> {
+    vault = vault || this.vaultAddress;
+    return this.getItem(`vault-${vault}-proposal-pledges-${request.buildQueryString()}`, this._platformApi.getVaultProposalPledges(vault, request));
   }
 
-  getPledge(proposalId: number, pledger: string, vault?: string) {
+  getPledge(proposalId: number, pledger: string, vault?: string): Observable<IVaultProposalPledgeResponseModel> {
     vault = vault || this.vaultAddress;
     return this.getItem(vault, this._platformApi.getVaultProposalPledge(vault, proposalId, pledger));
   }

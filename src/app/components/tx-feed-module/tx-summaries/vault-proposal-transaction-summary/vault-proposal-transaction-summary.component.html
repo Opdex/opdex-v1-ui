@@ -1,9 +1,29 @@
-<ng-container *ngIf="pledgeOrVote || createOrComplete">
-  <div *ngIf="pledgeOrVote">
-    #{{proposalId}} {{pledgeOrVoteWithdrawal ? '-' : '+' }}{{pledgeOrVoteAmount.formattedValue | shortNumber}} {{crs?.symbol}}
+<ng-container *ngIf="summary">
+  <div *ngIf="summary.pledgeOrVote?.amount" class="w-100 flex-row-center">
+    <div class="col no-wrap flex-shrink" *ngIf="summary.proposal?.proposalId">
+      <a class="no-decoration" href="javascript:void(0)" routerLink="/vault-governance/proposal/{{summary.proposal.proposalId}}">#{{summary.proposal.proposalId}}</a>
+    </div>
+
+    <div class="col no-wrap flex-shrink">
+      {{summary.pledgeOrVote.withdrawal ? '-' : '+' }}{{summary.pledgeOrVote.amount.formattedValue | shortNumber}} <a class="no-decoration" href="javascript:void(0)" routerLink="/tokens/{{summary.crs.address}}">{{summary.crs.symbol}}</a>
+    </div>
+
+    <div class="col no-wrap" *ngIf="summary.pledgeOrVote.inFavor !== null">
+      <span class="badge {{summary.pledgeOrVote.inFavor ? 'green' : 'red'}}">{{summary.pledgeOrVote.inFavor ? 'In Favor' : 'Opposed'}}</span>
+    </div>
   </div>
 
-  <div *ngIf="createOrComplete">
-    #{{proposalId}} {{createOrCompleteType || 'ProposalType'}} {{createOrCompleteAmount.formattedValue | shortNumber}} <span *ngIf="isCompleteProposal">{{createOrCompletePass}}</span>
+  <div *ngIf="summary.createOrComplete?.type" class="w-100 flex-row-center">
+    <div class="col no-wrap flex-shrink" *ngIf="summary.proposal?.proposalId && !summary.pledgeOrVote?.amount">
+      <a class="no-decoration" href="javascript:void(0)" routerLink="/vault-governance/proposal/{{summary.proposal.proposalId}}">#{{summary.proposal.proposalId}}</a>
+    </div>
+
+    <div class="col no-wrap flex-shrink">
+      {{summary.createOrComplete.type}}
+    </div>
+
+    <div class="col no-wrap" *ngIf="summary.createOrComplete.approved !== null">
+      <span class="badge {{summary.createOrComplete.approved ? 'green' : 'red'}}">{{summary.createOrComplete.approved ? 'Approved' : 'Denied'}}</span>
+    </div>
   </div>
 </ng-container>

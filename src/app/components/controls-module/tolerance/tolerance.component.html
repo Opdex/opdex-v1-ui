@@ -15,7 +15,7 @@
       [active]="selectedToleranceLevel === 4"
       label="Custom Tolerance"
       [showLabel]="false"
-      [buttonDisabled]="true"
+      [suffixDisabled]="true"
       [numbersOnly]="true">
       <ng-container *ngIf="!customTolerance.valid">
         <span class="error">0.01 minimum and 99.99 maximum</span>

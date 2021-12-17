@@ -1,4 +1,3 @@
-import { CreateCertificateVaultProposalQuoteRequest } from './platform-api/requests/vault-governances/create-certificate-vault-proposal-quote-request.interface';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { Block } from "./block";
 import { IBlock } from "./platform-api/responses/blocks/block.interface";
@@ -147,12 +146,12 @@ export class TransactionReceipt {
   }
 
   private getVaultProposalSummary(): string {
-    if (this.eventTypeExists(TransactionEventTypes.CreateVaultProposalEvent)) return 'Create Vault Proposal';
-    else if (this.eventTypeExists(TransactionEventTypes.CompleteVaultProposalEvent)) return 'Complete Vault Proposal';
-    else if (this.eventTypeExists(TransactionEventTypes.VaultProposalPledgeEvent)) return 'Vault Proposal Pledge';
-    else if (this.eventTypeExists(TransactionEventTypes.VaultProposalWithdrawPledgeEvent)) return 'Vault Proposal Pledge Withdrawal';
-    else if (this.eventTypeExists(TransactionEventTypes.VaultProposalVoteEvent)) return 'Vault Proposal Vote';
-    else if (this.eventTypeExists(TransactionEventTypes.VaultProposalWithdrawVoteEvent)) return 'Vault Proposal Vote Withdrawal';
+    if (this.eventTypeExists(TransactionEventTypes.CreateVaultProposalEvent)) return 'Create Proposal';
+    else if (this.eventTypeExists(TransactionEventTypes.CompleteVaultProposalEvent)) return 'Complete Proposal';
+    else if (this.eventTypeExists(TransactionEventTypes.VaultProposalPledgeEvent)) return 'Pledge';
+    else if (this.eventTypeExists(TransactionEventTypes.VaultProposalWithdrawPledgeEvent)) return 'Withdraw Pledge';
+    else if (this.eventTypeExists(TransactionEventTypes.VaultProposalVoteEvent)) return 'Vote';
+    else if (this.eventTypeExists(TransactionEventTypes.VaultProposalWithdrawVoteEvent)) return 'Withdraw Vote';
     else return 'Vault Proposal';
   }
 }

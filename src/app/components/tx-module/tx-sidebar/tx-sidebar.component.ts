@@ -1,9 +1,10 @@
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { Router } from '@angular/router';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
-import { TransactionTypes } from '@sharedLookups/transaction-types.lookup';
+import { ITransactionType, TransactionTypes } from '@sharedLookups/transaction-types.lookup';
 import { ISidenavMessage } from '@sharedModels/transaction-view';
 import { Observable, Subscription } from 'rxjs';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
@@ -22,7 +23,7 @@ export class TxSidebarComponent implements OnChanges {
   @Output() onModeChange = new EventEmitter<'over' | 'side'>();
 
   sidenavMode: 'over' | 'side' = 'over';
-  transactionTypes = [...TransactionTypes.filter(type => type.view)];
+  transactionTypes: ITransactionType[];
   context$: Observable<any>;
   widescreen: boolean;
   subscription = new Subscription();
@@ -35,8 +36,13 @@ export class TxSidebarComponent implements OnChanges {
     private _breakpointObserver: BreakpointObserver,
     private _sidenav: SidenavService,
     private _context: UserContextService,
-    private _router: Router
+    private _router: Router,
+    private _env: EnvironmentsService
   ) {
+    this.transactionTypes = !!this._env.vaultGovernanceAddress
+      ? [...TransactionTypes.filter(type => !!type.view)]
+      : [...TransactionTypes.filter(type => !!type.view && type.view !== TransactionView.vaultProposal)]
+
     this.subscription.add(this._context.getUserContext$().subscribe(context => this.context = context));
 
     this.subscription.add(
