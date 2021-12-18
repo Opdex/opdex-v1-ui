@@ -5,7 +5,12 @@
 
       <h2>Connect</h2>
 
-      <opdex-qr-code [data]="sid"></opdex-qr-code>
+      <opdex-qr-code [data]="stratisId"></opdex-qr-code>
+
+      <div class="expiration" *ngIf="percentageTimeRemaining">
+        <mat-progress-bar [color]="percentageTimeRemaining < 10 ? 'warn' : 'primary'" [value]="percentageTimeRemaining"></mat-progress-bar>
+        <small class="mt-2 light">{{timeRemaining}} Remaining</small>
+      </div>
 
       <form [formGroup]="form" name="auth-form" id="auth-form" (submit)="submitDevnetAuth()" *ngIf="isDevnet">
         <mat-form-field floatLabel="always">

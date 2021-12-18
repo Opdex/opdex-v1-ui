@@ -6,7 +6,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { take, catchError, startWith, map } from 'rxjs/operators';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Router } from '@angular/router';
-import { Observable, of, Subscription } from 'rxjs';
+import { Observable, of, Subscription, timer } from 'rxjs';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
@@ -31,7 +31,11 @@ export class AuthComponent implements OnInit, OnDestroy {
   icons = Icons;
   iconSizes = IconSizes;
   hubConnection: HubConnection;
-  sid: string;
+  stratisId: string;
+  expirationTime: number;
+  expirationLength: number;
+  timeRemaining: string;
+  percentageTimeRemaining: number;
 
   get publicKey(): FormControl {
     return this.form.get('publicKey') as FormControl;
@@ -78,6 +82,8 @@ export class AuthComponent implements OnInit, OnDestroy {
             await this.connectToSignalR();
           }
         }));
+
+    this.subscription.add(timer(0, 1000).subscribe(async _ => await this.calcSidExpiration()));
   }
 
   submitDevnetAuth(): void {
@@ -132,12 +138,37 @@ export class AuthComponent implements OnInit, OnDestroy {
 
     await this.hubConnection.start();
 
-    this.sid = await this.hubConnection.invoke('GetStratisId');
+    await this.getStratisId();
 
     this.hubConnection.on('OnAuthenticated', async (token: string) => {
       await this.stopHubConnection();
       this._context.setToken(token);
     });
+  }
+
+  private async getStratisId() {
+    this.stratisId = await this.hubConnection.invoke('GetStratisId');
+
+    if (!!this.stratisId === false || !this.stratisId.startsWith('sid:')) return;
+
+    const url = new URL(this.stratisId.replace('sid:', 'https://'));
+    const expiration = parseInt(url.searchParams.get('exp'));
+
+    this.expirationTime = new Date(expiration * 1000).getTime();
+    this.expirationLength = (this.expirationTime - new Date().getTime()) / 1000;
+
+    await this.calcSidExpiration();
+  }
+
+  private async calcSidExpiration(): Promise<void> {
+    const timeRemaining = (this.expirationTime - new Date().getTime()) / 1000;
+    const minutes = Math.floor(timeRemaining / 60);
+    const seconds = Math.floor(timeRemaining % 60);
+
+    if (minutes <= 0 && seconds <= 0) await this.getStratisId();
+
+    this.percentageTimeRemaining = Math.floor((timeRemaining  / this.expirationLength) * 100);
+    this.timeRemaining = `${minutes}:${seconds.toString().padStart(2, '0')}`;
   }
 
   private async stopHubConnection(): Promise<void> {
