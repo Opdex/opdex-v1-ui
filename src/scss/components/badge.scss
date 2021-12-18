@@ -1,0 +1,22 @@
+.badge {
+  font-size: .8em;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: #fff;
+
+  &.balance, &.blue {
+    background: $blue-primary;
+  }
+
+  &.staking, &.purple {
+    background: $purple-primary;
+  }
+
+  &.mining, &.red {
+    background: $red-primary;
+  }
+
+  &.active, &.green {
+    background: $green-primary;
+  }
+}
