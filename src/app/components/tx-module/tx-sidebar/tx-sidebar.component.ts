@@ -43,7 +43,17 @@ export class TxSidebarComponent implements OnChanges {
       ? [...TransactionTypes.filter(type => !!type.view)]
       : [...TransactionTypes.filter(type => !!type.view && type.view !== TransactionView.vaultProposal)]
 
-    this.subscription.add(this._context.getUserContext$().subscribe(context => this.context = context));
+    this.subscription.add(
+      this._context.getUserContext$()
+        .subscribe(context => {
+          this.context = context;
+
+          this.transactionTypes = !!this._env.vaultGovernanceAddress
+            ? [...TransactionTypes.filter(type => !!type.view)]
+            : [...TransactionTypes.filter(type => !!type.view && type.view !== TransactionView.vaultProposal)];
+
+          if (!!this.context?.wallet == false) this.transactionTypes = this.transactionTypes.filter(type => !type.viewRequiresAuth);
+        }));
 
     this.subscription.add(
       this._breakpointObserver

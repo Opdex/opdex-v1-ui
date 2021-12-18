@@ -1,3 +1,5 @@
+import { IconSizes } from 'src/app/enums/icon-sizes';
+import { Icons } from 'src/app/enums/icons';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
 import { Component, Input } from '@angular/core';
 import { IVaultProposalResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-response-model.interface';
@@ -10,6 +12,9 @@ import { IVaultProposalResponseModel } from '@sharedModels/platform-api/response
 export class VaultProposalCardComponent {
   @Input() proposal: IVaultProposalResponseModel;
   @Input() latestBlock: IBlock;
+
+  icons = Icons;
+  iconSizes = IconSizes;
 
   getExpirationPercentage() {
     if (this.proposal.status === 'Complete' || this.proposal.expiration <= this.latestBlock.height) return 100;

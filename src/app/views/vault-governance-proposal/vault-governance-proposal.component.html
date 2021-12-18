@@ -33,7 +33,8 @@
             </p>
 
             <p class="mb-0 flex-row align-items-end">
-              <small class="mr-2">By</small> <opdex-copy-address [address]="proposal.creator"></opdex-copy-address>
+              <small class="mr-2">By</small>
+              <opdex-copy-address [address]="proposal.creator"></opdex-copy-address>
             </p>
 
             <p class="mb-0 flex-row align-items-end" *ngIf="proposal.type === 'Create' || proposal.type === 'Revoke'">
@@ -83,13 +84,16 @@
           </div>
         </div>
 
-        <p class="mb-3">{{proposal.description}}</p>
+        <div class="mb-2">
+          <small class="b-400 light">Description</small>
+          <p class="mb-2">{{proposal.description}}</p>
+        </div>
 
         <div *ngIf="proposal.expiration >= latestBlock.height" style="max-width: 600px;">
           <mat-progress-bar color="primary" mode="determinate" [value]="getExpirationPercentage(proposal)"></mat-progress-bar>
 
           <div class="mt-2 flex-row-center-between">
-            <small class="light">Expires in {{proposal.expiration - latestBlock.height | formatNumber:0}} blocks</small>
+            <small class="light">{{proposal.expiration - latestBlock.height | formatNumber:0}} blocks remaining</small>
             <!-- <small class="light float-right">{{miningGovernance.nominationPeriodEndDate | timeago}}</small> -->
           </div>
         </div>
@@ -97,7 +101,6 @@
     </div>
   </div>
 </div>
-
 
 <div class="pt-5 pb-3 standard-section" *ngIf="proposal">
   <div class="container">
@@ -113,7 +116,13 @@
         </div>
         <opdex-vault-proposal-pledges-table [filter]="pledgesFilter"></opdex-vault-proposal-pledges-table>
       </div>
+    </div>
+  </div>
+</div>
 
+<div class="pt-5 pb-3 standard-section" *ngIf="proposal">
+  <div class="container">
+    <div class="row">
       <div class="col-12 mt-3" *ngIf="proposal.status !== 'Pledge'">
         <div class="flex-row-center-between">
           <h4 class="d-inline mb-0">Votes</h4>
@@ -123,6 +132,7 @@
             <button mat-flat-button color="primary" class="ml-3" (click)="openTransactionView('Vote', false)" *ngIf="proposal.status === 'Vote' && proposal.expiration >= latestBlock.height">Vote</button>
           </div>
         </div>
+
         <opdex-vault-proposal-votes-table [filter]="votesFilter"></opdex-vault-proposal-votes-table>
       </div>
     </div>

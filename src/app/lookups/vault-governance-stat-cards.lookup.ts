@@ -25,16 +25,16 @@ export class VaultGovernanceStatCardsLookup {
         },
         show: true
       },
-      {
-        title: 'Proposed',
-        value: vault?.tokensProposed,
-        suffix: token?.symbol,
-        helpInfo: {
-          title: 'Proposed Tokens',
-          paragraph: 'Proposed tokens are the number of tokens current requested in active create certificate proposals.'
-        },
-        show: true
-      },
+      // {
+      //   title: 'Proposed',
+      //   value: vault?.tokensProposed,
+      //   suffix: token?.symbol,
+      //   helpInfo: {
+      //     title: 'Proposed Tokens',
+      //     paragraph: 'Proposed tokens are the number of tokens current requested in active create certificate proposals.'
+      //   },
+      //   show: true
+      // },
       {
         title: 'Pledge Minimum',
         value: vault?.totalPledgeMinimum,

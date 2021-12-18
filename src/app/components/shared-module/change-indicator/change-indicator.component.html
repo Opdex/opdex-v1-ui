@@ -1,7 +1,7 @@
-<div class="change-indicator {{value >= 0 ? 'positive' : 'negative'}} {{size}}" *ngIf="value !== 0 || forceDisplay">
+<div class="change-indicator {{value >= 0 ? 'positive' : 'negative'}}" *ngIf="value !== 0 || forceDisplay">
   <mat-icon *ngIf="value !== 0">{{value >= 0 ? icons.up : icons.down}}</mat-icon>
   <mat-icon *ngIf="value === 0">{{icons.swapAlt}}</mat-icon>
 
-  <p class="change" *ngIf="value !== 0">{{(value > 0 ? value : value * -1)}}%</p>
-  <p class="change" *ngIf="value === 0">0.00%</p>
+  <span class="change" *ngIf="value !== 0">{{(value > 0 ? value : value * -1)}}%</span>
+  <span class="change" *ngIf="value === 0">0.00%</span>
 </div>

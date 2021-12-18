@@ -1,3 +1,5 @@
+import { IVaultProposalsFilter } from './../../models/platform-api/requests/vault-governances/vault-proposals-filter';
+import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Icons } from 'src/app/enums/icons';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -21,6 +23,7 @@ import { TransactionView } from '@sharedModels/transaction-view';
 import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { ReviewQuoteComponent } from '@sharedComponents/tx-module/shared/review-quote/review-quote.component';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
+import { Context } from 'vm';
 
 @Component({
   selector: 'opdex-vault-governance',
@@ -37,6 +40,8 @@ export class VaultGovernanceComponent implements OnInit {
   transactionsRequest: ITransactionsRequest;
   transactionViews = TransactionView;
   icons = Icons;
+  context: any;
+  proposalsFilter: VaultProposalsFilter;
 
   constructor(
     private _vaultsService: VaultGovernancesService,
@@ -45,11 +50,19 @@ export class VaultGovernanceComponent implements OnInit {
     private _env: EnvironmentsService,
     private _sidebar: SidenavService,
     private _platformApiService: PlatformApiService,
-    private _bottomSheet: MatBottomSheet
+    private _bottomSheet: MatBottomSheet,
+    private _context: UserContextService
   ) {
     // Init with null to get default/loading animations
     this.statCards = VaultGovernanceStatCardsLookup.getStatCards(null, null);
     this.proposals = { results: [null, null, null, null], paging: {} } as IVaultProposalsResponseModel;
+
+    this.proposalsFilter = new VaultProposalsFilter({
+      limit: 4,
+      direction: 'DESC'
+    } as IVaultProposalsFilter);
+
+    this.subscription.add(this._context.getUserContext$().subscribe(context => this.context = context));
 
     this.transactionsRequest = {
       limit: 15,
@@ -70,7 +83,7 @@ export class VaultGovernanceComponent implements OnInit {
 
   getOpenProposals$(): Observable<IVaultProposalsResponseModel> {
     return this._vaultsService
-      .getProposals(new VaultProposalsFilter(), this._env.vaultGovernanceAddress)
+      .getProposals(this.proposalsFilter, this._env.vaultGovernanceAddress)
       .pipe(tap(proposals => this.proposals = proposals));
   }
 
@@ -88,6 +101,11 @@ export class VaultGovernanceComponent implements OnInit {
 
   openTransactionView(view: string) {
     this._sidebar.openSidenav(TransactionView.vaultProposal, { child: view });
+  }
+
+  proposalsPageChange(cursor: string) {
+    this.proposalsFilter.cursor = cursor;
+    this.getOpenProposals$().pipe(take(1)).subscribe();
   }
 
   proposalsTrackBy(index: number, proposal: IVaultProposalResponseModel) {
