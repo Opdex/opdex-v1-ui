@@ -31,7 +31,6 @@ export class InputControlComponent extends ValueAccessor {
   @Output() onPrefixClick: EventEmitter<any> = new EventEmitter<any>();
 
   clickPrefix(): void {
-    console.log('hit')
     this.onPrefixClick.emit();
   }
 
