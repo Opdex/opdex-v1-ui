@@ -45,5 +45,6 @@
     <opdex-tx-mine *ngSwitchCase="4" [data]="message?.data" (onPoolSelection)="handlePoolSelection($event)"></opdex-tx-mine>
     <opdex-tx-allowance *ngSwitchCase="5" [data]="message?.data"></opdex-tx-allowance>
     <opdex-tx-create-pool *ngSwitchCase="6" [data]="message?.data"></opdex-tx-create-pool>
+    <opdex-tx-vault-proposal *ngSwitchCase="7" [data]="message?.data"></opdex-tx-vault-proposal>
   </div>
 </div>

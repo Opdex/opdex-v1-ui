@@ -35,6 +35,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { WalletComponent } from './views/wallet/wallet.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -60,6 +61,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NotificationsModule } from '@sharedComponents/notifications-module/notifications.module';
 import { TradeComponent } from './views/trade/trade.component';
 import { VaultGovernanceComponent } from './views/vault-governance/vault-governance.component';
+import { VaultGovernanceProposalComponent } from './views/vault-governance-proposal/vault-governance-proposal.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +77,8 @@ import { VaultGovernanceComponent } from './views/vault-governance/vault-governa
     VaultComponent,
     AuthComponent,
     TradeComponent,
-    VaultGovernanceComponent
+    VaultGovernanceComponent,
+    VaultGovernanceProposalComponent
   ],
   imports: [
     BrowserModule,
@@ -99,6 +102,7 @@ import { VaultGovernanceComponent } from './views/vault-governance/vault-governa
     MatButtonToggleModule,
     MatTooltipModule,
     MatIconModule,
+    MatProgressSpinnerModule,
     MatSidenavModule,
     MatBottomSheetModule,
     MatTabsModule,

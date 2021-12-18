@@ -1,7 +1,6 @@
-import { ITransactionEvent } from "../transaction-event.interface";
+import { IVaultProposalBaseEvent } from "./vault-proposal-base-event.interface";
 
-export interface IVaultProposalWithdrawVoteEvent extends ITransactionEvent {
-  proposalId: number;
+export interface IVaultProposalWithdrawVoteEvent extends IVaultProposalBaseEvent {
   voter: string;
   withdrawAmount: string;
   voterAmount: string;

@@ -19,7 +19,7 @@
 
             <div class="flex-row-end">
               <h4 class="mb-0 mr-2">${{token.summary.priceUsd | shortNumber}}</h4>
-              <opdex-change-indicator style="padding-bottom: 2px;" [value]="token.summary.dailyPriceChangePercent" size="s" *ngIf="token.summary.dailyPriceChangePercent !== null && token.summary.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
+              <opdex-change-indicator style="padding-bottom: 2px;" [value]="token.summary.dailyPriceChangePercent" *ngIf="token.summary.dailyPriceChangePercent !== null && token.summary.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
             </div>
           </div>
         </opdex-card>

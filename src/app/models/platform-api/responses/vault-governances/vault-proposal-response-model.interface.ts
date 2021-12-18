@@ -1,6 +1,6 @@
 export interface IVaultProposalResponseModel {
   vault: string;
-  tokeN: string;
+  token: string;
   proposalId: number;
   creator: string;
   wallet: string;

@@ -108,6 +108,7 @@ export class TransactionReceipt {
       case 'Distribute': return 'Distribute';
       case 'Permissions': return 'Set Permission';
       case 'Allowance': return 'Approve Allowance';
+      case 'Vault Proposal': return this.getVaultProposalSummary();
       default: return 'Unknown';
     }
   }
@@ -142,5 +143,15 @@ export class TransactionReceipt {
     if (this.eventTypeExists(TransactionEventTypes.CreateVaultCertificateEvent)) return 'Create Vault Certificate';
     else if (this.eventTypeExists(TransactionEventTypes.RedeemVaultCertificateEvent)) return 'Redeem Vault Certificate';
     else return 'Revoke Vault Certificate';
+  }
+
+  private getVaultProposalSummary(): string {
+    if (this.eventTypeExists(TransactionEventTypes.CreateVaultProposalEvent)) return 'Create Proposal';
+    else if (this.eventTypeExists(TransactionEventTypes.CompleteVaultProposalEvent)) return 'Complete Proposal';
+    else if (this.eventTypeExists(TransactionEventTypes.VaultProposalPledgeEvent)) return 'Pledge';
+    else if (this.eventTypeExists(TransactionEventTypes.VaultProposalWithdrawPledgeEvent)) return 'Withdraw Pledge';
+    else if (this.eventTypeExists(TransactionEventTypes.VaultProposalVoteEvent)) return 'Vote';
+    else if (this.eventTypeExists(TransactionEventTypes.VaultProposalWithdrawVoteEvent)) return 'Withdraw Vote';
+    else return 'Vault Proposal';
   }
 }

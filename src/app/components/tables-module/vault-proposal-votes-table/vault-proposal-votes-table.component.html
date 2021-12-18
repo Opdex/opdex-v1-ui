@@ -1,0 +1,59 @@
+<ng-container *ngIf="!loading; else loader">
+  <ng-container *ngIf="dataSource?.data?.length; else noResults">
+    <div class="table-container">
+      <table mat-table [dataSource]="dataSource" matSort [trackBy]="trackBy" class="w-100">
+        <ng-container matColumnDef="proposalId" sticky>
+          <th mat-header-cell *matHeaderCellDef> Proposal # </th>
+          <td mat-cell *matCellDef="let element" class="token-identity no-wrap">
+            {{element.proposalId}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="voter">
+          <th mat-header-cell *matHeaderCellDef> Voter </th>
+          <td mat-cell *matCellDef="let element"> <span class="no-wrap">{{element.voter}}</span> </td>
+        </ng-container>
+
+        <ng-container matColumnDef="vote">
+          <th mat-header-cell *matHeaderCellDef> Vote </th>
+          <td mat-cell *matCellDef="let element"> <span class="no-wrap">{{element.vote | formatNumber:8}}</span> </td>
+        </ng-container>
+
+        <ng-container matColumnDef="inFavor">
+          <th mat-header-cell *matHeaderCellDef> In Favor </th>
+          <td mat-cell *matCellDef="let element"> <span class="no-wrap">{{element.inFavor}}</span> </td>
+        </ng-container>
+
+        <ng-container matColumnDef="balance">
+          <th mat-header-cell *matHeaderCellDef> Balance </th>
+          <td mat-cell *matCellDef="let element"> <span class="no-wrap">{{element.balance | formatNumber:8}}</span> </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>  </th>
+          <td mat-cell *matCellDef="let element"> </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+    <div class="paginator">
+      <div class="flex-row-center-center">
+        <button mat-icon-button [disabled]="!paging?.previous" (click)="pageChange(paging?.previous)"><mat-icon>{{icons.previous}}</mat-icon></button>
+        <button mat-icon-button [disabled]="!paging?.next" (click)="pageChange(paging?.next)"><mat-icon>{{icons.next}}</mat-icon></button>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #noResults>
+    <div class="mt-4">
+      <p>No Results</p>
+    </div>
+  </ng-template>
+</ng-container>
+
+<ng-template #loader>
+  <opdex-skeleton-table></opdex-skeleton-table>
+</ng-template>

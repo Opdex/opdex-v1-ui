@@ -5,7 +5,8 @@ export enum TransactionView {
   stake = 3,
   mine = 4,
   allowance = 5,
-  createPool = 6
+  createPool = 6,
+  vaultProposal = 7
 }
 
 export interface ISidenavMessage {

@@ -16,3 +16,53 @@
     </div>
   </div>
 </div>
+
+<div class="offset-section pt-5 pb-3" *ngIf="proposals && proposals.results.length > 0">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="flex-row-center-between mb-3">
+          <h2 class="mb-0">Proposals</h2>
+
+          <button mat-stroked-button color="primary" (click)="openTransactionView('Create')" *ngIf="context.wallet"><mat-icon>{{icons.add}}</mat-icon> Create Proposal</button>
+        </div>
+      </div>
+
+      <ng-container *ngFor="let proposal of proposals.results; trackBy: proposalsTrackBy">
+        <div class="col-12 col-md-6 col-xl-3">
+         <opdex-vault-proposal-card [proposal]="proposal" [latestBlock]="latestBlock"></opdex-vault-proposal-card>
+        </div>
+      </ng-container>
+
+      <div class="col-12">
+        <div class="paginator">
+          <div class="flex-row-center-center">
+            <button mat-icon-button [disabled]="!proposals?.paging?.previous" (click)="proposalsPageChange(proposals?.paging?.previous)"><mat-icon>{{icons.previous}}</mat-icon></button>
+            <button mat-icon-button [disabled]="!proposals?.paging?.next" (click)="proposalsPageChange(proposals?.paging?.next)"><mat-icon>{{icons.next}}</mat-icon></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="pt-5 pb-3 standard-section">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h4 class="d-inline mb-0">Certificates</h4>
+        <opdex-vault-certificates-table [certificates]="certificates" (onPageChange)="handlePageChange($event)"></opdex-vault-certificates-table>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="standard-section blend-cards pt-3 pb-3 tx-bg">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-6 col-xl-5">
+        <opdex-tx-feed [transactionsRequest]="transactionsRequest" size="l"></opdex-tx-feed>
+      </div>
+    </div>
+  </div>
+</div>

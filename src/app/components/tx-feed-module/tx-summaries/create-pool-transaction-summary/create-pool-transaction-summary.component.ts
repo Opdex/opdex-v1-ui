@@ -33,7 +33,6 @@ export class CreatePoolTransactionSummaryComponent implements OnChanges, OnDestr
 
   ngOnChanges(): void {
     this.isQuote = this.transaction.hash?.length === 0;
-    console.log(this.isQuote)
     const createEvents = this.transaction.events.filter(event => this.eventTypes.includes(event.eventType)) as ICreateLiquidityPoolEvent[];
 
     if (createEvents[0] === undefined) {

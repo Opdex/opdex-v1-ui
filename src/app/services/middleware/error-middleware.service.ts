@@ -5,9 +5,11 @@ export class ErrorMiddlewareService implements ErrorHandler {
   constructor(private injector: Injector) { }
 
   // handles all uncaught errors throughout code and logs them.
-  handleError(error: string) {
+  handleError(error: Error) {
     console.group('Unexpected Error:');
-    console.log(error.toString());
+    console.log(error.name);
+    console.log(error.message);
+    console.log(error.stack);
     console.groupEnd();
   }
 }

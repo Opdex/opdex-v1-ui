@@ -23,6 +23,8 @@ import { WalletMiningPositionsTableComponent } from './wallet-mining-positions-t
 import { WalletStakingPositionsTableComponent } from './wallet-staking-positions-table/wallet-staking-positions-table.component';
 import { WalletProvisioningPositionsTableComponent } from './wallet-provisioning-positions-table/wallet-provisioning-positions-table.component';
 import { SkeletonTableComponent } from './skeleton-table/skeleton-table.component';
+import { VaultProposalPledgesTableComponent } from './vault-proposal-pledges-table/vault-proposal-pledges-table.component';
+import { VaultProposalVotesTableComponent } from './vault-proposal-votes-table/vault-proposal-votes-table.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { SkeletonTableComponent } from './skeleton-table/skeleton-table.componen
     WalletMiningPositionsTableComponent,
     WalletStakingPositionsTableComponent,
     WalletProvisioningPositionsTableComponent,
-    SkeletonTableComponent
+    SkeletonTableComponent,
+    VaultProposalPledgesTableComponent,
+    VaultProposalVotesTableComponent
   ],
   imports: [
     CommonModule,
@@ -58,7 +62,9 @@ import { SkeletonTableComponent } from './skeleton-table/skeleton-table.componen
     WalletBalancesTableComponent,
     WalletMiningPositionsTableComponent,
     WalletStakingPositionsTableComponent,
-    WalletProvisioningPositionsTableComponent
+    WalletProvisioningPositionsTableComponent,
+    VaultProposalPledgesTableComponent,
+    VaultProposalVotesTableComponent
   ]
 })
 export class TablesModule { }

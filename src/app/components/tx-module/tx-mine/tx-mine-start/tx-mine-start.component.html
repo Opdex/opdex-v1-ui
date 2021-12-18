@@ -1,6 +1,6 @@
 <div class="start-mining">
   <form [formGroup]="form" name="start-mining-form" id="start-mining-form" (submit)="submit()">
-    <opdex-input-control [buttonDisabled]="true" [prefixIcon]="icons.add" label="Mine" [formControl]="amount" [suffix]="pool.token.lp.symbol" [numbersOnly]="true">
+    <opdex-input-control [suffixDisabled]="true" [prefixIcon]="icons.add" label="Mine" [formControl]="amount" [suffix]="pool.token.lp.symbol" [numbersOnly]="true">
       <div class="flex-row-center-end">
         <span class="success" *ngIf="fiatValue">${{fiatValue | shortNumber}}</span>
       </div>

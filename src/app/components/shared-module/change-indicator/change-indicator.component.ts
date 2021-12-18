@@ -8,7 +8,6 @@ import { Icons } from 'src/app/enums/icons';
 })
 export class ChangeIndicatorComponent {
   @Input() value: number;
-  @Input() size: 's' | 'm' | 'l' = 'l'
   @Input() forceDisplay: boolean = false;
 
   icons = Icons;

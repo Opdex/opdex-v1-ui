@@ -1,0 +1,25 @@
+<div class="vault-proposal-pledge">
+  <form [formGroup]="form" name="vault-proposal-pledge-form" id="vault-proposal-pledge-form" (submit)="submit()">
+    <div class="mb-3">
+      <opdex-input-control placeholder="" label="Proposal #" [formControl]="proposalId"></opdex-input-control>
+    </div>
+
+    <div class="mb-3">
+      <opdex-input-control
+        [prefixIcon]="isWithdrawal ? icons.remove : icons.add"
+        [prefixIconDisabled]="false"
+        (onPrefixClick)="handleAddRemoveStatus()"
+        [suffixDisabled]="true"
+        [label]="isWithdrawal ? 'Withdraw' : 'Pledge'"
+        [formControl]="amount"
+        [numbersOnly]="true"
+        suffix="CRS">
+        <div class="flex-row-center-end">
+          <span class="success" *ngIf="fiatValue">${{fiatValue | shortNumber}}</span>
+        </div>
+      </opdex-input-control>
+    </div>
+
+    <button mat-flat-button color="primary" class="mt-3 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
+  </form>
+</div>
