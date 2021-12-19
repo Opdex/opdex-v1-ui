@@ -1,5 +1,5 @@
-export const PositiveDecimalNumberRegex = /^(?!-0?(\.0+)?$)-?(0|[1-9]\d*)?(\.\d+)?(?<=\d)$/;
-export const PositiveOrNegativeDecimalNumberRegex = /^-?(0|[1-9]\d*)?(\.\d+)?(?<=\d)$/;
+export const PositiveDecimalNumberRegex = /^([0-9]+\.?[0-9]*|\.[0-9]+)$/;
+export const PositiveOrNegativeDecimalNumberRegex = /^[+-]?([0-9]+\.?[0-9]*|\.[0-9]+)$/;
 
 export function sanitize(regex: RegExp, value: string): string {
   var sanitized = regex.exec(value);
