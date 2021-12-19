@@ -64,7 +64,8 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
     this._platformApi
       .stopMiningQuote(this.pool.summary.miningPool.address, request.payload)
         .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => this.quote(quote));
+        .subscribe((quote: ITransactionQuote) => this.quote(quote),
+                   (errors: string[]) => this.quoteErrors = errors);
   }
 
   handlePercentageSelect(value: any) {

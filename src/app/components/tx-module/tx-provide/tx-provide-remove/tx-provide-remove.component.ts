@@ -116,7 +116,8 @@ export class TxProvideRemoveComponent extends TxBase {
     this._platformApi
       .removeLiquidityQuote(this.pool.address, request.payload)
         .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => this.quote(quote));
+        .subscribe((quote: ITransactionQuote) => this.quote(quote),
+                   (errors: string[]) => this.quoteErrors = errors);
   }
 
   calcTolerance(tolerance?: number) {

@@ -6,7 +6,7 @@
         <a class="body-default b-300 no-decoration" href="javascript:void(0)" routerLink="/tokens/{{token.address}}">{{token.symbol}}</a>
       </h2>
 
-      <div class="flex-row-end">
+      <div class="flex-row-center-end">
         <h3 class="mb-0 mr-2 b-300">${{token?.summary?.priceUsd | shortNumber}}</h3>
         <opdex-change-indicator [value]="token?.summary?.dailyPriceChangePercent" *ngIf="token?.summary?.dailyPriceChangePercent !== null && token?.summary?.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
       </div>
@@ -20,7 +20,7 @@
 
       <div class="flex-row-center">
         <mat-icon color="primary" class="mr-2 tiny">{{icons.swap}}</mat-icon>
-        <h5 class="flex-row-end mb-0">
+        <h5 class="flex-row-center-end mb-0">
           <span>{{swapRate | shortNumber }}</span>
           <small class="ml-1">{{swapToken.symbol}}</small>
         </h5>

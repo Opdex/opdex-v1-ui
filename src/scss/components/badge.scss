@@ -1,8 +1,12 @@
 .badge {
   font-size: .8em;
-  padding: 4px 8px;
+  padding: 3px 6px;
   border-radius: 4px;
   color: #fff;
+  font-weight: 400;
+  // display: inline-flex;
+  align-items: center;
+  line-height: 1em;
 
   &.balance, &.blue {
     background: $blue-primary;

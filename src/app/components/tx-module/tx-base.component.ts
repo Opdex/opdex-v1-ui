@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 export abstract class TxBase{
   context: any;
   context$: Subscription;
+  quoteErrors: string[] = [];
 
   private _userContext: UserContextService;
   private _bottomSheet: MatBottomSheet;
@@ -20,10 +21,9 @@ export abstract class TxBase{
     this.context$ = this._userContext.getUserContext$().subscribe(context => this.context = context);
   }
 
-  quote(quote: ITransactionQuote) {
-    this._bottomSheet.open(ReviewQuoteComponent, {
-      data: quote
-    });
+  quote(quote: ITransactionQuote): void {
+    this.quoteErrors = [];
+    this._bottomSheet.open(ReviewQuoteComponent, { data: quote });
   }
 
   /**

@@ -72,6 +72,8 @@
 
   <button mat-flat-button color="primary" class="mt-3 w-100" (click)="submit()" [disabled]="!form.valid || !context?.wallet || !tokenInMax || !tokenOutMin">Quote</button>
 
+  <opdex-tx-quote-errors [quoteErrors]="quoteErrors"></opdex-tx-quote-errors>
+
   <div class="mt-3" *ngIf="allowance">
     <opdex-allowance-validation [transactionType]="transactionTypes.swap" [allowance]="allowance"></opdex-allowance-validation>
   </div>

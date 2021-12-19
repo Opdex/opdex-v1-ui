@@ -1,7 +1,4 @@
-<div class="change-indicator {{value >= 0 ? 'positive' : 'negative'}}" *ngIf="value !== 0 || forceDisplay">
-  <mat-icon *ngIf="value !== 0">{{value >= 0 ? icons.up : icons.down}}</mat-icon>
-  <mat-icon *ngIf="value === 0">{{icons.swapAlt}}</mat-icon>
-
-  <span class="change" *ngIf="value !== 0">{{(value > 0 ? value : value * -1) | formatNumber:2}}%</span>
+<div class="badge {{value >= 0 ? 'green' : 'red'}}" *ngIf="value !== 0 || forceDisplay">
+  <span class="change" *ngIf="value !== 0">{{value >= 0 ? '+' : ''}}{{value | formatNumber:2}}%</span>
   <span class="change" *ngIf="value === 0">0.00%</span>
 </div>

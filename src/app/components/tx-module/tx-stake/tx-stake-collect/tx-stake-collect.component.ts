@@ -43,7 +43,8 @@ export class TxStakeCollectComponent extends TxBase implements OnChanges {
     this._platformApi
       .collectStakingRewardsQuote(this.pool.address, request.payload)
         .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => this.quote(quote));
+        .subscribe((quote: ITransactionQuote) => this.quote(quote),
+                   (errors: string[]) => this.quoteErrors = errors);
   }
 
   destroyContext$() {

@@ -80,7 +80,8 @@ export class TxCreatePoolComponent extends TxBase {
     this._platform
       .createLiquidityPool(request.payload)
         .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => this.quote(quote));
+        .subscribe((quote: ITransactionQuote) => this.quote(quote),
+                   (errors: string[]) => this.quoteErrors = errors);
   }
 
   validateToken(): void{
@@ -98,7 +99,8 @@ export class TxCreatePoolComponent extends TxBase {
           this.isValidToken = true;
           this.validatedToken = token;
         }
-      });
+      },
+      (errors: string[]) => this.quoteErrors = errors);
   }
 
   destroyContext$() {

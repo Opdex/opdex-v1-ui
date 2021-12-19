@@ -107,7 +107,8 @@ export class TxVaultProposalCreateComponent extends TxBase implements OnDestroy 
 
     quote$
       .pipe(take(1))
-      .subscribe((quote: ITransactionQuote) => this.quote(quote));
+      .subscribe((quote: ITransactionQuote) => this.quote(quote),
+                 (errors: string[]) => this.quoteErrors = errors);
   }
 
   destroyContext$() {

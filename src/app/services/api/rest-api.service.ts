@@ -92,9 +92,18 @@ export class RestApiService {
       this._error.logHttpError(error, error.url);
     }
 
-    // Return an observable with a user-facing error message.
-    return throwError(
-      'Something bad happened; please try again later.');
+    const errors = [];
+
+    if (!!error?.error) {
+      // Covers problem details validation errors - we don't care about they key, we'll tell the users all errors
+      Object.keys(error?.error?.errors).map(key => errors.push(...error.error.errors[key]));
+
+      // Covers Exception based errors
+      if (!!error.error.detail) errors.push(error.error.detail);
+    }
+
+    // Return an observable with a user-facing error messages
+    return throwError(errors);
   }
 }
 

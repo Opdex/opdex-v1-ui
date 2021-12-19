@@ -7,7 +7,7 @@
         <h2 class="d-inline-block mb-0">{{token.symbol}}</h2>
       </a>
 
-      <div class="flex-row-end">
+      <div class="flex-row-center-end">
         <h3 class="mb-0 mr-2 b-300">${{token.summary.priceUsd | shortNumber}}</h3>
         <opdex-change-indicator [value]="token.summary.dailyPriceChangePercent" *ngIf="token.summary.dailyPriceChangePercent !== null && token.summary.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
       </div>

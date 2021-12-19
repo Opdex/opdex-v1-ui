@@ -59,7 +59,8 @@ export class TxAllowanceComponent extends TxBase {
           return this._platformApiService.approveAllowanceQuote(this.token.value, request.payload);
         }),
         take(1))
-      .subscribe((quote: ITransactionQuote) => this.quote(quote));
+      .subscribe((quote: ITransactionQuote) => this.quote(quote),
+                 (errors: string[]) => this.quoteErrors = errors);
   }
 
   destroyContext$() {
