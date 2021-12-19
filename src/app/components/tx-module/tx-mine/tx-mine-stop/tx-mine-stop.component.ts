@@ -8,7 +8,7 @@ import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liq
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Icons } from 'src/app/enums/icons';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
-import { DecimalStringRegex } from '@sharedLookups/regex';
+import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { Subscription } from 'rxjs';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MiningQuote } from '@sharedModels/platform-api/requests/mining-pools/mining-quote';
@@ -39,7 +39,7 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
     super(_injector);
 
     this.form = this._fb.group({
-      amount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]]
+      amount: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]]
     });
 
     this.subscription.add(

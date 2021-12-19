@@ -1,4 +1,4 @@
-import { DecimalStringRegex } from '@sharedLookups/regex';
+import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
 import { FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ValueAccessor } from '@sharedServices/utility/value-accessor';
@@ -75,10 +75,11 @@ export class InputControlComponent extends ValueAccessor {
     // Allows anything to be pasted, does not run regex or validations
     if (isShortcut && event.key === 'v') return;
 
-    // If regex does not result in an empty string, it does not meet the regex required
-    // Consider changing logic to check updatedValue === sanitize(regex, updatedValue);
-    if (updatedValue.replace(DecimalStringRegex, '') !== '') {
-      event.preventDefault();
-    }
+    if (updatedValue.endsWith('.')) updatedValue = updatedValue.replace('.', '');
+
+    // === '' is edge case where users start with '.'
+    const valid = updatedValue === '' || updatedValue.search(PositiveDecimalNumberRegex) > -1;
+
+    if (!valid) event.preventDefault();
   }
 }

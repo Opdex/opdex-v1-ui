@@ -6,7 +6,7 @@ import { OnDestroy } from '@angular/core';
 import { Component, Injector, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { DecimalStringRegex } from '@sharedLookups/regex';
+import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable } from 'rxjs';
@@ -71,7 +71,7 @@ export class TxVaultProposalCreateComponent extends TxBase implements OnDestroy 
     this.form = this._fb.group({
       type: [1, [Validators.required]],
       description: ['', [Validators.required]],
-      amount: ['', [Validators.pattern(DecimalStringRegex)]],
+      amount: ['', [Validators.pattern(PositiveDecimalNumberRegex)]],
       recipient: ['']
     });
   }

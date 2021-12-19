@@ -11,7 +11,7 @@
           <span *ngIf="tokenInFiatValue && !tokenInExact" class="success ml-2">${{tokenInMaxFiatValue | shortNumber}}</span>
         </div>
         <div class="fiat-quote">
-          <span class="success ml-2" *ngIf="tokenInFiatValue">${{tokenInFiatValue | shortNumber}}</span>
+          <span class="success" *ngIf="tokenInFiatValue">${{tokenInFiatValue | shortNumber}}</span>
         </div>
       </div>
     </opdex-input-control>
@@ -37,7 +37,12 @@
           <span *ngIf="tokenOutMinFiatValue && tokenInExact" class="success ml-2">${{tokenOutMinFiatValue | shortNumber}}</span>
         </div>
         <div class="fiat-quote">
-          <span class="success ml-2" *ngIf="tokenOutFiatValue">${{tokenOutFiatValue | shortNumber}}</span>
+          <span class="success" *ngIf="!!tokenOutFiatValue">${{tokenOutFiatValue | shortNumber}}</span>
+          <span class="ml-1"
+            [ngClass]="{'error': tokenOutFiatPercentageDifference.bigInt < 0, 'success': tokenOutFiatPercentageDifference.bigInt >= 0 }"
+            *ngIf="!!tokenOutFiatPercentageDifference">
+            ({{tokenOutFiatPercentageDifference?.formattedValue | shortNumber}}%)
+          </span>
         </div>
       </div>
     </opdex-input-control>

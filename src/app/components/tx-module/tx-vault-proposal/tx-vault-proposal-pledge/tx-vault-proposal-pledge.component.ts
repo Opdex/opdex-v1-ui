@@ -10,6 +10,7 @@ import { EnvironmentsService } from '@sharedServices/utility/environments.servic
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
+import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 
 @Component({
   selector: 'opdex-tx-vault-proposal-pledge',
@@ -41,7 +42,7 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
 
     this.form = this._fb.group({
       proposalId: ['', [Validators.required]],
-      amount: ['', [Validators.required]]
+      amount: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]]
     });
   }
 

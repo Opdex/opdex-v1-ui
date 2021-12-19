@@ -1,6 +1,6 @@
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
-import { DecimalStringRegex } from '@sharedLookups/regex';
+import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { Component, Input, OnInit, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
@@ -79,8 +79,8 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     }
 
     this.form = this._fb.group({
-      amountCrs: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
-      amountSrc: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
+      amountCrs: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
+      amountSrc: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
     });
   }
 

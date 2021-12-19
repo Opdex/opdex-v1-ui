@@ -13,7 +13,7 @@ import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { Icons } from 'src/app/enums/icons';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
-import { DecimalStringRegex } from '@sharedLookups/regex';
+import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { RemoveLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/remove-liquidity-request';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
@@ -70,7 +70,7 @@ export class TxProvideRemoveComponent extends TxBase {
     }
 
     this.form = this._fb.group({
-      liquidity: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
+      liquidity: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
     });
 
     this.allowance$ = this.liquidity.valueChanges

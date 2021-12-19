@@ -11,7 +11,7 @@ import { debounceTime, map, switchMap, take, distinctUntilChanged, tap, filter }
 import { Icons } from 'src/app/enums/icons';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
-import { DecimalStringRegex } from '@sharedLookups/regex';
+import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MiningQuote } from '@sharedModels/platform-api/requests/mining-pools/mining-quote';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
@@ -47,7 +47,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
     super(_injector);
 
     this.form = this._fb.group({
-      amount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]]
+      amount: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]]
     });
 
     this.allowance$ = this.amount.valueChanges

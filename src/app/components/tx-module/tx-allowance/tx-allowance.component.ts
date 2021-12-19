@@ -8,7 +8,7 @@ import { TxBase } from '../tx-base.component';
 import { Icons } from 'src/app/enums/icons';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { switchMap, take } from 'rxjs/operators';
-import { DecimalStringRegex } from '@sharedLookups/regex';
+import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { ApproveAllowanceRequest } from '@sharedModels/platform-api/requests/tokens/approve-allowance-request';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 
@@ -47,7 +47,7 @@ export class TxAllowanceComponent extends TxBase {
     this.form = this._fb.group({
       token: ['', [Validators.required]],
       spender: ['', [Validators.required]],
-      amount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
+      amount: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
     });
   }
 

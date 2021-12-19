@@ -1,11 +1,11 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { PositiveOrNegativeDecimalNumberRegex } from '@sharedLookups/regex';
 import { ShortNumberTypes } from '@sharedLookups/short-number-types.lookup';
 
 // Todo: Remove trailing zeros for numbers like 1.00M or 1.10M.
 // Should result in 1M or 1.1M
 @Pipe({ name: 'shortNumber' })
 export class ShortNumberPipe implements PipeTransform {
-
   shortNumberTypes = ShortNumberTypes;
 
   transform(value: string | number): string {
@@ -13,7 +13,8 @@ export class ShortNumberPipe implements PipeTransform {
 
     value = typeof(value) !== 'string' ? value.toString() : value;
 
-    const isValidNumber = value ? value.search(/^\d*(\.\d+)?$/gm) : -1;
+    const isValidNumber = value ? value.search(PositiveOrNegativeDecimalNumberRegex) : -1;
+
     value = isValidNumber === -1 ? 'NAN' : value;
 
     if (value.replace(/0/g, '').replace('.', '') === '') {

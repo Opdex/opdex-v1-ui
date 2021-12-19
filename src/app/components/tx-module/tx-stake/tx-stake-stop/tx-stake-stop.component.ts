@@ -7,7 +7,7 @@ import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Icons } from 'src/app/enums/icons';
-import { DecimalStringRegex } from '@sharedLookups/regex';
+import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { Subscription } from 'rxjs';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { StopStakingRequest } from '@sharedModels/platform-api/requests/liquidity-pools/stop-staking-request';
@@ -42,7 +42,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
     super(_injector);
 
     this.form = this._fb.group({
-      amount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
+      amount: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
       liquidate: [false]
     });
 

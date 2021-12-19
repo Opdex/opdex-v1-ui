@@ -3,7 +3,7 @@ import { MathService } from '@sharedServices/utility/math.service';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { DecimalStringRegex } from '@sharedLookups/regex';
+import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
@@ -46,7 +46,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
     super(_injector);
 
     this.form = this._fb.group({
-      amount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]]
+      amount: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]]
     });
 
     this.latestSyncedBlock$ = this._blocksService.getLatestBlock$()

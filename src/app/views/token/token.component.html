@@ -3,7 +3,7 @@
     <div class="row mb-3 justify-content-between align-items-center">
       <div class="col-12 col-lg-6 col-xl-8">
         <h1 class="mb-0">{{token.name}}</h1>
-        <opdex-copy-address [address]="token?.address"></opdex-copy-address>
+        <opdex-copy-address [address]="token?.address" *ngIf="token?.address !== 'CRS'"></opdex-copy-address>
       </div>
 
       <div class="d-none d-lg-block col-lg-6 col-xl-4">
@@ -15,12 +15,21 @@
       <div class="col-12 col-md-6 col-xl-3">
         <opdex-card>
           <div class="flex-row-center-between">
-            <h3 class="mb-0">{{token.symbol}}</h3>
+            <p class="mb-0">{{token.symbol}}</p>
 
-            <div class="flex-row-end">
-              <h4 class="mb-0 mr-2">${{token.summary.priceUsd | shortNumber}}</h4>
-              <opdex-change-indicator style="padding-bottom: 2px;" [value]="token.summary.dailyPriceChangePercent" *ngIf="token.summary.dailyPriceChangePercent !== null && token.summary.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
+            <div class="flex-row-center-end">
+              <p class="mb-0 mr-2">${{token.summary.priceUsd | shortNumber}}</p>
+              <opdex-change-indicator [value]="token.summary.dailyPriceChangePercent" *ngIf="token.summary.dailyPriceChangePercent !== null && token.summary.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
             </div>
+          </div>
+        </opdex-card>
+      </div>
+
+      <div class="col-12 col-md-6 col-xl-3">
+        <opdex-card [fullHeight]="true">
+          <div class="flex-row-center-between">
+            <p class="mb-0">Total Supply</p>
+            <p class="mb-0">{{token.totalSupply | shortNumber}}</p>
           </div>
         </opdex-card>
       </div>

@@ -15,7 +15,7 @@ import { debounceTime, take, distinctUntilChanged, switchMap, map, tap, catchErr
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { Icons } from 'src/app/enums/icons';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
-import { DecimalStringRegex } from '@sharedLookups/regex';
+import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { TxBase } from '../tx-base.component';
 import { IMarketToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
@@ -49,6 +49,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   tokenOutFiatValue: string;
   tokenOutMinFiatValue: string;
   tokenOutPercentageSelected: string;
+  tokenOutFiatPercentageDifference: FixedDecimal;
   changeTokenOut: boolean;
   toleranceThreshold: number;
   deadlineThreshold: number;
@@ -80,8 +81,8 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     this.toleranceThreshold = this.context?.preferences?.toleranceThreshold || 0.1;
 
     this.form = this._fb.group({
-      tokenInAmount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
-      tokenOutAmount: ['', [Validators.required, Validators.pattern(DecimalStringRegex)]],
+      tokenInAmount: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
+      tokenOutAmount: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
     });
 
     this.subscription.add(
@@ -223,6 +224,16 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
 
     this.tokenInMaxFiatValue = MathService.multiply(tokenInMax, tokenInPrice);
     this.tokenOutMinFiatValue = MathService.multiply(tokenOutMin, tokenOutPrice);
+
+    // Calc token in fiat vs out fiat percentage difference
+    const tokenOutFiatFixed = new FixedDecimal(this.tokenOutFiatValue, 8);
+    const tokenInFiatFixed = new FixedDecimal(this.tokenInFiatValue, 8);
+    const negativeOneHundred = new FixedDecimal('-100', 8);
+    const one = new FixedDecimal('1', 8);
+    const percentageOutputOfInputFixed = new FixedDecimal(MathService.divide(tokenOutFiatFixed, tokenInFiatFixed), 8);
+    const differenceFixed = new FixedDecimal(MathService.subtract(one, percentageOutputOfInputFixed), 8);
+
+    this.tokenOutFiatPercentageDifference = new FixedDecimal(MathService.multiply(differenceFixed, negativeOneHundred), 8);
   }
 
   toggleShowMore(): void {
@@ -247,15 +258,20 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     }
   }
 
-  private resetValues() {
-    this.tokenInAmount.setValue('', { emitEvent: false });
-    this.tokenOutAmount.setValue('', { emitEvent: false });
+  private resetValues(isAmountInQuote: boolean) {
+    // If "isAmountInQuote" reset amountOut or vice versa
+    // This lets users put "0" or "." in the AmountOut field, resulting in an "AmountIn" quote
+    // Then the AmountOut field is not cleared, maintaining the "0" or "." and the AmountOut is cleared.
+    if (isAmountInQuote) this.tokenInAmount.setValue('', { emitEvent: false });
+    else this.tokenOutAmount.setValue('', { emitEvent: false });
+
     this.tokenInMax = null;
     this.tokenInFiatValue = null;
     this.tokenInMaxFiatValue = null;
     this.tokenOutMin = null;
     this.tokenOutFiatValue = null;
     this.tokenOutMinFiatValue = null;
+    this.tokenOutFiatPercentageDifference = null;
   }
 
   private amountInQuote(amountOut: string): Observable<boolean> {
@@ -264,7 +280,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     const amountOutFixed = new FixedDecimal(amountOut, this.tokenOut.decimals);
 
     if (amountOutFixed.isZero) {
-      this.resetValues();
+      this.resetValues(true);
       return of(false);
     }
 
@@ -287,7 +303,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     const amountInFixed = new FixedDecimal(amountIn, this.tokenIn.decimals);
 
     if (amountInFixed.isZero) {
-      this.resetValues();
+      this.resetValues(false);
       return of(false);
     }
 

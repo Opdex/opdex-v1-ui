@@ -55,6 +55,8 @@ export class FixedDecimal {
 
     if (value.startsWith('.')) {
       value = `0${value}`;
+    } else if (value.startsWith('-.')) {
+      value = value.replace('-.', '-0.');
     }
 
     const parts = value.split('.');

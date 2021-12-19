@@ -1,3 +1,4 @@
+import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { Component, Injector, Input, OnChanges, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
@@ -45,7 +46,7 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
 
     this.form = this._fb.group({
       proposalId: ['', [Validators.required]],
-      amount: ['', [Validators.required]],
+      amount: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
       inFavor: [false, Validators.required]
     });
   }
