@@ -39,8 +39,7 @@ export class LineChangeComponent implements OnChanges, OnInit {
           this.lineSeries = chart.addAreaSeries({
             lineColor: this.chartData[0].value > this.chartData[this.chartData.length - 1].value ? this.redColor : this.greenColor,
             lineWidth: <DeepPartial<LineWidth>>4,
-            topColor: 'transparent',
-            bottomColor: 'transparent',
+            topColor: this.chartData[0].value > this.chartData[this.chartData.length - 1].value ? 'rgba(242, 67, 91, 0.4)' : 'rgba(0, 235, 147, 0.4)',
             priceLineVisible: false,
             lastValueVisible: false,
             crosshairMarkerVisible: false
