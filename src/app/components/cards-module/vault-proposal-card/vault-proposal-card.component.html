@@ -17,20 +17,21 @@
       </small>
     </div>
 
-    <div class="flex-row-center-between flex-wrap mb-2">
+    <div class="flex-row-center-between flex-wrap">
       <p class="mb-2" style="font-size: 2em; line-height: 1.2em" *ngIf="proposal.type !== 'Revoke'">
         <span class="b-400 mr-2">{{proposal.amount | shortNumber}}</span>
         <small *ngIf="proposal.type === 'Create'">ODX</small>
         <small *ngIf="proposal.type !== 'Create'">CRS</small>
       </p>
 
+      <div class="space-between"></div>
+
       <div class="w-100 flex-row-center-between" style="flex-grow: 1">
         <div class="pledge flex-column">
           <small class="flex-row-center">
             <span class="light mr-1 b-400">Pledge</span>
             <mat-icon color="primary" [ngClass]="iconSizes.tiny" *ngIf="proposal.status === 'Pledge'">{{icons.inProgress}}</mat-icon>
-            <mat-icon color="warn" [ngClass]="iconSizes.tiny" *ngIf="proposal.status === 'Complete' && !proposal.approved">{{icons.close}}</mat-icon>
-            <mat-icon class="positive-value" [ngClass]="iconSizes.tiny" *ngIf="proposal.status === 'Vote' || (proposal.status === 'Complete' && proposal.approved)">{{icons.check}}</mat-icon>
+            <mat-icon class="positive-value" [ngClass]="iconSizes.tiny" *ngIf="proposal.status === 'Vote'">{{icons.check}}</mat-icon>
           </small>
 
           <small class="flex-row-center">
@@ -43,8 +44,6 @@
           <small class="flex-row-center">
             <span class="light mr-1 b-400">Vote</span>
             <mat-icon color="primary" [ngClass]="iconSizes.tiny" *ngIf="proposal.status === 'Vote'">{{icons.inProgress}}</mat-icon>
-            <mat-icon color="warn" [ngClass]="iconSizes.tiny" *ngIf="proposal.status === 'Complete' && !proposal.approved">{{icons.close}}</mat-icon>
-            <mat-icon class="positive-value" [ngClass]="iconSizes.tiny" *ngIf="proposal.status === 'Complete' && proposal.approved">{{icons.check}}</mat-icon>
           </small>
 
           <div class="flex-row-center-between">
@@ -63,14 +62,17 @@
       </div>
     </div>
 
-    <div class="space-between"></div>
-
-    <mat-progress-bar [color]="proposal.expiration >= latestBlock.height ? 'primary' : 'warn'" mode="determinate" [value]="getExpirationPercentage()"></mat-progress-bar>
+    <mat-progress-bar [color]="proposal.expiration >= latestBlock.height ? 'primary' : 'warn'"
+                      class="mt-2 green"
+                      mode="determinate"
+                      [value]="getExpirationPercentage()"
+                      *ngIf="proposal.expiration >= latestBlock.height || proposal.status === 'Complete'"></mat-progress-bar>
 
     <div class="mt-2 flex-row-center-between">
       <small class="light" *ngIf="proposal.expiration >= latestBlock.height">{{proposal.expiration - latestBlock.height | formatNumber:0}} blocks remaining</small>
       <!-- <small class="light float-right">{{miningGovernance.nominationPeriodEndDate | timeago}}</small> -->
-      <small class="light" *ngIf="proposal.expiration < latestBlock.height">Closed</small>
+      <button mat-stroked-button color="primary" class="small w-100" *ngIf="proposal.status !== 'Complete' && proposal.expiration < latestBlock.height" (click)="completeProposal()" [disabled]="!!context?.wallet === false">Complete Proposal</button>
+      <span class="badge {{proposal.approved ? 'green' : 'red'}}" *ngIf="proposal.status === 'Complete' && proposal.expiration < latestBlock.height">{{proposal.approved ? 'Approved' : 'Denied'}}</span>
     </div>
   </ng-container>
 

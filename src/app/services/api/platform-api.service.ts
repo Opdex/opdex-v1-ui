@@ -68,6 +68,7 @@ import { VaultProposalsFilter } from '@sharedModels/platform-api/requests/vault-
 import { IVaultProposalsResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposals-response-model.interface';
 import { IVaultProposalPledgesResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-pledges-response-model.interface';
 import { IVaultProposalVotesResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-votes-response-model.interface';
+import { VaultCertificatesFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-certificates-filter';
 
 @Injectable({
   providedIn: 'root'
@@ -281,6 +282,10 @@ export class PlatformApiService extends RestApiService {
     return this.get<IVaultGovernanceResponseModel>(`${this.api}/vault-governances/${address}`);
   }
 
+  public getVaultGovernanceCertificates(address: string, request: VaultCertificatesFilter): Observable<IVaultCertificates> {
+    return this.get<IVaultCertificates>(`${this.api}/vault-governances/${address}/certificates${request.buildQueryString()}`);
+  }
+
   public redeemVaultCertificate(vault: string): Observable<ITransactionQuote> {
     return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/certificates/redeem`, {});
   }
@@ -301,20 +306,20 @@ export class PlatformApiService extends RestApiService {
     return this.get<IVaultProposalResponseModel>(`${this.api}/vault-governances/${address}/proposals/${proposalId}`);
   }
 
-  public createCertificateVaultProposal(vault: string, payload: ICreateCertificateVaultProposalQuoteRequest): Observable<ITransactionQuote> {
-    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/create-certificate`, payload);
+  public createCertificateVaultProposal(vault: string, request: ICreateCertificateVaultProposalQuoteRequest): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/create-certificate`, request);
   }
 
-  public revokeCertificateVaultProposal(vault: string, payload: IRevokeCertificateVaultProposalQuoteRequest): Observable<ITransactionQuote> {
-    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/revoke-certificate`, payload);
+  public revokeCertificateVaultProposal(vault: string, request: IRevokeCertificateVaultProposalQuoteRequest): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/revoke-certificate`, request);
   }
 
-  public minimumPledgeVaultProposal(vault: string, payload: IMinimumPledgeVaultProposalQuoteRequest): Observable<ITransactionQuote> {
-    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/minimum-pledge`, payload);
+  public minimumPledgeVaultProposal(vault: string, request: IMinimumPledgeVaultProposalQuoteRequest): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/minimum-pledge`, request);
   }
 
-  public minimumVoteVaultProposal(vault: string, payload: IMinimumVoteVaultProposalQuoteRequest): Observable<ITransactionQuote> {
-    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/minimum-vote`, payload);
+  public minimumVoteVaultProposal(vault: string, request: IMinimumVoteVaultProposalQuoteRequest): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/minimum-vote`, request);
   }
 
   public completeVaultProposal(vault: string, proposalId: number): Observable<ITransactionQuote> {
@@ -325,24 +330,24 @@ export class PlatformApiService extends RestApiService {
     return this.get<IVaultProposalPledgeResponseModel>(`${this.api}/vault-governances/${address}/proposals/${proposalId}/pledges/${pledger}`);
   }
 
-  public pledgeToVaultProposal(vault: string, proposalId: number, payload: IVaultProposalPledgeQuoteRequest): Observable<ITransactionQuote> {
-    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/${proposalId}/pledges`, payload);
+  public pledgeToVaultProposal(vault: string, proposalId: number, request: IVaultProposalPledgeQuoteRequest): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/${proposalId}/pledges`, request);
   }
 
-  public withdrawVaultProposalPledge(vault: string, proposalId: number, payload: IVaultProposalWithdrawPledgeQuoteRequest): Observable<ITransactionQuote> {
-    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/${proposalId}/pledges/withdraw`, payload);
+  public withdrawVaultProposalPledge(vault: string, proposalId: number, request: IVaultProposalWithdrawPledgeQuoteRequest): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/${proposalId}/pledges/withdraw`, request);
   }
 
   public getVaultProposalVote(address: string, proposalId: number, voter: string): Observable<IVaultProposalVoteResponseModel> {
     return this.get<IVaultProposalVoteResponseModel>(`${this.api}/vault-governances/${address}/proposals/${proposalId}/votes/${voter}`);
   }
 
-  public voteOnVaultProposal(vault: string, proposalId: number, payload: IVaultProposalVoteQuoteRequest): Observable<ITransactionQuote> {
-    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/${proposalId}/votes`, payload);
+  public voteOnVaultProposal(vault: string, proposalId: number, request: IVaultProposalVoteQuoteRequest): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/${proposalId}/votes`, request);
   }
 
-  public withdrawVaultProposalVote(vault: string, proposalId: number, payload: IVaultProposalWithdrawVoteQuoteRequest): Observable<ITransactionQuote> {
-    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/${proposalId}/votes/withdraw`, payload);
+  public withdrawVaultProposalVote(vault: string, proposalId: number, request: IVaultProposalWithdrawVoteQuoteRequest): Observable<ITransactionQuote> {
+    return this.post<ITransactionQuote>(`${this.api}/vault-governances/${vault}/proposals/${proposalId}/votes/withdraw`, request);
   }
 
   ////////////////////////////

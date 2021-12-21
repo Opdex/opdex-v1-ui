@@ -19,6 +19,7 @@ import { IVaultProposalPledgeResponseModel } from '@sharedModels/platform-api/re
 })
 export class VaultProposalPledgesTableComponent implements OnChanges {
   @Input() filter: VaultProposalPledgesFilter;
+  @Input() hideProposalIdColumn: boolean;
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
   paging: ICursor;
@@ -32,7 +33,7 @@ export class VaultProposalPledgesTableComponent implements OnChanges {
 
   constructor(private _vaultsService: VaultGovernancesService, private _blocksService: BlocksService) {
     this.dataSource = new MatTableDataSource<any>();
-    this.displayedColumns = ['proposalId', 'pledger', 'pledge', 'balance', 'actions'];
+    this.displayedColumns = ['pledger', 'pledge', 'balance', 'actions'];
   }
 
   ngOnChanges() {
@@ -43,6 +44,12 @@ export class VaultProposalPledgesTableComponent implements OnChanges {
         this._blocksService.getLatestBlock$()
           .pipe(switchMap(_ => this.getPledges$(this.filter?.cursor)))
           .subscribe(_ => this.loading = false))
+    }
+
+    if (!!this.hideProposalIdColumn === false) this.displayedColumns.unshift('proposalId')
+    else {
+      const index = this.displayedColumns.findIndex(item => item === 'proposalId');
+      if (index > -1) this.displayedColumns = this.displayedColumns.splice(index, 1);
     }
   }
 

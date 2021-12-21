@@ -83,7 +83,13 @@ export class TxVaultProposalCreateComponent extends TxBase implements OnDestroy 
     let quote$: Observable<ITransactionQuote>;
 
     if (this.type.value === 1) {
-      // Todo: Get locked token and decimals
+      const amount = new FixedDecimal(this.amount.value, 8);
+
+      if (amount.bigInt > new FixedDecimal('5000000', 8).bigInt) {
+        this.quoteErrors = ['Maximum amount is 5 million.'];
+        return;
+      }
+
       const request = new CreateCertificateVaultProposalQuoteRequest(this.recipient.value, new FixedDecimal(this.amount.value, 8), this.description.value);
       quote$ = this._platformApi.createCertificateVaultProposal(vault, request.payload);
     }

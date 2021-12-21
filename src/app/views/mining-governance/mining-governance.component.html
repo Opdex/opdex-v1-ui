@@ -17,7 +17,7 @@
                   <opdex-help-button class="mr-2" [info]="miningGovernanceStatCardsInfo.nominationsHelpInfo"></opdex-help-button> Nominations
                 </span>
 
-                <span class="badge {{miningGovernance.periodRemainingBlocks > 0 ? 'success' : 'warn'}}">{{miningGovernance.periodRemainingBlocks > 0 ? 'Ongoing' : 'Paused'}}</span>
+                <span class="badge {{miningGovernance.periodRemainingBlocks > 0 ? 'green' : 'red'}}">{{miningGovernance.periodRemainingBlocks > 0 ? 'Ongoing' : 'Paused'}}</span>
               </h4>
 
               <h5 class="mb-0" *ngIf="miningGovernance.periodRemainingBlocks > 0">

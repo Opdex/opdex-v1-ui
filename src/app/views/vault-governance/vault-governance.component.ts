@@ -1,4 +1,4 @@
-import { IVaultProposalsFilter } from './../../models/platform-api/requests/vault-governances/vault-proposals-filter';
+import { IVaultProposalsFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposals-filter';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Icons } from 'src/app/enums/icons';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -23,7 +23,8 @@ import { TransactionView } from '@sharedModels/transaction-view';
 import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { ReviewQuoteComponent } from '@sharedComponents/tx-module/shared/review-quote/review-quote.component';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
-import { Context } from 'vm';
+import { VaultCertificatesFilter, IVaultCertificatesFilter, VaultCertificateStatusFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-certificates-filter';
+import { IVaultCertificates } from '@sharedModels/platform-api/responses/vaults/vault-certificate.interface';
 
 @Component({
   selector: 'opdex-vault-governance',
@@ -42,6 +43,8 @@ export class VaultGovernanceComponent implements OnInit {
   icons = Icons;
   context: any;
   proposalsFilter: VaultProposalsFilter;
+  certificatesFilter: VaultCertificatesFilter;
+  certificates: IVaultCertificates;
 
   constructor(
     private _vaultsService: VaultGovernancesService,
@@ -62,6 +65,12 @@ export class VaultGovernanceComponent implements OnInit {
       direction: 'DESC'
     } as IVaultProposalsFilter);
 
+    this.certificatesFilter = new VaultCertificatesFilter({
+      status: VaultCertificateStatusFilter.vesting,
+      limit: 10,
+      direction: 'DESC'
+    } as IVaultCertificatesFilter);
+
     this.subscription.add(this._context.getUserContext$().subscribe(context => this.context = context));
 
     this.transactionsRequest = {
@@ -77,7 +86,8 @@ export class VaultGovernanceComponent implements OnInit {
         .pipe(
           tap(block => this.latestBlock = block),
           switchMap(_ => this.getVault$()),
-          switchMap(_ => this.getOpenProposals$()))
+          switchMap(_ => this.getOpenProposals$()),
+          switchMap(_ => this.getVaultCertificates$()))
         .subscribe());
   }
 
@@ -97,6 +107,16 @@ export class VaultGovernanceComponent implements OnInit {
           this.statCards = VaultGovernanceStatCardsLookup.getStatCards(this.vault, this.token);
           return this.token;
         }));
+  }
+
+  getVaultCertificates$(): Observable<IVaultCertificates> {
+    return this._vaultsService.getCertificates(this.certificatesFilter, this._env.vaultGovernanceAddress)
+      .pipe(tap(response => this.certificates = response));
+  }
+
+  handlePageChange($event) {
+    this.certificatesFilter.cursor = $event;
+    this.getVaultCertificates$().pipe(take(1)).subscribe();
   }
 
   openTransactionView(view: string) {
