@@ -14,7 +14,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RestApiService } from './rest-api.service';
 import { ErrorService } from '@sharedServices/utility/error.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ILiquidityPoolsResponse, ILiquidityPoolResponse, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { LiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { TransactionRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
@@ -69,6 +69,7 @@ import { IVaultProposalsResponseModel } from '@sharedModels/platform-api/respons
 import { IVaultProposalPledgesResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-pledges-response-model.interface';
 import { IVaultProposalVotesResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-votes-response-model.interface';
 import { VaultCertificatesFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-certificates-filter';
+import { IIndexStatus } from '@sharedModels/platform-api/responses/index/index-status.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -115,6 +116,12 @@ export class PlatformApiService extends RestApiService {
   public getLatestSyncedBlock(): Observable<IBlock> {
     return this.get<IBlock>(`${this.api}/index/latest-block`);
   }
+
+  public getIndexStatus(): Observable<IIndexStatus> {
+    return of({} as IIndexStatus); // Temporary
+    return this.get<IIndexStatus>(`${this.api}/index/status`);
+  }
+
 
   ////////////////////////////
   // Market Tokens

@@ -41,6 +41,7 @@ export enum Icons {
     down = 'arrow_downward',
     previous = 'arrow_back',
     next = 'arrow_forward',
+    arrowUp = 'keyboard_arrow_up',
     arrowDown = 'keyboard_arrow_down',
     arrowLeft = 'keyboard_arrow_left',
     arrowRight = 'keyboard_arrow_right',
@@ -61,5 +62,8 @@ export enum Icons {
     inProgress = 'sync',
     thumbUp = 'thumb_up_alt',
     thumbDown = 'thumb_down_alt',
-    pledge = 'favorite'
+    pledge = 'favorite',
+    warning = 'warning',
+    rewind = 'sync_problem',
+    maintenance = 'sync_disabled'
 }

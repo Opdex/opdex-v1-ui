@@ -1,10 +1,11 @@
+import { IIndexStatus } from './models/platform-api/responses/index/index-status.interface';
+import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { AppUpdateModalComponent } from './components/modals-module/app-update-modal/app-update-modal.component';
 import { TransactionReceipt } from './models/transaction-receipt';
 import { ITransactionReceipt } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
-import { catchError, take } from 'rxjs/operators';
+import { catchError, switchMap, take } from 'rxjs/operators';
 import { TransactionsService } from '@sharedServices/platform/transactions.service';
 import { JwtService } from '@sharedServices/utility/jwt.service';
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { SidenavService } from './services/utility/sidenav.service';
 import { ChangeDetectorRef, Component, HostBinding, OnInit, ViewChild } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
@@ -41,12 +42,13 @@ export class AppComponent implements OnInit {
   context: any;
   network: string;
   menuOpen = false;
-  isPinned = true;
+  isPinned = false;
   message: ISidenavMessage;
   sidenavMode: 'over' | 'side' = 'over';
   hubConnection: HubConnection;
   loading = true;
   icons = Icons;
+  indexStatus: IIndexStatus;
 
   constructor(
     public overlayContainer: OverlayContainer,
@@ -79,6 +81,11 @@ export class AppComponent implements OnInit {
           this._context.setToken(jwt);
           setTimeout(() => this.loading = false, 1500);
         }));
+
+    this.subscription.add(
+      timer(0, 15000)
+        .pipe(switchMap(_ => this._api.getIndexStatus()))
+      .subscribe(status => this.indexStatus = status));
   }
 
   ngAfterContentChecked() {

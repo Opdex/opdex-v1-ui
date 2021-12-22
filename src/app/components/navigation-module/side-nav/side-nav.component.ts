@@ -5,7 +5,7 @@ import { TransactionsService } from '@sharedServices/platform/transactions.servi
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { ThemeService } from '@sharedServices/utility/theme.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
-import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
@@ -22,8 +22,9 @@ import { take, tap } from 'rxjs/operators';
 export class SideNavComponent implements OnDestroy {
   @Output() onPinnedToggle = new EventEmitter<boolean>();
   @Output() onRouteChanged = new EventEmitter<string>();
+  @Input() mobileMenuOpen: boolean;
   userContext$: Observable<any>;
-  isPinned: boolean = true;
+  isPinned: boolean = false;
   theme$: Subscription;
   theme: 'light-mode' | 'dark-mode';
   latestSyncedBlock$: Observable<IBlock>;

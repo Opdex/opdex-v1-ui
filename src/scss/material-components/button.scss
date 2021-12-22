@@ -93,3 +93,11 @@ button {
     color: #fff !important;
   }
 }
+
+.mat-button {
+  &.transparent {
+    .mat-button-focus-overlay {
+      display: none !important;
+    }
+  }
+}
