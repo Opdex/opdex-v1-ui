@@ -1,3 +1,7 @@
+import { IconSizes } from 'src/app/enums/icon-sizes';
+import { Icons } from 'src/app/enums/icons';
+import { catchError } from 'rxjs/operators';
+import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { VaultProposalPledgesFilter, IVaultProposalPledgesFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-pledges-filter';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -11,7 +15,7 @@ import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { VaultGovernancesService } from '@sharedServices/platform/vault-governances.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { tap, switchMap, map, take } from 'rxjs/operators';
 import { ReviewQuoteComponent } from '@sharedComponents/tx-module/shared/review-quote/review-quote.component';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
@@ -20,6 +24,8 @@ import { TransactionView } from '@sharedModels/transaction-view';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
 import { IVaultProposalVotesFilter, VaultProposalVotesFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-votes-filter';
+import { IVaultProposalVoteResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-vote-response-model.interface';
+import { IVaultProposalPledgeResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-pledge-response-model.interface';
 
 @Component({
   selector: 'opdex-vault-governance-proposal',
@@ -34,6 +40,11 @@ export class VaultGovernanceProposalComponent {
   pledgesFilter: VaultProposalPledgesFilter;
   votesFilter: VaultProposalVotesFilter;
   proposal: IVaultProposalResponseModel;
+  context: any;
+  userVote: IVaultProposalVoteResponseModel;
+  userPledge: IVaultProposalPledgeResponseModel;
+  icons = Icons;
+  iconSizes = IconSizes;
 
   constructor(
     private _vaultsService: VaultGovernancesService,
@@ -42,16 +53,21 @@ export class VaultGovernanceProposalComponent {
     private _sidebar: SidenavService,
     private _route: ActivatedRoute,
     private _platformApiService: PlatformApiService,
-    private _bottomSheet: MatBottomSheet
+    private _bottomSheet: MatBottomSheet,
+    private _context: UserContextService
   ) {
     const proposalId = parseInt(this._route.snapshot.paramMap.get('proposalId'));
+
+    this.subscription.add(this._context.getUserContext$().subscribe(context => this.context = context));
 
     this.subscription.add(
       this._blocksService.getLatestBlock$()
         .pipe(
           tap(block => this.latestBlock = block),
           switchMap(_ => this.getVault$()),
-          switchMap(_ => this.getProposal$(proposalId)))
+          switchMap(_ => this.getProposal$(proposalId)),
+          switchMap(_ => this.getVote$()),
+          switchMap(_ => this.getPledge$()))
         .subscribe());
 
     this.pledgesFilter = new VaultProposalPledgesFilter({
@@ -84,6 +100,24 @@ export class VaultGovernanceProposalComponent {
           this.token = token as IToken;
           return this.token;
         }));
+  }
+
+  getVote$(): Observable<IVaultProposalVoteResponseModel> {
+    if (this.proposal.status === 'Pledge' || !!this.context?.wallet === false) return of(null);
+
+    return this._vaultsService.getVote(this.proposal.proposalId, this.context.wallet, this.proposal.vault)
+      .pipe(
+        catchError(_ => of(null)),
+        tap(vote => this.userVote = vote));
+  }
+
+  getPledge$(): Observable<IVaultProposalVoteResponseModel> {
+    if (!!this.context?.wallet === false) return of(null);
+
+    return this._vaultsService.getPledge(this.proposal.proposalId, this.context.wallet, this.proposal.vault)
+      .pipe(
+        catchError(_ => of(null)),
+        tap(pledge => this.userPledge = pledge));
   }
 
   openTransactionView(view: string, withdraw: boolean) {

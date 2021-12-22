@@ -17,7 +17,7 @@
                   <opdex-help-button class="mr-2" [info]="miningGovernanceStatCardsInfo.nominationsHelpInfo"></opdex-help-button> Nominations
                 </span>
 
-                <span class="badge {{miningGovernance.periodRemainingBlocks > 0 ? 'success' : 'warn'}}">{{miningGovernance.periodRemainingBlocks > 0 ? 'Ongoing' : 'Paused'}}</span>
+                <span class="badge {{miningGovernance.periodRemainingBlocks > 0 ? 'green' : 'red'}}">{{miningGovernance.periodRemainingBlocks > 0 ? 'Ongoing' : 'Paused'}}</span>
               </h4>
 
               <h5 class="mb-0" *ngIf="miningGovernance.periodRemainingBlocks > 0">
@@ -88,6 +88,22 @@
 
 <div class="standard-section pt-5 pb-3">
   <div class="container">
+    <div class="mb-4" *ngIf="miningPools$ | async as miningPools">
+      <div class="row" *ngIf="miningPools.length">
+        <div class="col-12">
+          <h2 class="flex-row-center">
+            <mat-icon class="mine mr-2">{{icons.mining}}</mat-icon>
+            Active Liquidity Mining
+          </h2>
+        </div>
+      </div>
+      <div class="scrollable-row">
+        <div class="scrollable-card" *ngFor="let pool of miningPools; trackBy: poolsTrackBy">
+          <opdex-mining-card [pool]="pool"></opdex-mining-card>
+        </div>
+      </div>
+    </div>
+
     <div class="row">
       <div class="col-12">
         <h2 class="flex-row-center">
@@ -102,21 +118,5 @@
         <opdex-staking-pool-card [pool]="pool"></opdex-staking-pool-card>
       </div>
     </div>
-
-    <ng-container *ngIf="miningPools$ | async as miningPools">
-      <div class="row mt-4" *ngIf="miningPools.length">
-        <div class="col-12">
-          <h2 class="flex-row-center">
-            <mat-icon class="mine mr-2">{{icons.mining}}</mat-icon>
-            Active Liquidity Mining
-          </h2>
-        </div>
-      </div>
-      <div class="scrollable-row">
-        <div class="scrollable-card" *ngFor="let pool of miningPools; trackBy: poolsTrackBy">
-          <opdex-mining-card [pool]="pool"></opdex-mining-card>
-        </div>
-      </div>
-    </ng-container>
   </div>
 </div>

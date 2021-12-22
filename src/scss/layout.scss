@@ -140,6 +140,11 @@
   @extend %flexColumnCenter;
 }
 
+.flex-column-center-center {
+  @extend %flexColumnCenter;
+  justify-content: center;
+}
+
 .flex-column-end {
   @extend %flexColumnEnd;
 }

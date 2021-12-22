@@ -60,5 +60,6 @@ export enum Icons {
     proposal = 'ballot',
     inProgress = 'sync',
     thumbUp = 'thumb_up_alt',
-    thumbDown = 'thumb_down_alt'
+    thumbDown = 'thumb_down_alt',
+    pledge = 'favorite'
 }

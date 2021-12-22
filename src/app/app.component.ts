@@ -126,6 +126,7 @@ export class AppComponent implements OnInit {
     // Listen to tx sidenav events
     this.subscription.add(
       this._sidenav.getStatus()
+        .pipe(filter(_ => !!this.sidenav))
         .subscribe(async (message: ISidenavMessage) => {
           this.message = message;
           if (message.status === true) await this.sidenav.open()

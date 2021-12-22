@@ -2,7 +2,7 @@
   <ng-container *ngIf="dataSource?.data?.length; else noResults">
     <div class="table-container">
       <table mat-table [dataSource]="dataSource" matSort [trackBy]="trackBy" class="w-100">
-        <ng-container matColumnDef="proposalId" sticky>
+        <ng-container matColumnDef="proposalId" sticky *ngIf="!!hideProposalIdColumn === false">
           <th mat-header-cell *matHeaderCellDef> Proposal # </th>
           <td mat-cell *matCellDef="let element" class="token-identity no-wrap">
             {{element.proposalId}}

@@ -54,24 +54,93 @@
       </div>
 
       <div class="col-12 col-lg-6 col-xl-8">
-        <div class="mb-5">
-          <h4 class="mb-0 flex-row-center"><mat-icon color="primary" class="mr-2">{{icons.tokens}}</mat-icon>Balances</h4>
-          <opdex-wallet-balances-table [records]="walletBalances" (onPageChange)="handleBalancesPageChange($event)"></opdex-wallet-balances-table>
+        <div class="mb-3">
+          <div class="flex-row-center-between">
+            <h4 class="mb-0 flex-row-center">
+              <mat-icon color="primary" class="mr-2">{{icons.tokens}}</mat-icon>Balances
+            </h4>
+            <button mat-icon-button color="primary" class="small" (click)="toggleBalanceCollapse()"><mat-icon>{{balanceCollapse ? icons.add : icons.remove}}</mat-icon></button>
+          </div>
+
+          <div [@collapse]="balanceCollapse">
+            <opdex-wallet-balances-table [records]="walletBalances" (onPageChange)="handleBalancesPageChange($event)"></opdex-wallet-balances-table>
+          </div>
+
+          <mat-divider *ngIf="balanceCollapse" class="mt-3"></mat-divider>
         </div>
 
-        <div class="mb-5">
-          <h4 class="mb-0 flex-row-center"><mat-icon class="provide mr-2">{{icons.provide}}</mat-icon>Provisional Positions</h4>
-          <opdex-wallet-provisioning-positions-table [records]="walletProvisions" (onPageChange)="handleProvisionalPositionsPageChange($event)"></opdex-wallet-provisioning-positions-table>
+        <div class="mb-3">
+          <div class="flex-row-center-between">
+            <h4 class="mb-0 flex-row-center">
+              <mat-icon class="provide mr-2">{{icons.provide}}</mat-icon>Providing
+            </h4>
+            <button mat-icon-button color="primary" class="small" (click)="toggleProvidingCollapse()"><mat-icon>{{providingCollapse ? icons.add : icons.remove}}</mat-icon></button>
+          </div>
+
+          <div [@collapse]="providingCollapse">
+            <opdex-wallet-provisioning-positions-table [records]="walletProvisions" (onPageChange)="handleProvisionalPositionsPageChange($event)"></opdex-wallet-provisioning-positions-table>
+          </div>
+
+          <mat-divider *ngIf="providingCollapse" class="mt-3"></mat-divider>
         </div>
 
-        <div class="mb-5">
-          <h4 class="mb-0 flex-row-center"><mat-icon class="mine mr-2">{{icons.mining}}</mat-icon>Mining Positions</h4>
-          <opdex-wallet-mining-positions-table [records]="miningPositions" (onPageChange)="handleMiningPositionsPageChange($event)"></opdex-wallet-mining-positions-table>
+        <div class="mb-3">
+          <div class="flex-row-center-between">
+            <h4 class="mb-0 flex-row-center">
+              <mat-icon class="mine mr-2">{{icons.mining}}</mat-icon>Mining
+            </h4>
+            <button mat-icon-button color="primary" class="small" (click)="toggleMiningCollapse()"><mat-icon>{{miningCollapse ? icons.add : icons.remove}}</mat-icon></button>
+          </div>
+
+          <div [@collapse]="miningCollapse">
+            <opdex-wallet-mining-positions-table [records]="miningPositions" (onPageChange)="handleMiningPositionsPageChange($event)"></opdex-wallet-mining-positions-table>
+          </div>
+
+          <mat-divider *ngIf="miningCollapse" class="mt-3"></mat-divider>
         </div>
 
-        <div class="mb-5">
-          <h4 class="mb-0 flex-row-center"><mat-icon class="stake mr-2">verified_user</mat-icon>Staking Positions</h4>
-          <opdex-wallet-staking-positions-table [records]="stakingPositions" (onPageChange)="handleStakingPositionsPageChange($event)"></opdex-wallet-staking-positions-table>
+        <div class="mb-3">
+          <div class="flex-row-center-between">
+            <h4 class="mb-0 flex-row-center">
+              <mat-icon class="stake mr-2">{{icons.staking}}</mat-icon>Staking
+            </h4>
+            <button mat-icon-button color="primary" class="small" (click)="toggleStakingCollapse()"><mat-icon>{{stakingCollapse ? icons.add : icons.remove}}</mat-icon></button>
+          </div>
+
+          <div [@collapse]="stakingCollapse">
+            <opdex-wallet-staking-positions-table [records]="stakingPositions" (onPageChange)="handleStakingPositionsPageChange($event)"></opdex-wallet-staking-positions-table>
+          </div>
+
+          <mat-divider *ngIf="stakingCollapse" class="mt-3"></mat-divider>
+        </div>
+
+        <div class="mb-3">
+          <div class="flex-row-center-between">
+            <h4 class="mb-0 flex-row-center">
+              <mat-icon class="blue mr-2">{{icons.pledge}}</mat-icon>Proposal Pledges
+            </h4>
+            <button mat-icon-button color="primary" class="small" (click)="togglePledgingCollapse()"><mat-icon>{{pledgingCollapse ? icons.add : icons.remove}}</mat-icon></button>
+          </div>
+
+          <div [@collapse]="pledgingCollapse">
+            <opdex-vault-proposal-pledges-table [filter]="pledgesFilter" [hideProposalIdColumn]="true"></opdex-vault-proposal-pledges-table>
+          </div>
+
+          <mat-divider *ngIf="pledgingCollapse" class="mt-3"></mat-divider>
+        </div>
+
+
+        <div class="mb-3" >
+          <div class="flex-row-center-between">
+            <h4 class="mb-0 flex-row-center">
+              <mat-icon class="stake mr-2">{{icons.proposal}}</mat-icon>Proposal Votes
+            </h4>
+            <button mat-icon-button color="primary" class="small" (click)="toggleVotingCollapse()"><mat-icon>{{votingCollapse ? icons.add : icons.remove}}</mat-icon></button>
+          </div>
+
+          <div [@collapse]="votingCollapse">
+            <opdex-vault-proposal-votes-table [filter]="votesFilter" [hideProposalIdColumn]="true"></opdex-vault-proposal-votes-table>
+          </div>
         </div>
       </div>
 

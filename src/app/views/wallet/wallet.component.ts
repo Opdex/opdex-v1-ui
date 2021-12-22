@@ -19,6 +19,8 @@ import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
+import { VaultProposalPledgesFilter, IVaultProposalPledgesFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-pledges-filter';
+import { VaultProposalVotesFilter, IVaultProposalVotesFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-votes-filter';
 
 @Component({
   selector: 'opdex-wallet',
@@ -39,6 +41,14 @@ export class WalletComponent implements OnInit {
   block = 1;
   icons = Icons;
   iconSizes = IconSizes;
+  pledgesFilter: VaultProposalPledgesFilter;
+  votesFilter: VaultProposalVotesFilter;
+  balanceCollapse: boolean = false;
+  providingCollapse: boolean = true;
+  miningCollapse: boolean = true;
+  stakingCollapse: boolean = true;
+  pledgingCollapse: boolean = true;
+  votingCollapse: boolean = true;
 
   constructor(
     private _context: UserContextService,
@@ -61,6 +71,20 @@ export class WalletComponent implements OnInit {
       eventTypes: [],
       wallet: this.wallet.wallet
     };
+
+    this.pledgesFilter = new VaultProposalPledgesFilter({
+      pledger: this.wallet.wallet,
+      limit: 5,
+      direction: 'DESC',
+      includeZeroBalances: false
+    } as IVaultProposalPledgesFilter);
+
+    this.votesFilter = new VaultProposalVotesFilter({
+      voter: this.wallet.wallet,
+      limit: 5,
+      direction: 'DESC',
+      includeZeroBalances: false
+    } as IVaultProposalVotesFilter);
   }
 
   ngOnInit(): void {
@@ -232,5 +256,29 @@ export class WalletComponent implements OnInit {
 
   handleTxOption($event: TransactionView) {
     this._sidebar.openSidenav($event);
+  }
+
+  toggleBalanceCollapse() {
+    this.balanceCollapse = !this.balanceCollapse;
+  }
+
+  toggleProvidingCollapse() {
+    this.providingCollapse = !this.providingCollapse;
+  }
+
+  toggleMiningCollapse() {
+    this.miningCollapse = !this.miningCollapse;
+  }
+
+  toggleStakingCollapse() {
+    this.stakingCollapse = !this.stakingCollapse;
+  }
+
+  togglePledgingCollapse() {
+    this.pledgingCollapse = !this.pledgingCollapse;
+  }
+
+  toggleVotingCollapse() {
+    this.votingCollapse = !this.votingCollapse;
   }
 }

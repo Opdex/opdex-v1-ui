@@ -5,6 +5,12 @@
     }
   }
 
+  &.gray {
+    circle {
+      stroke: #ccc;
+    }
+  }
+
   &.tiny {
     width: 16px !important;
     height: 16px !important;
@@ -32,6 +38,16 @@
     svg {
       width: 28px !important;
       height: 28px !important;
+    }
+  }
+
+  &.xl {
+    width: 200px !important;
+    height: 200px !important;
+
+    svg {
+      width: 200px !important;
+      height: 200px !important;
     }
   }
 }

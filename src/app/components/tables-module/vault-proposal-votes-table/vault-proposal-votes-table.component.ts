@@ -19,6 +19,7 @@ import { Icons } from 'src/app/enums/icons';
 })
 export class VaultProposalVotesTableComponent implements OnChanges {
   @Input() filter: VaultProposalVotesFilter;
+  @Input() hideProposalIdColumn: boolean;
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
   paging: ICursor;
@@ -32,7 +33,7 @@ export class VaultProposalVotesTableComponent implements OnChanges {
 
   constructor(private _vaultsService: VaultGovernancesService, private _blocksService: BlocksService) {
     this.dataSource = new MatTableDataSource<any>();
-    this.displayedColumns = ['proposalId', 'voter', 'vote', 'balance', 'actions'];
+    this.displayedColumns = ['voter', 'vote', 'balance', 'actions'];
   }
 
   ngOnChanges() {
@@ -43,6 +44,12 @@ export class VaultProposalVotesTableComponent implements OnChanges {
         this._blocksService.getLatestBlock$()
           .pipe(switchMap(_ => this.getVotes$(this.filter?.cursor)))
           .subscribe(_ => this.loading = false))
+    }
+
+    if (!!this.hideProposalIdColumn === false) this.displayedColumns.unshift('proposalId')
+    else {
+      const index = this.displayedColumns.findIndex(item => item === 'proposalId');
+      if (index > -1) this.displayedColumns = this.displayedColumns.splice(index, 1);
     }
   }
 

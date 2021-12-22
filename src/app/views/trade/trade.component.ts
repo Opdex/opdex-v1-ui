@@ -1,3 +1,4 @@
+import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { ISidenavMessage, TransactionView } from '@sharedModels/transaction-view';
 import { Component } from '@angular/core';
 
@@ -9,8 +10,9 @@ import { Component } from '@angular/core';
 export class TradeComponent {
   message: ISidenavMessage;
 
-  constructor() {
+  constructor(private _sidebar: SidenavService) {
     this.setMessage(TransactionView.swap);
+    this._sidebar.closeSidenav();
   }
 
   handleTxOption($event: TransactionView) {
