@@ -8,7 +8,7 @@ import { IVaultProposalResponseModel } from '@sharedModels/platform-api/response
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { IVaultGovernanceResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-governance-response-model.interface';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
@@ -32,6 +32,8 @@ import { IVaultCertificates } from '@sharedModels/platform-api/responses/vaults/
   styleUrls: ['./vault-governance.component.scss']
 })
 export class VaultGovernanceComponent implements OnInit {
+  @ViewChild('proposalScrollBar') proposalScrollBar: ElementRef;
+
   subscription: Subscription = new Subscription();
   vault: IVaultGovernanceResponseModel;
   token: IToken;
@@ -125,6 +127,8 @@ export class VaultGovernanceComponent implements OnInit {
 
   proposalsPageChange(cursor: string) {
     this.proposalsFilter.cursor = cursor;
+    this.proposals = { results: [null, null, null, null], paging: {} } as IVaultProposalsResponseModel;
+    this.proposalScrollBar.nativeElement.scrollTo({left: 0, behavior: 'smooth'});
     this.getOpenProposals$().pipe(take(1)).subscribe();
   }
 

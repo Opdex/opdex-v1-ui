@@ -93,19 +93,6 @@ export const TransactionTypes: ITransactionType[] = [
   },
   {
     priority: 7,
-    title: 'Vault Certificate',
-    view: null,
-    viewRequiresAuth: true,
-    icon: Icons.receipt,
-    iconColor: 'stake',
-    targetEvents: [
-      TransactionEventTypes.CreateVaultCertificateEvent,
-      TransactionEventTypes.RevokeVaultCertificateEvent,
-      TransactionEventTypes.RedeemVaultCertificateEvent
-    ]
-  },
-  {
-    priority: 8,
     title: 'Vault Proposal',
     view: TransactionView.vaultProposal,
     viewRequiresAuth: true,
@@ -118,6 +105,19 @@ export const TransactionTypes: ITransactionType[] = [
       TransactionEventTypes.VaultProposalWithdrawPledgeEvent,
       TransactionEventTypes.VaultProposalVoteEvent,
       TransactionEventTypes.VaultProposalWithdrawVoteEvent
+    ]
+  },
+  {
+    priority: 8,
+    title: 'Vault Certificate',
+    view: null,
+    viewRequiresAuth: true,
+    icon: Icons.receipt,
+    iconColor: 'stake',
+    targetEvents: [
+      TransactionEventTypes.CreateVaultCertificateEvent,
+      TransactionEventTypes.RevokeVaultCertificateEvent,
+      TransactionEventTypes.RedeemVaultCertificateEvent
     ]
   },
   {

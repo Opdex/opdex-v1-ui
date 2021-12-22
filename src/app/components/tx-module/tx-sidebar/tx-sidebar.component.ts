@@ -52,7 +52,11 @@ export class TxSidebarComponent implements OnChanges {
             ? [...TransactionTypes.filter(type => !!type.view)]
             : [...TransactionTypes.filter(type => !!type.view && type.view !== TransactionView.vaultProposal)];
 
-          if (!!this.context?.wallet == false) this.transactionTypes = this.transactionTypes.filter(type => !type.viewRequiresAuth);
+          if (!!this.context?.wallet === false) {
+            this.transactionTypes = this.transactionTypes.filter(type => !type.viewRequiresAuth);
+
+            if (this.showNavMenu) this.closeSidenav();
+          }
         }));
 
     this.subscription.add(

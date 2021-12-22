@@ -35,7 +35,10 @@
           </small>
 
           <small class="flex-row-center">
-            <mat-icon class="mr-1" color="primary" [ngClass]="iconSizes.tiny">{{icons.add}}</mat-icon>
+            <button mat-icon-button color="primary" class="mr-1" (click)="openSidenav('Pledge')" [ngClass]="iconSizes.tiny" [disabled]="!!this.context?.wallet === false">
+              <mat-icon class="blue">{{icons.add}}</mat-icon>
+            </button>
+
             {{proposal.pledgeAmount | shortNumber}}
           </small>
         </div>
@@ -49,12 +52,18 @@
           <div class="flex-row-center-between">
 
             <small class="flex-row-center mr-3">
-              <mat-icon class="mr-1 positive-value" [ngClass]="iconSizes.tiny">{{icons.thumbUp}}</mat-icon>
+              <button mat-icon-button class="mr-1" (click)="openSidenav('Vote', true)" [ngClass]="iconSizes.tiny" [disabled]="!!this.context?.wallet === false">
+                <mat-icon class="positive-value">{{icons.thumbUp}}</mat-icon>
+              </button>
+
               {{proposal.yesAmount | shortNumber}}
             </small>
 
             <small class="flex-row-center">
-              <mat-icon class="mr-1" color="warn" [ngClass]="iconSizes.tiny">{{icons.thumbDown}}</mat-icon>
+              <button mat-icon-button color="warn" class="mr-1" (click)="openSidenav('Vote', false)" [ngClass]="iconSizes.tiny" [disabled]="!!this.context?.wallet === false">
+                <mat-icon class="red">{{icons.thumbDown}}</mat-icon>
+              </button>
+
               {{proposal.noAmount | shortNumber}}
             </small>
           </div>

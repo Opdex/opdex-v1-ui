@@ -54,7 +54,7 @@ import { IProvideAmountInResponse } from '@sharedModels/platform-api/responses/l
 import { IStratisSignatureAuthRequest } from '@sharedModels/platform-api/requests/auth/stratis-signature-auth-request.interface';
 import { IMinimumPledgeVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/minimum-plege-vault-proposal-quote-request.interface';
 import { IMinimumVoteVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/minimum-vote-vault-proposal-quote-request.interface';
-import { IVaultProposalWithdrawPledgeQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-widthraw-pledge-quote-request.interface';
+import { IVaultProposalWithdrawPledgeQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-withdraw-pledge-quote-request.interface';
 import { IVaultProposalWithdrawVoteQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-withdraw-vote-quote-request.interface';
 import { IVaultProposalVoteQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-vote-quote-request.interface';
 import { IVaultProposalPledgeQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-pledge-quote-request.interface';

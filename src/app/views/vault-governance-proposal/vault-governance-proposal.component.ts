@@ -103,7 +103,7 @@ export class VaultGovernanceProposalComponent {
   }
 
   getVote$(): Observable<IVaultProposalVoteResponseModel> {
-    if (this.proposal.status === 'Pledge') return of(null);
+    if (this.proposal.status === 'Pledge' || !!this.context?.wallet === false) return of(null);
 
     return this._vaultsService.getVote(this.proposal.proposalId, this.context.wallet, this.proposal.vault)
       .pipe(
@@ -112,6 +112,8 @@ export class VaultGovernanceProposalComponent {
   }
 
   getPledge$(): Observable<IVaultProposalVoteResponseModel> {
+    if (!!this.context?.wallet === false) return of(null);
+
     return this._vaultsService.getPledge(this.proposal.proposalId, this.context.wallet, this.proposal.vault)
       .pipe(
         catchError(_ => of(null)),

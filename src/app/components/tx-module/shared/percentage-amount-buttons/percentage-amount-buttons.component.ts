@@ -1,10 +1,12 @@
+import { catchError } from 'rxjs/operators';
+import { VaultGovernancesService } from '@sharedServices/platform/vault-governances.service';
 import { MathService } from '@sharedServices/utility/math.service';
 import { tap } from 'rxjs/operators';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { BlocksService } from '@sharedServices/platform/blocks.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
@@ -17,8 +19,9 @@ import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 export class PercentageAmountButtonsComponent implements OnChanges {
   @Input() contract: string; // The Mining/Liquidity/Token where the balance would be checked
   @Input() token: IToken;
-  @Input() positionType: 'Balance' | 'Staking' | 'Mining';
+  @Input() positionType: 'Balance' | 'Staking' | 'Mining' | 'ProposalVote' | 'ProposalPledge';
   @Input() selected: string;
+  @Input() proposalId: number;
   @Output() onPercentageSelect = new EventEmitter<any>();
 
   contextSubscription = new Subscription();
@@ -30,7 +33,8 @@ export class PercentageAmountButtonsComponent implements OnChanges {
   constructor(
     private _context: UserContextService,
     private _blocksService: BlocksService,
-    private _walletService: WalletsService
+    private _walletService: WalletsService,
+    private _vaultService: VaultGovernancesService
   ) {
     this.contextSubscription.add(
       this._context.getUserContext$()
@@ -50,9 +54,20 @@ export class PercentageAmountButtonsComponent implements OnChanges {
         balance$ = this._walletService.getStakingPosition(this.context.wallet, this.contract)
           .pipe(map(result => result.amount));
       }
-      else {
+      else if (this.positionType === 'Mining') {
         balance$ = this._walletService.getMiningPosition(this.context.wallet, this.contract)
           .pipe(map(result => result.amount));
+      }
+      else if (this.positionType === 'ProposalVote' && this.proposalId > 0) {
+        balance$ = this._vaultService.getVote(this.proposalId, this.context.wallet, this.contract)
+          .pipe(map(result => result.balance));
+      }
+      else if (this.positionType === 'ProposalPledge' && this.proposalId > 0) {
+        balance$ = this._vaultService.getPledge(this.proposalId, this.context.wallet, this.contract)
+          .pipe(map(result => result.balance));
+      }
+      else {
+        balance$ = of('0');
       }
 
       if (this.positionSubscription && !this.positionSubscription.closed) {
@@ -62,7 +77,7 @@ export class PercentageAmountButtonsComponent implements OnChanges {
 
       this.positionSubscription.add(
         this._blocksService.getLatestBlock$()
-          .pipe(switchMap(_ => balance$))
+          .pipe(switchMap(_ => balance$.pipe(catchError(_ => of('0')))))
           .subscribe(result => this.balance = new FixedDecimal(result, this.token.decimals)));
     }
   }

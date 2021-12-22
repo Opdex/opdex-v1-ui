@@ -1,3 +1,5 @@
+import { TransactionView } from '@sharedModels/transaction-view';
+import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -27,9 +29,14 @@ export class VaultProposalCardComponent {
   constructor(
     private _platformApiService: PlatformApiService,
     private _bottomSheet: MatBottomSheet,
-    private _context: UserContextService)
+    private _context: UserContextService,
+    private _sidenav: SidenavService)
   {
     this.subscription.add(this._context.getUserContext$().subscribe(context => this.context = context));
+  }
+
+  openSidenav(childView: string, inFavor?: boolean) {
+    this._sidenav.openSidenav(TransactionView.vaultProposal, { child: childView, inFavor, proposalId: this.proposal.proposalId});
   }
 
   getExpirationPercentage() {

@@ -1,3 +1,5 @@
+import { TokensService } from '@sharedServices/platform/tokens.service';
+import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { Component, Injector, Input, OnChanges, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -8,7 +10,7 @@ import { ITransactionQuote } from '@sharedModels/platform-api/responses/transact
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 
@@ -23,6 +25,11 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
   icons = Icons;
   fiatValue: string;
   isWithdrawal = false;
+  percentageSelected: string;
+  crs: IToken;
+  vaultAddress: string;
+  positionType: 'Balance' | 'ProposalVote';
+  subscription = new Subscription();
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -40,37 +47,44 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
     protected _injector: Injector,
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
-    private _env: EnvironmentsService
+    private _env: EnvironmentsService,
+    private _tokenService: TokensService
   ) {
     super(_injector);
 
+    this.vaultAddress = this._env.vaultGovernanceAddress;
+
     this.form = this._fb.group({
-      proposalId: ['', [Validators.required]],
+      proposalId: ['', [Validators.required, Validators.min(1)]],
       amount: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
       inFavor: [false, Validators.required]
     });
+
+    this.subscription.add(this._tokenService.getToken('CRS').subscribe(crs => this.crs = crs));
   }
 
   ngOnChanges() {
     if (!!this.data) {
       this.proposalId.setValue(this.data.proposalId);
       this.isWithdrawal = !!this.data.withdraw;
+      this.inFavor.setValue(!!this.data.inFavor);
+
+      this.positionType = this.isWithdrawal ? 'ProposalVote' : 'Balance';
     }
   }
 
   submit(): void {
-    const vault = this._env.vaultGovernanceAddress;
-    if (!vault) return;
+    if (!this.vaultAddress) return;
 
     let quote$: Observable<ITransactionQuote>;
 
     if (!this.isWithdrawal) {
       const request = new VaultProposalVoteQuoteRequest(new FixedDecimal(this.amount.value, 8), this.inFavor.value);
-      quote$ = this._platformApi.voteOnVaultProposal(vault, this.proposalId.value, request.payload);
+      quote$ = this._platformApi.voteOnVaultProposal(this.vaultAddress, this.proposalId.value, request.payload);
     }
     else {
       const request = new VaultProposalWithdrawVoteQuoteRequest(new FixedDecimal(this.amount.value, 8));
-      quote$ = this._platformApi.withdrawVaultProposalVote(vault, this.proposalId.value, request.payload);
+      quote$ = this._platformApi.withdrawVaultProposalVote(this.vaultAddress, this.proposalId.value, request.payload);
     }
 
     quote$
@@ -81,6 +95,12 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
 
   handleAddRemoveStatus(): void {
     this.isWithdrawal = !this.isWithdrawal;
+    this.positionType = this.isWithdrawal ? 'ProposalVote' : 'Balance';
+  }
+
+  handlePercentageSelect(value: any): void {
+    this.percentageSelected = null;
+    this.amount.setValue(value.result, {emitEvent: true});
   }
 
   destroyContext$() {
@@ -89,5 +109,6 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
 
   ngOnDestroy() {
     this.destroyContext$();
+    this.subscription.unsubscribe();
   }
 }

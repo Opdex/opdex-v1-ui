@@ -52,7 +52,7 @@
           <p class="mb-0">{{proposal.description}}</p>
         </div>
 
-        <div *ngIf="proposal.expiration >= latestBlock.height" style="max-width: 600px;">
+        <div *ngIf="proposal.expiration >= latestBlock.height" class="mb-3" style="max-width: 600px;">
           <mat-progress-bar color="primary" mode="determinate" [value]="getExpirationPercentage(proposal)"></mat-progress-bar>
 
           <div class="mt-2 flex-row-center-between">
@@ -110,7 +110,7 @@
   </div>
 </div>
 
-<div class="offset-section pt-5 pb-3">
+<div class="offset-section pt-5 pb-4" *ngIf="!!context?.wallet">
   <div class="container">
     <div class="row">
       <div class="col-12">

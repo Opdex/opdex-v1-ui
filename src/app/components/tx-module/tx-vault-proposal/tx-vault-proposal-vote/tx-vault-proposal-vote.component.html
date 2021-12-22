@@ -1,7 +1,7 @@
 <div class="vault-proposal-vote">
   <form [formGroup]="form" name="vault-proposal-vote-form" id="vault-proposal-vote-form" (submit)="submit()">
     <div class="mb-3">
-      <opdex-input-control placeholder="" [suffixDisabled]="true" label="Proposal #" [formControl]="proposalId"></opdex-input-control>
+      <opdex-input-control placeholder="1" [suffixDisabled]="true" label="Proposal #" [formControl]="proposalId"></opdex-input-control>
     </div>
 
     <div class="mb-3">
@@ -18,6 +18,15 @@
           <span class="success" *ngIf="fiatValue">${{fiatValue | shortNumber}}</span>
         </div>
       </opdex-input-control>
+
+      <opdex-percentage-amount-buttons
+        contract="{{ isWithdrawal ? vaultAddress : 'CRS'}}"
+        [token]="crs"
+        [positionType]="positionType"
+        [selected]="percentageSelected"
+        (onPercentageSelect)="handlePercentageSelect($event)"
+        [proposalId]="proposalId.value"
+        *ngIf="crs"></opdex-percentage-amount-buttons>
     </div>
 
     <mat-checkbox
