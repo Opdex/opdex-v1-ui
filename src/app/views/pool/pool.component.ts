@@ -1,4 +1,4 @@
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { AddressPosition } from '@sharedModels/address-position';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { IconSizes } from 'src/app/enums/icon-sizes';
@@ -91,7 +91,7 @@ export class PoolComponent implements OnInit, OnDestroy {
     private _title: Title,
     private _gaService: GoogleAnalyticsService,
     private _walletService: WalletsService,
-    private _blocksService: BlocksService
+    private _indexService: IndexService
   ) {
     // init stat cards with null for loading/default animations
     this.statCards = PoolStatCardsLookup.getStatCards(this.pool);
@@ -124,7 +124,7 @@ export class PoolComponent implements OnInit, OnDestroy {
     }
 
     this.subscription.add(
-      this._blocksService.getLatestBlock$().pipe(
+      this._indexService.getLatestBlock$().pipe(
         switchMap(_ => this.getLiquidityPool()),
         tap(_ => this.historyFilter?.refresh()),
         switchMap(_ => this.getPoolHistory()),

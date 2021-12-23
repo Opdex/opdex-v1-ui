@@ -1,7 +1,7 @@
 import { tap } from 'rxjs/operators';
 import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { Component, OnDestroy } from '@angular/core';
 import { TokenOrderByTypes, TokenProvisionalTypes, TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
@@ -22,7 +22,7 @@ export class TokensComponent implements OnDestroy {
 
   constructor(
     private _sidebar: SidenavService,
-    private _blocksService: BlocksService,
+    private _indexService: IndexService,
     private _liquidityPoolsService: LiquidityPoolsService)
   {
     // Initialize placeholder skeleton
@@ -38,7 +38,7 @@ export class TokensComponent implements OnDestroy {
     const volumeFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Volume, limit: 4, direction: 'DESC'});
 
     this.subscription.add(
-      this._blocksService.getLatestBlock$()
+      this._indexService.getLatestBlock$()
         .pipe(
           switchMap(_ => this._liquidityPoolsService.getLiquidityPools(volumeFilter)),
           tap(pools => this.poolsByVolume = pools.results))

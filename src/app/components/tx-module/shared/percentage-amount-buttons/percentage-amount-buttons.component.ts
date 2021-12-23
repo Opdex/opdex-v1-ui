@@ -3,7 +3,7 @@ import { VaultGovernancesService } from '@sharedServices/platform/vault-governan
 import { MathService } from '@sharedServices/utility/math.service';
 import { tap } from 'rxjs/operators';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { Observable, of, Subscription } from 'rxjs';
@@ -32,7 +32,7 @@ export class PercentageAmountButtonsComponent implements OnChanges {
 
   constructor(
     private _context: UserContextService,
-    private _blocksService: BlocksService,
+    private _indexService: IndexService,
     private _walletService: WalletsService,
     private _vaultService: VaultGovernancesService
   ) {
@@ -76,7 +76,7 @@ export class PercentageAmountButtonsComponent implements OnChanges {
       }
 
       this.positionSubscription.add(
-        this._blocksService.getLatestBlock$()
+        this._indexService.getLatestBlock$()
           .pipe(switchMap(_ => balance$.pipe(catchError(_ => of('0')))))
           .subscribe(result => this.balance = new FixedDecimal(result, this.token.decimals)));
     }

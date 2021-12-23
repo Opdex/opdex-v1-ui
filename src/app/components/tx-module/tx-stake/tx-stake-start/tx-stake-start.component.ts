@@ -1,4 +1,4 @@
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { MathService } from '@sharedServices/utility/math.service';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -41,7 +41,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
     protected _injector: Injector,
-    private _blocksService: BlocksService
+    private _indexService: IndexService
   ) {
     super(_injector);
 
@@ -49,7 +49,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
       amount: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]]
     });
 
-    this.latestSyncedBlock$ = this._blocksService.getLatestBlock$()
+    this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
       .pipe(
         filter(_ => this.context?.wallet),
         switchMap(_ => this.getAllowance$()))

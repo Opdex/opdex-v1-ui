@@ -21,9 +21,19 @@
         </aside>
 
         <div class="animation-container">
+          <div class="notification-banner warning flex-row-center-center p-2" *ngIf="!!indexStatus?.available === false || !!indexStatus?.locked && indexStatus.reason === 'Rewind'">
+            <ng-container *ngIf="!!indexStatus?.available === false">
+              <mat-icon class="small mr-2">{{icons.maintenance}}</mat-icon> Undergoing temporary maintenance, block progression will continue shortly.
+            </ng-container>
+
+            <ng-container *ngIf="!!indexStatus?.locked === true && indexStatus.reason === 'Rewind'">
+              <mat-icon class="small mr-2">{{icons.rewind}}</mat-icon> Undergoing a chain reorganization, block progression will continue shortly.
+            </ng-container>
+          </div>
+
           <div id="page-content">
             <div class="mobile-nav" [ngClass]="{'open': menuOpen}">
-              <opdex-side-nav (onRouteChanged)="handleRouteChanged($event)"></opdex-side-nav>
+              <opdex-side-nav (onRouteChanged)="handleRouteChanged($event)" [mobileMenuOpen]="menuOpen"></opdex-side-nav>
               <button mat-icon-button class="small close-button" (click)="handleToggleMenu()" *ngIf="menuOpen">
                 <mat-icon>{{icons.close}}</mat-icon>
               </button>

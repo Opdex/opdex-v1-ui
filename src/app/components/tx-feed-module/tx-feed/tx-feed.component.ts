@@ -6,7 +6,7 @@ import { TransactionsService } from '@sharedServices/platform/transactions.servi
 import { Component, OnChanges, OnDestroy, ViewChild, ElementRef, Input } from '@angular/core';
 import { ITransactionsRequest, TransactionRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { TransactionReceipt } from '@sharedModels/transaction-receipt';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { Icons } from 'src/app/enums/icons';
 
 @Component({
@@ -32,7 +32,7 @@ export class TxFeedComponent implements OnChanges, OnDestroy {
 
   constructor(
     private _transactionsService: TransactionsService,
-    private _blocksService: BlocksService) { }
+    private _indexService: IndexService) { }
 
   ngOnChanges(): void {
     if (this.transactionsRequest) {
@@ -50,7 +50,7 @@ export class TxFeedComponent implements OnChanges, OnDestroy {
       }
 
       this.subscription.add(
-        this._blocksService.getLatestBlock$()
+        this._indexService.getLatestBlock$()
           .pipe(
             tap(_ => this.transactionsRequest.cursor = null), // reset the cursor
             switchMap(_ => this.getTransactions(this.transactionsRequest)))

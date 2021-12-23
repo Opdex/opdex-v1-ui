@@ -1,6 +1,6 @@
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { NominationFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { MiningGovernancesService } from '@sharedServices/platform/mining-governances.service';
 import { Subscription } from 'rxjs';
 import { TokensService } from '@sharedServices/platform/tokens.service';
@@ -47,7 +47,7 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
     private _context: UserContextService,
     private _tokenService: TokensService,
     private _liquidityPoolsService: LiquidityPoolsService,
-    private _blocks: BlocksService,
+    private _blocks: IndexService,
     private _env: EnvironmentsService
   ) {
     this.nominatedPools = [ null, null, null, null ];

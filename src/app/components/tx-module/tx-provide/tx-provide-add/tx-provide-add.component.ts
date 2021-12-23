@@ -1,5 +1,5 @@
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { Component, Input, OnInit, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -65,7 +65,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
     protected _injector: Injector,
-    private _blocksService: BlocksService,
+    private _indexService: IndexService,
     private _env: EnvironmentsService
   ) {
     super(_injector);
@@ -122,7 +122,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
           switchMap(_ => this.getAllowance$()))
         .subscribe());
 
-        this.latestSyncedBlock$ = this._blocksService.getLatestBlock$()
+        this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
           .pipe(
             tap(block => this.latestBlock = block?.height),
             filter(_ => this.context?.wallet),

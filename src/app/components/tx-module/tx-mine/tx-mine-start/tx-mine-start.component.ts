@@ -14,7 +14,7 @@ import { ITransactionQuote } from '@sharedModels/platform-api/responses/transact
 import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MiningQuote } from '@sharedModels/platform-api/requests/mining-pools/mining-quote';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 
 @Component({
   selector: 'opdex-tx-mine-start',
@@ -42,7 +42,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
     protected _injector: Injector,
-    private _blocksService: BlocksService
+    private _indexService: IndexService
   ) {
     super(_injector);
 
@@ -58,7 +58,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
         switchMap((amount: string) => this.getAllowance$(amount)))
       .subscribe();
 
-    this.latestSyncedBlock$ = this._blocksService.getLatestBlock$()
+    this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
       .pipe(
         filter(_ => this.context?.wallet),
         switchMap(_ => this.getAllowance$()))

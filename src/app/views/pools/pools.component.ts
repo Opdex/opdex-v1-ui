@@ -1,4 +1,4 @@
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
@@ -27,7 +27,7 @@ export class PoolsComponent implements OnInit, OnDestroy {
   constructor(
     private _sidebar: SidenavService,
     private _liquidityPoolsService: LiquidityPoolsService,
-    private _blocksService: BlocksService
+    private _indexService: IndexService
   ) {
     this.topPoolsFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 10, direction: 'DESC'});
 
@@ -45,7 +45,7 @@ export class PoolsComponent implements OnInit, OnDestroy {
     const miningFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 4, direction: 'DESC', miningFilter: MiningFilter.Enabled});
     const volumeFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Volume, limit: 4, direction: 'DESC'});
 
-    this.subscription.add(this._blocksService.getLatestBlock$()
+    this.subscription.add(this._indexService.getLatestBlock$()
       .pipe(switchMap(_ => {
         return combineLatest([
           this._liquidityPoolsService.getLiquidityPools(volumeFilter),

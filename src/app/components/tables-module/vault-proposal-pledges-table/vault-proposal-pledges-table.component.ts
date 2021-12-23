@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
 import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
 import { VaultGovernancesService } from '@sharedServices/platform/vault-governances.service';
@@ -31,7 +31,7 @@ export class VaultProposalPledgesTableComponent implements OnChanges {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private _vaultsService: VaultGovernancesService, private _blocksService: BlocksService) {
+  constructor(private _vaultsService: VaultGovernancesService, private _indexService: IndexService) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['pledger', 'pledge', 'balance', 'actions'];
   }
@@ -41,7 +41,7 @@ export class VaultProposalPledgesTableComponent implements OnChanges {
       this.loading = true;
       this.subscription = new Subscription();
       this.subscription.add(
-        this._blocksService.getLatestBlock$()
+        this._indexService.getLatestBlock$()
           .pipe(switchMap(_ => this.getPledges$(this.filter?.cursor)))
           .subscribe(_ => this.loading = false))
     }

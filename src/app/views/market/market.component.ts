@@ -1,6 +1,6 @@
 import { IMarketHistoryResponse } from '@sharedModels/platform-api/responses/markets/market-history-response.interface';
 import { IMarket } from '@sharedModels/platform-api/responses/markets/market.interface';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { MarketHistory } from '@sharedModels/market-history';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
@@ -65,7 +65,7 @@ export class MarketComponent implements OnInit, OnDestroy {
     private _marketsService: MarketsService,
     private _sidebar: SidenavService,
     private _liquidityPoolsService: LiquidityPoolsService,
-    private _blocksService: BlocksService
+    private _indexService: IndexService
   ) {
     // Initialize with null to get the default/loading animations
     this.statCards = MarketStatCardsLookup.getStatCards(null);
@@ -93,7 +93,7 @@ export class MarketComponent implements OnInit, OnDestroy {
     });
 
     this.subscription.add(
-      this._blocksService.getLatestBlock$()
+      this._indexService.getLatestBlock$()
         .pipe(
           switchMap(_ => this.getMarket()),
           tap(_ => this.historyFilter?.refresh()),

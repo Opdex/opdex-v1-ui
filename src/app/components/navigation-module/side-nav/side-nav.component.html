@@ -1,64 +1,60 @@
-<div id="side-nav" [ngClass]="{'pinned': isPinned}">
+<div id="side-nav" [ngClass]="{'pinned': isPinned || mobileMenuOpen}">
   <div class="foreground" *ngIf="userContext$ | async as context">
     <div class="logo" routerLink="/">
       <img src="/assets/logo-light-blue.png" alt="Opdex Logo">
       <p class="opdex">OPDEX</p>
     </div>
 
-    <div class="stick-nav">
-      <button mat-mini-fab [ngClass]="iconSizes.small" class="navbar-pin" (click)="togglePin()">
-        <mat-icon>{{isPinned ? icons.arrowLeft : icons.arrowRight}}</mat-icon>
-      </button>
-    </div>
-
     <ul class="sidebar-nav">
       <li>
-        <a mat-button (click)="emitRouteChange('/')" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a mat-button class="transparent" (click)="emitRouteChange('/')" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [matTooltip]="!isPinned && !mobileMenuOpen ? 'Market' : null" matTooltipPosition="right">
           <mat-icon>{{icons.market}}</mat-icon>
           <span class="secondary">Market</span>
         </a>
       </li>
       <li>
-        <a mat-button (click)="emitRouteChange('/trade')" routerLink="/trade" routerLinkActive="active">
+        <a mat-button class="transparent" (click)="emitRouteChange('/trade')" routerLink="/trade" routerLinkActive="active" [matTooltip]="!isPinned && !mobileMenuOpen ? 'Trade' : null" matTooltipPosition="right">
           <mat-icon>{{icons.swap}}</mat-icon>
           <span class="secondary">Trade</span>
         </a>
       </li>
       <li>
-        <a mat-button (click)="emitRouteChange('/pools')" routerLink="/pools" routerLinkActive="active">
+        <a mat-button class="transparent" (click)="emitRouteChange('/pools')" routerLink="/pools" routerLinkActive="active" [matTooltip]="!isPinned && !mobileMenuOpen ? 'Liquidity Pools' : null" matTooltipPosition="right">
           <mat-icon>{{icons.liquidityPool}}</mat-icon>
           <span class="secondary">Liquidity Pools</span>
         </a>
       </li>
       <li>
-        <a mat-button (click)="emitRouteChange('/tokens')" routerLink="/tokens" routerLinkActive="active">
+        <a mat-button class="transparent" (click)="emitRouteChange('/tokens')" routerLink="/tokens" routerLinkActive="active" [matTooltip]="!isPinned && !mobileMenuOpen ? 'Tokens' : null" matTooltipPosition="right">
           <mat-icon>{{icons.tokens}}</mat-icon>
           <span class="secondary">Tokens</span>
         </a>
       </li>
       <li>
-        <a mat-button (click)="emitRouteChange('/mining-governance')" routerLink="/mining-governance" routerLinkActive="active">
+        <a mat-button class="transparent" (click)="emitRouteChange('/mining-governance')" routerLink="/mining-governance" routerLinkActive="active" [matTooltip]="!isPinned && !mobileMenuOpen ? 'Mining' : null" matTooltipPosition="right">
           <mat-icon>{{icons.mining}}</mat-icon>
           <span class="secondary">Mining</span>
         </a>
       </li>
       <li *ngIf="usesVault">
-        <a mat-button (click)="emitRouteChange('/vault')" routerLink="/vault" routerLinkActive="active">
+        <a mat-button class="transparent" (click)="emitRouteChange('/vault')" routerLink="/vault" routerLinkActive="active" [matTooltip]="!isPinned && !mobileMenuOpen ? 'Vault' : null" matTooltipPosition="right">
           <mat-icon>{{icons.vault}}</mat-icon>
           <span class="secondary">Vault</span>
         </a>
       </li>
       <li *ngIf="usesVaultGovernance">
-        <a mat-button (click)="emitRouteChange('/vault-governance')" routerLink="/vault-governance" routerLinkActive="active">
+        <a mat-button class="transparent" (click)="emitRouteChange('/vault-governance')" routerLink="/vault-governance" routerLinkActive="active" [matTooltip]="!isPinned && !mobileMenuOpen ? 'Vault' : null" matTooltipPosition="right">
           <mat-icon>{{icons.vault}}</mat-icon>
           <span class="secondary">Vault</span>
         </a>
       </li>
       <li>
         <a mat-button
+          class="transparent"
           (click)="emitRouteChange(!context?.wallet ? '/auth' : '/wallet')"
           routerLink="{{!context?.wallet ? '/auth' : '/wallet'}}"
-          routerLinkActive="active">
+          routerLinkActive="active"
+          [matTooltip]="!isPinned && !mobileMenuOpen ? 'Wallet' : null" matTooltipPosition="right">
           <span class="wallet-indicator {{context?.wallet ? 'valid' : 'invalid'}}"></span>
           <mat-icon>{{icons.wallet}}</mat-icon>
           <span class="secondary">Wallet</span>
@@ -68,9 +64,9 @@
 
     <div class="space-between"></div>
 
-    <ul class="sidebar-nav secondary mb-2">
-      <div class="flex-row-center no-wrap" *ngIf="pendingTransactions?.length > 0">
-        <button mat-button [matMenuTriggerFor]="qMenu" class="small d-inline pl-0 pr-0">
+    <div class="sidebar-nav secondary mb-2">
+      <div class="flex-row-center no-wrap"  *ngIf="pendingTransactions?.length > 0">
+        <button mat-button [matMenuTriggerFor]="qMenu" class="small d-inline pl-0 pr-0 transparent">
           <mat-icon class="swap mr-2">{{icons.send}}</mat-icon>
           <small>Pending Transactions</small>
         </button>
@@ -93,28 +89,28 @@
       </div>
 
       <div class="flex-row-center no-wrap">
-        <button mat-button class="small d-inline pl-0 pr-0" (click)="networkTooltip.toggle()" *ngIf="latestSyncedBlock$ | async as block">
+        <button mat-button class="small d-inline pl-0 pr-0 transparent" (click)="networkTooltip.toggle()" *ngIf="latestSyncedBlock$ | async as block">
           <mat-icon class="mr-2" [matTooltip]="network" #networkTooltip="matTooltip">languages</mat-icon>
           <small>#{{block.height | formatNumber:0}}</small>
         </button>
       </div>
 
       <div class="flex-row-center no-wrap" *ngIf="theme">
-        <button mat-button class="small d-inline pl-0 pr-0" (click)="toggleTheme()">
+        <button mat-button class="small d-inline pl-0 pr-0 transparent" (click)="toggleTheme()">
           <mat-icon class="mr-2">{{theme === 'dark-mode' ? 'brightness_3' : 'brightness_7'}}</mat-icon>
           <small>{{theme === 'dark-mode' ? 'Dark Mode' : 'Light Mode'}}</small>
         </button>
       </div>
 
       <div class="flex-row-center no-wrap">
-        <button mat-button class="small d-inline pl-0 pr-0" (click)="openBugReport()">
+        <button mat-button class="small d-inline pl-0 pr-0 transparent" (click)="openBugReport()">
           <mat-icon class="mr-2">{{icons.bug}}</mat-icon>
           <small>Report Issue</small>
         </button>
       </div>
 
       <div class="flex-row-center no-wrap" *ngIf="context?.wallet">
-        <button mat-button class="small d-inline pl-0 pr-0" (click)="logout()">
+        <button mat-button class="small d-inline pl-0 pr-0 transparent" (click)="logout()">
           <mat-icon class="mr-2">{{icons.exit}}</mat-icon>
           <small>Logout</small>
         </button>
@@ -147,12 +143,15 @@
           </a>
         </div>
 
-        <a mat-button class="tiny body-content d-inline pl-0 pr-0" href="https://opdex.com/assets/opdex-platform-ui-terms-of-use.pdf" target="_blank" rel="noopener">Terms & Conditions</a>
+        <a mat-button class="tiny body-content d-inline pl-0 pr-0 transparent" href="https://opdex.com/assets/opdex-platform-ui-terms-of-use.pdf" target="_blank" rel="noopener">Terms & Conditions</a>
       </div>
+    </div>
 
-
-    </ul>
-
-    <img class="defi-blocks" src="assets/defi2@2x.png">
+    <div class="flex-row-center no-wrap pl-2" *ngIf="!mobileMenuOpen">
+      <button mat-button class="small d-inline pl-0 pr-0 transparent" (click)="togglePin()">
+        <mat-icon class="mr-2">{{isPinned ? icons.arrowDown : icons.arrowRight}}</mat-icon>
+        <small>{{isPinned ? 'Less': 'More'}}</small>
+      </button>
+    </div>
   </div>
 </div>

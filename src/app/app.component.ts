@@ -1,10 +1,11 @@
+import { IIndexStatus } from './models/platform-api/responses/index/index-status.interface';
+import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { AppUpdateModalComponent } from './components/modals-module/app-update-modal/app-update-modal.component';
 import { TransactionReceipt } from './models/transaction-receipt';
 import { ITransactionReceipt } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
-import { catchError, take } from 'rxjs/operators';
+import { catchError, switchMap, take } from 'rxjs/operators';
 import { TransactionsService } from '@sharedServices/platform/transactions.service';
 import { JwtService } from '@sharedServices/utility/jwt.service';
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { SidenavService } from './services/utility/sidenav.service';
 import { ChangeDetectorRef, Component, HostBinding, OnInit, ViewChild } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
@@ -19,7 +20,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { BugReportModalComponent } from '@sharedComponents/modals-module/bug-report-modal/bug-report-modal.component';
 import { Title } from '@angular/platform-browser';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { ISidenavMessage } from '@sharedModels/transaction-view';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { Icons } from './enums/icons';
@@ -41,12 +42,13 @@ export class AppComponent implements OnInit {
   context: any;
   network: string;
   menuOpen = false;
-  isPinned = true;
+  isPinned = false;
   message: ISidenavMessage;
   sidenavMode: 'over' | 'side' = 'over';
   hubConnection: HubConnection;
   loading = true;
   icons = Icons;
+  indexStatus: IIndexStatus;
 
   constructor(
     public overlayContainer: OverlayContainer,
@@ -58,7 +60,7 @@ export class AppComponent implements OnInit {
     private _api: PlatformApiService,
     private _context: UserContextService,
     private _title: Title,
-    private _blocksService: BlocksService,
+    private _indexService: IndexService,
     private _jwt: JwtService,
     private _transactionService: TransactionsService,
     private _cdref: ChangeDetectorRef,
@@ -106,8 +108,11 @@ export class AppComponent implements OnInit {
         else if (!this.hubConnection?.connectionId) await this.connectToSignalR();
       }));
 
-    // Refresh blocks on timer
-    this.subscription.add(timer(0,8000).subscribe(_ => this._blocksService.refreshLatestBlock()));
+    // Get index status on timer
+    this.subscription.add(
+      timer(0,8000)
+        .pipe(switchMap(_ => this._indexService.refreshStatus$()))
+        .subscribe(indexStatus => this.indexStatus = indexStatus));
 
     // Get theme
     this.subscription.add(this._theme.getTheme().subscribe(theme => this.setTheme(theme)));

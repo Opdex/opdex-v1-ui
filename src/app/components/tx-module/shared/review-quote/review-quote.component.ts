@@ -1,5 +1,5 @@
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
 import { ITransactionReceipt } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
 import { TransactionReceipt } from '@sharedModels/transaction-receipt';
@@ -58,7 +58,7 @@ export class ReviewQuoteComponent implements OnDestroy {
     private _platformApi: PlatformApiService,
     public _bottomSheetRef: MatBottomSheetRef<ReviewQuoteComponent>,
     private _transactionsService: TransactionsService,
-    private _blocksService: BlocksService,
+    private _indexService: IndexService,
     private _env: EnvironmentsService,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: ITransactionQuote
   ) {
@@ -78,7 +78,7 @@ export class ReviewQuoteComponent implements OnDestroy {
         .subscribe(_ => this._bottomSheetRef.dismiss(this.txHash)));
 
     this.subscription.add(
-      this._blocksService.getLatestBlock$()
+      this._indexService.getLatestBlock$()
         .pipe(
           tap(block => this.latestBlock = block),
           switchMap(_ => this._platformApi.replayQuote(new QuoteReplayRequest({quote: this.data.request}))),
@@ -99,7 +99,7 @@ export class ReviewQuoteComponent implements OnDestroy {
       to: this.quoteRequest.to,
       gasUsed: quote.gasUsed,
       // Use the service for the first request when component loads, observable wouldn't have emitted yet
-      block: this.latestBlock || this._blocksService.getLatestBlock(),
+      block: this.latestBlock || this._indexService.getLatestBlock(),
       success: !quote.error,
       events: quote.events
     } as ITransactionReceipt);
