@@ -7,7 +7,7 @@ import { tap, switchMap, take } from 'rxjs/operators';
 import { IVault } from '@sharedModels/platform-api/responses/vaults/vault.interface';
 import { IVaultCertificates } from '@sharedModels/platform-api/responses/vaults/vault-certificate.interface';
 import { Icons } from 'src/app/enums/icons';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { VaultStatCardsLookup } from '@sharedLookups/vault-stat-cards.lookup';
 
 @Component({
@@ -25,7 +25,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   constructor(
     private _vaultsService: VaultsService,
     private _tokensService: TokensService,
-    private _blocksService: BlocksService
+    private _indexService: IndexService
   ) {
     // Init with null to get default/loading animations
     this.statCards = VaultStatCardsLookup.getStatCards(null);
@@ -33,7 +33,7 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscription.add(
-      this._blocksService.getLatestBlock$().pipe(switchMap(_ => this._vaultsService.getVault()
+      this._indexService.getLatestBlock$().pipe(switchMap(_ => this._vaultsService.getVault()
         .pipe(
           tap(vault => this.vault = vault),
           switchMap(() => this._tokensService.getMarketToken(this.vault.lockedToken?.address || this.vault.lockedToken)),

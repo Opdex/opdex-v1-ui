@@ -1,11 +1,12 @@
-import { take, tap, filter } from 'rxjs/operators';
+import { IIndexStatus } from '@sharedModels/platform-api/responses/index/index-status.interface';
+import { tap, filter } from 'rxjs/operators';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
 
 @Injectable({ providedIn: 'root' })
-export class BlocksService {
+export class IndexService {
   private _block: IBlock;
   private block$ = new BehaviorSubject<IBlock>(null);
 
@@ -19,16 +20,14 @@ export class BlocksService {
     return this.block$.asObservable().pipe(filter(block => !!block));
   }
 
-  refreshLatestBlock(): void {
-    this._platformApi.getLatestSyncedBlock()
+  refreshStatus$(): Observable<IIndexStatus> {
+    return this._platformApi.getIndexStatus()
       .pipe(
-        take(1),
-        tap((block: IBlock) => {
-          if (!this._block || this._block.height < block.height) {
-            this._block = block;
+        tap((status: IIndexStatus) => {
+          if (!this._block || this._block.height < status.block.height) {
+            this._block = status.block;
             this.block$.next(this._block);
           }
-        }))
-      .subscribe();
+        }));
   }
 }

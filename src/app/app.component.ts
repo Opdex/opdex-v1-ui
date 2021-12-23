@@ -20,7 +20,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { BugReportModalComponent } from '@sharedComponents/modals-module/bug-report-modal/bug-report-modal.component';
 import { Title } from '@angular/platform-browser';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { ISidenavMessage } from '@sharedModels/transaction-view';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { Icons } from './enums/icons';
@@ -60,7 +60,7 @@ export class AppComponent implements OnInit {
     private _api: PlatformApiService,
     private _context: UserContextService,
     private _title: Title,
-    private _blocksService: BlocksService,
+    private _indexService: IndexService,
     private _jwt: JwtService,
     private _transactionService: TransactionsService,
     private _cdref: ChangeDetectorRef,
@@ -81,11 +81,6 @@ export class AppComponent implements OnInit {
           this._context.setToken(jwt);
           setTimeout(() => this.loading = false, 1500);
         }));
-
-    this.subscription.add(
-      timer(0, 15000)
-        .pipe(switchMap(_ => this._api.getIndexStatus()))
-      .subscribe(status => this.indexStatus = status));
   }
 
   ngAfterContentChecked() {
@@ -113,8 +108,11 @@ export class AppComponent implements OnInit {
         else if (!this.hubConnection?.connectionId) await this.connectToSignalR();
       }));
 
-    // Refresh blocks on timer
-    this.subscription.add(timer(0,8000).subscribe(_ => this._blocksService.refreshLatestBlock()));
+    // Get index status on timer
+    this.subscription.add(
+      timer(0,8000)
+        .pipe(switchMap(_ => this._indexService.refreshStatus$()))
+        .subscribe(indexStatus => this.indexStatus = indexStatus));
 
     // Get theme
     this.subscription.add(this._theme.getTheme().subscribe(theme => this.setTheme(theme)));

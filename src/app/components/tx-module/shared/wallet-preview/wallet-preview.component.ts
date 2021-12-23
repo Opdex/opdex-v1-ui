@@ -1,7 +1,7 @@
 import { MiningPoolsService } from '@sharedServices/platform/mining-pools.service';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { combineLatest, Observable, of, Subscription, zip } from 'rxjs';
@@ -40,7 +40,7 @@ export class WalletPreviewComponent implements OnDestroy {
     private _walletService: WalletsService,
     private _tokenService: TokensService,
     private _liquidityPoolService: LiquidityPoolsService,
-    private _blocksService: BlocksService,
+    private _indexService: IndexService,
     private _miningPoolService: MiningPoolsService
   ) {
     this.subscription.add(this._userContext.getUserContext$()
@@ -49,7 +49,7 @@ export class WalletPreviewComponent implements OnDestroy {
         switchMap(_ => this.getWalletSummary()))
       .subscribe());
 
-    this.subscription.add(this._blocksService.getLatestBlock$().pipe(skip(1), switchMap(_ => this.getWalletSummary())).subscribe());
+    this.subscription.add(this._indexService.getLatestBlock$().pipe(skip(1), switchMap(_ => this.getWalletSummary())).subscribe());
   }
 
   ngOnChanges() {

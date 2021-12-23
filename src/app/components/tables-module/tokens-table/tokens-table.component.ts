@@ -1,5 +1,5 @@
 import { ITokenHistoryResponse } from '@sharedModels/platform-api/responses/tokens/token-history-response.interface';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { Component, Input, OnChanges, ViewChild, OnDestroy } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
@@ -32,7 +32,7 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private _router: Router, private _tokensService: TokensService, private _blocksService: BlocksService) {
+  constructor(private _router: Router, private _tokensService: TokensService, private _indexService: IndexService) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['token', 'name', 'price', 'history'];
   }
@@ -41,7 +41,7 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
     if (this.filter && !this.subscription) {
       this.subscription = new Subscription();
       this.subscription.add(
-        this._blocksService.getLatestBlock$()
+        this._indexService.getLatestBlock$()
           .pipe(switchMap(_ => this.getTokens$(this.filter?.cursor)))
           .subscribe())
     }

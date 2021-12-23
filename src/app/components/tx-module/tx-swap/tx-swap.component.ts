@@ -4,7 +4,7 @@ import { TokenOrderByTypes, TokensFilter } from '@sharedModels/platform-api/requ
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { ISwapAmountInQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-in-quote-response.interface';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -70,7 +70,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   constructor(
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
-    private _blocksService: BlocksService,
+    private _indexService: IndexService,
     private _tokensService: TokensService,
     private _env: EnvironmentsService,
     protected _injector: Injector
@@ -104,7 +104,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
         ).subscribe());
 
     this.subscription.add(
-      this._blocksService.getLatestBlock$()
+      this._indexService.getLatestBlock$()
         .pipe(
           tap(block => this.latestBlock = block?.height),
           tap(_ => this.refreshToken(this.tokenIn?.address)),

@@ -1,5 +1,5 @@
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
@@ -57,7 +57,7 @@ export class PoolPreviewComponent implements OnChanges, OnDestroy {
   constructor(
     private _fb: FormBuilder,
     private _liquidityPoolsService: LiquidityPoolsService,
-    private _blocksService: BlocksService
+    private _indexService: IndexService
   ) {
     this.poolForm = this._fb.group({
       poolControl: ['', [Validators.required]]
@@ -73,7 +73,7 @@ export class PoolPreviewComponent implements OnChanges, OnDestroy {
         map((poolAddress: string) => poolAddress ? this._filterPools(poolAddress) : this.pools.slice()));
 
     this.subscription.add(
-      this._blocksService.getLatestBlock$()
+      this._indexService.getLatestBlock$()
         .pipe(
           skip(1),
           filter(_ => !!this.pool),

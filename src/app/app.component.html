@@ -21,12 +21,12 @@
         </aside>
 
         <div class="animation-container">
-          <div class="notification-banner warning flex-row-center-center p-2" *ngIf="!!indexStatus?.status && (!!indexStatus?.status?.available === false || !!indexStatus?.status?.locked && indexStatus.status.reason === 'Rewind')">
-            <ng-container *ngIf="!!indexStatus?.status?.available === false">
+          <div class="notification-banner warning flex-row-center-center p-2" *ngIf="!!indexStatus?.available === false || !!indexStatus?.locked && indexStatus.reason === 'Rewind'">
+            <ng-container *ngIf="!!indexStatus?.available === false">
               <mat-icon class="small mr-2">{{icons.maintenance}}</mat-icon> Undergoing temporary maintenance, block progression will continue shortly.
             </ng-container>
 
-            <ng-container *ngIf="!!indexStatus?.status?.locked === true && indexStatus.status.reason === 'Rewind'">
+            <ng-container *ngIf="!!indexStatus?.locked === true && indexStatus.reason === 'Rewind'">
               <mat-icon class="small mr-2">{{icons.rewind}}</mat-icon> Undergoing a chain reorganization, block progression will continue shortly.
             </ng-container>
           </div>

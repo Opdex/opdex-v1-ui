@@ -113,12 +113,7 @@ export class PlatformApiService extends RestApiService {
   // Indexer
   ////////////////////////////
 
-  public getLatestSyncedBlock(): Observable<IBlock> {
-    return this.get<IBlock>(`${this.api}/index/latest-block`);
-  }
-
   public getIndexStatus(): Observable<IIndexStatus> {
-    return of({} as IIndexStatus); // Temporary
     return this.get<IIndexStatus>(`${this.api}/index/status`);
   }
 

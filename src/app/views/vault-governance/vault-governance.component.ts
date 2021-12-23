@@ -10,7 +10,7 @@ import { EnvironmentsService } from '@sharedServices/utility/environments.servic
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { IVaultGovernanceResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-governance-response-model.interface';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { VaultGovernancesService } from '@sharedServices/platform/vault-governances.service';
 import { Observable, Subscription } from 'rxjs';
@@ -51,7 +51,7 @@ export class VaultGovernanceComponent implements OnInit {
   constructor(
     private _vaultsService: VaultGovernancesService,
     private _tokensService: TokensService,
-    private _blocksService: BlocksService,
+    private _indexService: IndexService,
     private _env: EnvironmentsService,
     private _sidebar: SidenavService,
     private _platformApiService: PlatformApiService,
@@ -84,7 +84,7 @@ export class VaultGovernanceComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscription.add(
-      this._blocksService.getLatestBlock$()
+      this._indexService.getLatestBlock$()
         .pipe(
           tap(block => this.latestBlock = block),
           switchMap(_ => this.getVault$()),

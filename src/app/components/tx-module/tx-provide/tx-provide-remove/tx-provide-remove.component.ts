@@ -1,5 +1,5 @@
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
 import { Component, Input, Injector } from '@angular/core';
@@ -56,7 +56,7 @@ export class TxProvideRemoveComponent extends TxBase {
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
     protected _injector: Injector,
-    private _blocksService: BlocksService,
+    private _indexService: IndexService,
     private _env: EnvironmentsService
   ) {
     super(_injector);
@@ -82,7 +82,7 @@ export class TxProvideRemoveComponent extends TxBase {
         switchMap(amount => this.getAllowance$(amount)))
         .subscribe();
 
-      this.latestSyncedBlock$ = this._blocksService.getLatestBlock$()
+      this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
         .pipe(
           tap(block => this.latestBlock = block?.height),
           filter(_ => this.context?.wallet),

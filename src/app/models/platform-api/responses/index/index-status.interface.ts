@@ -1,7 +1,10 @@
 import { IBlock } from "../blocks/block.interface";
-import { IIndexLock } from "./index-lock.interface";
 
 export interface IIndexStatus {
   block: IBlock;
-  status: IIndexLock;
+  available: boolean;
+  locked: boolean;
+  instanceId: string;
+  reason?: string;
+  modifiedDate: Date;
 }

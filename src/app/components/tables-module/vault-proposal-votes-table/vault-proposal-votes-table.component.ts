@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { VaultProposalVotesFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-votes-filter';
 import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
 import { IVaultProposalVotesResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-votes-response-model.interface';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { VaultGovernancesService } from '@sharedServices/platform/vault-governances.service';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap, tap, take } from 'rxjs/operators';
@@ -31,7 +31,7 @@ export class VaultProposalVotesTableComponent implements OnChanges {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private _vaultsService: VaultGovernancesService, private _blocksService: BlocksService) {
+  constructor(private _vaultsService: VaultGovernancesService, private _indexService: IndexService) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['voter', 'vote', 'balance', 'actions'];
   }
@@ -41,7 +41,7 @@ export class VaultProposalVotesTableComponent implements OnChanges {
       this.loading = true;
       this.subscription = new Subscription();
       this.subscription.add(
-        this._blocksService.getLatestBlock$()
+        this._indexService.getLatestBlock$()
           .pipe(switchMap(_ => this.getVotes$(this.filter?.cursor)))
           .subscribe(_ => this.loading = false))
     }

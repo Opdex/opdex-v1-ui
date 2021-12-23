@@ -7,7 +7,7 @@ import { ThemeService } from '@sharedServices/utility/theme.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
 import { Icons } from 'src/app/enums/icons';
 import { MatDialog } from '@angular/material/dialog';
@@ -40,7 +40,7 @@ export class SideNavComponent implements OnDestroy {
     public dialog: MatDialog,
     private _context: UserContextService,
     private _theme: ThemeService,
-    private _blocksService: BlocksService,
+    private _indexService: IndexService,
     private _transactionsService: TransactionsService,
     private _platformApiService: PlatformApiService,
     private _router: Router,
@@ -48,7 +48,7 @@ export class SideNavComponent implements OnDestroy {
   ) {
     this.userContext$ = this._context.getUserContext$();
     this.theme$ = this._theme.getTheme().subscribe((theme: 'light-mode' | 'dark-mode') => this.theme = theme);
-    this.latestSyncedBlock$ = this._blocksService.getLatestBlock$();
+    this.latestSyncedBlock$ = this._indexService.getLatestBlock$();
     this.network = this._env.network;
     this.subscription.add(this._transactionsService.getBroadcastedTransactions$().subscribe(txs => this.pendingTransactions = txs));
     this.usesVaultGovernance = this._env.vaultGovernanceAddress?.length > 0;

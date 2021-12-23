@@ -1,5 +1,5 @@
 import { Injector } from '@angular/core';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { Observable, BehaviorSubject } from "rxjs";
 import { switchMap, shareReplay } from "rxjs/operators";
 
@@ -10,11 +10,11 @@ interface ICacheRecord {
 }
 
 export abstract class CacheService {
-  private _blocksService: BlocksService;
+  private _indexService: IndexService;
   private cache: Record<string, ICacheRecord> = {};
 
   constructor(protected injector: Injector) {
-    this._blocksService = injector.get(BlocksService);
+    this._indexService = injector.get(IndexService);
   }
 
   /**
@@ -32,7 +32,7 @@ export abstract class CacheService {
    * @returns Observable T of the cached items type.
    */
   protected getItem<T>(key: string, $value: Observable<T>, cacheOnly?: boolean): Observable<T> {
-    const currentBlock = this._blocksService.getLatestBlock();
+    const currentBlock = this._indexService.getLatestBlock();
     const blockHeight = currentBlock?.height || 0;
 
     // New up an item if it doesn't yet exist
@@ -70,7 +70,7 @@ export abstract class CacheService {
       };
     }
 
-    const currentBlock = this._blocksService.getLatestBlock();
+    const currentBlock = this._indexService.getLatestBlock();
     const blockHeight = currentBlock?.height || 0;
 
     if (blockHeight > this.cache[key].lastUpdateBlock) {

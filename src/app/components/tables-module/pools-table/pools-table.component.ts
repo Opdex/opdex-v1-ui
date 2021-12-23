@@ -8,7 +8,7 @@ import { IconSizes } from 'src/app/enums/icon-sizes';
 import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
 import { LiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { Observable, Subscription } from 'rxjs';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { switchMap, take, tap } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
@@ -33,7 +33,7 @@ export class PoolsTableComponent implements OnChanges, OnDestroy {
 
   constructor(
     private _router: Router,
-    private _blocksService: BlocksService,
+    private _indexService: IndexService,
     private _liquidityPoolsService: LiquidityPoolsService,
     private _sidebar: SidenavService
   ) {
@@ -45,7 +45,7 @@ export class PoolsTableComponent implements OnChanges, OnDestroy {
     if (this.filter && !this.subscription) {
       this.subscription = new Subscription();
       this.subscription.add(
-        this._blocksService.getLatestBlock$()
+        this._indexService.getLatestBlock$()
           .pipe(switchMap(_ => this.getLiquidityPools$(this.filter?.cursor)))
           .subscribe())
     }

@@ -11,7 +11,7 @@ import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interf
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IVaultGovernanceResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-governance-response-model.interface';
 import { IVaultProposalResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-response-model.interface';
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { VaultGovernancesService } from '@sharedServices/platform/vault-governances.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
@@ -49,7 +49,7 @@ export class VaultGovernanceProposalComponent {
   constructor(
     private _vaultsService: VaultGovernancesService,
     private _tokensService: TokensService,
-    private _blocksService: BlocksService,
+    private _indexService: IndexService,
     private _sidebar: SidenavService,
     private _route: ActivatedRoute,
     private _platformApiService: PlatformApiService,
@@ -61,7 +61,7 @@ export class VaultGovernanceProposalComponent {
     this.subscription.add(this._context.getUserContext$().subscribe(context => this.context = context));
 
     this.subscription.add(
-      this._blocksService.getLatestBlock$()
+      this._indexService.getLatestBlock$()
         .pipe(
           tap(block => this.latestBlock = block),
           switchMap(_ => this.getVault$()),

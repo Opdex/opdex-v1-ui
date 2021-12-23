@@ -1,4 +1,4 @@
-import { BlocksService } from '@sharedServices/platform/blocks.service';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { TokenHistory } from '@sharedModels/token-history';
 import { IconSizes } from 'src/app/enums/icon-sizes';
@@ -56,7 +56,7 @@ export class TokenComponent implements OnInit {
     private _title: Title,
     private _gaService: GoogleAnalyticsService,
     private _sidebar: SidenavService,
-    private _blocksService: BlocksService
+    private _indexService: IndexService
   ) { }
 
   ngOnInit(): void {
@@ -79,7 +79,7 @@ export class TokenComponent implements OnInit {
     }
 
     this.subscription.add(
-      this._blocksService.getLatestBlock$()
+      this._indexService.getLatestBlock$()
         .pipe(
           switchMap(_ => this.getToken()),
           tap(_ => this.historyFilter?.refresh()),
