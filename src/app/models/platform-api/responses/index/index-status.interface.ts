@@ -1,7 +1,7 @@
 import { IBlock } from "../blocks/block.interface";
 
 export interface IIndexStatus {
-  block: IBlock;
+  latestBlock: IBlock;
   available: boolean;
   locked: boolean;
   instanceId: string;

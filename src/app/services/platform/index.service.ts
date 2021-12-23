@@ -24,8 +24,8 @@ export class IndexService {
     return this._platformApi.getIndexStatus()
       .pipe(
         tap((status: IIndexStatus) => {
-          if (!this._block || this._block.height < status.block.height) {
-            this._block = status.block;
+          if (!this._block || this._block.height < status.latestBlock.height) {
+            this._block = status.latestBlock;
             this.block$.next(this._block);
           }
         }));
