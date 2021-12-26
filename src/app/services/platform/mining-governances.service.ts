@@ -13,8 +13,4 @@ export class MiningGovernancesService extends CacheService {
   getMiningGovernance(address: string): Observable<any> {
     return this.getItem(address, this._platformApi.getMiningGovernance(address));
   }
-
-  refreshMiningGovernance(address: string): void {
-    this.refreshItem(address);
-  }
 }

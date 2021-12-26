@@ -14,8 +14,4 @@ export class MiningPoolsService extends CacheService {
   getMiningPool(address: string): Observable<IMiningPool> {
     return this.getItem(address, this._platformApi.getMiningPool(address));
   }
-
-  refreshMiningPool(address: string): void {
-    this.refreshItem(address);
-  }
 }

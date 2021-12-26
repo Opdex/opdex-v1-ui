@@ -8,6 +8,7 @@ import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interf
 import { CacheService } from '../utility/cache.service';
 import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { ITokenHistoryResponse } from '@sharedModels/platform-api/responses/tokens/token-history-response.interface';
+import { tap } from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class TokensService extends CacheService {
@@ -27,7 +28,8 @@ export class TokensService extends CacheService {
   }
 
   getTokens(request: TokensFilter): Observable<ITokensResponse> {
-    return this.getItem(`tokens-request-${request.buildQueryString()}`, this._platformApi.getMarketTokens(request));
+    return this.getItem(`tokens-${request.buildQueryString()}`, this._platformApi.getMarketTokens(request))
+      .pipe(tap(tokens => tokens.results.forEach(token => this.cacheItem(`market-token-${token.address}`, token))));
   }
 
   getTokenHistory(address: string, filter: HistoryFilter): Observable<ITokenHistoryResponse> {
@@ -36,17 +38,5 @@ export class TokensService extends CacheService {
     return address === 'CRS'
       ? this.getItem(key, this._platformApi.getTokenHistory(address, filter))
       : this.getItem(key, this._platformApi.getMarketTokenHistory(address, filter));
-  }
-
-  refreshToken(address: string): void {
-    this.refreshItem(address);
-  }
-
-  refreshTokens(request: TokensFilter): void {
-    this.refreshItem(`tokens-request-${request.buildQueryString()}`);
-  }
-
-  refreshTokenHistory(address: string, filter: HistoryFilter): void {
-    this.refreshItem(`${address}-history-${filter.buildQueryString()}`);
   }
 }

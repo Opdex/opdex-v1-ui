@@ -1,4 +1,4 @@
-import { NotificationService } from './../utility/notification.service';
+import { NotificationService } from '@sharedServices/utility/notification.service';
 import { TransactionReceipt } from '@sharedModels/transaction-receipt';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -31,20 +31,12 @@ export class TransactionsService extends CacheService {
   // API Methods
 
   getTransaction(hash: string): Observable<ITransactionReceipt> {
-    return this.getItem(`transaction-request-${hash}`, this._platformApi.getTransaction(hash), true);
-  }
-
-  refreshTransaction(hash: string): void {
-    this.refreshItem(`transaction-request-${hash}`);
+    return this.getItem(hash, this._platformApi.getTransaction(hash), true);
   }
 
   getTransactions(request: TransactionRequest): Observable<ITransactionReceipts> {
     const isHistorical = request.cursor?.length > 0;
-    return this.getItem(`transactions-request-${request.buildQueryString()}`, this._platformApi.getTransactions(request), isHistorical);
-  }
-
-  refreshTransactions(request: TransactionRequest) {
-    this.refreshItem(`transactions-request-${request.buildQueryString()}`);
+    return this.getItem(`transactions-${request.buildQueryString()}`, this._platformApi.getTransactions(request), isHistorical);
   }
 
   // Service Observable Methods

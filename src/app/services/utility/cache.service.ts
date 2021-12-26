@@ -1,6 +1,6 @@
 import { Injector } from '@angular/core';
 import { IndexService } from '@sharedServices/platform/index.service';
-import { Observable, BehaviorSubject } from "rxjs";
+import { Observable, BehaviorSubject, of } from "rxjs";
 import { switchMap, shareReplay } from "rxjs/operators";
 
 interface ICacheRecord {
@@ -55,6 +55,33 @@ export abstract class CacheService {
 
     // Return cache item observable
     return this.cache[key].observable;
+  }
+
+  /**
+   * @summary Manually caches an items response. Good to use when retrieving paginated requests to cache the individual records.
+   * @param key The key to store the cached item by
+   * @param value The generic value to cache
+   */
+  protected cacheItem<T>(key: string, value: T): void {
+    const currentBlock = this._indexService.getLatestBlock();
+    const blockHeight = currentBlock?.height || 0;
+
+    if (!this.cache[key]) {
+      this.cache[key] = {
+        subject: new BehaviorSubject<void>(null),
+        observable: null,
+      };
+    }
+
+    this.cache[key].observable = this.cache[key].subject
+      .pipe(
+        switchMap(_ => of(value)),
+        shareReplay(1));
+
+    if (blockHeight > this.cache[key].lastUpdateBlock) {
+      this.cache[key].lastUpdateBlock = blockHeight;
+      this.cache[key].subject.next();
+    }
   }
 
   /**

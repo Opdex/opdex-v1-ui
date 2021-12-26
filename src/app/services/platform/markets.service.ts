@@ -19,12 +19,4 @@ export class MarketsService extends CacheService {
   getMarketHistory(request: HistoryFilter): Observable<IMarketHistoryResponse> {
     return this.getItem(`market-history-${request.buildQueryString()}`, this._platformApi.getMarketHistory(request));
   }
-
-  refreshMarket(): void {
-    this.refreshItem('market');
-  }
-
-  refreshMarketHistory(request: HistoryFilter): void {
-    this.refreshItem(`market-history-${request.buildQueryString()}`);
-  }
 }
