@@ -42,7 +42,7 @@ export class AppComponent implements OnInit {
   context: any;
   network: string;
   menuOpen = false;
-  isPinned = false;
+  isPinned = true;
   message: ISidenavMessage;
   sidenavMode: 'over' | 'side' = 'over';
   hubConnection: HubConnection;

@@ -24,7 +24,7 @@ export class SideNavComponent implements OnDestroy {
   @Output() onRouteChanged = new EventEmitter<string>();
   @Input() mobileMenuOpen: boolean;
   userContext$: Observable<any>;
-  isPinned: boolean = false;
+  isPinned: boolean = true;
   theme$: Subscription;
   theme: 'light-mode' | 'dark-mode';
   latestSyncedBlock$: Observable<IBlock>;
