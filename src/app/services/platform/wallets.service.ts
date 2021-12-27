@@ -1,3 +1,5 @@
+import { MiningPositionsFilter } from './../../models/platform-api/requests/wallets/mining-positions-filter';
+import { StakingPositionsFilter } from '@sharedModels/platform-api/requests/wallets/staking-positions-filter';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable, Injector } from '@angular/core';
 import { CacheService } from '@sharedServices/utility/cache.service';
@@ -6,6 +8,7 @@ import { IAddressBalance, IAddressBalances } from '@sharedModels/platform-api/re
 import { IAddressStaking, IAddressStakingPositions } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { IAddressMining, IAddressMiningPositions } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { tap } from 'rxjs/operators';
+import { WalletBalancesFilter } from '@sharedModels/platform-api/requests/wallets/wallet-balances-filter';
 
 @Injectable({ providedIn: 'root' })
 export class WalletsService extends CacheService {
@@ -17,8 +20,8 @@ export class WalletsService extends CacheService {
     return this.getItem(`wallet-balance-${wallet}-${token}`, this._platformApi.getBalance(wallet, token));
   }
 
-  getWalletBalances(wallet: string, tokenType = 'All', limit?: number, cursor?: string): Observable<IAddressBalances> {
-    return this.getItem(`wallet-balances-${wallet}-${tokenType}-${limit}-${cursor}`, this._platformApi.getWalletBalances(wallet, tokenType, limit, cursor))
+  getWalletBalances(wallet: string, request: WalletBalancesFilter): Observable<IAddressBalances> {
+    return this.getItem(`wallet-balances-${wallet}-${request.buildQueryString()}`, this._platformApi.getWalletBalances(wallet, request))
       .pipe(tap(balances => balances.results.forEach(balance => this.cacheItem(`wallet-balance-${wallet}-${balance.token}`, balance))));
   }
 
@@ -26,8 +29,8 @@ export class WalletsService extends CacheService {
     return this.getItem(`staking-position-${wallet}-${liquidityPool}`, this._platformApi.getStakingPosition(wallet, liquidityPool));
   }
 
-  getStakingPositions(wallet: string, limit?: number, cursor?: string): Observable<IAddressStakingPositions> {
-    return this.getItem(`staking-positions-${wallet}-${limit}-${cursor}`, this._platformApi.getStakingPositions(wallet, limit, cursor))
+  getStakingPositions(wallet: string, request: StakingPositionsFilter): Observable<IAddressStakingPositions> {
+    return this.getItem(`staking-positions-${wallet}-${request.buildQueryString()}`, this._platformApi.getStakingPositions(wallet, request))
       .pipe(tap(stakingPositions => stakingPositions.results.forEach(stakingPosition => this.cacheItem(`staking-position-${wallet}-${stakingPosition.liquidityPool}`, stakingPosition))));
   }
 
@@ -35,8 +38,8 @@ export class WalletsService extends CacheService {
     return this.getItem(`mining-position-${wallet}-${miningPool}`, this._platformApi.getMiningPosition(wallet, miningPool));
   }
 
-  getMiningPositions(wallet: string, limit?: number, cursor?: string): Observable<IAddressMiningPositions> {
-    return this.getItem(`mining-positions-${wallet}-${limit}-${cursor}`, this._platformApi.getMiningPositions(wallet, limit, cursor))
+  getMiningPositions(wallet: string, request: MiningPositionsFilter): Observable<IAddressMiningPositions> {
+    return this.getItem(`mining-positions-${wallet}-${request.buildQueryString()}`, this._platformApi.getMiningPositions(wallet, request))
       .pipe(tap(positions => positions.results.forEach(position => this.cacheItem(`mining-position-${wallet}-${position.miningPool}`, position))));
   }
 }

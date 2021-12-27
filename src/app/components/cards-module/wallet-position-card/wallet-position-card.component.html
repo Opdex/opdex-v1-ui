@@ -1,24 +1,27 @@
 <opdex-card>
-  <div class="flex-row-center-between" *ngIf="position?.value !== null && position?.value !== undefined; else loadingPositions">
-    <div>
-      <small class="light mb-1">{{position.position}}</small>
-      <h4 class="mb-0 flex-row-center">
-        <ng-container [ngSwitch]="position.position">
-          <mat-icon [ngClass]="iconSizes.small" class="swap mr-2" *ngSwitchCase="'Balance'">{{icons.tokens}}</mat-icon>
-          <mat-icon [ngClass]="iconSizes.small" class="provide mr-2" *ngSwitchCase="'Providing'">{{icons.provide}}</mat-icon>
-          <mat-icon [ngClass]="iconSizes.small" class="stake mr-2" *ngSwitchCase="'Staking'">{{icons.staking}}</mat-icon>
-          <mat-icon [ngClass]="iconSizes.small" class="mine mr-2" *ngSwitchCase="'Mining'">{{icons.mining}}</mat-icon>
-        </ng-container>
-
-        {{position.token.symbol}}
-      </h4>
+  <ng-container *ngIf="position?.value !== null && position?.value !== undefined; else loadingPositions">
+    <div class="flex-row-center-between">
+      <small class="light">{{position.position}}</small>
+      <small class="light">${{position.value.formattedValue | shortNumber}}</small>
     </div>
 
-    <div class="flex-column-end justify-content-end">
-      <small class="light mb-1" >${{position.value.formattedValue | shortNumber}}</small>
-      <p class="mb-0" style="font-size: 1.2em;">{{position.amount.formattedValue | shortNumber}}</p>
+    <div class="flex-row-center-between">
+      <a class="no-decoration" routerLink="/tokens/{{position.token.address}}">
+        <p class="mb-0 b-400 flex-row-center mr-3">
+          <ng-container [ngSwitch]="position.position">
+            <mat-icon [ngClass]="iconSizes.tiny" class="swap mr-1" *ngSwitchCase="'Balance'">{{icons.tokens}}</mat-icon>
+            <mat-icon [ngClass]="iconSizes.tiny" class="provide mr-1" *ngSwitchCase="'Providing'">{{icons.provide}}</mat-icon>
+            <mat-icon [ngClass]="iconSizes.tiny" class="stake mr-1" *ngSwitchCase="'Staking'">{{icons.staking}}</mat-icon>
+            <mat-icon [ngClass]="iconSizes.tiny" class="mine mr-1" *ngSwitchCase="'Mining'">{{icons.mining}}</mat-icon>
+          </ng-container>
+
+          {{position.token.symbol}}
+        </p>
+      </a>
+
+      <p class="mb-0">{{position.amount.formattedValue | formatNumber:position.token.decimals > 8 ? 8 : position.token.decimals}}</p>
     </div>
-  </div>
+  </ng-container>
 
   <ng-template #loadingPositions>
     <div class="w-100">

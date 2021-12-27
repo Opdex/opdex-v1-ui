@@ -1,3 +1,5 @@
+import { SidenavService } from './../../../services/utility/sidenav.service';
+import { OnDestroy } from '@angular/core';
 import { VaultProposalPledgesFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-pledges-filter';
 import { IVaultProposalPledgesResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-pledges-response-model.interface';
 import { Component, Input, OnChanges, ViewChild } from '@angular/core';
@@ -11,13 +13,15 @@ import { Observable, Subscription } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
 import { VaultGovernancesService } from '@sharedServices/platform/vault-governances.service';
 import { IVaultProposalPledgeResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-pledge-response-model.interface';
+import { TransactionView } from '@sharedModels/transaction-view';
 
 @Component({
   selector: 'opdex-vault-proposal-pledges-table',
   templateUrl: './vault-proposal-pledges-table.component.html',
   styleUrls: ['./vault-proposal-pledges-table.component.scss']
 })
-export class VaultProposalPledgesTableComponent implements OnChanges {
+export class VaultProposalPledgesTableComponent implements OnChanges, OnDestroy {
+  @ViewChild(MatSort) sort: MatSort;
   @Input() filter: VaultProposalPledgesFilter;
   @Input() hideProposalIdColumn: boolean;
   displayedColumns: string[];
@@ -29,9 +33,10 @@ export class VaultProposalPledgesTableComponent implements OnChanges {
   iconSizes = IconSizes;
   loading = true;
 
-  @ViewChild(MatSort) sort: MatSort;
-
-  constructor(private _vaultsService: VaultGovernancesService, private _indexService: IndexService) {
+  constructor(
+    private _vaultsService: VaultGovernancesService,
+    private _indexService: IndexService,
+    private _sidebar: SidenavService) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['pledger', 'pledge', 'balance', 'actions'];
   }
@@ -51,6 +56,10 @@ export class VaultProposalPledgesTableComponent implements OnChanges {
       const index = this.displayedColumns.findIndex(item => item === 'proposalId');
       if (index > -1) this.displayedColumns = this.displayedColumns.splice(index, 1);
     }
+  }
+
+  openSidebar(proposalId: number, withdraw: boolean): void {
+    this._sidebar.openSidenav(TransactionView.vaultProposal, { child: 'Pledge', proposalId, withdraw })
   }
 
   private getPledges$(cursor?: string): Observable<IVaultProposalPledgesResponseModel> {

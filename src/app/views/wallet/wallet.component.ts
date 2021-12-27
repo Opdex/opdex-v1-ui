@@ -1,19 +1,17 @@
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
+import { TokenProvisionalTypes } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { ThemeService } from '@sharedServices/utility/theme.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
 import { IAddressBalance } from '@sharedModels/platform-api/responses/wallets/address-balance.interface';
-import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
-import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { Router } from '@angular/router';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { Component, OnInit } from '@angular/core';
-import { forkJoin, Observable, of } from 'rxjs';
-import { map, switchMap, take, tap, catchError } from 'rxjs/operators';
+import { switchMap, take, tap } from 'rxjs/operators';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
-import { IAddressStaking } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
@@ -21,6 +19,9 @@ import { TransactionView } from '@sharedModels/transaction-view';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
 import { VaultProposalPledgesFilter, IVaultProposalPledgesFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-pledges-filter';
 import { VaultProposalVotesFilter, IVaultProposalVotesFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-votes-filter';
+import { IWalletBalancesRequest, WalletBalancesFilter } from '@sharedModels/platform-api/requests/wallets/wallet-balances-filter';
+import { StakingPositionsFilter, IStakingPositionsRequest } from '@sharedModels/platform-api/requests/wallets/staking-positions-filter';
+import { IMiningPositionsRequest, MiningPositionsFilter } from '@sharedModels/platform-api/requests/wallets/mining-positions-filter';
 
 @Component({
   selector: 'opdex-wallet',
@@ -29,37 +30,39 @@ import { VaultProposalVotesFilter, IVaultProposalVotesFilter } from '@sharedMode
   animations: [CollapseAnimation]
 })
 export class WalletComponent implements OnInit {
-  transactionsRequest: ITransactionsRequest;
-  walletProvisions: any;
-  walletBalances: any;
-  miningPositions: any;
-  stakingPositions: any;
   wallet: any;
+  showPreferences: boolean;
   crsBalance: IAddressBalance;
   crsBalanceValue: string;
-  showPreferences: boolean;
-  block = 1;
-  icons = Icons;
-  iconSizes = IconSizes;
+  showProposals: boolean;
   pledgesFilter: VaultProposalPledgesFilter;
   votesFilter: VaultProposalVotesFilter;
+  walletBalancesFilter: WalletBalancesFilter;
+  provisionalBalancesFilter: WalletBalancesFilter;
+  transactionsRequest: ITransactionsRequest;
+  stakingFilter: StakingPositionsFilter;
+  miningFilter: MiningPositionsFilter;
   balanceCollapse: boolean = false;
   providingCollapse: boolean = true;
   miningCollapse: boolean = true;
   stakingCollapse: boolean = true;
   pledgingCollapse: boolean = true;
   votingCollapse: boolean = true;
+  icons = Icons;
+  iconSizes = IconSizes;
+
 
   constructor(
     private _context: UserContextService,
     private _tokensService: TokensService,
-    private _liquidityPoolService: LiquidityPoolsService,
     private _walletsService: WalletsService,
     private _router: Router,
     private _theme: ThemeService,
-    private _sidebar: SidenavService
+    private _sidebar: SidenavService,
+    private _env: EnvironmentsService
   ) {
     this.wallet = this._context.getUserContext();
+    this.showProposals = !!this._env.vaultGovernanceAddress;
 
     if (!this.wallet || !this.wallet.wallet) {
       this._router.navigateByUrl('/auth');
@@ -85,14 +88,31 @@ export class WalletComponent implements OnInit {
       direction: 'DESC',
       includeZeroBalances: false
     } as IVaultProposalVotesFilter);
+
+    this.walletBalancesFilter = new WalletBalancesFilter({
+      tokenType: TokenProvisionalTypes.NonProvisional,
+      limit: 5,
+      direction: 'DESC',
+      includeZeroBalances: false} as IWalletBalancesRequest);
+
+    this.provisionalBalancesFilter = new WalletBalancesFilter({
+      tokenType: TokenProvisionalTypes.Provisional,
+      limit: 5,
+      direction: 'DESC',
+      includeZeroBalances: false} as IWalletBalancesRequest);
+
+    this.stakingFilter = new StakingPositionsFilter({
+      limit: 5,
+      direction: 'DESC',
+      includeZeroAmounts: false} as IStakingPositionsRequest);
+
+    this.miningFilter = new MiningPositionsFilter({
+      limit: 5,
+      direction: 'DESC',
+      includeZeroAmounts: false} as IMiningPositionsRequest);
   }
 
   ngOnInit(): void {
-    this.getWalletBalances(5);
-    this.getMiningPositions(5);
-    this.getStakingPositions(5);
-    this.getProvisionalPositions(5);
-
     this._walletsService.getBalance(this.wallet.wallet, 'CRS')
       .pipe(
         tap(crsBalance => this.crsBalance = crsBalance),
@@ -105,180 +125,51 @@ export class WalletComponent implements OnInit {
         take(1)).subscribe();
   }
 
-  handleDeadlineChange(threshold: number) {
+  handleDeadlineChange(threshold: number): void {
     this.wallet.preferences.deadlineThreshold = threshold;
     this._context.setUserPreferences(this.wallet.wallet, this.wallet.preferences);
   }
 
-  handleToleranceChange(threshold: number) {
+  handleToleranceChange(threshold: number): void {
     this.wallet.preferences.toleranceThreshold = threshold;
     this._context.setUserPreferences(this.wallet.wallet, this.wallet.preferences);
   }
 
-  toggleTheme(theme: string) {
+  toggleTheme(theme: string): void {
     this.wallet.preferences.theme = theme;
     this._context.setUserPreferences(this.wallet.wallet, this.wallet.preferences);
     this._theme.setTheme(theme);
   }
 
-  togglePreferences() {
+  togglePreferences(): void {
     this.showPreferences = !this.showPreferences;
   }
 
-  handleBalancesPageChange(cursor: string) {
-    this.getWalletBalances(null, cursor);
-  }
-
-  handleMiningPositionsPageChange(cursor: string) {
-    this.getMiningPositions(null, cursor);
-  }
-
-  handleStakingPositionsPageChange(cursor: string) {
-    this.getStakingPositions(null, cursor);
-  }
-
-  handleProvisionalPositionsPageChange(cursor: string) {
-    this.getProvisionalPositions(null, cursor);
-  }
-
-  private getMiningPositions(limit?: number, cursor?: string) {
-    this._walletsService.getMiningPositions(this.wallet.wallet, limit, cursor)
-      .pipe(
-        switchMap(response => {
-          if (response.results.length === 0) return of(response);
-
-          const positions$: Observable<IAddressMining>[] = [];
-
-          response.results.forEach(position => {
-            const miningPositionDetails$: Observable<any> =
-              this._liquidityPoolService.getLiquidityPool(position.miningToken)
-                .pipe(take(1), map(pool => { return { pool, position } }));
-
-            positions$.push(miningPositionDetails$);
-          })
-
-          return forkJoin(positions$).pipe(map(positions => { return { paging: response.paging, positions } }));
-        }),
-        take(1)
-      ).subscribe(response => this.miningPositions = response);
-  }
-
-  private getStakingPositions(limit?: number, cursor?: string) {
-    this._walletsService.getStakingPositions(this.wallet.wallet, limit, cursor)
-      .pipe(
-        switchMap(response => {
-          if (response.results.length === 0) return of(response);
-
-          const positions$: Observable<IAddressStaking>[] = [];
-
-          response.results.forEach(position => {
-            const stakingPositionDetails$: Observable<any> =
-              this._liquidityPoolService.getLiquidityPool(position.liquidityPool)
-                .pipe(
-                  take(1),
-                  map(pool => { return { pool, position }; }));
-
-            positions$.push(stakingPositionDetails$);
-          })
-
-          return forkJoin(positions$).pipe(map(positions => {
-            return { paging: response.paging, positions }
-          }));
-        }),
-        take(1)
-      ).subscribe(response => this.stakingPositions = response);
-  }
-
-  private getWalletBalances(limit?: number, cursor?: string) {
-    this._walletsService.getWalletBalances(this.wallet.wallet, 'NonProvisional', limit, cursor)
-      .pipe(
-        switchMap(response => {
-          if (response.results.length === 0) return of(response);
-
-          const balances$: Observable<IToken>[] = [];
-
-          response.results.forEach(balance => {
-            const tokenDetails$: Observable<IToken> =
-              this._tokensService.getMarketToken(balance.token)
-                .pipe(
-                  // Fallback to tokens when necessary
-                  // Todo: Backend really should return average token prices
-                  catchError(_ => this._tokensService.getToken(balance.token)),
-                  take(1),
-                  map(token => {
-                    token.balance = balance;
-                    return token;
-                  })
-                );
-
-            balances$.push(tokenDetails$);
-          })
-
-          return forkJoin(balances$).pipe(map(balances => {
-            return { paging: response.paging, balances }
-          }));
-        }),
-        take(1)
-      ).subscribe(response => this.walletBalances = response);
-  }
-
-  private getProvisionalPositions(limit?: number, cursor?: string) {
-    this._walletsService.getWalletBalances(this.wallet.wallet, 'Provisional', limit, cursor)
-      .pipe(
-        switchMap(response => {
-          if (response.results.length === 0) return of(response);
-
-          const balances$: Observable<IToken>[] = [];
-
-          response.results.forEach(balance => {
-            const poolDetail$: Observable<IToken> =
-              this._liquidityPoolService.getLiquidityPool(balance.token)
-                .pipe(
-                  take(1),
-                  map(pool => {
-                    let token = pool.token.lp;
-                    token.name = pool.name
-                    token.balance = balance;
-                    return token;
-                  })
-                );
-
-            balances$.push(poolDetail$);
-          })
-
-          return forkJoin(balances$).pipe(map(balances => {
-            return { paging: response.paging, balances }
-          }));
-        }),
-        take(1)
-      ).subscribe(response => this.walletProvisions = response);
-  }
-
-  handleTxOption($event: TransactionView) {
+  handleTxOption($event: TransactionView): void {
     this._sidebar.openSidenav($event);
   }
 
-  toggleBalanceCollapse() {
+  toggleBalanceCollapse(): void {
     this.balanceCollapse = !this.balanceCollapse;
   }
 
-  toggleProvidingCollapse() {
+  toggleProvidingCollapse(): void {
     this.providingCollapse = !this.providingCollapse;
   }
 
-  toggleMiningCollapse() {
+  toggleMiningCollapse(): void {
     this.miningCollapse = !this.miningCollapse;
   }
 
-  toggleStakingCollapse() {
+  toggleStakingCollapse(): void {
     this.stakingCollapse = !this.stakingCollapse;
   }
 
-  togglePledgingCollapse() {
+  togglePledgingCollapse(): void {
     this.pledgingCollapse = !this.pledgingCollapse;
   }
 
-  toggleVotingCollapse() {
+  toggleVotingCollapse(): void {
     this.votingCollapse = !this.votingCollapse;
   }
 }

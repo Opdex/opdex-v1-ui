@@ -12,7 +12,7 @@ import { IndexService } from '@sharedServices/platform/index.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { switchMap, take, tap } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
-import { ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
+import { ILiquidityPoolResponse, ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 
 @Component({
   selector: 'opdex-pools-table',
@@ -20,16 +20,14 @@ import { ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/li
   styleUrls: ['./pools-table.component.scss']
 })
 export class PoolsTableComponent implements OnChanges, OnDestroy {
+  @ViewChild(MatSort) sort: MatSort;
   @Input() filter: LiquidityPoolsFilter;
   displayedColumns: string[];
-  dataSource: MatTableDataSource<any>;
-  icons = Icons;
-  pool$: Observable<ILiquidityPoolsResponse>;
+  dataSource: MatTableDataSource<ILiquidityPoolResponse>;
   subscription: Subscription;
   paging: ICursor;
+  icons = Icons;
   iconSizes = IconSizes;
-
-  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private _router: Router,
@@ -37,57 +35,64 @@ export class PoolsTableComponent implements OnChanges, OnDestroy {
     private _liquidityPoolsService: LiquidityPoolsService,
     private _sidebar: SidenavService
   ) {
-    this.dataSource = new MatTableDataSource<any>();
+    this.dataSource = new MatTableDataSource<ILiquidityPoolResponse>();
     this.displayedColumns = ['name', 'liquidity', 'stakingWeight', 'volumeDaily', 'rewards', 'options'];
   }
 
   ngOnChanges() {
     if (this.filter && !this.subscription) {
+      if (this.subscription && !this.subscription.closed) {
+        this.subscription.unsubscribe();
+      }
+
       this.subscription = new Subscription();
+
       this.subscription.add(
         this._indexService.getLatestBlock$()
           .pipe(switchMap(_ => this.getLiquidityPools$(this.filter?.cursor)))
-          .subscribe())
+          .subscribe());
     }
   }
 
   private getLiquidityPools$(cursor?: string): Observable<ILiquidityPoolsResponse> {
     this.filter.cursor = cursor;
-    return this._liquidityPoolsService.getLiquidityPools(this.filter).pipe(tap(pools => {
-      this.dataSource.data = [...pools.results];
-      this.paging = pools.paging;
-    }));
+
+    return this._liquidityPoolsService.getLiquidityPools(this.filter)
+      .pipe(tap(pools => {
+        this.dataSource.data = [...pools.results];
+        this.paging = pools.paging;
+      }));
   }
 
-  navigate(name: string) {
+  navigate(name: string): void {
     this._router.navigateByUrl(`/pools/${name}`);
   }
 
-  trackBy(index: number, pool: any) {
-    return pool.address; // Todo: Should also track by moving targets like liquidity or volume
+  trackBy(index: number, pool: ILiquidityPoolResponse): string {
+    return `${index}-${pool.address}-${pool.summary.reserves.usd}-${pool.summary.staking?.weight || 0}-${pool.summary.volume.dailyUsd}`;
   }
 
-  pageChange(cursor: string) {
+  pageChange(cursor: string): void {
     this.getLiquidityPools$(cursor).pipe(take(1)).subscribe();
   }
 
-  provide(pool: any) {
+  provide(pool: any): void {
     this._sidebar.openSidenav(TransactionView.provide, {pool: pool});
   }
 
-  swap(pool: any) {
+  swap(pool: any): void {
     this._sidebar.openSidenav(TransactionView.swap, {pool: pool});
   }
 
-  stake(pool: any) {
+  stake(pool: any): void {
     this._sidebar.openSidenav(TransactionView.stake, {pool: pool});
   }
 
-  mine(pool: any) {
+  mine(pool: any): void {
     this._sidebar.openSidenav(TransactionView.mine, {pool: pool});
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 }

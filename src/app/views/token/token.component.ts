@@ -1,8 +1,14 @@
+import { AddressPosition } from '@sharedModels/address-position';
+import { UserContextService } from '@sharedServices/utility/user-context.service';
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
+import { ILiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
+import { WalletsService } from '@sharedServices/platform/wallets.service';
+import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { TokenHistory } from '@sharedModels/token-history';
 import { IconSizes } from 'src/app/enums/icon-sizes';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { delay, switchMap, take, tap } from 'rxjs/operators';
@@ -15,6 +21,9 @@ import { Icons } from 'src/app/enums/icons';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
+import { LiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 
 @Component({
   selector: 'opdex-token',
@@ -24,6 +33,8 @@ import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 export class TokenComponent implements OnInit {
   tokenAddress: string;
   token: any;
+  liquidityPool: ILiquidityPoolResponse;
+  balance: AddressPosition;
   subscription = new Subscription();
   tokenHistory: TokenHistory;
   transactionEventTypes = TransactionEventTypes;
@@ -48,6 +59,7 @@ export class TokenComponent implements OnInit {
   transactionsRequest: ITransactionsRequest;
   routerSubscription = new Subscription();
   historyFilter: HistoryFilter;
+  context: any;
 
   constructor(
     private _route: ActivatedRoute,
@@ -56,7 +68,11 @@ export class TokenComponent implements OnInit {
     private _title: Title,
     private _gaService: GoogleAnalyticsService,
     private _sidebar: SidenavService,
-    private _indexService: IndexService
+    private _indexService: IndexService,
+    private _lpService: LiquidityPoolsService,
+    private _walletService: WalletsService,
+    private _envService: EnvironmentsService,
+    private _userContextService: UserContextService
   ) { }
 
   ngOnInit(): void {
@@ -81,9 +97,12 @@ export class TokenComponent implements OnInit {
     this.subscription.add(
       this._indexService.getLatestBlock$()
         .pipe(
+          switchMap(_ => this._userContextService.getUserContext$().pipe(tap(context => this.context = context))),
           switchMap(_ => this.getToken()),
           tap(_ => this.historyFilter?.refresh()),
-          switchMap(_ => this.getTokenHistory()))
+          switchMap(_ => this.getTokenHistory()),
+          switchMap(_ => this.tryGetLiquidityPool()),
+          switchMap(_ => this.tryGetWalletBalance()))
         .subscribe());
   }
 
@@ -130,6 +149,36 @@ export class TokenComponent implements OnInit {
           this.handleChartTypeChange(this.selectedChart.category);
         })
       );
+  }
+
+  private tryGetLiquidityPool(): Observable<ILiquidityPoolResponse> {
+    if (!this.token || this.token.address === 'CRS' || this.token.symbol === 'OLPT') return of(null);
+
+    const filter = new LiquidityPoolsFilter({
+      tokens: [this.token.address],
+      market: this._envService.marketAddress,
+      limit: 1
+    } as ILiquidityPoolsFilter);
+
+    return this._lpService.getLiquidityPools(filter)
+      .pipe(map(pools => {
+        const pool = pools?.results?.length ? pools.results[0] : null;
+
+        this.liquidityPool = pool;
+        return pool;
+      }));
+  }
+
+  private tryGetWalletBalance(): Observable<AddressPosition> {
+    if (!!this.context?.wallet === false) return of(null);
+
+    return this._walletService.getBalance(this.context.wallet, this.token.address)
+      .pipe(map(balance => {
+        const position = new AddressPosition(this.context.wallet, this.token, 'Balance', new FixedDecimal(balance.balance, this.token.decimals));
+
+        this.balance = position;
+        return position;
+      }));
   }
 
   handleChartTypeChange($event): void {

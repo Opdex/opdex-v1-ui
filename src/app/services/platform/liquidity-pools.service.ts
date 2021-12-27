@@ -24,14 +24,14 @@ export class LiquidityPoolsService extends CacheService {
     return this.getItem(`${address}-history-${request.buildQueryString()}`, this._platformApi.getLiquidityPoolHistory(address, request));
   }
 
-  getLiquidityPools(request: LiquidityPoolsFilter): Observable<ILiquidityPoolsResponse> {
+  getLiquidityPools(request: LiquidityPoolsFilter, cacheOnly?: boolean): Observable<ILiquidityPoolsResponse> {
     const market = this._env.marketAddress;
 
     if (request.markets.find(m => m === market) === undefined) {
       request.markets.push(market);
     }
 
-    return this.getItem(`liquidity-pools-${request.buildQueryString()}`, this._platformApi.getLiquidityPools(request))
+    return this.getItem(`liquidity-pools-${request.buildQueryString()}`, this._platformApi.getLiquidityPools(request), cacheOnly)
       .pipe(tap(pools => pools.results.forEach(pool => this.cacheItem(pool.address, pool))));
   }
 }

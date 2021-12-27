@@ -1,5 +1,3 @@
-@import 'src/scss/bootstrap-grid';
-
 .big-balance {
   font-size: 1.4em;
   font-weight: 400;
@@ -8,23 +6,5 @@
 
   small {
     font-size: .5em;
-  }
-}
-
-.mobile-tx-feed {
-  display: block;
-}
-
-.desktop-tx-feed {
-  display: none;
-}
-
-@media (min-width: map_get($grid-breakpoints, lg)) {
-  .mobile-tx-feed {
-    display: none;
-  }
-
-  .desktop-tx-feed {
-    display: block;
   }
 }

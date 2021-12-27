@@ -1,0 +1,13 @@
+@import 'src/scss/colors';
+
+.dark-mode {
+  .badge {
+    color: #000;
+  }
+}
+
+.light-mode {
+  .badge {
+    color: #fff;
+  }
+}

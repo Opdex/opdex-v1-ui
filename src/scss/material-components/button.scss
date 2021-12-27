@@ -77,6 +77,30 @@ button {
     background: white !important;
     color: $dark-primary !important;
   }
+
+  &.purple, &.stake {
+    background-color: $purple-primary !important;
+    color: white !important;
+  }
+
+  &.red, &.mine {
+    background-color: $red-primary !important;
+    color: white !important;
+  }
+
+  &.green, &.provide {
+    background-color: $green-primary !important;
+    color: white !important;
+  }
+
+  &.blue, &.swap {
+    background-color: $blue-primary !important;
+    color: white !important;
+  }
+
+  &.flat {
+    box-shadow: none !important;
+  }
 }
 
 

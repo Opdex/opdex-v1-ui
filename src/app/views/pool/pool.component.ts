@@ -326,6 +326,11 @@ export class PoolComponent implements OnInit, OnDestroy {
     return `${index}-${statCard.title}-${statCard.value}`;
   }
 
+  positionsTrackBy(index: number, position: AddressPosition): string {
+    if (!!position === false) return index.toString();
+    return `${index}-${position.value}-${position.amount}-${position.token.address}`;
+  }
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
     this.routerSubscription.unsubscribe();

@@ -26,7 +26,12 @@
 
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>  </th>
-          <td mat-cell *matCellDef="let element"> </td>
+          <td mat-cell *matCellDef="let element">
+            <div class="flex-row-center-end">
+              <button mat-mini-fab class="tiny green flat mr-1" (click)="openSidebar(element.proposalId, false)" matTooltip="Pledge"><mat-icon>{{icons.add}}</mat-icon></button>
+              <button mat-mini-fab class="tiny red flat" (click)="openSidebar(element.proposalId, true)" matTooltip="Withdraw"><mat-icon>{{icons.remove}}</mat-icon></button>
+            </div>
+          </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

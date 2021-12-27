@@ -1,7 +1,7 @@
+import { MiningPositionsFilter } from '@sharedModels/platform-api/requests/wallets/mining-positions-filter';
 import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { IMarketToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IAddressMiningPositions } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
-import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
 import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { IAddressStaking, IAddressStakingPositions } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { ITransactionBroadcast } from '@sharedModels/platform-api/responses/transactions/transaction-broadcast.interface';
@@ -70,6 +70,8 @@ import { IVaultProposalPledgesResponseModel } from '@sharedModels/platform-api/r
 import { IVaultProposalVotesResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-votes-response-model.interface';
 import { VaultCertificatesFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-certificates-filter';
 import { IIndexStatus } from '@sharedModels/platform-api/responses/index/index-status.interface';
+import { WalletBalancesFilter } from '@sharedModels/platform-api/requests/wallets/wallet-balances-filter';
+import { StakingPositionsFilter } from '@sharedModels/platform-api/requests/wallets/staking-positions-filter';
 
 @Injectable({
   providedIn: 'root'
@@ -389,14 +391,11 @@ export class PlatformApiService extends RestApiService {
   }
 
   ////////////////////////////////////////////////////////
-  // Wallet Transactions - Temporary Local ENV only
+  // Wallet Details
   ////////////////////////////////////////////////////////
 
-  // Balances
-  public getWalletBalances(wallet: string, tokenType = 'All', limit?: number, cursor?: string): Observable<IAddressBalances> {
-    let query = cursor ? `?cursor=${cursor}` : `?limit=${limit}&direction=ASC&tokenType=${tokenType}`;
-
-    return this.get<IAddressBalances>(`${this.api}/wallets/${wallet}/balance${query}`);
+  public getWalletBalances(wallet: string, request: WalletBalancesFilter): Observable<IAddressBalances> {
+    return this.get<IAddressBalances>(`${this.api}/wallets/${wallet}/balance${request.buildQueryString()}`);
   }
 
   public getAllowance(owner: string, spender: string, token: string): Observable<IAddressAllowanceResponse> {
@@ -415,15 +414,11 @@ export class PlatformApiService extends RestApiService {
     return this.get<IAddressMining>(`${this.api}/wallets/${owner}/mining/${miningPool}`);
   }
 
-  public getMiningPositions(owner: string, limit?: number, cursor?: string): Observable<IAddressMiningPositions> {
-    let query = cursor ? `?cursor=${cursor}` : `?limit=${limit}&direction=ASC`;
-
-    return this.get<IAddressMiningPositions>(`${this.api}/wallets/${owner}/mining${query}`);
+  public getMiningPositions(owner: string, request: MiningPositionsFilter): Observable<IAddressMiningPositions> {
+    return this.get<IAddressMiningPositions>(`${this.api}/wallets/${owner}/mining${request.buildQueryString()}`);
   }
 
-  public getStakingPositions(owner: string, limit?: number, cursor?: string): Observable<IAddressStakingPositions> {
-    let query = cursor ? `?cursor=${cursor}` : `?limit=${limit}&direction=ASC`;
-
-    return this.get<IAddressStakingPositions>(`${this.api}/wallets/${owner}/staking${query}`);
+  public getStakingPositions(owner: string, request: StakingPositionsFilter): Observable<IAddressStakingPositions> {
+    return this.get<IAddressStakingPositions>(`${this.api}/wallets/${owner}/staking${request.buildQueryString()}`);
   }
 }

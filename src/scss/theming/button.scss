@@ -1,5 +1,28 @@
 @import 'src/scss/colors';
 
+.dark-mode {
+  button {
+    &.purple, &.stake {
+      background-color: $purple-primary !important;
+      color: $dark-primary !important;
+    }
+
+    &.red, &.mine {
+      background-color: $red-primary !important;
+      color: $dark-primary !important;
+    }
+
+    &.green, &.provide {
+      background-color: $green-primary !important;
+      color: $dark-primary !important;
+    }
+
+    &.blue, &.swap {
+      color: $dark-primary !important;
+    }
+  }
+}
+
 @media (hover: hover) and (pointer: fine) {
   .light-mode {
     .row-hoverable {

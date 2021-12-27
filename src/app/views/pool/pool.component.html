@@ -72,9 +72,9 @@
         </div>
       </div>
 
-      <div class="scrollable-row">
-        <ng-container *ngFor="let position of positions">
-          <div class="scrollable-card">
+      <div class="row">
+        <ng-container *ngFor="let position of positions; let i = index; trackBy: positionsTrackBy">
+          <div class="col-xs-12 col-sm">
             <opdex-wallet-position-card [position]="position"></opdex-wallet-position-card>
           </div>
         </ng-container>
