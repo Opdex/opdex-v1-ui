@@ -43,10 +43,28 @@
       </ng-container>
     </div>
 
-    <div class="row d-sm-none">
+    <div class="row d-sm-none mb-3">
       <div class="col-12">
         <opdex-tx-buttons (onSelectOption)="handleTxOption($event)"></opdex-tx-buttons>
       </div>
+    </div>
+
+    <div *ngIf="context$ | async as context">
+      <ng-container *ngIf="context.wallet">
+        <div class="row" *ngIf="context.wallet">
+          <div class="col-12">
+            <h4 class="b-300 flex-row-center"><mat-icon color="primary" class="small mr-2">{{icons.wallet}}</mat-icon> Positions</h4>
+          </div>
+        </div>
+
+        <div class="row">
+          <ng-container *ngFor="let position of positions; let i = index; trackBy: positionsTrackBy">
+            <div class="col-xs-12 col-sm">
+              <opdex-wallet-position-card [position]="position"></opdex-wallet-position-card>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>
@@ -62,26 +80,6 @@
       (onTimeChange)="handleChartTimeChange($event)"></opdex-line-chart>
   </div>
 </div>
-
-<ng-container *ngIf="context$ | async as context">
-  <div class="standard-section pt-5 pb-3" *ngIf="context.wallet">
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <h4 class="b-300">Current Positions</h4>
-        </div>
-      </div>
-
-      <div class="row">
-        <ng-container *ngFor="let position of positions; let i = index; trackBy: positionsTrackBy">
-          <div class="col-xs-12 col-sm">
-            <opdex-wallet-position-card [position]="position"></opdex-wallet-position-card>
-          </div>
-        </ng-container>
-      </div>
-    </div>
-  </div>
-</ng-container>
 
 <div class="standard-section blend-cards pt-5 pb-3 tx-bg">
   <div class="container">

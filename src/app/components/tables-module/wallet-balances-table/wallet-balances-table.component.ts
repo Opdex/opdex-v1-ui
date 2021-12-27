@@ -1,4 +1,4 @@
-import { EnvironmentsService } from './../../../services/utility/environments.service';
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { IndexService } from '@sharedServices/platform/index.service';
@@ -132,15 +132,18 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
           return forkJoin(balances$)
             .pipe(map(balances => {
               this.dataSource.data = balances.map(token => {
+                const price = new FixedDecimal(token.summary?.priceUsd?.toString() || '0', 8);
+
                 return {
                   name: token.name,
                   symbol: token.symbol,
                   address: token.address,
                   balance: token.balance.balance,
                   decimals: token.decimals,
+                  price: price,
                   total: MathService.multiply(
                     new FixedDecimal(token.balance.balance, token.decimals),
-                    new FixedDecimal(token.summary?.priceUsd?.toString() || '0', 8))
+                    price)
                 }
               });
 

@@ -1,3 +1,4 @@
+import { MathService } from '@sharedServices/utility/math.service';
 import { AddressPosition } from '@sharedModels/address-position';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
@@ -60,6 +61,8 @@ export class TokenComponent implements OnInit {
   routerSubscription = new Subscription();
   historyFilter: HistoryFilter;
   context: any;
+  crsPerOlpt: string;
+  srcPerOlpt: string;
 
   constructor(
     private _route: ActivatedRoute,
@@ -152,7 +155,21 @@ export class TokenComponent implements OnInit {
   }
 
   private tryGetLiquidityPool(): Observable<ILiquidityPoolResponse> {
-    if (!this.token || this.token.address === 'CRS' || this.token.symbol === 'OLPT') return of(null);
+    if (!this.token || this.token.address === 'CRS') return of(null);
+
+    if (this.token.symbol === 'OLPT') {
+      return this._lpService.getLiquidityPool(this.token.address)
+        .pipe(tap(pool => {
+          this.liquidityPool = pool;
+
+          const olptSupply = new FixedDecimal(pool.token.lp.totalSupply, pool.token.lp.decimals);
+          const crsReserves = new FixedDecimal(pool.summary.reserves.crs, pool.token.crs.decimals);
+          const srcReserves = new FixedDecimal(pool.summary.reserves.src, pool.token.src.decimals);
+
+          this.crsPerOlpt = MathService.divide(crsReserves, olptSupply);
+          this.srcPerOlpt = MathService.divide(srcReserves, olptSupply);
+        }));
+    }
 
     const filter = new LiquidityPoolsFilter({
       tokens: [this.token.address],
@@ -211,7 +228,7 @@ export class TokenComponent implements OnInit {
   }
 
   handleTxOption($event: TransactionView): void {
-    this._sidebar.openSidenav($event);
+    this._sidebar.openSidenav($event, {pool: this.liquidityPool});
   }
 
   ngOnDestroy(): void {

@@ -7,7 +7,7 @@
       </div>
 
       <div class="d-none d-lg-block col-lg-6 col-xl-4">
-        <opdex-tx-buttons (onSelectOption)="handleTxOption($event)" [hideStaking]="true" [hideMining]="true"></opdex-tx-buttons>
+        <opdex-tx-buttons (onSelectOption)="handleTxOption($event)" [hideStaking]="true" [hideMining]="true" *ngIf="liquidityPool"></opdex-tx-buttons>
       </div>
     </div>
 
@@ -38,21 +38,43 @@
     <div class="row">
       <div class="col-12 col-md-6 col-xl-3" *ngIf="!!liquidityPool">
         <opdex-card [fullHeight]="true">
-          <div class="flex-row-center-between">
-            <a class="b-400 no-decoration" routerLink="/pools/{{liquidityPool.address}}">{{liquidityPool.name}}</a>
-            <p class="mb-0 flex-row-center">
-              <mat-icon class="mr-1" [ngClass]="iconSizes.tiny">{{icons.swap}}</mat-icon>
-              {{liquidityPool.summary.cost.crsPerSrc | shortNumber}} CRS
-            </p>
-          </div>
+          <ng-container *ngIf="token.address !== liquidityPool.address; else olpt">
+            <div class="flex-row-center-between">
+              <a class="b-400 no-decoration" routerLink="/pools/{{liquidityPool.address}}">{{liquidityPool.name}}</a>
+              <p class="mb-0 flex-row-center">
+                <mat-icon class="ml-1 mr-1" [ngClass]="iconSizes.tiny">{{icons.lock}}</mat-icon>
+                <span class="align-items-end">
+                  {{liquidityPool.summary.reserves.src | shortNumber}} <small>{{token.symbol}}</small>
+                </span>
+              </p>
+            </div>
 
-          <div class="flex-row-center-between">
-            <p class="mb-0">Locked Supply</p>
-            <p class="mb-0 flex-row-center">
-              <mat-icon class="mr-1" [ngClass]="iconSizes.tiny">{{icons.lock}}</mat-icon>
-              {{liquidityPool.summary.reserves.src | shortNumber}} {{token.symbol}}
-            </p>
-          </div>
+            <div class="flex-row-center-between">
+              <span class="align-items-end">
+                1 <small>{{token.symbol}}</small>
+              </span>
+
+              <mat-icon class="ml-1 mr-1" [ngClass]="iconSizes.tiny">{{icons.swap}}</mat-icon>
+
+              <span class="align-items-end">
+                {{liquidityPool.summary.cost.crsPerSrc | shortNumber}} <small>{{liquidityPool.token.crs.symbol}}</small>
+              </span>
+            </div>
+          </ng-container>
+
+          <ng-template #olpt>
+            <div class="flex-row-center-between">
+              <a class="b-400 no-decoration" routerLink="/pools/{{liquidityPool.address}}">{{liquidityPool.name}}</a>
+              <p class="mb-0">
+                1 <small>{{liquidityPool.token.lp.symbol}}</small>
+              </p>
+            </div>
+
+            <div class="flex-row-center-between">
+              <p class="mb-0">~{{crsPerOlpt | shortNumber}} <smalL>{{liquidityPool.token.crs.symbol}}</smalL></p>
+              <p class="mb-0">~{{srcPerOlpt | shortNumber}} <small>{{liquidityPool.token.src.symbol}}</small></p>
+            </div>
+          </ng-template>
         </opdex-card>
       </div>
 
