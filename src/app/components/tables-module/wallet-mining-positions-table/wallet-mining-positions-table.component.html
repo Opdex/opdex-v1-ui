@@ -1,4 +1,4 @@
-<ng-container *ngIf="dataSource?.data?.length; else loading">
+<ng-container *ngIf="!!dataSource; else loading">
   <ng-container *ngIf="dataSource?.data?.length; else noResults">
     <div class="table-container">
       <table mat-table [dataSource]="dataSource" matSort [trackBy]="trackBy" class="w-100">

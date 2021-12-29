@@ -88,7 +88,10 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
     return this._walletsService.getWalletBalances(context.wallet, this.filter)
       .pipe(
         switchMap(response => {
-          if (response.results.length === 0) return of(response);
+          if (response.results.length === 0) {
+            this.dataSource.data = [];
+            return of(response);
+          }
 
           const balances$: Observable<IToken>[] = [];
 

@@ -88,7 +88,10 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
     return this._walletsService.getMiningPositions(context.wallet, this.filter)
       .pipe(
         switchMap(response => {
-          if (response.results.length === 0) return of(response);
+          if (response.results.length === 0) {
+            this.dataSource.data = [];
+            return of(response);
+          }
 
           const positions$: Observable<IAddressMining>[] = [];
 

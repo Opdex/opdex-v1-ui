@@ -88,7 +88,10 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
     return this._walletsService.getStakingPositions(context.wallet, this.filter)
       .pipe(
         switchMap(response => {
-          if (response.results.length === 0) return of(response);
+          if (response.results.length === 0) {
+            this.dataSource.data = [];
+            return of(response);
+          }
 
           const positions$: Observable<IAddressStaking>[] = [];
 
