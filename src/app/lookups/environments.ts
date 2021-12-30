@@ -13,10 +13,10 @@ export interface IEnvironment {
 export const environments: IEnvironment[] = [
   {
     apiUrl: 'https://dev-api.opdex.com',
-    marketAddress: 'PWDmf9PRDCYbDUyz5aszX47R3tZ5jvyJ5s',
-    routerAddress: 'PB9w3vR8khmBHMmo2SnkCYAqnaRHMHQgDS',
-    miningGovernanceAddress: 'PKX8VNBREb6KeixTBNm8vwz6gvFQeRVYkv',
-    vaultGovernanceAddress: 'PVC6D6de6G4EMw7cibQytzb1DYcYF4MLLu',
+    marketAddress: 'PUx2N7tTDEtgRhLBBrDVZr5weJMFSpREJY',
+    routerAddress: 'PMxJGmaNFBnbpkLzQvhLxiEDydayzke3uE',
+    miningGovernanceAddress: 'PGGt9u4s7UzEpdwx73iwbVGyCEqxKw3jEc',
+    vaultGovernanceAddress: 'PHJ5i8tS9JsNEzUjuQRM9F1wXdmpbJ8QYF',
     vaultAddress: '',
     network: Network.Devnet
   },
