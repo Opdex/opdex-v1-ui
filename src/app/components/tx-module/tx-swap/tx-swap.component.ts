@@ -57,6 +57,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   transactionTypes = AllowanceRequiredTransactionTypes;
   showMore: boolean;
   latestBlock: number;
+  sufficientBalance: boolean;
   subscription = new Subscription();
 
   get tokenInAmount(): FormControl {
@@ -91,8 +92,9 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
           debounceTime(400),
           distinctUntilChanged(),
           tap(_ => this.tokenInExact = true),
-          switchMap((value: string) => this.amountOutQuote(value))
-        ).subscribe());
+          switchMap((value: string) => this.amountOutQuote(value)),
+          switchMap(_ => this.validateBalance()))
+        .subscribe());
 
     this.subscription.add(
       this.tokenOutAmount.valueChanges
@@ -100,8 +102,9 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
           debounceTime(400),
           distinctUntilChanged(),
           tap(_ => this.tokenInExact = false),
-          switchMap((value: string) => this.amountInQuote(value))
-        ).subscribe());
+          switchMap((value: string) => this.amountInQuote(value)),
+          switchMap(_ => this.validateBalance()))
+        .subscribe());
 
     this.subscription.add(
       this._indexService.getLatestBlock$()
@@ -109,7 +112,8 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
           tap(block => this.latestBlock = block?.height),
           tap(_ => this.refreshToken(this.tokenIn?.address)),
           tap(_ => this.refreshToken(this.tokenOut?.address)),
-          switchMap(_ => this.validateAllowance()))
+          switchMap(_ => this.validateAllowance()),
+          switchMap(_ => this.validateBalance()))
         .subscribe());
   }
 
@@ -331,6 +335,18 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
         map((response: IAddressAllowanceResponse) => new AllowanceValidation(response, this.tokenInAmount.value, this.tokenIn)),
         tap((allowance: AllowanceValidation) => this.allowance = allowance),
         map((allowance: AllowanceValidation) => allowance.isApproved));
+  }
+
+  private validateBalance(): Observable<boolean> {
+    if (!this.tokenIn || !this.tokenOut || !this.context?.wallet || !this.tokenInAmount.value) {
+      return of(false);
+    }
+
+    const amountNeededString = this.tokenInExact ? this.tokenInAmount.value : this.tokenInMax;
+    const amountNeeded = new FixedDecimal(amountNeededString, this.tokenIn.decimals);
+
+    return this._validateBalance$(this.tokenIn, amountNeeded)
+      .pipe(tap(result => this.sufficientBalance = result));
   }
 
   private refreshToken(address: string): void {

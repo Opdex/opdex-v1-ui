@@ -26,6 +26,8 @@
       (onPercentageSelect)="handlePercentageSelect('amountIn', $event)"
       *ngIf="tokenIn"></opdex-percentage-amount-buttons>
 
+    <p class="mt-2 mb-0 error" *ngIf="!sufficientBalance && form.valid && tokenInMax && tokenOutMin">Insufficient balance</p>
+
     <div class="flex-row-center-around mt-4 mb-2">
       <button mat-icon-button [ngClass]="iconSizes.small" (click)="switch()" type="button"><mat-icon>{{icons.down}}</mat-icon></button>
     </div>

@@ -32,6 +32,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
   allowanceTransaction$ = new Subscription();
   latestSyncedBlock$: Subscription;
   percentageSelected: string;
+  sufficientBalance: boolean;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -52,7 +53,8 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
     this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
       .pipe(
         filter(_ => this.context?.wallet),
-        switchMap(_ => this.getAllowance$()))
+        switchMap(_ => this.getAllowance$()),
+        switchMap(_ => this.validateBalance()))
       .subscribe();
 
     this.allowance$ = this.amount.valueChanges
@@ -60,12 +62,39 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
         debounceTime(300),
         distinctUntilChanged(),
         tap(amount => this.setFiatValue(amount)),
-        switchMap((amount: string) => this.getAllowance$(amount)))
+        switchMap((amount: string) => this.getAllowance$(amount)),
+        switchMap(_ => this.validateBalance()))
       .subscribe();
   }
 
   ngOnChanges(): void {
     this.pool = this.data?.pool;
+  }
+
+  submit(): void {
+    const request = new StartStakingRequest(new FixedDecimal(this.amount.value, this.pool.summary.staking.token.decimals));
+
+    this._platformApi
+      .startStakingQuote(this.pool.address, request.payload)
+        .pipe(take(1))
+        .subscribe((quote: ITransactionQuote) => this.quote(quote),
+                   (errors: string[]) => this.quoteErrors = errors);
+  }
+
+  handlePercentageSelect(value: any) {
+    this.percentageSelected = value.percentageOption;
+    this.amount.setValue(value.result, {emitEvent: true});
+  }
+
+  private validateBalance(): Observable<boolean> {
+    if (!this.amount.value || !this.context?.wallet || !this.pool) {
+      return of(false);
+    }
+
+    const amountNeeded = new FixedDecimal(this.amount.value, this.pool.token.lp.decimals);
+
+    return this._validateBalance$(this.pool.token.lp, amountNeeded)
+      .pipe(tap(result => this.sufficientBalance = result));
   }
 
   private setFiatValue(amount: string) {
@@ -88,21 +117,6 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
       .pipe(
         map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, this.data.pool.summary.staking?.token)),
         tap(allowance => this.allowance = allowance));
-  }
-
-  submit(): void {
-    const request = new StartStakingRequest(new FixedDecimal(this.amount.value, this.pool.summary.staking.token.decimals));
-
-    this._platformApi
-      .startStakingQuote(this.pool.address, request.payload)
-        .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => this.quote(quote),
-                   (errors: string[]) => this.quoteErrors = errors);
-  }
-
-  handlePercentageSelect(value: any) {
-    this.percentageSelected = value.percentageOption;
-    this.amount.setValue(value.result, {emitEvent: true});
   }
 
   destroyContext$() {

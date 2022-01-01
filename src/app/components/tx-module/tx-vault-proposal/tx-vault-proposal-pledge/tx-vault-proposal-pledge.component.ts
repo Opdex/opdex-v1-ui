@@ -7,8 +7,8 @@ import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
-import { Observable, Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Observable, of, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, take, tap } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
@@ -30,6 +30,7 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
   vaultAddress: string;
   positionType: 'Balance' | 'ProposalPledge';
   subscription = new Subscription();
+  sufficientBalance: boolean;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -56,6 +57,14 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
     });
 
     this.subscription.add(this._tokenService.getToken('CRS').subscribe(crs => this.crs = crs));
+
+    this.subscription.add(
+      this.amount.valueChanges
+        .pipe(
+          debounceTime(400),
+          distinctUntilChanged(),
+          switchMap(_ => this.validateBalance()))
+        .subscribe());
   }
 
   ngOnChanges() {
@@ -95,6 +104,18 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
   handlePercentageSelect(value: any): void {
     this.percentageSelected = null;
     this.amount.setValue(value.result, {emitEvent: true});
+  }
+
+  private validateBalance(): Observable<boolean> {
+    if (!this.amount.value || !this.context?.wallet || !this.crs || !this.proposalId.value) return of(false);
+
+    const amountNeeded = new FixedDecimal(this.amount.value, this.crs.decimals);
+
+    const stream$: Observable<boolean> = this.isWithdrawal
+      ? this._validateVaultPledge$(this.proposalId.value, amountNeeded)
+      : this._validateBalance$(this.crs, amountNeeded);
+
+    return stream$.pipe(tap(result => this.sufficientBalance = result));
   }
 
   destroyContext$() {

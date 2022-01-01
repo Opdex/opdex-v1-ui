@@ -27,6 +27,8 @@
         (onPercentageSelect)="handlePercentageSelect($event)"
         [proposalId]="proposalId.value"
         *ngIf="crs"></opdex-percentage-amount-buttons>
+
+        <p class="mt-2 mb-0 error" *ngIf="!sufficientBalance && form.valid && proposalId.value">Insufficient balance</p>
     </div>
 
     <mat-checkbox

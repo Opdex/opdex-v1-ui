@@ -6,7 +6,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { of, Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { debounceTime, map, switchMap, take, distinctUntilChanged, tap, filter } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
@@ -33,6 +33,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
   allowanceTransaction$ = new Subscription();
   latestSyncedBlock$: Subscription;
   percentageSelected: string;
+  sufficientBalance: boolean;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -55,7 +56,8 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
         debounceTime(300),
         distinctUntilChanged(),
         tap(amount => this.setFiatValue(amount)),
-        switchMap((amount: string) => this.getAllowance$(amount)))
+        switchMap((amount: string) => this.getAllowance$(amount)),
+        switchMap(_ => this.validateBalance()))
       .subscribe();
 
     this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
@@ -67,6 +69,32 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
 
   ngOnChanges(): void {
     this.pool = this.data?.pool;
+  }
+
+  submit(): void {
+    const request = new MiningQuote(new FixedDecimal(this.amount.value, this.pool.token.lp.decimals));
+
+    this._platformApi
+      .startMiningQuote(this.pool.summary.miningPool.address, request.payload)
+        .pipe(take(1))
+        .subscribe((quote: ITransactionQuote) => this.quote(quote),
+                   (errors: string[]) => this.quoteErrors = errors);
+  }
+
+  handlePercentageSelect(value: any) {
+    this.percentageSelected = value.percentageOption;
+    this.amount.setValue(value.result, {emitEvent: true});
+  }
+
+  private validateBalance(): Observable<boolean> {
+    if (!this.amount.value || !this.context?.wallet || !this.pool) {
+      return of(false);
+    }
+
+    const amountNeeded = new FixedDecimal(this.amount.value, this.pool.token.lp.decimals);
+
+    return this._validateBalance$(this.pool.token.lp, amountNeeded)
+      .pipe(tap(result => this.sufficientBalance = result));
   }
 
   private setFiatValue(amount: string) {
@@ -89,21 +117,6 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
       .pipe(
         map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, this.data?.pool?.token?.lp)),
         tap(allowance => this.allowance = allowance));
-  }
-
-  submit(): void {
-    const request = new MiningQuote(new FixedDecimal(this.amount.value, this.pool.token.lp.decimals));
-
-    this._platformApi
-      .startMiningQuote(this.pool.summary.miningPool.address, request.payload)
-        .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => this.quote(quote),
-                   (errors: string[]) => this.quoteErrors = errors);
-  }
-
-  handlePercentageSelect(value: any) {
-    this.percentageSelected = value.percentageOption;
-    this.amount.setValue(value.result, {emitEvent: true});
   }
 
   destroyContext$() {
