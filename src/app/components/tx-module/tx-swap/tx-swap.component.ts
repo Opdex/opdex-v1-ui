@@ -330,9 +330,8 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
       return of(false);
     }
 
-    return this._platformApi.getAllowance(this.context.wallet, this._env.routerAddress, this.tokenIn.address)
+    return this._validateAllowance$(this.context.wallet, this._env.routerAddress, this.tokenIn, this.tokenInAmount.value)
       .pipe(
-        map((response: IAddressAllowanceResponse) => new AllowanceValidation(response, this.tokenInAmount.value, this.tokenIn)),
         tap((allowance: AllowanceValidation) => this.allowance = allowance),
         map((allowance: AllowanceValidation) => allowance.isApproved));
   }

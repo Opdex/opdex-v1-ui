@@ -106,17 +106,11 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
 
   private getAllowance$(amount?: string) {
     amount = amount || this.amount.value;
+    const spender = this.pool?.summary?.miningPool?.address;
+    const token = this.pool?.token?.lp;
 
-    const spender = this.data?.pool?.summary?.miningPool?.address;
-    const token = this.data?.pool?.token?.lp?.address;
-
-    if (!amount) return of(null);
-
-    return this._platformApi
-      .getAllowance(this.context.wallet, spender, token)
-      .pipe(
-        map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, this.data?.pool?.token?.lp)),
-        tap(allowance => this.allowance = allowance));
+    return this._validateAllowance$(this.context.wallet, spender, token, amount)
+      .pipe(tap(allowance => this.allowance = allowance));
   }
 
   destroyContext$() {

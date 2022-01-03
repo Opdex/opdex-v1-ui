@@ -10,7 +10,7 @@ import { ITransactionQuote } from '@sharedModels/platform-api/responses/transact
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, of, Subscription } from 'rxjs';
-import { debounceTime, switchMap, tap, map, take, distinctUntilChanged, filter } from 'rxjs/operators';
+import { debounceTime, switchMap, tap, take, distinctUntilChanged, filter } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 import { StartStakingRequest } from '@sharedModels/platform-api/requests/liquidity-pools/start-staking-request';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
@@ -106,17 +106,11 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
 
   private getAllowance$(amount?: string): Observable<AllowanceValidation> {
     amount = amount || this.amount.value;
+    const spender = this.pool?.address;
+    const token = this.pool?.summary?.staking?.token;
 
-    const spender = this.data?.pool?.address;
-    const token = this.data?.pool?.summary?.staking?.token?.address;
-
-    if (!amount) return of(null);
-
-    return this._platformApi
-      .getAllowance(this.context.wallet, spender, token)
-      .pipe(
-        map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, this.data.pool.summary.staking?.token)),
-        tap(allowance => this.allowance = allowance));
+    return this._validateAllowance$(this.context.wallet, spender, token, amount)
+      .pipe(tap(allowance => this.allowance = allowance));
   }
 
   destroyContext$() {

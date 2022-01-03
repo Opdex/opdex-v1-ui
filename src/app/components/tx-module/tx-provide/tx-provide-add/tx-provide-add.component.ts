@@ -122,36 +122,17 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
           switchMap(_ => this.getAllowance$()))
         .subscribe());
 
-        this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
-          .pipe(
-            tap(block => this.latestBlock = block?.height),
-            filter(_ => this.context?.wallet),
-            switchMap(_ => this.getAllowance$()))
-          .subscribe();
-  }
-
-  getAllowance$():Observable<AllowanceValidation> {
-    const spender = this._env.routerAddress;
-    const token = this.pool?.token?.src?.address;
-
-    if (!this.amountSrc.value) return of(null);
-
-    return this._platformApi
-      .getAllowance(this.context.wallet, spender, token)
+    this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
       .pipe(
-        map(allowanceResponse => new AllowanceValidation(allowanceResponse, this.amountSrc.value, this.pool.token.src)),
-        tap((rsp: AllowanceValidation) => this.allowance = rsp)
-      );
+        tap(block => this.latestBlock = block?.height),
+        filter(_ => this.context?.wallet),
+        switchMap(_ => this.getAllowance$()))
+      .subscribe();
   }
 
   quote$(value: string, tokenIn: IToken): Observable<string> {
-    if (!tokenIn) {
-      throwError('Invalid token');
-    }
-
-    if (!value) return of('');
-
-    if (!this.pool.summary.reserves?.crs || this.pool.summary.reserves.crs === '0.00000000') return of('');
+    if (!tokenIn) throwError('Invalid token');
+    if (!value || !this.pool.summary.reserves?.crs || this.pool.summary.reserves.crs === '0.00000000') return of('');
 
     // Technically the input should be made invalid in this case using form validations, cannot end with decimal point
     if (value.endsWith('.')) value = `${value}00`;
@@ -225,6 +206,11 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
       this.srcPercentageSelected = value.percentageOption;
       this.amountSrc.setValue(value.result, {emitEvent: true});
     }
+  }
+
+  private getAllowance$(): Observable<AllowanceValidation> {
+    return this._validateAllowance$(this.context.wallet, this._env.routerAddress, this.pool.token.src, this.amountSrc.value)
+      .pipe(tap(allowance => this.allowance = allowance));
   }
 
   destroyContext$() {

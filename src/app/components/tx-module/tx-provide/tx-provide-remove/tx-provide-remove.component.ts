@@ -90,20 +90,6 @@ export class TxProvideRemoveComponent extends TxBase {
         .subscribe();
   }
 
-  getAllowance$(amount?: string):Observable<any> {
-    amount = amount || this.liquidity.value;
-    const spender = this._env.routerAddress;
-    const token = this.pool?.token?.lp?.address;
-
-    if (!amount) return of(null);
-
-    return this._platformApi
-      .getAllowance(this.context.wallet, spender, token)
-      .pipe(
-        map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, this.pool.token.lp)),
-        tap((rsp: AllowanceValidation) => this.allowance = rsp));
-  }
-
   submit(): void {
     const request = new RemoveLiquidityRequest(
       new FixedDecimal(this.liquidity.value, this.pool.token.lp.decimals),
@@ -171,6 +157,13 @@ export class TxProvideRemoveComponent extends TxBase {
   handlePercentageSelect(value: any) {
     this.percentageSelected = value.percentageOption;
     this.liquidity.setValue(value.result, {emitEvent: true});
+  }
+
+  private getAllowance$(amount?: string):Observable<any> {
+    amount = amount || this.liquidity.value;
+
+    return this._validateAllowance$(this.context.wallet, this._env.routerAddress, this.pool?.token?.lp, amount)
+      .pipe(tap(allowance => this.allowance = allowance));
   }
 
   destroyContext$() {

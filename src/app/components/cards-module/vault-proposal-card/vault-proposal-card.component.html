@@ -17,56 +17,54 @@
       </small>
     </div>
 
-    <div class="flex-row-center-between flex-wrap">
-      <p class="mb-2" style="font-size: 2em; line-height: 1.2em" *ngIf="proposal.type !== 'Revoke'">
-        <span class="b-400 mr-2">{{proposal.amount | shortNumber}}</span>
-        <small *ngIf="proposal.type === 'Create'">ODX</small>
-        <small *ngIf="proposal.type !== 'Create'">CRS</small>
-      </p>
+    <p class="mb-2" style="font-size: 2em; line-height: 1.2em" *ngIf="proposal.type !== 'Revoke'">
+      <span class="b-400 mr-2">{{proposal.amount | shortNumber}}</span>
+      <small *ngIf="proposal.type === 'Create'">ODX</small>
+      <small *ngIf="proposal.type !== 'Create'">CRS</small>
+    </p>
 
-      <div class="space-between"></div>
+    <div class="space-between"></div>
 
-      <div class="w-100 flex-row-center-between" style="flex-grow: 1">
-        <div class="pledge flex-column">
-          <small class="flex-row-center">
-            <span class="light mr-1 b-400">Pledge</span>
-            <mat-icon color="primary" [ngClass]="iconSizes.tiny" *ngIf="proposal.status === 'Pledge'">{{icons.inProgress}}</mat-icon>
-            <mat-icon class="positive-value" [ngClass]="iconSizes.tiny" *ngIf="proposal.status === 'Vote'">{{icons.check}}</mat-icon>
-          </small>
+    <div class="w-100 flex-row-center-between" style="flex-grow: 1">
+      <div class="pledge flex-column">
+        <small class="flex-row-center">
+          <span class="light mr-1 b-400">Pledge</span>
+          <mat-icon color="primary" [ngClass]="iconSizes.tiny" *ngIf="proposal.status === 'Pledge'">{{icons.inProgress}}</mat-icon>
+          <mat-icon class="positive-value" [ngClass]="iconSizes.tiny" *ngIf="proposal.status === 'Vote'">{{icons.check}}</mat-icon>
+        </small>
 
-          <small class="flex-row-center">
-            <button mat-icon-button color="primary" class="mr-1" (click)="openSidenav('Pledge')" [ngClass]="iconSizes.tiny" [disabled]="!!this.context?.wallet === false">
-              <mat-icon class="blue">{{icons.add}}</mat-icon>
+        <small class="flex-row-center">
+          <button mat-icon-button color="primary" class="mr-1" (click)="openSidenav('Pledge')" [ngClass]="iconSizes.tiny" [disabled]="!!this.context?.wallet === false">
+            <mat-icon class="blue">{{icons.add}}</mat-icon>
+          </button>
+
+          {{proposal.pledgeAmount | shortNumber}}
+        </small>
+      </div>
+
+      <div class="pledge flex-column">
+        <small class="flex-row-center">
+          <span class="light mr-1 b-400">Vote</span>
+          <mat-icon color="primary" [ngClass]="iconSizes.tiny" *ngIf="proposal.status === 'Vote'">{{icons.inProgress}}</mat-icon>
+        </small>
+
+        <div class="flex-row-center-between">
+
+          <small class="flex-row-center mr-3">
+            <button mat-icon-button class="mr-1" (click)="openSidenav('Vote', true)" [ngClass]="iconSizes.tiny" [disabled]="!!this.context?.wallet === false">
+              <mat-icon class="positive-value">{{icons.thumbUp}}</mat-icon>
             </button>
 
-            {{proposal.pledgeAmount | shortNumber}}
+            {{proposal.yesAmount | shortNumber}}
           </small>
-        </div>
 
-        <div class="pledge flex-column">
           <small class="flex-row-center">
-            <span class="light mr-1 b-400">Vote</span>
-            <mat-icon color="primary" [ngClass]="iconSizes.tiny" *ngIf="proposal.status === 'Vote'">{{icons.inProgress}}</mat-icon>
+            <button mat-icon-button color="warn" class="mr-1" (click)="openSidenav('Vote', false)" [ngClass]="iconSizes.tiny" [disabled]="!!this.context?.wallet === false">
+              <mat-icon class="red">{{icons.thumbDown}}</mat-icon>
+            </button>
+
+            {{proposal.noAmount | shortNumber}}
           </small>
-
-          <div class="flex-row-center-between">
-
-            <small class="flex-row-center mr-3">
-              <button mat-icon-button class="mr-1" (click)="openSidenav('Vote', true)" [ngClass]="iconSizes.tiny" [disabled]="!!this.context?.wallet === false">
-                <mat-icon class="positive-value">{{icons.thumbUp}}</mat-icon>
-              </button>
-
-              {{proposal.yesAmount | shortNumber}}
-            </small>
-
-            <small class="flex-row-center">
-              <button mat-icon-button color="warn" class="mr-1" (click)="openSidenav('Vote', false)" [ngClass]="iconSizes.tiny" [disabled]="!!this.context?.wallet === false">
-                <mat-icon class="red">{{icons.thumbDown}}</mat-icon>
-              </button>
-
-              {{proposal.noAmount | shortNumber}}
-            </small>
-          </div>
         </div>
       </div>
     </div>

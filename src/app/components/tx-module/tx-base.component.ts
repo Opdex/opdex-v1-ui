@@ -9,6 +9,7 @@ import { ITransactionQuote } from '@sharedModels/platform-api/responses/transact
 import { Observable, of, Subscription } from 'rxjs';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { catchError, map } from 'rxjs/operators';
+import { AllowanceValidation } from '@sharedModels/allowance-validation';
 
 export abstract class TxBase{
   context: any;
@@ -35,17 +36,34 @@ export abstract class TxBase{
     this._bottomSheet.open(ReviewQuoteComponent, { data: quote });
   }
 
+  protected _validateAllowance$(owner: string, spender: string, token: IToken, amount: string): Observable<AllowanceValidation> {
+    if (!owner || !spender || !token || !amount) return of(null);
+
+    const amountToSpend = new FixedDecimal(amount, token.decimals);
+
+    return this._walletsService
+      .getAllowance(owner, spender, token.address)
+      .pipe(
+        map(allowanceResponse => new AllowanceValidation(allowanceResponse, amountToSpend.formattedValue, token)),
+        catchError(_ => of(null)));
+  }
+
   protected _validateBalance$(token: IToken, amountToSpend: FixedDecimal): Observable<boolean> {
     if (!token) return of(false);
     if (amountToSpend.bigInt === BigInt(0)) return of(true);
 
     return this._walletsService.getBalance(this.context.wallet, token.address)
       .pipe(
-        map(balance => {
-          const fixedBalance = new FixedDecimal(balance.balance, token.decimals);
-          return fixedBalance.bigInt >= amountToSpend.bigInt;
-        }),
+        map(balance => this._isEnough(new FixedDecimal(balance.balance, token.decimals), amountToSpend)),
         catchError(_ => of(false)));
+  }
+
+  protected _validateStakingBalance$() {
+
+  }
+
+  protected _validateMiningBalance$() {
+
   }
 
   protected _validateVaultPledge$(proposalId: number, amountToSpend: FixedDecimal): Observable<boolean> {
@@ -53,10 +71,7 @@ export abstract class TxBase{
 
     return this._vaultsService.getPledge(proposalId, this.context.wallet)
       .pipe(
-        map(pledge => {
-          const fixedPledge = new FixedDecimal(pledge.balance, 8);
-          return fixedPledge.bigInt >= amountToSpend.bigInt;
-        }),
+        map(pledge => this._isEnough(new FixedDecimal(pledge.balance, 8), amountToSpend)),
         catchError(_ => of(false)));
   }
 
@@ -65,11 +80,12 @@ export abstract class TxBase{
 
     return this._vaultsService.getVote(proposalId, this.context.wallet)
       .pipe(
-        map(vote => {
-          const fixedVote = new FixedDecimal(vote.balance, 8);
-          return fixedVote.bigInt >= amountToSpend.bigInt;
-        }),
+        map(vote => this._isEnough(new FixedDecimal(vote.balance, 8), amountToSpend)),
         catchError(_ => of(false)));
+  }
+
+  private _isEnough(actualAmount: FixedDecimal, neededAmount: FixedDecimal) {
+    return actualAmount.bigInt >= neededAmount.bigInt;
   }
 
   /**
