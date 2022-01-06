@@ -26,10 +26,10 @@
   </div>
 
   <opdex-card class="pool-summary" *ngIf="pool">
-    <h3 class="mb-1">
+    <h4 class="mb-1">
       <opdex-copy-button [tooltip]="pool?.address" [value]="pool?.address" [icon]="icons.link" [size]="iconSizes.tiny"></opdex-copy-button>
       <a class="no-decoration ml-1" routerLink="/pools/{{pool?.address}}">{{pool.name}}</a>
-    </h3>
+    </h4>
 
     <button mat-icon-button [ngClass]="iconSizes.tiny" class="exit" (click)="clearPool()">
       <mat-icon>{{icons.close}}</mat-icon>

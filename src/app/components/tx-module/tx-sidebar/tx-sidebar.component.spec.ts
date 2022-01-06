@@ -1,25 +1,25 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+// import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TxSidebarComponent } from './tx-sidebar.component';
+// import { TxSidebarComponent } from './tx-sidebar.component';
 
-describe('TxSidebarComponent', () => {
-  let component: TxSidebarComponent;
-  let fixture: ComponentFixture<TxSidebarComponent>;
+// describe('TxSidebarComponent', () => {
+//   let component: TxSidebarComponent;
+//   let fixture: ComponentFixture<TxSidebarComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ TxSidebarComponent ]
-    })
-    .compileComponents();
-  });
+//   beforeEach(async () => {
+//     await TestBed.configureTestingModule({
+//       declarations: [ TxSidebarComponent ]
+//     })
+//     .compileComponents();
+//   });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(TxSidebarComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+//   beforeEach(() => {
+//     fixture = TestBed.createComponent(TxSidebarComponent);
+//     component = fixture.componentInstance;
+//     fixture.detectChanges();
+//   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+//   it('should create', () => {
+//     expect(component).toBeTruthy();
+//   });
+// });

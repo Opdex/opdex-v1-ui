@@ -1,0 +1,5 @@
+
+<div class="flex-row-center">
+  <mat-icon [ngClass]="{'orange': warn, 'red': !warn }" class="mr-1 tiny">{{warn ? icons.warning : icons.error}}</mat-icon>
+  <p class="light quote-error">{{message}}</p>
+</div>

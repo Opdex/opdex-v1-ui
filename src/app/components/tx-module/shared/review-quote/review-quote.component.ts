@@ -38,6 +38,7 @@ export class ReviewQuoteComponent implements OnDestroy {
   latestBlock: IBlock;
   icons = Icons;
   iconSizes = IconSizes;
+  showQrAnyways: boolean;
 
   methodParametersHelp = {
     title: 'What are method parameters?',
@@ -104,7 +105,7 @@ export class ReviewQuoteComponent implements OnDestroy {
       events: quote.events
     } as ITransactionReceipt);
 
-    if (!this.quoteReceipt.success) {
+    if (!this.quoteReceipt.success && !this.showQrAnyways) {
       this.showParameterDetails = false;
       this.showMethodDetails = false;
     }

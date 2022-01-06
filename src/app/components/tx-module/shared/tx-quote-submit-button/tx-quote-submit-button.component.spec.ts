@@ -1,20 +1,20 @@
 // import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-// import { TxVaultProposalVoteComponent } from './tx-vault-proposal-vote.component';
+// import { TxQuoteSubmitButtonComponent } from './tx-quote-submit-button.component';
 
-// describe('TxVaultProposalVoteComponent', () => {
-//   let component: TxVaultProposalVoteComponent;
-//   let fixture: ComponentFixture<TxVaultProposalVoteComponent>;
+// describe('TxQuoteSubmitButtonComponent', () => {
+//   let component: TxQuoteSubmitButtonComponent;
+//   let fixture: ComponentFixture<TxQuoteSubmitButtonComponent>;
 
 //   beforeEach(async () => {
 //     await TestBed.configureTestingModule({
-//       declarations: [ TxVaultProposalVoteComponent ]
+//       declarations: [ TxQuoteSubmitButtonComponent ]
 //     })
 //     .compileComponents();
 //   });
 
 //   beforeEach(() => {
-//     fixture = TestBed.createComponent(TxVaultProposalVoteComponent);
+//     fixture = TestBed.createComponent(TxQuoteSubmitButtonComponent);
 //     component = fixture.componentInstance;
 //     fixture.detectChanges();
 //   });

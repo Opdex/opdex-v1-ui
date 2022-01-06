@@ -1,3 +1,4 @@
+import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { VaultGovernancesService } from '@sharedServices/platform/vault-governances.service';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
@@ -58,12 +59,24 @@ export abstract class TxBase{
         catchError(_ => of(false)));
   }
 
-  protected _validateStakingBalance$() {
+  protected _validateStakingBalance$(liquidityPool: ILiquidityPoolResponse, amountToSpend: FixedDecimal): Observable<boolean> {
+    if (!liquidityPool) return of(false);
+    if (amountToSpend.bigInt === BigInt(0)) return of(true);
 
+    return this._walletsService.getStakingPosition(this.context.wallet, liquidityPool.address)
+      .pipe(
+        map(position => this._isEnough(new FixedDecimal(position.amount, liquidityPool.summary.staking.token.decimals), amountToSpend)),
+        catchError(_ => of(false)));
   }
 
-  protected _validateMiningBalance$() {
+  protected _validateMiningBalance$(liquidityPool: ILiquidityPoolResponse, amountToSpend: FixedDecimal): Observable<boolean> {
+    if (!liquidityPool) return of(false);
+    if (amountToSpend.bigInt === BigInt(0)) return of(true);
 
+    return this._walletsService.getMiningPosition(this.context.wallet, liquidityPool.summary.miningPool.address)
+      .pipe(
+        map(position => this._isEnough(new FixedDecimal(position.amount, liquidityPool.token.lp.decimals), amountToSpend)),
+        catchError(_ => of(false)));
   }
 
   protected _validateVaultPledge$(proposalId: number, amountToSpend: FixedDecimal): Observable<boolean> {

@@ -32,7 +32,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
   allowanceTransaction$ = new Subscription();
   latestSyncedBlock$: Subscription;
   percentageSelected: string;
-  sufficientBalance: boolean;
+  balanceError: boolean;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -87,14 +87,14 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
   }
 
   private validateBalance(): Observable<boolean> {
-    if (!this.amount.value || !this.context?.wallet || !this.pool) {
+    if (!this.amount.value || !this.context?.wallet || !this.pool || !this.pool.summary.staking) {
       return of(false);
     }
 
     const amountNeeded = new FixedDecimal(this.amount.value, this.pool.token.lp.decimals);
 
-    return this._validateBalance$(this.pool.token.lp, amountNeeded)
-      .pipe(tap(result => this.sufficientBalance = result));
+    return this._validateBalance$(this.pool.summary.staking.token, amountNeeded)
+      .pipe(tap(result => this.balanceError = !result));
   }
 
   private setFiatValue(amount: string) {

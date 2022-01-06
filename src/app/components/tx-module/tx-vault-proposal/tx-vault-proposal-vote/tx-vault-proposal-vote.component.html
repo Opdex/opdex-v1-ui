@@ -1,5 +1,5 @@
 <div class="vault-proposal-vote">
-  <form [formGroup]="form" name="vault-proposal-vote-form" id="vault-proposal-vote-form" (submit)="submit()">
+  <form [formGroup]="form" name="vault-proposal-vote-form" id="vault-proposal-vote-form">
     <div class="mb-3">
       <opdex-input-control placeholder="1" [suffixDisabled]="true" label="Proposal #" [formControl]="proposalId"></opdex-input-control>
     </div>
@@ -28,7 +28,10 @@
         [proposalId]="proposalId.value"
         *ngIf="crs"></opdex-percentage-amount-buttons>
 
-        <p class="mt-2 mb-0 error" *ngIf="!sufficientBalance && form.valid && proposalId.value">Insufficient balance</p>
+        <p class="mt-2 mb-0 flex-row-center" *ngIf="balanceError && form.valid && proposalId.value">
+          <mat-icon color="warn" [ngClass]="iconSizes.tiny" class="mr-2">{{icons.error}}</mat-icon>
+          Insufficient Balance
+        </p>
     </div>
 
     <mat-checkbox
@@ -41,7 +44,7 @@
       In Favor
     </mat-checkbox>
 
-    <button mat-flat-button color="primary" class="mt-3 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
+    <opdex-tx-quote-submit-button [disabled]="!form.valid || !context?.wallet" (onSubmit)="submit()"></opdex-tx-quote-submit-button>
 
     <opdex-tx-quote-errors [quoteErrors]="quoteErrors"></opdex-tx-quote-errors>
   </form>

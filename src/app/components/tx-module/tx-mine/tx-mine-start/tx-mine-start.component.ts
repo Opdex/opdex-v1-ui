@@ -33,7 +33,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
   allowanceTransaction$ = new Subscription();
   latestSyncedBlock$: Subscription;
   percentageSelected: string;
-  sufficientBalance: boolean;
+  balanceError: boolean;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -94,7 +94,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
     const amountNeeded = new FixedDecimal(this.amount.value, this.pool.token.lp.decimals);
 
     return this._validateBalance$(this.pool.token.lp, amountNeeded)
-      .pipe(tap(result => this.sufficientBalance = result));
+      .pipe(tap(result => this.balanceError = !result));
   }
 
   private setFiatValue(amount: string) {

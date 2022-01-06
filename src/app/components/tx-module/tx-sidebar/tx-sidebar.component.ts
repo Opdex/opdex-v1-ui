@@ -65,7 +65,7 @@ export class TxSidebarComponent implements OnChanges {
         .subscribe((result: BreakpointState) => {
           this.widescreen = !result.matches;
           if (!this.widescreen && this.sidenavMode === 'side') this.toggleSidenavMode();
-          // Todo: When NOT widescreen, route changes should close the sidebar
+          // Todo: When NOT widescreen (specifically mobile devices), route changes should close the sidebar
           // Closing sidebar wipes its state, consider implementing a service that can preserve state
         }));
   }

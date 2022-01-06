@@ -1,5 +1,5 @@
 <div class="start-mining">
-  <form [formGroup]="form" name="start-mining-form" id="start-mining-form" (submit)="submit()">
+  <form [formGroup]="form" name="start-mining-form" id="start-mining-form">
     <opdex-input-control [suffixDisabled]="true" [prefixIcon]="icons.add" label="Mine" [formControl]="amount" [suffix]="pool.token.lp.symbol" [numbersOnly]="true">
       <div class="flex-row-center-end">
         <span class="success" *ngIf="fiatValue">${{fiatValue | shortNumber}}</span>
@@ -13,14 +13,25 @@
       [selected]="percentageSelected"
       (onPercentageSelect)="handlePercentageSelect($event)"></opdex-percentage-amount-buttons>
 
-    <p class="mt-2 mb-0 error" *ngIf="!sufficientBalance && form.valid && fiatValue">Insufficient balance</p>
+    <div class="mt-2" *ngIf="balanceError || allowance">
+      <opdex-tx-quote-error
+        [warn]="true"
+        message="Insufficient Balance"
+        *ngIf="balanceError">
+      </opdex-tx-quote-error>
 
-    <button mat-flat-button color="primary" class="mt-3 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
+      <opdex-allowance-validation
+        [transactionType]="transactionTypes.startMining"
+        [allowance]="allowance">
+      </opdex-allowance-validation>
+    </div>
+
+    <opdex-tx-quote-submit-button
+      [warn]="balanceError || (allowance && !allowance?.isApproved)"
+      [disabled]="!form.valid || !context?.wallet"
+      (onSubmit)="submit()">
+    </opdex-tx-quote-submit-button>
 
     <opdex-tx-quote-errors [quoteErrors]="quoteErrors"></opdex-tx-quote-errors>
   </form>
-
-  <div class="mt-3" *ngIf="allowance">
-    <opdex-allowance-validation [transactionType]="transactionTypes.startMining" [allowance]="allowance"></opdex-allowance-validation>
-  </div>
 </div>

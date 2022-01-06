@@ -1,12 +1,19 @@
 <div class="add-liquidity">
-  <form [formGroup]="form" name="add-liquidity-form" id="swap-form" (submit)="submit()">
+  <form [formGroup]="form" name="add-liquidity-form" id="add-liquidity-form">
     <div class="mb-4">
-      <opdex-input-control [suffixDisabled]="true" [prefixIcon]="icons.add" label="Add {{pool.token.crs.symbol}}" [formControl]="amountCrs" [suffix]="pool.token.crs.symbol" [numbersOnly]="true">
+      <opdex-input-control
+        [suffixDisabled]="true"
+        [prefixIcon]="icons.add"
+        label="Add {{pool.token.crs.symbol}}"
+        [formControl]="amountCrs"
+        [suffix]="pool.token.crs.symbol"
+        [numbersOnly]="true">
         <div class="flex-row-center-between">
           <div class="tolerance-amounts">
             <span *ngIf="crsInMin">Min: {{crsInMin | shortNumber}}</span>
             <span *ngIf="crsInMinFiatValue" class="success ml-2">(${{crsInMinFiatValue | shortNumber}})</span>
           </div>
+
           <div class="fiat-quote">
             <span class="success ml-2" *ngIf="crsInFiatValue">${{crsInFiatValue | shortNumber}}</span>
           </div>
@@ -18,15 +25,23 @@
         [token]="pool.token.crs"
         positionType="Balance"
         [selected]="crsPercentageSelected"
-        (onPercentageSelect)="handlePercentageSelect('crs', $event)"></opdex-percentage-amount-buttons>
+        (onPercentageSelect)="handlePercentageSelect('crs', $event)">
+      </opdex-percentage-amount-buttons>
     </div>
 
-    <opdex-input-control [suffixDisabled]="true" [prefixIcon]="icons.add" label="Add {{pool.token.src.symbol}}" [formControl]="amountSrc" [suffix]="pool.token.src.symbol" [numbersOnly]="true">
+    <opdex-input-control
+      [suffixDisabled]="true"
+      [prefixIcon]="icons.add"
+      label="Add {{pool.token.src.symbol}}"
+      [formControl]="amountSrc"
+      [suffix]="pool.token.src.symbol"
+      [numbersOnly]="true">
       <div class="flex-row-center-between">
         <div class="tolerance-amounts">
           <span *ngIf="srcInMin">Min: {{srcInMin | shortNumber}}</span>
           <span *ngIf="srcInMinFiatValue" class="success ml-2">(${{srcInMinFiatValue | shortNumber}})</span>
         </div>
+
         <div class="fiat-quote">
           <span class="success ml-2" *ngIf="srcInFiatValue">${{srcInFiatValue | shortNumber}}</span>
         </div>
@@ -38,26 +53,47 @@
       [token]="pool.token.src"
       positionType="Balance"
       [selected]="srcPercentageSelected"
-      (onPercentageSelect)="handlePercentageSelect('src', $event)"></opdex-percentage-amount-buttons>
+      (onPercentageSelect)="handlePercentageSelect('src', $event)">
+    </opdex-percentage-amount-buttons>
 
-    <div class="flex-row-center-end">
-      <button mat-icon-button color="primary" [ngClass]="iconSizes.small" (click)="toggleShowMore(!showMore)" type="button"><mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon></button>
+    <div class="mt-2 mb-2" *ngIf="allowance">
+      <opdex-allowance-validation [transactionType]="transactionTypes.addLiquidity" [allowance]="allowance"></opdex-allowance-validation>
     </div>
 
-    <div [@collapse]="!showMore">
-      <opdex-tolerance [value]="toleranceThreshold" (onToleranceChange)="calcTolerance($event)"></opdex-tolerance>
-
-      <div class="mt-2">
-        <opdex-deadline [value]="deadlineThreshold" (onDeadlineChange)="calcDeadline($event)"></opdex-deadline>
+    <!-- Tolerance and Deadline -->
+    <ng-container *ngIf="!!context?.wallet">
+      <div class="flex-row-center-end">
+        <button
+          mat-icon-button color="primary"
+          [ngClass]="iconSizes.small"
+          (click)="toggleShowMore(!showMore)"
+          type="button">
+          <mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon>
+        </button>
       </div>
-    </div>
 
-    <button mat-flat-button color="primary" class="mt-3 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
+      <div [@collapse]="!showMore">
+        <opdex-tolerance
+          [value]="toleranceThreshold"
+          (onToleranceChange)="calcTolerance($event)">
+        </opdex-tolerance>
+
+        <div class="mt-2">
+          <opdex-deadline
+            [value]="deadlineThreshold"
+            (onDeadlineChange)="calcDeadline($event)">
+          </opdex-deadline>
+        </div>
+      </div>
+    </ng-container>
+    <!-- End Tolerance and Deadline -->
+
+    <opdex-tx-quote-submit-button
+      [warn]="allowance && !allowance?.isApproved"
+      [disabled]="!form.valid || !context?.wallet"
+      (onSubmit)="submit()">
+    </opdex-tx-quote-submit-button>
 
     <opdex-tx-quote-errors [quoteErrors]="quoteErrors"></opdex-tx-quote-errors>
   </form>
-
-  <div class="mt-3" *ngIf="allowance">
-    <opdex-allowance-validation [transactionType]="transactionTypes.addLiquidity" [allowance]="allowance"></opdex-allowance-validation>
-  </div>
 </div>

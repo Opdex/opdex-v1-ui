@@ -1,5 +1,10 @@
 <div class="collect-mining-rewards">
-  <button mat-flat-button color="primary" class="w-100" (click)="submit()" [disabled]="!context?.wallet">Quote</button>
+  <p class="mb-0 b-400 light">Collect Rewards</p>
+
+  <opdex-tx-quote-submit-button
+    [disabled]="!context?.wallet"
+    (onSubmit)="submit()">
+  </opdex-tx-quote-submit-button>
 
   <opdex-tx-quote-errors [quoteErrors]="quoteErrors"></opdex-tx-quote-errors>
 </div>

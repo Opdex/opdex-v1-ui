@@ -4,19 +4,29 @@
 
 <opdex-card class="swap">
   <form [formGroup]="form" name="swap-form" id="swap-form">
-    <opdex-input-control *ngIf="!changeTokenIn" [prefixIcon]="icons.remove" label="{{tokenInExact ? 'Sell Exactly' : 'Sell'}}" [formControl]="tokenInAmount" [suffix]="tokenIn?.symbol || 'Select Token'" (handleChangeToken)="changeToken('tokenIn')" [numbersOnly]="true">
+    <opdex-input-control *ngIf="!changeTokenIn"
+      [prefixIcon]="icons.remove"
+      label="{{tokenInExact ? 'Sell Exactly' : 'Sell'}}"
+      [formControl]="tokenInAmount"
+      [suffix]="tokenIn?.symbol || 'Select Token'"
+      (handleChangeToken)="changeToken('tokenIn')"
+      [numbersOnly]="true">
       <div class="flex-row-center-between">
         <div class="tolerance-amounts">
           <span *ngIf="tokenInMax && !tokenInExact">Max: {{tokenInMax | formatNumber:tokenIn.decimals}}</span>
           <span *ngIf="tokenInFiatValue && !tokenInExact" class="success ml-2">${{tokenInMaxFiatValue | shortNumber}}</span>
         </div>
+
         <div class="fiat-quote">
           <span class="success" *ngIf="tokenInFiatValue">${{tokenInFiatValue | shortNumber}}</span>
         </div>
       </div>
     </opdex-input-control>
 
-    <opdex-token-keyword-filter-control *ngIf="changeTokenIn" (onTokenSelect)="selectToken('tokenIn', $event)"></opdex-token-keyword-filter-control>
+    <opdex-token-keyword-filter-control
+      *ngIf="changeTokenIn"
+      (onTokenSelect)="selectToken('tokenIn', $event)">
+    </opdex-token-keyword-filter-control>
 
     <opdex-percentage-amount-buttons
       [contract]="tokenIn?.address"
@@ -26,18 +36,50 @@
       (onPercentageSelect)="handlePercentageSelect('amountIn', $event)"
       *ngIf="tokenIn"></opdex-percentage-amount-buttons>
 
-    <p class="mt-2 mb-0 error" *ngIf="!sufficientBalance && form.valid && tokenInMax && tokenOutMin">Insufficient balance</p>
+    <div class="mt-2" *ngIf="allowance || balanceError || tokenInAmount.errors">
+      <ng-container *ngIf="!tokenInAmount.errors && !tokenOutAmount.errors">
+        <opdex-tx-quote-error
+          [warn]="true"
+          message="Insufficient Balance"
+          *ngIf="balanceError">
+        </opdex-tx-quote-error>
 
-    <div class="flex-row-center-around mt-4 mb-2">
-      <button mat-icon-button [ngClass]="iconSizes.small" (click)="switch()" type="button"><mat-icon>{{icons.down}}</mat-icon></button>
+        <opdex-allowance-validation
+          [transactionType]="transactionTypes.swap"
+          [allowance]="allowance">
+        </opdex-allowance-validation>
+      </ng-container>
+
+      <opdex-tx-quote-error *ngIf="tokenInAmount.errors?.invalidAmountOutQuote"
+        [warn]="false"
+        message="Insufficient Reserves">
+      </opdex-tx-quote-error>
     </div>
 
-    <opdex-input-control *ngIf="!changeTokenOut" [prefixIcon]="icons.add" label="{{!tokenInExact ? 'Buy Exactly' : 'Buy'}}" [formControl]="tokenOutAmount" [suffix]="tokenOut?.symbol || 'Select Token'" (handleChangeToken)="changeToken('tokenOut')" [numbersOnly]="true">
+    <!-- Switch Button -->
+    <div class="flex-row-center-around mt-4 mb-2">
+      <button mat-icon-button
+        [ngClass]="iconSizes.small"
+        (click)="switch()"
+        type="button">
+        <mat-icon>{{icons.down}}</mat-icon>
+      </button>
+    </div>
+    <!-- End Switch Button -->
+
+    <opdex-input-control *ngIf="!changeTokenOut"
+      [prefixIcon]="icons.add"
+      label="{{!tokenInExact ? 'Buy Exactly' : 'Buy'}}"
+      [formControl]="tokenOutAmount"
+      [suffix]="tokenOut?.symbol || 'Select Token'"
+      (handleChangeToken)="changeToken('tokenOut')"
+      [numbersOnly]="true">
       <div class="flex-row-center-between">
         <div class="tolerance-amounts">
           <span *ngIf="tokenOutMin && tokenInExact">Min: {{tokenOutMin | formatNumber:tokenOut.decimals}}</span>
           <span *ngIf="tokenOutMinFiatValue && tokenInExact" class="success ml-2">${{tokenOutMinFiatValue | shortNumber}}</span>
         </div>
+
         <div class="fiat-quote">
           <span class="success" *ngIf="!!tokenOutFiatValue">${{tokenOutFiatValue | shortNumber}}</span>
           <span class="ml-1"
@@ -49,7 +91,10 @@
       </div>
     </opdex-input-control>
 
-    <opdex-token-keyword-filter-control *ngIf="changeTokenOut" (onTokenSelect)="selectToken('tokenOut', $event)"></opdex-token-keyword-filter-control>
+    <opdex-token-keyword-filter-control
+      *ngIf="changeTokenOut"
+      (onTokenSelect)="selectToken('tokenOut', $event)">
+    </opdex-token-keyword-filter-control>
 
     <opdex-percentage-amount-buttons
       [contract]="tokenOut?.address"
@@ -59,24 +104,46 @@
       (onPercentageSelect)="handlePercentageSelect('amountOut', $event)"
       *ngIf="tokenOut"></opdex-percentage-amount-buttons>
 
-    <div class="flex-row-center-end">
-      <button mat-icon-button color="primary" [ngClass]="iconSizes.small" (click)="toggleShowMore()" type="button"><mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon></button>
+    <div class="mt-2" *ngIf="tokenOutAmount.errors?.invalidAmountInQuote">
+      <opdex-tx-quote-error
+        [warn]="false"
+        message="Insufficient Reserves">
+      </opdex-tx-quote-error>
     </div>
 
-    <div [@collapse]="!showMore">
-      <opdex-tolerance [value]="toleranceThreshold" (onToleranceChange)="calcTotals($event)"></opdex-tolerance>
-
-      <div class="mt-2">
-        <opdex-deadline [value]="deadlineThreshold" (onDeadlineChange)="calcDeadline($event)"></opdex-deadline>
+    <!-- Tolerance and Deadline -->
+    <ng-container *ngIf="!!context?.wallet">
+      <div class="flex-row-center-end">
+        <button mat-icon-button
+          color="primary"
+          [ngClass]="iconSizes.small"
+          (click)="toggleShowMore()"
+          type="button"><mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon>
+        </button>
       </div>
-    </div>
+
+      <div [@collapse]="!showMore">
+        <opdex-tolerance
+          [value]="toleranceThreshold"
+          (onToleranceChange)="calcTotals($event)">
+        </opdex-tolerance>
+
+        <div class="mt-2">
+          <opdex-deadline
+            [value]="deadlineThreshold"
+            (onDeadlineChange)="calcDeadline($event)">
+          </opdex-deadline>
+        </div>
+      </div>
+    </ng-container>
+    <!-- End Tolerance and Deadline -->
+
+    <opdex-tx-quote-submit-button
+      [warn]="balanceError || (allowance && !allowance?.isApproved)"
+      [disabled]="!form.valid || !context?.wallet || !tokenInMax || !tokenOutMin"
+      (onSubmit)="submit()">
+    </opdex-tx-quote-submit-button>
+
+    <opdex-tx-quote-errors [quoteErrors]="quoteErrors"></opdex-tx-quote-errors>
   </form>
-
-  <button mat-flat-button color="primary" class="mt-3 w-100" (click)="submit()" [disabled]="!form.valid || !context?.wallet || !tokenInMax || !tokenOutMin">Quote</button>
-
-  <opdex-tx-quote-errors [quoteErrors]="quoteErrors"></opdex-tx-quote-errors>
-
-  <div class="mt-3" *ngIf="allowance">
-    <opdex-allowance-validation [transactionType]="transactionTypes.swap" [allowance]="allowance"></opdex-allowance-validation>
-  </div>
 </opdex-card>

@@ -55,7 +55,7 @@ export class AllowanceValidationComponent implements OnChanges, OnDestroy {
   }
 
   ngOnChanges() {
-    if (this.allowance.isApproved) this.waiting = false;
+    if (this.allowance?.isApproved) this.waiting = false;
   }
 
   approveAllowance() {

@@ -1,6 +1,12 @@
 <div class="start-staking">
-  <form [formGroup]="form" name="start-staking-form" id="start-staking-form" (submit)="submit()">
-    <opdex-input-control [suffixDisabled]="true" [prefixIcon]="icons.add" label="Stake" [formControl]="amount" [suffix]="pool.summary.staking?.token.symbol" [numbersOnly]="true">
+  <form [formGroup]="form" name="start-staking-form" id="start-staking-form">
+    <opdex-input-control
+      [suffixDisabled]="true"
+      [prefixIcon]="icons.add"
+      label="Stake"
+      [formControl]="amount"
+      [suffix]="pool.summary.staking?.token.symbol"
+      [numbersOnly]="true">
       <div class="flex-row-center-end">
         <span class="success" *ngIf="fiatValue">${{fiatValue | shortNumber}}</span>
       </div>
@@ -13,14 +19,24 @@
       [selected]="percentageSelected"
       (onPercentageSelect)="handlePercentageSelect($event)"></opdex-percentage-amount-buttons>
 
-    <p class="mt-2 mb-0 error" *ngIf="!sufficientBalance && form.valid && fiatValue">Insufficient balance</p>
+    <div class="mt-2 mb-2" *ngIf="allowance || balanceError">
+      <opdex-tx-quote-error
+        [warn]="true"
+        message="Insufficient Balance"
+        *ngIf="balanceError">
+      </opdex-tx-quote-error>
 
-    <button mat-flat-button color="primary" class="mt-3 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
+      <opdex-allowance-validation
+        [transactionType]="transactionTypes.startStaking"
+        [allowance]="allowance">
+      </opdex-allowance-validation>
+    </div>
+
+    <opdex-tx-quote-submit-button
+      [disabled]="!form.valid || !context?.wallet"
+      (onSubmit)="submit()">
+    </opdex-tx-quote-submit-button>
 
     <opdex-tx-quote-errors [quoteErrors]="quoteErrors"></opdex-tx-quote-errors>
   </form>
-
-  <div class="mt-3" *ngIf="allowance">
-    <opdex-allowance-validation [transactionType]="transactionTypes.startStaking" [allowance]="allowance"></opdex-allowance-validation>
-  </div>
 </div>

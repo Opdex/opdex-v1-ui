@@ -1,3 +1,4 @@
+import { IconSizes } from 'src/app/enums/icon-sizes';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
@@ -23,6 +24,7 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
   @Input() data: any;
   form: FormGroup;
   icons = Icons;
+  iconSizes = IconSizes;
   fiatValue: string;
   isWithdrawal = false;
   percentageSelected: string;
@@ -30,7 +32,7 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
   vaultAddress: string;
   positionType: 'Balance' | 'ProposalVote';
   subscription = new Subscription();
-  sufficientBalance: boolean;
+  balanceError: boolean;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -121,7 +123,7 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
       ? this._validateVaultVote$(this.proposalId.value, amountNeeded)
       : this._validateBalance$(this.crs, amountNeeded);
 
-    return stream$.pipe(tap(result => this.sufficientBalance = result));
+    return stream$.pipe(tap(result => this.balanceError = !result));
   }
 
   destroyContext$() {

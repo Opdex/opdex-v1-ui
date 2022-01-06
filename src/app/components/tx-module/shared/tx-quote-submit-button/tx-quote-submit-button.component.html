@@ -1,0 +1,11 @@
+<button
+  mat-flat-button
+  type="button"
+  [color]="warn ? 'warn' : 'primary'"
+  class="mt-3 w-100 flex-row-center"
+  (click)="submit()"
+  [disabled]="disabled">
+  <span class="flex-row-center-center">
+    Quote <mat-icon *ngIf="warn" class="ml-1 tiny">{{icons.warning}}</mat-icon>
+  </span>
+</button>

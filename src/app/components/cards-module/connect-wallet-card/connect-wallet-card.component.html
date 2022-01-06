@@ -1,18 +1,15 @@
 <opdex-card>
   <div class="flex-row-center-between">
-    <h5 class="mb-0 flex-row-center b-400">
+    <h5 class="mb-0 flex-row-center">
       <mat-icon class="mine small mr-2">{{icons.error}}</mat-icon>
-      Connect Wallet
+      Wallet
     </h5>
-    <button mat-icon-button color="primary" [ngClass]="iconSizes.small" (click)="toggleConnectMessage()">
-      <mat-icon>{{ collapsed ? icons.add : icons.remove }}</mat-icon>
-    </button>
-  </div>
 
-  <div [@collapse]="collapsed">
-    <p class="pt-3">Provide your wallet public key to review transaction quotes, history and token balances.</p>
-    <button mat-stroked-button color="primary" class="w-100 flex-row-center" (click)="connectWallet()">
-      Connect
+    <button mat-stroked-button color="primary" [ngClass]="iconSizes.small" class="flex-row-center" (click)="connectWallet()">
+      <span class="flex-row-center">
+        Connect
+        <mat-icon class="tiny ml-2">{{ icons.wallet }}</mat-icon>
+      </span>
     </button>
   </div>
 </opdex-card>

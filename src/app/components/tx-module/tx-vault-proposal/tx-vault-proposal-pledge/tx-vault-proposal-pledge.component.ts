@@ -13,6 +13,7 @@ import { Icons } from 'src/app/enums/icons';
 import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { VaultProposalPledgeQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-pledge-quote-request.interface';
+import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
   selector: 'opdex-tx-vault-proposal-pledge',
@@ -23,6 +24,7 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
   @Input() data;
   form: FormGroup;
   icons = Icons;
+  iconSizes = IconSizes;
   fiatValue: string;
   isWithdrawal = false;
   percentageSelected: string;
@@ -30,7 +32,7 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
   vaultAddress: string;
   positionType: 'Balance' | 'ProposalPledge';
   subscription = new Subscription();
-  sufficientBalance: boolean;
+  balanceError: boolean;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -115,7 +117,7 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
       ? this._validateVaultPledge$(this.proposalId.value, amountNeeded)
       : this._validateBalance$(this.crs, amountNeeded);
 
-    return stream$.pipe(tap(result => this.sufficientBalance = result));
+    return stream$.pipe(tap(result => this.balanceError = !result));
   }
 
   destroyContext$() {

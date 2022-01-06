@@ -32,25 +32,25 @@ const MathTestLookup = {
 
 describe('MathService', () => {
   MathTestLookup.addTests.forEach(test => {
-    it(`adds ${test.a} and ${test.b}`, () => {
+    it(`adds ${test.a.originalValue} and ${test.b.originalValue}`, () => {
       expect(MathService.add(test.a, test.b)).toBe(test.expectedOutput);
     });
   });
 
   MathTestLookup.subtractTests.forEach(test => {
-    it(`subtracts ${test.a} minus ${test.b}`, () => {
+    it(`subtracts ${test.a.originalValue} minus ${test.b.originalValue}`, () => {
       expect(MathService.subtract(test.a, test.b)).toBe(test.expectedOutput);
     });
   });
 
   MathTestLookup.multiplyTests.forEach(test => {
-    it(`multiplies ${test.a} times ${test.b}`, () => {
+    it(`multiplies ${test.a.originalValue} times ${test.b.originalValue}`, () => {
       expect(MathService.multiply(test.a, test.b)).toBe(test.expectedOutput);
     });
   });
 
   MathTestLookup.divideTests.forEach(test => {
-    it(`divides ${test.a} by ${test.b}`, () => {
+    it(`divides ${test.a.originalValue} by ${test.b.originalValue}`, () => {
       expect(MathService.divide(test.a, test.b)).toBe(test.expectedOutput);
     });
   });
