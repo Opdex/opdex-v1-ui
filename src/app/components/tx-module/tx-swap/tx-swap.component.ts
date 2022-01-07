@@ -7,10 +7,10 @@ import { IndexService } from '@sharedServices/platform/index.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { Component, Input, OnDestroy, Injector } from '@angular/core';
+import { Component, Input, OnDestroy, Injector, OnChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription, of, Observable, throwError } from 'rxjs';
-import { debounceTime, take, distinctUntilChanged, switchMap, map, tap, catchError, filter } from 'rxjs/operators';
+import { Subscription, of, Observable } from 'rxjs';
+import { debounceTime, take, switchMap, map, tap, catchError, filter } from 'rxjs/operators';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { Icons } from 'src/app/enums/icons';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
@@ -31,7 +31,7 @@ import { CollapseAnimation } from '@sharedServices/animations/collapse';
   styleUrls: ['./tx-swap.component.scss'],
   animations: [CollapseAnimation]
 })
-export class TxSwapComponent extends TxBase implements OnDestroy {
+export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
   @Input() data: any;
   icons = Icons;
   iconSizes = IconSizes;

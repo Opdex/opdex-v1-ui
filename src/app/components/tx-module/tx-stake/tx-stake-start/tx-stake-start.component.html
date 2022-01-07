@@ -3,7 +3,7 @@
     <opdex-input-control
       [suffixDisabled]="true"
       [prefixIcon]="icons.add"
-      label="Stake"
+      label="Start Staking"
       [formControl]="amount"
       [suffix]="pool.summary.staking?.token.symbol"
       [numbersOnly]="true">
@@ -33,7 +33,8 @@
     </div>
 
     <opdex-tx-quote-submit-button
-      [disabled]="!form.valid || !context?.wallet"
+      [warn]="balanceError || (allowance && !allowance?.isApproved)"
+      [disabled]="!form.valid || !context?.wallet || balanceError === undefined"
       (onSubmit)="submit()">
     </opdex-tx-quote-submit-button>
 

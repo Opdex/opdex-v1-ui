@@ -81,7 +81,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
                    (errors: string[]) => this.quoteErrors = errors);
   }
 
-  handlePercentageSelect(value: any) {
+  handlePercentageSelect(value: any): void {
     this.percentageSelected = value.percentageOption;
     this.amount.setValue(value.result, {emitEvent: true});
   }
@@ -97,14 +97,14 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
       .pipe(tap(result => this.balanceError = !result));
   }
 
-  private setFiatValue(amount: string) {
+  private setFiatValue(amount: string): void {
     const lptFiat = new FixedDecimal(this.pool.token.lp.summary.priceUsd.toString(), 8);
     const amountDecimal = new FixedDecimal(amount, this.pool.token.lp.decimals);
 
     this.fiatValue = MathService.multiply(amountDecimal, lptFiat);
   }
 
-  private getAllowance$(amount?: string) {
+  private getAllowance$(amount?: string): Observable<AllowanceValidation> {
     amount = amount || this.amount.value;
     const spender = this.pool?.summary?.miningPool?.address;
     const token = this.pool?.token?.lp;
@@ -113,11 +113,11 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
       .pipe(tap(allowance => this.allowance = allowance));
   }
 
-  destroyContext$() {
+  destroyContext$(): void {
     this.context$.unsubscribe();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroyContext$();
     if (this.allowance$) this.allowance$.unsubscribe();
     if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();

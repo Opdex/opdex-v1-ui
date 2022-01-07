@@ -1,3 +1,4 @@
+import { OnDestroy } from '@angular/core';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { MathService } from '@sharedServices/utility/math.service';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
@@ -20,7 +21,7 @@ import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-requi
   templateUrl: './tx-stake-start.component.html',
   styleUrls: ['./tx-stake-start.component.scss']
 })
-export class TxStakeStartComponent extends TxBase implements OnChanges {
+export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestroy {
   @Input() data;
   icons = Icons;
   form: FormGroup;
@@ -81,7 +82,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
                    (errors: string[]) => this.quoteErrors = errors);
   }
 
-  handlePercentageSelect(value: any) {
+  handlePercentageSelect(value: any): void {
     this.percentageSelected = value.percentageOption;
     this.amount.setValue(value.result, {emitEvent: true});
   }
@@ -97,7 +98,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
       .pipe(tap(result => this.balanceError = !result));
   }
 
-  private setFiatValue(amount: string) {
+  private setFiatValue(amount: string): void {
     const stakingTokenFiat = new FixedDecimal(this.pool.summary.staking?.token.summary.priceUsd.toString(), 8);
     const amountDecimal = new FixedDecimal(amount, this.pool.summary.staking?.token.decimals);
 
@@ -113,11 +114,11 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
       .pipe(tap(allowance => this.allowance = allowance));
   }
 
-  destroyContext$() {
+  destroyContext$(): void {
     this.context$.unsubscribe();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroyContext$();
     if (this.allowance$) this.allowance$.unsubscribe();
     if (this.latestSyncedBlock$) this.latestSyncedBlock$.unsubscribe();

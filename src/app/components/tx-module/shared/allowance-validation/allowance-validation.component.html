@@ -7,7 +7,7 @@
       <p class="quote-error light" *ngIf="waiting">Awaiting Approval</p>
     </div>
 
-    <button mat-flat-button color="primary" class="tiny" *ngIf="!waiting" (click)="approveAllowance()" type="button">Approve</button>
+    <button mat-raised-button color="primary" class="tiny" *ngIf="!waiting" (click)="approveAllowance()" type="button">Approve</button>
   </div>
 
   <div class="flex-row-center-between" *ngIf="allowance.isApproved">

@@ -1,6 +1,12 @@
 <div class="stop-staking">
   <form [formGroup]="form" name="stop-staking-form" id="stop-staking-form">
-    <opdex-input-control [suffixDisabled]="true" [prefixIcon]="icons.remove" label="Stop Staking" [formControl]="amount" [suffix]="pool.summary.staking?.token.symbol" [numbersOnly]="true">
+    <opdex-input-control
+      [suffixDisabled]="true"
+      [prefixIcon]="icons.remove"
+      label="Stop Staking"
+      [formControl]="amount"
+      [suffix]="pool.summary.staking?.token.symbol"
+      [numbersOnly]="true">
       <div class="flex-row-center-end">
         <span class="success" *ngIf="fiatValue">${{fiatValue | shortNumber}}</span>
       </div>
@@ -13,6 +19,13 @@
       [selected]="percentageSelected"
       (onPercentageSelect)="handlePercentageSelect($event)"></opdex-percentage-amount-buttons>
 
+    <div class="mt-2" *ngIf="balanceError">
+      <opdex-tx-quote-error
+        [warn]="true"
+        message="Insufficient Staking Balance">
+      </opdex-tx-quote-error>
+    </div>
+
     <mat-checkbox
       formControlName="liquidate"
       color="primary"
@@ -23,7 +36,11 @@
       Liquidate Collected OLPT
     </mat-checkbox>
 
-    <opdex-tx-quote-submit-button [disabled]="!form.valid || !context?.wallet" (onSubmit)="submit()"></opdex-tx-quote-submit-button>
+    <opdex-tx-quote-submit-button
+      [warn]="balanceError"
+      [disabled]="!form.valid || !context?.wallet || balanceError === undefined"
+      (onSubmit)="submit()">
+    </opdex-tx-quote-submit-button>
 
     <opdex-tx-quote-errors [quoteErrors]="quoteErrors"></opdex-tx-quote-errors>
   </form>

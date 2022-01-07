@@ -140,7 +140,7 @@
 
     <opdex-tx-quote-submit-button
       [warn]="balanceError || (allowance && !allowance?.isApproved)"
-      [disabled]="!form.valid || !context?.wallet || !tokenInMax || !tokenOutMin"
+      [disabled]="!form.valid || !tokenInMax || !tokenOutMin || balanceError === undefined"
       (onSubmit)="submit()">
     </opdex-tx-quote-submit-button>
 

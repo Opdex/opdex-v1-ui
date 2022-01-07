@@ -25,8 +25,17 @@
       [selected]="percentageSelected"
       (onPercentageSelect)="handlePercentageSelect($event)"></opdex-percentage-amount-buttons>
 
-    <div class="mt-2 mb-2" *ngIf="allowance">
-      <opdex-allowance-validation [transactionType]="transactionTypes.removeLiquidity" [allowance]="allowance"></opdex-allowance-validation>
+    <div class="mt-2 mb-2" *ngIf="allowance || balanceError">
+      <opdex-allowance-validation
+        [transactionType]="transactionTypes.removeLiquidity"
+        [allowance]="allowance">
+      </opdex-allowance-validation>
+
+      <opdex-tx-quote-error
+        [warn]="true"
+        message="Insufficient Balance"
+        *ngIf="balanceError">
+      </opdex-tx-quote-error>
     </div>
 
     <!-- Tolerance and Deadline -->
@@ -53,7 +62,7 @@
 
     <opdex-tx-quote-submit-button
       [warn]="allowance && !allowance?.isApproved"
-      [disabled]="!form.valid || !context?.wallet"
+      [disabled]="!form.valid || !context?.wallet || balanceError === undefined"
       (onSubmit)="submit()">
     </opdex-tx-quote-submit-button>
 

@@ -61,7 +61,6 @@ export abstract class TxBase{
 
   protected _validateStakingBalance$(liquidityPool: ILiquidityPoolResponse, amountToSpend: FixedDecimal): Observable<boolean> {
     if (!liquidityPool) return of(false);
-    if (amountToSpend.bigInt === BigInt(0)) return of(true);
 
     return this._walletsService.getStakingPosition(this.context.wallet, liquidityPool.address)
       .pipe(
@@ -71,7 +70,6 @@ export abstract class TxBase{
 
   protected _validateMiningBalance$(liquidityPool: ILiquidityPoolResponse, amountToSpend: FixedDecimal): Observable<boolean> {
     if (!liquidityPool) return of(false);
-    if (amountToSpend.bigInt === BigInt(0)) return of(true);
 
     return this._walletsService.getMiningPosition(this.context.wallet, liquidityPool.summary.miningPool.address)
       .pipe(
@@ -98,6 +96,11 @@ export abstract class TxBase{
   }
 
   private _isEnough(actualAmount: FixedDecimal, neededAmount: FixedDecimal) {
+    // If the necessary amount is 0 but this is still being called, we're checking to make sure they have a balance in general
+    if (neededAmount.bigInt === BigInt(0)) {
+      return !actualAmount.isZero;
+    }
+
     return actualAmount.bigInt >= neededAmount.bigInt;
   }
 

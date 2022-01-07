@@ -1,6 +1,12 @@
 <div class="start-mining">
   <form [formGroup]="form" name="start-mining-form" id="start-mining-form">
-    <opdex-input-control [suffixDisabled]="true" [prefixIcon]="icons.add" label="Mine" [formControl]="amount" [suffix]="pool.token.lp.symbol" [numbersOnly]="true">
+    <opdex-input-control
+      [suffixDisabled]="true"
+      [prefixIcon]="icons.add"
+      label="Start Mining"
+      [formControl]="amount"
+      [suffix]="pool.token.lp.symbol"
+      [numbersOnly]="true">
       <div class="flex-row-center-end">
         <span class="success" *ngIf="fiatValue">${{fiatValue | shortNumber}}</span>
       </div>
@@ -28,7 +34,7 @@
 
     <opdex-tx-quote-submit-button
       [warn]="balanceError || (allowance && !allowance?.isApproved)"
-      [disabled]="!form.valid || !context?.wallet"
+      [disabled]="!form.valid || !context?.wallet || balanceError === undefined"
       (onSubmit)="submit()">
     </opdex-tx-quote-submit-button>
 

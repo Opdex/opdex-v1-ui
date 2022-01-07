@@ -11,10 +11,10 @@
     </ng-container>
 
     <div class="mt-2" *ngIf="quote?.error">
-      <div class="flex-row-center mb-2">
-        <opdex-help-button class="mr-2" [info]="errorHelp" [icon]="icons.error" iconColor="red"></opdex-help-button>
-        <h6 class="mb-0 d-inline">Errors</h6>
-      </div>
+      <p class="mb-2 b-400 flex-row-center error" style="font-size: 1.1em">
+        <mat-icon color="warn" class="small mr-2">{{icons.error}}</mat-icon>
+        Errors
+      </p>
 
       <p>{{quote.error}}</p>
 

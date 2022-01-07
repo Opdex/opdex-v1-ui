@@ -4,7 +4,7 @@
       <opdex-input-control
         [suffixDisabled]="true"
         [prefixIcon]="icons.add"
-        label="Add {{pool.token.crs.symbol}}"
+        label="Provide {{pool.token.crs.symbol}}"
         [formControl]="amountCrs"
         [suffix]="pool.token.crs.symbol"
         [numbersOnly]="true">
@@ -27,12 +27,25 @@
         [selected]="crsPercentageSelected"
         (onPercentageSelect)="handlePercentageSelect('crs', $event)">
       </opdex-percentage-amount-buttons>
+
+      <div class="mt-2 mb-2" *ngIf="crsBalanceError || amountCrs.errors?.invalidAmountEquivalent">
+        <opdex-tx-quote-error
+          [warn]="true"
+          message="Insufficient {{pool.token.crs.symbol}} Balance"
+          *ngIf="crsBalanceError">
+        </opdex-tx-quote-error>
+
+        <opdex-tx-quote-error *ngIf="amountCrs.errors?.invalidAmountEquivalent"
+          [warn]="false"
+          message="Error retrieving {{pool.token.src.symbol}} equivalent deposit amount.">
+        </opdex-tx-quote-error>
+      </div>
     </div>
 
     <opdex-input-control
       [suffixDisabled]="true"
       [prefixIcon]="icons.add"
-      label="Add {{pool.token.src.symbol}}"
+      label="Provide {{pool.token.src.symbol}}"
       [formControl]="amountSrc"
       [suffix]="pool.token.src.symbol"
       [numbersOnly]="true">
@@ -56,8 +69,22 @@
       (onPercentageSelect)="handlePercentageSelect('src', $event)">
     </opdex-percentage-amount-buttons>
 
-    <div class="mt-2 mb-2" *ngIf="allowance">
-      <opdex-allowance-validation [transactionType]="transactionTypes.addLiquidity" [allowance]="allowance"></opdex-allowance-validation>
+    <div class="mt-2 mb-2" *ngIf="allowance || srcBalanceError || amountSrc.errors?.invalidAmountEquivalent">
+      <opdex-allowance-validation
+        [transactionType]="transactionTypes.addLiquidity"
+        [allowance]="allowance">
+      </opdex-allowance-validation>
+
+      <opdex-tx-quote-error
+        [warn]="true"
+        message="Insufficient {{pool.token.src.symbol}} Balance"
+        *ngIf="srcBalanceError">
+      </opdex-tx-quote-error>
+
+      <opdex-tx-quote-error *ngIf="amountSrc.errors?.invalidAmountEquivalent"
+        [warn]="false"
+        message="Error retrieving {{pool.token.crs.symbol}} equivalent deposit amount.">
+      </opdex-tx-quote-error>
     </div>
 
     <!-- Tolerance and Deadline -->
@@ -89,8 +116,8 @@
     <!-- End Tolerance and Deadline -->
 
     <opdex-tx-quote-submit-button
-      [warn]="allowance && !allowance?.isApproved"
-      [disabled]="!form.valid || !context?.wallet"
+      [warn]="(allowance && !allowance?.isApproved) || crsBalanceError || srcBalanceError"
+      [disabled]="!form.valid || !context?.wallet || crsBalanceError === undefined || srcBalanceError === undefined"
       (onSubmit)="submit()">
     </opdex-tx-quote-submit-button>
 

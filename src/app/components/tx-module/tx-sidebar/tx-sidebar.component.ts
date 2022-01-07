@@ -81,17 +81,6 @@ export class TxSidebarComponent implements OnChanges {
     this.onModeChange.emit(this.sidenavMode);
   }
 
-  handleConnectWallet() {
-    this._router.navigateByUrl('/auth');
-    if (!this.widescreen) {
-      this.closeSidenav();
-      return;
-    }
-
-    this.sidenavMode = 'side';
-    this.onModeChange.emit(this.sidenavMode);
-  }
-
   setTransactionView(view: TransactionView) {
     this.message.view = view;
   }

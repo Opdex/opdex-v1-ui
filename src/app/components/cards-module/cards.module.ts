@@ -19,7 +19,6 @@ import { MiningCardComponent } from './mining-card/mining-card.component';
 import { LiquidityPoolCardComponent } from './liquidity-pool-card/liquidity-pool-card.component';
 import { StakingPoolCardComponent } from './staking-pool-card/staking-pool-card.component';
 import { StatCardComponent } from './stat-card/stat-card.component';
-import { ConnectWalletCardComponent } from './connect-wallet-card/connect-wallet-card.component';
 import { LiquidityPoolTokenCardComponent } from './liquidity-pool-token-card/liquidity-pool-token-card.component';
 import { MarketTokenCardComponent } from './market-token-card/market-token-card.component';
 import { WalletPositionCardComponent } from './wallet-position-card/wallet-position-card.component';
@@ -32,7 +31,6 @@ import { VaultProposalCardComponent } from './vault-proposal-card/vault-proposal
     LiquidityPoolCardComponent,
     StakingPoolCardComponent,
     StatCardComponent,
-    ConnectWalletCardComponent,
     LiquidityPoolTokenCardComponent,
     MarketTokenCardComponent,
     WalletPositionCardComponent,
@@ -57,7 +55,6 @@ import { VaultProposalCardComponent } from './vault-proposal-card/vault-proposal
     LiquidityPoolCardComponent,
     StakingPoolCardComponent,
     StatCardComponent,
-    ConnectWalletCardComponent,
     LiquidityPoolTokenCardComponent,
     MarketTokenCardComponent,
     WalletPositionCardComponent,

@@ -50,11 +50,6 @@ export class ReviewQuoteComponent implements OnDestroy {
     paragraph: 'All Opdex transactions are executed by calling to a smart contract. Method details cover which smart contract to talk to and what functionality the user wants to execute.'
   }
 
-  errorHelp = {
-    title: 'Why do I have errors?',
-    paragraph: 'Transaction quotes simply request what the outcome of a transaction would be at that point in time. Errors can occur for multiple reasons including invalid balances, token allowances, addresses or simply because the transaction request is not permitted due to smart contract logic.'
-  }
-
   public constructor(
     private _platformApi: PlatformApiService,
     public _bottomSheetRef: MatBottomSheetRef<ReviewQuoteComponent>,

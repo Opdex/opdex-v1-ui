@@ -20,8 +20,16 @@
       (onPercentageSelect)="handlePercentageSelect($event)">
     </opdex-percentage-amount-buttons>
 
+    <div class="mt-2" *ngIf="balanceError">
+      <opdex-tx-quote-error
+        [warn]="true"
+        message="Insufficient Mining Balance">
+      </opdex-tx-quote-error>
+    </div>
+
     <opdex-tx-quote-submit-button
-      [disabled]="!form.valid || !context?.wallet"
+      [warn]="balanceError"
+      [disabled]="!form.valid || !context?.wallet || balanceError === undefined"
       (onSubmit)="submit()">
     </opdex-tx-quote-submit-button>
 

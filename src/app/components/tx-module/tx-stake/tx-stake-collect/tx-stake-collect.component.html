@@ -1,6 +1,6 @@
 <div class="collect-staking-rewards">
   <form [formGroup]="form" name="collect-staking-rewards-form" id="collect-staking-rewards-form">
-    <p class="b-400 light">Collect Rewards</p>
+    <p class="b-400 light">Collect Staking Rewards</p>
 
     <mat-checkbox
       formControlName="liquidate"
@@ -11,8 +11,17 @@
       Liquidate Collected OLPT
     </mat-checkbox>
 
+    <div class="mt-3" *ngIf="balanceError">
+      <opdex-tx-quote-error
+        [warn]="true"
+        message="Insufficient Staking Balance"
+        *ngIf="balanceError">
+      </opdex-tx-quote-error>
+    </div>
+
     <opdex-tx-quote-submit-button
-      [disabled]="!form.valid || !context?.wallet"
+      [warn]="balanceError"
+      [disabled]="!form.valid || !context?.wallet || balanceError === undefined"
       (onSubmit)="submit()">
     </opdex-tx-quote-submit-button>
 
