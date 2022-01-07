@@ -37,7 +37,7 @@
 
         <opdex-tx-quote-error *ngIf="amountCrs.errors?.invalidAmountEquivalent"
           [warn]="false"
-          message="Error retrieving {{pool.token.src.symbol}} equivalent deposit amount.">
+          message="Error retrieving equivalent {{pool.token.src.symbol}} amount">
         </opdex-tx-quote-error>
       </div>
     </div>
@@ -83,7 +83,7 @@
 
       <opdex-tx-quote-error *ngIf="amountSrc.errors?.invalidAmountEquivalent"
         [warn]="false"
-        message="Error retrieving {{pool.token.crs.symbol}} equivalent deposit amount.">
+        message="Error retrieving equivalent {{pool.token.crs.symbol}} amount">
       </opdex-tx-quote-error>
     </div>
 

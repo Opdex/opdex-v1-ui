@@ -244,6 +244,8 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
   }
 
   private getAllowance$(): Observable<AllowanceValidation> {
+    if (!!this.pool === false) return of();
+
     return this._validateAllowance$(this.context.wallet, this._env.routerAddress, this.pool.token.src, this.amountSrc.value)
       .pipe(tap(allowance => this.allowance = allowance));
   }

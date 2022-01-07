@@ -11,62 +11,87 @@
 
   <div [@collapse]="hide">
     <div class="mt-2">
-      <ng-container *ngIf="positions?.length > 0; else none">
-        <div class="flex-row">
-          <div class="col flex-shrink">
-            <div style="width: 18px; height: 18px;"></div>
-          </div>
-          <div class="col">
-            <small class="light">Token</small>
-          </div>
-
-          <div class="col">
-            <small class="light">Amount</small>
-          </div>
-
-          <div class="col flex-column-end">
-            <small class="light">Value</small>
-          </div>
-        </div>
-
-        <ng-container *ngFor="let position of positions; let i = index; trackBy: trackPosition">
-          <div class="flex-row-center">
-            <div class="col flex-shrink flex-column justify-content-end">
-              <button type="button" mat-icon-button color="primary" [ngClass]="iconSizes.tiny" *ngIf="position.position === 'Balance'" (click)="balanceTooltip.toggle()">
-                <mat-icon #balanceTooltip="matTooltip" [matTooltip]="position.position">{{icons.tokens}}</mat-icon>
-              </button>
-
-              <button type="button" mat-icon-button color="primary" [ngClass]="iconSizes.tiny" *ngIf="position.position === 'Providing'" (click)="providingTooltip.toggle()">
-                <mat-icon class="provide" #providingTooltip="matTooltip" [matTooltip]="position.position">{{icons.provide}}</mat-icon>
-              </button>
-
-              <button type="button" mat-icon-button color="primary"  [ngClass]="iconSizes.tiny" *ngIf="position.position === 'Staking'" (click)="stakingTooltip.toggle()">
-                <mat-icon class="stake" #stakingTooltip="matTooltip" [matTooltip]="position.position">{{icons.staking}}</mat-icon>
-              </button>
-
-              <button type="button" mat-icon-button color="primary" [ngClass]="iconSizes.tiny" (click)="miningTooltip.toggle()" *ngIf="position.position === 'Mining'" >
-                <mat-icon class="mine" #miningTooltip="matTooltip" [matTooltip]="position.position">{{icons.mining}}</mat-icon>
-              </button>
+      <ng-container *ngIf="positions; else loading">
+        <ng-container *ngIf="positions?.length > 0; else none">
+          <div class="flex-row">
+            <div class="col flex-shrink">
+              <div style="width: 18px; height: 18px;"></div>
+            </div>
+            <div class="col">
+              <small class="light">Token</small>
             </div>
 
-            <div class="col flex-column justify-content-end">
-              <small>{{position.token.symbol}}</small>
-            </div>
-
-            <div class="col flex-column justify-content-end">
-              <a class="no-decoration" [matTooltip]="position.amount.formattedValue" [cdkCopyToClipboard]="position.amount.formattedValue" href="javascript:void(0)">
-                <small>{{position.amount.formattedValue | shortNumber}}</small>
-              </a>
+            <div class="col">
+              <small class="light">Amount</small>
             </div>
 
             <div class="col flex-column-end">
-              <small>${{position.value.formattedValue | shortNumber}}</small>
+              <small class="light">Value</small>
             </div>
           </div>
+
+          <ng-container *ngFor="let position of positions; let i = index; trackBy: trackPosition">
+            <div class="flex-row-center">
+              <div class="col flex-shrink flex-column justify-content-end">
+                <button type="button" mat-icon-button color="primary" [ngClass]="iconSizes.tiny" *ngIf="position.position === 'Balance'" (click)="balanceTooltip.toggle()">
+                  <mat-icon #balanceTooltip="matTooltip" [matTooltip]="position.position">{{icons.tokens}}</mat-icon>
+                </button>
+
+                <button type="button" mat-icon-button color="primary" [ngClass]="iconSizes.tiny" *ngIf="position.position === 'Providing'" (click)="providingTooltip.toggle()">
+                  <mat-icon class="provide" #providingTooltip="matTooltip" [matTooltip]="position.position">{{icons.provide}}</mat-icon>
+                </button>
+
+                <button type="button" mat-icon-button color="primary"  [ngClass]="iconSizes.tiny" *ngIf="position.position === 'Staking'" (click)="stakingTooltip.toggle()">
+                  <mat-icon class="stake" #stakingTooltip="matTooltip" [matTooltip]="position.position">{{icons.staking}}</mat-icon>
+                </button>
+
+                <button type="button" mat-icon-button color="primary" [ngClass]="iconSizes.tiny" (click)="miningTooltip.toggle()" *ngIf="position.position === 'Mining'" >
+                  <mat-icon class="mine" #miningTooltip="matTooltip" [matTooltip]="position.position">{{icons.mining}}</mat-icon>
+                </button>
+              </div>
+
+              <div class="col flex-column justify-content-end">
+                <small>{{position.token.symbol}}</small>
+              </div>
+
+              <div class="col flex-column justify-content-end">
+                <a class="no-decoration" [matTooltip]="position.amount.formattedValue" [cdkCopyToClipboard]="position.amount.formattedValue" href="javascript:void(0)">
+                  <small>{{position.amount.formattedValue | shortNumber}}</small>
+                </a>
+              </div>
+
+              <div class="col flex-column-end">
+                <small>${{position.value.formattedValue | shortNumber}}</small>
+              </div>
+            </div>
+          </ng-container>
         </ng-container>
+
+        <ng-template #none>No positions available.</ng-template>
       </ng-container>
 
-      <ng-template #none>No positions available.</ng-template>
+      <ng-template #loading>
+        <div class="flex-row-center-between">
+          <div class="skeleton-bg w-25 mb-2 mr-2"></div>
+          <div class="skeleton-bg w-25 mb-2 mr-2"></div>
+          <div class="skeleton-bg w-25 mb-2 mr-2"></div>
+          <div class="skeleton-bg w-25 mb-2"></div>
+        </div>
+
+        <div class="flex-row-center-between">
+          <div class="skeleton-bg w-25 mb-2 mr-2"></div>
+          <div class="skeleton-bg w-25 mb-2 mr-2"></div>
+          <div class="skeleton-bg w-25 mb-2 mr-2"></div>
+          <div class="skeleton-bg w-25 mb-2"></div>
+        </div>
+
+        <div class="flex-row-center-between">
+          <div class="skeleton-bg w-25 mr-2"></div>
+          <div class="skeleton-bg w-25 mr-2"></div>
+          <div class="skeleton-bg w-25 mr-2"></div>
+          <div class="skeleton-bg w-25"></div>
+        </div>
+      </ng-template>
     </div>
   </div>
 </opdex-card>

@@ -1,7 +1,11 @@
 <div class="vault-proposal-pledge">
   <form [formGroup]="form" name="vault-proposal-pledge-form" id="vault-proposal-pledge-form">
     <div class="mb-3">
-      <opdex-input-control placeholder="1" label="Proposal #" [formControl]="proposalId"></opdex-input-control>
+      <opdex-input-control
+        placeholder="1"
+        label="Proposal ID"
+        [formControl]="proposalId">
+      </opdex-input-control>
     </div>
 
     <div class="mb-3">
@@ -26,15 +30,27 @@
         [selected]="percentageSelected"
         (onPercentageSelect)="handlePercentageSelect($event)"
         [proposalId]="proposalId.value"
-        *ngIf="crs"></opdex-percentage-amount-buttons>
+        *ngIf="crs">
+      </opdex-percentage-amount-buttons>
 
-        <p class="mt-2 mb-0 flex-row-center" *ngIf="balanceError && form.valid && proposalId.value">
-          <mat-icon color="warn" [ngClass]="iconSizes.tiny" class="mr-2">{{icons.error}}</mat-icon>
-          Insufficient Balance
-        </p>
+      <!-- <p class="mt-2 mb-0 flex-row-center" *ngIf="balanceError && form.valid && proposalId.value">
+        <mat-icon color="warn" [ngClass]="iconSizes.tiny" class="mr-2">{{icons.error}}</mat-icon>
+        Insufficient Balance
+      </p> -->
+
+      <div class="mt-2" *ngIf="balanceError">
+        <opdex-tx-quote-error
+          [warn]="true"
+          message="Insufficient Balance">
+        </opdex-tx-quote-error>
+      </div>
     </div>
 
-    <opdex-tx-quote-submit-button [disabled]="!form.valid || !context?.wallet" (onSubmit)="submit()"></opdex-tx-quote-submit-button>
+    <opdex-tx-quote-submit-button
+      [warn]="balanceError"
+      [disabled]="!form.valid || !context?.wallet || balanceError === undefined"
+      (onSubmit)="submit()">
+    </opdex-tx-quote-submit-button>
 
     <opdex-tx-quote-errors [quoteErrors]="quoteErrors"></opdex-tx-quote-errors>
   </form>
