@@ -1,8 +1,6 @@
 import { IVaultProposalsFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposals-filter';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Icons } from 'src/app/enums/icons';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
 import { IVaultProposalResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-response-model.interface';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
@@ -21,8 +19,6 @@ import { IVaultProposalsResponseModel } from '@sharedModels/platform-api/respons
 import { VaultProposalsFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposals-filter';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
-import { ReviewQuoteComponent } from '@sharedComponents/tx-module/shared/review-quote/review-quote.component';
-import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { VaultCertificatesFilter, IVaultCertificatesFilter, VaultCertificateStatusFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-certificates-filter';
 import { IVaultCertificates } from '@sharedModels/platform-api/responses/vaults/vault-certificate.interface';
 
@@ -54,8 +50,6 @@ export class VaultGovernanceComponent implements OnInit {
     private _indexService: IndexService,
     private _env: EnvironmentsService,
     private _sidebar: SidenavService,
-    private _platformApiService: PlatformApiService,
-    private _bottomSheet: MatBottomSheet,
     private _context: UserContextService
   ) {
     // Init with null to get default/loading animations
@@ -139,13 +133,6 @@ export class VaultGovernanceComponent implements OnInit {
 
   statCardTrackBy(index: number, statCard: StatCardInfo) {
     return `${index}-${statCard.title}-${statCard.value}`;
-  }
-
-  quoteComplete(proposalId: number): void {
-    this._platformApiService
-      .completeVaultProposal(this.vault.vault, proposalId)
-        .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => this._bottomSheet.open(ReviewQuoteComponent, { data: quote }));
   }
 
   ngOnDestroy() {

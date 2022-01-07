@@ -7,7 +7,7 @@
   [disabled]="disabled"
   *ngIf="!!context?.wallet">
   <span class="flex-row-center-center">
-    Quote <mat-icon *ngIf="warn" class="ml-1 tiny">{{icons.warning}}</mat-icon>
+    {{label}} <mat-icon *ngIf="warn" class="ml-1 tiny">{{icons.warning}}</mat-icon>
   </span>
 </button>
 

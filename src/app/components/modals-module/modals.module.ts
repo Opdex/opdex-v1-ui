@@ -19,12 +19,14 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { HelpModalComponent } from './help-modal/help-modal.component';
 import { BugReportModalComponent } from './bug-report-modal/bug-report-modal.component';
 import { AppUpdateModalComponent } from './app-update-modal/app-update-modal.component';
+import { MaintenanceNotificationModalComponent } from './maintenance-notification-modal/maintenance-notification-modal.component';
 
 @NgModule({
   declarations: [
     HelpModalComponent,
     BugReportModalComponent,
-    AppUpdateModalComponent
+    AppUpdateModalComponent,
+    MaintenanceNotificationModalComponent
   ],
   imports: [
     CommonModule,
@@ -45,7 +47,8 @@ import { AppUpdateModalComponent } from './app-update-modal/app-update-modal.com
   exports: [
     HelpModalComponent,
     BugReportModalComponent,
-    AppUpdateModalComponent
+    AppUpdateModalComponent,
+    MaintenanceNotificationModalComponent
   ]
 })
 export class ModalsModule { }

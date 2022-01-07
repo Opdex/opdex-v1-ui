@@ -78,6 +78,7 @@
     <div class="mt-2 flex-row-center-between">
       <small class="light" *ngIf="proposal.expiration >= latestBlock.height">{{proposal.expiration - latestBlock.height | formatNumber:0}} blocks remaining</small>
       <!-- <small class="light float-right">{{miningGovernance.nominationPeriodEndDate | timeago}}</small> -->
+
       <button mat-stroked-button color="primary" class="small w-100" *ngIf="proposal.status !== 'Complete' && proposal.expiration < latestBlock.height" (click)="completeProposal()" [disabled]="!!context?.wallet === false">Complete Proposal</button>
       <span class="badge {{proposal.approved ? 'green' : 'red'}}" *ngIf="proposal.status === 'Complete' && proposal.expiration < latestBlock.height">{{proposal.approved ? 'Approved' : 'Denied'}}</span>
     </div>

@@ -115,7 +115,7 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
   }
 
   private validateBalance(): Observable<boolean> {
-    if (!this.amount.value || !this.context?.wallet || !this.crs || !this.proposalId.value) return of(false);
+    if (!this.amount.value || !this.context?.wallet || !this.crs) return of(false);
 
     const amountNeeded = new FixedDecimal(this.amount.value, this.crs.decimals);
 
@@ -126,11 +126,11 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
     return stream$.pipe(tap(result => this.balanceError = !result));
   }
 
-  destroyContext$() {
+  destroyContext$(): void {
     this.context$.unsubscribe();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroyContext$();
     this.subscription.unsubscribe();
   }

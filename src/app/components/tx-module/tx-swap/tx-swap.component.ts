@@ -173,13 +173,6 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
       this.calcDeadline(this.deadlineThreshold)
     );
 
-    this.quoteErrors = [
-      'Unexpected weird error',
-      'Another error for testing'
-    ]
-
-    return;
-
     this._platformApi
       .swapQuote(this.tokenIn.address, request.payload)
         .pipe(take(1))

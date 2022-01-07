@@ -1,0 +1,17 @@
+<h2 class="flex-row-center">
+  <mat-icon class="red mr-2">{{icons.error}}</mat-icon> Maintenance In Progress
+</h2>
+
+<mat-dialog-content>
+  <p>Maintenance is in progress, transaction quotes, prices, analytics and other data may be affected. Would you like to continue?</p>
+</mat-dialog-content>
+
+<div class="row mt-3">
+  <div class="col-12 col-sm-4">
+    <button mat-stroked-button mat-dialog-close color="primary" class="cancel">Cancel</button>
+  </div>
+
+  <div class="col-12 col-sm-8">
+    <button mat-flat-button color="warn" (click)="proceed()">Continue Anyways</button>
+  </div>
+</div>

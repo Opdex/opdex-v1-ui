@@ -1,3 +1,5 @@
+import { IIndexStatus } from '@sharedModels/platform-api/responses/index/index-status.interface';
+import { MatDialog } from '@angular/material/dialog';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { NominationFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { IndexService } from '@sharedServices/platform/index.service';
@@ -21,6 +23,7 @@ import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { MiningGovernanceStatCardsLookup } from '@sharedLookups/mining-governance-stat-cards.lookup';
 import { RewardMiningPoolsRequest } from '@sharedModels/platform-api/requests/mining-governances/reward-mining-pools-request';
+import { MaintenanceNotificationModalComponent } from '@sharedComponents/modals-module/maintenance-notification-modal/maintenance-notification-modal.component';
 
 @Component({
   selector: 'opdex-mining-governance',
@@ -30,11 +33,11 @@ import { RewardMiningPoolsRequest } from '@sharedModels/platform-api/requests/mi
 export class MiningGovernanceComponent implements OnInit, OnDestroy {
   nominatedPools: ILiquidityPoolResponse[];
   miningPools$: Observable<ILiquidityPoolResponse[]>;
-  miningGovernance$: Subscription;
   miningGovernance: MiningGovernance;
   submitting: boolean;
   nominationPeriodEndDate: string;
   context: any;
+  indexStatus: IIndexStatus;
   icons = Icons;
   iconSizes = IconSizes;
   subscription = new Subscription();
@@ -47,8 +50,9 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
     private _context: UserContextService,
     private _tokenService: TokensService,
     private _liquidityPoolsService: LiquidityPoolsService,
-    private _blocks: IndexService,
-    private _env: EnvironmentsService
+    private _indexService: IndexService,
+    private _env: EnvironmentsService,
+    private _dialog: MatDialog
   ) {
     this.nominatedPools = [ null, null, null, null ];
   }
@@ -56,30 +60,48 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.context = this._context.getUserContext();
 
-    this.miningGovernance$ = this._blocks.getLatestBlock$()
-      .pipe(
-        switchMap(_ => {
-          return this._miningGovernanceService.getMiningGovernance(this._env.miningGovernanceAddress)
-            .pipe(
-              tap((rsp: IMiningGovernance) => this.miningGovernance = new MiningGovernance(rsp)),
-              switchMap(governance => this._tokenService.getMarketToken(governance.minedToken)),
-              tap(minedToken => this.miningGovernance.setMinedToken(minedToken)));
-        })).subscribe();
+    this.subscription.add(
+      this._indexService.getLatestBlock$()
+        .pipe(
+          switchMap(_ => this._miningGovernanceService.getMiningGovernance(this._env.miningGovernanceAddress)),
+          tap((rsp: IMiningGovernance) => this.miningGovernance = new MiningGovernance(rsp)),
+          switchMap(governance => this._tokenService.getMarketToken(governance.minedToken)),
+          tap(minedToken => this.miningGovernance.setMinedToken(minedToken)))
+        .subscribe());
 
     const nominationFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 4, direction: 'DESC', nominationFilter: NominationFilter.Nominated});
 
     this.subscription.add(
-      this._blocks.getLatestBlock$()
+      this._indexService.getLatestBlock$()
         .pipe(switchMap(_ => this._liquidityPoolsService.getLiquidityPools(nominationFilter)))
         .subscribe(pools => this.nominatedPools = pools.results));
 
-    this.miningPools$ = this._blocks.getLatestBlock$().pipe(switchMap(_ => {
+    this.subscription.add(
+      this._indexService.getStatus$()
+        .subscribe(status => this.indexStatus = status));
+
+    this.miningPools$ = this._indexService.getLatestBlock$().pipe(switchMap(_ => {
       const filter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 4, direction: 'DESC', miningFilter: MiningFilter.Enabled});
       return this._liquidityPoolsService.getLiquidityPools(filter).pipe(map(pools => pools.results));
     }));
   }
 
   quoteDistribution(): void {
+    if (!this.context?.wallet) return;
+
+    if (!!this.indexStatus?.available === false) {
+      this._dialog.open(MaintenanceNotificationModalComponent, {width: '500px', autoFocus: false})
+        .afterClosed()
+        .pipe(take(1))
+        .subscribe(result => {
+          if (result) this.quoteExecute();
+        });
+    } else {
+      this.quoteExecute()
+    }
+  }
+
+  private quoteExecute(): void {
     const request = new RewardMiningPoolsRequest(true);
 
     this._platformApiService
@@ -94,7 +116,6 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.miningGovernance$) this.miningGovernance$.unsubscribe();
     this.subscription.unsubscribe();
   }
 }

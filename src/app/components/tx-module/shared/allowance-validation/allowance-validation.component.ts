@@ -1,3 +1,6 @@
+import { IIndexStatus } from '@sharedModels/platform-api/responses/index/index-status.interface';
+import { MatDialog } from '@angular/material/dialog';
+import { IndexService } from '@sharedServices/platform/index.service';
 import { IApprovalEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/tokens/approve-event.interface';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { Subscription } from 'rxjs';
@@ -13,6 +16,7 @@ import { ITransactionQuote } from '@sharedModels/platform-api/responses/transact
 import { take } from 'rxjs/operators';
 import { ApproveAllowanceRequest } from '@sharedModels/platform-api/requests/tokens/approve-allowance-request';
 import { IconSizes } from 'src/app/enums/icon-sizes';
+import { MaintenanceNotificationModalComponent } from '@sharedComponents/modals-module/maintenance-notification-modal/maintenance-notification-modal.component';
 
 @Component({
   selector: 'opdex-allowance-validation',
@@ -25,6 +29,7 @@ export class AllowanceValidationComponent implements OnChanges, OnDestroy {
   ignore: boolean = true;
   transactionTypes = AllowanceRequiredTransactionTypes;
   waiting: boolean;
+  indexStatus: IIndexStatus;
   icons = Icons;
   iconSizes = IconSizes;
   subscription = new Subscription();
@@ -32,26 +37,34 @@ export class AllowanceValidationComponent implements OnChanges, OnDestroy {
   constructor(
     private _bottomSheet: MatBottomSheet,
     private _platformApi: PlatformApiService,
-    private _transactionsService: TransactionsService)
-  {
+    private _transactionsService: TransactionsService,
+    private _indexService: IndexService,
+    private _dialog: MatDialog
+  ) {
     this.subscription.add(
       this._transactionsService.getBroadcastedTransaction$()
         .subscribe(tx => {
           if (this.allowance?.isApproved === false) this.waiting = true;
         }));
 
-    this.subscription.add(this._transactionsService.getMinedTransaction$().subscribe(tx => {
-      const allowanceEvents = tx.eventsOfType([TransactionEventTypes.ApprovalEvent]);
-      const correctLength = allowanceEvents.length === 1;
-      const firstEvent = allowanceEvents[0] as IApprovalEvent;
-      const spendersMatch = firstEvent.spender === this.allowance.spender;
+    this.subscription.add(
+      this._indexService.getStatus$()
+        .subscribe(status => this.indexStatus = status));
 
-      if (this.allowance && correctLength && spendersMatch) {
-        this.allowance.update(firstEvent);
+    this.subscription.add(
+      this._transactionsService.getMinedTransaction$()
+      .subscribe(tx => {
+        const allowanceEvents = tx.eventsOfType([TransactionEventTypes.ApprovalEvent]);
+        const correctLength = allowanceEvents.length === 1;
+        const firstEvent = allowanceEvents[0] as IApprovalEvent;
+        const spendersMatch = firstEvent.spender === this.allowance.spender;
 
-        if (this.allowance.isApproved) this.waiting = false;
-      }
-    }));
+        if (this.allowance && correctLength && spendersMatch) {
+          this.allowance.update(firstEvent);
+
+          if (this.allowance.isApproved) this.waiting = false;
+        }
+      }));
   }
 
   ngOnChanges() {
@@ -61,6 +74,19 @@ export class AllowanceValidationComponent implements OnChanges, OnDestroy {
   approveAllowance() {
     if (!this.allowance) return;
 
+    if (!!this.indexStatus?.available === false) {
+      this._dialog.open(MaintenanceNotificationModalComponent, {width: '500px', autoFocus: false})
+        .afterClosed()
+        .pipe(take(1))
+        .subscribe(result => {
+          if (result) this.approveExecute();
+        });
+    } else {
+      this.approveExecute()
+    }
+  }
+
+  private approveExecute(): void {
     const request = new ApproveAllowanceRequest(this.allowance.requestToSpend, this.allowance.spender);
 
     this._platformApi.approveAllowanceQuote(this.allowance.token.address, request.payload)

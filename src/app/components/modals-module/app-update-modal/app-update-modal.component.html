@@ -6,9 +6,12 @@
   <p>There is an updated version of the app available. How would you like to proceed?</p>
 </mat-dialog-content>
 
-<mat-dialog-actions class="flex-row-center-between">
-  <div class="flex-row-center w-100">
-    <button mat-stroked-button mat-dialog-close color="warn" class="w-100 mr-3">Ignore</button>
-    <button mat-flat-button cdkFocusInitial color="primary" (click)="update()" class="w-100">Update</button>
+<div class="row mt-3">
+  <div class="col-12 col-sm-4">
+    <button mat-stroked-button mat-dialog-close color="primary" class="cancel">Cancel</button>
   </div>
-</mat-dialog-actions>
+
+  <div class="col-12 col-sm-8">
+    <button mat-flat-button cdkFocusInitial color="primary" (click)="update()">Update</button>
+  </div>
+</div>
