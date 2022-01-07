@@ -121,7 +121,7 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
       this.tokenIn = this.data.pool.token.src;
       this.tokenOut = this.data.pool.token.crs;
     } else {
-      const topTokens = new TokensFilter({limit: 2, direction: 'DESC', orderBy: TokenOrderByTypes.DailyPriceChangePercent});
+      const topTokens = new TokensFilter({limit: 2, direction: 'DESC', orderBy: TokenOrderByTypes.DailyPriceChangePercent, includeZeroLiquidity: false});
       this._tokensService.getTokens(topTokens)
         .pipe(take(1))
         .subscribe(response => {
