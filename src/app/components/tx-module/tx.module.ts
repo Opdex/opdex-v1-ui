@@ -53,6 +53,8 @@ import { TxVaultProposalCreateComponent } from './tx-vault-proposal/tx-vault-pro
 import { TxVaultProposalVoteComponent } from './tx-vault-proposal/tx-vault-proposal-vote/tx-vault-proposal-vote.component';
 import { TxVaultProposalPledgeComponent } from './tx-vault-proposal/tx-vault-proposal-pledge/tx-vault-proposal-pledge.component';
 import { TxQuoteErrorsComponent } from './shared/tx-quote-errors/tx-quote-errors.component';
+import { TxQuoteSubmitButtonComponent } from './shared/tx-quote-submit-button/tx-quote-submit-button.component';
+import { TxQuoteErrorComponent } from './shared/tx-quote-error/tx-quote-error.component';
 
 
 @NgModule({
@@ -82,7 +84,9 @@ import { TxQuoteErrorsComponent } from './shared/tx-quote-errors/tx-quote-errors
     TxVaultProposalCreateComponent,
     TxVaultProposalVoteComponent,
     TxVaultProposalPledgeComponent,
-    TxQuoteErrorsComponent
+    TxQuoteErrorsComponent,
+    TxQuoteSubmitButtonComponent,
+    TxQuoteErrorComponent
   ],
   imports: [
     CommonModule,

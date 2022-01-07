@@ -1,5 +1,4 @@
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
-import { IAddressAllowanceResponse } from '@sharedModels/platform-api/responses/wallets/address-allowance.interface';
 import { TokenOrderByTypes, TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
@@ -8,10 +7,10 @@ import { IndexService } from '@sharedServices/platform/index.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { Component, Input, OnDestroy, Injector } from '@angular/core';
+import { Component, Input, OnDestroy, Injector, OnChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription, of, Observable } from 'rxjs';
-import { debounceTime, take, distinctUntilChanged, switchMap, map, tap, catchError, filter } from 'rxjs/operators';
+import { debounceTime, take, switchMap, map, tap, catchError, filter } from 'rxjs/operators';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { Icons } from 'src/app/enums/icons';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
@@ -32,7 +31,7 @@ import { CollapseAnimation } from '@sharedServices/animations/collapse';
   styleUrls: ['./tx-swap.component.scss'],
   animations: [CollapseAnimation]
 })
-export class TxSwapComponent extends TxBase implements OnDestroy {
+export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
   @Input() data: any;
   icons = Icons;
   iconSizes = IconSizes;
@@ -57,6 +56,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
   transactionTypes = AllowanceRequiredTransactionTypes;
   showMore: boolean;
   latestBlock: number;
+  balanceError: boolean;
   subscription = new Subscription();
 
   get tokenInAmount(): FormControl {
@@ -89,19 +89,21 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
       this.tokenInAmount.valueChanges
         .pipe(
           debounceTime(400),
-          distinctUntilChanged(),
+          // distinctUntilChanged(),
           tap(_ => this.tokenInExact = true),
-          switchMap((value: string) => this.amountOutQuote(value))
-        ).subscribe());
+          switchMap((value: string) => this.amountOutQuote(value)),
+          switchMap(_ => this.validateBalance()))
+        .subscribe());
 
     this.subscription.add(
       this.tokenOutAmount.valueChanges
         .pipe(
           debounceTime(400),
-          distinctUntilChanged(),
+          // distinctUntilChanged(),
           tap(_ => this.tokenInExact = false),
-          switchMap((value: string) => this.amountInQuote(value))
-        ).subscribe());
+          switchMap((value: string) => this.amountInQuote(value)),
+          switchMap(_ => this.validateBalance()))
+        .subscribe());
 
     this.subscription.add(
       this._indexService.getLatestBlock$()
@@ -109,7 +111,8 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
           tap(block => this.latestBlock = block?.height),
           tap(_ => this.refreshToken(this.tokenIn?.address)),
           tap(_ => this.refreshToken(this.tokenOut?.address)),
-          switchMap(_ => this.validateAllowance()))
+          switchMap(_ => this.tokenInExact ? this.amountOutQuote(this.tokenInAmount.value) : this.amountInQuote(this.tokenOutAmount.value)),
+          switchMap(_ => this.validateBalance()))
         .subscribe());
   }
 
@@ -118,7 +121,7 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
       this.tokenIn = this.data.pool.token.src;
       this.tokenOut = this.data.pool.token.crs;
     } else {
-      const topTokens = new TokensFilter({limit: 2, direction: 'DESC', orderBy: TokenOrderByTypes.DailyPriceChangePercent});
+      const topTokens = new TokensFilter({limit: 2, direction: 'DESC', orderBy: TokenOrderByTypes.DailyPriceChangePercent, includeZeroLiquidity: false});
       this._tokensService.getTokens(topTokens)
         .pipe(take(1))
         .subscribe(response => {
@@ -141,9 +144,11 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
       this.tokenOutPercentageSelected = null;
     }
 
-    if (token !== null && token !== undefined) {
+    if (!!token) {
       if (isTokenInField) this.tokenIn = token as IMarketToken;
       else this.tokenOut = token as IMarketToken;
+
+      this.allowance = null;
 
       this.tokenInExact
         ? this.amountOutQuote(this.tokenInAmount.value).pipe(take(1)).subscribe()
@@ -229,12 +234,17 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     // Calc token in fiat vs out fiat percentage difference
     const tokenOutFiatFixed = new FixedDecimal(this.tokenOutFiatValue, 8);
     const tokenInFiatFixed = new FixedDecimal(this.tokenInFiatValue, 8);
+    const oneHundred = new FixedDecimal('100', 8);
     const negativeOneHundred = new FixedDecimal('-100', 8);
     const one = new FixedDecimal('1', 8);
     const percentageOutputOfInputFixed = new FixedDecimal(MathService.divide(tokenOutFiatFixed, tokenInFiatFixed), 8);
-    const differenceFixed = new FixedDecimal(MathService.subtract(one, percentageOutputOfInputFixed), 8);
+    const isPositiveValue = percentageOutputOfInputFixed.bigInt > one.bigInt;
+    const multiplier = isPositiveValue ? oneHundred : negativeOneHundred;
+    const differenceFixed = isPositiveValue
+      ? new FixedDecimal(MathService.subtract(percentageOutputOfInputFixed, one), 8)
+      : new FixedDecimal(MathService.subtract(one, percentageOutputOfInputFixed), 8);
 
-    this.tokenOutFiatPercentageDifference = new FixedDecimal(MathService.multiply(differenceFixed, negativeOneHundred), 8);
+    this.tokenOutFiatPercentageDifference = new FixedDecimal(MathService.multiply(differenceFixed, multiplier), 8);
   }
 
   toggleShowMore(): void {
@@ -249,10 +259,18 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
 
   handlePercentageSelect(field: string, value: any): void {
     if (field === 'amountIn') {
+      if (this.tokenInPercentageSelected === value.percentageOption && this.tokenInAmount.value === value.result) {
+        return;
+      }
+
       this.tokenOutPercentageSelected = null;
       this.tokenInPercentageSelected = value.percentageOption;
       this.tokenInAmount.setValue(value.result, {emitEvent: true});
     } else {
+      if (this.tokenOutPercentageSelected === value.percentageOption && this.tokenOutAmount.value === value.result) {
+        return;
+      }
+
       this.tokenOutPercentageSelected = value.percentageOption;
       this.tokenInPercentageSelected = null;
       this.tokenOutAmount.setValue(value.result, {emitEvent: true});
@@ -290,7 +308,10 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
     return this._platformApi
       .swapAmountInQuote(this.tokenIn.address, request.payload)
       .pipe(
-        catchError(() => of()),
+        catchError(() => {
+          this.tokenOutAmount.setErrors({ invalidAmountInQuote: true });
+          return of();
+        }),
         filter(quote => quote !== null && quote !== undefined),
         tap((value: ISwapAmountInQuoteResponse) => this.tokenInAmount.setValue(value.amountIn, { emitEvent: false })),
         tap(_ => this.calcTotals()),
@@ -312,7 +333,10 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
 
     return this._platformApi.swapAmountOutQuote(this.tokenOut.address, request.payload)
       .pipe(
-        catchError(() => of()),
+        catchError(() => {
+          this.tokenInAmount.setErrors({ invalidAmountOutQuote: true });
+          return of();
+        }),
         filter(quote => quote !== null && quote !== undefined),
         tap((value: ISwapAmountOutQuoteResponse) => this.tokenOutAmount.setValue(value.amountOut, { emitEvent: false })),
         tap(_ => this.calcTotals()),
@@ -326,11 +350,22 @@ export class TxSwapComponent extends TxBase implements OnDestroy {
       return of(false);
     }
 
-    return this._platformApi.getAllowance(this.context.wallet, this._env.routerAddress, this.tokenIn.address)
+    return this._validateAllowance$(this.context.wallet, this._env.routerAddress, this.tokenIn, this.tokenInAmount.value)
       .pipe(
-        map((response: IAddressAllowanceResponse) => new AllowanceValidation(response, this.tokenInAmount.value, this.tokenIn)),
         tap((allowance: AllowanceValidation) => this.allowance = allowance),
         map((allowance: AllowanceValidation) => allowance.isApproved));
+  }
+
+  private validateBalance(): Observable<boolean> {
+    if (!this.tokenIn || !this.tokenOut || !this.context?.wallet || !this.tokenInAmount.value) {
+      return of(false);
+    }
+
+    const amountNeededString = this.tokenInExact ? this.tokenInAmount.value : this.tokenInMax;
+    const amountNeeded = new FixedDecimal(amountNeededString, this.tokenIn.decimals);
+
+    return this._validateBalance$(this.tokenIn, amountNeeded)
+      .pipe(tap(result => this.balanceError = !result));
   }
 
   private refreshToken(address: string): void {

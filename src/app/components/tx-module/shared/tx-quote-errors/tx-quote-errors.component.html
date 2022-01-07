@@ -1,3 +1,5 @@
-<div *ngIf="!!quoteErrors?.length" class="mt-3">
-  <p class="error mb-0" *ngFor="let error of quoteErrors">{{error}}</p>
+<div class="mt-3" *ngIf="quoteErrors?.length">
+  <ng-container *ngFor="let error of quoteErrors">
+    <opdex-tx-quote-error [message]="error"></opdex-tx-quote-error>
+  </ng-container>
 </div>

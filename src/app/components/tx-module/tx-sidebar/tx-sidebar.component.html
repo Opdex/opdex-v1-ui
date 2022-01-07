@@ -1,6 +1,6 @@
 <div id="tx-sidebar-container">
   <div class="flex-row-center-between mb-3" *ngIf="showNavMenu">
-    <!-- Empty div on purpose so the transaction type selector is centered even if the below button is hidden.-->
+    <!-- Empty div on purpose when not widescreen so the transaction type selector is centered even if the below button is hidden.-->
     <div style="width: 22px; height: 22px;">
       <button mat-icon-button color="primary" [ngClass]="iconSizes.small" (click)="toggleSidenavMode()" *ngIf="widescreen">
         <mat-icon>{{sidenavMode == 'over' ? icons.expand : icons.collapse }}</mat-icon>
@@ -32,10 +32,6 @@
     <button mat-icon-button color="primary" (click)="closeSidenav()" [ngClass]="iconSizes.small" aria-label="Close Sidenav">
       <mat-icon>{{icons.close}}</mat-icon>
     </button>
-  </div>
-
-  <div class="connect-wallet mb-3" *ngIf="!context?.wallet">
-    <opdex-connect-wallet-card (onConnectWallet)="handleConnectWallet()"></opdex-connect-wallet-card>
   </div>
 
   <div [ngSwitch]="message?.view">

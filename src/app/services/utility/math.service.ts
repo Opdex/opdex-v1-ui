@@ -47,7 +47,7 @@ export class MathService {
   static add(a: FixedDecimal, b: FixedDecimal) {
     if (!a || !b) return '0';
 
-    // Subtract
+    // Add
     const result = a.bigInt + b.bigInt;
 
     const resultRoundedLength = result.toString().length - (a.decimals);

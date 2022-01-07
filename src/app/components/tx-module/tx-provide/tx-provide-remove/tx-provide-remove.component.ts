@@ -2,12 +2,12 @@ import { EnvironmentsService } from '@sharedServices/utility/environments.servic
 import { IndexService } from '@sharedServices/platform/index.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
-import { Component, Input, Injector } from '@angular/core';
+import { Component, Input, Injector, OnDestroy, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
-import { switchMap, map, take, filter, debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
+import { switchMap, take, filter, debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { Observable, of, Subscription } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { Icons } from 'src/app/enums/icons';
@@ -24,7 +24,7 @@ import { CollapseAnimation } from '@sharedServices/animations/collapse';
   styleUrls: ['./tx-provide-remove.component.scss'],
   animations: [CollapseAnimation]
 })
-export class TxProvideRemoveComponent extends TxBase {
+export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDestroy {
   @Input() pool: ILiquidityPoolResponse;
   icons = Icons;
   iconSizes = IconSizes;
@@ -47,6 +47,7 @@ export class TxProvideRemoveComponent extends TxBase {
   latestSyncedBlock$: Subscription;
   latestBlock: number;
   percentageSelected: string;
+  balanceError: boolean;
 
   get liquidity(): FormControl {
     return this.form.get('liquidity') as FormControl;
@@ -78,30 +79,30 @@ export class TxProvideRemoveComponent extends TxBase {
         debounceTime(400),
         distinctUntilChanged(),
         tap(_ => this.calcTolerance()),
-        filter(_ => this.context.wallet !== undefined),
-        switchMap(amount => this.getAllowance$(amount)))
-        .subscribe();
+        filter(_ => !!this.context?.wallet),
+        switchMap(amount => this.getAllowance$(amount)),
+        switchMap(allowance => this.validateBalance(allowance.requestToSpend)))
+      .subscribe();
 
-      this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
-        .pipe(
-          tap(block => this.latestBlock = block?.height),
-          filter(_ => this.context?.wallet),
-          switchMap(_ => this.getAllowance$()))
-        .subscribe();
+    this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
+      .pipe(
+        tap(block => this.latestBlock = block?.height),
+        filter(_ => !!this.context?.wallet && !!this.pool),
+        switchMap(_ => this.getAllowance$()))
+      .subscribe();
   }
 
-  getAllowance$(amount?: string):Observable<any> {
-    amount = amount || this.liquidity.value;
-    const spender = this._env.routerAddress;
-    const token = this.pool?.token?.lp?.address;
+  ngOnChanges(): void {
+    if (!!this.pool === false) return;
 
-    if (!amount) return of(null);
-
-    return this._platformApi
-      .getAllowance(this.context.wallet, spender, token)
-      .pipe(
-        map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, this.pool.token.lp)),
-        tap((rsp: AllowanceValidation) => this.allowance = rsp));
+    if (this.liquidity.value) {
+      this.getAllowance$(this.liquidity.value)
+        .pipe(
+          tap(_ => this.calcTolerance()),
+          switchMap(allowance => this.validateBalance(allowance.requestToSpend)),
+          take(1))
+        .subscribe()
+    }
   }
 
   submit(): void {
@@ -120,7 +121,7 @@ export class TxProvideRemoveComponent extends TxBase {
                    (errors: string[]) => this.quoteErrors = errors);
   }
 
-  calcTolerance(tolerance?: number) {
+  calcTolerance(tolerance?: number): void {
     if (tolerance) this.toleranceThreshold = tolerance;
 
     if (this.toleranceThreshold > 99.99 || this.toleranceThreshold < .01) return;
@@ -157,7 +158,7 @@ export class TxProvideRemoveComponent extends TxBase {
     this.lptInFiatValue = MathService.subtract(usdOut, usdTolerance);
   }
 
-  toggleShowMore(value: boolean) {
+  toggleShowMore(value: boolean): void {
     this.showMore = value;
   }
 
@@ -168,16 +169,32 @@ export class TxProvideRemoveComponent extends TxBase {
     return blocks + this.latestBlock;
   }
 
-  handlePercentageSelect(value: any) {
+  handlePercentageSelect(value: any): void {
     this.percentageSelected = value.percentageOption;
     this.liquidity.setValue(value.result, {emitEvent: true});
   }
 
-  destroyContext$() {
+  private getAllowance$(amount?: string): Observable<AllowanceValidation> {
+    amount = amount || this.liquidity.value;
+
+    return this._validateAllowance$(this.context.wallet, this._env.routerAddress, this.pool?.token?.lp, amount)
+      .pipe(tap(allowance => this.allowance = allowance));
+  }
+
+  private validateBalance(amount: FixedDecimal): Observable<boolean> {
+    if (!this.context?.wallet || !this.pool) {
+      return of(false);
+    }
+
+    return this._validateBalance$(this.pool.token.lp, amount)
+      .pipe(tap(result => this.balanceError = !result));
+  }
+
+  destroyContext$(): void {
     this.context$.unsubscribe();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroyContext$();
     if (this.allowance$) this.allowance$.unsubscribe();
     if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();

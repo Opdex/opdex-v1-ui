@@ -1,5 +1,19 @@
 <div class="collect-mining-rewards">
-  <button mat-flat-button color="primary" class="w-100" (click)="submit()" [disabled]="!context?.wallet">Quote</button>
+  <p class="mb-0 b-400 light">Collect Mining Rewards</p>
+
+  <div class="mt-2" *ngIf="balanceError">
+    <opdex-tx-quote-error
+      [warn]="true"
+      message="Insufficient Mining Balance"
+      *ngIf="balanceError">
+    </opdex-tx-quote-error>
+  </div>
+
+  <opdex-tx-quote-submit-button
+    [warn]="balanceError"
+    [disabled]="!context?.wallet || balanceError === undefined"
+    (onSubmit)="submit()">
+  </opdex-tx-quote-submit-button>
 
   <opdex-tx-quote-errors [quoteErrors]="quoteErrors"></opdex-tx-quote-errors>
 </div>

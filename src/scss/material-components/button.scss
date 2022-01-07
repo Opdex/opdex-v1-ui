@@ -2,12 +2,13 @@
 
 button {
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
 
   &.tiny {
     &.mat-button-base {
-      line-height: 16px;
+      line-height: 20px;
       font-size: .8em;
     }
 
@@ -30,10 +31,7 @@ button {
       line-height: 16px;
       height: 16px;
       width: 16px;
-
-      &.material-icons {
-        font-size: 16px;
-      }
+      font-size: 16px;
     }
   }
 
@@ -58,18 +56,15 @@ button {
     }
 
     .mat-icon {
-      line-height: 20px;
+      font-size: 22px;
       height: 22px;
       width: 22px;
-
-      &.material-icons {
-        font-size: 22px;
-      }
+      line-height: 22px;
     }
   }
 
   .mat-button-wrapper {
-    flex: 1!important;
+    flex: 1 !important;
   }
 
   &.white {

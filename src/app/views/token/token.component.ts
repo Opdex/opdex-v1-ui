@@ -190,7 +190,9 @@ export class TokenComponent implements OnInit {
     if (!!this.context?.wallet === false) return of(null);
 
     return this._walletService.getBalance(this.context.wallet, this.token.address)
-      .pipe(map(balance => {
+      .pipe(
+        catchError(_ => of({balance: '0'})),
+        map(balance => {
         const position = new AddressPosition(this.context.wallet, this.token, 'Balance', new FixedDecimal(balance.balance, this.token.decimals));
 
         this.balance = position;

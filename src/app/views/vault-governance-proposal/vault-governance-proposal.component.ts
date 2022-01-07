@@ -3,8 +3,6 @@ import { Icons } from 'src/app/enums/icons';
 import { catchError } from 'rxjs/operators';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { VaultProposalPledgesFilter, IVaultProposalPledgesFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-pledges-filter';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { ActivatedRoute } from '@angular/router';
 import { Component } from '@angular/core';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
@@ -17,8 +15,6 @@ import { VaultGovernancesService } from '@sharedServices/platform/vault-governan
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { Observable, of, Subscription } from 'rxjs';
 import { tap, switchMap, map, take } from 'rxjs/operators';
-import { ReviewQuoteComponent } from '@sharedComponents/tx-module/shared/review-quote/review-quote.component';
-import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { StatCardInfo } from '@sharedModels/stat-card-info';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
@@ -52,8 +48,6 @@ export class VaultGovernanceProposalComponent {
     private _indexService: IndexService,
     private _sidebar: SidenavService,
     private _route: ActivatedRoute,
-    private _platformApiService: PlatformApiService,
-    private _bottomSheet: MatBottomSheet,
     private _context: UserContextService
   ) {
     const proposalId = parseInt(this._route.snapshot.paramMap.get('proposalId'));
@@ -160,13 +154,6 @@ export class VaultGovernanceProposalComponent {
 
   statCardTrackBy(index: number, statCard: StatCardInfo) {
     return `${index}-${statCard.title}-${statCard.value}`;
-  }
-
-  quoteComplete(proposalId: number): void {
-    this._platformApiService
-      .completeVaultProposal(this.vault.vault, proposalId)
-        .pipe(take(1))
-        .subscribe((quote: ITransactionQuote) => this._bottomSheet.open(ReviewQuoteComponent, { data: quote }));
   }
 
   ngOnDestroy() {

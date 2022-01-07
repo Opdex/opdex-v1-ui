@@ -31,35 +31,27 @@ const MathTestLookup = {
 }
 
 describe('MathService', () => {
-  // This pipe is a pure, stateless function so no need for BeforeEach
-  let service: MathService;
-  beforeEach(() => { service = new MathService(); });
-
-  it('creates an instance', () => {
-    expect(service).toBeTruthy();
-  });
-
   MathTestLookup.addTests.forEach(test => {
-    it(`adds ${test.a} and ${test.b}`, () => {
-      expect(service.add(test.a, test.b)).toBe(test.expectedOutput);
+    it(`adds ${test.a.originalValue} and ${test.b.originalValue}`, () => {
+      expect(MathService.add(test.a, test.b)).toBe(test.expectedOutput);
     });
   });
 
   MathTestLookup.subtractTests.forEach(test => {
-    it(`subtracts ${test.a} minus ${test.b}`, () => {
-      expect(service.subtract(test.a, test.b)).toBe(test.expectedOutput);
+    it(`subtracts ${test.a.originalValue} minus ${test.b.originalValue}`, () => {
+      expect(MathService.subtract(test.a, test.b)).toBe(test.expectedOutput);
     });
   });
 
   MathTestLookup.multiplyTests.forEach(test => {
-    it(`multiplies ${test.a} times ${test.b}`, () => {
-      expect(service.multiply(test.a, test.b)).toBe(test.expectedOutput);
+    it(`multiplies ${test.a.originalValue} times ${test.b.originalValue}`, () => {
+      expect(MathService.multiply(test.a, test.b)).toBe(test.expectedOutput);
     });
   });
 
   MathTestLookup.divideTests.forEach(test => {
-    it(`divides ${test.a} by ${test.b}`, () => {
-      expect(service.divide(test.a, test.b)).toBe(test.expectedOutput);
+    it(`divides ${test.a.originalValue} by ${test.b.originalValue}`, () => {
+      expect(MathService.divide(test.a, test.b)).toBe(test.expectedOutput);
     });
   });
 });

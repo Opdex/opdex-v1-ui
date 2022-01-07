@@ -1,0 +1,24 @@
+<button
+  mat-flat-button
+  type="button"
+  [color]="warn ? 'warn' : 'primary'"
+  class="mt-3 w-100"
+  (click)="submit()"
+  [disabled]="disabled"
+  *ngIf="!!context?.wallet">
+  <span class="flex-row-center-center">
+    {{label}} <mat-icon *ngIf="warn" class="ml-1 tiny">{{icons.warning}}</mat-icon>
+  </span>
+</button>
+
+<button
+  mat-flat-button
+  type="button"
+  color="primary"
+  class="mt-3 w-100"
+  (click)="connectWallet()"
+  *ngIf="!!context?.wallet === false">
+  <span class="flex-row-center-center">
+    Connect Wallet <mat-icon class="ml-1 tiny">{{icons.wallet}}</mat-icon>
+  </span>
+</button>

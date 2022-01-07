@@ -3,7 +3,11 @@
     <mat-button-toggle [value]="option.value" class="w-100" *ngFor="let option of txOptions">{{option.action}}</mat-button-toggle>
   </mat-button-toggle-group>
 
-  <opdex-pool-preview [pool]="pool" [view]="view" (onPoolChange)="handlePoolChange($event)"></opdex-pool-preview>
+  <opdex-pool-preview
+    [pool]="pool"
+    [view]="view"
+    (onPoolChange)="handlePoolChange($event)">
+  </opdex-pool-preview>
 
   <ng-container *ngIf="pool">
     <opdex-wallet-preview

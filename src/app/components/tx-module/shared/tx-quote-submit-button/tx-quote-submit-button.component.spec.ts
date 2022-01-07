@@ -1,20 +1,20 @@
 // import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-// import { ConnectWalletCardComponent } from './connect-wallet-card.component';
+// import { TxQuoteSubmitButtonComponent } from './tx-quote-submit-button.component';
 
-// describe('ConnectWalletCardComponent', () => {
-//   let component: ConnectWalletCardComponent;
-//   let fixture: ComponentFixture<ConnectWalletCardComponent>;
+// describe('TxQuoteSubmitButtonComponent', () => {
+//   let component: TxQuoteSubmitButtonComponent;
+//   let fixture: ComponentFixture<TxQuoteSubmitButtonComponent>;
 
 //   beforeEach(async () => {
 //     await TestBed.configureTestingModule({
-//       declarations: [ ConnectWalletCardComponent ]
+//       declarations: [ TxQuoteSubmitButtonComponent ]
 //     })
 //     .compileComponents();
 //   });
 
 //   beforeEach(() => {
-//     fixture = TestBed.createComponent(ConnectWalletCardComponent);
+//     fixture = TestBed.createComponent(TxQuoteSubmitButtonComponent);
 //     component = fixture.componentInstance;
 //     fixture.detectChanges();
 //   });

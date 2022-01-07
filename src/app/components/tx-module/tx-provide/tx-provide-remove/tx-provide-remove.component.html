@@ -1,10 +1,17 @@
 <div class="remove-liquidity">
-  <form [formGroup]="form" name="remove-liquidity-form" id="remove-liquidity-form" (submit)="submit()">
-    <opdex-input-control [suffixDisabled]="true" [prefixIcon]="icons.remove" label="Liquidate" [formControl]="liquidity" [suffix]="pool.token.lp.symbol" [numbersOnly]="true">
+  <form [formGroup]="form" name="remove-liquidity-form" id="remove-liquidity-form">
+    <opdex-input-control
+      [suffixDisabled]="true"
+      [prefixIcon]="icons.remove"
+      label="Liquidate"
+      [formControl]="liquidity"
+      [suffix]="pool.token.lp.symbol"
+      [numbersOnly]="true">
       <div class="flex-row-center-between">
         <div class="tolerance-amounts">
           <span *ngIf="crsOutMin && srcOutMin">Min: {{crsOutMin | shortNumber}} {{pool.token.crs.symbol}} <span style="opacity: .5">|</span> {{srcOutMin | shortNumber}} {{pool.token.src.symbol}}</span>
         </div>
+
         <div class="fiat-quote">
           <span class="success ml-2" *ngIf="lptInFiatValue && lptInFiatValue !== 'NaN'">${{lptInFiatValue | shortNumber}}</span>
         </div>
@@ -18,24 +25,47 @@
       [selected]="percentageSelected"
       (onPercentageSelect)="handlePercentageSelect($event)"></opdex-percentage-amount-buttons>
 
-    <div class="flex-row-center-end">
-      <button mat-icon-button color="primary" [ngClass]="iconSizes.small" (click)="toggleShowMore(!showMore)" type="button"><mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon></button>
+    <div class="mt-2 mb-2" *ngIf="allowance || balanceError">
+      <opdex-allowance-validation
+        [transactionType]="transactionTypes.removeLiquidity"
+        [allowance]="allowance">
+      </opdex-allowance-validation>
+
+      <opdex-tx-quote-error
+        [warn]="true"
+        message="Insufficient Balance"
+        *ngIf="balanceError">
+      </opdex-tx-quote-error>
     </div>
 
-    <div [@collapse]="!showMore">
-      <opdex-tolerance [value]="toleranceThreshold" (onToleranceChange)="calcTolerance($event)"></opdex-tolerance>
-
-      <div class="mt-2">
-        <opdex-deadline [value]="deadlineThreshold" (onDeadlineChange)="calcDeadline($event)"></opdex-deadline>
+    <!-- Tolerance and Deadline -->
+    <ng-container *ngIf="!!context?.wallet">
+      <div class="flex-row-center-end">
+        <button mat-icon-button
+          color="primary"
+          [ngClass]="iconSizes.small"
+          (click)="toggleShowMore(!showMore)"
+          type="button">
+          <mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon>
+        </button>
       </div>
-    </div>
 
-    <button mat-flat-button color="primary" class="mt-3 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
+      <div [@collapse]="!showMore">
+        <opdex-tolerance [value]="toleranceThreshold" (onToleranceChange)="calcTolerance($event)"></opdex-tolerance>
+
+        <div class="mt-2">
+          <opdex-deadline [value]="deadlineThreshold" (onDeadlineChange)="calcDeadline($event)"></opdex-deadline>
+        </div>
+      </div>
+    </ng-container>
+    <!-- End Tolerance and Deadline -->
+
+    <opdex-tx-quote-submit-button
+      [warn]="allowance && !allowance?.isApproved"
+      [disabled]="!form.valid || !context?.wallet || balanceError === undefined"
+      (onSubmit)="submit()">
+    </opdex-tx-quote-submit-button>
 
     <opdex-tx-quote-errors [quoteErrors]="quoteErrors"></opdex-tx-quote-errors>
   </form>
-
-  <div class="mt-3" *ngIf="allowance">
-    <opdex-allowance-validation [transactionType]="transactionTypes.removeLiquidity" [allowance]="allowance"></opdex-allowance-validation>
-  </div>
 </div>

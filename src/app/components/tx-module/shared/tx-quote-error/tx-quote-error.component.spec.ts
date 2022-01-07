@@ -1,20 +1,20 @@
 // import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-// import { TxVaultProposalVoteComponent } from './tx-vault-proposal-vote.component';
+// import { TxQuoteErrorComponent } from './tx-quote-error.component';
 
-// describe('TxVaultProposalVoteComponent', () => {
-//   let component: TxVaultProposalVoteComponent;
-//   let fixture: ComponentFixture<TxVaultProposalVoteComponent>;
+// describe('TxQuoteErrorComponent', () => {
+//   let component: TxQuoteErrorComponent;
+//   let fixture: ComponentFixture<TxQuoteErrorComponent>;
 
 //   beforeEach(async () => {
 //     await TestBed.configureTestingModule({
-//       declarations: [ TxVaultProposalVoteComponent ]
+//       declarations: [ TxQuoteErrorComponent ]
 //     })
 //     .compileComponents();
 //   });
 
 //   beforeEach(() => {
-//     fixture = TestBed.createComponent(TxVaultProposalVoteComponent);
+//     fixture = TestBed.createComponent(TxQuoteErrorComponent);
 //     component = fixture.componentInstance;
 //     fixture.detectChanges();
 //   });

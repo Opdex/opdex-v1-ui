@@ -65,7 +65,7 @@ export class TxSidebarComponent implements OnChanges {
         .subscribe((result: BreakpointState) => {
           this.widescreen = !result.matches;
           if (!this.widescreen && this.sidenavMode === 'side') this.toggleSidenavMode();
-          // Todo: When NOT widescreen, route changes should close the sidebar
+          // Todo: When NOT widescreen (specifically mobile devices), route changes should close the sidebar
           // Closing sidebar wipes its state, consider implementing a service that can preserve state
         }));
   }
@@ -78,17 +78,6 @@ export class TxSidebarComponent implements OnChanges {
 
   toggleSidenavMode() {
     this.sidenavMode = this.sidenavMode == 'over' ? 'side' : 'over';
-    this.onModeChange.emit(this.sidenavMode);
-  }
-
-  handleConnectWallet() {
-    this._router.navigateByUrl('/auth');
-    if (!this.widescreen) {
-      this.closeSidenav();
-      return;
-    }
-
-    this.sidenavMode = 'side';
     this.onModeChange.emit(this.sidenavMode);
   }
 

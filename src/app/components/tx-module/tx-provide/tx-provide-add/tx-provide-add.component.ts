@@ -1,7 +1,8 @@
+import { OnDestroy } from '@angular/core';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
-import { Component, Input, OnInit, Injector } from '@angular/core';
+import { Component, Input, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
@@ -29,7 +30,7 @@ import { IProvideAmountInResponse } from '@sharedModels/platform-api/responses/l
   styleUrls: ['./tx-provide-add.component.scss'],
   animations: [CollapseAnimation]
 })
-export class TxProvideAddComponent extends TxBase implements OnInit {
+export class TxProvideAddComponent extends TxBase implements OnDestroy {
   @Input() pool: ILiquidityPoolResponse;
   icons = Icons;
   iconSizes = IconSizes;
@@ -52,6 +53,8 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
   latestBlock: number;
   crsPercentageSelected: string;
   srcPercentageSelected: string;
+  crsBalanceError: boolean;
+  srcBalanceError: boolean;
 
   get amountCrs(): FormControl {
     return this.form.get('amountCrs') as FormControl;
@@ -82,18 +85,16 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
       amountCrs: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
       amountSrc: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
     });
-  }
 
-  // Bug -
-  // Set CRS amount in (quotes and sets SRC amount)
-  // Change SRC amount (quote and change CRS amount)
-  // Change CRS amount (12.24999999 to 12.25) registers no change, no re-quote is given.
-  // FINDINGS
-  // This is because CRS value is manually typed, auto populates SRC value with quote. Change SRC value, auto re-populates CRS from quote.
-  // Then changing CRS does not get triggered by DistinctUntilChanged(), it never knew about the auto populated quote changes so it thinks nothing changed.
-  //
-  // This isn't reproducible 100% of the time, there must be more to it.
-  ngOnInit(): void {
+    // Bug -
+    // Set CRS amount in (quotes and sets SRC amount)
+    // Change SRC amount (quote and change CRS amount)
+    // Change CRS amount (12.24999999 to 12.25) registers no change, no re-quote is given.
+    // FINDINGS
+    // This is because CRS value is manually typed, auto populates SRC value with quote. Change SRC value, auto re-populates CRS from quote.
+    // Then changing CRS does not get triggered by DistinctUntilChanged(), it never knew about the auto populated quote changes so it thinks nothing changed.
+    //
+    // This isn't reproducible 100% of the time, there must be more to it.
     this.subscription.add(
       this.amountCrs.valueChanges
         .pipe(
@@ -105,7 +106,8 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
           }),
           tap(_ => this.calcTolerance()),
           filter(_ => this.context?.wallet),
-          switchMap(_ => this.getAllowance$()))
+          switchMap(_ => this.getAllowance$()),
+          switchMap(_ => this.validateBalances()))
         .subscribe());
 
     this.subscription.add(
@@ -119,39 +121,22 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
           }),
           tap(_ => this.calcTolerance()),
           filter(_ => this.context?.wallet),
-          switchMap(_ => this.getAllowance$()))
+          switchMap(_ => this.getAllowance$()),
+          switchMap(_ => this.validateBalances()))
         .subscribe());
 
-        this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
-          .pipe(
-            tap(block => this.latestBlock = block?.height),
-            filter(_ => this.context?.wallet),
-            switchMap(_ => this.getAllowance$()))
-          .subscribe();
-  }
-
-  getAllowance$():Observable<AllowanceValidation> {
-    const spender = this._env.routerAddress;
-    const token = this.pool?.token?.src?.address;
-
-    if (!this.amountSrc.value) return of(null);
-
-    return this._platformApi
-      .getAllowance(this.context.wallet, spender, token)
+    this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
       .pipe(
-        map(allowanceResponse => new AllowanceValidation(allowanceResponse, this.amountSrc.value, this.pool.token.src)),
-        tap((rsp: AllowanceValidation) => this.allowance = rsp)
-      );
+        tap(block => this.latestBlock = block?.height),
+        filter(_ => this.context?.wallet),
+        switchMap(_ => this.getAllowance$()),
+        switchMap(_ => this.validateBalances()))
+      .subscribe();
   }
 
   quote$(value: string, tokenIn: IToken): Observable<string> {
-    if (!tokenIn) {
-      throwError('Invalid token');
-    }
-
-    if (!value) return of('');
-
-    if (!this.pool.summary.reserves?.crs || this.pool.summary.reserves.crs === '0.00000000') return of('');
+    if (!tokenIn) throwError('Invalid token');
+    if (!value || !this.pool.summary.reserves?.crs || this.pool.summary.reserves.crs === '0.00000000') return of('');
 
     // Technically the input should be made invalid in this case using form validations, cannot end with decimal point
     if (value.endsWith('.')) value = `${value}00`;
@@ -164,7 +149,14 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     return this._platformApi.quoteAddLiquidity(this.pool.address, payload)
       .pipe(
         map((response: IProvideAmountInResponse) => response?.amountIn || ''),
-        catchError(() => of('')));
+        catchError(() => {
+          const isBasedOnCrs = tokenIn.address.toLowerCase() === 'crs';
+
+          if (isBasedOnCrs) this.amountCrs.setErrors({ invalidAmountEquivalent: true });
+          else this.amountSrc.setErrors({ invalidAmountEquivalent: true });
+
+          return of('')
+        }));
   }
 
   submit(): void {
@@ -184,7 +176,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
                    (errors: string[]) => this.quoteErrors = errors);
   }
 
-  calcTolerance(tolerance?: number) {
+  calcTolerance(tolerance?: number): void {
     if (tolerance) this.toleranceThreshold = tolerance;
 
     if (this.toleranceThreshold > 99.99 || this.toleranceThreshold < .01) return;
@@ -204,7 +196,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     this.srcInMinFiatValue = MathService.multiply(new FixedDecimal(this.srcInMin, this.pool.token.src.decimals), new FixedDecimal(this.pool.token.src.summary.priceUsd.toString(), 8));
   }
 
-  toggleShowMore(value: boolean) {
+  toggleShowMore(value: boolean): void {
     this.showMore = value;
   }
 
@@ -215,7 +207,7 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     return blocks + this.latestBlock;
   }
 
-  handlePercentageSelect(field: string, value: any) {
+  handlePercentageSelect(field: string, value: any): void {
     if (field === 'crs') {
       this.crsPercentageSelected = value.percentageOption;
       this.srcPercentageSelected = null;
@@ -227,11 +219,42 @@ export class TxProvideAddComponent extends TxBase implements OnInit {
     }
   }
 
-  destroyContext$() {
+  private validateBalances(): Observable<void> {
+    if (!this.pool || !this.context?.wallet) {
+      return of();
+    }
+
+    const crsNeeded = new FixedDecimal(this.amountCrs.value, this.pool.token.crs.decimals);
+    const srcNeeded = new FixedDecimal(this.amountSrc.value, this.pool.token.src.decimals);
+
+    return this.validateBalance(this.pool.token.crs, crsNeeded)
+      .pipe(
+        tap(result => this.crsBalanceError = !result),
+        switchMap(_ => this.validateBalance(this.pool.token.src, srcNeeded)),
+        tap(result => this.srcBalanceError = !result),
+        map(_ => null));
+  }
+
+  private validateBalance(token: IToken, amount: FixedDecimal): Observable<boolean> {
+    if (!this.context?.wallet || !this.pool) {
+      return of(false);
+    }
+
+    return this._validateBalance$(token, amount);
+  }
+
+  private getAllowance$(): Observable<AllowanceValidation> {
+    if (!!this.pool === false) return of();
+
+    return this._validateAllowance$(this.context.wallet, this._env.routerAddress, this.pool.token.src, this.amountSrc.value)
+      .pipe(tap(allowance => this.allowance = allowance));
+  }
+
+  destroyContext$(): void {
     this.context$.unsubscribe();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroyContext$();
     this.subscription.unsubscribe();
     if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();

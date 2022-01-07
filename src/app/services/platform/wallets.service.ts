@@ -1,19 +1,24 @@
-import { MiningPositionsFilter } from './../../models/platform-api/requests/wallets/mining-positions-filter';
+import { IAddressAllowanceResponse } from '@sharedModels/platform-api/responses/wallets/address-allowance.interface';
+import { MiningPositionsFilter } from '@sharedModels/platform-api/requests/wallets/mining-positions-filter';
 import { StakingPositionsFilter } from '@sharedModels/platform-api/requests/wallets/staking-positions-filter';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable, Injector } from '@angular/core';
 import { CacheService } from '@sharedServices/utility/cache.service';
-import { Observable } from 'rxjs';
 import { IAddressBalance, IAddressBalances } from '@sharedModels/platform-api/responses/wallets/address-balance.interface';
 import { IAddressStaking, IAddressStakingPositions } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { IAddressMining, IAddressMiningPositions } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
-import { tap } from 'rxjs/operators';
 import { WalletBalancesFilter } from '@sharedModels/platform-api/requests/wallets/wallet-balances-filter';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class WalletsService extends CacheService {
   constructor(private _platformApi: PlatformApiService, protected _injector: Injector) {
     super(_injector);
+  }
+
+  getAllowance(wallet: string, spender: string, token: string): Observable<IAddressAllowanceResponse> {
+    return this.getItem(`wallet-allowance-${wallet}-${spender}-${token}`, this._platformApi.getAllowance(wallet, spender, token));
   }
 
   getBalance(wallet: string, token: string): Observable<IAddressBalance> {

@@ -6,7 +6,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { of, Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { debounceTime, map, switchMap, take, distinctUntilChanged, tap, filter } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
@@ -33,6 +33,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
   allowanceTransaction$ = new Subscription();
   latestSyncedBlock$: Subscription;
   percentageSelected: string;
+  balanceError: boolean;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -55,7 +56,8 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
         debounceTime(300),
         distinctUntilChanged(),
         tap(amount => this.setFiatValue(amount)),
-        switchMap((amount: string) => this.getAllowance$(amount)))
+        switchMap((amount: string) => this.getAllowance$(amount)),
+        switchMap(_ => this.validateBalance()))
       .subscribe();
 
     this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
@@ -69,28 +71,6 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
     this.pool = this.data?.pool;
   }
 
-  private setFiatValue(amount: string) {
-    const lptFiat = new FixedDecimal(this.pool.token.lp.summary.priceUsd.toString(), 8);
-    const amountDecimal = new FixedDecimal(amount, this.pool.token.lp.decimals);
-
-    this.fiatValue = MathService.multiply(amountDecimal, lptFiat);
-  }
-
-  private getAllowance$(amount?: string) {
-    amount = amount || this.amount.value;
-
-    const spender = this.data?.pool?.summary?.miningPool?.address;
-    const token = this.data?.pool?.token?.lp?.address;
-
-    if (!amount) return of(null);
-
-    return this._platformApi
-      .getAllowance(this.context.wallet, spender, token)
-      .pipe(
-        map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, this.data?.pool?.token?.lp)),
-        tap(allowance => this.allowance = allowance));
-  }
-
   submit(): void {
     const request = new MiningQuote(new FixedDecimal(this.amount.value, this.pool.token.lp.decimals));
 
@@ -101,16 +81,43 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
                    (errors: string[]) => this.quoteErrors = errors);
   }
 
-  handlePercentageSelect(value: any) {
+  handlePercentageSelect(value: any): void {
     this.percentageSelected = value.percentageOption;
     this.amount.setValue(value.result, {emitEvent: true});
   }
 
-  destroyContext$() {
+  private validateBalance(): Observable<boolean> {
+    if (!this.amount.value || !this.context?.wallet || !this.pool) {
+      return of(false);
+    }
+
+    const amountNeeded = new FixedDecimal(this.amount.value, this.pool.token.lp.decimals);
+
+    return this._validateBalance$(this.pool.token.lp, amountNeeded)
+      .pipe(tap(result => this.balanceError = !result));
+  }
+
+  private setFiatValue(amount: string): void {
+    const lptFiat = new FixedDecimal(this.pool.token.lp.summary.priceUsd.toString(), 8);
+    const amountDecimal = new FixedDecimal(amount, this.pool.token.lp.decimals);
+
+    this.fiatValue = MathService.multiply(amountDecimal, lptFiat);
+  }
+
+  private getAllowance$(amount?: string): Observable<AllowanceValidation> {
+    amount = amount || this.amount.value;
+    const spender = this.pool?.summary?.miningPool?.address;
+    const token = this.pool?.token?.lp;
+
+    return this._validateAllowance$(this.context.wallet, spender, token, amount)
+      .pipe(tap(allowance => this.allowance = allowance));
+  }
+
+  destroyContext$(): void {
     this.context$.unsubscribe();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroyContext$();
     if (this.allowance$) this.allowance$.unsubscribe();
     if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();

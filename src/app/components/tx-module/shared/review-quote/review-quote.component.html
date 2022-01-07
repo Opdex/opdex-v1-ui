@@ -11,12 +11,18 @@
     </ng-container>
 
     <div class="mt-2" *ngIf="quote?.error">
-      <div class="flex-row-center mb-2">
-        <opdex-help-button class="mr-2" [info]="errorHelp" [icon]="icons.error" iconColor="red"></opdex-help-button>
-        <h6 class="mb-0 d-inline">Errors</h6>
-      </div>
+      <p class="mb-2 b-400 flex-row-center error" style="font-size: 1.1em">
+        <mat-icon color="warn" class="small mr-2">{{icons.error}}</mat-icon>
+        Errors
+      </p>
 
       <p>{{quote.error}}</p>
+
+      <div class="flex-row-center-between mb-3" *ngIf="!showQrAnyways">
+        <button mat-stroked-button style="flex-basis: 30%" (click)="close()">Cancel</button>
+        <button mat-flat-button color="warn" (click)="showQrAnyways = true; showMethodDetails = true; showParameterDetails = true;" class="ml-3" style="flex-grow: 1;">Continue Anyways</button>
+      </div>
+
       <mat-divider></mat-divider>
     </div>
 
@@ -73,11 +79,13 @@
 
     <mat-divider></mat-divider>
 
-    <div class="mt-4">
+    <div class="mt-4" *ngIf="quoteReceipt.success || showQrAnyways;">
+      <p class="error b-400 text-center" *ngIf="showQrAnyways">This transaction is highly likely to fail.</p>
+
       <opdex-qr-code [data]="quoteRequest"></opdex-qr-code>
     </div>
 
-    <ng-container *ngIf="isDevnet">
+    <ng-container *ngIf="isDevnet && (quoteReceipt.success || showQrAnyways)">
       <button mat-flat-button color="primary" class="w-100 mt-3 ml-0" (click)="submit()" [disabled]="submitting" cdkFocusInitial>{{!submitting ? 'Local Submit' : 'Submitting'}}</button>
       <mat-progress-bar mode="indeterminate" *ngIf="submitting" class="mt-3"></mat-progress-bar>
     </ng-container>

@@ -1,6 +1,5 @@
 <div class="create-vault-proposal">
-  <form [formGroup]="form" name="create-vault-proposal-form" id="create-vault-proposal-form" (submit)="submit()">
-
+  <form [formGroup]="form" name="create-vault-proposal-form" id="create-vault-proposal-form">
     <div class="mb-3">
       <mat-form-field appearance="legacy" floatLabel="always">
         <mat-label>Proposal Type</mat-label>
@@ -13,7 +12,11 @@
     </div>
 
     <div class="mb-3" *ngIf="type.value !== 2">
-      <opdex-input-control [suffixDisabled]="true" label="Amount" [formControl]="amount" [numbersOnly]="true">
+      <opdex-input-control
+        [suffixDisabled]="true"
+        label="Amount"
+        [formControl]="amount"
+        [numbersOnly]="true">
         <div class="flex-row-center-end">
           <span class="success" *ngIf="fiatValue">${{fiatValue | shortNumber}}</span>
         </div>
@@ -21,16 +24,28 @@
     </div>
 
     <div class="mb-3">
-      <opdex-input-control placeholder="torAyErDvMdZqNdVU8kmiLaykuE5L2UfwJ" [suffixDisabled]="true" label="Recipient" [formControl]="recipient" *ngIf="type.value <= 2"></opdex-input-control>
+      <opdex-input-control
+        placeholder="torAyErDvMdZqNdVU8kmiLaykuE5L2UfwJ"
+        [suffixDisabled]="true"
+        label="Recipient"
+        [formControl]="recipient"
+        *ngIf="type.value <= 2">
+      </opdex-input-control>
     </div>
 
     <mat-form-field appearance="legacy" floatLabel="always">
       <mat-label>Description</mat-label>
-      <textarea matInput placeholder="OVP-1 Short Title https://some.link.com" formControlName="description"></textarea>
+      <textarea matInput
+        placeholder="OVP-1 Short Title https://some.link.com"
+        formControlName="description">
+      </textarea>
       <mat-hint>{{200 - (description.value?.length || 0)}}</mat-hint>
     </mat-form-field>
 
-    <button mat-flat-button color="primary" class="mt-3 w-100" [disabled]="!form.valid || !context?.wallet">Quote</button>
+    <opdex-tx-quote-submit-button
+      [disabled]="!form.valid || !context?.wallet"
+      (onSubmit)="submit()">
+    </opdex-tx-quote-submit-button>
 
     <opdex-tx-quote-errors [quoteErrors]="quoteErrors"></opdex-tx-quote-errors>
   </form>

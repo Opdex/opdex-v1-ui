@@ -1,3 +1,4 @@
+import { OnDestroy } from '@angular/core';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { MathService } from '@sharedServices/utility/math.service';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
@@ -10,7 +11,7 @@ import { ITransactionQuote } from '@sharedModels/platform-api/responses/transact
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, of, Subscription } from 'rxjs';
-import { debounceTime, switchMap, tap, map, take, distinctUntilChanged, filter } from 'rxjs/operators';
+import { debounceTime, switchMap, tap, take, distinctUntilChanged, filter } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 import { StartStakingRequest } from '@sharedModels/platform-api/requests/liquidity-pools/start-staking-request';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
@@ -20,7 +21,7 @@ import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-requi
   templateUrl: './tx-stake-start.component.html',
   styleUrls: ['./tx-stake-start.component.scss']
 })
-export class TxStakeStartComponent extends TxBase implements OnChanges {
+export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestroy {
   @Input() data;
   icons = Icons;
   form: FormGroup;
@@ -32,6 +33,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
   allowanceTransaction$ = new Subscription();
   latestSyncedBlock$: Subscription;
   percentageSelected: string;
+  balanceError: boolean;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -52,7 +54,8 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
     this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
       .pipe(
         filter(_ => this.context?.wallet),
-        switchMap(_ => this.getAllowance$()))
+        switchMap(_ => this.getAllowance$()),
+        switchMap(_ => this.validateBalance()))
       .subscribe();
 
     this.allowance$ = this.amount.valueChanges
@@ -60,34 +63,13 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
         debounceTime(300),
         distinctUntilChanged(),
         tap(amount => this.setFiatValue(amount)),
-        switchMap((amount: string) => this.getAllowance$(amount)))
+        switchMap((amount: string) => this.getAllowance$(amount)),
+        switchMap(_ => this.validateBalance()))
       .subscribe();
   }
 
   ngOnChanges(): void {
     this.pool = this.data?.pool;
-  }
-
-  private setFiatValue(amount: string) {
-    const stakingTokenFiat = new FixedDecimal(this.pool.summary.staking?.token.summary.priceUsd.toString(), 8);
-    const amountDecimal = new FixedDecimal(amount, this.pool.summary.staking?.token.decimals);
-
-    this.fiatValue = MathService.multiply(amountDecimal, stakingTokenFiat);
-  }
-
-  private getAllowance$(amount?: string): Observable<AllowanceValidation> {
-    amount = amount || this.amount.value;
-
-    const spender = this.data?.pool?.address;
-    const token = this.data?.pool?.summary?.staking?.token?.address;
-
-    if (!amount) return of(null);
-
-    return this._platformApi
-      .getAllowance(this.context.wallet, spender, token)
-      .pipe(
-        map(allowanceResponse => new AllowanceValidation(allowanceResponse, amount, this.data.pool.summary.staking?.token)),
-        tap(allowance => this.allowance = allowance));
   }
 
   submit(): void {
@@ -100,16 +82,43 @@ export class TxStakeStartComponent extends TxBase implements OnChanges {
                    (errors: string[]) => this.quoteErrors = errors);
   }
 
-  handlePercentageSelect(value: any) {
+  handlePercentageSelect(value: any): void {
     this.percentageSelected = value.percentageOption;
     this.amount.setValue(value.result, {emitEvent: true});
   }
 
-  destroyContext$() {
+  private validateBalance(): Observable<boolean> {
+    if (!this.amount.value || !this.context?.wallet || !this.pool || !this.pool.summary.staking) {
+      return of(false);
+    }
+
+    const amountNeeded = new FixedDecimal(this.amount.value, this.pool.token.lp.decimals);
+
+    return this._validateBalance$(this.pool.summary.staking.token, amountNeeded)
+      .pipe(tap(result => this.balanceError = !result));
+  }
+
+  private setFiatValue(amount: string): void {
+    const stakingTokenFiat = new FixedDecimal(this.pool.summary.staking?.token.summary.priceUsd.toString(), 8);
+    const amountDecimal = new FixedDecimal(amount, this.pool.summary.staking?.token.decimals);
+
+    this.fiatValue = MathService.multiply(amountDecimal, stakingTokenFiat);
+  }
+
+  private getAllowance$(amount?: string): Observable<AllowanceValidation> {
+    amount = amount || this.amount.value;
+    const spender = this.pool?.address;
+    const token = this.pool?.summary?.staking?.token;
+
+    return this._validateAllowance$(this.context.wallet, spender, token, amount)
+      .pipe(tap(allowance => this.allowance = allowance));
+  }
+
+  destroyContext$(): void {
     this.context$.unsubscribe();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroyContext$();
     if (this.allowance$) this.allowance$.unsubscribe();
     if (this.latestSyncedBlock$) this.latestSyncedBlock$.unsubscribe();

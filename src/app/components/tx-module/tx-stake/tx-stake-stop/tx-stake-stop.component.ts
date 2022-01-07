@@ -1,6 +1,7 @@
+import { OnDestroy } from '@angular/core';
 import { MathService } from '@sharedServices/utility/math.service';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
-import { debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, take, tap, switchMap } from 'rxjs/operators';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
@@ -8,7 +9,7 @@ import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liq
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Icons } from 'src/app/enums/icons';
 import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
-import { Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { StopStakingRequest } from '@sharedModels/platform-api/requests/liquidity-pools/stop-staking-request';
 
@@ -17,7 +18,7 @@ import { StopStakingRequest } from '@sharedModels/platform-api/requests/liquidit
   templateUrl: './tx-stake-stop.component.html',
   styleUrls: ['./tx-stake-stop.component.scss']
 })
-export class TxStakeStopComponent extends TxBase implements OnChanges {
+export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy {
   @Input() data;
   icons = Icons;
   form: FormGroup;
@@ -25,6 +26,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
   subscription = new Subscription();
   fiatValue: string;
   percentageSelected: string;
+  balanceError: boolean;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -50,12 +52,14 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
       this.amount.valueChanges
         .pipe(
           debounceTime(400),
-          distinctUntilChanged())
-        .subscribe(amount => {
-          const stakingTokenFiat = new FixedDecimal(this.pool.summary.staking?.token.summary.priceUsd.toString(), 8);
-          const amountDecimal = new FixedDecimal(amount, this.pool.summary.staking?.token.decimals);
-          this.fiatValue = MathService.multiply(amountDecimal, stakingTokenFiat);
-        }));
+          distinctUntilChanged(),
+          tap(amount => {
+            const stakingTokenFiat = new FixedDecimal(this.pool.summary.staking?.token.summary.priceUsd.toString(), 8);
+            const amountDecimal = new FixedDecimal(amount, this.pool.summary.staking?.token.decimals);
+            this.fiatValue = MathService.multiply(amountDecimal, stakingTokenFiat);
+          }),
+          switchMap(_ => this.validateStakingBalance()))
+        .subscribe());
   }
 
   ngOnChanges(): void {
@@ -72,16 +76,27 @@ export class TxStakeStopComponent extends TxBase implements OnChanges {
                    (errors: string[]) => this.quoteErrors = errors);
   }
 
-  handlePercentageSelect(value: any) {
+  handlePercentageSelect(value: any): void {
     this.percentageSelected = value.percentageOption;
     this.amount.setValue(value.result, {emitEvent: true});
   }
 
-  destroyContext$() {
+  private validateStakingBalance(): Observable<boolean> {
+    if (!this.amount.value || !this.context?.wallet || !this.pool?.summary?.staking?.token) {
+      return of(false);
+    }
+
+    const amountNeeded = new FixedDecimal(this.amount.value, this.pool.summary.staking.token.decimals);
+
+    return this._validateStakingBalance$(this.pool, amountNeeded)
+      .pipe(tap(result => this.balanceError = !result));
+  }
+
+  destroyContext$(): void {
     this.context$.unsubscribe();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroyContext$();
     this.subscription.unsubscribe();
   }
