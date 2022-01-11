@@ -47,7 +47,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MiningGovernanceComponent } from './views/mining-governance/mining-governance.component';
-import { VaultComponent } from './views/vault/vault.component';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { jwtOptionsFactory } from '@sharedServices/utility/jwt.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -60,8 +59,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NotificationsModule } from '@sharedComponents/notifications-module/notifications.module';
 import { TradeComponent } from './views/trade/trade.component';
-import { VaultGovernanceComponent } from './views/vault-governance/vault-governance.component';
-import { VaultGovernanceProposalComponent } from './views/vault-governance-proposal/vault-governance-proposal.component';
+import { VaultComponent } from './views/vault/vault.component';
+import { VaultProposalComponent } from './views/vault-proposal/vault-proposal.component';
 
 @NgModule({
   declarations: [
@@ -74,11 +73,10 @@ import { VaultGovernanceProposalComponent } from './views/vault-governance-propo
     TokenComponent,
     WalletComponent,
     MiningGovernanceComponent,
-    VaultComponent,
     AuthComponent,
     TradeComponent,
-    VaultGovernanceComponent,
-    VaultGovernanceProposalComponent
+    VaultComponent,
+    VaultProposalComponent
   ],
   imports: [
     BrowserModule,

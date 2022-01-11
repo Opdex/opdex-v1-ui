@@ -33,7 +33,6 @@ export class SideNavComponent implements OnDestroy {
   network: string;
   subscription = new Subscription();
   pendingTransactions: string[] = [];
-  usesVaultGovernance: boolean;
   usesVault: boolean;
 
   constructor(
@@ -51,8 +50,7 @@ export class SideNavComponent implements OnDestroy {
     this.latestSyncedBlock$ = this._indexService.getLatestBlock$();
     this.network = this._env.network;
     this.subscription.add(this._transactionsService.getBroadcastedTransactions$().subscribe(txs => this.pendingTransactions = txs));
-    this.usesVaultGovernance = this._env.vaultGovernanceAddress?.length > 0;
-    this.usesVault = this._env.vaultAddress?.length > 0;
+    this.usesVault = !!this._env.vaultAddress;
   }
 
   toggleTheme() {

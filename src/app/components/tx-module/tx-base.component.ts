@@ -1,5 +1,5 @@
 import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
-import { VaultGovernancesService } from '@sharedServices/platform/vault-governances.service';
+import { VaultsService } from '@sharedServices/platform/vaults.service';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { Injector } from '@angular/core';
@@ -20,7 +20,7 @@ export abstract class TxBase{
   private _userContext: UserContextService;
   private _bottomSheet: MatBottomSheet;
   private _walletsService: WalletsService;
-  protected _vaultsService: VaultGovernancesService;
+  protected _vaultsService: VaultsService;
 
   constructor(
     protected _injector: Injector
@@ -28,7 +28,7 @@ export abstract class TxBase{
     this._userContext = this._injector.get(UserContextService);
     this._bottomSheet = this._injector.get(MatBottomSheet);
     this._walletsService = this._injector.get(WalletsService);
-    this._vaultsService = this._injector.get(VaultGovernancesService);
+    this._vaultsService = this._injector.get(VaultsService);
     this.context$ = this._userContext.getUserContext$().subscribe(context => this.context = context);
   }
 

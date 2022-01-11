@@ -1,24 +1,24 @@
-import { IVaultGovernanceResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-governance-response-model.interface';
-import { IVaultProposalResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-response-model.interface';
+import { IVaultResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-response-model.interface';
+import { IVaultProposalResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-response-model.interface';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { IToken, IMarketToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { TokensService } from '@sharedServices/platform/tokens.service';
-import { VaultGovernancesService } from '@sharedServices/platform/vault-governances.service';
+import { VaultsService } from '@sharedServices/platform/vaults.service';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
-import { ICompleteVaultProposalEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vault-governances/complete-vault-proposal-event.interface';
-import { ICreateVaultProposalEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vault-governances/create-vault-proposal-event.interface';
-import { IVaultProposalPledgeEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vault-governances/vault-proposal-pledge-event.interface';
-import { IVaultProposalVoteEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vault-governances/vault-proposal-vote-event.interface';
-import { IVaultProposalWithdrawPledgeEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vault-governances/vault-proposal-withdraw-pledge-event.interface';
-import { IVaultProposalWithdrawVoteEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vault-governances/vault-proposal-withdraw-vote-event.interface';
+import { ICompleteVaultProposalEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vaults/complete-vault-proposal-event.interface';
+import { ICreateVaultProposalEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vaults/create-vault-proposal-event.interface';
+import { IVaultProposalPledgeEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vaults/vault-proposal-pledge-event.interface';
+import { IVaultProposalVoteEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vaults/vault-proposal-vote-event.interface';
+import { IVaultProposalWithdrawPledgeEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vaults/vault-proposal-withdraw-pledge-event.interface';
+import { IVaultProposalWithdrawVoteEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vaults/vault-proposal-withdraw-vote-event.interface';
 import { TransactionReceipt } from '@sharedModels/transaction-receipt';
 import { Observable, of, Subscription } from 'rxjs';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
-import { IVaultProposalBaseEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vault-governances/vault-proposal-base-event.interface';
+import { IVaultProposalBaseEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vaults/vault-proposal-base-event.interface';
 
 interface IVaultProposalSummary {
-  vault: IVaultGovernanceResponseModel,
+  vault: IVaultResponseModel,
   proposal: IVaultProposalResponseModel;
   pledgeOrVote: IVaultProposalPledgeOrVoteSummary;
   createOrComplete: IVaultProposalCreateOrCompleteSummary;
@@ -64,7 +64,7 @@ export class VaultProposalTransactionSummaryComponent implements OnChanges, OnDe
     TransactionEventTypes.CompleteVaultProposalEvent,
   ];
 
-  constructor(private _vaultGovernancesService: VaultGovernancesService, private _tokensService: TokensService) { }
+  constructor(private _VaultsService: VaultsService, private _tokensService: TokensService) { }
 
   ngOnChanges() {
     this.createOrCompleteEvents = this.transaction.events.filter(event => this.createOrCompleteEventTypes.includes(event.eventType)) as IVaultProposalBaseEvent[];
@@ -86,7 +86,7 @@ export class VaultProposalTransactionSummaryComponent implements OnChanges, OnDe
     const vault = this.createOrCompleteEvents[0]?.contract || this.pledgeOrVoteEvents[0]?.contract;
 
     this.subscription.add(
-      this._vaultGovernancesService.getProposal(proposalId, vault)
+      this._VaultsService.getProposal(proposalId, vault)
         .pipe(
           catchError(_ => of({} as IVaultProposalResponseModel)),
           map(proposal => { return { proposal } as IVaultProposalSummary }),
@@ -133,7 +133,7 @@ export class VaultProposalTransactionSummaryComponent implements OnChanges, OnDe
       const createEvent = this.createOrCompleteEvents.find(event => event.eventType === TransactionEventTypes.CreateVaultProposalEvent) as ICreateVaultProposalEvent;
       const completeEvent = this.createOrCompleteEvents.find(event => event.eventType === TransactionEventTypes.CompleteVaultProposalEvent) as ICompleteVaultProposalEvent;
 
-      return this._vaultGovernancesService.getVault(createEvent?.contract || completeEvent?.contract)
+      return this._VaultsService.getVault(createEvent?.contract || completeEvent?.contract)
         .pipe(
           tap(vault => summary.vault = vault),
           switchMap(vault => this._tokensService.getMarketToken(vault.token)),

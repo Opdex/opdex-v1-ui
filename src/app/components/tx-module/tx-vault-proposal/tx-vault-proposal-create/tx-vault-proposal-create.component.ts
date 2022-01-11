@@ -1,6 +1,6 @@
-import { MinimumPledgeVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/minimum-pledge-vault-proposal-quote-request.interface';
-import { CreateCertificateVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/create-certificate-vault-proposal-quote-request.interface';
-import { RevokeCertificateVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/revoke-certificate-vault-proposal-quote-request.interface';
+import { MinimumPledgeVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vaults/minimum-pledge-vault-proposal-quote-request.interface';
+import { CreateCertificateVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vaults/create-certificate-vault-proposal-quote-request.interface';
+import { RevokeCertificateVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vaults/revoke-certificate-vault-proposal-quote-request.interface';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { OnDestroy } from '@angular/core';
 import { Component, Injector, Input } from '@angular/core';
@@ -13,7 +13,7 @@ import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
-import { MinimumVoteVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/minimum-vote-vault-proposal-quote-request.interface';
+import { MinimumVoteVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vaults/minimum-vote-vault-proposal-quote-request.interface';
 
 @Component({
   selector: 'opdex-tx-vault-proposal-create',
@@ -77,7 +77,7 @@ export class TxVaultProposalCreateComponent extends TxBase implements OnDestroy 
   }
 
   submit(): void {
-    const vault = this._env.vaultGovernanceAddress;
+    const vault = this._env.vaultAddress;
     if (!vault) return;
 
     let quote$: Observable<ITransactionQuote>;

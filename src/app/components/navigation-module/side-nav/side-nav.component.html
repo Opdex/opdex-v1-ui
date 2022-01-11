@@ -42,12 +42,6 @@
           <span class="secondary">Vault</span>
         </a>
       </li>
-      <li *ngIf="usesVaultGovernance">
-        <a mat-button class="transparent" (click)="emitRouteChange('/vault-governance')" routerLink="/vault-governance" routerLinkActive="active" [matTooltip]="!isPinned && !mobileMenuOpen ? 'Vault' : null" matTooltipPosition="right">
-          <mat-icon>{{icons.vault}}</mat-icon>
-          <span class="secondary">Vault</span>
-        </a>
-      </li>
       <li>
         <a mat-button
           class="transparent"

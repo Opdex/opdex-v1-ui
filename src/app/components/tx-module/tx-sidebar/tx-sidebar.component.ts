@@ -39,7 +39,7 @@ export class TxSidebarComponent implements OnChanges {
     private _router: Router,
     private _env: EnvironmentsService
   ) {
-    this.transactionTypes = !!this._env.vaultGovernanceAddress
+    this.transactionTypes = !!this._env.vaultAddress
       ? [...TransactionTypes.filter(type => !!type.view)]
       : [...TransactionTypes.filter(type => !!type.view && type.view !== TransactionView.vaultProposal)]
 
@@ -48,7 +48,7 @@ export class TxSidebarComponent implements OnChanges {
         .subscribe(context => {
           this.context = context;
 
-          this.transactionTypes = !!this._env.vaultGovernanceAddress
+          this.transactionTypes = !!this._env.vaultAddress
             ? [...TransactionTypes.filter(type => !!type.view)]
             : [...TransactionTypes.filter(type => !!type.view && type.view !== TransactionView.vaultProposal)];
 

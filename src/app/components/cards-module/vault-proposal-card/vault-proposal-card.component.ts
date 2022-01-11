@@ -10,7 +10,7 @@ import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
 import { Component, Input, OnDestroy } from '@angular/core';
-import { IVaultProposalResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-response-model.interface';
+import { IVaultProposalResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-response-model.interface';
 import { ReviewQuoteComponent } from '@sharedComponents/tx-module/shared/review-quote/review-quote.component';
 import { take } from 'rxjs/operators';
 import { Subscription } from 'rxjs';

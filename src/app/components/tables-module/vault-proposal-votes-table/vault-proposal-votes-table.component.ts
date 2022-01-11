@@ -1,13 +1,13 @@
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
-import { IVaultProposalVoteResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-vote-response-model.interface';
+import { IVaultProposalVoteResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-vote-response-model.interface';
 import { Component, Input, ViewChild, OnChanges, OnDestroy } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { VaultProposalVotesFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-votes-filter';
+import { VaultProposalVotesFilter } from '@sharedModels/platform-api/requests/vaults/vault-proposal-votes-filter';
 import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
-import { IVaultProposalVotesResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-votes-response-model.interface';
+import { IVaultProposalVotesResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-votes-response-model.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
-import { VaultGovernancesService } from '@sharedServices/platform/vault-governances.service';
+import { VaultsService } from '@sharedServices/platform/vaults.service';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap, tap, take } from 'rxjs/operators';
 import { IconSizes } from 'src/app/enums/icon-sizes';
@@ -33,7 +33,7 @@ export class VaultProposalVotesTableComponent implements OnChanges, OnDestroy {
   loading = true;
 
   constructor(
-    private _vaultsService: VaultGovernancesService,
+    private _vaultsService: VaultsService,
     private _indexService: IndexService,
     private _sidebar: SidenavService
   ) {

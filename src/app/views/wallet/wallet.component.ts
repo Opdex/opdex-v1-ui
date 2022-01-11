@@ -17,8 +17,8 @@ import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
-import { VaultProposalPledgesFilter, IVaultProposalPledgesFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-pledges-filter';
-import { VaultProposalVotesFilter, IVaultProposalVotesFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-votes-filter';
+import { VaultProposalPledgesFilter, IVaultProposalPledgesFilter } from '@sharedModels/platform-api/requests/vaults/vault-proposal-pledges-filter';
+import { VaultProposalVotesFilter, IVaultProposalVotesFilter } from '@sharedModels/platform-api/requests/vaults/vault-proposal-votes-filter';
 import { IWalletBalancesRequest, WalletBalancesFilter } from '@sharedModels/platform-api/requests/wallets/wallet-balances-filter';
 import { StakingPositionsFilter, IStakingPositionsRequest } from '@sharedModels/platform-api/requests/wallets/staking-positions-filter';
 import { IMiningPositionsRequest, MiningPositionsFilter } from '@sharedModels/platform-api/requests/wallets/mining-positions-filter';
@@ -62,7 +62,7 @@ export class WalletComponent implements OnInit {
     private _env: EnvironmentsService
   ) {
     this.wallet = this._context.getUserContext();
-    this.showProposals = !!this._env.vaultGovernanceAddress;
+    this.showProposals = !!this._env.vaultAddress;
 
     if (!this.wallet || !this.wallet.wallet) {
       this._router.navigateByUrl('/auth');

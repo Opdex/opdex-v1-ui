@@ -2,35 +2,35 @@ import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
 import { catchError } from 'rxjs/operators';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
-import { VaultProposalPledgesFilter, IVaultProposalPledgesFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-pledges-filter';
+import { VaultProposalPledgesFilter, IVaultProposalPledgesFilter } from '@sharedModels/platform-api/requests/vaults/vault-proposal-pledges-filter';
 import { ActivatedRoute } from '@angular/router';
 import { Component } from '@angular/core';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
-import { IVaultGovernanceResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-governance-response-model.interface';
-import { IVaultProposalResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-response-model.interface';
+import { IVaultResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-response-model.interface';
+import { IVaultProposalResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-response-model.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
-import { VaultGovernancesService } from '@sharedServices/platform/vault-governances.service';
+import { VaultsService } from '@sharedServices/platform/vaults.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { Observable, of, Subscription } from 'rxjs';
-import { tap, switchMap, map, take } from 'rxjs/operators';
+import { tap, switchMap, map } from 'rxjs/operators';
 import { StatCardInfo } from '@sharedModels/stat-card-info';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MathService } from '@sharedServices/utility/math.service';
-import { IVaultProposalVotesFilter, VaultProposalVotesFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-votes-filter';
-import { IVaultProposalVoteResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-vote-response-model.interface';
-import { IVaultProposalPledgeResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-pledge-response-model.interface';
+import { IVaultProposalVotesFilter, VaultProposalVotesFilter } from '@sharedModels/platform-api/requests/vaults/vault-proposal-votes-filter';
+import { IVaultProposalVoteResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-vote-response-model.interface';
+import { IVaultProposalPledgeResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-pledge-response-model.interface';
 
 @Component({
-  selector: 'opdex-vault-governance-proposal',
-  templateUrl: './vault-governance-proposal.component.html',
-  styleUrls: ['./vault-governance-proposal.component.scss']
+  selector: 'opdex-vault-proposal',
+  templateUrl: './vault-proposal.component.html',
+  styleUrls: ['./vault-proposal.component.scss']
 })
-export class VaultGovernanceProposalComponent {
+export class VaultProposalComponent {
   subscription: Subscription = new Subscription();
-  vault: IVaultGovernanceResponseModel;
+  vault: IVaultResponseModel;
   token: IToken;
   latestBlock: IBlock;
   pledgesFilter: VaultProposalPledgesFilter;
@@ -43,7 +43,7 @@ export class VaultGovernanceProposalComponent {
   iconSizes = IconSizes;
 
   constructor(
-    private _vaultsService: VaultGovernancesService,
+    private _vaultsService: VaultsService,
     private _tokensService: TokensService,
     private _indexService: IndexService,
     private _sidebar: SidenavService,

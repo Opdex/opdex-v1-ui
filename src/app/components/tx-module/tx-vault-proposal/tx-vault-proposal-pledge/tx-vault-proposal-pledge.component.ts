@@ -1,6 +1,6 @@
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { Component, Injector, Input, OnChanges, OnDestroy } from '@angular/core';
-import { VaultProposalWithdrawPledgeQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-withdraw-pledge-quote-request.interface';
+import { VaultProposalWithdrawPledgeQuoteRequest } from '@sharedModels/platform-api/requests/vaults/vault-proposal-withdraw-pledge-quote-request.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
@@ -12,7 +12,7 @@ import { debounceTime, distinctUntilChanged, switchMap, take, tap } from 'rxjs/o
 import { Icons } from 'src/app/enums/icons';
 import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
-import { VaultProposalPledgeQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-pledge-quote-request.interface';
+import { VaultProposalPledgeQuoteRequest } from '@sharedModels/platform-api/requests/vaults/vault-proposal-pledge-quote-request.interface';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
@@ -51,7 +51,7 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
   ) {
     super(_injector);
 
-    this.vaultAddress = this._env.vaultGovernanceAddress;
+    this.vaultAddress = this._env.vaultAddress;
 
     this.form = this._fb.group({
       proposalId: ['', [Validators.required, Validators.min(1)]],

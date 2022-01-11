@@ -24,10 +24,6 @@ export class EnvironmentsService {
     return this._env.miningGovernanceAddress;
   }
 
-  public get vaultGovernanceAddress(): string {
-    return this._env.vaultGovernanceAddress;
-  }
-
   public get vaultAddress(): string {
     return this._env.vaultAddress;
   }
