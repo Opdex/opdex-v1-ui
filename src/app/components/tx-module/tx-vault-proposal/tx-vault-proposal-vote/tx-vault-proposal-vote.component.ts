@@ -5,8 +5,8 @@ import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { Component, Injector, Input, OnChanges, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { VaultProposalVoteQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-vote-quote-request.interface';
-import { VaultProposalWithdrawVoteQuoteRequest } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-withdraw-vote-quote-request.interface';
+import { VaultProposalVoteQuoteRequest } from '@sharedModels/platform-api/requests/vaults/vault-proposal-vote-quote-request.interface';
+import { VaultProposalWithdrawVoteQuoteRequest } from '@sharedModels/platform-api/requests/vaults/vault-proposal-withdraw-vote-quote-request.interface';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -55,7 +55,7 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
   ) {
     super(_injector);
 
-    this.vaultAddress = this._env.vaultGovernanceAddress;
+    this.vaultAddress = this._env.vaultAddress;
 
     this.form = this._fb.group({
       proposalId: ['', [Validators.required, Validators.min(1)]],

@@ -132,8 +132,7 @@ export class TransactionReceipt {
   private getOwnershipSummary(): string {
     var isPending = this.eventsOfType([
       TransactionEventTypes.ClaimPendingDeployerOwnershipEvent,
-      TransactionEventTypes.SetPendingMarketOwnershipEvent,
-      TransactionEventTypes.SetPendingVaultOwnershipEvent
+      TransactionEventTypes.SetPendingMarketOwnershipEvent
     ]).length > 0;
 
     return isPending ? 'New Pending Owner' : 'Claimed Ownership';

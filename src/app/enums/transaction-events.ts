@@ -33,14 +33,10 @@ export enum TransactionEventTypes {
   RewardMiningPoolEvent = 'RewardMiningPoolEvent',
   NominationEvent = 'NominationEvent',
 
-  // Vault
+  // Vaults
   CreateVaultCertificateEvent = 'CreateVaultCertificateEvent',
   RevokeVaultCertificateEvent = 'RevokeVaultCertificateEvent',
   RedeemVaultCertificateEvent = 'RedeemVaultCertificateEvent',
-  SetPendingVaultOwnershipEvent = 'SetPendingVaultOwnershipEvent',
-  ClaimPendingVaultOwnershipEvent = 'ClaimPendingVaultOwnershipEvent',
-
-  // Vault Governance
   CreateVaultProposalEvent = 'CreateVaultProposalEvent',
   CompleteVaultProposalEvent = 'CompleteVaultProposalEvent',
   VaultProposalPledgeEvent = 'VaultProposalPledgeEvent',

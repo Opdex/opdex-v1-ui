@@ -1,7 +1,7 @@
 <ng-container *ngIf="summary">
   <div *ngIf="summary.pledgeOrVote?.amount" class="w-100 flex-row-center">
     <div class="col no-wrap flex-shrink" *ngIf="summary.proposal?.proposalId">
-      <a class="no-decoration" href="javascript:void(0)" routerLink="/vault-governance/proposal/{{summary.proposal.proposalId}}">#{{summary.proposal.proposalId}}</a>
+      <a class="no-decoration" href="javascript:void(0)" routerLink="/vault/proposal/{{summary.proposal.proposalId}}">#{{summary.proposal.proposalId}}</a>
     </div>
 
     <div class="col no-wrap flex-shrink">
@@ -15,7 +15,7 @@
 
   <div *ngIf="summary.createOrComplete?.type" class="w-100 flex-row-center" [ngClass]="{'mt-1': summary.pledgeOrVote?.amount}">
     <div class="col no-wrap flex-shrink" *ngIf="summary.proposal?.proposalId && !summary.pledgeOrVote?.amount">
-      <a class="no-decoration" href="javascript:void(0)" routerLink="/vault-governance/proposal/{{summary.proposal.proposalId}}">#{{summary.proposal.proposalId}}</a>
+      <a class="no-decoration" href="javascript:void(0)" routerLink="/vault/proposal/{{summary.proposal.proposalId}}">#{{summary.proposal.proposalId}}</a>
     </div>
 
     <div class="col no-wrap flex-shrink">

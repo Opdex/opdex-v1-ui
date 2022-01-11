@@ -1,4 +1,4 @@
-export interface IVaultGovernanceResponseModel {
+export interface IVaultResponseModel {
   vault: string;
   token: string;
   tokensLocked: string;

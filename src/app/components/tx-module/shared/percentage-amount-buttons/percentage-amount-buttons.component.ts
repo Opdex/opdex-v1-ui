@@ -1,5 +1,5 @@
 import { catchError } from 'rxjs/operators';
-import { VaultGovernancesService } from '@sharedServices/platform/vault-governances.service';
+import { VaultsService } from '@sharedServices/platform/vaults.service';
 import { MathService } from '@sharedServices/utility/math.service';
 import { tap } from 'rxjs/operators';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
@@ -34,7 +34,7 @@ export class PercentageAmountButtonsComponent implements OnChanges {
     private _context: UserContextService,
     private _indexService: IndexService,
     private _walletService: WalletsService,
-    private _vaultService: VaultGovernancesService
+    private _vaultService: VaultsService
   ) {
     this.contextSubscription.add(
       this._context.getUserContext$()

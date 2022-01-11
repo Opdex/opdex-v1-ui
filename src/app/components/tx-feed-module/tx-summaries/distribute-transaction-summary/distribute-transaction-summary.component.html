@@ -1,7 +1,7 @@
 <ng-container *ngIf="token && !error">
   <div class="flex-row-center mb-2">
     <button mat-icon-button color="primary" [ngClass]="iconSizes.tiny" class="mr-2" routerLink="/mining-governance">
-      <mat-icon class="swap">{{icons.miningGovernance}}</mat-icon>
+      <mat-icon class="red">{{icons.mining}}</mat-icon>
     </button>
 
     +{{miningGovernanceAmount.formattedValue | shortNumber}}

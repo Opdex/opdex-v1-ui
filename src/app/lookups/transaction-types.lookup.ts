@@ -130,10 +130,8 @@ export const TransactionTypes: ITransactionType[] = [
     targetEvents: [
       TransactionEventTypes.SetPendingDeployerOwnershipEvent,
       TransactionEventTypes.SetPendingMarketOwnershipEvent,
-      TransactionEventTypes.SetPendingVaultOwnershipEvent,
       TransactionEventTypes.ClaimPendingDeployerOwnershipEvent,
-      TransactionEventTypes.ClaimPendingMarketOwnershipEvent,
-      TransactionEventTypes.ClaimPendingVaultOwnershipEvent
+      TransactionEventTypes.ClaimPendingMarketOwnershipEvent
     ]
   },
   {

@@ -1,7 +1,7 @@
 import { SidenavService } from './../../../services/utility/sidenav.service';
 import { OnDestroy } from '@angular/core';
-import { VaultProposalPledgesFilter } from '@sharedModels/platform-api/requests/vault-governances/vault-proposal-pledges-filter';
-import { IVaultProposalPledgesResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-pledges-response-model.interface';
+import { VaultProposalPledgesFilter } from '@sharedModels/platform-api/requests/vaults/vault-proposal-pledges-filter';
+import { IVaultProposalPledgesResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-pledges-response-model.interface';
 import { Component, Input, OnChanges, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -11,8 +11,8 @@ import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
-import { VaultGovernancesService } from '@sharedServices/platform/vault-governances.service';
-import { IVaultProposalPledgeResponseModel } from '@sharedModels/platform-api/responses/vault-governances/vault-proposal-pledge-response-model.interface';
+import { VaultsService } from '@sharedServices/platform/vaults.service';
+import { IVaultProposalPledgeResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-pledge-response-model.interface';
 import { TransactionView } from '@sharedModels/transaction-view';
 
 @Component({
@@ -34,7 +34,7 @@ export class VaultProposalPledgesTableComponent implements OnChanges, OnDestroy 
   loading = true;
 
   constructor(
-    private _vaultsService: VaultGovernancesService,
+    private _vaultsService: VaultsService,
     private _indexService: IndexService,
     private _sidebar: SidenavService) {
     this.dataSource = new MatTableDataSource<any>();
