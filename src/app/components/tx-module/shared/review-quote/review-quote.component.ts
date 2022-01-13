@@ -4,7 +4,7 @@ import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interf
 import { ITransactionReceipt } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
 import { TransactionReceipt } from '@sharedModels/transaction-receipt';
 import { TransactionsService } from '@sharedServices/platform/transactions.service';
-import { switchMap } from 'rxjs/operators';
+import { filter, switchMap } from 'rxjs/operators';
 import { tap } from 'rxjs/operators';
 import { Component, Inject, OnDestroy } from '@angular/core';
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
@@ -70,6 +70,22 @@ export class ReviewQuoteComponent implements OnDestroy {
         .subscribe(txHash => this.txHash = txHash));
 
     this.subscription.add(
+      this._transactionsService.getMinedTransaction$()
+        .subscribe(receipt => {
+          if (this.txHash) return;
+
+          const fromAddressMatches = receipt.from === this.quoteRequest.sender;
+          const toAddressMatches = receipt.to === this.quoteRequest.to;
+          let matchingEvents = true;
+
+          for (var i = 0; i < receipt.events?.length || 0; i++) {
+            matchingEvents = receipt.events[i].eventType === this.quote.events[i]?.eventType;
+          }
+
+          if (fromAddressMatches && toAddressMatches && matchingEvents) this.txHash = receipt.hash;
+        }));
+
+    this.subscription.add(
       this._bottomSheetRef.backdropClick()
         .subscribe(_ => this._bottomSheetRef.dismiss(this.txHash)));
 
@@ -77,6 +93,7 @@ export class ReviewQuoteComponent implements OnDestroy {
       this._indexService.getLatestBlock$()
         .pipe(
           tap(block => this.latestBlock = block),
+          filter(_ => !!this.txHash === false),
           switchMap(_ => this._platformApi.replayQuote(new QuoteReplayRequest({quote: this.data.request}))),
           tap(q => this.setQuoteRequest(q.request)),
           tap(q => this.setQuoteReceipt(q)))
@@ -96,7 +113,7 @@ export class ReviewQuoteComponent implements OnDestroy {
       gasUsed: quote.gasUsed,
       // Use the service for the first request when component loads, observable wouldn't have emitted yet
       block: this.latestBlock || this._indexService.getLatestBlock(),
-      success: !quote.error,
+      success: !!quote.error === false,
       events: quote.events
     } as ITransactionReceipt);
 

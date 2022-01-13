@@ -124,13 +124,14 @@ export class PoolComponent implements OnInit, OnDestroy {
     }
 
     this.subscription.add(
-      this._indexService.getLatestBlock$().pipe(
-        switchMap(_ => this.getLiquidityPool()),
-        tap(_ => this.historyFilter?.refresh()),
-        switchMap(_ => this.getPoolHistory()),
-        switchMap(_ => this.getWalletSummary())
-      ).subscribe());
-  }
+      this._indexService.getLatestBlock$()
+        .pipe(
+          switchMap(_ => this.getLiquidityPool()),
+          tap(_ => this.historyFilter?.refresh()),
+          switchMap(_ => this.getPoolHistory()),
+          switchMap(_ => this.getWalletSummary())
+        ).subscribe());
+    }
 
   openTransactionSidebar(view: TransactionView, childView: string = null) {
     const data = {
@@ -144,6 +145,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   private getLiquidityPool(): Observable<any> {
     return this._liquidityPoolsService.getLiquidityPool(this.poolAddress)
       .pipe(
+        tap(response => console.log(response)),
         catchError(_ => of(null)),
         tap(pool => this.pool = pool),
         map((pool) => {

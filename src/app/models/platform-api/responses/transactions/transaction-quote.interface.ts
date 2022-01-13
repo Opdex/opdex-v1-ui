@@ -2,8 +2,13 @@ import { ITransactionEvent } from "./transaction-events/transaction-event.interf
 
 export interface ITransactionQuote {
   result: any;
-  error: string;
+  error: ITransactionError;
   gasUsed: number;
   events: ITransactionEvent[];
   request: string;
+}
+
+export interface ITransactionError {
+  raw: string;
+  friendly: string;
 }

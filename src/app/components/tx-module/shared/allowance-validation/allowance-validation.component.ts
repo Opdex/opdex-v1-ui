@@ -57,7 +57,7 @@ export class AllowanceValidationComponent implements OnChanges, OnDestroy {
         const allowanceEvents = tx.eventsOfType([TransactionEventTypes.ApprovalEvent]);
         const correctLength = allowanceEvents.length === 1;
         const firstEvent = allowanceEvents[0] as IApprovalEvent;
-        const spendersMatch = firstEvent.spender === this.allowance.spender;
+        const spendersMatch = firstEvent?.spender === this.allowance.spender;
 
         if (this.allowance && correctLength && spendersMatch) {
           this.allowance.update(firstEvent);
