@@ -20,10 +20,10 @@ export const environments: IEnvironment[] = [
   },
   {
     apiUrl: 'https://test-api.opdex.com',
-    marketAddress: 't8kAxvbaFzpPTWDE8f2bdgV7V1276xu2VH',
-    routerAddress: 't8XpH1pNYDgCnqk91ZQKLgpUVeJ7XmomLT',
-    miningGovernanceAddress: 'tVfGTqrToiTU9bfnvD5UDC5ZQVY4oj4jrc',
-    vaultAddress: '',
+    marketAddress: 't7RorA7xQCMVYKPM1ibPE1NSswaLbpqLQb',
+    routerAddress: 'tAFxpxRdcV9foADqD6gK3c8sY5MeANzFp5',
+    miningGovernanceAddress: 'tKFkNiL5KJ3Q4br929i6hHbB4X4mt1MigF',
+    vaultAddress: 't7hy4H51KzU6PPCL4QKCdgBGPLV9Jpmf9G',
     network: Network.Testnet
   },
   {
