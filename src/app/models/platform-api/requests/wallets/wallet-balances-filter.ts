@@ -1,8 +1,8 @@
-import { TokenProvisionalTypes } from "../tokens/tokens-filter";
+import { TokenAttributes } from "../tokens/tokens-filter";
 
 export interface IWalletBalancesRequest {
   tokens?: string[];
-  tokenType?: TokenProvisionalTypes;
+  tokenAttributes?: TokenAttributes[];
   cursor?: string
   includeZeroBalances?: boolean;
   limit?: number;
@@ -11,7 +11,7 @@ export interface IWalletBalancesRequest {
 
 export class WalletBalancesFilter {
   tokens?: string[];
-  tokenType?: TokenProvisionalTypes;
+  tokenAttributes?: TokenAttributes[];
   cursor?: string
   includeZeroBalances: boolean;
   limit: number;
@@ -26,7 +26,7 @@ export class WalletBalancesFilter {
     };
 
     this.tokens = request.tokens;
-    this.tokenType = request.tokenType;
+    this.tokenAttributes = request.tokenAttributes;
     this.includeZeroBalances = request.includeZeroBalances || false;
     this.cursor = request.cursor;
     this.limit = request.limit || 5;
@@ -42,7 +42,10 @@ export class WalletBalancesFilter {
       this.tokens.forEach(contract => query = this.addToQuery(query, 'tokens', contract));
     }
 
-    query = this.addToQuery(query, 'tokenType', this.tokenType);
+    if (this.tokenAttributes?.length > 0) {
+      this.tokenAttributes.forEach(attribute => query = this.addToQuery(query, 'tokenAttributes', attribute));
+    }
+
     query = this.addToQuery(query, 'includeZeroBalances', this.includeZeroBalances.toString());
     query = this.addToQuery(query, 'limit', this.limit);
     query = this.addToQuery(query, 'direction', this.direction);

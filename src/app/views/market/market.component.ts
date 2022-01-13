@@ -15,7 +15,7 @@ import { StatCardInfo } from '@sharedModels/stat-card-info';
 import { MarketsService } from '@sharedServices/platform/markets.service';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
-import { TokenOrderByTypes, TokenProvisionalTypes, TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
+import { TokenOrderByTypes, TokenAttributes, TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
 import { MarketStatCardsLookup } from '@sharedLookups/market-stat-cards.lookup';
 
@@ -76,7 +76,7 @@ export class MarketComponent implements OnInit, OnDestroy {
       orderBy: TokenOrderByTypes.DailyPriceChangePercent,
       direction: 'DESC',
       limit: 5,
-      tokenType: TokenProvisionalTypes.NonProvisional
+      tokenAttributes: [TokenAttributes.NonProvisional]
     });
 
     this.liquidityPoolsFilter = new LiquidityPoolsFilter({

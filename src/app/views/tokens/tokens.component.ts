@@ -4,7 +4,7 @@ import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.
 import { IndexService } from '@sharedServices/platform/index.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { Component, OnDestroy } from '@angular/core';
-import { TokenOrderByTypes, TokenProvisionalTypes, TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
+import { TokenOrderByTypes, TokenAttributes, TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { LiquidityPoolsFilter, LpOrderBy } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { switchMap } from 'rxjs/operators';
@@ -32,7 +32,7 @@ export class TokensComponent implements OnDestroy {
       orderBy: TokenOrderByTypes.DailyPriceChangePercent,
       direction: 'DESC',
       limit: 10,
-      tokenType: TokenProvisionalTypes.NonProvisional
+      tokenAttributes: [TokenAttributes.NonProvisional]
     });
 
     const volumeFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Volume, limit: 4, direction: 'DESC'});
