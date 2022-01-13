@@ -25,6 +25,7 @@ export interface IToken {
   sats: number;
   totalSupply: string;
   summary: ITokenSummary;
+  attributes: string[];
   balance?: any;
 }
 

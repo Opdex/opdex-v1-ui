@@ -1,5 +1,5 @@
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
-import { TokenProvisionalTypes } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
+import { TokenAttributes } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { ThemeService } from '@sharedServices/utility/theme.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
@@ -90,13 +90,13 @@ export class WalletComponent implements OnInit {
     } as IVaultProposalVotesFilter);
 
     this.walletBalancesFilter = new WalletBalancesFilter({
-      tokenType: TokenProvisionalTypes.NonProvisional,
+      tokenAttributes: [TokenAttributes.NonProvisional],
       limit: 5,
       direction: 'DESC',
       includeZeroBalances: false} as IWalletBalancesRequest);
 
     this.provisionalBalancesFilter = new WalletBalancesFilter({
-      tokenType: TokenProvisionalTypes.Provisional,
+      tokenAttributes: [TokenAttributes.Provisional],
       limit: 5,
       direction: 'DESC',
       includeZeroBalances: false} as IWalletBalancesRequest);

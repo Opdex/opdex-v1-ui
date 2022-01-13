@@ -6,15 +6,15 @@ export enum TokenOrderByTypes {
   DailyPriceChangePercent = 'DailyPriceChangePercent'
 }
 
-export enum TokenProvisionalTypes {
-  All = 'All',
+export enum TokenAttributes {
   Provisional = 'Provisional',
-  NonProvisional = 'NonProvisional'
+  NonProvisional = 'NonProvisional',
+  Staking = 'Staking'
 }
 
 export interface ITokensRequest {
   tokens?: string[];
-  tokenType?: TokenProvisionalTypes;
+  tokenAttributes?: TokenAttributes[];
   includeZeroLiquidity?: boolean;
   orderBy?: TokenOrderByTypes;
   limit?: number;
@@ -26,7 +26,7 @@ export interface ITokensRequest {
 export class TokensFilter implements ITokensRequest {
   keyword?: string;
   tokens?: string[];
-  tokenType?: TokenProvisionalTypes;
+  tokenAttributes?: TokenAttributes[];
   includeZeroLiquidity?: boolean;
   orderBy?: TokenOrderByTypes;
   limit?: number;
@@ -42,7 +42,7 @@ export class TokensFilter implements ITokensRequest {
 
     this.keyword = request.keyword;
     this.tokens = request.tokens;
-    this.tokenType = request.tokenType;
+    this.tokenAttributes = request.tokenAttributes;
     this.orderBy = request.orderBy;
     this.includeZeroLiquidity = request.includeZeroLiquidity;
     this.cursor = request.cursor;
@@ -59,8 +59,11 @@ export class TokensFilter implements ITokensRequest {
       this.tokens.forEach(contract => query = this.addToQuery(query, 'tokens', contract));
     }
 
+    if (this.tokenAttributes?.length > 0) {
+      this.tokenAttributes.forEach(attribute => query = this.addToQuery(query, 'tokenAttributes', attribute));
+    }
+
     query = this.addToQuery(query, 'keyword', this.keyword);
-    query = this.addToQuery(query, 'tokenType', this.tokenType);
     query = this.addToQuery(query, 'includeZeroLiquidity', this.includeZeroLiquidity?.toString());
     query = this.addToQuery(query, 'orderBy', this.orderBy);
     query = this.addToQuery(query, 'limit', this.limit);

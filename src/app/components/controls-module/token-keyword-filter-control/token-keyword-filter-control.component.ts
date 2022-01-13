@@ -4,7 +4,7 @@ import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interf
 import { debounceTime, distinctUntilChanged, map, switchMap, take, tap } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { Icons } from 'src/app/enums/icons';
-import { TokensFilter, ITokensRequest, TokenOrderByTypes, TokenProvisionalTypes } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
+import { TokensFilter, ITokensRequest, TokenOrderByTypes, TokenAttributes } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { Component, ElementRef, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
@@ -37,7 +37,7 @@ export class TokenKeywordFilterControlComponent implements OnInit, OnDestroy {
       orderBy: TokenOrderByTypes.DailyPriceChangePercent,
       direction: 'DESC',
       limit: 10,
-      tokenType: this.includeProvisional ? TokenProvisionalTypes.All : TokenProvisionalTypes.NonProvisional,
+      tokenAttributes: this.includeProvisional ? [] : [TokenAttributes.NonProvisional],
       includeZeroLiquidity: false
     } as ITokensRequest);
 
