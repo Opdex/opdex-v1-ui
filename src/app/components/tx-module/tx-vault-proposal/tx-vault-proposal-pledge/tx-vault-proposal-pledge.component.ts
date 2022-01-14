@@ -14,6 +14,7 @@ import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { VaultProposalPledgeQuoteRequest } from '@sharedModels/platform-api/requests/vaults/vault-proposal-pledge-quote-request.interface';
 import { IconSizes } from 'src/app/enums/icon-sizes';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 @Component({
   selector: 'opdex-tx-vault-proposal-pledge',
@@ -95,7 +96,7 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
     quote$
       .pipe(take(1))
       .subscribe((quote: ITransactionQuote) => this.quote(quote),
-                 (errors: string[]) => this.quoteErrors = errors);
+                 (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
   handleAddRemoveStatus(): void {

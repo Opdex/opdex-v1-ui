@@ -15,6 +15,7 @@ import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MiningQuote } from '@sharedModels/platform-api/requests/mining-pools/mining-quote';
 import { IndexService } from '@sharedServices/platform/index.service';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 @Component({
   selector: 'opdex-tx-mine-start',
@@ -78,7 +79,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
       .startMiningQuote(this.pool.summary.miningPool.address, request.payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote),
-                   (errors: string[]) => this.quoteErrors = errors);
+                   (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
   handlePercentageSelect(value: any): void {

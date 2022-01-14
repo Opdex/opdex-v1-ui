@@ -14,6 +14,7 @@ import { EnvironmentsService } from '@sharedServices/utility/environments.servic
 import { Observable, of, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, take, tap } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 @Component({
   selector: 'opdex-tx-vault-proposal-vote',
@@ -101,7 +102,7 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
     quote$
       .pipe(take(1))
       .subscribe((quote: ITransactionQuote) => this.quote(quote),
-                 (errors: string[]) => this.quoteErrors = errors);
+                 (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
   handleAddRemoveStatus(): void {

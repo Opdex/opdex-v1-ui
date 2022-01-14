@@ -5,6 +5,7 @@ import { ErrorService } from '@sharedServices/utility/error.service';
 import { throwError, Observable, of } from 'rxjs';
 import { catchError, delay, map, mergeMap, retryWhen } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 // Retryable error codes
 // Note 404 is excluded intentionally due to checking of wallet balances primarily in liquidity pools
@@ -82,28 +83,28 @@ export class RestApiService {
         this._jwt.removeToken();
         location.reload();
       }
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong.
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
-
-      this._error.logHttpError(error, error.url);
     }
 
     const errors = [];
 
     if (!!error?.error) {
-      // Covers problem details validation errors - we don't care about they key, we'll tell the users all errors
-      Object.keys(error?.error?.errors).map(key => errors.push(...error.error.errors[key]));
+      if (!!error.error.errors) {
+        // Covers problem details validation errors - we don't care about they key, we'll tell the users all errors
+        Object.keys(error.error.errors).map(key => errors.push(...error.error.errors[key]));
+      }
 
       // Covers Exception based errors
-      if (!!error.error.detail) errors.push(error.error.detail);
+      if (!!error.error.detail) {
+        errors.push(error.error.detail);
+      }
     }
 
+    const errorResponse = new OpdexHttpError(errors, error.status);
+
+    console.error(errorResponse)
+
     // Return an observable with a user-facing error messages
-    return throwError(errors);
+    return throwError(errorResponse);
   }
 }
 

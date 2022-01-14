@@ -14,6 +14,7 @@ import { take } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MinimumVoteVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vaults/minimum-vote-vault-proposal-quote-request.interface';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 @Component({
   selector: 'opdex-tx-vault-proposal-create',
@@ -119,7 +120,7 @@ export class TxVaultProposalCreateComponent extends TxBase implements OnDestroy 
     quote$
       .pipe(take(1))
       .subscribe((quote: ITransactionQuote) => this.quote(quote),
-                 (errors: string[]) => this.quoteErrors = errors);
+                 (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
   destroyContext$() {

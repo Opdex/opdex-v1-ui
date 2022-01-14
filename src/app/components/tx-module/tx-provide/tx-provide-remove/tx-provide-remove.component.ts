@@ -17,6 +17,7 @@ import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { RemoveLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/remove-liquidity-request';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 @Component({
   selector: 'opdex-tx-provide-remove',
@@ -118,7 +119,7 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
       .removeLiquidityQuote(this.pool.address, request.payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote),
-                   (errors: string[]) => this.quoteErrors = errors);
+                   (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
   calcTolerance(tolerance?: number): void {

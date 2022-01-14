@@ -12,6 +12,7 @@ import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { Observable, of, Subscription } from 'rxjs';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { StopStakingRequest } from '@sharedModels/platform-api/requests/liquidity-pools/stop-staking-request';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 @Component({
   selector: 'opdex-tx-stake-stop',
@@ -73,7 +74,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
       .stopStakingQuote(this.pool.address, request.payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote),
-                   (errors: string[]) => this.quoteErrors = errors);
+                   (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
   handlePercentageSelect(value: any): void {

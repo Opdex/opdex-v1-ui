@@ -388,6 +388,10 @@ export class PlatformApiService extends RestApiService {
     return this.get<IAddressBalance>(`${this.api}/wallets/${owner}/balance/${token}`);
   }
 
+  public refreshBalance(owner: string, token: string): Observable<IAddressBalance> {
+    return this.post<IAddressBalance>(`${this.api}/wallets/${owner}/balance/${token}`, {});
+  }
+
   public getStakingPosition(owner: string, liquidityPool: string): Observable<IAddressStaking> {
     return this.get<IAddressStaking>(`${this.api}/wallets/${owner}/staking/${liquidityPool}`);
   }

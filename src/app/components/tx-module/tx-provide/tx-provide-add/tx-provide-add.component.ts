@@ -23,6 +23,7 @@ import { IAddLiquidityAmountInQuoteRequest } from '@sharedModels/platform-api/re
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
 import { IProvideAmountInResponse } from '@sharedModels/platform-api/responses/liquidity-pools/provide-amount-in-response.interface';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 @Component({
   selector: 'opdex-tx-provide-add',
@@ -173,7 +174,7 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
       .addLiquidityQuote(this.pool.address, request.payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote),
-                   (errors: string[]) => this.quoteErrors = errors);
+                   (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
   calcTolerance(tolerance?: number): void {

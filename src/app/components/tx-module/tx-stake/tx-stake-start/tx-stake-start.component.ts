@@ -15,6 +15,7 @@ import { debounceTime, switchMap, tap, take, distinctUntilChanged, filter } from
 import { Icons } from 'src/app/enums/icons';
 import { StartStakingRequest } from '@sharedModels/platform-api/requests/liquidity-pools/start-staking-request';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 @Component({
   selector: 'opdex-tx-stake-start',
@@ -79,7 +80,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
       .startStakingQuote(this.pool.address, request.payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote),
-                   (errors: string[]) => this.quoteErrors = errors);
+                   (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
   handlePercentageSelect(value: any): void {

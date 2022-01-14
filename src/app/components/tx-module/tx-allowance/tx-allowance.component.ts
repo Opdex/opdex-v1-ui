@@ -11,6 +11,7 @@ import { switchMap, take } from 'rxjs/operators';
 import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { ApproveAllowanceRequest } from '@sharedModels/platform-api/requests/tokens/approve-allowance-request';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 @Component({
   selector: 'opdex-tx-allowance',
@@ -60,7 +61,7 @@ export class TxAllowanceComponent extends TxBase {
         }),
         take(1))
       .subscribe((quote: ITransactionQuote) => this.quote(quote),
-                 (errors: string[]) => this.quoteErrors = errors);
+                 (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
   destroyContext$() {
