@@ -44,6 +44,10 @@ export class TxVaultProposalCreateComponent extends TxBase implements OnDestroy 
     }
   ];
 
+  get deposit(): FormControl {
+    return this.form.get('deposit') as FormControl;
+  }
+
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
   }
@@ -70,6 +74,7 @@ export class TxVaultProposalCreateComponent extends TxBase implements OnDestroy 
 
     this.form = this._fb.group({
       type: [1, [Validators.required]],
+      deposit: [{value: '500', disabled: true}, [Validators.required]],
       description: ['', [Validators.required]],
       amount: ['', [Validators.pattern(PositiveDecimalNumberRegex)]],
       recipient: ['']

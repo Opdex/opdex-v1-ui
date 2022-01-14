@@ -1,5 +1,5 @@
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
-import { TokenOrderByTypes, TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
+import { TokenAttributes, TokenOrderByTypes, TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { ISwapAmountInQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-in-quote-response.interface';
@@ -121,7 +121,13 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
       this.tokenIn = this.data.pool.token.src;
       this.tokenOut = this.data.pool.token.crs;
     } else {
-      const topTokens = new TokensFilter({limit: 2, direction: 'DESC', orderBy: TokenOrderByTypes.DailyPriceChangePercent, includeZeroLiquidity: false});
+      const topTokens = new TokensFilter({
+        limit: 2,
+        direction: 'DESC',
+        orderBy: TokenOrderByTypes.DailyPriceChangePercent,
+        includeZeroLiquidity: false,
+        tokenAttributes: [TokenAttributes.NonProvisional]
+      });
       this._tokensService.getTokens(topTokens)
         .pipe(take(1))
         .subscribe(response => {
