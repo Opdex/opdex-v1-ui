@@ -25,7 +25,7 @@
     "@angular/service-worker": "^12.2.8",
     "@auth0/angular-jwt": "^5.0.2",
     "@microsoft/signalr": "^6.0.0",
-    "angular-resize-event": "^13.1.2",
+    "angular-resize-event": "^3.1.1",
     "bootstrap-4-grid": "^3.4.0",
     "lightweight-charts": "^3.6.1",
     "ng-qrcode": "^5.2.0",
