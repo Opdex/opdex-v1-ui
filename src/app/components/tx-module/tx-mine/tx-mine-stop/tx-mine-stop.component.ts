@@ -92,6 +92,7 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
     this.form.reset();
     this.fiatValue = null;
     this.balanceError = null;
+    this.percentageSelected = null;
   }
 
   destroyContext$(): void {

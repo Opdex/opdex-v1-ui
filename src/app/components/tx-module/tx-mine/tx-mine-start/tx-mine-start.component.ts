@@ -120,6 +120,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
     this.fiatValue = null;
     this.allowance = null;
     this.balanceError = null;
+    this.percentageSelected = null;
   }
 
   destroyContext$(): void {

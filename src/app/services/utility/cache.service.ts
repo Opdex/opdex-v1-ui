@@ -48,9 +48,14 @@ export abstract class CacheService {
     }
 
     // Update, the found record is stale
-    if (blockHeight > this.cache[key].lastUpdateBlock && !cacheOnly) {
+    if (blockHeight > this.cache[key].lastUpdateBlock) {
       this.cache[key].lastUpdateBlock = blockHeight;
-      this.cache[key].subject.next();
+
+      // Only broadcast the above lastUpdateBlock change if we're not strictly pulling from cache
+      // Prevents cache only attempts from broadcasting changes to other steams forcing API refresh
+      if (!cacheOnly) {
+        this.cache[key].subject.next();
+      }
     }
 
     // Return cache item observable

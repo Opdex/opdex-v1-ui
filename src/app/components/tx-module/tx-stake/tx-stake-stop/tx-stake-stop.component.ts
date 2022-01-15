@@ -98,6 +98,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
     this.form.reset();
     this.fiatValue = null;
     this.balanceError = null;
+    this.percentageSelected = null;
   }
 
   destroyContext$(): void {

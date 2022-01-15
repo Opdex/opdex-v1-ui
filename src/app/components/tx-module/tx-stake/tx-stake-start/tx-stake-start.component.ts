@@ -123,6 +123,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
     this.fiatValue = null;
     this.allowance = null;
     this.balanceError = null;
+    this.percentageSelected = null;
   }
 
   destroyContext$(): void {

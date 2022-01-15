@@ -80,7 +80,7 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
         debounceTime(400),
         distinctUntilChanged(),
         tap(_ => this.calcTolerance()),
-        filter(_ => !!this.context?.wallet),
+        filter(amount => !!this.context?.wallet && !!amount),
         switchMap(amount => this.getAllowance$(amount)),
         switchMap(allowance => this.validateBalance(allowance.requestToSpend)))
       .subscribe();
@@ -204,6 +204,7 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
     this.srcOutMin = null;
     this.allowance = null;
     this.balanceError = null;
+    this.percentageSelected = null;
   }
 
   destroyContext$(): void {
