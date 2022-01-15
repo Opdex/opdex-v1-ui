@@ -145,7 +145,6 @@ export class PoolComponent implements OnInit, OnDestroy {
   private getLiquidityPool(): Observable<any> {
     return this._liquidityPoolsService.getLiquidityPool(this.poolAddress)
       .pipe(
-        tap(response => console.log(response)),
         catchError(_ => of(null)),
         tap(pool => this.pool = pool),
         map((pool) => {

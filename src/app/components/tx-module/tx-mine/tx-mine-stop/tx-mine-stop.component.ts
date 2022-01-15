@@ -41,7 +41,7 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
     super(_injector);
 
     this.form = this._fb.group({
-      amount: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]]
+      amount: [null, [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]]
     });
 
     this.subscription.add(
@@ -60,6 +60,7 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
 
   ngOnChanges(): void {
     this.pool = this.data?.pool;
+    this.reset();
   }
 
   submit(): void {
@@ -85,6 +86,12 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
 
     return this._validateMiningBalance$(this.pool, amountNeeded)
       .pipe(tap(result => this.balanceError = !result));
+  }
+
+  private reset(): void {
+    this.form.reset();
+    this.fiatValue = null;
+    this.balanceError = null;
   }
 
   destroyContext$(): void {

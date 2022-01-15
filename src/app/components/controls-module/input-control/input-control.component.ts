@@ -55,7 +55,7 @@ export class InputControlComponent extends ValueAccessor {
     if (isArrow) return;
 
     // Take current previous control value prior to this keystroke
-    let previousControlValue = this.formControl.value;
+    let previousControlValue = this.formControl.value || '';
 
     // Append this keystroke
     let updatedValue = `${previousControlValue}${event.key}`;
