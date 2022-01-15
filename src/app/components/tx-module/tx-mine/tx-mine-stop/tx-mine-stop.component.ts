@@ -1,5 +1,5 @@
 import { MathService } from '@sharedServices/utility/math.service';
-import { debounceTime, distinctUntilChanged, switchMap, take, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, switchMap, take, tap } from 'rxjs/operators';
 import { Injector, OnChanges, OnDestroy } from '@angular/core';
 import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -50,10 +50,16 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
           debounceTime(400),
           distinctUntilChanged(),
           tap(amount => {
+            if (!!amount === false) {
+              this.fiatValue = null;
+              return;
+            }
+
             const lptFiat = new FixedDecimal(this.pool.token.lp.summary.priceUsd.toString(), 8);
             const amountDecimal = new FixedDecimal(amount, this.pool.token.lp.decimals);
             this.fiatValue = MathService.multiply(amountDecimal, lptFiat);
           }),
+          filter(amount => !!amount),
           switchMap(_ => this.validateMiningBalance()))
         .subscribe());
   }

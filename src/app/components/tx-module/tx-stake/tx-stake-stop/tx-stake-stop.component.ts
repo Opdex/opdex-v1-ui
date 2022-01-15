@@ -1,7 +1,7 @@
 import { OnDestroy } from '@angular/core';
 import { MathService } from '@sharedServices/utility/math.service';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
-import { debounceTime, distinctUntilChanged, take, tap, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, take, tap, switchMap, filter } from 'rxjs/operators';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
@@ -55,10 +55,17 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
           debounceTime(400),
           distinctUntilChanged(),
           tap(amount => {
+            if (!!amount === false) {
+              this.fiatValue = null;
+              return;
+            }
+
             const stakingTokenFiat = new FixedDecimal(this.pool.summary.staking?.token.summary.priceUsd.toString(), 8);
             const amountDecimal = new FixedDecimal(amount, this.pool.summary.staking?.token.decimals);
+
             this.fiatValue = MathService.multiply(amountDecimal, stakingTokenFiat);
           }),
+          filter(amount => !!amount),
           switchMap(_ => this.validateStakingBalance()))
         .subscribe());
   }
