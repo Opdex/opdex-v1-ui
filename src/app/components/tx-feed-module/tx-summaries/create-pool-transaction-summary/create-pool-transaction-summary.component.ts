@@ -8,7 +8,7 @@ import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.
 import { Subscription } from 'rxjs';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap, take, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-create-pool-transaction-summary',
@@ -45,16 +45,18 @@ export class CreatePoolTransactionSummaryComponent implements OnChanges, OnDestr
 
     if (this.isQuote) {
       this.subscription.add(
-        this._tokenService.getToken(createEvents[0].token, true)
+        this._tokenService.getToken(createEvents[0].token)
         .pipe(
+          take(1),
           tap(token => this.src = token),
-          switchMap(_ => this._tokenService.getToken('CRS', true))
+          switchMap(_ => this._tokenService.getToken('CRS'))
         ).subscribe(
           (token) => this.crs = token,
           (error: string) => this.error = 'Oops, something is wrong.'));
     } else {
       this.subscription.add(
-        this._liquidityPoolService.getLiquidityPool(createEvents[0].liquidityPool, true)
+        this._liquidityPoolService.getLiquidityPool(createEvents[0].liquidityPool)
+          .pipe(take(1))
           .subscribe(
             (pool: ILiquidityPoolResponse) => this.pool = pool,
             (error: string) => this.error = 'Oops, something is wrong.'));

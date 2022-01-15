@@ -100,6 +100,11 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
   }
 
   private setFiatValue(amount: string): void {
+    if (!!amount === false) {
+      this.fiatValue = null;
+      return;
+    }
+
     const lptFiat = new FixedDecimal(this.pool.token.lp.summary.priceUsd.toString(), 8);
     const amountDecimal = new FixedDecimal(amount, this.pool.token.lp.decimals);
 

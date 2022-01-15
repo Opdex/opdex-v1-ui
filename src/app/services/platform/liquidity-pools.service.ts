@@ -16,22 +16,22 @@ export class LiquidityPoolsService extends CacheService {
     super(_injector);
   }
 
-  getLiquidityPool(address: string, cacheOnly?: boolean): Observable<ILiquidityPoolResponse> {
-    return this.getItem(address, this._platformApi.getPool(address), cacheOnly);
+  getLiquidityPool(address: string): Observable<ILiquidityPoolResponse> {
+    return this.getItem(address, this._platformApi.getPool(address));
   }
 
   getLiquidityPoolHistory(address: string, request: HistoryFilter): Observable<ILiquidityPoolSnapshotHistoryResponse> {
     return this.getItem(`${address}-history-${request.buildQueryString()}`, this._platformApi.getLiquidityPoolHistory(address, request));
   }
 
-  getLiquidityPools(request: LiquidityPoolsFilter, cacheOnly?: boolean): Observable<ILiquidityPoolsResponse> {
+  getLiquidityPools(request: LiquidityPoolsFilter): Observable<ILiquidityPoolsResponse> {
     const market = this._env.marketAddress;
 
     if (request.markets.find(m => m === market) === undefined) {
       request.markets.push(market);
     }
 
-    return this.getItem(`liquidity-pools-${request.buildQueryString()}`, this._platformApi.getLiquidityPools(request), cacheOnly)
+    return this.getItem(`liquidity-pools-${request.buildQueryString()}`, this._platformApi.getLiquidityPools(request))
       .pipe(tap(pools => pools.results.forEach(pool => this.cacheItem(pool.address, pool))));
   }
 }

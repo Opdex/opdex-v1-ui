@@ -10,6 +10,7 @@ import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Subscription } from 'rxjs';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-stake-transaction-summary',
@@ -63,8 +64,9 @@ export class StakeTransactionSummaryComponent implements OnChanges, OnDestroy {
     this.subscription = new Subscription();
 
     this.subscription.add(
-      this._liquidityPoolService.getLiquidityPool(startEvent?.contract || stopEvent?.contract || collectEvent?.contract, true)
-        .subscribe((liquidityPool: ILiquidityPoolResponse) => {
+      this._liquidityPoolService.getLiquidityPool(startEvent?.contract || stopEvent?.contract || collectEvent?.contract)
+      .pipe(take(1))
+      .subscribe((liquidityPool: ILiquidityPoolResponse) => {
           this.pool = liquidityPool;
 
           const stakingAmount = startEvent?.amount || stopEvent?.amount || '0';

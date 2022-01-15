@@ -1,3 +1,4 @@
+import { take } from 'rxjs/operators';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IRewardMiningPoolEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/governances/reward-mining-pool-event.interface';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
@@ -39,7 +40,8 @@ export class EnableMiningTransactionSummaryComponent implements OnChanges, OnDes
     this.subscription = new Subscription();
 
     this.subscription.add(
-      combineLatest(rewardEvents.map(event => this._liquidityPoolService.getLiquidityPool(event.stakingPool, true)))
+      combineLatest(rewardEvents.map(event => this._liquidityPoolService.getLiquidityPool(event.stakingPool)))
+        .pipe(take(1))
         .subscribe((pools: ILiquidityPoolResponse[]) => {
           this.pools = pools;
           this.poolAmount = new FixedDecimal(rewardEvents[0].amount, pools[0].summary?.staking?.token?.decimals);

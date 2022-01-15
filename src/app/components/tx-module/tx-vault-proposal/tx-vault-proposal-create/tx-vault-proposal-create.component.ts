@@ -140,7 +140,7 @@ export class TxVaultProposalCreateComponent extends TxBase implements OnDestroy 
 
     const amountNeeded = new FixedDecimal('500', 8);
 
-    return this._tokenService.getToken('CRS', true)
+    return this._tokenService.getToken('CRS')
       .pipe(
         switchMap(crs => this._validateBalance$(crs, amountNeeded)),
         tap(result => this.balanceError = !result));
