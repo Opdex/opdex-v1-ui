@@ -23,6 +23,7 @@ import { IAddLiquidityAmountInQuoteRequest } from '@sharedModels/platform-api/re
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
 import { IProvideAmountInResponse } from '@sharedModels/platform-api/responses/liquidity-pools/provide-amount-in-response.interface';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 @Component({
   selector: 'opdex-tx-provide-add',
@@ -67,9 +68,9 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
   constructor(
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
-    protected _injector: Injector,
     private _indexService: IndexService,
-    private _env: EnvironmentsService
+    private _env: EnvironmentsService,
+    protected _injector: Injector
   ) {
     super(_injector);
 
@@ -82,8 +83,8 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
     }
 
     this.form = this._fb.group({
-      amountCrs: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
-      amountSrc: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
+      amountCrs: [null, [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
+      amountSrc: [null, [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
     });
 
     // Bug -
@@ -134,6 +135,10 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
       .subscribe();
   }
 
+  ngOnChanges(): void {
+    this.reset();
+  }
+
   quote$(value: string, tokenIn: IToken): Observable<string> {
     if (!tokenIn) throwError('Invalid token');
     if (!value || !this.pool.summary.reserves?.crs || this.pool.summary.reserves.crs === '0.00000000') return of('');
@@ -173,7 +178,7 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
       .addLiquidityQuote(this.pool.address, request.payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote),
-                   (errors: string[]) => this.quoteErrors = errors);
+                   (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
   calcTolerance(tolerance?: number): void {
@@ -248,6 +253,21 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
 
     return this._validateAllowance$(this.context.wallet, this._env.routerAddress, this.pool.token.src, this.amountSrc.value)
       .pipe(tap(allowance => this.allowance = allowance));
+  }
+
+  private reset(): void {
+    this.form.reset();
+    this.allowance = null;
+    this.crsInFiatValue = null;
+    this.crsInMinFiatValue = null;
+    this.srcInFiatValue = null;
+    this.srcInMinFiatValue = null;
+    this.crsInMin = null;
+    this.srcInMin = null;
+    this.crsPercentageSelected = null;
+    this.srcPercentageSelected = null;
+    this.crsBalanceError = null;
+    this.srcBalanceError = null;
   }
 
   destroyContext$(): void {

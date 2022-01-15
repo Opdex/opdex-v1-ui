@@ -9,7 +9,7 @@ import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Subscription } from 'rxjs';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-mine-transaction-summary',
@@ -53,7 +53,9 @@ export class MineTransactionSummaryComponent implements OnChanges, OnDestroy {
 
     this.subscription.add(
       this._miningPoolService.getMiningPool(startEvent?.contract || stopEvent?.contract || collectEvent?.contract)
-        .pipe(switchMap((miningPool: IMiningPool) => this._liquidityPoolService.getLiquidityPool(miningPool.liquidityPool, true)))
+        .pipe(
+          switchMap((miningPool: IMiningPool) => this._liquidityPoolService.getLiquidityPool(miningPool.liquidityPool)),
+          take(1))
         .subscribe((liquidityPool: ILiquidityPoolResponse) => {
           this.pool = liquidityPool;
 

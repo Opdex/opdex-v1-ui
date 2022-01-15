@@ -15,6 +15,7 @@ import { debounceTime, switchMap, tap, take, distinctUntilChanged, filter } from
 import { Icons } from 'src/app/enums/icons';
 import { StartStakingRequest } from '@sharedModels/platform-api/requests/liquidity-pools/start-staking-request';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 @Component({
   selector: 'opdex-tx-stake-start',
@@ -48,7 +49,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
     super(_injector);
 
     this.form = this._fb.group({
-      amount: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]]
+      amount: [null, [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]]
     });
 
     this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
@@ -70,6 +71,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
 
   ngOnChanges(): void {
     this.pool = this.data?.pool;
+    this.reset();
   }
 
   submit(): void {
@@ -79,7 +81,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
       .startStakingQuote(this.pool.address, request.payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote),
-                   (errors: string[]) => this.quoteErrors = errors);
+                   (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
   handlePercentageSelect(value: any): void {
@@ -99,6 +101,11 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
   }
 
   private setFiatValue(amount: string): void {
+    if (!!amount === false) {
+      this.fiatValue = null;
+      return;
+    }
+
     const stakingTokenFiat = new FixedDecimal(this.pool.summary.staking?.token.summary.priceUsd.toString(), 8);
     const amountDecimal = new FixedDecimal(amount, this.pool.summary.staking?.token.decimals);
 
@@ -112,6 +119,14 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
 
     return this._validateAllowance$(this.context.wallet, spender, token, amount)
       .pipe(tap(allowance => this.allowance = allowance));
+  }
+
+  private reset(): void {
+    this.form.reset();
+    this.fiatValue = null;
+    this.allowance = null;
+    this.balanceError = null;
+    this.percentageSelected = null;
   }
 
   destroyContext$(): void {

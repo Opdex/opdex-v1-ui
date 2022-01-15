@@ -9,6 +9,7 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { take, tap, switchMap } from 'rxjs/operators';
 import { Observable, of, Subscription } from 'rxjs';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 @Component({
   selector: 'opdex-tx-stake-collect',
@@ -65,7 +66,7 @@ export class TxStakeCollectComponent extends TxBase implements OnChanges, OnDest
       .collectStakingRewardsQuote(this.pool.address, request.payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote),
-                   (errors: string[]) => this.quoteErrors = errors);
+                   (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
   private validateStakingBalance(): Observable<boolean> {

@@ -14,6 +14,7 @@ import { TokensService } from '@sharedServices/platform/tokens.service';
 import { AddTokenRequest } from '@sharedModels/platform-api/requests/tokens/add-token-request';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IconSizes } from 'src/app/enums/icon-sizes';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 @Component({
   selector: 'opdex-tx-create-pool',
@@ -81,7 +82,7 @@ export class TxCreatePoolComponent extends TxBase {
       .createLiquidityPool(request.payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote),
-                   (errors: string[]) => this.quoteErrors = errors);
+                   (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
   validateToken(): void{
@@ -100,7 +101,7 @@ export class TxCreatePoolComponent extends TxBase {
           this.validatedToken = token;
         }
       },
-      (errors: string[]) => this.quoteErrors = errors);
+      (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
   destroyContext$() {

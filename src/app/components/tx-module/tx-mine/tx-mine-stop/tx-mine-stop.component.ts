@@ -12,6 +12,7 @@ import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { Observable, of, Subscription } from 'rxjs';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MiningQuote } from '@sharedModels/platform-api/requests/mining-pools/mining-quote';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 @Component({
   selector: 'opdex-tx-mine-stop',
@@ -40,7 +41,7 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
     super(_injector);
 
     this.form = this._fb.group({
-      amount: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]]
+      amount: [null, [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]]
     });
 
     this.subscription.add(
@@ -59,6 +60,7 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
 
   ngOnChanges(): void {
     this.pool = this.data?.pool;
+    this.reset();
   }
 
   submit(): void {
@@ -67,7 +69,7 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
     this._platformApi.stopMiningQuote(this.pool.summary.miningPool.address, request.payload)
       .pipe(take(1))
       .subscribe((quote: ITransactionQuote) => this.quote(quote),
-                  (errors: string[]) => this.quoteErrors = errors);
+                  (error: OpdexHttpError) => this.quoteErrors = error.errors);
 }
 
   handlePercentageSelect(value: any): void {
@@ -84,6 +86,13 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
 
     return this._validateMiningBalance$(this.pool, amountNeeded)
       .pipe(tap(result => this.balanceError = !result));
+  }
+
+  private reset(): void {
+    this.form.reset();
+    this.fiatValue = null;
+    this.balanceError = null;
+    this.percentageSelected = null;
   }
 
   destroyContext$(): void {

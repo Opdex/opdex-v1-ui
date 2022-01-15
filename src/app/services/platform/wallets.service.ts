@@ -8,8 +8,9 @@ import { IAddressBalance, IAddressBalances } from '@sharedModels/platform-api/re
 import { IAddressStaking, IAddressStakingPositions } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { IAddressMining, IAddressMiningPositions } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { WalletBalancesFilter } from '@sharedModels/platform-api/requests/wallets/wallet-balances-filter';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 @Injectable({ providedIn: 'root' })
 export class WalletsService extends CacheService {
@@ -22,7 +23,16 @@ export class WalletsService extends CacheService {
   }
 
   getBalance(wallet: string, token: string): Observable<IAddressBalance> {
-    return this.getItem(`wallet-balance-${wallet}-${token}`, this._platformApi.getBalance(wallet, token));
+    const stream$ = this._platformApi.getBalance(wallet, token)
+      .pipe(catchError((error: OpdexHttpError) => {
+        if (error.status === 404) {
+          return this._platformApi.refreshBalance(wallet, token);
+        }
+
+        return throwError(error);
+      }));
+
+    return this.getItem(`wallet-balance-${wallet}-${token}`, stream$);
   }
 
   getWalletBalances(wallet: string, request: WalletBalancesFilter): Observable<IAddressBalances> {

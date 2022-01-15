@@ -17,6 +17,7 @@ import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { RemoveLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/remove-liquidity-request';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 @Component({
   selector: 'opdex-tx-provide-remove',
@@ -71,7 +72,7 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
     }
 
     this.form = this._fb.group({
-      liquidity: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
+      liquidity: [null, [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
     });
 
     this.allowance$ = this.liquidity.valueChanges
@@ -79,7 +80,7 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
         debounceTime(400),
         distinctUntilChanged(),
         tap(_ => this.calcTolerance()),
-        filter(_ => !!this.context?.wallet),
+        filter(amount => !!this.context?.wallet && !!amount),
         switchMap(amount => this.getAllowance$(amount)),
         switchMap(allowance => this.validateBalance(allowance.requestToSpend)))
       .subscribe();
@@ -93,6 +94,8 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
   }
 
   ngOnChanges(): void {
+    this.reset();
+
     if (!!this.pool === false) return;
 
     if (this.liquidity.value) {
@@ -118,7 +121,7 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
       .removeLiquidityQuote(this.pool.address, request.payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote),
-                   (errors: string[]) => this.quoteErrors = errors);
+                   (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
   calcTolerance(tolerance?: number): void {
@@ -188,6 +191,20 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
 
     return this._validateBalance$(this.pool.token.lp, amount)
       .pipe(tap(result => this.balanceError = !result));
+  }
+
+  private reset(): void {
+    this.form.reset();
+    this.lptInFiatValue = null;
+    this.lptInMinFiatValue = null;
+    this.usdOut = null;
+    this.crsOut = null;
+    this.crsOutMin = null;
+    this.srcOut = null;
+    this.srcOutMin = null;
+    this.allowance = null;
+    this.balanceError = null;
+    this.percentageSelected = null;
   }
 
   destroyContext$(): void {

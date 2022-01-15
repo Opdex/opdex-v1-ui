@@ -1,6 +1,7 @@
 import { OnDestroy } from '@angular/core';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
@@ -52,7 +53,7 @@ export class TxMineCollectComponent extends TxBase implements OnChanges, OnDestr
       .collectMiningRewardsQuote(this.pool.summary.miningPool.address)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote),
-                   (errors: string[]) => this.quoteErrors = errors);
+                   (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
   private validateMiningBalance(): Observable<boolean> {

@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { Icons } from 'src/app/enums/icons';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { IconSizes } from 'src/app/enums/icon-sizes';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-allowance-transaction-summary',
@@ -42,7 +43,8 @@ export class AllowanceTransactionSummaryComponent implements OnChanges, OnDestro
     this.subscription = new Subscription();
 
     this.subscription.add(
-      this._tokenService.getToken(approveEvents[0].contract, true)
+      this._tokenService.getToken(approveEvents[0].contract)
+        .pipe(take(1))
         .subscribe(
           (token: IToken) => {
             this.token = token;

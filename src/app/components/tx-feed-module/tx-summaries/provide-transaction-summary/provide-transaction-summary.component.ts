@@ -7,6 +7,7 @@ import { TransactionReceipt } from '@sharedModels/transaction-receipt';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Subscription } from 'rxjs';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-provide-transaction-summary',
@@ -45,7 +46,8 @@ export class ProvideTransactionSummaryComponent implements OnChanges, OnDestroy 
     this.subscription = new Subscription();
 
     this.subscription.add(
-      this._liquidityPoolService.getLiquidityPool(provideEvents[0].contract, true)
+      this._liquidityPoolService.getLiquidityPool(provideEvents[0].contract)
+      .pipe(take(1))
       .subscribe((pool: ILiquidityPoolResponse) => {
         if (provideEvents[0].eventType === TransactionEventTypes.AddLiquidityEvent) {
           const event = provideEvents[0] as IAddLiquidityEvent;

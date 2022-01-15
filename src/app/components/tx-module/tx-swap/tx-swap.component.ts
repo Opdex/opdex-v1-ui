@@ -24,6 +24,7 @@ import { SwapAmountOutQuoteRequest } from '@sharedModels/platform-api/requests/t
 import { ISwapAmountOutQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-out-quote-response.interface';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 @Component({
   selector: 'opdex-tx-swap',
@@ -183,7 +184,7 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
       .swapQuote(this.tokenIn.address, request.payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote),
-                   (errors: string[]) => this.quoteErrors = errors);
+                   (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
   switch() {

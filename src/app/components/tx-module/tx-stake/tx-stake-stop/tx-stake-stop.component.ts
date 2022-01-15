@@ -12,6 +12,7 @@ import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { Observable, of, Subscription } from 'rxjs';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { StopStakingRequest } from '@sharedModels/platform-api/requests/liquidity-pools/stop-staking-request';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 @Component({
   selector: 'opdex-tx-stake-stop',
@@ -44,7 +45,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
     super(_injector);
 
     this.form = this._fb.group({
-      amount: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
+      amount: [null, [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
       liquidate: [false]
     });
 
@@ -64,6 +65,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
 
   ngOnChanges(): void {
     this.pool = this.data?.pool;
+    this.reset();
   }
 
   submit(): void {
@@ -73,7 +75,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
       .stopStakingQuote(this.pool.address, request.payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote),
-                   (errors: string[]) => this.quoteErrors = errors);
+                   (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
   handlePercentageSelect(value: any): void {
@@ -90,6 +92,13 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
 
     return this._validateStakingBalance$(this.pool, amountNeeded)
       .pipe(tap(result => this.balanceError = !result));
+  }
+
+  private reset(): void {
+    this.form.reset();
+    this.fiatValue = null;
+    this.balanceError = null;
+    this.percentageSelected = null;
   }
 
   destroyContext$(): void {
