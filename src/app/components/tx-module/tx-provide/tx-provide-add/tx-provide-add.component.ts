@@ -68,9 +68,9 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
   constructor(
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
-    protected _injector: Injector,
     private _indexService: IndexService,
-    private _env: EnvironmentsService
+    private _env: EnvironmentsService,
+    protected _injector: Injector
   ) {
     super(_injector);
 
@@ -83,8 +83,8 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
     }
 
     this.form = this._fb.group({
-      amountCrs: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
-      amountSrc: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
+      amountCrs: [null, [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
+      amountSrc: [null, [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
     });
 
     // Bug -
@@ -133,6 +133,10 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
         switchMap(_ => this.getAllowance$()),
         switchMap(_ => this.validateBalances()))
       .subscribe();
+  }
+
+  ngOnChanges(): void {
+    this.reset();
   }
 
   quote$(value: string, tokenIn: IToken): Observable<string> {
@@ -249,6 +253,21 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
 
     return this._validateAllowance$(this.context.wallet, this._env.routerAddress, this.pool.token.src, this.amountSrc.value)
       .pipe(tap(allowance => this.allowance = allowance));
+  }
+
+  private reset(): void {
+    this.form.reset();
+    this.allowance = null;
+    this.crsInFiatValue = null;
+    this.crsInMinFiatValue = null;
+    this.srcInFiatValue = null;
+    this.srcInMinFiatValue = null;
+    this.crsInMin = null;
+    this.srcInMin = null;
+    this.crsPercentageSelected = null;
+    this.srcPercentageSelected = null;
+    this.crsBalanceError = null;
+    this.srcBalanceError = null;
   }
 
   destroyContext$(): void {

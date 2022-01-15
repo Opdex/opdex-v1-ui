@@ -28,10 +28,9 @@ export abstract class CacheService {
    * @summary Base method to retrieve a sharable cached object.
    * @param key The cached items unique key to look it up by
    * @param $value The api request as observable to use if the cached item doesn't exit.
-   * @param cacheOnly default false, optionally only take cached responses or brand new responses if this is the first occurrence of the request.
    * @returns Observable T of the cached items type.
    */
-  protected getItem<T>(key: string, $value: Observable<T>, cacheOnly: boolean = false): Observable<T> {
+  protected getItem<T>(key: string, $value: Observable<T>): Observable<T> {
     const currentBlock = this._indexService.getLatestBlock();
     const blockHeight = currentBlock?.height || 0;
 
@@ -48,7 +47,7 @@ export abstract class CacheService {
     }
 
     // Update, the found record is stale
-    if (blockHeight > this.cache[key].lastUpdateBlock && !cacheOnly) {
+    if (blockHeight > this.cache[key].lastUpdateBlock) {
       this.cache[key].lastUpdateBlock = blockHeight;
       this.cache[key].subject.next();
     }

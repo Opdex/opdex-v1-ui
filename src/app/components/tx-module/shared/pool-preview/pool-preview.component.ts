@@ -79,7 +79,7 @@ export class PoolPreviewComponent implements OnChanges, OnDestroy {
           filter(_ => !!this.pool),
           switchMap(_ => this._liquidityPoolsService.getLiquidityPool(this.pool.address)),
           tap(pool => this.pool = pool))
-        .subscribe());
+        .subscribe(_ => this.setRecords()));
   }
 
   ngOnChanges() {

@@ -1,3 +1,4 @@
+import { take } from 'rxjs/operators';
 import { IVaultResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-response-model.interface';
 import { IVaultProposalResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-response-model.interface';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
@@ -103,8 +104,10 @@ export class VaultProposalTransactionSummaryComponent implements OnChanges, OnDe
       const voteEvent = this.pledgeOrVoteEvents.find(event => event.eventType === TransactionEventTypes.VaultProposalVoteEvent) as IVaultProposalVoteEvent;
       const withdrawVoteEvent = this.pledgeOrVoteEvents.find(event => event.eventType === TransactionEventTypes.VaultProposalWithdrawVoteEvent) as IVaultProposalWithdrawVoteEvent;
 
-      return this._tokensService.getToken('CRS', true)
-        .pipe(map(crs => {
+      return this._tokensService.getToken('CRS')
+        .pipe(
+          take(1),
+          map(crs => {
           summary.crs = crs;
           summary.pledgeOrVote = { inFavor: null } as IVaultProposalPledgeOrVoteSummary;
 

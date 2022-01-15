@@ -17,14 +17,14 @@ export class TokensService extends CacheService {
     super(_injector);
   }
 
-  getToken(address: string, cacheOnly?: boolean): Observable<IToken> {
-    return this.getItem(`token-${address}`, this._platformApi.getToken(address), cacheOnly)
+  getToken(address: string): Observable<IToken> {
+    return this.getItem(`token-${address}`, this._platformApi.getToken(address))
   }
 
-  getMarketToken(address: string, cacheOnly?: boolean): Observable<IToken | IMarketToken> {
+  getMarketToken(address: string): Observable<IToken | IMarketToken> {
     return address === 'CRS'
-      ? this.getToken(address, cacheOnly)
-      : this.getItem(`market-token-${address}`, this._platformApi.getMarketToken(address), cacheOnly);
+      ? this.getToken(address)
+      : this.getItem(`market-token-${address}`, this._platformApi.getMarketToken(address));
   }
 
   getTokens(request: TokensFilter): Observable<ITokensResponse> {

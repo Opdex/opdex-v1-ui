@@ -80,7 +80,7 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
       limit: 1
     } as ILiquidityPoolsFilter);
 
-    return this._liquidityPoolService.getLiquidityPools(filter, true)
+    return this._liquidityPoolService.getLiquidityPools(filter)
       .pipe(map(pools => {
         const pool = pools?.results?.length ? pools.results[0] : null;
         return pool;

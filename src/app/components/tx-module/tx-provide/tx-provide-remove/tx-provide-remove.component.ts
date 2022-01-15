@@ -72,7 +72,7 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
     }
 
     this.form = this._fb.group({
-      liquidity: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
+      liquidity: [null, [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
     });
 
     this.allowance$ = this.liquidity.valueChanges
@@ -80,7 +80,7 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
         debounceTime(400),
         distinctUntilChanged(),
         tap(_ => this.calcTolerance()),
-        filter(_ => !!this.context?.wallet),
+        filter(amount => !!this.context?.wallet && !!amount),
         switchMap(amount => this.getAllowance$(amount)),
         switchMap(allowance => this.validateBalance(allowance.requestToSpend)))
       .subscribe();
@@ -94,6 +94,8 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
   }
 
   ngOnChanges(): void {
+    this.reset();
+
     if (!!this.pool === false) return;
 
     if (this.liquidity.value) {
@@ -189,6 +191,20 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
 
     return this._validateBalance$(this.pool.token.lp, amount)
       .pipe(tap(result => this.balanceError = !result));
+  }
+
+  private reset(): void {
+    this.form.reset();
+    this.lptInFiatValue = null;
+    this.lptInMinFiatValue = null;
+    this.usdOut = null;
+    this.crsOut = null;
+    this.crsOutMin = null;
+    this.srcOut = null;
+    this.srcOutMin = null;
+    this.allowance = null;
+    this.balanceError = null;
+    this.percentageSelected = null;
   }
 
   destroyContext$(): void {

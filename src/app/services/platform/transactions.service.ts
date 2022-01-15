@@ -31,12 +31,11 @@ export class TransactionsService extends CacheService {
   // API Methods
 
   getTransaction(hash: string): Observable<ITransactionReceipt> {
-    return this.getItem(hash, this._platformApi.getTransaction(hash), true);
+    return this.getItem(hash, this._platformApi.getTransaction(hash));
   }
 
   getTransactions(request: TransactionRequest): Observable<ITransactionReceipts> {
-    const isHistorical = request.cursor?.length > 0;
-    return this.getItem(`transactions-${request.buildQueryString()}`, this._platformApi.getTransactions(request), isHistorical);
+    return this.getItem(`transactions-${request.buildQueryString()}`, this._platformApi.getTransactions(request));
   }
 
   // Service Observable Methods

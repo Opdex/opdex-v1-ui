@@ -1,16 +1,17 @@
+import { IndexService } from '@sharedServices/platform/index.service';
+import { TokensService } from '@sharedServices/platform/tokens.service';
 import { MinimumPledgeVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vaults/minimum-pledge-vault-proposal-quote-request.interface';
 import { CreateCertificateVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vaults/create-certificate-vault-proposal-quote-request.interface';
 import { RevokeCertificateVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vaults/revoke-certificate-vault-proposal-quote-request.interface';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
-import { OnDestroy } from '@angular/core';
-import { Component, Injector, Input } from '@angular/core';
+import { Component, Injector, Input, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Observable, of, Subscription } from 'rxjs';
+import { take, switchMap, tap } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MinimumVoteVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vaults/minimum-vote-vault-proposal-quote-request.interface';
@@ -26,6 +27,8 @@ export class TxVaultProposalCreateComponent extends TxBase implements OnDestroy 
   form: FormGroup;
   icons = Icons;
   fiatValue: string;
+  balanceError: boolean;
+  subscription = new Subscription();
   proposalTypes = [
     {
       label: 'Create Certificate',
@@ -69,6 +72,8 @@ export class TxVaultProposalCreateComponent extends TxBase implements OnDestroy 
     protected _injector: Injector,
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
+    private _tokenService: TokensService,
+    private _indexService: IndexService,
     private _env: EnvironmentsService
   ) {
     super(_injector);
@@ -80,6 +85,11 @@ export class TxVaultProposalCreateComponent extends TxBase implements OnDestroy 
       amount: ['', [Validators.pattern(PositiveDecimalNumberRegex)]],
       recipient: ['']
     });
+
+    this.subscription.add(
+      this._indexService.getLatestBlock$()
+        .pipe(switchMap(_ => this.validateBalance()))
+        .subscribe());
   }
 
   submit(): void {
@@ -123,11 +133,25 @@ export class TxVaultProposalCreateComponent extends TxBase implements OnDestroy 
                  (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
+  private validateBalance(): Observable<boolean> {
+    if (!this.context?.wallet) {
+      return of(false);
+    }
+
+    const amountNeeded = new FixedDecimal('500', 8);
+
+    return this._tokenService.getToken('CRS')
+      .pipe(
+        switchMap(crs => this._validateBalance$(crs, amountNeeded)),
+        tap(result => this.balanceError = !result));
+  }
+
   destroyContext$() {
     this.context$.unsubscribe();
   }
 
   ngOnDestroy() {
     this.destroyContext$();
+    this.subscription.unsubscribe();
   }
 }

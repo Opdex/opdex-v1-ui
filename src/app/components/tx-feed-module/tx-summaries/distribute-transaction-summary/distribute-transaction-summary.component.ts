@@ -8,6 +8,7 @@ import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { Subscription } from 'rxjs';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { IconSizes } from 'src/app/enums/icon-sizes';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-distribute-transaction-summary',
@@ -44,7 +45,8 @@ export class DistributeTransactionSummaryComponent implements OnChanges, OnDestr
     this.subscription = new Subscription();
 
     this.subscription.add(
-      this._tokenService.getToken(event.contract, true)
+      this._tokenService.getToken(event.contract)
+        .pipe(take(1))
         .subscribe(token => {
           this.token = token;
           this.miningGovernanceAmount = new FixedDecimal(event.miningGovernanceAmount, this.token.decimals);

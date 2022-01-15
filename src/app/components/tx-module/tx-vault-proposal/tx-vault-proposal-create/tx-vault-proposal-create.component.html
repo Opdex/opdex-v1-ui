@@ -8,6 +8,13 @@
         [formControl]="deposit"
         [numbersOnly]="true">
       </opdex-input-control>
+
+      <div class="mt-2" *ngIf="balanceError">
+        <opdex-tx-quote-error
+          [warn]="true"
+          message="Insufficient Deposit Balance">
+        </opdex-tx-quote-error>
+      </div>
     </div>
 
     <div class="mb-3">
@@ -53,7 +60,8 @@
     </mat-form-field>
 
     <opdex-tx-quote-submit-button
-      [disabled]="!form.valid || !context?.wallet"
+      [warn]="balanceError"
+      [disabled]="!form.valid || !context?.wallet || balanceError === undefined"
       (onSubmit)="submit()">
     </opdex-tx-quote-submit-button>
 

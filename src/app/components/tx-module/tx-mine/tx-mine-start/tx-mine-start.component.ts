@@ -49,7 +49,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
     super(_injector);
 
     this.form = this._fb.group({
-      amount: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]]
+      amount: [null, [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]]
     });
 
     this.allowance$ = this.amount.valueChanges
@@ -70,6 +70,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
 
   ngOnChanges(): void {
     this.pool = this.data?.pool;
+    this.reset();
   }
 
   submit(): void {
@@ -99,6 +100,11 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
   }
 
   private setFiatValue(amount: string): void {
+    if (!!amount === false) {
+      this.fiatValue = null;
+      return;
+    }
+
     const lptFiat = new FixedDecimal(this.pool.token.lp.summary.priceUsd.toString(), 8);
     const amountDecimal = new FixedDecimal(amount, this.pool.token.lp.decimals);
 
@@ -112,6 +118,14 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
 
     return this._validateAllowance$(this.context.wallet, spender, token, amount)
       .pipe(tap(allowance => this.allowance = allowance));
+  }
+
+  private reset(): void {
+    this.form.reset();
+    this.fiatValue = null;
+    this.allowance = null;
+    this.balanceError = null;
+    this.percentageSelected = null;
   }
 
   destroyContext$(): void {

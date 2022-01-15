@@ -49,7 +49,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
     super(_injector);
 
     this.form = this._fb.group({
-      amount: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]]
+      amount: [null, [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]]
     });
 
     this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
@@ -71,6 +71,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
 
   ngOnChanges(): void {
     this.pool = this.data?.pool;
+    this.reset();
   }
 
   submit(): void {
@@ -100,6 +101,11 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
   }
 
   private setFiatValue(amount: string): void {
+    if (!!amount === false) {
+      this.fiatValue = null;
+      return;
+    }
+
     const stakingTokenFiat = new FixedDecimal(this.pool.summary.staking?.token.summary.priceUsd.toString(), 8);
     const amountDecimal = new FixedDecimal(amount, this.pool.summary.staking?.token.decimals);
 
@@ -113,6 +119,14 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
 
     return this._validateAllowance$(this.context.wallet, spender, token, amount)
       .pipe(tap(allowance => this.allowance = allowance));
+  }
+
+  private reset(): void {
+    this.form.reset();
+    this.fiatValue = null;
+    this.allowance = null;
+    this.balanceError = null;
+    this.percentageSelected = null;
   }
 
   destroyContext$(): void {

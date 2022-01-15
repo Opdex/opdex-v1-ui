@@ -54,7 +54,7 @@ export class TokenKeywordFilterControlComponent implements OnInit, OnDestroy {
     setTimeout(() => this.filterInput.nativeElement.focus());
 
     // Only taking 1, no need to refresh or unsub
-    this._tokensService.getMarketToken('CRS', true)
+    this._tokensService.getMarketToken('CRS')
       .pipe(
         tap(crs => this.crs = crs),
         switchMap(_ => this.getTokens$(null)),
