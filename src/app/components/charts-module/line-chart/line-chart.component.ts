@@ -195,8 +195,8 @@ export class LineChartComponent implements OnChanges, OnInit {
 
   onResized(event: ResizedEvent) {
     if (this.chart !== undefined) {
-      this.width = event.newWidth;
-      this.chart.resize(event.newWidth, this.height);
+      this.width = event.newRect.width;
+      this.chart.resize(event.newRect.width, this.height);
       this.chart.timeScale().fitContent();
     }
   }

@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 
 import { LineChartComponent } from './line-chart/line-chart.component';
 import { LineChangeComponent } from './line-change/line-change.component';
-import { AngularResizedEventModule } from 'angular-resize-event';
+import { AngularResizeEventModule } from 'angular-resize-event';
 
 @NgModule({
   declarations: [
@@ -16,7 +16,7 @@ import { AngularResizedEventModule } from 'angular-resize-event';
   ],
   imports: [
     CommonModule,
-    AngularResizedEventModule,
+    AngularResizeEventModule,
     MatMenuModule,
     MatButtonModule,
     MatIconModule,

@@ -1,3 +1,4 @@
+import { environment } from './../environments/environment.testnet';
 import { IIndexStatus } from './models/platform-api/responses/index/index-status.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { AppUpdateModalComponent } from './components/modals-module/app-update-modal/app-update-modal.component';
@@ -70,7 +71,7 @@ export class AppComponent implements OnInit {
     window.addEventListener('resize', this.appHeight);
     this.appHeight();
 
-    this._appUpdate.available.subscribe(_ => this.openAppUpdate());
+    this._appUpdate.versionUpdates.subscribe(_ => this.openAppUpdate());
 
     this.network = this._env.network;
     this.context = this._context.getUserContext();
@@ -98,6 +99,16 @@ export class AppComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    // Immediately check service worker for updates, reload if found
+    if (environment.production) {
+      try {
+        const update = await this._appUpdate.checkForUpdate();
+        if (update) location.reload();
+      } catch {
+        // Ignore - likely local env
+      }
+    }
+
     // Get context
     this.subscription
       .add(this._context.getUserContext$()
