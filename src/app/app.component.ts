@@ -99,16 +99,6 @@ export class AppComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    // Immediately check service worker for updates, reload if found
-    if (environment.production) {
-      try {
-        const update = await this._appUpdate.checkForUpdate();
-        if (update) location.reload();
-      } catch {
-        // Ignore - likely local env
-      }
-    }
-
     // Get context
     this.subscription
       .add(this._context.getUserContext$()
