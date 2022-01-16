@@ -169,12 +169,21 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
   }
 
   submit() {
+    const tokenInAmount = new FixedDecimal(this.tokenInAmount.value, this.tokenIn.decimals);
+    const tokenOutAmount = new FixedDecimal(this.tokenOutAmount.value, this.tokenOut.decimals);
+    const tokenInMax = this.tokenInExact
+      ? tokenInAmount
+      : new FixedDecimal(this.tokenInMax, this.tokenIn.decimals);
+    const tokenOutMin = !this.tokenInExact
+      ? tokenOutAmount
+      : new FixedDecimal(this.tokenOutMin, this.tokenOut.decimals);
+
     const request = new SwapRequest(
       this.tokenOut.address,
-      new FixedDecimal(this.tokenInAmount.value, this.tokenIn.decimals),
-      new FixedDecimal(this.tokenOutAmount.value, this.tokenOut.decimals),
-      new FixedDecimal(this.tokenInMax, this.tokenIn.decimals),
-      new FixedDecimal(this.tokenOutMin, this.tokenOut.decimals),
+      tokenInAmount,
+      tokenOutAmount,
+      tokenInMax,
+      tokenOutMin,
       this.tokenInExact,
       this.context.wallet,
       this.calcDeadline(this.deadlineThreshold)
