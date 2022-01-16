@@ -15,7 +15,7 @@ export class MarketStatCardsLookup {
         iconColor: 'primary',
         helpInfo: {
           title: 'What is Liquidity?',
-          paragraph: 'Liquidity represents the total USD amount of tokens locked in liquidity pools through provisioning. Liquidity can be measured for the market as a whole, or at an individual liquidity pool level.'
+          paragraph: `Liquidity represents the total USD amount of tokens locked in liquidity pool's within a market.`
         }
       },
       {
@@ -28,7 +28,7 @@ export class MarketStatCardsLookup {
         iconColor: 'stake',
         helpInfo: {
           title: 'What is Staking?',
-          paragraph: 'Staking in liquidity pools acts as voting in the mining governance to enable liquidity mining. This indicator displays how many tokens are staking and can be represented for the market as a whole or at an individual staking pool level.'
+          paragraph: 'Staking represents tokens locked and voting in favor of a liquidity pool having liquidity mining enabled.'
         }
       },
       {
@@ -41,7 +41,7 @@ export class MarketStatCardsLookup {
         iconColor: 'provide',
         helpInfo: {
           title: 'What is Volume?',
-          paragraph: 'Volume is the total USD value of tokens swapped and is usually displayed on a daily time frame. Volume tracks the value of tokens input to the protocol during swaps, plus transaction fees.'
+          paragraph: 'Volume is the total USD value of tokens input for swap transactions which includes transaction fees.'
         }
       },
       {
@@ -54,7 +54,7 @@ export class MarketStatCardsLookup {
         iconColor: 'reward',
         helpInfo: {
           title: 'What are Rewards?',
-          paragraph: 'The rewards indicator displays the total USD value of transaction fees accumulated based on the volume of swap transactions. Rewards are collected by participants for providing liquidity and for staking in active markets.'
+          paragraph: 'Rewards are the value tokens distributed between liquidity providers and staking participants originating from swap transaction fees.'
         }
       }
     ];

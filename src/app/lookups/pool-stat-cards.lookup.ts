@@ -14,7 +14,7 @@ export class PoolStatCardsLookup {
         iconColor: 'primary',
         helpInfo: {
           title: 'What is Liquidity?',
-          paragraph: 'Liquidity represents the total USD amount of tokens locked in liquidity pools through provisioning. Liquidity can be measured for the market as a whole, or at an individual liquidity pool level.'
+          paragraph: 'Liquidity represents the total USD amount of paired tokens locked in a liquidity pool smart contract.'
         }
       },
       {
@@ -27,7 +27,7 @@ export class PoolStatCardsLookup {
         iconColor: 'stake',
         helpInfo: {
           title: 'What is Staking?',
-          paragraph: 'Staking in liquidity pools acts as voting in the mining governance to enable liquidity mining. This indicator displays how many tokens are staking and can be represented for the market as a whole or at an individual staking pool level.'
+          paragraph: 'Staking represents tokens locked and voted in favor of a liquidity pool having liquidity mining enabled.'
         }
       },
       {
@@ -40,7 +40,7 @@ export class PoolStatCardsLookup {
         iconColor: 'provide',
         helpInfo: {
           title: 'What is Volume?',
-          paragraph: 'Volume is the total USD value of tokens swapped and is usually displayed on a daily time frame. Volume tracks the value of tokens input to the protocol during swaps including transaction fees.'
+          paragraph: 'Volume is the total USD value of tokens input for swap transactions which includes transaction fees.'
         }
       },
       {
@@ -53,7 +53,7 @@ export class PoolStatCardsLookup {
         iconColor: 'reward',
         helpInfo: {
           title: 'What are Rewards?',
-          paragraph: 'The rewards indicator displays the total USD value of transaction fees accumulated based on the volume of swap transactions. Rewards are collected by participants for providing liquidity and for staking in active markets.'
+          paragraph: 'Rewards are the value tokens distributed between liquidity providers and staking participants originating from swap transaction fees.'
         }
       },
       {
@@ -65,7 +65,7 @@ export class PoolStatCardsLookup {
         iconColor: 'mine',
         helpInfo: {
           title: 'What is Liquidity Mining?',
-          paragraph: 'Liquidity mining is when new governance tokens are mined, from liquidity that is provided and staked in mining pools. This indicator displays the totals currently used for mining within the liquidity pool, whether liquidity mining is currently active or not.'
+          paragraph: 'Liquidity mining is how governance staking token are distributed. Provide liquidity to a pool that has enabled liquidity mining and stake the provided liquidity in a mining pool to collect mining rewards by position weight.'
         }
       }
     ];

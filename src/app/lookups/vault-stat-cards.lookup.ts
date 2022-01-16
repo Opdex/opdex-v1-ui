@@ -11,7 +11,7 @@ export class VaultStatCardsLookup {
         suffix: token?.symbol,
         helpInfo: {
           title: 'Locked Tokens',
-          paragraph: 'The locked tokens indicator displays how many governance tokens are currently locked within the vault contract. As certificates are redeemed and tokens are collected, the supply will be reduced accordingly.'
+          paragraph: 'Locked tokens refers to the total number of tokens locked within the vault smart contract. As certificates are redeemed and tokens are collected, the supply will be reduced accordingly.'
         },
         show: true
       },
@@ -21,27 +21,17 @@ export class VaultStatCardsLookup {
         suffix: token?.symbol,
         helpInfo: {
           title: 'Unassigned Tokens',
-          paragraph: 'Unassigned tokens is the balance of tokens not currently assigned to active certificates. As certificates are created and assigned to wallets, the amount of unassigned tokens is reduced accordingly.'
+          paragraph: 'Unassigned tokens are tokens not currently assigned to certificates. The number of unassigned tokens changes as certificates are created or revoked.'
         },
         show: true
       },
-      // {
-      //   title: 'Proposed',
-      //   value: vault?.tokensProposed,
-      //   suffix: token?.symbol,
-      //   helpInfo: {
-      //     title: 'Proposed Tokens',
-      //     paragraph: 'Proposed tokens are the number of tokens current requested in active create certificate proposals.'
-      //   },
-      //   show: true
-      // },
       {
         title: 'Pledge Minimum',
         value: vault?.totalPledgeMinimum,
         suffix: 'CRS',
         helpInfo: {
           title: 'Proposal Pledge Minimum',
-          paragraph: 'The minimum number of CRS tokens required to collectively have pledged to move a proposal on to a vote.'
+          paragraph: 'The minimum number of CRS tokens required to collectively have pledged to move a proposal into the voting stage.'
         },
         show: true
       },
