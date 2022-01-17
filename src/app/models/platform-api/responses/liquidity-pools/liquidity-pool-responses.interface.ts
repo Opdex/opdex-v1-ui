@@ -8,6 +8,7 @@ export interface ILiquidityPoolResponse {
   name: string;
   transactionFee: number;
   token: ITokenGroup;
+  miningPool: IMiningPool;
   summary: ILiquidityPoolSummaryResponse;
 }
 
@@ -17,7 +18,6 @@ export interface ILiquidityPoolSummaryResponse {
   staking: IStakingSummaryResponse;
   volume: IVolumeSummaryResponse;
   cost: ICostSummaryResponse;
-  miningPool: IMiningPool;
 }
 
 export interface IReservesSummaryResponse {

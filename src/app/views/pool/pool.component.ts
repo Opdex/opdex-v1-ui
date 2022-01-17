@@ -155,7 +155,7 @@ export class PoolComponent implements OnInit, OnDestroy {
 
           var contracts = [pool.address, pool.token.src.address];
 
-          if (pool?.summary?.miningPool?.address) contracts.push(pool.summary.miningPool.address);
+          if (pool?.miningPool?.address) contracts.push(pool.miningPool.address);
 
           this.transactionsRequest = {
             limit: 15,
@@ -235,8 +235,8 @@ export class PoolComponent implements OnInit, OnDestroy {
         combo.push(this.getStakingPosition(context.wallet, this.poolAddress, stakingToken));
       }
 
-      if (this.pool.summary.miningPool) {
-        combo.push(this.getMiningPosition(context.wallet, this.pool.summary.miningPool.address, lpToken));
+      if (this.pool.miningPool) {
+        combo.push(this.getMiningPosition(context.wallet, this.pool.miningPool.address, lpToken));
       }
 
       return zip(...combo).pipe(take(1), tap(results => this.positions = results));

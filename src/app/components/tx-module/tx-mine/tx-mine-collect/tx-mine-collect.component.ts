@@ -50,7 +50,7 @@ export class TxMineCollectComponent extends TxBase implements OnChanges, OnDestr
 
   submit(): void {
     this._platformApi
-      .collectMiningRewardsQuote(this.pool.summary.miningPool.address)
+      .collectMiningRewardsQuote(this.pool.miningPool.address)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote),
                    (error: OpdexHttpError) => this.quoteErrors = error.errors);

@@ -72,7 +72,7 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
   submit(): void {
     const request = new MiningQuote(new FixedDecimal(this.amount.value, this.pool.token.lp.decimals));
 
-    this._platformApi.stopMiningQuote(this.pool.summary.miningPool.address, request.payload)
+    this._platformApi.stopMiningQuote(this.pool.miningPool.address, request.payload)
       .pipe(take(1))
       .subscribe((quote: ITransactionQuote) => this.quote(quote),
                   (error: OpdexHttpError) => this.quoteErrors = error.errors);

@@ -145,10 +145,10 @@ export class PoolPreviewComponent implements OnChanges, OnDestroy {
     }
 
     // Mining
-    if (this.showMining && !!this.pool.summary.miningPool) {
+    if (this.showMining && !!this.pool.miningPool) {
       this.poolPreviewRecords.push({
         token: this.pool.summary.staking.token,
-        supply: this.pool.summary.miningPool.tokensMining,
+        supply: this.pool.miningPool.tokensMining,
         percentageChange: this.pool.token.lp.summary.dailyPriceChangePercent,
         price: this.pool.token.lp.summary.priceUsd
       });
