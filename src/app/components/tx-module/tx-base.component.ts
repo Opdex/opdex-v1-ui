@@ -71,7 +71,7 @@ export abstract class TxBase{
   protected _validateMiningBalance$(liquidityPool: ILiquidityPoolResponse, amountToSpend: FixedDecimal): Observable<boolean> {
     if (!liquidityPool) return of(false);
 
-    return this._walletsService.getMiningPosition(this.context.wallet, liquidityPool.summary.miningPool.address)
+    return this._walletsService.getMiningPosition(this.context.wallet, liquidityPool.miningPool.address)
       .pipe(
         map(position => this._isEnough(new FixedDecimal(position.amount, liquidityPool.token.lp.decimals), amountToSpend)),
         catchError(_ => of(false)));

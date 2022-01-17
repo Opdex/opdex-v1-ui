@@ -77,7 +77,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
     const request = new MiningQuote(new FixedDecimal(this.amount.value, this.pool.token.lp.decimals));
 
     this._platformApi
-      .startMiningQuote(this.pool.summary.miningPool.address, request.payload)
+      .startMiningQuote(this.pool.miningPool.address, request.payload)
         .pipe(take(1))
         .subscribe((quote: ITransactionQuote) => this.quote(quote),
                    (error: OpdexHttpError) => this.quoteErrors = error.errors);
@@ -113,7 +113,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
 
   private getAllowance$(amount?: string): Observable<AllowanceValidation> {
     amount = amount || this.amount.value;
-    const spender = this.pool?.summary?.miningPool?.address;
+    const spender = this.pool?.miningPool?.address;
     const token = this.pool?.token?.lp;
 
     return this._validateAllowance$(this.context.wallet, spender, token, amount)

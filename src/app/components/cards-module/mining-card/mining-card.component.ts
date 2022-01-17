@@ -22,7 +22,7 @@ export class MiningCardComponent implements OnChanges {
 
   ngOnChanges() {
     this.miningUsd = MathService.multiply(
-      new FixedDecimal(this.pool.summary.miningPool.tokensMining, this.pool.token.lp.decimals),
+      new FixedDecimal(this.pool.miningPool.tokensMining, this.pool.token.lp.decimals),
       new FixedDecimal(this.pool.token.lp.summary.priceUsd.toString(), 8));
   }
 

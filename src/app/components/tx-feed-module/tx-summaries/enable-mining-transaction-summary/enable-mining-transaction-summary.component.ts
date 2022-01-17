@@ -51,7 +51,7 @@ export class EnableMiningTransactionSummaryComponent implements OnChanges, OnDes
 
   poolsTrackBy(index: number, pool: ILiquidityPoolResponse) {
     if (pool === null || pool === undefined) return index;
-    return `${index}-${pool.address}-${pool.summary.cost.crsPerSrc}-${pool.summary.miningPool?.tokensMining}-${pool.summary.staking?.weight}`;
+    return `${index}-${pool.address}-${pool.summary.cost.crsPerSrc}-${pool.miningPool?.tokensMining}-${pool.summary.staking?.weight}`;
   }
 
   ngOnDestroy(): void {

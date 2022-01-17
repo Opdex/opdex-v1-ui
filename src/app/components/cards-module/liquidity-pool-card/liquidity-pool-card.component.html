@@ -19,7 +19,7 @@
         <button mat-menu-item [ngClass]="iconSizes.small" (click)="stake()" *ngIf="pool.summary.staking">
           <mat-icon class="stake">{{icons.staking}}</mat-icon> Stake {{pool.summary.staking?.token?.symbol}}
         </button>
-        <button mat-menu-item [ngClass]="iconSizes.small" (click)="mine()" *ngIf="pool.summary.miningPool?.isActive">
+        <button mat-menu-item [ngClass]="iconSizes.small" (click)="mine()" *ngIf="pool.miningPool?.isActive">
           <mat-icon class="mine">{{icons.mining}}</mat-icon> Mine {{pool.summary.staking?.token?.symbol}}
         </button>
       </mat-menu>
