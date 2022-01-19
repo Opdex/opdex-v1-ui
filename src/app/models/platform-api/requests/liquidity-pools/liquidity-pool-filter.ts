@@ -3,31 +3,31 @@ export interface ILiquidityPoolsFilter {
   tokens?: string[];
   liquidityPools?: string[];
   markets?: string[];
-  stakingFilter?: StakingFilter;
-  miningFilter?: MiningFilter;
-  nominationFilter?: NominationFilter;
+  stakingStatus?: StakingStatus;
+  miningStatus?: MiningStatus;
+  nominationStatus?: NominationStatus;
   orderBy?: LpOrderBy;
   limit?: number;
   direction?: string;
   cursor?: string
 }
 
-export enum StakingFilter {
+export enum StakingStatus {
   Any = 'Any',
   Enabled = 'Enabled',
   Disabled = 'Disabled'
 }
 
-export enum MiningFilter {
+export enum MiningStatus {
   Any = 'Any',
   Enabled = 'Enabled',
   Disabled = 'Disabled'
 }
 
-export enum NominationFilter {
+export enum NominationStatus {
   Any = 'Any',
   Nominated = 'Nominated',
-  NonNominated = 'NonNominated'
+  Excluded = 'Excluded'
 }
 
 export enum LpOrderBy {
@@ -42,9 +42,9 @@ export class LiquidityPoolsFilter implements ILiquidityPoolsFilter {
   tokens?: string[];
   liquidityPools?: string[];
   markets?: string[];
-  stakingFilter?: StakingFilter;
-  miningFilter?: MiningFilter;
-  nominationFilter?: NominationFilter;
+  stakingStatus?: StakingStatus;
+  miningStatus?: MiningStatus;
+  nominationStatus?: NominationStatus;
   orderBy?: LpOrderBy;
   limit?: number;
   direction?: string;
@@ -61,9 +61,9 @@ export class LiquidityPoolsFilter implements ILiquidityPoolsFilter {
     this.tokens = filter.tokens || [];
     this.markets = filter.markets || [];
     this.liquidityPools = filter.liquidityPools || [];
-    this.stakingFilter = filter.stakingFilter;
-    this.miningFilter = filter.miningFilter;
-    this.nominationFilter = filter.nominationFilter;
+    this.stakingStatus = filter.stakingStatus;
+    this.miningStatus = filter.miningStatus;
+    this.nominationStatus = filter.nominationStatus;
     this.orderBy = filter.orderBy;
     this.limit = filter.limit;
     this.direction = filter.direction;
@@ -88,9 +88,9 @@ export class LiquidityPoolsFilter implements ILiquidityPoolsFilter {
     }
 
     query = this.addToQuery(query, 'keyword', this.keyword);
-    query = this.addToQuery(query, 'stakingFilter', this.stakingFilter);
-    query = this.addToQuery(query, 'miningFilter', this.miningFilter);
-    query = this.addToQuery(query, 'nominationFilter', this.nominationFilter);
+    query = this.addToQuery(query, 'stakingStatus', this.stakingStatus);
+    query = this.addToQuery(query, 'miningStatus', this.miningStatus);
+    query = this.addToQuery(query, 'nominationStatus', this.nominationStatus);
     query = this.addToQuery(query, 'orderBy', this.orderBy);
     query = this.addToQuery(query, 'limit', this.limit);
     query = this.addToQuery(query, 'direction', this.direction);

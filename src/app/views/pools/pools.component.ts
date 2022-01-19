@@ -6,7 +6,7 @@ import { TransactionView } from '@sharedModels/transaction-view';
 import { map, switchMap } from 'rxjs/operators';
 import { combineLatest, Subscription } from 'rxjs';
 import { Icons } from 'src/app/enums/icons';
-import { LiquidityPoolsFilter, LpOrderBy, MiningFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
+import { LiquidityPoolsFilter, LpOrderBy, MiningStatus } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { ILiquidityPoolsResponse, ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 
 interface IPoolsView {
@@ -42,7 +42,7 @@ export class PoolsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const miningFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 4, direction: 'DESC', miningFilter: MiningFilter.Enabled});
+    const miningFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 4, direction: 'DESC', miningStatus: MiningStatus.Enabled});
     const volumeFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Volume, limit: 4, direction: 'DESC'});
 
     this.subscription.add(this._indexService.getLatestBlock$()

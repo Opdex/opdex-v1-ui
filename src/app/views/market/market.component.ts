@@ -10,7 +10,7 @@ import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liq
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { delay, map, switchMap, take, tap } from 'rxjs/operators';
-import { LiquidityPoolsFilter, LpOrderBy, MiningFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
+import { LiquidityPoolsFilter, LpOrderBy, MiningStatus } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { StatCardInfo } from '@sharedModels/stat-card-info';
 import { MarketsService } from '@sharedServices/platform/markets.service';
 import { TransactionView } from '@sharedModels/transaction-view';
@@ -89,7 +89,7 @@ export class MarketComponent implements OnInit, OnDestroy {
       orderBy: LpOrderBy.Liquidity,
       limit: 4,
       direction: 'DESC',
-      miningFilter: MiningFilter.Enabled
+      miningStatus: MiningStatus.Enabled
     });
 
     this.subscription.add(
