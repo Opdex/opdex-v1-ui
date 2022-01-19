@@ -11,7 +11,7 @@ export interface IEnvironment {
 
 export const environments: IEnvironment[] = [
   {
-    apiUrl: 'https://v1-dev-api.opdex.com',
+    apiUrl: 'https://v1-dev-api.opdex.com/v1',
     marketAddress: 'PXToW7DpAhVAYn9Ye3TLs91jV22NqLmHWx',
     routerAddress: 'PNzmDwtPNt5EYukJZzjShsHHrjpe2y594x',
     miningGovernanceAddress: 'PHrY3DUj6DgjKZq2aWdwGiKs5FAWoy2QS2',
@@ -19,7 +19,7 @@ export const environments: IEnvironment[] = [
     network: Network.Devnet
   },
   {
-    apiUrl: 'https://v1-test-api.opdex.com',
+    apiUrl: 'https://v1-test-api.opdex.com/v1',
     marketAddress: 't7RorA7xQCMVYKPM1ibPE1NSswaLbpqLQb',
     routerAddress: 'tAFxpxRdcV9foADqD6gK3c8sY5MeANzFp5',
     miningGovernanceAddress: 'tKFkNiL5KJ3Q4br929i6hHbB4X4mt1MigF',
@@ -27,7 +27,7 @@ export const environments: IEnvironment[] = [
     network: Network.Testnet
   },
   {
-    apiUrl: 'https://v1-api.opdex.com',
+    apiUrl: 'https://v1-api.opdex.com/v1',
     marketAddress: '',
     routerAddress: '',
     miningGovernanceAddress: '',
