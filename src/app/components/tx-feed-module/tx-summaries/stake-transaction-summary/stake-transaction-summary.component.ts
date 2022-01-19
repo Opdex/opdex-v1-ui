@@ -74,15 +74,15 @@ export class StakeTransactionSummaryComponent implements OnChanges, OnDestroy {
 
           if (this.isCollection) {
             if (this.collectionLiquidatedRewards) {
-              this.amountOneToken = liquidityPool.token.crs;
-              this.amountTwoToken = liquidityPool.token.src;
+              this.amountOneToken = liquidityPool.tokens.crs;
+              this.amountTwoToken = liquidityPool.tokens.src;
 
               const amountOne = burnEvent.amountCrs;
               const amountTwo = burnEvent.amountSrc;
               this.collectAmountOne = new FixedDecimal(amountOne, this.amountOneToken.decimals);
               this.collectAmountTwo = new FixedDecimal(amountTwo, this.amountTwoToken.decimals);
             } else {
-              this.amountOneToken = liquidityPool.token.lp;
+              this.amountOneToken = liquidityPool.tokens.lp;
               this.collectAmountOne = new FixedDecimal(collectEvent.amount, this.amountOneToken.decimals);
             }
           }

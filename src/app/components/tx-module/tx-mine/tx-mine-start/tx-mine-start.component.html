@@ -5,7 +5,7 @@
       [prefixIcon]="icons.add"
       label="Start Mining"
       [formControl]="amount"
-      [suffix]="pool.token.lp.symbol"
+      [suffix]="pool.tokens.lp.symbol"
       [numbersOnly]="true">
       <div class="flex-row-center-end">
         <span class="success" *ngIf="fiatValue">${{fiatValue | shortNumber}}</span>
@@ -14,7 +14,7 @@
 
     <opdex-percentage-amount-buttons
       [contract]="pool.address"
-      [token]="pool.token.lp"
+      [token]="pool.tokens.lp"
       positionType="Balance"
       [selected]="percentageSelected"
       (onPercentageSelect)="handlePercentageSelect($event)"></opdex-percentage-amount-buttons>

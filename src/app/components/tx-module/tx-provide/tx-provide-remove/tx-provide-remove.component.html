@@ -5,11 +5,11 @@
       [prefixIcon]="icons.remove"
       label="Liquidate"
       [formControl]="liquidity"
-      [suffix]="pool.token.lp.symbol"
+      [suffix]="pool.tokens.lp.symbol"
       [numbersOnly]="true">
       <div class="flex-row-center-between">
         <div class="tolerance-amounts">
-          <span *ngIf="crsOutMin && srcOutMin">Min: {{crsOutMin | shortNumber}} {{pool.token.crs.symbol}} <span style="opacity: .5">|</span> {{srcOutMin | shortNumber}} {{pool.token.src.symbol}}</span>
+          <span *ngIf="crsOutMin && srcOutMin">Min: {{crsOutMin | shortNumber}} {{pool.tokens.crs.symbol}} <span style="opacity: .5">|</span> {{srcOutMin | shortNumber}} {{pool.tokens.src.symbol}}</span>
         </div>
 
         <div class="fiat-quote">
@@ -20,7 +20,7 @@
 
     <opdex-percentage-amount-buttons
       [contract]="pool.address"
-      [token]="pool.token.lp"
+      [token]="pool.tokens.lp"
       positionType="Balance"
       [selected]="percentageSelected"
       (onPercentageSelect)="handlePercentageSelect($event)"></opdex-percentage-amount-buttons>

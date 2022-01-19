@@ -110,9 +110,9 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
 
   submit(): void {
     const request = new RemoveLiquidityRequest(
-      new FixedDecimal(this.liquidity.value, this.pool.token.lp.decimals),
-      new FixedDecimal(this.crsOutMin, this.pool.token.crs.decimals),
-      new FixedDecimal(this.srcOutMin, this.pool.token.src.decimals),
+      new FixedDecimal(this.liquidity.value, this.pool.tokens.lp.decimals),
+      new FixedDecimal(this.crsOutMin, this.pool.tokens.crs.decimals),
+      new FixedDecimal(this.srcOutMin, this.pool.tokens.src.decimals),
       this.context.wallet,
       this.calcDeadline(this.deadlineThreshold)
     );
@@ -130,12 +130,12 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
     if (this.toleranceThreshold > 99.99 || this.toleranceThreshold < .01) return;
     if (!this.liquidity.value) return;
 
-    const lptDecimals = this.pool.token.lp.decimals;
+    const lptDecimals = this.pool.tokens.lp.decimals;
     const liquidityValue = new FixedDecimal(this.liquidity.value, lptDecimals);
-    const totalSupply = new FixedDecimal(this.pool.token.lp.totalSupply.toString(), lptDecimals);
+    const totalSupply = new FixedDecimal(this.pool.tokens.lp.totalSupply.toString(), lptDecimals);
 
-    const crsDecimals = this.pool.token.crs.decimals;
-    const srcDecimals = this.pool.token.src.decimals;
+    const crsDecimals = this.pool.tokens.crs.decimals;
+    const srcDecimals = this.pool.tokens.src.decimals;
     const reservesUsd = new FixedDecimal(this.pool.summary.reserves.usd.toFixed(8), 8);
     const reserveCrs = new FixedDecimal(this.pool.summary.reserves.crs, crsDecimals);
     const reserveSrc = new FixedDecimal(this.pool.summary.reserves.src, srcDecimals);
@@ -180,7 +180,7 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
   private getAllowance$(amount?: string): Observable<AllowanceValidation> {
     amount = amount || this.liquidity.value;
 
-    return this._validateAllowance$(this.context.wallet, this._env.routerAddress, this.pool?.token?.lp, amount)
+    return this._validateAllowance$(this.context.wallet, this._env.routerAddress, this.pool?.tokens?.lp, amount)
       .pipe(tap(allowance => this.allowance = allowance));
   }
 
@@ -189,7 +189,7 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
       return of(false);
     }
 
-    return this._validateBalance$(this.pool.token.lp, amount)
+    return this._validateBalance$(this.pool.tokens.lp, amount)
       .pipe(tap(result => this.balanceError = !result));
   }
 

@@ -55,8 +55,8 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
               return;
             }
 
-            const lptFiat = new FixedDecimal(this.pool.token.lp.summary.priceUsd.toString(), 8);
-            const amountDecimal = new FixedDecimal(amount, this.pool.token.lp.decimals);
+            const lptFiat = new FixedDecimal(this.pool.tokens.lp.summary.priceUsd.toString(), 8);
+            const amountDecimal = new FixedDecimal(amount, this.pool.tokens.lp.decimals);
             this.fiatValue = MathService.multiply(amountDecimal, lptFiat);
           }),
           filter(amount => !!amount),
@@ -70,7 +70,7 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
   }
 
   submit(): void {
-    const request = new MiningQuote(new FixedDecimal(this.amount.value, this.pool.token.lp.decimals));
+    const request = new MiningQuote(new FixedDecimal(this.amount.value, this.pool.tokens.lp.decimals));
 
     this._platformApi.stopMiningQuote(this.pool.miningPool.address, request.payload)
       .pipe(take(1))
@@ -88,7 +88,7 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
       return of(false);
     }
 
-    const amountNeeded = new FixedDecimal(this.amount.value, this.pool.token.lp.decimals);
+    const amountNeeded = new FixedDecimal(this.amount.value, this.pool.tokens.lp.decimals);
 
     return this._validateMiningBalance$(this.pool, amountNeeded)
       .pipe(tap(result => this.balanceError = !result));

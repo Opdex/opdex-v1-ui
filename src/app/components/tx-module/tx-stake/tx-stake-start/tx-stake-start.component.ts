@@ -94,7 +94,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
       return of(false);
     }
 
-    const amountNeeded = new FixedDecimal(this.amount.value, this.pool.token.lp.decimals);
+    const amountNeeded = new FixedDecimal(this.amount.value, this.pool.tokens.lp.decimals);
 
     return this._validateBalance$(this.pool.summary.staking.token, amountNeeded)
       .pipe(tap(result => this.balanceError = !result));

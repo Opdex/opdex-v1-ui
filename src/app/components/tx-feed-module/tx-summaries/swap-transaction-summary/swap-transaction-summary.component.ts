@@ -48,8 +48,8 @@ export class SwapTransactionSummaryComponent implements OnChanges, OnDestroy {
             tap((pool: ILiquidityPoolResponse) => {
             const crsIn = new FixedDecimal(event.amountCrsIn, 8);
 
-            this.tokenIn = crsIn.isZero ? pool.token.src : pool.token.crs;
-            this.tokenOut = crsIn.isZero ? pool.token.crs : pool.token.src;
+            this.tokenIn = crsIn.isZero ? pool.tokens.src : pool.tokens.crs;
+            this.tokenOut = crsIn.isZero ? pool.tokens.crs : pool.tokens.src;
 
             const tokenInAmount = crsIn.isZero ? event.amountSrcIn : event.amountCrsIn;
             this.tokenInAmount = new FixedDecimal(tokenInAmount, this.tokenIn.decimals);
@@ -68,8 +68,8 @@ export class SwapTransactionSummaryComponent implements OnChanges, OnDestroy {
         ])
         .pipe(take(1))
         .subscribe(([firstPool, secondPool]: [ILiquidityPoolResponse, ILiquidityPoolResponse]) => {
-          this.tokenIn = firstPool.token.src;
-          this.tokenOut = secondPool.token.src;
+          this.tokenIn = firstPool.tokens.src;
+          this.tokenOut = secondPool.tokens.src;
           this.tokenInAmount = new FixedDecimal(firstEvent.amountSrcIn, this.tokenIn.decimals);
           this.tokenOutAmount = new FixedDecimal(secondEvent.amountSrcOut, this.tokenOut.decimals);
         }));

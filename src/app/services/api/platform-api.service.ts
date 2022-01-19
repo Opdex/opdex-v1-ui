@@ -115,7 +115,7 @@ export class PlatformApiService extends RestApiService {
   ////////////////////////////
 
   public getIndexStatus(): Observable<IIndexStatus> {
-    return this.get<IIndexStatus>(`${this.api}/index`);
+    return this.get<IIndexStatus>(`${this.api}/indexer`);
   }
 
 

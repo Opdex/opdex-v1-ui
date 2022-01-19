@@ -162,9 +162,9 @@ export class TokenComponent implements OnInit {
         .pipe(tap(pool => {
           this.liquidityPool = pool;
 
-          const olptSupply = new FixedDecimal(pool.token.lp.totalSupply, pool.token.lp.decimals);
-          const crsReserves = new FixedDecimal(pool.summary.reserves.crs, pool.token.crs.decimals);
-          const srcReserves = new FixedDecimal(pool.summary.reserves.src, pool.token.src.decimals);
+          const olptSupply = new FixedDecimal(pool.tokens.lp.totalSupply, pool.tokens.lp.decimals);
+          const crsReserves = new FixedDecimal(pool.summary.reserves.crs, pool.tokens.crs.decimals);
+          const srcReserves = new FixedDecimal(pool.summary.reserves.src, pool.tokens.src.decimals);
 
           this.crsPerOlpt = MathService.divide(crsReserves, olptSupply);
           this.srcPerOlpt = MathService.divide(srcReserves, olptSupply);

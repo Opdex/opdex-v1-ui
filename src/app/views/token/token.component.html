@@ -57,7 +57,7 @@
               <mat-icon class="ml-1 mr-1" [ngClass]="iconSizes.tiny">{{icons.swap}}</mat-icon>
 
               <span class="align-items-end">
-                {{liquidityPool.summary.cost.crsPerSrc | shortNumber}} <small>{{liquidityPool.token.crs.symbol}}</small>
+                {{liquidityPool.summary.cost.crsPerSrc | shortNumber}} <small>{{liquidityPool.tokens.crs.symbol}}</small>
               </span>
             </div>
           </ng-container>
@@ -66,13 +66,13 @@
             <div class="flex-row-center-between">
               <a class="b-400 no-decoration" routerLink="/pools/{{liquidityPool.address}}">{{liquidityPool.name}}</a>
               <p class="mb-0">
-                1 <small>{{liquidityPool.token.lp.symbol}}</small>
+                1 <small>{{liquidityPool.tokens.lp.symbol}}</small>
               </p>
             </div>
 
             <div class="flex-row-center-between">
-              <p class="mb-0">~{{crsPerOlpt | shortNumber}} <smalL>{{liquidityPool.token.crs.symbol}}</smalL></p>
-              <p class="mb-0">~{{srcPerOlpt | shortNumber}} <small>{{liquidityPool.token.src.symbol}}</small></p>
+              <p class="mb-0">~{{crsPerOlpt | shortNumber}} <smalL>{{liquidityPool.tokens.crs.symbol}}</smalL></p>
+              <p class="mb-0">~{{srcPerOlpt | shortNumber}} <small>{{liquidityPool.tokens.src.symbol}}</small></p>
             </div>
           </ng-template>
         </opdex-card>

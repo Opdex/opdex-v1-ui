@@ -101,7 +101,7 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
                 .pipe(
                   take(1),
                   map(pool => {
-                    let token = pool.token.lp;
+                    let token = pool.tokens.lp;
                     token.name = pool.name
                     token.balance = balance;
                     return token;

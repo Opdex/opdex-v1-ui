@@ -113,7 +113,7 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
                   stakingTokenSymbol: p.pool.summary.staking?.token.symbol,
                   liquidityPoolAddress: p.pool.address,
                   position: p.position.amount,
-                  decimals: p.pool.token.lp.decimals,
+                  decimals: p.pool.tokens.lp.decimals,
                   isNominated: p.pool.summary?.staking.nominated === true,
                   value: MathService.multiply(
                     new FixedDecimal(p.position.amount, p.pool.summary.staking?.token.decimals),

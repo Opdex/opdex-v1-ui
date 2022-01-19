@@ -59,7 +59,7 @@ export class TxMineCollectComponent extends TxBase implements OnChanges, OnDestr
   private validateMiningBalance(): Observable<boolean> {
     if (!!this.pool === false || !this.context?.wallet) return of(false);
 
-    return this._validateMiningBalance$(this.pool, new FixedDecimal('0', this.pool.token.lp.decimals))
+    return this._validateMiningBalance$(this.pool, new FixedDecimal('0', this.pool.tokens.lp.decimals))
       .pipe(tap(result => this.balanceError = !result))
   }
 
