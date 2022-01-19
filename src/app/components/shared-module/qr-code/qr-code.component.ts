@@ -12,11 +12,6 @@ export class QrCodeComponent implements OnChanges {
   icons = Icons;
   qr: string;
 
-  helpInfo = {
-    title: 'QR Codes',
-    paragraph: 'Displayed QR codes can be scanned and used for authentication and transaction quote validation. By scanning or copying the QR code in any wallet that follows Opdex QR code standards, the wallet can display and the user can verify or act on the encoded data.'
-  }
-
   ngOnChanges() {
     // Make sure the data is safe for QR codes
     this.qr = typeof this.data === 'string' ? this.data : JSON.stringify(this.data);

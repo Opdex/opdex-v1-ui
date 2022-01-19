@@ -1,18 +1,25 @@
 <section id="auth" class="header-section tx-bg flex-row-center-center">
   <div class="container">
     <opdex-card>
-      <img src="/assets/logo-light-blue.png" alt="Opdex Logo" class="logo">
+      <div class="flex-row-center-center mb-3 mt-2">
+        <img src="/assets/logo-light-blue.png" alt="Opdex Logo" class="logo mr-1">
+        <h1 class="mb-0">Login</h1>
+      </div>
 
-      <h2>Connect</h2>
+      <p class="text-center">Scan or copy the QR code using a compatible Stratis wallet to login.</p>
 
       <opdex-qr-code [data]="stratisId"></opdex-qr-code>
 
-      <div class="expiration" *ngIf="percentageTimeRemaining">
+      <div class="mt-3" *ngIf="percentageTimeRemaining">
+        <small>Code Reset</small>
         <mat-progress-bar [color]="percentageTimeRemaining < 10 ? 'warn' : 'primary'" [value]="percentageTimeRemaining"></mat-progress-bar>
         <small class="mt-2 light">{{timeRemaining}} Remaining</small>
       </div>
 
       <form [formGroup]="form" name="auth-form" id="auth-form" (submit)="submitDevnetAuth()" *ngIf="isDevnet">
+        <mat-divider class="mt-3 mb-3" style="position: relative"></mat-divider>
+        <h4 class="mb-3">Devnet Login</h4>
+
         <mat-form-field floatLabel="always">
           <mat-label>Public Key</mat-label>
 

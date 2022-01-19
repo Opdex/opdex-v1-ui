@@ -82,6 +82,8 @@
     <div class="mt-4" *ngIf="quoteReceipt.success || showQrAnyways;">
       <p class="error b-400 text-center" *ngIf="showQrAnyways">This transaction is highly likely to fail.</p>
 
+      <small class="d-block light text-center mb-3">Scan or copy the QR code with a Stratis wallet to quote and complete the transaction.</small>
+
       <opdex-qr-code [data]="quoteRequest"></opdex-qr-code>
     </div>
 
