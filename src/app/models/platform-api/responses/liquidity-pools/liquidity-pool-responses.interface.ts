@@ -6,8 +6,8 @@ export interface ILiquidityPoolsResponse extends IPaging<ILiquidityPoolResponse>
 export interface ILiquidityPoolResponse {
   address: string;
   name: string;
-  transactionFee: number;
-  token: ITokenGroup;
+  transactionFeePercent: number;
+  tokens: ITokenGroup;
   miningPool: IMiningPool;
   summary: ILiquidityPoolSummaryResponse;
 }

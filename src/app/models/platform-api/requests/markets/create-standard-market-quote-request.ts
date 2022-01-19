@@ -1,5 +1,5 @@
 export interface ICreateStandardMarketQuoteRequest {
-  marketOwner: string;
+  owner: string;
   transactionFee: number;
   authPoolCreators: boolean;
   authLiquidityProviders: boolean;
@@ -8,7 +8,7 @@ export interface ICreateStandardMarketQuoteRequest {
 }
 
 export class CreateStandardMarketQuoteRequest {
-  private _marketOwner: string;
+  private _owner: string;
   private _transactionFee: number;
   private _authPoolCreators: boolean;
   private _authLiquidityProviders: boolean;
@@ -17,7 +17,7 @@ export class CreateStandardMarketQuoteRequest {
 
   public get payload(): ICreateStandardMarketQuoteRequest {
     return {
-      marketOwner: this._marketOwner,
+      owner: this._owner,
       transactionFee: this._transactionFee,
       authPoolCreators: this._authPoolCreators,
       authLiquidityProviders: this._authLiquidityProviders,
@@ -26,9 +26,9 @@ export class CreateStandardMarketQuoteRequest {
     }
   }
 
-  constructor(marketOwner: string, transactionFee: number, authPoolCreators: boolean,
+  constructor(owner: string, transactionFee: number, authPoolCreators: boolean,
               authLiquidityProviders: boolean, authTraders: boolean, enableMarketFee: boolean) {
-    this._marketOwner = marketOwner;
+    this._owner = owner;
     this._transactionFee = transactionFee;
     this._authPoolCreators = authPoolCreators;
     this._authLiquidityProviders= authLiquidityProviders;

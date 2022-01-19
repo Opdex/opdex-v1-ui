@@ -3,7 +3,7 @@
   <strong>
     {{event.amount | shortNumber}}
   </strong>
-  <a class="no-decoration" routerLink="/tokens/{{pool.token.lp.address}}">{{pool.token.lp.symbol}}</a> staking rewards.
+  <a class="no-decoration" routerLink="/tokens/{{pool.tokens.lp.address}}">{{pool.tokens.lp.symbol}}</a> staking rewards.
 </p>
 
 <ng-template #loading>Collected <strong>{{event.amount | shortNumber}}</strong> LPT staking rewards.</ng-template>

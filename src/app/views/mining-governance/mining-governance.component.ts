@@ -1,7 +1,6 @@
 import { IIndexStatus } from '@sharedModels/platform-api/responses/index/index-status.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
-import { NominationFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { MiningGovernancesService } from '@sharedServices/platform/mining-governances.service';
 import { Subscription } from 'rxjs';
@@ -11,7 +10,7 @@ import { ReviewQuoteComponent } from '@sharedComponents/tx-module/shared/review-
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LiquidityPoolsFilter, LpOrderBy, MiningFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
+import { LiquidityPoolsFilter, LpOrderBy, NominationStatus, MiningStatus } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable } from 'rxjs';
@@ -69,7 +68,7 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
           tap(minedToken => this.miningGovernance.setMinedToken(minedToken)))
         .subscribe());
 
-    const nominationFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 4, direction: 'DESC', nominationFilter: NominationFilter.Nominated});
+    const nominationFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 4, direction: 'DESC', nominationStatus: NominationStatus.Nominated});
 
     this.subscription.add(
       this._indexService.getLatestBlock$()
@@ -81,7 +80,7 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
         .subscribe(status => this.indexStatus = status));
 
     this.miningPools$ = this._indexService.getLatestBlock$().pipe(switchMap(_ => {
-      const filter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 4, direction: 'DESC', miningFilter: MiningFilter.Enabled});
+      const filter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 4, direction: 'DESC', miningStatus: MiningStatus.Enabled});
       return this._liquidityPoolsService.getLiquidityPools(filter).pipe(map(pools => pools.results));
     }));
   }

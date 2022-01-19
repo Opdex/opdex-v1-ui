@@ -74,7 +74,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
   }
 
   submit(): void {
-    const request = new MiningQuote(new FixedDecimal(this.amount.value, this.pool.token.lp.decimals));
+    const request = new MiningQuote(new FixedDecimal(this.amount.value, this.pool.tokens.lp.decimals));
 
     this._platformApi
       .startMiningQuote(this.pool.miningPool.address, request.payload)
@@ -93,9 +93,9 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
       return of(false);
     }
 
-    const amountNeeded = new FixedDecimal(this.amount.value, this.pool.token.lp.decimals);
+    const amountNeeded = new FixedDecimal(this.amount.value, this.pool.tokens.lp.decimals);
 
-    return this._validateBalance$(this.pool.token.lp, amountNeeded)
+    return this._validateBalance$(this.pool.tokens.lp, amountNeeded)
       .pipe(tap(result => this.balanceError = !result));
   }
 
@@ -105,8 +105,8 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
       return;
     }
 
-    const lptFiat = new FixedDecimal(this.pool.token.lp.summary.priceUsd.toString(), 8);
-    const amountDecimal = new FixedDecimal(amount, this.pool.token.lp.decimals);
+    const lptFiat = new FixedDecimal(this.pool.tokens.lp.summary.priceUsd.toString(), 8);
+    const amountDecimal = new FixedDecimal(amount, this.pool.tokens.lp.decimals);
 
     this.fiatValue = MathService.multiply(amountDecimal, lptFiat);
   }
@@ -114,7 +114,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
   private getAllowance$(amount?: string): Observable<AllowanceValidation> {
     amount = amount || this.amount.value;
     const spender = this.pool?.miningPool?.address;
-    const token = this.pool?.token?.lp;
+    const token = this.pool?.tokens?.lp;
 
     return this._validateAllowance$(this.context.wallet, spender, token, amount)
       .pipe(tap(allowance => this.allowance = allowance));

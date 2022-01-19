@@ -62,15 +62,15 @@ export class MineTransactionSummaryComponent implements OnChanges, OnDestroy {
           const collectAmount = collectEvent === undefined ? '0' : collectEvent.amount;
           this.collectAmount = new FixedDecimal(collectAmount, liquidityPool.summary.staking?.token.decimals);
 
-          let lptAmount = new FixedDecimal('0', liquidityPool.token.lp.decimals);
+          let lptAmount = new FixedDecimal('0', liquidityPool.tokens.lp.decimals);
 
           if (startEvent !== undefined) {
             this.isAddition = true;
-            lptAmount = new FixedDecimal(startEvent.amount, liquidityPool.token.lp.decimals);
+            lptAmount = new FixedDecimal(startEvent.amount, liquidityPool.tokens.lp.decimals);
           }
           else if (stopEvent !== undefined) {
             this.isAddition = false;
-            lptAmount = new FixedDecimal(stopEvent.amount, liquidityPool.token.lp.decimals);
+            lptAmount = new FixedDecimal(stopEvent.amount, liquidityPool.tokens.lp.decimals);
           }
 
           this.lptAmount = lptAmount;

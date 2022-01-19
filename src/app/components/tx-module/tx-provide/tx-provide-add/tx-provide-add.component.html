@@ -4,9 +4,9 @@
       <opdex-input-control
         [suffixDisabled]="true"
         [prefixIcon]="icons.add"
-        label="Provide {{pool.token.crs.symbol}}"
+        label="Provide {{pool.tokens.crs.symbol}}"
         [formControl]="amountCrs"
-        [suffix]="pool.token.crs.symbol"
+        [suffix]="pool.tokens.crs.symbol"
         [numbersOnly]="true">
         <div class="flex-row-center-between">
           <div class="tolerance-amounts">
@@ -21,8 +21,8 @@
       </opdex-input-control>
 
       <opdex-percentage-amount-buttons
-        [contract]="pool.token.crs.address"
-        [token]="pool.token.crs"
+        [contract]="pool.tokens.crs.address"
+        [token]="pool.tokens.crs"
         positionType="Balance"
         [selected]="crsPercentageSelected"
         (onPercentageSelect)="handlePercentageSelect('crs', $event)">
@@ -31,13 +31,13 @@
       <div class="mt-2 mb-2" *ngIf="crsBalanceError || amountCrs.errors?.invalidAmountEquivalent">
         <opdex-tx-quote-error
           [warn]="true"
-          message="Insufficient {{pool.token.crs.symbol}} Balance"
+          message="Insufficient {{pool.tokens.crs.symbol}} Balance"
           *ngIf="crsBalanceError">
         </opdex-tx-quote-error>
 
         <opdex-tx-quote-error *ngIf="amountCrs.errors?.invalidAmountEquivalent"
           [warn]="false"
-          message="Error retrieving equivalent {{pool.token.src.symbol}} amount">
+          message="Error retrieving equivalent {{pool.tokens.src.symbol}} amount">
         </opdex-tx-quote-error>
       </div>
     </div>
@@ -45,9 +45,9 @@
     <opdex-input-control
       [suffixDisabled]="true"
       [prefixIcon]="icons.add"
-      label="Provide {{pool.token.src.symbol}}"
+      label="Provide {{pool.tokens.src.symbol}}"
       [formControl]="amountSrc"
-      [suffix]="pool.token.src.symbol"
+      [suffix]="pool.tokens.src.symbol"
       [numbersOnly]="true">
       <div class="flex-row-center-between">
         <div class="tolerance-amounts">
@@ -62,8 +62,8 @@
     </opdex-input-control>
 
     <opdex-percentage-amount-buttons
-      [contract]="pool.token.src.address"
-      [token]="pool.token.src"
+      [contract]="pool.tokens.src.address"
+      [token]="pool.tokens.src"
       positionType="Balance"
       [selected]="srcPercentageSelected"
       (onPercentageSelect)="handlePercentageSelect('src', $event)">
@@ -77,13 +77,13 @@
 
       <opdex-tx-quote-error
         [warn]="true"
-        message="Insufficient {{pool.token.src.symbol}} Balance"
+        message="Insufficient {{pool.tokens.src.symbol}} Balance"
         *ngIf="srcBalanceError">
       </opdex-tx-quote-error>
 
       <opdex-tx-quote-error *ngIf="amountSrc.errors?.invalidAmountEquivalent"
         [warn]="false"
-        message="Error retrieving equivalent {{pool.token.crs.symbol}} amount">
+        message="Error retrieving equivalent {{pool.tokens.crs.symbol}} amount">
       </opdex-tx-quote-error>
     </div>
 

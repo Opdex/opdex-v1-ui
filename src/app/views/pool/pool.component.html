@@ -2,11 +2,11 @@
   <div class="container">
     <div class="row align-items-center">
       <div class="col-12 col-sm-6 col-xl-8">
-        <h1 class="mb-0">{{pool?.token?.src?.symbol || 'XYZ'}}/{{pool?.token?.crs?.symbol || 'CRS'}}</h1>
+        <h1 class="mb-0">{{pool?.tokens?.src?.symbol || 'XYZ'}}/{{pool?.tokens?.crs?.symbol || 'CRS'}}</h1>
         <opdex-copy-address [address]="pool?.address"></opdex-copy-address>
 
         <div class="chip-group mt-2">
-          <div class="chip blue">{{pool?.transactionFee > 0 ? pool.transactionFee : 0}}% Fee</div>
+          <div class="chip blue">{{pool?.transactionFeePercent > 0 ? pool.transactionFeePercent : 0}}% Fee</div>
           <div class="chip purple" *ngIf="pool?.summary?.staking?.nominated"><mat-icon>{{icons.staking}}</mat-icon> Nominated</div>
           <div class="chip red" *ngIf="pool?.miningPool?.isActive"><mat-icon>{{icons.mining}}</mat-icon> Mining</div>
         </div>
@@ -20,18 +20,18 @@
     <div class="row">
       <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
         <opdex-liquidity-pool-token-card
-          [token]="pool?.token?.src"
+          [token]="pool?.tokens?.src"
           [reserves]="pool?.summary?.reserves?.src"
           [swapRate]="pool?.summary?.cost?.crsPerSrc"
-          [swapToken]="pool?.token?.crs"></opdex-liquidity-pool-token-card>
+          [swapToken]="pool?.tokens?.crs"></opdex-liquidity-pool-token-card>
       </div>
 
       <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
         <opdex-liquidity-pool-token-card
-          [token]="pool?.token?.crs"
+          [token]="pool?.tokens?.crs"
           [reserves]="pool?.summary?.reserves?.crs"
           [swapRate]="pool?.summary?.cost?.srcPerCrs"
-          [swapToken]="pool?.token?.src"></opdex-liquidity-pool-token-card>
+          [swapToken]="pool?.tokens?.src"></opdex-liquidity-pool-token-card>
       </div>
     </div>
 

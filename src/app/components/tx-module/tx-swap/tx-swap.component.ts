@@ -119,8 +119,8 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
 
   ngOnChanges() {
     if (this.data?.pool) {
-      this.tokenIn = this.data.pool.token.src;
-      this.tokenOut = this.data.pool.token.crs;
+      this.tokenIn = this.data.pool.tokens.src;
+      this.tokenOut = this.data.pool.tokens.crs;
     } else {
       const topTokens = new TokensFilter({
         limit: 2,

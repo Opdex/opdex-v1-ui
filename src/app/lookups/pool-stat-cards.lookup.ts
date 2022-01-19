@@ -59,7 +59,7 @@ export class PoolStatCardsLookup {
       {
         title: 'Mining',
         value: pool?.miningPool?.tokensMining,
-        suffix: pool?.token?.lp?.symbol,
+        suffix: pool?.tokens?.lp?.symbol,
         show: (pool?.miningPool !== null && pool?.miningPool !== undefined) && (pool?.miningPool?.isActive || pool?.miningPool?.tokensMining !== '0.00000000'),
         icon: Icons.mining,
         iconColor: 'mine',

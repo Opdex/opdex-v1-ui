@@ -72,7 +72,7 @@ export class WalletComponent implements OnInit {
       limit: 15,
       direction: "DESC",
       eventTypes: [],
-      wallet: this.wallet.wallet
+      sender: this.wallet.wallet
     };
 
     this.pledgesFilter = new VaultProposalPledgesFilter({

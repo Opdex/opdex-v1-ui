@@ -101,7 +101,7 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
         .pipe(
           debounceTime(400),
           distinctUntilChanged(),
-          switchMap(amount => this.quote$(amount, this.pool?.token?.crs)),
+          switchMap(amount => this.quote$(amount, this.pool?.tokens?.crs)),
           tap(amount => {
             if (amount !== '') this.amountSrc.setValue(amount, { emitEvent: false })
           }),
@@ -116,7 +116,7 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
         .pipe(
           debounceTime(400),
           distinctUntilChanged(),
-          switchMap(amount => this.quote$(amount, this.pool?.token?.src)),
+          switchMap(amount => this.quote$(amount, this.pool?.tokens?.src)),
           tap(quoteAmount => {
             if (quoteAmount !== '') this.amountCrs.setValue(quoteAmount, { emitEvent: false })
           }),
@@ -166,10 +166,10 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
 
   submit(): void {
     const request = new AddLiquidityRequest(
-      new FixedDecimal(this.amountCrs.value, this.pool.token.crs.decimals),
-      new FixedDecimal(this.amountSrc.value, this.pool.token.src.decimals),
-      new FixedDecimal(this.crsInMin, this.pool.token.crs.decimals),
-      new FixedDecimal(this.srcInMin, this.pool.token.src.decimals),
+      new FixedDecimal(this.amountCrs.value, this.pool.tokens.crs.decimals),
+      new FixedDecimal(this.amountSrc.value, this.pool.tokens.src.decimals),
+      new FixedDecimal(this.crsInMin, this.pool.tokens.crs.decimals),
+      new FixedDecimal(this.srcInMin, this.pool.tokens.src.decimals),
       this.context.wallet,
       this.calcDeadline(this.deadlineThreshold)
     );
@@ -187,18 +187,18 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
     if (this.toleranceThreshold > 99.99 || this.toleranceThreshold < .01) return;
     if (!this.amountCrs.value || !this.amountSrc.value) return;
 
-    let crsInValue = new FixedDecimal(this.amountCrs.value, this.pool.token.crs.decimals);
+    let crsInValue = new FixedDecimal(this.amountCrs.value, this.pool.tokens.crs.decimals);
     let crsMinTolerance = MathService.multiply(crsInValue, new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8));
-    this.crsInMin = MathService.subtract(crsInValue, new FixedDecimal(crsMinTolerance, this.pool.token.crs.decimals));
+    this.crsInMin = MathService.subtract(crsInValue, new FixedDecimal(crsMinTolerance, this.pool.tokens.crs.decimals));
 
-    let srcInValue = new FixedDecimal(this.amountSrc.value, this.pool.token.src.decimals);
+    let srcInValue = new FixedDecimal(this.amountSrc.value, this.pool.tokens.src.decimals);
     let srcMinTolerance = MathService.multiply(srcInValue, new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8));
-    this.srcInMin = MathService.subtract(srcInValue, new FixedDecimal(srcMinTolerance, this.pool.token.src.decimals));
+    this.srcInMin = MathService.subtract(srcInValue, new FixedDecimal(srcMinTolerance, this.pool.tokens.src.decimals));
 
-    this.crsInFiatValue = MathService.multiply(new FixedDecimal(this.amountCrs.value, this.pool.token.crs.decimals), new FixedDecimal(this.pool.token.crs.summary.priceUsd.toString(), 8));
-    this.crsInMinFiatValue = MathService.multiply(new FixedDecimal(this.crsInMin, this.pool.token.crs.decimals), new FixedDecimal(this.pool.token.crs.summary.priceUsd.toString(), 8));
-    this.srcInFiatValue = MathService.multiply(new FixedDecimal(this.amountSrc.value, this.pool.token.src.decimals), new FixedDecimal(this.pool.token.src.summary.priceUsd.toString(), 8));
-    this.srcInMinFiatValue = MathService.multiply(new FixedDecimal(this.srcInMin, this.pool.token.src.decimals), new FixedDecimal(this.pool.token.src.summary.priceUsd.toString(), 8));
+    this.crsInFiatValue = MathService.multiply(new FixedDecimal(this.amountCrs.value, this.pool.tokens.crs.decimals), new FixedDecimal(this.pool.tokens.crs.summary.priceUsd.toString(), 8));
+    this.crsInMinFiatValue = MathService.multiply(new FixedDecimal(this.crsInMin, this.pool.tokens.crs.decimals), new FixedDecimal(this.pool.tokens.crs.summary.priceUsd.toString(), 8));
+    this.srcInFiatValue = MathService.multiply(new FixedDecimal(this.amountSrc.value, this.pool.tokens.src.decimals), new FixedDecimal(this.pool.tokens.src.summary.priceUsd.toString(), 8));
+    this.srcInMinFiatValue = MathService.multiply(new FixedDecimal(this.srcInMin, this.pool.tokens.src.decimals), new FixedDecimal(this.pool.tokens.src.summary.priceUsd.toString(), 8));
   }
 
   toggleShowMore(value: boolean): void {
@@ -229,13 +229,13 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
       return of();
     }
 
-    const crsNeeded = new FixedDecimal(this.amountCrs.value, this.pool.token.crs.decimals);
-    const srcNeeded = new FixedDecimal(this.amountSrc.value, this.pool.token.src.decimals);
+    const crsNeeded = new FixedDecimal(this.amountCrs.value, this.pool.tokens.crs.decimals);
+    const srcNeeded = new FixedDecimal(this.amountSrc.value, this.pool.tokens.src.decimals);
 
-    return this.validateBalance(this.pool.token.crs, crsNeeded)
+    return this.validateBalance(this.pool.tokens.crs, crsNeeded)
       .pipe(
         tap(result => this.crsBalanceError = !result),
-        switchMap(_ => this.validateBalance(this.pool.token.src, srcNeeded)),
+        switchMap(_ => this.validateBalance(this.pool.tokens.src, srcNeeded)),
         tap(result => this.srcBalanceError = !result),
         map(_ => null));
   }
@@ -251,7 +251,7 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
   private getAllowance$(): Observable<AllowanceValidation> {
     if (!!this.pool === false) return of();
 
-    return this._validateAllowance$(this.context.wallet, this._env.routerAddress, this.pool.token.src, this.amountSrc.value)
+    return this._validateAllowance$(this.context.wallet, this._env.routerAddress, this.pool.tokens.src, this.amountSrc.value)
       .pipe(tap(allowance => this.allowance = allowance));
   }
 

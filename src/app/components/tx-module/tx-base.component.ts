@@ -73,7 +73,7 @@ export abstract class TxBase{
 
     return this._walletsService.getMiningPosition(this.context.wallet, liquidityPool.miningPool.address)
       .pipe(
-        map(position => this._isEnough(new FixedDecimal(position.amount, liquidityPool.token.lp.decimals), amountToSpend)),
+        map(position => this._isEnough(new FixedDecimal(position.amount, liquidityPool.tokens.lp.decimals), amountToSpend)),
         catchError(_ => of(false)));
   }
 

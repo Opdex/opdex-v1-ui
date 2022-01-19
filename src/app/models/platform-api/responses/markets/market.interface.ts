@@ -10,6 +10,6 @@ export interface IMarket {
   authTraders: string;
   authProviders: boolean;
   marketFeeEnabled: boolean;
-  transactionFee: number;
+  transactionFeePercent: number;
   summary: IMarketSummaryResponse;
 }

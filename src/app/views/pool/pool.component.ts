@@ -153,7 +153,7 @@ export class PoolComponent implements OnInit, OnDestroy {
             return;
           }
 
-          var contracts = [pool.address, pool.token.src.address];
+          var contracts = [pool.address, pool.tokens.src.address];
 
           if (pool?.miningPool?.address) contracts.push(pool.miningPool.address);
 
@@ -217,9 +217,9 @@ export class PoolComponent implements OnInit, OnDestroy {
     const context = this._userContext.getUserContext();
 
     if (context.wallet && this.pool) {
-      const crsToken = this.pool.token.crs;
-      const srcToken = this.pool.token.src;
-      const lpToken = this.pool.token.lp;
+      const crsToken = this.pool.tokens.crs;
+      const srcToken = this.pool.tokens.src;
+      const lpToken = this.pool.tokens.lp;
       const stakingToken = this.pool.summary.staking?.token;
 
       const combo = [
@@ -261,15 +261,15 @@ export class PoolComponent implements OnInit, OnDestroy {
               const prefixIsCrs = parts[0].includes('CRS');
 
               if (prefixIsCrs) {
-                o.suffix = this.pool.token.src.symbol;
-                o.decimals = this.pool.token.src.decimals
+                o.suffix = this.pool.tokens.src.symbol;
+                o.decimals = this.pool.tokens.src.decimals
               } else {
-                o.suffix = this.pool.token.crs.symbol;
+                o.suffix = this.pool.tokens.crs.symbol;
               }
 
               o.category = prefixIsCrs
-                ? `${this.pool.token.crs.symbol}/${this.pool.token.src.symbol}`
-                : `${this.pool.token.src.symbol}/${this.pool.token.crs.symbol}`;
+                ? `${this.pool.tokens.crs.symbol}/${this.pool.tokens.src.symbol}`
+                : `${this.pool.tokens.src.symbol}/${this.pool.tokens.crs.symbol}`;
             }
 
             return o;
@@ -290,9 +290,9 @@ export class PoolComponent implements OnInit, OnDestroy {
       this.chartData = this.poolHistory.volume;
     } else if ($event === 'Staking') {
       this.chartData = this.poolHistory.staking;
-    } else if ($event === `${this.pool.token.crs.symbol}/${this.pool.token.src.symbol}`) {
+    } else if ($event === `${this.pool.tokens.crs.symbol}/${this.pool.tokens.src.symbol}`) {
       this.chartData = this.poolHistory.srcPerCrs;
-    } else if ($event === `${this.pool.token.src.symbol}/${this.pool.token.crs.symbol}`) {
+    } else if ($event === `${this.pool.tokens.src.symbol}/${this.pool.tokens.crs.symbol}`) {
       this.chartData = this.poolHistory.crsPerSrc;
     }
   }

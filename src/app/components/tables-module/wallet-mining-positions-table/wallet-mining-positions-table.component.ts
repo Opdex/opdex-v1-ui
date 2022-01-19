@@ -109,15 +109,15 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
                 this.dataSource.data = positions.map((p: any) => {
                   return {
                     name: p.pool.name,
-                    miningTokenSymbol: p.pool.token.lp.symbol,
+                    miningTokenSymbol: p.pool.tokens.lp.symbol,
                     liquidityPoolAddress: p.pool.address,
                     miningPoolAddress: p.position.miningPool,
                     position: p.position.amount,
                     isActive: p.pool.miningPool?.isActive === true,
-                    decimals: p.pool.token.lp.decimals,
+                    decimals: p.pool.tokens.lp.decimals,
                     value: MathService.multiply(
-                      new FixedDecimal(p.position.amount, p.pool.token.lp.decimals),
-                      new FixedDecimal(p.pool.token.lp.summary.priceUsd.toString(), 8))
+                      new FixedDecimal(p.position.amount, p.pool.tokens.lp.decimals),
+                      new FixedDecimal(p.pool.tokens.lp.summary.priceUsd.toString(), 8))
                   }
                 });
 

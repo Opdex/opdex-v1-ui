@@ -111,26 +111,26 @@ export class PoolPreviewComponent implements OnChanges, OnDestroy {
     if (this.showReserves) {
       // CRS
       this.poolPreviewRecords.push({
-        token: this.pool.token.crs,
+        token: this.pool.tokens.crs,
         supply: this.pool.summary.reserves.crs,
-        percentageChange: this.pool.token.crs.summary.dailyPriceChangePercent,
-        price: this.pool.token.crs.summary.priceUsd
+        percentageChange: this.pool.tokens.crs.summary.dailyPriceChangePercent,
+        price: this.pool.tokens.crs.summary.priceUsd
       });
 
       // SRC
       this.poolPreviewRecords.push({
-        token: this.pool.token.src,
+        token: this.pool.tokens.src,
         supply: this.pool.summary.reserves.src,
-        percentageChange: this.pool.token.src.summary.dailyPriceChangePercent,
-        price: this.pool.token.src.summary.priceUsd
+        percentageChange: this.pool.tokens.src.summary.dailyPriceChangePercent,
+        price: this.pool.tokens.src.summary.priceUsd
       });
 
       // LP
       this.poolPreviewRecords.push({
-        token: this.pool.token.lp,
-        supply: this.pool.token.lp.totalSupply,
-        percentageChange: this.pool.token.lp.summary.dailyPriceChangePercent,
-        price: this.pool.token.lp.summary.priceUsd
+        token: this.pool.tokens.lp,
+        supply: this.pool.tokens.lp.totalSupply,
+        percentageChange: this.pool.tokens.lp.summary.dailyPriceChangePercent,
+        price: this.pool.tokens.lp.summary.priceUsd
       });
     }
 
@@ -149,8 +149,8 @@ export class PoolPreviewComponent implements OnChanges, OnDestroy {
       this.poolPreviewRecords.push({
         token: this.pool.summary.staking.token,
         supply: this.pool.miningPool.tokensMining,
-        percentageChange: this.pool.token.lp.summary.dailyPriceChangePercent,
-        price: this.pool.token.lp.summary.priceUsd
+        percentageChange: this.pool.tokens.lp.summary.dailyPriceChangePercent,
+        price: this.pool.tokens.lp.summary.priceUsd
       });
     }
   }
@@ -162,8 +162,8 @@ export class PoolPreviewComponent implements OnChanges, OnDestroy {
 
     return this.pools.filter(pool => {
       var addressMatch = pool.address.toLowerCase().includes(filterValue);
-      var symbolMatch = pool.token.src.symbol.toLowerCase().includes(filterValue);
-      var nameMatch = pool.token.src.name.toLowerCase().includes(filterValue);
+      var symbolMatch = pool.tokens.src.symbol.toLowerCase().includes(filterValue);
+      var nameMatch = pool.tokens.src.name.toLowerCase().includes(filterValue);
 
       return addressMatch || nameMatch || symbolMatch;
     });

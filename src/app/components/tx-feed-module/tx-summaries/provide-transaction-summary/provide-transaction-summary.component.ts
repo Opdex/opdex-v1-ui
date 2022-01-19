@@ -52,15 +52,15 @@ export class ProvideTransactionSummaryComponent implements OnChanges, OnDestroy 
         if (provideEvents[0].eventType === TransactionEventTypes.AddLiquidityEvent) {
           const event = provideEvents[0] as IAddLiquidityEvent;
           this.isAddition = true;
-          this.lptAmount = new FixedDecimal(event.amountLpt, pool.token.lp.decimals);
-          this.srcAmount = new FixedDecimal(event.amountSrc, pool.token.src.decimals);
-          this.crsAmount = new FixedDecimal(event.amountCrs, pool.token.crs.decimals);
+          this.lptAmount = new FixedDecimal(event.amountLpt, pool.tokens.lp.decimals);
+          this.srcAmount = new FixedDecimal(event.amountSrc, pool.tokens.src.decimals);
+          this.crsAmount = new FixedDecimal(event.amountCrs, pool.tokens.crs.decimals);
         } else {
           const event = provideEvents[0] as IRemoveLiquidityEvent;
           this.isAddition = false;
-          this.lptAmount = new FixedDecimal(event.amountLpt, pool.token.lp.decimals);
-          this.srcAmount = new FixedDecimal(event.amountSrc, pool.token.src.decimals);
-          this.crsAmount = new FixedDecimal(event.amountCrs, pool.token.crs.decimals);
+          this.lptAmount = new FixedDecimal(event.amountLpt, pool.tokens.lp.decimals);
+          this.srcAmount = new FixedDecimal(event.amountSrc, pool.tokens.src.decimals);
+          this.crsAmount = new FixedDecimal(event.amountCrs, pool.tokens.crs.decimals);
         }
 
         this.pool = pool;

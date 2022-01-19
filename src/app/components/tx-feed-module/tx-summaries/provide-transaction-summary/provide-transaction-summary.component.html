@@ -1,17 +1,17 @@
 <ng-container *ngIf="pool && !error">
   <div class="flex-row-center mb-2">
     <div class="no-wrap">
-      {{isAddition ? '+' : '-'}}{{lptAmount.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.name}}</a> <a class="ml-1 no-decoration" routerLink="/tokens/{{pool.address}}">{{pool.token.lp.symbol}}</a>
+      {{isAddition ? '+' : '-'}}{{lptAmount.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.name}}</a> <a class="ml-1 no-decoration" routerLink="/tokens/{{pool.address}}">{{pool.tokens.lp.symbol}}</a>
     </div>
   </div>
 
   <div class="flex-row-center">
     <div class="col flex-shrink no-wrap">
-      {{isAddition ? '-' : '+'}}{{crsAmount.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/tokens/{{pool.token.crs.address}}">{{pool.token.crs.symbol}}</a>
+      {{isAddition ? '-' : '+'}}{{crsAmount.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/tokens/{{pool.tokens.crs.address}}">{{pool.tokens.crs.symbol}}</a>
     </div>
 
     <div class="col no-wrap">
-      {{isAddition ? '-' : '+'}}{{srcAmount.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/tokens/{{pool.token.src.address}}">{{pool.token.src.symbol}}</a>
+      {{isAddition ? '-' : '+'}}{{srcAmount.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/tokens/{{pool.tokens.src.address}}">{{pool.tokens.src.symbol}}</a>
     </div>
   </div>
 </ng-container>

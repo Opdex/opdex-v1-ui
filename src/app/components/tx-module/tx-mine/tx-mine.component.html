@@ -7,7 +7,7 @@
 
   <ng-container *ngIf="pool">
     <opdex-wallet-preview
-      [balanceTokens]="[pool.token.lp.address]"
+      [balanceTokens]="[pool.tokens.lp.address]"
       [positionMining]="[pool.miningPool?.address]"></opdex-wallet-preview>
 
     <!-- We're specifically checking staking capabilities here for right now. In the staking market
