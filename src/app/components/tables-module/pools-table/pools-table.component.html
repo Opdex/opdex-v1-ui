@@ -58,10 +58,10 @@
 
           <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
             <button mat-menu-item [ngClass]="iconSizes.small" (click)="swap(element)">
-              <mat-icon class="swap">{{icons.swap}}</mat-icon> Swap {{element.token.src?.symbol}}
+              <mat-icon class="swap">{{icons.swap}}</mat-icon> Swap {{element.tokens.src?.symbol}}
             </button>
             <button mat-menu-item [ngClass]="iconSizes.small" (click)="provide(element)">
-              <mat-icon class="provide">{{icons.provide}}</mat-icon> Provide {{element.token.src?.symbol}}
+              <mat-icon class="provide">{{icons.provide}}</mat-icon> Provide {{element.tokens.src?.symbol}}
             </button>
             <button mat-menu-item [ngClass]="iconSizes.small" (click)="stake(element)" *ngIf="element.summary.staking">
               <mat-icon class="stake">{{icons.staking}}</mat-icon> Stake {{element.staking?.token?.symbol}}
