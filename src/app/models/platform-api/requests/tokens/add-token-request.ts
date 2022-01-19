@@ -1,17 +1,17 @@
 export interface IAddTokenRequest {
-  tokenAddress: string;
+  token: string;
 }
 
 export class AddTokenRequest {
-  private _tokenAddress: string;
+  private _token: string;
 
   public get payload(): IAddTokenRequest {
     return {
-      tokenAddress: this._tokenAddress
+      token: this._token
     }
   }
 
-  constructor(tokenAddress: string) {
-    this._tokenAddress = tokenAddress;
+  constructor(token: string) {
+    this._token = token;
   }
 }
