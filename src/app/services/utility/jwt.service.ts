@@ -12,7 +12,8 @@ export class JwtService {
   constructor(private _storage: StorageService, private _env: EnvironmentsService) { }
 
   public getAllowedDomain(): string {
-    return this._env.apiUrl.replace('https://', '').replace('http://', '').replace('.com/v1', '.com');
+    const { host } = new URL(this._env.apiUrl);
+    return host;
   }
 
   /**
