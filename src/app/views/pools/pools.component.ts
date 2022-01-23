@@ -1,3 +1,4 @@
+import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -22,12 +23,14 @@ export class PoolsComponent implements OnInit, OnDestroy {
   pools: IPoolsView;
   icons = Icons;
   topPoolsFilter: LiquidityPoolsFilter;
+  context: any;
   subscription = new Subscription();
 
   constructor(
     private _sidebar: SidenavService,
     private _liquidityPoolsService: LiquidityPoolsService,
-    private _indexService: IndexService
+    private _indexService: IndexService,
+    private _context: UserContextService
   ) {
     this.topPoolsFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 10, direction: 'DESC'});
 
@@ -39,6 +42,10 @@ export class PoolsComponent implements OnInit, OnDestroy {
       },
       mining: null
     }
+
+    this.subscription.add(
+      this._context.getUserContext$()
+        .subscribe(context => this.context = context));
   }
 
   ngOnInit(): void {

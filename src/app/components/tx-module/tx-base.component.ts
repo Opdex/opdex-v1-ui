@@ -12,7 +12,7 @@ import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { catchError, map } from 'rxjs/operators';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 
-export abstract class TxBase{
+export abstract class TxBase {
   context: any;
   context$: Subscription;
   quoteErrors: string[] = [];

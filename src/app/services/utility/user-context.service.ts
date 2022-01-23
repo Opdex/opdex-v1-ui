@@ -12,7 +12,7 @@ export interface IUserPreferences {
 @Injectable({ providedIn: 'root' })
 
 export class UserContextService {
-  private userContext$ = new BehaviorSubject<any>(null);
+  private userContext$ = new BehaviorSubject<any>({});
   private _token: string;
 
   constructor(
@@ -45,7 +45,7 @@ export class UserContextService {
   getUserContext() {
     const data = this._jwtService.decodeToken();
 
-    if (!data) return null;
+    if (!data) return {};
 
     let preferences = {} as IUserPreferences;
     if (data.wallet) {

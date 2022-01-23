@@ -25,7 +25,7 @@ export class WalletsService extends CacheService {
   getBalance(wallet: string, token: string): Observable<IAddressBalance> {
     const stream$ = this._platformApi.getBalance(wallet, token)
       .pipe(catchError((error: OpdexHttpError) => {
-        if (error.status === 404) {
+        if (error.status === 404 && token !== 'CRS') {
           return this._platformApi.refreshBalance(wallet, token);
         }
 

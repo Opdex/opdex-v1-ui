@@ -4,7 +4,6 @@ import { IMarketToken } from '@sharedModels/platform-api/responses/tokens/token.
 import { IAddressMiningPositions } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { IAddressStaking, IAddressStakingPositions } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
-import { ITransactionBroadcast } from '@sharedModels/platform-api/responses/transactions/transaction-broadcast.interface';
 import { IMarket } from '@sharedModels/platform-api/responses/markets/market.interface';
 import { IMiningGovernance, IMiningGovernances } from '@sharedModels/platform-api/responses/mining-governances/mining-governance.interface';
 import { IAddressBalance, IAddressBalances } from '@sharedModels/platform-api/responses/wallets/address-balance.interface';
@@ -35,7 +34,6 @@ import { IRemoveLiquidityRequest } from '@sharedModels/platform-api/requests/liq
 import { IAddLiquidityAmountInQuoteRequest } from '@sharedModels/platform-api/requests/quotes/add-liquidity-amount-in-quote-request';
 import { IRewardMiningPoolsRequest } from '@sharedModels/platform-api/requests/mining-governances/reward-mining-pools-request';
 import { IQuoteReplayRequest } from '@sharedModels/platform-api/requests/transactions/quote-replay-request';
-import { ITransactionBroadcastNotificationRequest } from '@sharedModels/platform-api/requests/transactions/transaction-broadcast-notification-request';
 import { ISwapRequest } from '@sharedModels/platform-api/requests/tokens/swap-request';
 import { IAddTokenRequest } from '@sharedModels/platform-api/requests/tokens/add-token-request';
 import { ISwapAmountOutQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-out-quote-response.interface';
@@ -50,7 +48,6 @@ import { HistoryFilter } from '@sharedModels/platform-api/requests/history-filte
 import { IMarketHistoryResponse } from '@sharedModels/platform-api/responses/markets/market-history-response.interface';
 import { ILiquidityPoolSnapshotHistoryResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-snapshots-responses.interface';
 import { IProvideAmountInResponse } from '@sharedModels/platform-api/responses/liquidity-pools/provide-amount-in-response.interface';
-import { IStratisSignatureAuthRequest } from '@sharedModels/platform-api/requests/auth/stratis-signature-auth-request.interface';
 import { IMinimumPledgeVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vaults/minimum-pledge-vault-proposal-quote-request.interface';
 import { IMinimumVoteVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vaults/minimum-vote-vault-proposal-quote-request.interface';
 import { IVaultProposalWithdrawPledgeQuoteRequest } from '@sharedModels/platform-api/requests/vaults/vault-proposal-withdraw-pledge-quote-request.interface';
@@ -89,25 +86,6 @@ export class PlatformApiService extends RestApiService {
     super(_http, _error, _jwt, _router);
     this.api = this._env.apiUrl;
     this.marketAddress = this._env.marketAddress;
-  }
-
-  ////////////////////////////
-  // Auth
-  ////////////////////////////
-
-  public auth(wallet: string): Observable<string> {
-    let walletParam = '?wallet='
-    if (wallet) walletParam = `${walletParam}${wallet}`;
-
-    return this.post(`${this.api}/auth/authorize${walletParam}`, {}, { responseType: 'text' });
-  }
-
-  public authCallback(payload: IStratisSignatureAuthRequest): Observable<void> {
-    return this.post(`${this.api}/auth`, payload);
-  }
-
-  public signMessage(payload: IStratisSignatureAuthRequest): Observable<void> {
-    return this.post(`${this.api}/auth/sign-message`, payload);
   }
 
   ////////////////////////////
@@ -360,16 +338,8 @@ export class PlatformApiService extends RestApiService {
     return this.get<ITransactionReceipt>(`${this.api}/transactions/${hash}`);
   }
 
-  public broadcastQuote(payload: IQuoteReplayRequest): Observable<ITransactionBroadcast> {
-    return this.post<ITransactionBroadcast>(`${this.api}/transactions/broadcast-quote`, payload);
-  }
-
   public replayQuote(payload: IQuoteReplayRequest): Observable<ITransactionQuote> {
     return this.post<ITransactionQuote>(`${this.api}/transactions/replay-quote`, payload);
-  }
-
-  public notifyTransaction(payload: ITransactionBroadcastNotificationRequest): Observable<void> {
-    return this.post(`${this.api}/transactions`, payload);
   }
 
   ////////////////////////////////////////////////////////
