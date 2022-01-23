@@ -12,7 +12,7 @@ import { ThemeService } from './services/utility/theme.service';
 import { MatSidenav } from '@angular/material/sidenav';
 import { of, Subscription, timer } from 'rxjs';
 import { FadeAnimation } from '@sharedServices/animations/fade-animation';
-import { Router, RouterOutlet, RoutesRecognized } from '@angular/router';
+import { Router, RouterOutlet, RoutesRecognized, NavigationEnd } from '@angular/router';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { filter, map, tap } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
@@ -43,12 +43,12 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   hubConnection: HubConnection;
   indexStatus: IIndexStatus;
   updateOpened = false;
+  updateAvailable = false;
   menuOpen = false;
   isPinned = true;
   loading = true;
   icons = Icons;
   subscription = new Subscription();
-
 
   constructor(
     public overlayContainer: OverlayContainer,
@@ -97,7 +97,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     // Get theme
     this.subscription.add(this._theme.getTheme().subscribe(theme => this.setTheme(theme)));
 
-    // Watch router events
+    // Watch router events for page titles
     this.subscription.add(
       this.router.events
       .pipe(
@@ -108,6 +108,14 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
         tap(route => this.gaService.pageView(route.path, route.title)))
       .subscribe());
 
+    // Watch router events for app updates
+    this.subscription.add(
+      this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        filter(_ => this.updateAvailable))
+      .subscribe(_ => this.update()));
+
     // Listen to tx sidenav events
     this.subscription.add(
       this._sidenav.getStatus()
@@ -117,6 +125,10 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
           if (message.status === true) await this.sidenav.open()
           else await this.sidenav.close();
         }));
+  }
+
+  update(): void {
+    location.reload();
   }
 
   handleSidenavModeChange(event: 'over' | 'side') {
@@ -150,7 +162,10 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
       this.dialog.open(AppUpdateModalComponent, { width: '500px' })
         .afterClosed()
         .pipe(take(1))
-        .subscribe(_ => this.updateOpened = false);
+        .subscribe(_ => {
+          this.updateOpened = false;
+          this.updateAvailable = true;
+        });
     }
   }
 
