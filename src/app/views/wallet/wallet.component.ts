@@ -51,7 +51,6 @@ export class WalletComponent implements OnInit {
   icons = Icons;
   iconSizes = IconSizes;
 
-
   constructor(
     private _context: UserContextService,
     private _tokensService: TokensService,

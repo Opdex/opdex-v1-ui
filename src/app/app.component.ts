@@ -1,6 +1,4 @@
-import { environment } from './../environments/environment.testnet';
 import { IIndexStatus } from './models/platform-api/responses/index/index-status.interface';
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { AppUpdateModalComponent } from './components/modals-module/app-update-modal/app-update-modal.component';
 import { TransactionReceipt } from './models/transaction-receipt';
 import { ITransactionReceipt } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
@@ -8,17 +6,16 @@ import { catchError, switchMap, take } from 'rxjs/operators';
 import { TransactionsService } from '@sharedServices/platform/transactions.service';
 import { JwtService } from '@sharedServices/utility/jwt.service';
 import { SidenavService } from './services/utility/sidenav.service';
-import { ChangeDetectorRef, Component, HostBinding, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, HostBinding, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { ThemeService } from './services/utility/theme.service';
 import { MatSidenav } from '@angular/material/sidenav';
-import { Observable, of, Subscription, timer } from 'rxjs';
+import { of, Subscription, timer } from 'rxjs';
 import { FadeAnimation } from '@sharedServices/animations/fade-animation';
 import { Router, RouterOutlet, RoutesRecognized } from '@angular/router';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { filter, map, tap } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
-import { BugReportModalComponent } from '@sharedComponents/modals-module/bug-report-modal/bug-report-modal.component';
 import { Title } from '@angular/platform-browser';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
 import { IndexService } from '@sharedServices/platform/index.service';
@@ -34,22 +31,24 @@ import { EnvironmentsService } from '@sharedServices/utility/environments.servic
   styleUrls: ['./app.component.scss'],
   animations: [FadeAnimation]
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   @HostBinding('class') componentCssClass: string;
   @ViewChild('sidenav') sidenav: MatSidenav;
+  private appHeightRecorded: number;
   theme: string;
-  subscription = new Subscription();
-  context$: Observable<any>;
   context: any;
   network: string;
-  menuOpen = false;
-  isPinned = true;
   message: ISidenavMessage;
   sidenavMode: 'over' | 'side' = 'over';
   hubConnection: HubConnection;
+  indexStatus: IIndexStatus;
+  updateOpened = false;
+  menuOpen = false;
+  isPinned = true;
   loading = true;
   icons = Icons;
-  indexStatus: IIndexStatus;
+  subscription = new Subscription();
+
 
   constructor(
     public overlayContainer: OverlayContainer,
@@ -58,13 +57,12 @@ export class AppComponent implements OnInit {
     public gaService: GoogleAnalyticsService,
     private _theme: ThemeService,
     private _sidenav: SidenavService,
-    private _api: PlatformApiService,
     private _context: UserContextService,
     private _title: Title,
     private _indexService: IndexService,
     private _jwt: JwtService,
     private _transactionService: TransactionsService,
-    private _cdref: ChangeDetectorRef,
+    private _cdRef: ChangeDetectorRef,
     private _appUpdate: SwUpdate,
     private _env: EnvironmentsService
   ) {
@@ -73,45 +71,26 @@ export class AppComponent implements OnInit {
 
     this._appUpdate.versionUpdates.subscribe(_ => this.openAppUpdate());
 
-    this.network = this._env.network;
-    this.context = this._context.getUserContext();
-
-    this.subscription.add(
-      this._api.auth(this.context?.wallet)
-        .subscribe(jwt => {
-          this._context.setToken(jwt);
-          setTimeout(() => this.loading = false, 1500);
-        }));
+    setTimeout(() => this.loading = false, 1500);
   }
 
-  ngAfterContentChecked() {
-    this._cdref.detectChanges();
-  }
-
-  private appHeightRecorded: number;
-  private appHeight() {
-    const height = window.innerHeight;
-
-    if (height !== this.appHeightRecorded) {
-      this.appHeightRecorded = height;
-      document.documentElement.style.setProperty('--app-height', `${height}px`);
-    }
+  ngAfterContentChecked(): void {
+    this._cdRef.detectChanges();
   }
 
   async ngOnInit(): Promise<void> {
-    // Get context
-    this.subscription
-      .add(this._context.getUserContext$()
-      .subscribe(async context => {
-        this.context = context;
-
-        if (!this.context?.wallet) this.stopHubConnection();
-        else if (!this.hubConnection?.connectionId) await this.connectToSignalR();
-      }));
+    const storedToken = this._context.getToken();
+    this._context.setToken(storedToken);
+    this.subscription.add(
+      this._context.getUserContext$()
+        .subscribe(async context => {
+          if (!context?.wallet) this.stopHubConnection();
+          else if (!this.hubConnection?.connectionId) await this.connectToSignalR();
+        }));
 
     // Get index status on timer
     this.subscription.add(
-      timer(0,8000)
+      timer(0, 8000)
         .pipe(switchMap(_ => this._indexService.refreshStatus$()))
         .subscribe(indexStatus => this.indexStatus = indexStatus));
 
@@ -140,27 +119,6 @@ export class AppComponent implements OnInit {
         }));
   }
 
-  toggleTheme() {
-    this._theme.setTheme(this.theme === 'light-mode' ? 'dark-mode' : 'light-mode');
-  }
-
-  private setTheme(theme: string): void {
-    if (theme === this.theme) return;
-
-    const overlayClassList = this.overlayContainer.getContainerElement().classList;
-    overlayClassList.add(theme);
-    overlayClassList.remove(this.theme);
-
-    document.documentElement.classList.add(theme);
-    document.documentElement.classList.remove(this.theme);
-
-    this.componentCssClass = `${theme} root`;
-    this.theme = theme;
-
-    const metaThemeColor = document.querySelector("meta[name=theme-color]");
-    metaThemeColor.setAttribute("content", this.theme === 'light-mode' ? '#ffffff' : '#1b192f');
-  }
-
   handleSidenavModeChange(event: 'over' | 'side') {
     this.sidenavMode = event;
   }
@@ -186,16 +144,31 @@ export class AppComponent implements OnInit {
     this.menuOpen = false;
   }
 
-  openBugReport(): void {
-    this.dialog.open(BugReportModalComponent, {
-      width: '500px'
-    });
+  private openAppUpdate(): void {
+    if (!this.updateOpened) {
+      this.updateOpened = true;
+      this.dialog.open(AppUpdateModalComponent, { width: '500px' })
+        .afterClosed()
+        .pipe(take(1))
+        .subscribe(_ => this.updateOpened = false);
+    }
   }
 
-  openAppUpdate(): void {
-    this.dialog.open(AppUpdateModalComponent, {
-      width: '500px'
-    });
+  private setTheme(theme: string): void {
+    if (theme === this.theme) return;
+
+    const overlayClassList = this.overlayContainer.getContainerElement().classList;
+    overlayClassList.add(theme);
+    overlayClassList.remove(this.theme);
+
+    document.documentElement.classList.add(theme);
+    document.documentElement.classList.remove(this.theme);
+
+    this.componentCssClass = `${theme} root`;
+    this.theme = theme;
+
+    const metaThemeColor = document.querySelector("meta[name=theme-color]");
+    metaThemeColor.setAttribute("content", this.theme === 'light-mode' ? '#ffffff' : '#1b192f');
   }
 
   private async connectToSignalR(): Promise<void> {
@@ -232,6 +205,15 @@ export class AppComponent implements OnInit {
     if (this.hubConnection && this.hubConnection.connectionId) {
       await this.hubConnection.stop();
       this.hubConnection = null;
+    }
+  }
+
+  private appHeight() {
+    const height = window.innerHeight;
+
+    if (height !== this.appHeightRecorded) {
+      this.appHeightRecorded = height;
+      document.documentElement.style.setProperty('--app-height', `${height}px`);
     }
   }
 

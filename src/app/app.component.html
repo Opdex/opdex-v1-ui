@@ -1,5 +1,5 @@
 <main [ngClass]="theme">
-  <mat-sidenav-container (backdropClick)="closeSidenav()" class="w-100 h-100 {{loading ? 'loading' : 'done'}}" *ngIf="context">
+  <mat-sidenav-container (backdropClick)="closeSidenav()" class="w-100 h-100 {{loading ? 'loading' : 'done'}}">
     <mat-sidenav #sidenav
       (keydown.escape)="closeSidenav()"
       position="end"

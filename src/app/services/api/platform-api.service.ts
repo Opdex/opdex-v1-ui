@@ -50,7 +50,6 @@ import { HistoryFilter } from '@sharedModels/platform-api/requests/history-filte
 import { IMarketHistoryResponse } from '@sharedModels/platform-api/responses/markets/market-history-response.interface';
 import { ILiquidityPoolSnapshotHistoryResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-snapshots-responses.interface';
 import { IProvideAmountInResponse } from '@sharedModels/platform-api/responses/liquidity-pools/provide-amount-in-response.interface';
-import { IStratisSignatureAuthRequest } from '@sharedModels/platform-api/requests/auth/stratis-signature-auth-request.interface';
 import { IMinimumPledgeVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vaults/minimum-pledge-vault-proposal-quote-request.interface';
 import { IMinimumVoteVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vaults/minimum-vote-vault-proposal-quote-request.interface';
 import { IVaultProposalWithdrawPledgeQuoteRequest } from '@sharedModels/platform-api/requests/vaults/vault-proposal-withdraw-pledge-quote-request.interface';
@@ -89,25 +88,6 @@ export class PlatformApiService extends RestApiService {
     super(_http, _error, _jwt, _router);
     this.api = this._env.apiUrl;
     this.marketAddress = this._env.marketAddress;
-  }
-
-  ////////////////////////////
-  // Auth
-  ////////////////////////////
-
-  public auth(wallet: string): Observable<string> {
-    let walletParam = '?wallet='
-    if (wallet) walletParam = `${walletParam}${wallet}`;
-
-    return this.post(`${this.api}/auth/authorize${walletParam}`, {}, { responseType: 'text' });
-  }
-
-  public authCallback(payload: IStratisSignatureAuthRequest): Observable<void> {
-    return this.post(`${this.api}/auth`, payload);
-  }
-
-  public signMessage(payload: IStratisSignatureAuthRequest): Observable<void> {
-    return this.post(`${this.api}/auth/sign-message`, payload);
   }
 
   ////////////////////////////

@@ -101,6 +101,10 @@ $sidebar-width: 100px;
 }
 
 .splash {
+  background-image: url('/assets/Bg1@2x.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: bottom;
   min-height: var(--app-height);
   width: 100%;
   display: flex;
