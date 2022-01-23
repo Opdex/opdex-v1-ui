@@ -4,7 +4,6 @@ import { IMarketToken } from '@sharedModels/platform-api/responses/tokens/token.
 import { IAddressMiningPositions } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { IAddressStaking, IAddressStakingPositions } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
-import { ITransactionBroadcast } from '@sharedModels/platform-api/responses/transactions/transaction-broadcast.interface';
 import { IMarket } from '@sharedModels/platform-api/responses/markets/market.interface';
 import { IMiningGovernance, IMiningGovernances } from '@sharedModels/platform-api/responses/mining-governances/mining-governance.interface';
 import { IAddressBalance, IAddressBalances } from '@sharedModels/platform-api/responses/wallets/address-balance.interface';
@@ -35,7 +34,6 @@ import { IRemoveLiquidityRequest } from '@sharedModels/platform-api/requests/liq
 import { IAddLiquidityAmountInQuoteRequest } from '@sharedModels/platform-api/requests/quotes/add-liquidity-amount-in-quote-request';
 import { IRewardMiningPoolsRequest } from '@sharedModels/platform-api/requests/mining-governances/reward-mining-pools-request';
 import { IQuoteReplayRequest } from '@sharedModels/platform-api/requests/transactions/quote-replay-request';
-import { ITransactionBroadcastNotificationRequest } from '@sharedModels/platform-api/requests/transactions/transaction-broadcast-notification-request';
 import { ISwapRequest } from '@sharedModels/platform-api/requests/tokens/swap-request';
 import { IAddTokenRequest } from '@sharedModels/platform-api/requests/tokens/add-token-request';
 import { ISwapAmountOutQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-out-quote-response.interface';
@@ -340,16 +338,8 @@ export class PlatformApiService extends RestApiService {
     return this.get<ITransactionReceipt>(`${this.api}/transactions/${hash}`);
   }
 
-  public broadcastQuote(payload: IQuoteReplayRequest): Observable<ITransactionBroadcast> {
-    return this.post<ITransactionBroadcast>(`${this.api}/transactions/broadcast-quote`, payload);
-  }
-
   public replayQuote(payload: IQuoteReplayRequest): Observable<ITransactionQuote> {
     return this.post<ITransactionQuote>(`${this.api}/transactions/replay-quote`, payload);
-  }
-
-  public notifyTransaction(payload: ITransactionBroadcastNotificationRequest): Observable<void> {
-    return this.post(`${this.api}/transactions`, payload);
   }
 
   ////////////////////////////////////////////////////////
