@@ -1,4 +1,3 @@
-import { environment } from './../environments/environment.testnet';
 import { IIndexStatus } from './models/platform-api/responses/index/index-status.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { AppUpdateModalComponent } from './components/modals-module/app-update-modal/app-update-modal.component';
@@ -50,6 +49,7 @@ export class AppComponent implements OnInit {
   loading = true;
   icons = Icons;
   indexStatus: IIndexStatus;
+  configuredForEnv: boolean;
 
   constructor(
     public overlayContainer: OverlayContainer,
@@ -73,6 +73,7 @@ export class AppComponent implements OnInit {
 
     this._appUpdate.versionUpdates.subscribe(_ => this.openAppUpdate());
 
+    this.configuredForEnv = !!this._env.marketAddress && !!this._env.routerAddress;
     this.network = this._env.network;
     this.context = this._context.getUserContext();
 
