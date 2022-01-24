@@ -117,7 +117,38 @@ $sidebar-width: 100px;
   bottom: 0;
   left: 0;
 
-  h1 {
+  .mat-button {
+    margin-top: 15px;
+    width: 100%;
+    max-width: 200px;
+
+    .social-icon {
+      max-width: 18px;
+      max-height: 18px;
+      margin: 0 5px 0;
+    }
+
+    &.discord {
+      background: $discord !important;
+      color: white;
+      margin-bottom: 15px;
+    }
+  }
+
+  &.coming-soon {
+    img {
+      width: 75px;
+    }
+
+    .opdex {
+      font-size: 3em;
+      font-weight: bold;
+      letter-spacing: 3px;
+      margin-bottom: 0;
+    }
+  }
+
+  h1.loading-title {
     margin-top: 50px;
     margin-bottom: 0;
   }

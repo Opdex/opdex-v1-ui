@@ -42,6 +42,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   sidenavMode: 'over' | 'side' = 'over';
   hubConnection: HubConnection;
   indexStatus: IIndexStatus;
+  configuredForEnv: boolean;
   updateOpened = false;
   updateAvailable = false;
   menuOpen = false;
@@ -68,9 +69,8 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   ) {
     window.addEventListener('resize', this.appHeight);
     this.appHeight();
-
     this._appUpdate.versionUpdates.subscribe(_ => this.openAppUpdate());
-
+    this.configuredForEnv = !!this._env.marketAddress && !!this._env.routerAddress;
     setTimeout(() => this.loading = false, 1500);
   }
 

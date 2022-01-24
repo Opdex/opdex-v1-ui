@@ -1,5 +1,5 @@
 <main [ngClass]="theme">
-  <mat-sidenav-container (backdropClick)="closeSidenav()" class="w-100 h-100 {{loading ? 'loading' : 'done'}}">
+  <mat-sidenav-container (backdropClick)="closeSidenav()" class="w-100 h-100 {{loading ? 'loading' : 'done'}}" *ngIf="configuredForEnv">
     <mat-sidenav #sidenav
       (keydown.escape)="closeSidenav()"
       position="end"
@@ -56,8 +56,20 @@
     </mat-sidenav-content>
   </mat-sidenav-container>
 
+  <div class="splash header-section coming-soon" *ngIf="!configuredForEnv">
+    <div class="flex-row-center-center">
+      <img src="/assets/logo-light-blue.png" alt="Opdex">
+      <h1 class="opdex">OPDEX</h1>
+    </div>
+    <h2 class="mt-3 mb-1">Coming Soon</h2>
+    <a mat-button href="https://discord.gg/TnWVDTTrjf" target="_blank" rel="noopener noreferrer" class="discord">
+      <img src="/assets/social/discord-white.svg" class="social-icon" alt="Discord Logo">
+      Join Discord
+    </a>
+  </div>
+
   <div class="splash header-section" *ngIf="loading">
     <img class="loading-logo" src="/assets/logo-light-blue.png" alt="Opdex">
-    <h1>OPDEX</h1>
+    <h1 class="loading-title">OPDEX</h1>
   </div>
 </main>
