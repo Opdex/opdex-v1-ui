@@ -23,6 +23,7 @@ import { IconSizes } from 'src/app/enums/icon-sizes';
 import { MiningGovernanceStatCardsLookup } from '@sharedLookups/mining-governance-stat-cards.lookup';
 import { RewardMiningPoolsRequest } from '@sharedModels/platform-api/requests/mining-governances/reward-mining-pools-request';
 import { MaintenanceNotificationModalComponent } from '@sharedComponents/modals-module/maintenance-notification-modal/maintenance-notification-modal.component';
+import { UserContext } from '@sharedModels/user-context';
 
 @Component({
   selector: 'opdex-mining-governance',
@@ -35,7 +36,7 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
   miningGovernance: MiningGovernance;
   submitting: boolean;
   nominationPeriodEndDate: string;
-  context: any;
+  context: UserContext;
   indexStatus: IIndexStatus;
   icons = Icons;
   iconSizes = IconSizes;

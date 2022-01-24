@@ -18,6 +18,7 @@ import { RemoveLiquidityRequest } from '@sharedModels/platform-api/requests/liqu
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
 import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
+import { UserContext } from '@sharedModels/user-context';
 
 @Component({
   selector: 'opdex-tx-provide-remove',
@@ -30,7 +31,7 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
   icons = Icons;
   iconSizes = IconSizes;
   form: FormGroup;
-  context: any;
+  context: UserContext;
   allowance$: Subscription;
   transactionTypes = AllowanceRequiredTransactionTypes;
   showMore: boolean = false;

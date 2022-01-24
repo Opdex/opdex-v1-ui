@@ -10,6 +10,7 @@ import { Observable, of, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
+import { UserContext } from '@sharedModels/user-context';
 
 @Component({
   selector: 'opdex-percentage-amount-buttons',
@@ -26,7 +27,7 @@ export class PercentageAmountButtonsComponent implements OnChanges {
 
   contextSubscription = new Subscription();
   positionSubscription = new Subscription();
-  context: any;
+  context: UserContext;
   balance: FixedDecimal;
   percentages: string[] = [ '25', '50', '75', '100' ];
 

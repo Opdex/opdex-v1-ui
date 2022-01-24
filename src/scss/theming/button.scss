@@ -2,23 +2,25 @@
 
 .dark-mode {
   button {
-    &.purple, &.stake {
-      background-color: $purple-primary !important;
-      color: $dark-primary !important;
-    }
+    &:not(.mat-button-disabled) {
+      &.purple, &.stake {
+        background-color: $purple-primary !important;
+        color: $dark-primary !important;
+      }
 
-    &.red, &.mine {
-      background-color: $red-primary !important;
-      color: $dark-primary !important;
-    }
+      &.red, &.mine {
+        background-color: $red-primary !important;
+        color: $dark-primary !important;
+      }
 
-    &.green, &.provide {
-      background-color: $green-primary !important;
-      color: $dark-primary !important;
-    }
+      &.green, &.provide {
+        background-color: $green-primary !important;
+        color: $dark-primary !important;
+      }
 
-    &.blue, &.swap {
-      color: $dark-primary !important;
+      &.blue, &.swap {
+        color: $dark-primary !important;
+      }
     }
   }
 }

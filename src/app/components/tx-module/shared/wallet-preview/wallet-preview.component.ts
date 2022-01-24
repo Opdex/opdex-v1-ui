@@ -17,6 +17,7 @@ import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { catchError, map, skip, switchMap, take, tap } from 'rxjs/operators';
 import { ILiquidityPoolResponse, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
+import { UserContext } from '@sharedModels/user-context';
 
 @Component({
   selector: 'opdex-wallet-preview',
@@ -30,7 +31,7 @@ export class WalletPreviewComponent implements OnDestroy {
   @Input() positionStaking: string[] = [];
   subscription = new Subscription();
   positions: any[];
-  context: any;
+  context: UserContext;
   icons = Icons;
   iconSizes = IconSizes;
   hide = false;

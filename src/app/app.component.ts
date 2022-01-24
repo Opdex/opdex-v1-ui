@@ -24,6 +24,7 @@ import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signal
 import { Icons } from './enums/icons';
 import { SwUpdate } from '@angular/service-worker';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
+import { UserContext } from '@sharedModels/user-context';
 
 @Component({
   selector: 'opdex-root',
@@ -36,7 +37,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   @ViewChild('sidenav') sidenav: MatSidenav;
   private appHeightRecorded: number;
   theme: string;
-  context: any;
+  context: UserContext;
   network: string;
   message: ISidenavMessage;
   sidenavMode: 'over' | 'side' = 'over';

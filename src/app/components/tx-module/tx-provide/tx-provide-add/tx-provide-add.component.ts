@@ -106,7 +106,7 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
             if (amount !== '') this.amountSrc.setValue(amount, { emitEvent: false })
           }),
           tap(_ => this.calcTolerance()),
-          filter(_ => this.context?.wallet),
+          filter(_ => !!this.context.wallet),
           switchMap(_ => this.getAllowance$()),
           switchMap(_ => this.validateBalances()))
         .subscribe());
@@ -121,7 +121,7 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
             if (quoteAmount !== '') this.amountCrs.setValue(quoteAmount, { emitEvent: false })
           }),
           tap(_ => this.calcTolerance()),
-          filter(_ => this.context?.wallet),
+          filter(_ => !!this.context.wallet),
           switchMap(_ => this.getAllowance$()),
           switchMap(_ => this.validateBalances()))
         .subscribe());
@@ -129,7 +129,7 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
     this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
       .pipe(
         tap(block => this.latestBlock = block?.height),
-        filter(_ => this.context?.wallet),
+        filter(_ => !!this.context.wallet),
         switchMap(_ => this.getAllowance$()),
         switchMap(_ => this.validateBalances()))
       .subscribe();

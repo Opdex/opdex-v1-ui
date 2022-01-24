@@ -1,6 +1,5 @@
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
-import { Router } from '@angular/router';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
@@ -11,6 +10,7 @@ import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
+import { UserContext } from '@sharedModels/user-context';
 
 @Component({
   selector: 'opdex-tx-sidebar',
@@ -27,7 +27,7 @@ export class TxSidebarComponent implements OnChanges {
   context$: Observable<any>;
   widescreen: boolean;
   subscription = new Subscription();
-  context: any;
+  context: UserContext;
   icons = Icons;
   iconSizes = IconSizes;
   pool: ILiquidityPoolResponse;
@@ -36,7 +36,6 @@ export class TxSidebarComponent implements OnChanges {
     private _breakpointObserver: BreakpointObserver,
     private _sidenav: SidenavService,
     private _context: UserContextService,
-    private _router: Router,
     private _env: EnvironmentsService
   ) {
     this.transactionTypes = !!this._env.vaultAddress

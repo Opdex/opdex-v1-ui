@@ -3,6 +3,7 @@ import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
 import { Component, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { UserContext } from '@sharedModels/user-context';
 
 @Component({
   selector: 'opdex-mobile-nav',
@@ -13,7 +14,7 @@ export class MobileNavComponent implements OnDestroy {
   @Output() onToggleMenu = new EventEmitter();
   icons = Icons;
   iconSizes = IconSizes;
-  context: any;
+  context: UserContext;
   subscription = new Subscription();
 
   constructor(private _context: UserContextService) {

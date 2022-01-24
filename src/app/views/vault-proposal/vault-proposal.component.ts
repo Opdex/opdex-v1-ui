@@ -22,6 +22,7 @@ import { MathService } from '@sharedServices/utility/math.service';
 import { IVaultProposalVotesFilter, VaultProposalVotesFilter } from '@sharedModels/platform-api/requests/vaults/vault-proposal-votes-filter';
 import { IVaultProposalVoteResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-vote-response-model.interface';
 import { IVaultProposalPledgeResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-pledge-response-model.interface';
+import { UserContext } from '@sharedModels/user-context';
 
 @Component({
   selector: 'opdex-vault-proposal',
@@ -36,7 +37,7 @@ export class VaultProposalComponent {
   pledgesFilter: VaultProposalPledgesFilter;
   votesFilter: VaultProposalVotesFilter;
   proposal: IVaultProposalResponseModel;
-  context: any;
+  context: UserContext;
   userVote: IVaultProposalVoteResponseModel;
   userPledge: IVaultProposalPledgeResponseModel;
   icons = Icons;

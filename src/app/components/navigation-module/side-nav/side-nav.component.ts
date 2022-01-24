@@ -11,6 +11,7 @@ import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interf
 import { Icons } from 'src/app/enums/icons';
 import { MatDialog } from '@angular/material/dialog';
 import { BugReportModalComponent } from '@sharedComponents/modals-module/bug-report-modal/bug-report-modal.component';
+import { UserContext } from '@sharedModels/user-context';
 
 @Component({
   selector: 'opdex-side-nav',
@@ -30,7 +31,7 @@ export class SideNavComponent implements OnDestroy {
   subscription = new Subscription();
   pendingTransactions: string[] = [];
   usesVault: boolean;
-  context: any;
+  context: UserContext;
 
   constructor(
     public dialog: MatDialog,

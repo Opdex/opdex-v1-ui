@@ -21,6 +21,7 @@ import { TransactionView } from '@sharedModels/transaction-view';
 import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { VaultCertificatesFilter, IVaultCertificatesFilter, VaultCertificateStatusFilter } from '@sharedModels/platform-api/requests/vaults/vault-certificates-filter';
 import { IVaultCertificates } from '@sharedModels/platform-api/responses/vaults/vault-certificate.interface';
+import { UserContext } from '@sharedModels/user-context';
 
 @Component({
   selector: 'opdex-vault',
@@ -39,7 +40,7 @@ export class VaultComponent implements OnInit {
   transactionsRequest: ITransactionsRequest;
   transactionViews = TransactionView;
   icons = Icons;
-  context: any;
+  context: UserContext;
   proposalsFilter: VaultProposalsFilter;
   certificatesFilter: VaultCertificatesFilter;
   certificates: IVaultCertificates;

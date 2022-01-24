@@ -1,18 +1,13 @@
+import { UserContext, UserContextPreferences } from '@sharedModels/user-context';
 import { StorageService } from './storage.service';
 import { BehaviorSubject } from 'rxjs';
 import { JwtService } from './jwt.service';
 import { Injectable } from '@angular/core';
 
-export interface IUserPreferences {
-  theme: string;
-  deadlineThreshold: number;
-  toleranceThreshold: number;
-}
-
 @Injectable({ providedIn: 'root' })
 
 export class UserContextService {
-  private userContext$ = new BehaviorSubject<any>({});
+  private userContext$ = new BehaviorSubject<UserContext>(new UserContext());
   private _token: string;
 
   constructor(
@@ -38,23 +33,20 @@ export class UserContextService {
     this.userContext$.next(data);
   }
 
-  setUserPreferences(wallet: string, preferences: IUserPreferences): void {
+  setUserPreferences(wallet: string, preferences: UserContextPreferences): void {
     this._storage.setLocalStorage(wallet, preferences, true);
   }
 
-  getUserContext() {
+  getUserContext(): UserContext {
     const data = this._jwtService.decodeToken();
 
-    if (!data) return {};
+    if (!data) return new UserContext();
 
-    let preferences = {} as IUserPreferences;
+    let preferences = new UserContextPreferences();
     if (data.wallet) {
-      preferences = this._storage.getLocalStorage(data?.wallet, true) || {} as IUserPreferences;
+      preferences = this._storage.getLocalStorage(data?.wallet, true) || new UserContextPreferences();
     }
 
-    return {
-      wallet: data.wallet,
-      preferences
-    };
+    return new UserContext(data.wallet, preferences);
   }
 }

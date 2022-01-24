@@ -15,6 +15,7 @@ import { ReviewQuoteComponent } from '@sharedComponents/tx-module/shared/review-
 import { take } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { MaintenanceNotificationModalComponent } from '@sharedComponents/modals-module/maintenance-notification-modal/maintenance-notification-modal.component';
+import { UserContext } from '@sharedModels/user-context';
 
 @Component({
   selector: 'opdex-vault-proposal-card',
@@ -27,7 +28,7 @@ export class VaultProposalCardComponent implements OnDestroy {
 
   icons = Icons;
   iconSizes = IconSizes;
-  context: any;
+  context: UserContext;
   indexStatus: IIndexStatus;
   subscription = new Subscription();
 

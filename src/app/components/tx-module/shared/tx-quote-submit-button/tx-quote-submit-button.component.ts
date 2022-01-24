@@ -10,6 +10,7 @@ import { Icons } from 'src/app/enums/icons';
 import { Component, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { take } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
+import { UserContext } from '@sharedModels/user-context';
 
 @Component({
   selector: 'opdex-tx-quote-submit-button',
@@ -21,7 +22,7 @@ export class TxQuoteSubmitButtonComponent implements OnDestroy {
   @Input() disabled: boolean;
   @Input() warn: boolean;
   @Output() onSubmit = new EventEmitter();
-  context: any;
+  context: UserContext;
   indexStatus: IIndexStatus;
   icons = Icons;
   iconSizes = IconSizes;

@@ -25,6 +25,7 @@ import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { LiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
+import { UserContext } from '@sharedModels/user-context';
 
 @Component({
   selector: 'opdex-token',
@@ -60,7 +61,7 @@ export class TokenComponent implements OnInit {
   transactionsRequest: ITransactionsRequest;
   routerSubscription = new Subscription();
   historyFilter: HistoryFilter;
-  context: any;
+  context: UserContext;
   crsPerOlpt: string;
   srcPerOlpt: string;
 

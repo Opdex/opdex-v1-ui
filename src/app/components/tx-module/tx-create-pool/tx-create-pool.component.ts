@@ -15,6 +15,7 @@ import { AddTokenRequest } from '@sharedModels/platform-api/requests/tokens/add-
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
+import { UserContext } from '@sharedModels/user-context';
 
 @Component({
   selector: 'opdex-tx-create-pool',
@@ -33,7 +34,7 @@ export class TxCreatePoolComponent extends TxBase {
   isTokenKnown: boolean;
   isValidToken: boolean;
   validatedToken: IToken = null;
-  context: any;
+  context: UserContext;
 
   get token(): FormControl {
     return this.form.get('token') as FormControl;

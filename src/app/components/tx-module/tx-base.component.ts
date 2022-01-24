@@ -11,9 +11,10 @@ import { Observable, of, Subscription } from 'rxjs';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { catchError, map } from 'rxjs/operators';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
+import { UserContext } from '@sharedModels/user-context';
 
 export abstract class TxBase {
-  context: any;
+  context: UserContext;
   context$: Subscription;
   quoteErrors: string[] = [];
 

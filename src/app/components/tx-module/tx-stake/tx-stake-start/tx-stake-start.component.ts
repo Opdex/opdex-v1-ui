@@ -54,7 +54,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
 
     this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
       .pipe(
-        filter(_ => this.context?.wallet),
+        filter(_ => !!this.context.wallet),
         switchMap(_ => this.getAllowance$()),
         switchMap(_ => this.validateBalance()))
       .subscribe();

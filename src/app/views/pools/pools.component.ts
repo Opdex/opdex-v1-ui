@@ -9,6 +9,7 @@ import { combineLatest, Subscription } from 'rxjs';
 import { Icons } from 'src/app/enums/icons';
 import { LiquidityPoolsFilter, LpOrderBy, MiningStatus } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { ILiquidityPoolsResponse, ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
+import { UserContext } from '@sharedModels/user-context';
 
 interface IPoolsView {
   topVolume: ILiquidityPoolsResponse,
@@ -23,7 +24,7 @@ export class PoolsComponent implements OnInit, OnDestroy {
   pools: IPoolsView;
   icons = Icons;
   topPoolsFilter: LiquidityPoolsFilter;
-  context: any;
+  context: UserContext;
   subscription = new Subscription();
 
   constructor(
