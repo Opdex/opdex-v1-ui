@@ -1,5 +1,5 @@
 <main [ngClass]="theme">
-  <mat-sidenav-container (backdropClick)="closeSidenav()" class="w-100 h-100 {{loading ? 'loading' : 'done'}}" *ngIf="context && configuredForEnv">
+  <mat-sidenav-container (backdropClick)="closeSidenav()" class="w-100 h-100 {{loading ? 'loading' : 'done'}}" *ngIf="configuredForEnv">
     <mat-sidenav #sidenav
       (keydown.escape)="closeSidenav()"
       position="end"
@@ -21,6 +21,10 @@
         </aside>
 
         <div class="animation-container">
+          <div class="notification-banner primary flex-row-center-center p-2" (click)="update()" style="cursor: pointer" *ngIf="updateAvailable">
+            <mat-icon class="small mr-2">{{icons.update}}</mat-icon> App update available, refresh to update.
+          </div>
+
           <div class="notification-banner warning flex-row-center-center p-2" *ngIf="!!indexStatus?.available === false || !!indexStatus?.locked && indexStatus.reason === 'Rewinding'">
             <ng-container *ngIf="!!indexStatus?.available === false">
               <mat-icon class="small mr-2">{{icons.maintenance}}</mat-icon> Undergoing temporary maintenance, block progression will continue shortly.

@@ -11,10 +11,7 @@ import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bott
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { Network } from 'src/app/enums/networks';
-import { IQuoteReplayRequest, QuoteReplayRequest } from '@sharedModels/platform-api/requests/transactions/quote-replay-request';
-import { TransactionBroadcastNotificationRequest } from '@sharedModels/platform-api/requests/transactions/transaction-broadcast-notification-request';
+import { QuoteReplayRequest } from '@sharedModels/platform-api/requests/transactions/quote-replay-request';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
@@ -30,7 +27,6 @@ export class ReviewQuoteComponent implements OnDestroy {
   submitting = false;
   quote: ITransactionQuote;
   quoteRequest: any;
-  isDevnet: boolean;
   subscription = new Subscription();
   quoteReceipt: TransactionReceipt;
   showMethodDetails = true;
@@ -59,7 +55,6 @@ export class ReviewQuoteComponent implements OnDestroy {
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: ITransactionQuote
   ) {
     this.quote = this.data;
-    this.isDevnet = this._env.network === Network.Devnet;
     this._transactionsService.setQuoteDrawerStatus(true);
 
     this.setQuoteRequest(this.data.request);
@@ -125,23 +120,6 @@ export class ReviewQuoteComponent implements OnDestroy {
 
   public transactionLogsTrackBy(index: number, transactionLog: any) {
     return transactionLog.sortOrder;
-  }
-
-  submit() {
-    if (!this.isDevnet) {
-      return;
-    }
-
-    this.submitting = true;
-    const payload: IQuoteReplayRequest = new QuoteReplayRequest({quote: this.quote.request});
-    this._platformApi.broadcastQuote(payload)
-      .pipe(
-        switchMap(response => {
-          var request = new TransactionBroadcastNotificationRequest({walletAddress: this.quoteRequest.sender, transactionHash: response.txHash})
-          return this._platformApi.notifyTransaction(request).pipe(take(1))
-        }),
-        take(1))
-      .subscribe();
   }
 
   toggleParameterDetails(): void {

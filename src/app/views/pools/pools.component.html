@@ -53,7 +53,7 @@
     <div class="container">
       <div class="row">
         <div class="col-12">
-          <div class="flex-row-center-end">
+          <div class="flex-row-center-end" *ngIf="context?.wallet">
             <button mat-button color="primary" (click)="createPool()"><mat-icon>{{icons.add}}</mat-icon> Create Pool</button>
           </div>
 
