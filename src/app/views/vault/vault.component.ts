@@ -63,7 +63,7 @@ export class VaultComponent implements OnInit {
     } as IVaultProposalsFilter);
 
     this.certificatesFilter = new VaultCertificatesFilter({
-      status: VaultCertificateStatusFilter.vesting,
+      status: [VaultCertificateStatusFilter.vesting],
       limit: 10,
       direction: 'DESC'
     } as IVaultCertificatesFilter);

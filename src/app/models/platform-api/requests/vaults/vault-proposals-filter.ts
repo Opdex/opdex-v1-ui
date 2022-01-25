@@ -12,16 +12,16 @@ export enum VaultProposalStatusFilter {
 }
 
 export interface IVaultProposalsFilter {
-  status?: VaultProposalStatusFilter;
-  type?: VaultProposalTypeFilter;
+  status?: VaultProposalStatusFilter[];
+  type?: VaultProposalTypeFilter[];
   limit?: number;
   direction?: string;
   cursor?: string;
 }
 
 export class VaultProposalsFilter implements IVaultProposalsFilter {
-  status?: VaultProposalStatusFilter;
-  type?: VaultProposalTypeFilter;
+  status?: VaultProposalStatusFilter[];
+  type?: VaultProposalTypeFilter[];
   limit?: number;
   direction?: string;
   cursor?: string;
@@ -45,8 +45,14 @@ export class VaultProposalsFilter implements IVaultProposalsFilter {
 
     let query = '';
 
-    query = this.addToQuery(query, 'status', this.status);
-    query = this.addToQuery(query, 'type', this.type);
+    if (this.status?.length > 0) {
+      this.status.forEach(status => query = this.addToQuery(query, 'status', status));
+    }
+
+    if (this.type?.length > 0) {
+      this.type.forEach(type => query = this.addToQuery(query, 'type', type));
+    }
+
     query = this.addToQuery(query, 'limit', this.limit);
     query = this.addToQuery(query, 'direction', this.direction);
 

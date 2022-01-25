@@ -7,7 +7,7 @@ export enum VaultCertificateStatusFilter {
 
 export interface IVaultCertificatesFilter {
   owner?: string;
-  status?: VaultCertificateStatusFilter;
+  status?: VaultCertificateStatusFilter[];
   limit?: number;
   direction?: string;
   cursor?: string;
@@ -15,7 +15,7 @@ export interface IVaultCertificatesFilter {
 
 export class VaultCertificatesFilter implements IVaultCertificatesFilter {
   owner?: string;
-  status?: VaultCertificateStatusFilter;
+  status?: VaultCertificateStatusFilter[];
   limit?: number;
   direction?: string;
   cursor?: string;
@@ -39,8 +39,11 @@ export class VaultCertificatesFilter implements IVaultCertificatesFilter {
 
     let query = '';
 
+    if (this.status?.length > 0) {
+      this.status.forEach(status => query = this.addToQuery(query, 'status', status));
+    }
+
     query = this.addToQuery(query, 'owner', this.owner);
-    query = this.addToQuery(query, 'status', this.status);
     query = this.addToQuery(query, 'limit', this.limit);
     query = this.addToQuery(query, 'direction', this.direction);
 
