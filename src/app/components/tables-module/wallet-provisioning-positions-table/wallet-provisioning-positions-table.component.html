@@ -31,8 +31,8 @@
           <th mat-header-cell *matHeaderCellDef>  </th>
           <td mat-cell *matCellDef="let element">
             <div class="flex-row-center-end">
-              <button mat-mini-fab class="tiny green flat mr-1" (click)="openSidebar('add', element.address)" matTooltip="Add Liquidity"><mat-icon>{{icons.add}}</mat-icon></button>
-              <button mat-mini-fab class="tiny red flat" (click)="openSidebar('remove', element.address)" matTooltip="Remove Liquidity"><mat-icon>{{icons.remove}}</mat-icon></button>
+              <button mat-mini-fab class="tiny green flat mr-1" (click)="openSidebar('add', element.address)" matTooltip="Add Liquidity" [disabled]="!element.isCurrentMarket"><mat-icon>{{icons.add}}</mat-icon></button>
+              <button mat-mini-fab class="tiny red flat" (click)="openSidebar('remove', element.address)" matTooltip="Remove Liquidity" [disabled]="!element.isCurrentMarket"><mat-icon>{{icons.remove}}</mat-icon></button>
             </div>
           </td>
         </ng-container>

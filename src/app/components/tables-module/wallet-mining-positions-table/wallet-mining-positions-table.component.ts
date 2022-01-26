@@ -1,3 +1,4 @@
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { OnDestroy } from '@angular/core';
 import { Component, Input, OnChanges, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
@@ -40,7 +41,8 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
     private _walletsService: WalletsService,
     private _liquidityPoolService: LiquidityPoolsService,
     private _indexService: IndexService,
-    private _userContext: UserContextService
+    private _userContext: UserContextService,
+    private _env: EnvironmentsService
   ) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['pool', 'status', 'position', 'value', 'actions'];
@@ -115,6 +117,7 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
                     position: p.position.amount,
                     isActive: p.pool.miningPool?.isActive === true,
                     decimals: p.pool.tokens.lp.decimals,
+                    isCurrentMarket: p.pool.market === this._env.marketAddress,
                     value: MathService.multiply(
                       new FixedDecimal(p.position.amount, p.pool.tokens.lp.decimals),
                       new FixedDecimal(p.pool.tokens.lp.summary.priceUsd.toString(), 8))

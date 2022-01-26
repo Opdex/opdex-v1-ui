@@ -1,3 +1,4 @@
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Component, OnChanges, OnDestroy, ViewChild, Input } from "@angular/core";
 import { MatSort } from "@angular/material/sort";
@@ -5,7 +6,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { Router } from "@angular/router";
 import { WalletBalancesFilter } from "@sharedModels/platform-api/requests/wallets/wallet-balances-filter";
 import { ICursor } from "@sharedModels/platform-api/responses/cursor.interface";
-import { IToken } from "@sharedModels/platform-api/responses/tokens/token.interface";
+import { IMarketToken } from "@sharedModels/platform-api/responses/tokens/token.interface";
 import { TransactionView } from "@sharedModels/transaction-view";
 import { FixedDecimal } from "@sharedModels/types/fixed-decimal";
 import { IndexService } from "@sharedServices/platform/index.service";
@@ -40,7 +41,8 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
     private _walletsService: WalletsService,
     private _liquidityPoolService: LiquidityPoolsService,
     private _indexService: IndexService,
-    private _userContext: UserContextService
+    private _userContext: UserContextService,
+    private _env: EnvironmentsService
   ) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['pool', 'token', 'balance', 'total', 'actions'];
@@ -93,10 +95,10 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
             return of(response);
           }
 
-          const balances$: Observable<IToken>[] = [];
+          const balances$: Observable<IMarketToken>[] = [];
 
           response.results.forEach(balance => {
-            const poolDetail$: Observable<IToken> =
+            const poolDetail$: Observable<IMarketToken> =
               this._liquidityPoolService.getLiquidityPool(balance.token)
                 .pipe(
                   take(1),
@@ -104,6 +106,7 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
                     let token = pool.tokens.lp;
                     token.name = pool.name
                     token.balance = balance;
+                    token.market = pool.market;
                     return token;
                   })
                 );
@@ -120,6 +123,7 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
                   address: token.address,
                   balance: token.balance.balance,
                   decimals: token.decimals,
+                  isCurrentMarket: token.market === this._env.marketAddress,
                   total: MathService.multiply(
                     new FixedDecimal(token.balance.balance, token.decimals),
                     new FixedDecimal(token.summary?.priceUsd?.toString() || '0', 8))

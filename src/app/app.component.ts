@@ -92,7 +92,9 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     // Get index status on timer
     this.subscription.add(
       timer(0, 8000)
-        .pipe(switchMap(_ => this._indexService.refreshStatus$()))
+        .pipe(
+          switchMap(_ => this._indexService.refreshStatus$()),
+          tap(_ => this.validateJwt()))
         .subscribe(indexStatus => this.indexStatus = indexStatus));
 
     // Get theme
@@ -155,6 +157,15 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   handleRouteChanged(url: string) {
     // dont care about the url just close the menu
     this.menuOpen = false;
+  }
+
+  private validateJwt(): void {
+    const userIsLoggedIn = !!this._context.getUserContext()?.wallet;
+    const tokenIsExpired = this._jwt.isTokenExpired();
+
+    if (userIsLoggedIn && tokenIsExpired) {
+      this._jwt.removeToken();
+    }
   }
 
   private openAppUpdate(): void {

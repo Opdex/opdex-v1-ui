@@ -64,6 +64,7 @@ export class TokenComponent implements OnInit {
   context: UserContext;
   crsPerOlpt: string;
   srcPerOlpt: string;
+  isCurrentMarket: boolean;
 
   constructor(
     private _route: ActivatedRoute,
@@ -136,6 +137,8 @@ export class TokenComponent implements OnInit {
             this._gaService.pageView(this._route.routeConfig.path, `${this.token.symbol} - ${this.token.name}`)
             this._title.setTitle(`${this.token.symbol} - ${this.token.name}`);
           }
+
+          this.isCurrentMarket = this.token.market === this._envService.marketAddress;
         })
       );
   }

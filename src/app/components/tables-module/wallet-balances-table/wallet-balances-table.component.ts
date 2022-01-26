@@ -14,7 +14,7 @@ import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
+import { IMarketToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { of, Observable, forkJoin, Subscription } from 'rxjs';
 import { switchMap, catchError, take, map } from 'rxjs/operators';
 import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
@@ -46,7 +46,7 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
     private _indexService: IndexService,
     private _userContext: UserContextService,
     private _liquidityPoolService: LiquidityPoolsService,
-    private _envService: EnvironmentsService
+    private _env: EnvironmentsService
   ) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['token', 'name', 'balance', 'total', 'actions'];
@@ -76,7 +76,7 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
   private tryGetLiquidityPool(tokenAddress: string): Observable<ILiquidityPoolResponse> {
     const filter = new LiquidityPoolsFilter({
       tokens: [tokenAddress],
-      market: this._envService.marketAddress,
+      market: this._env.marketAddress,
       limit: 1
     } as ILiquidityPoolsFilter);
 
@@ -113,10 +113,10 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
             return of(response);
           }
 
-          const balances$: Observable<IToken>[] = [];
+          const balances$: Observable<IMarketToken>[] = [];
 
           response.results.forEach(balance => {
-            const tokenDetails$: Observable<IToken> =
+            const tokenDetails$: Observable<IMarketToken> =
               this._tokensService.getMarketToken(balance.token)
                 .pipe(
                   // Fallback to tokens when necessary
@@ -125,7 +125,7 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
                   take(1),
                   map(token => {
                     token.balance = balance;
-                    return token;
+                    return token as IMarketToken;
                   })
                 );
 
@@ -144,6 +144,7 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
                   balance: token.balance.balance,
                   decimals: token.decimals,
                   price: price,
+                  isCurrentMarket: token.market === this._env.marketAddress,
                   total: MathService.multiply(
                     new FixedDecimal(token.balance.balance, token.decimals),
                     price)

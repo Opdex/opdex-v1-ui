@@ -1,6 +1,12 @@
 <div class="header-section">
   <div class="container">
     <div class="row align-items-center">
+      <div class="col-12 mb-3" *ngIf="!isCurrentMarket">
+        <opdex-card [warn]="true">
+          This liquidity pool is from an external market.
+        </opdex-card>
+      </div>
+
       <div class="col-12 col-sm-6 col-xl-8">
         <h1 class="mb-0">{{pool?.tokens?.src?.symbol || 'XYZ'}}/{{pool?.tokens?.crs?.symbol || 'CRS'}}</h1>
         <opdex-copy-address [address]="pool?.address"></opdex-copy-address>

@@ -81,7 +81,7 @@ export class RestApiService {
       // Hack, reload the entire view if we have an expired token
       if (this._jwt.isTokenExpired()) {
         this._jwt.removeToken();
-        location.reload();
+        this._router.navigateByUrl('/auth');
       }
     }
 

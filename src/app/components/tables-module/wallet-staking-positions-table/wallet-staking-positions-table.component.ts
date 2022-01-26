@@ -1,3 +1,4 @@
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { OnDestroy } from '@angular/core';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { StakingPositionsFilter } from '@sharedModels/platform-api/requests/wallets/staking-positions-filter';
@@ -40,7 +41,8 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
     private _walletsService: WalletsService,
     private _liquidityPoolService: LiquidityPoolsService,
     private _indexService: IndexService,
-    private _userContext: UserContextService
+    private _userContext: UserContextService,
+    private _env: EnvironmentsService
   ) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['pool', 'status', 'position', 'value', 'actions'];
@@ -115,6 +117,7 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
                   position: p.position.amount,
                   decimals: p.pool.tokens.lp.decimals,
                   isNominated: p.pool.summary?.staking.nominated === true,
+                  isCurrentMarket: p.pool.market === this._env.marketAddress,
                   value: MathService.multiply(
                     new FixedDecimal(p.position.amount, p.pool.summary.staking?.token.decimals),
                     new FixedDecimal(p.pool.summary.staking?.token.summary.priceUsd.toString(), 8))

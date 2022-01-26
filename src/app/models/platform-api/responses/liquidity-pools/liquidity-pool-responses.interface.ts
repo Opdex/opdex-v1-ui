@@ -7,6 +7,7 @@ export interface ILiquidityPoolResponse {
   address: string;
   name: string;
   transactionFeePercent: number;
+  market: string;
   tokens: ITokenGroup;
   miningPool: IMiningPool;
   summary: ILiquidityPoolSummaryResponse;

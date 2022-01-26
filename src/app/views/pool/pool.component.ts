@@ -1,3 +1,4 @@
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { AddressPosition } from '@sharedModels/address-position';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
@@ -81,6 +82,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   context$: Observable<any>;
   message: ISidenavMessage;
   historyFilter: HistoryFilter;
+  isCurrentMarket: boolean;
 
   constructor(
     private _route: ActivatedRoute,
@@ -91,7 +93,8 @@ export class PoolComponent implements OnInit, OnDestroy {
     private _title: Title,
     private _gaService: GoogleAnalyticsService,
     private _walletService: WalletsService,
-    private _indexService: IndexService
+    private _indexService: IndexService,
+    private _env: EnvironmentsService
   ) {
     // init stat cards with null for loading/default animations
     this.statCards = PoolStatCardsLookup.getStatCards(this.pool);
@@ -185,6 +188,8 @@ export class PoolComponent implements OnInit, OnDestroy {
               return 0;
             });
           }
+
+          this.isCurrentMarket = this.pool.market === this._env.marketAddress;
         })
       );
   }
