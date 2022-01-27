@@ -7,4 +7,6 @@ export interface IVaultResponseModel {
   totalPledgeMinimum: string;
   totalVoteMinimum: string;
   vestingDuration: number;
+  createdBlock: number;
+  modifiedBlock: number;
 }

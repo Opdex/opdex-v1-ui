@@ -4,6 +4,7 @@ export interface IMarketSummaryResponse {
   volumeUsd: number;
   staking: IMarketStakingResponse;
   rewards: any;
+  modifiedBlock: number;
 }
 
 export interface IMarketStakingResponse {

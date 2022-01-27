@@ -11,6 +11,8 @@ export interface ILiquidityPoolResponse {
   tokens: ITokenGroup;
   miningPool: IMiningPool;
   summary: ILiquidityPoolSummaryResponse;
+  createdBlock: number;
+  modifiedBlock: number;
 }
 
 export interface ILiquidityPoolSummaryResponse {
@@ -19,6 +21,7 @@ export interface ILiquidityPoolSummaryResponse {
   staking: IStakingSummaryResponse;
   volume: IVolumeSummaryResponse;
   cost: ICostSummaryResponse;
+  modifiedBlock: number;
 }
 
 export interface IReservesSummaryResponse {
