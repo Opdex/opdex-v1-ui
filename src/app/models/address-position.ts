@@ -40,7 +40,7 @@ export class AddressPosition {
 
   private calcValue(): FixedDecimal {
     const valueDecimals = 8;
-    let result = '0';
+    let result = new FixedDecimal('0', valueDecimals);
 
     if (this._token) {
       result = MathService.multiply(
@@ -48,6 +48,6 @@ export class AddressPosition {
         new FixedDecimal(this._amount.formattedValue, this._token.decimals));
     }
 
-    return new FixedDecimal(result, valueDecimals);
+    return result;
   }
 }

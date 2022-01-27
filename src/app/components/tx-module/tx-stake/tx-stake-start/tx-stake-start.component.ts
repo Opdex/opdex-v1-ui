@@ -29,7 +29,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
   pool: ILiquidityPoolResponse;
   allowance$: Subscription;
   transactionTypes = AllowanceRequiredTransactionTypes;
-  fiatValue: string;
+  fiatValue: FixedDecimal;
   allowance: AllowanceValidation;
   allowanceTransaction$ = new Subscription();
   latestSyncedBlock$: Subscription;

@@ -9,11 +9,11 @@
       [numbersOnly]="true">
       <div class="flex-row-center-between">
         <div class="tolerance-amounts">
-          <span *ngIf="crsOutMin && srcOutMin">Min: {{crsOutMin | shortNumber}} {{pool.tokens.crs.symbol}} <span style="opacity: .5">|</span> {{srcOutMin | shortNumber}} {{pool.tokens.src.symbol}}</span>
+          <span *ngIf="crsOutMin && srcOutMin">Min: {{crsOutMin.formattedValue | shortNumber}} {{pool.tokens.crs.symbol}} <span style="opacity: .5">|</span> {{srcOutMin.formattedValue | shortNumber}} {{pool.tokens.src.symbol}}</span>
         </div>
 
-        <div class="fiat-quote">
-          <span class="success ml-2" *ngIf="lptInFiatValue && lptInFiatValue !== 'NaN'">${{lptInFiatValue | shortNumber}}</span>
+        <div class="fiat-quote" *ngIf="!!lptInFiatValue">
+          <span class="success ml-2" *ngIf="lptInFiatValue.bigInt > 0">${{lptInFiatValue.formattedValue | shortNumber}}</span>
         </div>
       </div>
     </opdex-input-control>

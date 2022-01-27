@@ -3,12 +3,12 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class MathService {
-  static multiply(a: FixedDecimal, b: FixedDecimal) {
-    if (!a || !b) return '0';
+  static multiply(a: FixedDecimal, b: FixedDecimal): FixedDecimal {
+    if (!a || !b) return new FixedDecimal('0', a.decimals);
 
     const product = a.bigInt * b.bigInt;
 
-    if (product === BigInt(0)) return '0';
+    if (product === BigInt(0)) return new FixedDecimal('0', a.decimals);
 
     // Cut the string off at the precision point, no rounding is implemented.
     const productRoundedLength = product.toString().length - (a.decimals + b.decimals);
@@ -23,11 +23,13 @@ export class MathService {
     const total = `${whole}.${remainder}`;
 
     // round
-    return total.substring(0, whole.length + 1 + a.decimals)
+    const resultString = total.substring(0, whole.length + 1 + a.decimals);
+
+    return new FixedDecimal(resultString, a.decimals);
   }
 
-  static subtract(a: FixedDecimal, b: FixedDecimal) {
-    if (!a || !b) return '0';
+  static subtract(a: FixedDecimal, b: FixedDecimal): FixedDecimal {
+    if (!a || !b) return new FixedDecimal('0', a.decimals);
 
     // Subtract
     const result = a.bigInt - b.bigInt;
@@ -41,11 +43,13 @@ export class MathService {
     const remainder = result.toString().substring(resultRoundedLength).padStart(a.decimals, '0');
 
     // Using A and B Decimals, convert result
-    return `${whole}.${remainder}`;
+    const resultString = `${whole}.${remainder}`;
+
+    return new FixedDecimal(resultString, a.decimals);
   }
 
-  static add(a: FixedDecimal, b: FixedDecimal) {
-    if (!a || !b) return '0';
+  static add(a: FixedDecimal, b: FixedDecimal): FixedDecimal {
+    if (!a || !b) return new FixedDecimal('0', a.decimals);
 
     // Add
     const result = a.bigInt + b.bigInt;
@@ -59,11 +63,13 @@ export class MathService {
     const remainder = result.toString().substring(resultRoundedLength).padStart(a.decimals, '0');
 
     // Using A and B Decimals, convert result
-    return `${whole}.${remainder}`;
+    const resultString = `${whole}.${remainder}`;
+
+    return new FixedDecimal(resultString, a.decimals);
   }
 
-  static divide(a: FixedDecimal, b: FixedDecimal) {
-    if (!a || !b || a.isZero || b.isZero) return '0';
+  static divide(a: FixedDecimal, b: FixedDecimal): FixedDecimal {
+    if (!a || !b || a.isZero || b.isZero) return new FixedDecimal('0', a.decimals);
 
     const result = (a.bigInt * BigInt(Math.pow(10, b.decimals))) / b.bigInt;
 
@@ -73,6 +79,8 @@ export class MathService {
 
     const remainder = result.toString().substring(resultRoundedLength).padStart(a.decimals, '0');
 
-    return `${whole}.${remainder}`;
+    const resultString = `${whole}.${remainder}`;
+
+    return new FixedDecimal(resultString, a.decimals);
   }
 }

@@ -124,11 +124,11 @@ export class VaultProposalComponent {
     return `${index}-${proposal.proposalId}-${proposal.status}-${proposal.expiration}-${proposal.pledgeAmount}-${proposal.yesAmount}-${proposal.noAmount}`;
   }
 
-  getPledgePercentage(proposal: IVaultProposalResponseModel) {
+  getPledgePercentage(proposal: IVaultProposalResponseModel): FixedDecimal {
     const minimum = new FixedDecimal(this.vault.totalPledgeMinimum, 8);
     const pledge = new FixedDecimal(proposal.pledgeAmount, 8);
 
-    return MathService.multiply(new FixedDecimal(MathService.divide(pledge, minimum), 8), new FixedDecimal('100', 0));
+    return MathService.multiply(MathService.divide(pledge, minimum), new FixedDecimal('100', 0));
   }
 
   getExpirationPercentage(proposal: IVaultProposalResponseModel) {
@@ -143,14 +143,16 @@ export class VaultProposalComponent {
     return Math.floor((blocksPassed / duration) * 100);
   }
 
-  getVotePercentage(valueOne: string, valueTwo: string) {
+  getVotePercentage(valueOne: string, valueTwo: string): FixedDecimal {
     const first = new FixedDecimal(valueOne, 8);
     const second = new FixedDecimal(valueTwo, 8);
+    const oneHundred = new FixedDecimal('100', 0);
+    const zero = new FixedDecimal('0', 0);
 
-    if (second.bigInt === BigInt(0) && first.bigInt > BigInt(0)) return 100;
-    else if (second.bigInt === BigInt(0) && first.bigInt == BigInt(0)) return 0;
+    if (second.bigInt === BigInt(0) && first.bigInt > BigInt(0)) oneHundred;
+    else if (second.bigInt === BigInt(0) && first.bigInt == BigInt(0)) zero;
 
-    return MathService.multiply(new FixedDecimal(MathService.divide(first, second), 8), new FixedDecimal('100', 0));
+    return MathService.multiply(MathService.divide(first, second), new FixedDecimal('100', 0));
   }
 
   statCardTrackBy(index: number, statCard: StatCardInfo) {

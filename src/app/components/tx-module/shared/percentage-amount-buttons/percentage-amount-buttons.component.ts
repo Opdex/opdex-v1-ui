@@ -89,7 +89,7 @@ export class PercentageAmountButtonsComponent implements OnChanges {
     const formattedValue = value === '100' ? '1.00' : `0.${value}`;
     const result = MathService.multiply(this.balance, new FixedDecimal(formattedValue, 2));
 
-    this.onPercentageSelect.emit({result, percentageOption: value});
+    this.onPercentageSelect.emit({result: result.formattedValue, percentageOption: value});
   }
 
   ngOnDestroy(): void {

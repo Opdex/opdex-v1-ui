@@ -29,7 +29,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
   pool: ILiquidityPoolResponse;
   allowance$ = new Subscription();
   transactionTypes = AllowanceRequiredTransactionTypes;
-  fiatValue: string;
+  fiatValue: FixedDecimal;
   allowance: AllowanceValidation;
   allowanceTransaction$ = new Subscription();
   latestSyncedBlock$: Subscription;

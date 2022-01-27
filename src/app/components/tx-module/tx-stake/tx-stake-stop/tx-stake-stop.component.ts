@@ -25,7 +25,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
   form: FormGroup;
   pool: ILiquidityPoolResponse;
   subscription = new Subscription();
-  fiatValue: string;
+  fiatValue: FixedDecimal;
   percentageSelected: string;
   balanceError: boolean;
 

@@ -62,8 +62,8 @@ export class TokenComponent implements OnInit {
   routerSubscription = new Subscription();
   historyFilter: HistoryFilter;
   context: UserContext;
-  crsPerOlpt: string;
-  srcPerOlpt: string;
+  crsPerOlpt: FixedDecimal;
+  srcPerOlpt: FixedDecimal;
   isCurrentMarket: boolean;
 
   constructor(

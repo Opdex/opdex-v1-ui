@@ -13,12 +13,12 @@
       [numbersOnly]="true">
       <div class="flex-row-center-between">
         <div class="tolerance-amounts">
-          <span *ngIf="tokenInMax && !tokenInExact">Max: {{tokenInMax | formatNumber:tokenIn.decimals}}</span>
-          <span *ngIf="tokenInFiatValue && !tokenInExact" class="success ml-2">${{tokenInMaxFiatValue | shortNumber}}</span>
+          <span *ngIf="tokenInMax && !tokenInExact">Max: {{tokenInMax.formattedValue | formatNumber:tokenIn.decimals}}</span>
+          <span *ngIf="tokenInFiatValue && !tokenInExact" class="success ml-2">${{tokenInMaxFiatValue.formattedValue | shortNumber}}</span>
         </div>
 
         <div class="fiat-quote">
-          <span class="success" *ngIf="tokenInFiatValue">${{tokenInFiatValue | shortNumber}}</span>
+          <span class="success" *ngIf="tokenInFiatValue">${{tokenInFiatValue.formattedValue | shortNumber}}</span>
         </div>
       </div>
     </opdex-input-control>
@@ -76,12 +76,12 @@
       [numbersOnly]="true">
       <div class="flex-row-center-between">
         <div class="tolerance-amounts">
-          <span *ngIf="tokenOutMin && tokenInExact">Min: {{tokenOutMin | formatNumber:tokenOut.decimals}}</span>
-          <span *ngIf="tokenOutMinFiatValue && tokenInExact" class="success ml-2">${{tokenOutMinFiatValue | shortNumber}}</span>
+          <span *ngIf="tokenOutMin && tokenInExact">Min: {{tokenOutMin.formattedValue | formatNumber:tokenOut.decimals}}</span>
+          <span *ngIf="tokenOutMinFiatValue && tokenInExact" class="success ml-2">${{tokenOutMinFiatValue.formattedValue | shortNumber}}</span>
         </div>
 
         <div class="fiat-quote">
-          <span class="success" *ngIf="!!tokenOutFiatValue">${{tokenOutFiatValue | shortNumber}}</span>
+          <span class="success" *ngIf="!!tokenOutFiatValue">${{tokenOutFiatValue.formattedValue | shortNumber}}</span>
           <span class="ml-1"
             [ngClass]="{'error': tokenOutFiatPercentageDifference.bigInt < 0, 'success': tokenOutFiatPercentageDifference.bigInt >= 0 }"
             *ngIf="!!tokenOutFiatPercentageDifference">

@@ -14,7 +14,7 @@ import { IconSizes } from 'src/app/enums/icon-sizes';
 })
 export class MiningCardComponent implements OnChanges {
   @Input() pool: ILiquidityPoolResponse;
-  miningUsd: string;
+  miningUsd: FixedDecimal;
   icons = Icons;
   iconSizes = IconSizes;
 

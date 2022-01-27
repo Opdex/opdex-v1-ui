@@ -33,7 +33,7 @@ export class WalletComponent implements OnInit {
   wallet: any;
   showPreferences: boolean;
   crsBalance: IAddressBalance;
-  crsBalanceValue: string;
+  crsBalanceValue: FixedDecimal;
   showProposals: boolean;
   pledgesFilter: VaultProposalPledgesFilter;
   votesFilter: VaultProposalVotesFilter;
