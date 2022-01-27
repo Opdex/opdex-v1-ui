@@ -58,3 +58,26 @@
   white-space: nowrap;
 }
 
+.asset-image-placeholder {
+  width: 24px;
+  height: 24px;
+  background: $blue-primary;
+  border-radius: 50%;
+
+  &:not(.cirrus) {
+    border: 1px solid white;
+
+    &::after {
+      content: "?";
+      color: white;
+      display: flex;
+      justify-content: center;
+      line-height: 24px;
+    }
+  }
+
+  &.cirrus {
+    background-image: url('/assets/tokens/cirrus.png');
+    background-size: cover;
+  }
+}
