@@ -33,7 +33,7 @@ import { IAddLiquidityRequest } from '@sharedModels/platform-api/requests/liquid
 import { IRemoveLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/remove-liquidity-request';
 import { IAddLiquidityAmountInQuoteRequest } from '@sharedModels/platform-api/requests/quotes/add-liquidity-amount-in-quote-request';
 import { IRewardMiningPoolsRequest } from '@sharedModels/platform-api/requests/mining-governances/reward-mining-pools-request';
-import { IQuoteReplayRequest } from '@sharedModels/platform-api/requests/transactions/quote-replay-request';
+import { ITransactionQuoteRequest } from '@sharedModels/platform-api/requests/transactions/transaction-quote-request';
 import { ISwapRequest } from '@sharedModels/platform-api/requests/tokens/swap-request';
 import { IAddTokenRequest } from '@sharedModels/platform-api/requests/tokens/add-token-request';
 import { ISwapAmountOutQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-out-quote-response.interface';
@@ -338,7 +338,7 @@ export class PlatformApiService extends RestApiService {
     return this.get<ITransactionReceipt>(`${this.api}/transactions/${hash}`);
   }
 
-  public replayQuote(payload: IQuoteReplayRequest): Observable<ITransactionQuote> {
+  public replayQuote(payload: ITransactionQuoteRequest): Observable<ITransactionQuote> {
     return this.post<ITransactionQuote>(`${this.api}/transactions/replay-quote`, payload);
   }
 

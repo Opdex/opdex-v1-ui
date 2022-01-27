@@ -1,3 +1,4 @@
+import { ITransactionQuoteRequest } from '@sharedModels/platform-api/requests/transactions/transaction-quote-request';
 import { ITransactionEvent } from "./transaction-events/transaction-event.interface";
 
 export interface ITransactionQuote {
@@ -5,7 +6,7 @@ export interface ITransactionQuote {
   error: ITransactionError;
   gasUsed: number;
   events: ITransactionEvent[];
-  request: string;
+  request: ITransactionQuoteRequest;
 }
 
 export interface ITransactionError {
