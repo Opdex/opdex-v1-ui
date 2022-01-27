@@ -7,6 +7,8 @@ export interface IVaultCertificate {
   vestingEndBlock: number; // block number (number type is safe)
   redeemed: boolean;
   revoked: boolean;
+  createdBlock: number;
+  modifiedBlock: number;
 }
 
 export interface IVaultCertificates extends IPaging<IVaultCertificate> { }

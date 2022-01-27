@@ -8,6 +8,8 @@ export interface IMiningPool {
   rewardPerLpt: string;
   tokensMining: string;
   isActive: boolean;
+  createdBlock: number;
+  modifiedBlock: number;
 }
 
 export interface IMiningPools extends IPaging<IMiningPool> { }

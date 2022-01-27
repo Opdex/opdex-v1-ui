@@ -4,4 +4,6 @@ export interface IVaultProposalPledgeResponseModel {
   pledger: string;
   pledge: string;
   balance: string;
+  createdBlock: number;
+  modifiedBlock: number;
 }

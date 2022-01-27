@@ -13,4 +13,6 @@ export interface IVaultProposalResponseModel {
   noAmount: string;
   pledgeAmount: string;
   approved: boolean;
+  createdBlock: number;
+  modifiedBlock: number;
 }
