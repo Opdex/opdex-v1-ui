@@ -6,7 +6,7 @@
         <td mat-cell *matCellDef="let element">
           <div class="no-wrap flex-row-center">
             <img src="" *ngIf="element.image">
-            <div class="asset-image-placeholder mr-2"></div>
+            <div class="asset-image-placeholder mr-2" [ngClass]="{'odx': element.symbol.includes('ODX')}"></div>
             <!-- <opdex-copy-button [tooltip]="element.address" [value]="element.address" [icon]="icons.link" [size]="iconSizes.small"></opdex-copy-button> -->
             <a class="no-decoration b-400" href="javascript:void(0)" (click)="navigate(element.address)">{{element.symbol}}</a>
           </div>

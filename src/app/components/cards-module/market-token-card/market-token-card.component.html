@@ -3,7 +3,8 @@
     <small class="light">{{token.name}}</small>
     <div class="flex-row-center-between">
       <a class="body-default no-decoration d-inline-flex align-items-center" routerLink="/tokens/{{token.address}}">
-        <mat-icon class="{{iconColor}} mr-2">{{icon}}</mat-icon>
+        <!-- <mat-icon class="{{iconColor}} mr-2">{{icon}}</mat-icon> -->
+        <div class="asset-image-placeholder mr-2" [ngClass]="{'cirrus': token.symbol.includes('CRS'), 'odx': token.symbol.includes('ODX')}"></div>
         <h2 class="d-inline-block mb-0">{{token.symbol}}</h2>
       </a>
 

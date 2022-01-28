@@ -2,9 +2,13 @@
   <ng-container *ngIf="swapToken && token; else loading">
     <small class="light">{{token.name}}</small>
     <div class="flex-row-center-between">
-      <h2 class=" mb-0 d-inline">
-        <a class="body-default b-300 no-decoration" href="javascript:void(0)" routerLink="/tokens/{{token.address}}">{{token.symbol}}</a>
-      </h2>
+      <div class="flex-row-center">
+        <div class="asset-image-placeholder mr-2" [ngClass]="{'cirrus': token.symbol.includes('CRS'), 'odx': token.symbol.includes('ODX')}"></div>
+        <h2 class=" mb-0 d-inline">
+          <a class="body-default b-300 no-decoration" href="javascript:void(0)" routerLink="/tokens/{{token.address}}">{{token.symbol}}</a>
+        </h2>
+      </div>
+
 
       <div class="flex-row-center-end">
         <h3 class="mb-0 mr-2 b-300">${{token?.summary?.priceUsd | shortNumber}}</h3>

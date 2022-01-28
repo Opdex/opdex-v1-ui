@@ -61,15 +61,14 @@
 .asset-image-placeholder {
   width: 24px;
   height: 24px;
-  background: $blue-primary;
+  background: #fff;
   border-radius: 50%;
+  border: 1px solid #ddd;
 
-  &:not(.cirrus) {
-    border: 1px solid white;
-
+  &:not(.cirrus):not(.odx) {
     &::after {
       content: "?";
-      color: white;
+      color: $dark-primary;
       display: flex;
       justify-content: center;
       line-height: 24px;
@@ -77,7 +76,12 @@
   }
 
   &.cirrus {
-    background-image: url('/assets/tokens/cirrus.png');
+    background-image: url('/assets/tokens/crs.png');
+    background-size: cover;
+  }
+
+  &.odx {
+    background-image: url('/assets/tokens/odx.png');
     background-size: cover;
   }
 }
