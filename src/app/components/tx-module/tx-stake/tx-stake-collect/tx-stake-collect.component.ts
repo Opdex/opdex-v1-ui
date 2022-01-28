@@ -74,7 +74,7 @@ export class TxStakeCollectComponent extends TxBase implements OnChanges, OnDest
       return of(false);
     }
 
-    return this._validateStakingBalance$(this.pool, new FixedDecimal('0', this.pool.summary.staking.token.decimals))
+    return this._validateStakingBalance$(this.pool, FixedDecimal.Zero(this.pool.summary.staking.token.decimals))
       .pipe(tap(result => this.balanceError = !result))
   }
 

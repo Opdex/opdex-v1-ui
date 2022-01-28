@@ -1,4 +1,3 @@
-import { MathService } from '@sharedServices/utility/math.service';
 import { debounceTime, distinctUntilChanged, filter, switchMap, take, tap } from 'rxjs/operators';
 import { Injector, OnChanges, OnDestroy } from '@angular/core';
 import { Component, Input } from '@angular/core';
@@ -57,7 +56,8 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
 
             const lptFiat = new FixedDecimal(this.pool.tokens.lp.summary.priceUsd.toString(), 8);
             const amountDecimal = new FixedDecimal(amount, this.pool.tokens.lp.decimals);
-            this.fiatValue = MathService.multiply(amountDecimal, lptFiat);
+
+            this.fiatValue = amountDecimal.multiply(lptFiat);
           }),
           filter(amount => !!amount),
           switchMap(_ => this.validateMiningBalance()))

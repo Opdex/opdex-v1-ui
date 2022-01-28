@@ -8,7 +8,6 @@ import { TokensService } from '@sharedServices/platform/tokens.service';
 import { ISwapAmountInQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-in-quote-response.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
-import { MathService } from '@sharedServices/utility/math.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, Input, OnDestroy, Injector, OnChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -234,37 +233,32 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
     const tokenInPrice = new FixedDecimal(this.tokenIn.summary.priceUsd.toString(), 8);
     const tokenInTolerance = new FixedDecimal((1 + (this.toleranceThreshold / 100)).toFixed(8), 8);
     const tokenOutAmount = new FixedDecimal(this.tokenOutAmount.value, tokenOutDecimals);
-
-    // Todo: This is not the idea token out price, we need to calc the new price w/ expected reserve changes
     // const tokenOutPrice = this.getTokenOutEstimatedPrice(tokenInAmount, tokenOutAmount);
     const tokenOutPrice = new FixedDecimal(this.tokenOut.summary.priceUsd.toString(), 8);
     const tokenOutTolerancePercentage = new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8);
-    const tokenOutTolerance = MathService.multiply(tokenOutAmount, tokenOutTolerancePercentage);
+    const tokenOutTolerance = tokenOutAmount.multiply(tokenOutTolerancePercentage);
 
-    this.tokenInMax = MathService.multiply(tokenInAmount, tokenInTolerance);
-    this.tokenOutMin = MathService.subtract(tokenOutAmount, tokenOutTolerance);
-    this.tokenInFiatValue = MathService.multiply(tokenInAmount, tokenInPrice);
-
-    // Todo: Incorrect due to tokenOutPrice being incorrect
-    this.tokenOutFiatValue = MathService.multiply(tokenOutAmount, tokenOutPrice);
-    this.tokenInMaxFiatValue = MathService.multiply(this.tokenInMax, tokenInPrice);
-
-    // Todo: Incorrect due to tokenOutPrice being incorrect
-    this.tokenOutMinFiatValue = MathService.multiply(this.tokenOutMin, tokenOutPrice);
+    this.tokenInMax = tokenInAmount.multiply(tokenInTolerance);
+    this.tokenOutMin = tokenOutAmount.subtract(tokenOutTolerance);
+    this.tokenInFiatValue = tokenInAmount.multiply(tokenInPrice);
+    this.tokenOutFiatValue = tokenOutAmount.multiply(tokenOutPrice);
+    this.tokenInMaxFiatValue = this.tokenInMax.multiply(tokenInPrice);
+    this.tokenOutMinFiatValue = this.tokenOutMin.multiply(tokenOutPrice);
 
     // Calc token in fiat vs out fiat percentage difference
-    // todo: incorrect due to tokenOutFiatValue being incorrect
-    const oneHundred = new FixedDecimal('100', 8);
-    const negativeOneHundred = new FixedDecimal('-100', 8);
-    const one = new FixedDecimal('1', 8);
-    const percentageOutputOfInputFixed = MathService.divide(this.tokenOutFiatValue, this.tokenInFiatValue);
+    const one = FixedDecimal.One(8);
+    const percentageOutputOfInputFixed = this.tokenOutFiatValue.divide(this.tokenInFiatValue);
     const isPositiveValue = percentageOutputOfInputFixed.bigInt > one.bigInt;
-    const multiplier = isPositiveValue ? oneHundred : negativeOneHundred;
+    const multiplier = isPositiveValue ? FixedDecimal.OneHundred(8) : FixedDecimal.NegativeOneHundred(8);
     const differenceFixed = isPositiveValue
-      ? MathService.subtract(percentageOutputOfInputFixed, one)
-      : MathService.subtract(one, percentageOutputOfInputFixed);
+      ? percentageOutputOfInputFixed.subtract(one)
+      : one.subtract(percentageOutputOfInputFixed);
 
-    this.tokenOutFiatPercentageDifference = MathService.multiply(differenceFixed, multiplier);
+    this.tokenOutFiatPercentageDifference = differenceFixed.multiply(multiplier);
+  }
+
+  getPriceImpact(): FixedDecimal {
+    return FixedDecimal.Zero(8);
   }
 
   // getTokenOutEstimatedPrice(tokenInAmount: FixedDecimal, tokenOutAmount: FixedDecimal): FixedDecimal {
@@ -314,7 +308,7 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
   //     // Calc poolOutUpdated reserves
   //   }
 
-  //   return new FixedDecimal('0', 8);
+  //   return FixedDecimal.Zero(8);
   // }
 
   toggleShowMore(): void {

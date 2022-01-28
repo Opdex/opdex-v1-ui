@@ -1,5 +1,4 @@
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
-import { MathService } from '@sharedServices/utility/math.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { Component, Input, OnChanges } from '@angular/core';
 import { TransactionView } from '@sharedModels/transaction-view';
@@ -21,9 +20,10 @@ export class MiningCardComponent implements OnChanges {
   constructor(private _sidebar: SidenavService) { }
 
   ngOnChanges() {
-    this.miningUsd = MathService.multiply(
-      new FixedDecimal(this.pool.miningPool.tokensMining, this.pool.tokens.lp.decimals),
-      new FixedDecimal(this.pool.tokens.lp.summary.priceUsd.toString(), 8));
+    const tokensMining = new FixedDecimal(this.pool.miningPool.tokensMining, this.pool.tokens.lp.decimals);
+    const price = new FixedDecimal(this.pool.tokens.lp.summary.priceUsd.toString(), 8);
+
+    this.miningUsd = price.multiply(tokensMining);
   }
 
   transact(childView: string) {

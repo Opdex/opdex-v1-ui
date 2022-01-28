@@ -16,7 +16,6 @@ import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interf
 import { Icons } from 'src/app/enums/icons';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
-import { MathService } from '@sharedServices/utility/math.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { AddLiquidityRequest } from '@sharedModels/platform-api/requests/liquidity-pools/add-liquidity-request';
 import { IAddLiquidityAmountInQuoteRequest } from '@sharedModels/platform-api/requests/quotes/add-liquidity-amount-in-quote-request';
@@ -188,17 +187,22 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
     if (!this.amountCrs.value || !this.amountSrc.value) return;
 
     const crsInValue = new FixedDecimal(this.amountCrs.value, this.pool.tokens.crs.decimals);
-    const crsMinTolerance = MathService.multiply(crsInValue, new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8));
-    this.crsInMin = MathService.subtract(crsInValue, crsMinTolerance);
+    const crsMinTolerance = crsInValue.multiply(new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8));
+    this.crsInMin = crsInValue.subtract(crsMinTolerance);
 
     const srcInValue = new FixedDecimal(this.amountSrc.value, this.pool.tokens.src.decimals);
-    const srcMinTolerance = MathService.multiply(srcInValue, new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8));
-    this.srcInMin = MathService.subtract(srcInValue, srcMinTolerance);
+    const srcMinTolerance = srcInValue.multiply(new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8));
+    this.srcInMin = srcInValue.subtract(srcMinTolerance);
 
-    this.crsInFiatValue = MathService.multiply(new FixedDecimal(this.amountCrs.value, this.pool.tokens.crs.decimals), new FixedDecimal(this.pool.tokens.crs.summary.priceUsd.toString(), 8));
-    this.crsInMinFiatValue = MathService.multiply(this.crsInMin, new FixedDecimal(this.pool.tokens.crs.summary.priceUsd.toString(), 8));
-    this.srcInFiatValue = MathService.multiply(new FixedDecimal(this.amountSrc.value, this.pool.tokens.src.decimals), new FixedDecimal(this.pool.tokens.src.summary.priceUsd.toString(), 8));
-    this.srcInMinFiatValue = MathService.multiply(this.srcInMin, new FixedDecimal(this.pool.tokens.src.summary.priceUsd.toString(), 8));
+    const amountCrs = new FixedDecimal(this.amountCrs.value, this.pool.tokens.crs.decimals);
+    const priceCrs = new FixedDecimal(this.pool.tokens.crs.summary.priceUsd.toString(), 8);
+    const amountSrc = new FixedDecimal(this.amountSrc.value, this.pool.tokens.src.decimals);
+    const priceSrc = new FixedDecimal(this.pool.tokens.src.summary.priceUsd.toString(), 8);
+
+    this.crsInFiatValue = amountCrs.multiply(priceCrs);
+    this.crsInMinFiatValue = this.crsInMin.multiply(priceCrs);
+    this.srcInFiatValue = amountSrc.multiply(priceSrc);
+    this.srcInMinFiatValue = this.srcInMin.multiply(priceSrc);
   }
 
   toggleShowMore(value: boolean): void {

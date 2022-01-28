@@ -1,7 +1,6 @@
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
-import { MathService } from '@sharedServices/utility/math.service';
 import { Component, Input, Injector, OnDestroy, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
@@ -140,21 +139,21 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
     const reserveCrs = new FixedDecimal(this.pool.summary.reserves.crs, crsDecimals);
     const reserveSrc = new FixedDecimal(this.pool.summary.reserves.src, srcDecimals);
 
-    const percentageLiquidity = MathService.divide(liquidityValue, totalSupply);
+    const percentageLiquidity = liquidityValue.divide(totalSupply);
 
-    this.crsOut = MathService.multiply(reserveCrs, percentageLiquidity);
-    this.srcOut = MathService.multiply(reserveSrc, percentageLiquidity);
-    this.usdOut = MathService.multiply(reservesUsd, percentageLiquidity);
+    this.crsOut = reserveCrs.multiply(percentageLiquidity);
+    this.srcOut = reserveSrc.multiply(percentageLiquidity);
+    this.usdOut = reservesUsd.multiply(percentageLiquidity);
 
     const tolerancePercentage = new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8);
 
-    const crsTolerance = MathService.multiply(this.crsOut, tolerancePercentage);
-    const srcTolerance = MathService.multiply(this.srcOut, tolerancePercentage);
-    const usdTolerance = MathService.multiply(this.usdOut, tolerancePercentage);
+    const crsTolerance = this.crsOut.multiply(tolerancePercentage);
+    const srcTolerance = this.srcOut.multiply(tolerancePercentage);
+    const usdTolerance = this.usdOut.multiply(tolerancePercentage);
 
-    this.crsOutMin = MathService.subtract(this.crsOut, crsTolerance);
-    this.srcOutMin = MathService.subtract(this.srcOut, srcTolerance);
-    this.lptInFiatValue = MathService.subtract(this.usdOut, usdTolerance);
+    this.crsOutMin = this.crsOut.subtract(crsTolerance);
+    this.srcOutMin = this.srcOut.subtract(srcTolerance);
+    this.lptInFiatValue = this.usdOut.subtract(usdTolerance);
   }
 
   toggleShowMore(value: boolean): void {

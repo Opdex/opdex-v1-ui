@@ -11,7 +11,6 @@ import { TransactionView } from "@sharedModels/transaction-view";
 import { FixedDecimal } from "@sharedModels/types/fixed-decimal";
 import { IndexService } from "@sharedServices/platform/index.service";
 import { WalletsService } from "@sharedServices/platform/wallets.service";
-import { MathService } from "@sharedServices/utility/math.service";
 import { SidenavService } from "@sharedServices/utility/sidenav.service";
 import { UserContextService } from "@sharedServices/utility/user-context.service";
 import { Subscription, Observable, of, forkJoin } from "rxjs";
@@ -117,6 +116,9 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
           return forkJoin(balances$)
             .pipe(map(balances => {
               this.dataSource.data = balances.map(token => {
+                const price = new FixedDecimal(token.summary?.priceUsd?.toString() || '0', 8);
+                const amount = new FixedDecimal(token.balance.balance, token.decimals);
+
                 return {
                   pool: token.name,
                   token: token.symbol,
@@ -124,9 +126,7 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
                   balance: token.balance.balance,
                   decimals: token.decimals,
                   isCurrentMarket: token.market === this._env.marketAddress,
-                  total: MathService.multiply(
-                    new FixedDecimal(token.balance.balance, token.decimals),
-                    new FixedDecimal(token.summary?.priceUsd?.toString() || '0', 8))
+                  total: price.multiply(amount)
                 }
               });
 

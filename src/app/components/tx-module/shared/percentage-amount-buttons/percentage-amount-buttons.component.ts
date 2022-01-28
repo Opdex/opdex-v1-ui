@@ -1,6 +1,5 @@
 import { catchError } from 'rxjs/operators';
 import { VaultsService } from '@sharedServices/platform/vaults.service';
-import { MathService } from '@sharedServices/utility/math.service';
 import { tap } from 'rxjs/operators';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { IndexService } from '@sharedServices/platform/index.service';
@@ -87,7 +86,7 @@ export class PercentageAmountButtonsComponent implements OnChanges {
     if (!this.balance) return;
 
     const formattedValue = value === '100' ? '1.00' : `0.${value}`;
-    const result = MathService.multiply(this.balance, new FixedDecimal(formattedValue, 2));
+    const result = this.balance.multiply(new FixedDecimal(formattedValue, 2));
 
     this.onPercentageSelect.emit({result: result.formattedValue, percentageOption: value});
   }

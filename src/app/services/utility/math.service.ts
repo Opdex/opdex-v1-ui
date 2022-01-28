@@ -4,11 +4,11 @@ import { Injectable } from '@angular/core';
 @Injectable({ providedIn: 'root' })
 export class MathService {
   static multiply(a: FixedDecimal, b: FixedDecimal): FixedDecimal {
-    if (!a || !b) return new FixedDecimal('0', a.decimals);
+    if (!a || !b) return FixedDecimal.Zero(a.decimals);
 
     const product = a.bigInt * b.bigInt;
 
-    if (product === BigInt(0)) return new FixedDecimal('0', a.decimals);
+    if (product === BigInt(0)) return FixedDecimal.Zero(a.decimals);
 
     // Cut the string off at the precision point, no rounding is implemented.
     const productRoundedLength = product.toString().length - (a.decimals + b.decimals);
@@ -29,7 +29,7 @@ export class MathService {
   }
 
   static subtract(a: FixedDecimal, b: FixedDecimal): FixedDecimal {
-    if (!a || !b) return new FixedDecimal('0', a.decimals);
+    if (!a || !b) return FixedDecimal.Zero(a.decimals);
 
     // Subtract
     const result = a.bigInt - b.bigInt;
@@ -49,7 +49,7 @@ export class MathService {
   }
 
   static add(a: FixedDecimal, b: FixedDecimal): FixedDecimal {
-    if (!a || !b) return new FixedDecimal('0', a.decimals);
+    if (!a || !b) return FixedDecimal.Zero(a.decimals);
 
     // Add
     const result = a.bigInt + b.bigInt;
@@ -69,7 +69,7 @@ export class MathService {
   }
 
   static divide(a: FixedDecimal, b: FixedDecimal): FixedDecimal {
-    if (!a || !b || a.isZero || b.isZero) return new FixedDecimal('0', a.decimals);
+    if (!a || !b || a.isZero || b.isZero) return FixedDecimal.Zero(a.decimals);
 
     const result = (a.bigInt * BigInt(Math.pow(10, b.decimals))) / b.bigInt;
 
