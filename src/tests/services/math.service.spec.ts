@@ -9,6 +9,8 @@ const MathTestLookup = {
   ],
   subtractTests: [
     { a: new FixedDecimal('0.52400000', 8), b: new FixedDecimal('0.00500000', 8), expectedOutput: '0.51900000'},
+    { a: new FixedDecimal('0.52400000', 8), b: new FixedDecimal('0.005000000000000000', 18), expectedOutput: '0.51900000'},
+    { a: new FixedDecimal('0.524000000000000000', 18), b: new FixedDecimal('0.00500000', 8), expectedOutput: '0.519000000000000000'},
   ],
   multiplyTests: [
     { a: new FixedDecimal('100.12345678', 8), b: new FixedDecimal('2.49', 2), expectedOutput: '249.30740738'},

@@ -70,6 +70,10 @@ export class FixedDecimal {
     this._formattedValue = !!fractionNumber ? `${wholeNumber}.${fractionNumber}` : wholeNumber;
   }
 
+  resize(decimals: number): void {
+    // Todo: Resize number to add or remove decimals, no rounding, strict cutoff
+  }
+
   static Zero = (decimals: number): FixedDecimal => new FixedDecimal('0', decimals);
   static One = (decimals: number): FixedDecimal => new FixedDecimal('1', decimals);
   static NegativeOne = (decimals: number): FixedDecimal => new FixedDecimal('-1', decimals);

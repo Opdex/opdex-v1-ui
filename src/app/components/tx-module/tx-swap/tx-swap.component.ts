@@ -1,3 +1,4 @@
+import { SwapQuoteService } from '@sharedServices/utility/swap-quote.service';
 import { ILiquidityPoolResponse, ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { LiquidityPoolsFilter, ILiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
@@ -52,6 +53,7 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
   tokenOutMinFiatValue: FixedDecimal;
   tokenOutPercentageSelected: string;
   tokenOutFiatPercentageDifference: FixedDecimal;
+  priceImpact: FixedDecimal;
   changeTokenOut: boolean;
   toleranceThreshold: number;
   deadlineThreshold: number;
@@ -227,13 +229,12 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
     if (!this.tokenInAmount.value || !this.tokenInAmount.value) return;
     if (!this.poolIn || !this.poolOut) return;
 
-    const tokenInDecimals = this.tokenIn.decimals;
-    const tokenOutDecimals = this.tokenOut.decimals;
-    const tokenInAmount = new FixedDecimal(this.tokenInAmount.value, tokenInDecimals);
+    const tokenInAmount = new FixedDecimal(this.tokenInAmount.value, this.tokenIn.decimals);
     const tokenInPrice = new FixedDecimal(this.tokenIn.summary.priceUsd.toString(), 8);
     const tokenInTolerance = new FixedDecimal((1 + (this.toleranceThreshold / 100)).toFixed(8), 8);
-    const tokenOutAmount = new FixedDecimal(this.tokenOutAmount.value, tokenOutDecimals);
-    // const tokenOutPrice = this.getTokenOutEstimatedPrice(tokenInAmount, tokenOutAmount);
+    const tokenOutAmount = new FixedDecimal(this.tokenOutAmount.value, this.tokenOut.decimals);
+    this.priceImpact = this.getPriceImpact(tokenInAmount, tokenOutAmount);
+    console.log(this.priceImpact.formattedValue);
     const tokenOutPrice = new FixedDecimal(this.tokenOut.summary.priceUsd.toString(), 8);
     const tokenOutTolerancePercentage = new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8);
     const tokenOutTolerance = tokenOutAmount.multiply(tokenOutTolerancePercentage);
@@ -246,70 +247,74 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
     this.tokenOutMinFiatValue = this.tokenOutMin.multiply(tokenOutPrice);
 
     // Calc token in fiat vs out fiat percentage difference
-    const one = FixedDecimal.One(8);
-    const percentageOutputOfInputFixed = this.tokenOutFiatValue.divide(this.tokenInFiatValue);
-    const isPositiveValue = percentageOutputOfInputFixed.bigInt > one.bigInt;
-    const multiplier = isPositiveValue ? FixedDecimal.OneHundred(8) : FixedDecimal.NegativeOneHundred(8);
-    const differenceFixed = isPositiveValue
-      ? percentageOutputOfInputFixed.subtract(one)
-      : one.subtract(percentageOutputOfInputFixed);
-
-    this.tokenOutFiatPercentageDifference = differenceFixed.multiply(multiplier);
+    const oneHundred = FixedDecimal.OneHundred(8);
+    const percentageOutputOfInputFixed = oneHundred.multiply(this.tokenOutFiatValue).divide(this.tokenInFiatValue);
+    // Todo: Should still multiple by -1 if amountOut < amountIn
+    // Todo: Currently this should _always_ be multiplied by negative 1, double check and implement.
+    this.tokenOutFiatPercentageDifference = oneHundred.subtract(percentageOutputOfInputFixed);
   }
 
-  getPriceImpact(): FixedDecimal {
-    return FixedDecimal.Zero(8);
+  getPriceImpact(tokenInAmount: FixedDecimal, tokenOutAmount: FixedDecimal): FixedDecimal {
+    const isSrcToSrc = this.tokenIn.address !== 'CRS' && this.tokenOut.address !== 'CRS';
+    const isCrsToSrc = !isSrcToSrc && this.tokenIn.address === 'CRS';
+    const isSrcToCrs = !isSrcToSrc && !isCrsToSrc;
+    const pool0CrsReserves = new FixedDecimal(this.poolIn.summary.reserves.crs, this.poolIn.tokens.crs.decimals);
+    const pool0SrcReserves = new FixedDecimal(this.poolIn.summary.reserves.src, this.poolIn.tokens.src.decimals);
+    const pool1CrsReserves = new FixedDecimal(this.poolOut.summary.reserves.crs, this.poolOut.tokens.crs.decimals);
+    const pool1SrcReserves = new FixedDecimal(this.poolOut.summary.reserves.src, this.poolOut.tokens.src.decimals);
+    let updatedCrsReserves: FixedDecimal;
+    let updatedSrcReserves: FixedDecimal;
+
+    if (!isSrcToCrs) {
+      const quote = this.tokenInExact
+        ? SwapQuoteService.getAmountOutMulti(tokenInAmount, pool0CrsReserves, pool0SrcReserves, pool1CrsReserves, pool1SrcReserves, new FixedDecimal('0.003', 3))
+        : SwapQuoteService.getAmountInMulti(tokenOutAmount, pool1CrsReserves, pool1SrcReserves, pool0CrsReserves, pool0SrcReserves, new FixedDecimal('0.003', 3));
+
+      updatedCrsReserves = pool1CrsReserves.add(quote[1].amountIn);
+      updatedSrcReserves = pool1SrcReserves.subtract(quote[1].amountOut);
+    } else {
+      if (this.tokenInExact) {
+        if (isCrsToSrc) {
+          const quote = SwapQuoteService.getAmountOut(tokenInAmount, pool0CrsReserves, pool0SrcReserves, new FixedDecimal('0.003', 3));
+          updatedCrsReserves = pool1CrsReserves.add(quote.amountIn);
+          updatedSrcReserves = pool1SrcReserves.subtract(quote.amountOut);
+        } else {
+          const quote = SwapQuoteService.getAmountOut(tokenInAmount, pool0SrcReserves, pool0CrsReserves, new FixedDecimal('0.003', 3));
+          updatedCrsReserves = pool1SrcReserves.add(quote.amountIn);
+          updatedSrcReserves = pool1CrsReserves.subtract(quote.amountOut);
+        }
+      } else {
+        if (isCrsToSrc) {
+          const quote = SwapQuoteService.getAmountIn(tokenOutAmount, pool0CrsReserves, pool0SrcReserves, new FixedDecimal('0.003', 3));
+          updatedCrsReserves = pool1CrsReserves.add(quote.amountIn);
+          updatedSrcReserves = pool1SrcReserves.subtract(quote.amountOut);
+        } else {
+          const quote = SwapQuoteService.getAmountIn(tokenOutAmount, pool0SrcReserves, pool0CrsReserves, new FixedDecimal('0.003', 3));
+          updatedCrsReserves = pool1SrcReserves.add(quote.amountIn);
+          updatedSrcReserves = pool1CrsReserves.subtract(quote.amountOut);
+        }
+      }
+    }
+
+    const isSrcOut = isSrcToSrc || isCrsToSrc;
+    const oneHundred = FixedDecimal.OneHundred(8);
+    let previousAmountInPerAmountOut: FixedDecimal;
+    let currentAmountInPerAmountOut: FixedDecimal;
+
+    if (isSrcOut) {
+      previousAmountInPerAmountOut = new FixedDecimal(this.poolOut.summary.cost.crsPerSrc, this.poolOut.tokens.crs.decimals);
+      currentAmountInPerAmountOut = updatedCrsReserves.divide(updatedSrcReserves);
+    } else {
+      previousAmountInPerAmountOut = new FixedDecimal(this.poolOut.summary.cost.srcPerCrs, this.poolOut.tokens.src.decimals);
+      currentAmountInPerAmountOut = updatedSrcReserves.divide(updatedCrsReserves);
+    }
+
+    console.log(currentAmountInPerAmountOut.formattedValue);
+    console.log(previousAmountInPerAmountOut.formattedValue);
+    console.log(currentAmountInPerAmountOut.divide(previousAmountInPerAmountOut).formattedValue)
+
+    return currentAmountInPerAmountOut.divide(previousAmountInPerAmountOut).multiply(oneHundred).subtract(oneHundred);
   }
-
-  // getTokenOutEstimatedPrice(tokenInAmount: FixedDecimal, tokenOutAmount: FixedDecimal): FixedDecimal {
-  //   // If token out is CRS, nothing to calculate, return its USD price out
-  //   if (this.tokenOut.address === 'CRS') return new FixedDecimal(this.tokenOut.summary.priceUsd.toString(), 8);
-
-  //   const isSrcToSrc = this.tokenIn.address !== 'CRS' && this.tokenOut.address !== 'CRS';
-  //   const isCrsToSrc = !isSrcToSrc && this.tokenIn.address === 'CRS';
-  //   const isSrcToCrs = !isSrcToSrc && !isCrsToSrc;
-
-  //   let reservesIn = BigInt(0);
-  //   let reservesOut = BigInt(0);
-  //   let usd = 0;
-
-  //   if (isSrcToSrc) {
-  //     // Need to find out exactly how much CRS went to poolOut
-  //     // Need to calc poolOut updated reserves
-  //     // Using current CRS price, calc tokenOut usd
-  //   } else if (isCrsToSrc || isSrcToCrs) {
-  //     const crsToken = this.tokenIn.address === 'CRS' ? this.tokenIn : this.tokenOut;
-  //     const srcToken = this.tokenIn.address === 'CRS' ? this.tokenOut : this.tokenIn;
-  //     const crsReserves = new FixedDecimal(this.poolIn.summary.reserves.crs, 8);
-  //     const srcReserves = new FixedDecimal(this.poolIn.summary.reserves.src, srcToken.decimals);
-  //     const updatedCrsReserves = this.tokenIn.address === 'CRS' ? MathService.add(crsReserves, tokenInAmount) : MathService.subtract(crsReserves, tokenOutAmount);
-  //     const updatedSrcReserves = this.tokenIn.address === 'CRS' ? MathService.subtract(srcReserves, tokenOutAmount) : MathService.add(srcReserves, tokenInAmount);
-
-  //     // if (this.tokenOut.address === 'CRS') {
-  //     //   const crsPerSrcSats = BigInt(updatedCrsReserves.replace('.', '')) * BigInt(srcToken.sats) / BigInt(updatedSrcReserves.replace('.', ''));
-  //     //   const crsPerSrc = MathService.divide(new FixedDecimal(crsPerSrcSats.toString(), 8), new FixedDecimal(srcToken.sats.toString(), 8));
-  //     // } else {
-
-  //     // }
-  //     // Get token out usd
-  //     const crsPerSrcSats = updatedCrsReserves.bigInt * BigInt(srcToken.sats) / updatedSrcReserves.bigInt;
-  //     const crsPerSrc = MathService.divide(new FixedDecimal(crsPerSrcSats.toString(), 8), new FixedDecimal(srcToken.sats.toString(), 8));
-
-  //     console.log(crsPerSrc, this.poolIn.summary.cost.crsPerSrc);
-
-  //     const price = MathService.multiply(crsPerSrc, new FixedDecimal(this.poolIn.tokens.crs.summary.priceUsd.toString(), 8));
-
-
-  //     console.log(price)
-  //     return price;
-  //     // return token1 == UInt256.Zero ? UInt256.Zero : (UInt256)((BigInteger)token0 * token1Sats / token1);
-
-  //     // One pool involved
-  //     // Calc poolOutUpdated reserves
-  //   }
-
-  //   return FixedDecimal.Zero(8);
-  // }
 
   toggleShowMore(): void {
     this.showMore = !this.showMore;

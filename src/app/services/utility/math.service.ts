@@ -28,6 +28,7 @@ export class MathService {
     return new FixedDecimal(resultString, a.decimals);
   }
 
+  // Todo: If b.decimals > a.decimals math is incorrect
   static subtract(a: FixedDecimal, b: FixedDecimal): FixedDecimal {
     if (!a || !b) return FixedDecimal.Zero(a.decimals);
 

@@ -138,6 +138,10 @@
     </ng-container>
     <!-- End Tolerance and Deadline -->
 
+    <div *ngIf="priceImpact">
+      <p>Price Impact: {{priceImpact.formattedValue}}</p>
+    </div>
+
     <opdex-tx-quote-submit-button
       [warn]="balanceError || (allowance && !allowance?.isApproved)"
       [disabled]="!form.valid || !tokenInMax || !tokenOutMin || balanceError === undefined"
