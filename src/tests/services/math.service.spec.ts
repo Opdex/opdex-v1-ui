@@ -5,12 +5,14 @@ import { MathService } from '@sharedServices/utility/math.service';
 const MathTestLookup = {
   addTests: [
     { a: new FixedDecimal('0.52400000', 8), b: new FixedDecimal('0.00500000', 8), expectedOutput: '0.52900000'},
-    { a: new FixedDecimal('0.52400000', 8), b: new FixedDecimal('1.00500000', 8), expectedOutput: '1.52900000'}
+    { a: new FixedDecimal('0.52400000', 8), b: new FixedDecimal('1.00500000', 8), expectedOutput: '1.52900000'},
+    { a: new FixedDecimal('0.52400000', 8), b: new FixedDecimal('1.105000000000000000', 18), expectedOutput: '1.62900000'},
+    { a: new FixedDecimal('0.524000000000000000', 18), b: new FixedDecimal('1.10500000', 8), expectedOutput: '1.629000000000000000'}
   ],
   subtractTests: [
     { a: new FixedDecimal('0.52400000', 8), b: new FixedDecimal('0.00500000', 8), expectedOutput: '0.51900000'},
     { a: new FixedDecimal('0.52400000', 8), b: new FixedDecimal('0.005000000000000000', 18), expectedOutput: '0.51900000'},
-    { a: new FixedDecimal('0.524000000000000000', 18), b: new FixedDecimal('0.00500000', 8), expectedOutput: '0.519000000000000000'},
+    { a: new FixedDecimal('1.524000000000000000', 18), b: new FixedDecimal('0.00500000', 8), expectedOutput: '1.519000000000000000'},
   ],
   multiplyTests: [
     { a: new FixedDecimal('100.12345678', 8), b: new FixedDecimal('2.49', 2), expectedOutput: '249.30740738'},
@@ -29,6 +31,8 @@ const MathTestLookup = {
     { a: new FixedDecimal('20.40000000', 8), b: new FixedDecimal('.50000000', 8), expectedOutput: '40.80000000'},
     { a: new FixedDecimal('1.20000000', 8), b: new FixedDecimal('.33300000', 8), expectedOutput: '3.60360360'},
     { a: new FixedDecimal('1.00000000', 8), b: new FixedDecimal('10.00000000', 8), expectedOutput: '0.10000000'},
+    { a: new FixedDecimal('1.00000000', 8), b: new FixedDecimal('10.000000000000000000', 18), expectedOutput: '0.10000000'},
+    { a: new FixedDecimal('1.000000000000000000', 18), b: new FixedDecimal('10.00000000', 8), expectedOutput: '0.100000000000000000'},
   ],
 }
 

@@ -32,6 +32,14 @@ export class MathService {
   static subtract(a: FixedDecimal, b: FixedDecimal): FixedDecimal {
     if (!a || !b) return FixedDecimal.Zero(a.decimals);
 
+    const resultDecimalLength = a.decimals;
+
+    if (a.decimals < b.decimals) {
+      a.resize(b.decimals);
+    } else if (a.decimals > b.decimals) {
+      b.resize(a.decimals);
+    }
+
     // Subtract
     const result = a.bigInt - b.bigInt;
 
@@ -46,11 +54,19 @@ export class MathService {
     // Using A and B Decimals, convert result
     const resultString = `${whole}.${remainder}`;
 
-    return new FixedDecimal(resultString, a.decimals);
+    return new FixedDecimal(resultString, resultDecimalLength);
   }
 
   static add(a: FixedDecimal, b: FixedDecimal): FixedDecimal {
     if (!a || !b) return FixedDecimal.Zero(a.decimals);
+
+    const resultDecimalLength = a.decimals;
+
+    if (a.decimals < b.decimals) {
+      a.resize(b.decimals);
+    } else if (a.decimals > b.decimals) {
+      b.resize(a.decimals);
+    }
 
     // Add
     const result = a.bigInt + b.bigInt;
@@ -66,7 +82,7 @@ export class MathService {
     // Using A and B Decimals, convert result
     const resultString = `${whole}.${remainder}`;
 
-    return new FixedDecimal(resultString, a.decimals);
+    return new FixedDecimal(resultString, resultDecimalLength);
   }
 
   static divide(a: FixedDecimal, b: FixedDecimal): FixedDecimal {

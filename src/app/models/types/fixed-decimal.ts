@@ -71,7 +71,20 @@ export class FixedDecimal {
   }
 
   resize(decimals: number): void {
-    // Todo: Resize number to add or remove decimals, no rounding, strict cutoff
+    if (decimals === this.decimals || decimals < 0 || decimals > 18) return;
+
+    if (decimals === 0) { // Going to 0 decimals
+      this._fractionNumber = '';
+      this._formattedValue = this._wholeNumber;
+    } else {
+      this._fractionNumber = decimals > this.decimals
+        ? this._fractionNumber.padEnd(decimals, '0')
+        : this._fractionNumber.substring(0, decimals);
+
+      this._formattedValue = `${this.wholeNumber}.${this.fractionNumber}`;
+    }
+
+    this._decimals = decimals;
   }
 
   static Zero = (decimals: number): FixedDecimal => new FixedDecimal('0', decimals);
