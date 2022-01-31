@@ -6,7 +6,10 @@ export class MathService {
   static multiply(a: FixedDecimal, b: FixedDecimal): FixedDecimal {
     if (!a || !b) return FixedDecimal.Zero(a.decimals);
 
-    const product = a.bigInt * b.bigInt;
+    let product = a.bigInt * b.bigInt;
+    let isNegative = product < 0;
+
+    if (isNegative) product *= BigInt(-1);
 
     if (product === BigInt(0)) return FixedDecimal.Zero(a.decimals);
 
@@ -20,7 +23,7 @@ export class MathService {
     const remainder = product.toString().substring(productRoundedLength).padStart(a.decimals + b.decimals, '0');
 
     // Using A and B Decimals, convert result
-    const total = `${whole}.${remainder}`;
+    const total = `${isNegative ? '-' : ''}${whole}.${remainder}`;
 
     // round
     const resultString = total.substring(0, whole.length + 1 + a.decimals);
@@ -41,7 +44,10 @@ export class MathService {
     }
 
     // Subtract
-    const result = a.bigInt - b.bigInt;
+    let result = a.bigInt - b.bigInt;
+    let isNegative = result < 0;
+
+    if (isNegative) result *= BigInt(-1);
 
     const resultRoundedLength = result.toString().length - (a.decimals);
 
@@ -52,7 +58,7 @@ export class MathService {
     const remainder = result.toString().substring(resultRoundedLength).padStart(a.decimals, '0');
 
     // Using A and B Decimals, convert result
-    const resultString = `${whole}.${remainder}`;
+    const resultString = `${isNegative ? '-' : ''}${whole}.${remainder}`;
 
     return new FixedDecimal(resultString, resultDecimalLength);
   }

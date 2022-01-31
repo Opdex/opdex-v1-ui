@@ -5,6 +5,10 @@
     border: .2em solid #fff;
   }
 
+  .border {
+    border: 1px solid #ccc;
+  }
+
   #side-nav {
     border-right: 1px solid #ccc;
     background: #fff;
@@ -27,6 +31,10 @@
 .dark-mode {
   .wallet-indicator {
     border: .2em solid $dark-primary;
+  }
+
+  .border {
+    border: 1px solid #292929;
   }
 
   #side-nav {

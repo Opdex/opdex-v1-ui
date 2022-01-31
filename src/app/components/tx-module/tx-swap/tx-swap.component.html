@@ -12,10 +12,10 @@
       (handleChangeToken)="changeToken('tokenIn')"
       [numbersOnly]="true">
       <div class="flex-row-center-between">
-        <div class="tolerance-amounts">
+        <!-- <div class="tolerance-amounts">
           <span *ngIf="tokenInMax && !tokenInExact">Max: {{tokenInMax.formattedValue | formatNumber:tokenIn.decimals}}</span>
           <span *ngIf="tokenInFiatValue && !tokenInExact" class="success ml-2">${{tokenInMaxFiatValue.formattedValue | shortNumber}}</span>
-        </div>
+        </div> -->
 
         <div class="fiat-quote">
           <span class="success" *ngIf="tokenInFiatValue">${{tokenInFiatValue.formattedValue | shortNumber}}</span>
@@ -75,10 +75,10 @@
       (handleChangeToken)="changeToken('tokenOut')"
       [numbersOnly]="true">
       <div class="flex-row-center-between">
-        <div class="tolerance-amounts">
+        <!-- <div class="tolerance-amounts">
           <span *ngIf="tokenOutMin && tokenInExact">Min: {{tokenOutMin.formattedValue | formatNumber:tokenOut.decimals}}</span>
           <span *ngIf="tokenOutMinFiatValue && tokenInExact" class="success ml-2">${{tokenOutMinFiatValue.formattedValue | shortNumber}}</span>
-        </div>
+        </div> -->
 
         <div class="fiat-quote">
           <span class="success" *ngIf="!!tokenOutFiatValue">${{tokenOutFiatValue.formattedValue | shortNumber}}</span>
@@ -138,8 +138,26 @@
     </ng-container>
     <!-- End Tolerance and Deadline -->
 
-    <div *ngIf="priceImpact">
-      <p>Price Impact: {{priceImpact.formattedValue}}</p>
+    <div *ngIf="priceImpact" class="mt-3 p-2 border" style="border-radius: 4px;">
+      <small class="b-400">1 {{tokenOut.symbol}} = {{numInPerOneOut.formattedValue}} {{tokenIn.symbol}}</small>
+
+      <div class="flex-row-center-between">
+        <small class="b-400 light mr-1">Price Impact</small> <small>{{priceImpact.formattedValue | shortNumber}}%</small>
+      </div>
+
+      <div class="flex-row-center-between" *ngIf="tokenOutMin && tokenInExact">
+        <small class="b-400 light mr-1">Minimum Received ({{toleranceThreshold}}% slippage)</small>
+        <small>{{tokenOutMin.formattedValue | formatNumber:(tokenOut.decimals > 8 ? 8 : tokenOut.decimals)}} {{tokenOut.symbol}}</small>
+      </div>
+
+      <div class="flex-row-center-between" *ngIf="tokenInMax && !tokenInExact">
+        <small class="b-400 light mr-1">Maximum Sent ({{toleranceThreshold}}% slippage)</small>
+        <small>{{tokenInMax.formattedValue | formatNumber:(tokenIn.decimals > 8 ? 8 : tokenIn.decimals)}} {{tokenIn.symbol}}</small>
+      </div>
+
+      <div class="flex-row-center-between">
+        <small class="b-400 light mr-1">Block Deadline ({{deadlineThreshold}} minutes)</small> <small>{{deadlineBlock | formatNumber:0}}</small>
+      </div>
     </div>
 
     <opdex-tx-quote-submit-button

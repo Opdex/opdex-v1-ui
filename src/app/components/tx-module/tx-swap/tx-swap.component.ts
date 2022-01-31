@@ -54,9 +54,11 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
   tokenOutPercentageSelected: string;
   tokenOutFiatPercentageDifference: FixedDecimal;
   priceImpact: FixedDecimal;
+  numInPerOneOut: FixedDecimal;
   changeTokenOut: boolean;
   toleranceThreshold: number;
   deadlineThreshold: number;
+  deadlineBlock: number;
   allowance: AllowanceValidation;
   transactionTypes = AllowanceRequiredTransactionTypes;
   showMore: boolean;
@@ -117,6 +119,7 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
       this._indexService.getLatestBlock$()
         .pipe(
           tap(block => this.latestBlock = block?.height),
+          tap(_ => this.calcDeadline(this.deadlineThreshold)),
           filter(_ => !!this.tokenIn && !!this.tokenOut),
           switchMap(_ => this.refreshTokens(this.tokenIn.address, this.tokenOut.address)),
           switchMap(_ => this.tokenInExact ? this.amountOutQuote(this.tokenInAmount.value) : this.amountInQuote(this.tokenOutAmount.value)),
@@ -128,6 +131,8 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
     if (this.data?.pool) {
       this.tokenIn = this.data.pool.tokens.src;
       this.tokenOut = this.data.pool.tokens.crs;
+      this.poolIn = this.data.pool;
+      this.poolOut = this.data.pool;
     } else {
       const topTokens = new TokensFilter({
         limit: 2,
@@ -176,6 +181,7 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
   }
 
   submit() {
+    this.calcDeadline(this.deadlineThreshold);
     const tokenInAmount = new FixedDecimal(this.tokenInAmount.value, this.tokenIn.decimals);
     const tokenOutAmount = new FixedDecimal(this.tokenOutAmount.value, this.tokenOut.decimals);
     const tokenInMax = this.tokenInExact ? tokenInAmount : this.tokenInMax;
@@ -189,7 +195,7 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
       tokenOutMin,
       this.tokenInExact,
       this.context.wallet,
-      this.calcDeadline(this.deadlineThreshold)
+      this.deadlineBlock
     );
 
     this._platformApi
@@ -229,12 +235,12 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
     if (!this.tokenInAmount.value || !this.tokenInAmount.value) return;
     if (!this.poolIn || !this.poolOut) return;
 
+    const one = FixedDecimal.One(8);
+    const negativeOneHundred = FixedDecimal.NegativeOneHundred(8);
     const tokenInAmount = new FixedDecimal(this.tokenInAmount.value, this.tokenIn.decimals);
     const tokenInPrice = new FixedDecimal(this.tokenIn.summary.priceUsd.toString(), 8);
     const tokenInTolerance = new FixedDecimal((1 + (this.toleranceThreshold / 100)).toFixed(8), 8);
     const tokenOutAmount = new FixedDecimal(this.tokenOutAmount.value, this.tokenOut.decimals);
-    this.priceImpact = this.getPriceImpact(tokenInAmount, tokenOutAmount);
-    console.log(this.priceImpact.formattedValue);
     const tokenOutPrice = new FixedDecimal(this.tokenOut.summary.priceUsd.toString(), 8);
     const tokenOutTolerancePercentage = new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8);
     const tokenOutTolerance = tokenOutAmount.multiply(tokenOutTolerancePercentage);
@@ -245,13 +251,12 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
     this.tokenOutFiatValue = tokenOutAmount.multiply(tokenOutPrice);
     this.tokenInMaxFiatValue = this.tokenInMax.multiply(tokenInPrice);
     this.tokenOutMinFiatValue = this.tokenOutMin.multiply(tokenOutPrice);
+    this.priceImpact = this.getPriceImpact(tokenInAmount, tokenOutAmount);
+    this.numInPerOneOut = tokenInAmount.divide(tokenOutAmount);
+    // console.log('price impact: ', this.priceImpact.formattedValue);
 
-    // Calc token in fiat vs out fiat percentage difference
-    const oneHundred = FixedDecimal.OneHundred(8);
-    const percentageOutputOfInputFixed = oneHundred.multiply(this.tokenOutFiatValue).divide(this.tokenInFiatValue);
-    // Todo: Should still multiple by -1 if amountOut < amountIn
-    // Todo: Currently this should _always_ be multiplied by negative 1, double check and implement.
-    this.tokenOutFiatPercentageDifference = oneHundred.subtract(percentageOutputOfInputFixed);
+    // (1 - (amountOut / amountIn)) * -100
+    this.tokenOutFiatPercentageDifference = one.subtract(this.tokenOutFiatValue.divide(this.tokenInFiatValue)).multiply(negativeOneHundred);
   }
 
   getPriceImpact(tokenInAmount: FixedDecimal, tokenOutAmount: FixedDecimal): FixedDecimal {
@@ -265,65 +270,76 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
     let updatedCrsReserves: FixedDecimal;
     let updatedSrcReserves: FixedDecimal;
 
-    if (!isSrcToCrs) {
+    if (isSrcToSrc) {
       const quote = this.tokenInExact
         ? SwapQuoteService.getAmountOutMulti(tokenInAmount, pool0CrsReserves, pool0SrcReserves, pool1CrsReserves, pool1SrcReserves, new FixedDecimal('0.003', 3))
         : SwapQuoteService.getAmountInMulti(tokenOutAmount, pool1CrsReserves, pool1SrcReserves, pool0CrsReserves, pool0SrcReserves, new FixedDecimal('0.003', 3));
 
-      updatedCrsReserves = pool1CrsReserves.add(quote[1].amountIn);
-      updatedSrcReserves = pool1SrcReserves.subtract(quote[1].amountOut);
+      updatedCrsReserves = pool0CrsReserves.subtract(quote[0].amountOut);
+      updatedSrcReserves = pool0SrcReserves.add(quote[0].amountIn);
     } else {
       if (this.tokenInExact) {
         if (isCrsToSrc) {
           const quote = SwapQuoteService.getAmountOut(tokenInAmount, pool0CrsReserves, pool0SrcReserves, new FixedDecimal('0.003', 3));
-          updatedCrsReserves = pool1CrsReserves.add(quote.amountIn);
-          updatedSrcReserves = pool1SrcReserves.subtract(quote.amountOut);
+          updatedCrsReserves = pool0CrsReserves.add(quote.amountIn);
+          updatedSrcReserves = pool0SrcReserves.subtract(quote.amountOut);
         } else {
           const quote = SwapQuoteService.getAmountOut(tokenInAmount, pool0SrcReserves, pool0CrsReserves, new FixedDecimal('0.003', 3));
-          updatedCrsReserves = pool1SrcReserves.add(quote.amountIn);
-          updatedSrcReserves = pool1CrsReserves.subtract(quote.amountOut);
+          updatedSrcReserves = pool0SrcReserves.add(quote.amountIn);
+          updatedCrsReserves = pool0CrsReserves.subtract(quote.amountOut);
         }
       } else {
         if (isCrsToSrc) {
           const quote = SwapQuoteService.getAmountIn(tokenOutAmount, pool0CrsReserves, pool0SrcReserves, new FixedDecimal('0.003', 3));
-          updatedCrsReserves = pool1CrsReserves.add(quote.amountIn);
-          updatedSrcReserves = pool1SrcReserves.subtract(quote.amountOut);
+          updatedCrsReserves = pool0CrsReserves.add(quote.amountIn);
+          updatedSrcReserves = pool0SrcReserves.subtract(quote.amountOut);
         } else {
           const quote = SwapQuoteService.getAmountIn(tokenOutAmount, pool0SrcReserves, pool0CrsReserves, new FixedDecimal('0.003', 3));
-          updatedCrsReserves = pool1SrcReserves.add(quote.amountIn);
-          updatedSrcReserves = pool1CrsReserves.subtract(quote.amountOut);
+          updatedSrcReserves = pool0SrcReserves.add(quote.amountIn);
+          updatedCrsReserves = pool0CrsReserves.subtract(quote.amountOut);
         }
       }
     }
 
-    const isSrcOut = isSrcToSrc || isCrsToSrc;
-    const oneHundred = FixedDecimal.OneHundred(8);
     let previousAmountInPerAmountOut: FixedDecimal;
     let currentAmountInPerAmountOut: FixedDecimal;
 
-    if (isSrcOut) {
-      previousAmountInPerAmountOut = new FixedDecimal(this.poolOut.summary.cost.crsPerSrc, this.poolOut.tokens.crs.decimals);
+    if (isSrcToCrs || isSrcToSrc) {
+      previousAmountInPerAmountOut = new FixedDecimal(this.poolIn.summary.cost.crsPerSrc, this.poolIn.tokens.crs.decimals);
       currentAmountInPerAmountOut = updatedCrsReserves.divide(updatedSrcReserves);
     } else {
-      previousAmountInPerAmountOut = new FixedDecimal(this.poolOut.summary.cost.srcPerCrs, this.poolOut.tokens.src.decimals);
+      previousAmountInPerAmountOut = new FixedDecimal(this.poolIn.summary.cost.srcPerCrs, this.poolIn.tokens.src.decimals);
       currentAmountInPerAmountOut = updatedSrcReserves.divide(updatedCrsReserves);
     }
 
-    console.log(currentAmountInPerAmountOut.formattedValue);
-    console.log(previousAmountInPerAmountOut.formattedValue);
-    console.log(currentAmountInPerAmountOut.divide(previousAmountInPerAmountOut).formattedValue)
+    console.log('currentAmountInPerAmountOut: ', currentAmountInPerAmountOut.formattedValue);
+    console.log('previousAmountInPerAmountOut: ', previousAmountInPerAmountOut.formattedValue);
+    console.log('difference original: ', currentAmountInPerAmountOut.divide(previousAmountInPerAmountOut).formattedValue)
+    // console.log('difference updated: ', previousAmountInPerAmountOut.divide(currentAmountInPerAmountOut).formattedValue)
 
-    return currentAmountInPerAmountOut.divide(previousAmountInPerAmountOut).multiply(oneHundred).subtract(oneHundred);
+    const difference = currentAmountInPerAmountOut.divide(previousAmountInPerAmountOut);
+
+
+    const one = FixedDecimal.One(8);
+    const negativeOneHundred = FixedDecimal.NegativeOneHundred(8);
+    // const oneHundred = FixedDecimal.OneHundred(8);
+
+    console.log('friendly final * -100: ', one.subtract(difference).multiply(negativeOneHundred).formattedValue);
+    // console.log('friendly final * 100: ', one.subtract(difference).multiply(oneHundred).formattedValue)
+
+    return one.subtract(difference).multiply(negativeOneHundred);
   }
 
   toggleShowMore(): void {
     this.showMore = !this.showMore;
   }
 
-  calcDeadline(minutes: number): number {
+  calcDeadline(minutes: number): void {
     this.deadlineThreshold = minutes;
+
+    // console.log(this.deadlineThreshold)
     const blocks = Math.ceil(60 * minutes / 16);
-    return blocks + this.latestBlock;
+    this.deadlineBlock = blocks + this.latestBlock;
   }
 
   handlePercentageSelect(field: string, value: any): void {
@@ -430,8 +446,9 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
       return of(false);
     }
 
-    const amountNeededString = this.tokenInExact ? this.tokenInAmount.value : this.tokenInMax;
-    const amountNeeded = new FixedDecimal(amountNeededString, this.tokenIn.decimals);
+    const amountNeeded = this.tokenInExact
+      ? new FixedDecimal(this.tokenInAmount.value, this.tokenIn.decimals)
+      : this.tokenInMax;
 
     return this._validateBalance$(this.tokenIn, amountNeeded)
       .pipe(tap(result => this.balanceError = !result));
