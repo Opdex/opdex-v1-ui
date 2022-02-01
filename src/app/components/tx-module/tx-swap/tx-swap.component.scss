@@ -4,6 +4,10 @@
   color: $green-primary;
 }
 
-.error {
+.orange, .warn {
+  color: $orange-primary;
+}
+
+.red, .error {
   color: $red-primary;
 }
