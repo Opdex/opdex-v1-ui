@@ -4,11 +4,11 @@
     <div class="flex-row-center-between">
       <div class="flex-row-center">
         <opdex-token-icon [token]="token"></opdex-token-icon>
-        <h2 class=" mb-0 d-inline ml-2">
-          <a class="body-default b-300 no-decoration" href="javascript:void(0)" routerLink="/tokens/{{token.address}}">{{token.symbol}}</a>
-        </h2>
-      </div>
 
+        <a class="title no-decoration ml-2" href="javascript:void(0)" routerLink="/tokens/{{token.address}}">
+          <h2 class="mb-0">{{token.symbol}}</h2>
+        </a>
+      </div>
 
       <div class="flex-row-center-end">
         <h3 class="mb-0 mr-2 b-300">${{token?.summary?.priceUsd | shortNumber}}</h3>

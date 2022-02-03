@@ -1,14 +1,12 @@
 <opdex-card class="pool-card">
   <ng-container *ngIf="pool !== null && pool !== undefined; else loading">
     <div class="top-details">
-      <div class="title-container flex-row-center">
-        <div class="asset-images flex-row-center">
-          <opdex-token-icons [tokens]="[pool.tokens.crs, pool.tokens.src]"></opdex-token-icons>
-        </div>
+      <div class="flex-row-center">
+        <opdex-token-icons [tokens]="[pool.tokens.crs, pool.tokens.src]"></opdex-token-icons>
 
-        <h3 class="title ml-2">
-          <a href="javascript:void(0)" [routerLink]="['/pools', pool.address]">{{pool.name}}</a>
-        </h3>
+        <a class="title mb-0 ml-2" href="javascript:void(0)" [routerLink]="['/pools', pool.address]">
+          <h3>{{pool.name}}</h3>
+        </a>
       </div>
 
       <button mat-icon-button color="primary" [ngClass]="iconSizes.small" [matMenuTriggerFor]="beforeMenu">
