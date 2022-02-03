@@ -9,6 +9,8 @@ export interface IMiningGovernance {
   miningPoolRewardPerPeriod: string;
   totalRewardsPerPeriod: string;
   minedToken: string;
+  createdBlock: number;
+  modifiedBlock: number;
 }
 
 export interface IMiningGovernances extends IPaging<IMiningGovernance> { }

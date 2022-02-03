@@ -6,7 +6,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { MiningPositionsFilter } from '@sharedModels/platform-api/requests/wallets/mining-positions-filter';
 import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
-import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { IndexService } from '@sharedServices/platform/index.service';
@@ -94,7 +93,7 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
             return of(response);
           }
 
-          const positions$: Observable<IAddressMining>[] = [];
+          const positions$: Observable<any>[] = [];
 
           response.results.forEach(position => {
             const miningPositionDetails$: Observable<any> =
@@ -107,19 +106,20 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
           return forkJoin(positions$)
             .pipe(
               map(positions => {
-                this.dataSource.data = positions.map((p: any) => {
-                  const price = new FixedDecimal(p.pool.tokens.lp.summary.priceUsd.toString(), 8);
-                  const amount = new FixedDecimal(p.position.amount, p.pool.tokens.lp.decimals);
+                this.dataSource.data = positions.map(({ pool, position }) => {
+                  const price = new FixedDecimal(pool.tokens.lp.summary.priceUsd.toString(), 8);
+                  const amount = new FixedDecimal(position.amount, pool.tokens.lp.decimals);
 
                   return {
-                    name: p.pool.name,
-                    miningTokenSymbol: p.pool.tokens.lp.symbol,
-                    liquidityPoolAddress: p.pool.address,
-                    miningPoolAddress: p.position.miningPool,
-                    position: p.position.amount,
-                    isActive: p.pool.miningPool?.isActive === true,
-                    decimals: p.pool.tokens.lp.decimals,
-                    isCurrentMarket: p.pool.market === this._env.marketAddress,
+                    name: pool.name,
+                    poolTokens: [pool.tokens.crs, pool.tokens.src],
+                    miningTokenSymbol: pool.tokens.lp.symbol,
+                    liquidityPoolAddress: pool.address,
+                    miningPoolAddress: position.miningPool,
+                    position: amount,
+                    isActive: pool.miningPool?.isActive === true,
+                    decimals: pool.tokens.lp.decimals,
+                    isCurrentMarket: pool.market === this._env.marketAddress,
                     value: price.multiply(amount)
                   }
                 });

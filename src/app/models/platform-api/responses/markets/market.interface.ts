@@ -12,4 +12,6 @@ export interface IMarket {
   marketFeeEnabled: boolean;
   transactionFeePercent: number;
   summary: IMarketSummaryResponse;
+  createdBlock: number;
+  modifiedBlock: number;
 }

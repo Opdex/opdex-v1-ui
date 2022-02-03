@@ -138,12 +138,7 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
                 const balance = new FixedDecimal(token.balance.balance, token.decimals);
 
                 return {
-                  name: token.name,
-                  symbol: token.symbol,
-                  address: token.address,
-                  balance: token.balance.balance,
-                  decimals: token.decimals,
-                  price: price,
+                  token,
                   isCurrentMarket: token.market === this._env.marketAddress,
                   total: price.multiply(balance)
                 }

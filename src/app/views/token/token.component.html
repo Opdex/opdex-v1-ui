@@ -8,7 +8,11 @@
       </div>
 
       <div class="col-12 col-lg-6 col-xl-8">
-        <h1 class="mb-0">{{token.name}}</h1>
+        <div class="flex-row-center">
+          <opdex-token-icon [token]="token"></opdex-token-icon>
+          <h1 class="mb-0 ml-2">{{token.name}}</h1>
+        </div>
+
         <opdex-copy-address [address]="token?.address" *ngIf="token?.address !== 'CRS'"></opdex-copy-address>
       </div>
 

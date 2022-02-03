@@ -5,4 +5,6 @@ export interface IVaultProposalVoteResponseModel {
   vote: string;
   balance: string;
   inFavor: boolean;
+  createdBlock: number;
+  modifiedBlock: number;
 }

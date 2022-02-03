@@ -26,9 +26,16 @@ export interface IToken {
   totalSupply: string;
   summary: ITokenSummary;
   attributes: string[];
+  createdBlock: number;
+  modifiedBlock: number;
+  nativeToken: INativeToken;
   balance?: any;
 }
 
+export interface INativeToken {
+  nativeChain: string;
+  nativeAddress: string;
+}
 export interface ITokenSnapshot {
   price: IOhlcNumber;
   timestamp: Date;

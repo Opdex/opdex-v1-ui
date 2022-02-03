@@ -14,6 +14,7 @@ import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
 import { TokenHistory } from '@sharedModels/token-history';
+import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 
 @Component({
   selector: 'opdex-tokens-table',
@@ -59,17 +60,7 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
           return forkJoin(poolArray$);
         }),
         map(tokens => {
-          this.dataSource.data = [...tokens.map(t => {
-            return {
-              name: t.name,
-              symbol: t.symbol,
-              price: t.summary?.priceUsd,
-              change: t.summary?.dailyPriceChangePercent || 0,
-              address: t.address,
-              price7d: t.snapshotHistory
-            }
-          })];
-
+          this.dataSource.data = [...tokens];
           return {results: tokens, paging: this.paging}
         }),
         take(1)
@@ -99,8 +90,8 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
     this._router.navigateByUrl(`/tokens/${name}`);
   }
 
-  trackBy(index: number, token: any) {
-    return token.address // Todo: Should also track by moving targets like price
+  trackBy(index: number, token: IToken) {
+    return `${index}-${token.address}-${token.summary.dailyPriceChangePercent}-${token.summary.priceUsd}`;
   }
 
   ngOnDestroy() {
