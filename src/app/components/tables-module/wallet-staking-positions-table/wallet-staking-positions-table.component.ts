@@ -13,7 +13,6 @@ import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
 import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
-import { IAddressStaking } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
@@ -95,7 +94,7 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
             return of(response);
           }
 
-          const positions$: Observable<IAddressStaking>[] = [];
+          const positions$: Observable<any>[] = [];
 
           response.results.forEach(position => {
             const stakingPositionDetails$: Observable<any> =
@@ -109,18 +108,19 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
 
           return forkJoin(positions$)
             .pipe(map(positions => {
-              this.dataSource.data = positions.map((p: any) => {
+              this.dataSource.data = positions.map(({pool, position}) => {
                 return {
-                  name: p.pool.name,
-                  stakingTokenSymbol: p.pool.summary.staking?.token.symbol,
-                  liquidityPoolAddress: p.pool.address,
-                  position: p.position.amount,
-                  decimals: p.pool.tokens.lp.decimals,
-                  isNominated: p.pool.summary?.staking.nominated === true,
-                  isCurrentMarket: p.pool.market === this._env.marketAddress,
+                  name: pool.name,
+                  poolTokens: [pool.tokens.crs, pool.tokens.src],
+                  stakingTokenSymbol: pool.summary.staking?.token.symbol,
+                  liquidityPoolAddress: pool.address,
+                  position: position.amount,
+                  decimals: pool.tokens.lp.decimals,
+                  isNominated: pool.summary?.staking.nominated === true,
+                  isCurrentMarket: pool.market === this._env.marketAddress,
                   value: MathService.multiply(
-                    new FixedDecimal(p.position.amount, p.pool.summary.staking?.token.decimals),
-                    new FixedDecimal(p.pool.summary.staking?.token.summary.priceUsd.toString(), 8))
+                    new FixedDecimal(position.amount, pool.summary.staking?.token.decimals),
+                    new FixedDecimal(pool.summary.staking?.token.summary.priceUsd.toString(), 8))
                 }
               });
 

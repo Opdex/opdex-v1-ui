@@ -6,13 +6,13 @@
     justify-content: space-between;
     align-items: center;
 
-    .title {
-      color: $blue-primary;
-      display: inline;
-      margin-bottom: 0;
+    a {
+      text-decoration: none;
 
-      a {
-        text-decoration: none;
+      h3 {
+        color: $blue-primary;
+        display: inline;
+        margin-bottom: 0;
       }
     }
   }
@@ -34,28 +34,6 @@
 
     .value {
       margin-bottom: 0px;
-    }
-  }
-}
-
-@media(min-width: 769px) {
-  %pool-card {
-    .top-details {
-      .title {
-        color: $blue-primary;
-        display: inline;
-        margin-bottom: 0;
-
-        a {
-          text-decoration: none;
-        }
-      }
-    }
-
-    .button-group {
-      button {
-        margin-right: 10px;
-      }
     }
   }
 }

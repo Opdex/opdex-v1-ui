@@ -6,7 +6,6 @@ import { MatTableDataSource } from "@angular/material/table";
 import { Router } from "@angular/router";
 import { WalletBalancesFilter } from "@sharedModels/platform-api/requests/wallets/wallet-balances-filter";
 import { ICursor } from "@sharedModels/platform-api/responses/cursor.interface";
-import { IMarketToken } from "@sharedModels/platform-api/responses/tokens/token.interface";
 import { TransactionView } from "@sharedModels/transaction-view";
 import { FixedDecimal } from "@sharedModels/types/fixed-decimal";
 import { IndexService } from "@sharedServices/platform/index.service";
@@ -95,38 +94,32 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
             return of(response);
           }
 
-          const balances$: Observable<IMarketToken>[] = [];
+          const balances$: Observable<any>[] = [];
 
           response.results.forEach(balance => {
-            const poolDetail$: Observable<IMarketToken> =
+            const poolDetail$: Observable<any> =
               this._liquidityPoolService.getLiquidityPool(balance.token)
                 .pipe(
                   take(1),
                   map(pool => {
-                    let token = pool.tokens.lp;
-                    token.name = pool.name
-                    token.balance = balance;
-                    token.market = pool.market;
-                    return token;
-                  })
-                );
+                    return { pool, balance }
+                  }));
 
             balances$.push(poolDetail$);
           })
 
           return forkJoin(balances$)
             .pipe(map(balances => {
-              this.dataSource.data = balances.map(token => {
+              this.dataSource.data = balances.map(({pool, balance}) => {
+                const src = pool.tokens.src;
+
                 return {
-                  pool: token.name,
-                  token: token.symbol,
-                  address: token.address,
-                  balance: token.balance.balance,
-                  decimals: token.decimals,
-                  isCurrentMarket: token.market === this._env.marketAddress,
+                  pool,
+                  balance: balance.balance,
+                  isCurrentMarket: pool.market === this._env.marketAddress,
                   total: MathService.multiply(
-                    new FixedDecimal(token.balance.balance, token.decimals),
-                    new FixedDecimal(token.summary?.priceUsd?.toString() || '0', 8))
+                    new FixedDecimal(balance.balance,src.decimals),
+                    new FixedDecimal(src.summary?.priceUsd?.toString() || '0', 8))
                 }
               });
 

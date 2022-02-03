@@ -21,6 +21,8 @@ import { QrCodeComponent } from './qr-code/qr-code.component';
 
 // Other Imports
 import { QrCodeModule } from 'ng-qrcode';
+import { TokenIconComponent } from './token-icon/token-icon.component';
+import { TokenIconsComponent } from './token-icons/token-icons.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { QrCodeModule } from 'ng-qrcode';
     CopyButtonComponent,
     HelpButtonComponent,
     QrCodeComponent,
-    CopyAddressComponent
+    CopyAddressComponent,
+    TokenIconComponent,
+    TokenIconsComponent
   ],
   imports: [
     CommonModule,
@@ -48,7 +52,9 @@ import { QrCodeModule } from 'ng-qrcode';
     ChangeIndicatorComponent,
     HelpButtonComponent,
     QrCodeComponent,
-    CopyAddressComponent
+    CopyAddressComponent,
+    TokenIconComponent,
+    TokenIconsComponent
   ]
 })
 export class SharedModule { }
