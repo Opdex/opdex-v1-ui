@@ -5,10 +5,8 @@
         <th mat-header-cell *matHeaderCellDef> Name </th>
         <td mat-cell *matCellDef="let element">
           <div class="no-wrap flex-row-center">
-            <div class="asset-image-placeholder" style="position: relative; z-index:1" [ngClass]="{'odx': element.tokens.src.symbol.includes('ODX')}"></div>
-            <div class="asset-image-placeholder cirrus" style="position: relative; left: -15px; z-index:0"></div>
-            <!-- <opdex-copy-button [tooltip]="element.address" [value]="element.address" [icon]="icons.link" [size]="iconSizes.small"></opdex-copy-button> -->
-            <a class="no-decoration b-400" href="javascript:void(0)" (click)="navigate(element.address)">{{element.name}}</a>
+            <opdex-token-icons [tokens]="[element.tokens.crs, element.tokens.src]"></opdex-token-icons>
+            <a class="no-decoration b-400 ml-2" href="javascript:void(0)" (click)="navigate(element.address)">{{element.name}}</a>
           </div>
         </td>
       </ng-container>

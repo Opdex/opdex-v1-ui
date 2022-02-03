@@ -3,8 +3,8 @@
     <small class="light">{{token.name}}</small>
     <div class="flex-row-center-between">
       <div class="flex-row-center">
-        <div class="asset-image-placeholder mr-2" [ngClass]="{'cirrus': token.symbol.includes('CRS'), 'odx': token.symbol.includes('ODX')}"></div>
-        <h2 class=" mb-0 d-inline">
+        <opdex-token-icon [token]="token"></opdex-token-icon>
+        <h2 class=" mb-0 d-inline ml-2">
           <a class="body-default b-300 no-decoration" href="javascript:void(0)" routerLink="/tokens/{{token.address}}">{{token.symbol}}</a>
         </h2>
       </div>

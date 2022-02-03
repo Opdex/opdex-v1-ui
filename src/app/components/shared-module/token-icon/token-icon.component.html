@@ -1,0 +1,3 @@
+<div class="token-icon" style="position: relative; z-index:1" [ngClass]="{'cirrus': token.symbol.includes('CRS'), 'odx': token.symbol.includes('ODX')}">
+  <img [src]="iconPath" (error)="handleError()" *ngIf="iconPath">
+</div>

@@ -3,11 +3,10 @@
     <div class="top-details">
       <div class="title-container flex-row-center">
         <div class="asset-images flex-row-center">
-          <div class="asset-image-placeholder" style="position: relative; z-index:1"></div>
-          <div class="asset-image-placeholder cirrus" style="position: relative; left: -15px; z-index:0"></div>
+          <opdex-token-icons [tokens]="[pool.tokens.crs, pool.tokens.src]"></opdex-token-icons>
         </div>
 
-        <h3 class="title">
+        <h3 class="title ml-2">
           <a href="javascript:void(0)" [routerLink]="['/pools', pool.address]">{{pool.name}}</a>
         </h3>
       </div>

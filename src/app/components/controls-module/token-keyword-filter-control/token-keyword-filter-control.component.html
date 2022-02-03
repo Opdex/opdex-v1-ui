@@ -20,10 +20,15 @@
     (closed)="selectToken()">
     <ng-container *ngIf="tokens?.length > 0; else noTokens">
       <mat-option *ngFor="let token of tokens" [value]="token">
-        <div class="flex-column" *ngIf="token !== null; else loading">
-          <small class="overflow-ellipsis token-name">{{token.symbol}} - {{token.name}}</small>
-          <small class="overflow-ellipsis light token-address">{{token.address}}</small>
+        <div class="flex-row-center" *ngIf="token !== null; else loading">
+          <opdex-token-icon [token]="token"></opdex-token-icon>
+
+          <div class="flex-column ml-2">
+            <small class="overflow-ellipsis token-name">{{token.symbol}} - {{token.name}}</small>
+            <small class="overflow-ellipsis light token-address">{{token.address}}</small>
+          </div>
         </div>
+
         <ng-template #loading>
           <div class="skeleton-bg mb-1 w-100"></div>
         </ng-template>
