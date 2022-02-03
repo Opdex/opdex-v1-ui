@@ -7,12 +7,14 @@ import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interf
   styleUrls: ['./token-icon.component.scss']
 })
 export class TokenIconComponent {
-  private readonly _baseUrl = 'https://github.com/trustwallet/assets/blob/master/blockchains';
+  private readonly _baseUrl = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains';
 
   @Input() token: IToken;
 
   public get iconPath(): string {
-    const { nativeToken } = this.token;
+    if (!this.token) return '';
+
+    let { nativeToken } = this.token;
 
     if (!!nativeToken === false) return '';
 
@@ -22,6 +24,4 @@ export class TokenIconComponent {
       ? `${this._baseUrl}/${nativeChain.toLowerCase()}/assets/${nativeAddress}/logo.png`
       : `${this._baseUrl}/${nativeChain.toLowerCase()}/info/logo.png`;
   }
-
-  handleError() { }
 }

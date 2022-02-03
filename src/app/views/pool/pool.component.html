@@ -8,7 +8,11 @@
       </div>
 
       <div class="col-12 col-sm-6 col-xl-8">
-        <h1 class="mb-0">{{pool?.tokens?.src?.symbol || 'XYZ'}}/{{pool?.tokens?.crs?.symbol || 'CRS'}}</h1>
+        <div class="flex-row-center">
+          <opdex-token-icons [tokens]="[pool?.tokens?.crs, pool?.tokens?.src]"></opdex-token-icons>
+          <h1 class="mb-0 ml-2">{{pool?.name}}</h1>
+        </div>
+
         <opdex-copy-address [address]="pool?.address"></opdex-copy-address>
 
         <div class="chip-group mt-2">

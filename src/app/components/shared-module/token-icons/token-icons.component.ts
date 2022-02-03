@@ -19,4 +19,9 @@ export class TokenIconsComponent {
 
     return `${width}px`;
   }
+
+  trackBy(index: number, token: IToken): string {
+    if (!!token === false) return '';
+    return `${index}-${token.address}`;
+  }
 }

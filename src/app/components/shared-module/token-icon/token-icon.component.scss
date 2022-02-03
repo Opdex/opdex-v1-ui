@@ -1,29 +1,30 @@
 .token-icon {
   width: 24px;
   height: 24px;
-  background: #fff;
   border-radius: 50%;
   border: 1px solid #ddd;
   position: relative;
-  z-index: 1;
-
-  &:not(.cirrus):not(.odx) {
-    &::after {
-      content: "\1F978";
-      display: flex;
-      justify-content: center;
-      line-height: 24px;
-      font-size: 24px;
-    }
-  }
+  background-size: cover;
 
   &.cirrus {
-    background-image: url('/assets/tokens/crs.png');
-    background-size: cover;
+    background-image: url('/assets/tokens/crs.png') !important;
   }
 
   &.odx {
-    background-image: url('/assets/tokens/odx.png');
-    background-size: cover;
+    background-image: url('/assets/tokens/odx.png') !important;
+  }
+}
+
+.empty {
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  width: 24px;
+  height: 24px;
+
+  &::after {
+    content: "\1F978";
+    line-height: 26px;
+    font-size: 24px;
   }
 }

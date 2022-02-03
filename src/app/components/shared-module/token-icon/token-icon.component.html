@@ -1,3 +1,9 @@
-<div class="token-icon" style="position: relative; z-index:1" [ngClass]="{'cirrus': token.symbol.includes('CRS'), 'odx': token.symbol.includes('ODX')}">
-  <img [src]="iconPath" (error)="handleError()" *ngIf="iconPath">
+<div class="flex-row" style="position: relative;">
+  <div class="empty"></div>
+
+  <div class="token-icon" [ngClass]="{
+      'cirrus': token.symbol.includes('CRS'),
+      'odx': token.symbol.includes('ODX')
+    }" [ngStyle]="{'background-image': 'url(' + iconPath + ')'}">
+  </div>
 </div>
