@@ -57,32 +57,3 @@
   overflow: hidden;
   white-space: nowrap;
 }
-
-.asset-image-placeholder {
-  width: 24px;
-  height: 24px;
-  background: #fff;
-  border-radius: 50%;
-  border: 1px solid #ddd;
-
-  &:not(.cirrus):not(.odx) {
-    &::after {
-      content: "\1F978";
-      color: $dark-primary;
-      display: flex;
-      justify-content: center;
-      line-height: 24px;
-      font-size: 24px;
-    }
-  }
-
-  &.cirrus {
-    background-image: url('/assets/tokens/crs.png');
-    background-size: cover;
-  }
-
-  &.odx {
-    background-image: url('/assets/tokens/odx.png');
-    background-size: cover;
-  }
-}
