@@ -2,8 +2,7 @@
   <form [formGroup]="form" name="remove-liquidity-form" id="remove-liquidity-form">
     <opdex-input-control
       [suffixDisabled]="true"
-      [prefixIcon]="icons.remove"
-      label="Liquidate"
+      label="Remove Liquidity"
       [formControl]="liquidity"
       [suffix]="pool.tokens.lp.symbol"
       [numbersOnly]="true">
@@ -39,25 +38,23 @@
     </div>
 
     <!-- Tolerance and Deadline -->
-    <ng-container *ngIf="!!context?.wallet">
-      <div class="flex-row-center-end">
-        <button mat-icon-button
-          color="primary"
-          [ngClass]="iconSizes.small"
-          (click)="toggleShowMore(!showMore)"
-          type="button">
-          <mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon>
-        </button>
-      </div>
+    <div class="flex-row-center-end">
+      <button mat-icon-button
+        color="primary"
+        [ngClass]="iconSizes.small"
+        (click)="toggleShowMore(!showMore)"
+        type="button">
+        <mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon>
+      </button>
+    </div>
 
-      <div [@collapse]="!showMore">
-        <opdex-tolerance [value]="toleranceThreshold" (onToleranceChange)="calcTolerance($event)"></opdex-tolerance>
+    <div [@collapse]="!showMore">
+      <opdex-tolerance [value]="toleranceThreshold" (onToleranceChange)="calcTolerance($event)"></opdex-tolerance>
 
-        <div class="mt-2">
-          <opdex-deadline [value]="deadlineThreshold" (onDeadlineChange)="calcDeadline($event)"></opdex-deadline>
-        </div>
+      <div class="mt-2">
+        <opdex-deadline [value]="deadlineThreshold" (onDeadlineChange)="calcDeadline($event)"></opdex-deadline>
       </div>
-    </ng-container>
+    </div>
     <!-- End Tolerance and Deadline -->
 
     <opdex-tx-quote-submit-button

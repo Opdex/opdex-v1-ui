@@ -2,7 +2,6 @@
   <form [formGroup]="form" name="stop-staking-form" id="stop-staking-form">
     <opdex-input-control
       [suffixDisabled]="true"
-      [prefixIcon]="icons.remove"
       label="Stop Staking"
       [formControl]="amount"
       [suffix]="pool.summary.staking?.token.symbol"

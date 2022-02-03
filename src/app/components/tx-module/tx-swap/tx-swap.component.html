@@ -3,11 +3,9 @@
 </ng-container>
 
 <opdex-card class="swap">
-  <h4 class="mb-0">Swap</h4>
   <form [formGroup]="form" name="swap-form" id="swap-form">
     <opdex-input-control *ngIf="!changeTokenIn"
       label="{{tokenInExact ? 'Sell Exactly' : 'Sell'}}"
-      [showLabel]="false"
       [formControl]="tokenInAmount"
       [suffix]="tokenIn?.symbol || 'Select Token'"
       (handleChangeToken)="changeToken('tokenIn')"
@@ -65,7 +63,6 @@
 
     <opdex-input-control *ngIf="!changeTokenOut"
       label="{{!tokenInExact ? 'Buy Exactly' : 'Buy'}}"
-      [showLabel]="false"
       [formControl]="tokenOutAmount"
       [suffix]="tokenOut?.symbol || 'Select Token'"
       (handleChangeToken)="changeToken('tokenOut')"
@@ -126,12 +123,12 @@
 
         <div class="flex-row-center-between" *ngIf="tokenOutMin && tokenInExact">
           <small class="b-400 light mr-1">Minimum Received ({{toleranceThreshold}}% slippage)</small>
-          <small class="text-right no-wrap">{{tokenOutMin.formattedValue | formatNumber:(tokenOut.decimals > 8 ? 8 : tokenOut.decimals)}} {{tokenOut.symbol}}</small>
+          <small class="text-right no-wrap">{{tokenOutMin.formattedValue | formatNumber:(tokenOut.decimals > 4 ? 4 : tokenOut.decimals)}} {{tokenOut.symbol}}</small>
         </div>
 
         <div class="flex-row-center-between" *ngIf="tokenInMax && !tokenInExact">
           <small class="b-400 light mr-1">Maximum Sent ({{toleranceThreshold}}% slippage)</small>
-          <small class="text-right no-wrap">{{tokenInMax.formattedValue | formatNumber:(tokenIn.decimals > 8 ? 8 : tokenIn.decimals)}} {{tokenIn.symbol}}</small>
+          <small class="text-right no-wrap">{{tokenInMax.formattedValue | formatNumber:(tokenIn.decimals > 4 ? 4 : tokenIn.decimals)}} {{tokenIn.symbol}}</small>
         </div>
 
         <div class="flex-row-center-between">
@@ -142,33 +139,31 @@
     </div>
 
     <!-- Tolerance and Deadline -->
-    <ng-container *ngIf="!!context?.wallet">
-      <div class="flex-row-center-end mt-1">
-        <!-- <h4 class="mb-0">Settings</h4> -->
+    <div class="flex-row-center-end mt-1">
+      <!-- <h4 class="mb-0">Settings</h4> -->
 
-        <button mat-icon-button
-          color="primary"
-          [ngClass]="iconSizes.small"
-          (click)="toggleShowMore()"
-          type="button">
-          <mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon>
-        </button>
+      <button mat-icon-button
+        color="primary"
+        [ngClass]="iconSizes.small"
+        (click)="toggleShowMore()"
+        type="button">
+        <mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon>
+      </button>
+    </div>
+
+    <div [@collapse]="!showMore">
+      <opdex-tolerance
+        [value]="toleranceThreshold"
+        (onToleranceChange)="calcTotals($event)">
+      </opdex-tolerance>
+
+      <div class="mt-2">
+        <opdex-deadline
+          [value]="deadlineThreshold"
+          (onDeadlineChange)="calcDeadline($event)">
+        </opdex-deadline>
       </div>
-
-      <div [@collapse]="!showMore">
-        <opdex-tolerance
-          [value]="toleranceThreshold"
-          (onToleranceChange)="calcTotals($event)">
-        </opdex-tolerance>
-
-        <div class="mt-2">
-          <opdex-deadline
-            [value]="deadlineThreshold"
-            (onDeadlineChange)="calcDeadline($event)">
-          </opdex-deadline>
-        </div>
-      </div>
-    </ng-container>
+    </div>
     <!-- End Tolerance and Deadline -->
 
     <opdex-tx-quote-submit-button

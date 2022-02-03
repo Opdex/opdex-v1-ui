@@ -81,8 +81,8 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
     private _indexService: IndexService,
     private _liquidityPoolsService: LiquidityPoolsService,
     private _env: EnvironmentsService,
-    protected _injector: Injector,
-    private _marketsService: MarketsService
+    private _marketsService: MarketsService,
+    protected _injector: Injector
   ) {
     super(_injector);
 
@@ -139,7 +139,6 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
       .subscribe(market => {
         if (!this.tokenIn) this.tokenIn = market.crsToken as IMarketToken;
         this.marketFee = new FixedDecimal((market.transactionFeePercent * .01).toFixed(3), 3);
-        console.log(this.marketFee)
       });
   }
 
@@ -247,62 +246,12 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
     this.tokenOutMin = tokenOutAmount.subtract(tokenOutTolerance);
     this.tokenInFiatValue = tokenInAmount.multiply(tokenInPrice);
     this.tokenOutFiatValue = tokenOutAmount.multiply(tokenOutPrice);
-    this.priceImpact = this.getPriceImpact(tokenInAmount, tokenOutAmount);
+    this.priceImpact = SwapQuoteService.getPriceImpact(tokenInAmount, this.tokenIn, this.tokenOut, this.poolIn, this.poolOut, this.marketFee);
     this.numInPerOneOut = tokenInAmount.divide(tokenOutAmount);
 
     const tokenOutFiatPercentageDifference = one.subtract(this.tokenOutFiatValue.divide(this.tokenInFiatValue)).multiply(negativeOneHundred);
     tokenOutFiatPercentageDifference.resize(2);
     this.tokenOutFiatPercentageDifference = parseFloat(tokenOutFiatPercentageDifference.formattedValue);
-  }
-
-  getPriceImpact(tokenInAmount: FixedDecimal, tokenOutAmount: FixedDecimal): number {
-    const isSrcToSrc = this.tokenIn.address !== 'CRS' && this.tokenOut.address !== 'CRS';
-    const isCrsToSrc = !isSrcToSrc && this.tokenIn.address === 'CRS';
-    const isSrcToCrs = !isSrcToSrc && !isCrsToSrc;
-    const pool0CrsReserves = new FixedDecimal(this.poolIn.summary.reserves.crs, this.poolIn.tokens.crs.decimals);
-    const pool0SrcReserves = new FixedDecimal(this.poolIn.summary.reserves.src, this.poolIn.tokens.src.decimals);
-    const pool1CrsReserves = new FixedDecimal(this.poolOut.summary.reserves.crs, this.poolOut.tokens.crs.decimals);
-    const pool1SrcReserves = new FixedDecimal(this.poolOut.summary.reserves.src, this.poolOut.tokens.src.decimals);
-    let updatedCrsReserves: FixedDecimal;
-    let updatedSrcReserves: FixedDecimal;
-
-    if (isSrcToSrc) {
-      const quote = SwapQuoteService.getAmountOutMulti(tokenInAmount, pool0CrsReserves, pool0SrcReserves, pool1CrsReserves, pool1SrcReserves, this.marketFee);
-      updatedCrsReserves = pool0CrsReserves.subtract(quote[0].amountOut);
-      updatedSrcReserves = pool0SrcReserves.add(quote[0].amountIn);
-    } else if (isCrsToSrc) {
-      const quote = SwapQuoteService.getAmountOut(tokenInAmount, pool0CrsReserves, pool0SrcReserves, this.marketFee);
-      updatedCrsReserves = pool0CrsReserves.add(quote.amountIn);
-      updatedSrcReserves = pool0SrcReserves.subtract(quote.amountOut);
-    } else {
-      const quote = SwapQuoteService.getAmountOut(tokenInAmount, pool0SrcReserves, pool0CrsReserves, this.marketFee);
-      updatedCrsReserves = pool0CrsReserves.subtract(quote.amountOut);
-      updatedSrcReserves = pool0SrcReserves.add(quote.amountIn);
-    }
-
-    let previousAmountInPerAmountOut: FixedDecimal;
-    let currentAmountInPerAmountOut: FixedDecimal;
-
-    if (isSrcToCrs || isSrcToSrc) {
-      previousAmountInPerAmountOut = new FixedDecimal(this.poolIn.summary.cost.crsPerSrc, this.poolIn.tokens.crs.decimals);
-      currentAmountInPerAmountOut = updatedCrsReserves.divide(updatedSrcReserves);
-    } else {
-      previousAmountInPerAmountOut = new FixedDecimal(this.poolIn.summary.cost.srcPerCrs, this.poolIn.tokens.src.decimals);
-      currentAmountInPerAmountOut = updatedSrcReserves.divide(updatedCrsReserves);
-    }
-
-    // console.log('currentAmountInPerAmountOut: ', currentAmountInPerAmountOut.formattedValue);
-    // console.log('previousAmountInPerAmountOut: ', previousAmountInPerAmountOut.formattedValue);
-    // console.log('difference original: ', currentAmountInPerAmountOut.divide(previousAmountInPerAmountOut).formattedValue)
-    // console.log('difference updated: ', previousAmountInPerAmountOut.divide(currentAmountInPerAmountOut).formattedValue)
-
-    const difference = currentAmountInPerAmountOut.divide(previousAmountInPerAmountOut);
-    const one = FixedDecimal.One(8);
-    const negativeOneHundred = FixedDecimal.NegativeOneHundred(8);
-    const priceImpact = one.subtract(difference).multiply(negativeOneHundred);
-    priceImpact.resize(2);
-
-    return parseFloat(priceImpact.formattedValue);
   }
 
   toggleShowMore(): void {
@@ -431,6 +380,8 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
   }
 
   private refreshTokens(): Observable<ILiquidityPoolsResponse> {
+    if (!this.tokenIn || !this.tokenOut) return of(null);
+
     let tokens = [];
 
     if (!!this.tokenIn && this.tokenIn.address !== 'CRS') tokens.push(this.tokenIn.address);

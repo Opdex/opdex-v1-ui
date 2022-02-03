@@ -20,6 +20,8 @@ export class MiningCardComponent implements OnChanges {
   constructor(private _sidebar: SidenavService) { }
 
   ngOnChanges() {
+    if (!!this.pool.miningPool === false) return;
+
     const tokensMining = new FixedDecimal(this.pool.miningPool.tokensMining, this.pool.tokens.lp.decimals);
     const price = new FixedDecimal(this.pool.tokens.lp.summary.priceUsd.toString(), 8);
 

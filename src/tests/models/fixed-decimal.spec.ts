@@ -1,10 +1,5 @@
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 
-class FixedDecimalTest {
-  input: string | number;
-  expectedOutput: string;
-}
-
 const FixedDecimalSuccessfulTestsLookup = [
   { input: '1.00', formattedValue: '1.00', decimals: 2, whole: '1', fraction: '00', bigInt: BigInt('100'), isZero: false },
   { input: '0', formattedValue: '0.00000000',decimals: 8, whole: '0', fraction: '00000000', bigInt: BigInt('0'), isZero: true },
