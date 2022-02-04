@@ -217,7 +217,6 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
   }
 
   handlePercentageSelect(field: string, value: any): void {
-    console.log(value)
     if (field === 'crs') {
       this.crsPercentageSelected = value.percentageOption;
       this.srcPercentageSelected = null;

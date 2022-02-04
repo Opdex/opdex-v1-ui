@@ -123,9 +123,9 @@ export class VaultProposalComponent {
     return `${index}-${proposal.proposalId}-${proposal.status}-${proposal.expiration}-${proposal.pledgeAmount}-${proposal.yesAmount}-${proposal.noAmount}`;
   }
 
-  getPledgePercentage(proposal: IVaultProposalResponseModel): FixedDecimal {
+  get pledgePercentage(): FixedDecimal {
     const minimum = new FixedDecimal(this.vault.totalPledgeMinimum, 8);
-    const pledge = new FixedDecimal(proposal.pledgeAmount, 8);
+    const pledge = new FixedDecimal(this.proposal.pledgeAmount, 8);
 
     return pledge.divide(minimum).multiply(FixedDecimal.OneHundred(0));
   }
@@ -148,8 +148,8 @@ export class VaultProposalComponent {
     const oneHundred = FixedDecimal.OneHundred(0);
     const zero = FixedDecimal.Zero(0);
 
-    if (second.bigInt === BigInt(0) && first.bigInt > BigInt(0)) oneHundred;
-    else if (second.bigInt === BigInt(0) && first.bigInt == BigInt(0)) zero;
+    if (second.bigInt === BigInt(0) && first.bigInt > BigInt(0)) return oneHundred;
+    else if (second.bigInt === BigInt(0) && first.bigInt == BigInt(0)) return zero;
 
     return first.divide(second).multiply(oneHundred);
   }

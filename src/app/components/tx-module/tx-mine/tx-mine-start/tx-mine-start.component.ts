@@ -107,7 +107,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
     const lptFiat = new FixedDecimal(this.pool.tokens.lp.summary.priceUsd.toString(), 8);
     const amountDecimal = new FixedDecimal(amount, this.pool.tokens.lp.decimals);
 
-    this.fiatValue = amountDecimal.multiply(lptFiat);
+    this.fiatValue = lptFiat.multiply(amountDecimal);
   }
 
   private getAllowance$(amount?: string): Observable<AllowanceValidation> {
