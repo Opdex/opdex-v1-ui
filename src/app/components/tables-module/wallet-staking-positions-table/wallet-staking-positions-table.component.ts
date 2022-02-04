@@ -8,7 +8,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
-import { MathService } from '@sharedServices/utility/math.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
@@ -109,18 +108,19 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
           return forkJoin(positions$)
             .pipe(map(positions => {
               this.dataSource.data = positions.map(({pool, position}) => {
+                const price = new FixedDecimal(pool.summary.staking?.token.summary.priceUsd.toString(), 8);
+                const amount = new FixedDecimal(position.amount, pool.summary.staking?.token.decimals);
+
                 return {
                   name: pool.name,
                   poolTokens: [pool.tokens.crs, pool.tokens.src],
                   stakingTokenSymbol: pool.summary.staking?.token.symbol,
                   liquidityPoolAddress: pool.address,
-                  position: position.amount,
+                  position: amount,
                   decimals: pool.tokens.lp.decimals,
                   isNominated: pool.summary?.staking.nominated === true,
                   isCurrentMarket: pool.market === this._env.marketAddress,
-                  value: MathService.multiply(
-                    new FixedDecimal(position.amount, pool.summary.staking?.token.decimals),
-                    new FixedDecimal(pool.summary.staking?.token.summary.priceUsd.toString(), 8))
+                  value: price.multiply(amount)
                 }
               });
 

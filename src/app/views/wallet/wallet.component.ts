@@ -3,7 +3,6 @@ import { TokenAttributes } from '@sharedModels/platform-api/requests/tokens/toke
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { ThemeService } from '@sharedServices/utility/theme.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
-import { MathService } from '@sharedServices/utility/math.service';
 import { IAddressBalance } from '@sharedModels/platform-api/responses/wallets/address-balance.interface';
 import { Router } from '@angular/router';
 import { TokensService } from '@sharedServices/platform/tokens.service';
@@ -33,7 +32,7 @@ export class WalletComponent implements OnInit {
   wallet: any;
   showPreferences: boolean;
   crsBalance: IAddressBalance;
-  crsBalanceValue: string;
+  crsBalanceValue: FixedDecimal;
   showProposals: boolean;
   pledgesFilter: VaultProposalPledgesFilter;
   votesFilter: VaultProposalVotesFilter;
@@ -119,7 +118,8 @@ export class WalletComponent implements OnInit {
         tap((token: IToken) => {
           const costFixed = new FixedDecimal(token.summary.priceUsd.toString(), 8);
           const crsBalanceFixed = new FixedDecimal(this.crsBalance.balance, 8);
-          this.crsBalanceValue = MathService.multiply(crsBalanceFixed, costFixed);
+
+          this.crsBalanceValue = crsBalanceFixed.multiply(costFixed);
         }),
         take(1)).subscribe();
   }

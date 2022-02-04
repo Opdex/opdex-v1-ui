@@ -1,4 +1,3 @@
-import { MathService } from '@sharedServices/utility/math.service';
 import { AddressPosition } from '@sharedModels/address-position';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
@@ -62,8 +61,8 @@ export class TokenComponent implements OnInit {
   routerSubscription = new Subscription();
   historyFilter: HistoryFilter;
   context: UserContext;
-  crsPerOlpt: string;
-  srcPerOlpt: string;
+  crsPerOlpt: FixedDecimal;
+  srcPerOlpt: FixedDecimal;
   isCurrentMarket: boolean;
 
   constructor(
@@ -170,8 +169,8 @@ export class TokenComponent implements OnInit {
           const crsReserves = new FixedDecimal(pool.summary.reserves.crs, pool.tokens.crs.decimals);
           const srcReserves = new FixedDecimal(pool.summary.reserves.src, pool.tokens.src.decimals);
 
-          this.crsPerOlpt = MathService.divide(crsReserves, olptSupply);
-          this.srcPerOlpt = MathService.divide(srcReserves, olptSupply);
+          this.crsPerOlpt = crsReserves.divide(olptSupply);
+          this.srcPerOlpt = srcReserves.divide(olptSupply);
         }));
     }
 

@@ -5,20 +5,14 @@
 <opdex-card class="swap">
   <form [formGroup]="form" name="swap-form" id="swap-form">
     <opdex-input-control *ngIf="!changeTokenIn"
-      [prefixIcon]="icons.remove"
       label="{{tokenInExact ? 'Sell Exactly' : 'Sell'}}"
       [formControl]="tokenInAmount"
       [suffix]="tokenIn?.symbol || 'Select Token'"
       (handleChangeToken)="changeToken('tokenIn')"
       [numbersOnly]="true">
       <div class="flex-row-center-between">
-        <div class="tolerance-amounts">
-          <span *ngIf="tokenInMax && !tokenInExact">Max: {{tokenInMax | formatNumber:tokenIn.decimals}}</span>
-          <span *ngIf="tokenInFiatValue && !tokenInExact" class="success ml-2">${{tokenInMaxFiatValue | shortNumber}}</span>
-        </div>
-
         <div class="fiat-quote">
-          <span class="success" *ngIf="tokenInFiatValue">${{tokenInFiatValue | shortNumber}}</span>
+          <span *ngIf="tokenInFiatValue">${{tokenInFiatValue.formattedValue | shortNumber}}</span>
         </div>
       </div>
     </opdex-input-control>
@@ -57,7 +51,7 @@
     </div>
 
     <!-- Switch Button -->
-    <div class="flex-row-center-around mt-4 mb-2">
+    <div class="flex-row-center-around mt-4">
       <button mat-icon-button
         [ngClass]="iconSizes.small"
         (click)="switch()"
@@ -68,24 +62,21 @@
     <!-- End Switch Button -->
 
     <opdex-input-control *ngIf="!changeTokenOut"
-      [prefixIcon]="icons.add"
       label="{{!tokenInExact ? 'Buy Exactly' : 'Buy'}}"
       [formControl]="tokenOutAmount"
       [suffix]="tokenOut?.symbol || 'Select Token'"
       (handleChangeToken)="changeToken('tokenOut')"
       [numbersOnly]="true">
       <div class="flex-row-center-between">
-        <div class="tolerance-amounts">
-          <span *ngIf="tokenOutMin && tokenInExact">Min: {{tokenOutMin | formatNumber:tokenOut.decimals}}</span>
-          <span *ngIf="tokenOutMinFiatValue && tokenInExact" class="success ml-2">${{tokenOutMinFiatValue | shortNumber}}</span>
-        </div>
-
         <div class="fiat-quote">
-          <span class="success" *ngIf="!!tokenOutFiatValue">${{tokenOutFiatValue | shortNumber}}</span>
+          <span *ngIf="!!tokenOutFiatValue">${{tokenOutFiatValue.formattedValue | shortNumber}}</span>
           <span class="ml-1"
-            [ngClass]="{'error': tokenOutFiatPercentageDifference.bigInt < 0, 'success': tokenOutFiatPercentageDifference.bigInt >= 0 }"
+            [ngClass]="{
+              'orange': tokenOutFiatPercentageDifference < -1 && tokenOutFiatPercentageDifference > -5,
+              'red': tokenOutFiatPercentageDifference < -5
+            }"
             *ngIf="!!tokenOutFiatPercentageDifference">
-            ({{tokenOutFiatPercentageDifference?.formattedValue | shortNumber}}%)
+            {{tokenOutFiatPercentageDifference}}%
           </span>
         </div>
       </div>
@@ -111,31 +102,68 @@
       </opdex-tx-quote-error>
     </div>
 
-    <!-- Tolerance and Deadline -->
-    <ng-container *ngIf="!!context?.wallet">
-      <div class="flex-row-center-end">
-        <button mat-icon-button
-          color="primary"
-          [ngClass]="iconSizes.small"
-          (click)="toggleShowMore()"
-          type="button"><mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon>
+    <div *ngIf="priceImpact !== null && priceImpact !== undefined" class="mt-3 p-2 border" style="border-radius: 4px;">
+      <div class="flex-row-center-between">
+        <small class="b-400">1 {{tokenOut.symbol}} = {{numInPerOneOut.formattedValue}} {{tokenIn.symbol}}</small>
+
+        <button mat-icon-button class="tiny" (click)="toggleShowTransactionDetails()">
+          <mat-icon>{{showTransactionDetails ? icons.arrowDown : icons.arrowRight}}</mat-icon>
         </button>
       </div>
 
-      <div [@collapse]="!showMore">
-        <opdex-tolerance
-          [value]="toleranceThreshold"
-          (onToleranceChange)="calcTotals($event)">
-        </opdex-tolerance>
+      <div [@collapse]="!showTransactionDetails">
+        <div class="flex-row-center-between">
+          <small class="b-400 light mr-1">Price Impact</small>
+          <small class="text-right" [ngClass]="{
+            'orange': priceImpact < -1 && priceImpact > -5,
+            'red': priceImpact <= -5 }">
+            {{priceImpact.toFixed(2)}}%
+          </small>
+        </div>
 
-        <div class="mt-2">
-          <opdex-deadline
-            [value]="deadlineThreshold"
-            (onDeadlineChange)="calcDeadline($event)">
-          </opdex-deadline>
+        <div class="flex-row-center-between" *ngIf="tokenOutMin && tokenInExact">
+          <small class="b-400 light mr-1">Minimum Received ({{toleranceThreshold}}% slippage)</small>
+          <small class="text-right no-wrap">{{tokenOutMin.formattedValue | formatNumber:(tokenOut.decimals > 4 ? 4 : tokenOut.decimals)}} {{tokenOut.symbol}}</small>
+        </div>
+
+        <div class="flex-row-center-between" *ngIf="tokenInMax && !tokenInExact">
+          <small class="b-400 light mr-1">Maximum Sent ({{toleranceThreshold}}% slippage)</small>
+          <small class="text-right no-wrap">{{tokenInMax.formattedValue | formatNumber:(tokenIn.decimals > 4 ? 4 : tokenIn.decimals)}} {{tokenIn.symbol}}</small>
+        </div>
+
+        <div class="flex-row-center-between">
+          <small class="b-400 light mr-1">Block Deadline ({{deadlineThreshold}} minutes)</small>
+          <small class="text-right">{{deadlineBlock | formatNumber:0}}</small>
         </div>
       </div>
-    </ng-container>
+    </div>
+
+    <!-- Tolerance and Deadline -->
+    <div class="flex-row-center-end mt-1">
+      <!-- <h4 class="mb-0">Settings</h4> -->
+
+      <button mat-icon-button
+        color="primary"
+        [ngClass]="iconSizes.small"
+        (click)="toggleShowMore()"
+        type="button">
+        <mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon>
+      </button>
+    </div>
+
+    <div [@collapse]="!showMore">
+      <opdex-tolerance
+        [value]="toleranceThreshold"
+        (onToleranceChange)="calcTotals($event)">
+      </opdex-tolerance>
+
+      <div class="mt-2">
+        <opdex-deadline
+          [value]="deadlineThreshold"
+          (onDeadlineChange)="calcDeadline($event)">
+        </opdex-deadline>
+      </div>
+    </div>
     <!-- End Tolerance and Deadline -->
 
     <opdex-tx-quote-submit-button

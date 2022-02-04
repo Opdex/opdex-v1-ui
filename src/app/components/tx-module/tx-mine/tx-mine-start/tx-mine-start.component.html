@@ -2,13 +2,12 @@
   <form [formGroup]="form" name="start-mining-form" id="start-mining-form">
     <opdex-input-control
       [suffixDisabled]="true"
-      [prefixIcon]="icons.add"
       label="Start Mining"
       [formControl]="amount"
       [suffix]="pool.tokens.lp.symbol"
       [numbersOnly]="true">
       <div class="flex-row-center-end">
-        <span class="success" *ngIf="fiatValue">${{fiatValue | shortNumber}}</span>
+        <span class="success" *ngIf="fiatValue">${{fiatValue.formattedValue | shortNumber}}</span>
       </div>
     </opdex-input-control>
 

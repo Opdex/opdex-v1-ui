@@ -1,3 +1,5 @@
+import { MathService } from "@sharedServices/utility/math.service";
+
 export class FixedDecimal {
   private _originalValue: string;
   private _wholeNumber: string;
@@ -67,4 +69,32 @@ export class FixedDecimal {
     this._fractionNumber = fractionNumber;
     this._formattedValue = !!fractionNumber ? `${wholeNumber}.${fractionNumber}` : wholeNumber;
   }
+
+  resize(decimals: number): void {
+    if (decimals === this.decimals || decimals < 0 || decimals > 18) return;
+
+    if (decimals === 0) { // Going to 0 decimals
+      this._fractionNumber = '';
+      this._formattedValue = this._wholeNumber;
+    } else {
+      this._fractionNumber = decimals > this.decimals
+        ? this._fractionNumber.padEnd(decimals, '0')
+        : this._fractionNumber.substring(0, decimals);
+
+      this._formattedValue = `${this.wholeNumber}.${this.fractionNumber}`;
+    }
+
+    this._decimals = decimals;
+  }
+
+  static Zero = (decimals: number): FixedDecimal => new FixedDecimal('0', decimals);
+  static One = (decimals: number): FixedDecimal => new FixedDecimal('1', decimals);
+  static NegativeOne = (decimals: number): FixedDecimal => new FixedDecimal('-1', decimals);
+  static OneHundred = (decimals: number): FixedDecimal => new FixedDecimal('100', decimals);
+  static NegativeOneHundred = (decimals: number): FixedDecimal => new FixedDecimal('-100', decimals);
+
+  add = (value: FixedDecimal): FixedDecimal => MathService.add(this, value);
+  subtract = (value: FixedDecimal): FixedDecimal => MathService.subtract(this, value);
+  divide = (value: FixedDecimal): FixedDecimal => MathService.divide(this, value);
+  multiply = (value: FixedDecimal): FixedDecimal => MathService.multiply(this, value);
 }

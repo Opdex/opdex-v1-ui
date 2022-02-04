@@ -11,7 +11,6 @@ import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
-import { MathService } from '@sharedServices/utility/math.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Subscription, of, Observable, forkJoin } from 'rxjs';
@@ -108,19 +107,20 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
             .pipe(
               map(positions => {
                 this.dataSource.data = positions.map(({ pool, position }) => {
+                  const price = new FixedDecimal(pool.tokens.lp.summary.priceUsd.toString(), 8);
+                  const amount = new FixedDecimal(position.amount, pool.tokens.lp.decimals);
+
                   return {
                     name: pool.name,
                     poolTokens: [pool.tokens.crs, pool.tokens.src],
                     miningTokenSymbol: pool.tokens.lp.symbol,
                     liquidityPoolAddress: pool.address,
                     miningPoolAddress: position.miningPool,
-                    position: position.amount,
+                    position: amount,
                     isActive: pool.miningPool?.isActive === true,
                     decimals: pool.tokens.lp.decimals,
                     isCurrentMarket: pool.market === this._env.marketAddress,
-                    value: MathService.multiply(
-                      new FixedDecimal(position.amount, pool.tokens.lp.decimals),
-                      new FixedDecimal(pool.tokens.lp.summary.priceUsd.toString(), 8))
+                    value: price.multiply(amount)
                   }
                 });
 

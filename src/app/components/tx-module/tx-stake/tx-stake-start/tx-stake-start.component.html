@@ -2,13 +2,12 @@
   <form [formGroup]="form" name="start-staking-form" id="start-staking-form">
     <opdex-input-control
       [suffixDisabled]="true"
-      [prefixIcon]="icons.add"
       label="Start Staking"
       [formControl]="amount"
       [suffix]="pool.summary.staking?.token.symbol"
       [numbersOnly]="true">
       <div class="flex-row-center-end">
-        <span class="success" *ngIf="fiatValue">${{fiatValue | shortNumber}}</span>
+        <span class="success" *ngIf="fiatValue">${{fiatValue.formattedValue | shortNumber}}</span>
       </div>
     </opdex-input-control>
 

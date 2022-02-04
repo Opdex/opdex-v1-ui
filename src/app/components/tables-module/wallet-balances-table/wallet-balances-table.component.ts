@@ -4,7 +4,6 @@ import { UserContextService } from '@sharedServices/utility/user-context.service
 import { IndexService } from '@sharedServices/platform/index.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
-import { MathService } from '@sharedServices/utility/math.service';
 import { Component, Input, OnChanges, ViewChild, OnDestroy } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -136,13 +135,12 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
             .pipe(map(balances => {
               this.dataSource.data = balances.map(token => {
                 const price = new FixedDecimal(token.summary?.priceUsd?.toString() || '0', 8);
+                const balance = new FixedDecimal(token.balance.balance, token.decimals);
 
                 return {
                   token,
                   isCurrentMarket: token.market === this._env.marketAddress,
-                  total: MathService.multiply(
-                    new FixedDecimal(token.balance.balance, token.decimals),
-                    price)
+                  total: price.multiply(balance)
                 }
               });
 

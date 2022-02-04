@@ -1,5 +1,4 @@
 import { OnDestroy } from '@angular/core';
-import { MathService } from '@sharedServices/utility/math.service';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { debounceTime, distinctUntilChanged, take, tap, switchMap, filter } from 'rxjs/operators';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
@@ -25,7 +24,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
   form: FormGroup;
   pool: ILiquidityPoolResponse;
   subscription = new Subscription();
-  fiatValue: string;
+  fiatValue: FixedDecimal;
   percentageSelected: string;
   balanceError: boolean;
 
@@ -63,7 +62,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
             const stakingTokenFiat = new FixedDecimal(this.pool.summary.staking?.token.summary.priceUsd.toString(), 8);
             const amountDecimal = new FixedDecimal(amount, this.pool.summary.staking?.token.decimals);
 
-            this.fiatValue = MathService.multiply(amountDecimal, stakingTokenFiat);
+            this.fiatValue = stakingTokenFiat.multiply(amountDecimal);
           }),
           filter(amount => !!amount),
           switchMap(_ => this.validateStakingBalance()))

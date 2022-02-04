@@ -1,7 +1,6 @@
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
-import { MathService } from '@sharedServices/utility/math.service';
 import { Component, Input, Injector, OnDestroy, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
@@ -35,13 +34,12 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
   allowance$: Subscription;
   transactionTypes = AllowanceRequiredTransactionTypes;
   showMore: boolean = false;
-  lptInFiatValue: string;
-  lptInMinFiatValue: string;
-  usdOut: string;
-  crsOut: string;
-  crsOutMin: string;
-  srcOut: string;
-  srcOutMin: string;
+  lptInFiatValue: FixedDecimal;
+  usdOut: FixedDecimal;
+  crsOut: FixedDecimal;
+  crsOutMin: FixedDecimal;
+  srcOut: FixedDecimal;
+  srcOutMin: FixedDecimal;
   toleranceThreshold = 0.1;
   deadlineThreshold = 10;
   allowanceTransaction$: Subscription;
@@ -112,8 +110,8 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
   submit(): void {
     const request = new RemoveLiquidityRequest(
       new FixedDecimal(this.liquidity.value, this.pool.tokens.lp.decimals),
-      new FixedDecimal(this.crsOutMin, this.pool.tokens.crs.decimals),
-      new FixedDecimal(this.srcOutMin, this.pool.tokens.src.decimals),
+      this.crsOutMin,
+      this.srcOutMin,
       this.context.wallet,
       this.calcDeadline(this.deadlineThreshold)
     );
@@ -141,25 +139,21 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
     const reserveCrs = new FixedDecimal(this.pool.summary.reserves.crs, crsDecimals);
     const reserveSrc = new FixedDecimal(this.pool.summary.reserves.src, srcDecimals);
 
-    const percentageLiquidity = new FixedDecimal(MathService.divide(liquidityValue, totalSupply), 8);
+    const percentageLiquidity = liquidityValue.divide(totalSupply);
 
-    this.crsOut = MathService.multiply(reserveCrs, percentageLiquidity);
-    this.srcOut = MathService.multiply(reserveSrc, percentageLiquidity);
-    this.usdOut = MathService.multiply(reservesUsd, percentageLiquidity);
-
-    const crsOut = new FixedDecimal(this.crsOut, crsDecimals);
-    const srcOut = new FixedDecimal(this.srcOut, srcDecimals);
-    const usdOut = new FixedDecimal(this.usdOut, 8);
+    this.crsOut = reserveCrs.multiply(percentageLiquidity);
+    this.srcOut = reserveSrc.multiply(percentageLiquidity);
+    this.usdOut = reservesUsd.multiply(percentageLiquidity);
 
     const tolerancePercentage = new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8);
 
-    const crsTolerance = new FixedDecimal(MathService.multiply(crsOut, tolerancePercentage), crsDecimals);
-    const srcTolerance = new FixedDecimal(MathService.multiply(srcOut, tolerancePercentage), srcDecimals);
-    const usdTolerance = new FixedDecimal(MathService.multiply(usdOut, tolerancePercentage), 8);
+    const crsTolerance = this.crsOut.multiply(tolerancePercentage);
+    const srcTolerance = this.srcOut.multiply(tolerancePercentage);
+    const usdTolerance = this.usdOut.multiply(tolerancePercentage);
 
-    this.crsOutMin = MathService.subtract(crsOut, crsTolerance);
-    this.srcOutMin = MathService.subtract(srcOut, srcTolerance);
-    this.lptInFiatValue = MathService.subtract(usdOut, usdTolerance);
+    this.crsOutMin = this.crsOut.subtract(crsTolerance);
+    this.srcOutMin = this.srcOut.subtract(srcTolerance);
+    this.lptInFiatValue = this.usdOut.subtract(usdTolerance);
   }
 
   toggleShowMore(value: boolean): void {
@@ -197,7 +191,6 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
   private reset(): void {
     this.form.reset();
     this.lptInFiatValue = null;
-    this.lptInMinFiatValue = null;
     this.usdOut = null;
     this.crsOut = null;
     this.crsOutMin = null;

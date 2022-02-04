@@ -15,7 +15,7 @@
       <div class="row mt-3" *ngIf="crsBalance">
         <div class="col-12 col-md-6 col-lg-4 col-xl-3">
           <p class="big-balance">{{crsBalance.balance | formatNumber:8 }} <small>CRS</small></p>
-          <p class="mb-0 positive-value">${{crsBalanceValue | formatNumber }}</p>
+          <p class="mb-0 positive-value">${{crsBalanceValue?.formattedValue | formatNumber }}</p>
         </div>
       </div>
     </div>

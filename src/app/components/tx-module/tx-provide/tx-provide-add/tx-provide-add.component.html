@@ -3,19 +3,18 @@
     <div class="mb-4">
       <opdex-input-control
         [suffixDisabled]="true"
-        [prefixIcon]="icons.add"
         label="Provide {{pool.tokens.crs.symbol}}"
         [formControl]="amountCrs"
         [suffix]="pool.tokens.crs.symbol"
         [numbersOnly]="true">
         <div class="flex-row-center-between">
           <div class="tolerance-amounts">
-            <span *ngIf="crsInMin">Min: {{crsInMin | shortNumber}}</span>
-            <span *ngIf="crsInMinFiatValue" class="success ml-2">(${{crsInMinFiatValue | shortNumber}})</span>
+            <span *ngIf="crsInMin">Min: {{crsInMin.formattedValue | shortNumber}}</span>
+            <span *ngIf="crsInMinFiatValue" class="success ml-2">(${{crsInMinFiatValue.formattedValue | shortNumber}})</span>
           </div>
 
           <div class="fiat-quote">
-            <span class="success ml-2" *ngIf="crsInFiatValue">${{crsInFiatValue | shortNumber}}</span>
+            <span class="success ml-2" *ngIf="crsInFiatValue">${{crsInFiatValue.formattedValue | shortNumber}}</span>
           </div>
         </div>
       </opdex-input-control>
@@ -44,19 +43,18 @@
 
     <opdex-input-control
       [suffixDisabled]="true"
-      [prefixIcon]="icons.add"
       label="Provide {{pool.tokens.src.symbol}}"
       [formControl]="amountSrc"
       [suffix]="pool.tokens.src.symbol"
       [numbersOnly]="true">
       <div class="flex-row-center-between">
         <div class="tolerance-amounts">
-          <span *ngIf="srcInMin">Min: {{srcInMin | shortNumber}}</span>
-          <span *ngIf="srcInMinFiatValue" class="success ml-2">(${{srcInMinFiatValue | shortNumber}})</span>
+          <span *ngIf="srcInMin">Min: {{srcInMin.formattedValue | shortNumber}}</span>
+          <span *ngIf="srcInMinFiatValue" class="success ml-2">(${{srcInMinFiatValue.formattedValue | shortNumber}})</span>
         </div>
 
         <div class="fiat-quote">
-          <span class="success ml-2" *ngIf="srcInFiatValue">${{srcInFiatValue | shortNumber}}</span>
+          <span class="success ml-2" *ngIf="srcInFiatValue">${{srcInFiatValue.formattedValue | shortNumber}}</span>
         </div>
       </div>
     </opdex-input-control>
@@ -88,31 +86,29 @@
     </div>
 
     <!-- Tolerance and Deadline -->
-    <ng-container *ngIf="!!context?.wallet">
-      <div class="flex-row-center-end">
-        <button
-          mat-icon-button color="primary"
-          [ngClass]="iconSizes.small"
-          (click)="toggleShowMore(!showMore)"
-          type="button">
-          <mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon>
-        </button>
-      </div>
+    <div class="flex-row-center-end">
+      <button
+        mat-icon-button color="primary"
+        [ngClass]="iconSizes.small"
+        (click)="toggleShowMore(!showMore)"
+        type="button">
+        <mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon>
+      </button>
+    </div>
 
-      <div [@collapse]="!showMore">
-        <opdex-tolerance
-          [value]="toleranceThreshold"
-          (onToleranceChange)="calcTolerance($event)">
-        </opdex-tolerance>
+    <div [@collapse]="!showMore">
+      <opdex-tolerance
+        [value]="toleranceThreshold"
+        (onToleranceChange)="calcTolerance($event)">
+      </opdex-tolerance>
 
-        <div class="mt-2">
-          <opdex-deadline
-            [value]="deadlineThreshold"
-            (onDeadlineChange)="calcDeadline($event)">
-          </opdex-deadline>
-        </div>
+      <div class="mt-2">
+        <opdex-deadline
+          [value]="deadlineThreshold"
+          (onDeadlineChange)="calcDeadline($event)">
+        </opdex-deadline>
       </div>
-    </ng-container>
+    </div>
     <!-- End Tolerance and Deadline -->
 
     <opdex-tx-quote-submit-button

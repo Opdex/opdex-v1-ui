@@ -1,11 +1,13 @@
+import { MarketsService } from '@sharedServices/platform/markets.service';
+import { SwapQuoteService } from '@sharedServices/utility/swap-quote.service';
+import { ILiquidityPoolResponse, ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
+import { LiquidityPoolsFilter, ILiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
+import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
-import { TokenAttributes, TokenOrderByTypes, TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
-import { TokensService } from '@sharedServices/platform/tokens.service';
 import { ISwapAmountInQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-in-quote-response.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
-import { MathService } from '@sharedServices/utility/math.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, Input, OnDestroy, Injector, OnChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -34,31 +36,36 @@ import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 })
 export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
   @Input() data: any;
-  icons = Icons;
-  iconSizes = IconSizes;
-  tokenInExact = true;
   form: FormGroup;
   tokenIn: IMarketToken;
-  tokenInMax: string;
-  tokenInFiatValue: string;
-  tokenInMaxFiatValue: string;
+  tokenInMax: FixedDecimal;
+  tokenInFiatValue: FixedDecimal;
   tokenInPercentageSelected: string;
   changeTokenIn: boolean;
   tokenOut: IMarketToken;
-  tokenOutMin: string;
-  tokenOutFiatValue: string;
-  tokenOutMinFiatValue: string;
+  tokenOutMin: FixedDecimal;
+  tokenOutFiatValue: FixedDecimal;
   tokenOutPercentageSelected: string;
-  tokenOutFiatPercentageDifference: FixedDecimal;
+  tokenOutFiatPercentageDifference: number;
+  priceImpact: number;
+  numInPerOneOut: FixedDecimal;
   changeTokenOut: boolean;
   toleranceThreshold: number;
   deadlineThreshold: number;
+  deadlineBlock: number;
   allowance: AllowanceValidation;
-  transactionTypes = AllowanceRequiredTransactionTypes;
   showMore: boolean;
   latestBlock: number;
   balanceError: boolean;
+  poolIn: ILiquidityPoolResponse;
+  poolOut: ILiquidityPoolResponse;
+  marketFee: FixedDecimal;
+  transactionTypes = AllowanceRequiredTransactionTypes;
   subscription = new Subscription();
+  icons = Icons;
+  iconSizes = IconSizes;
+  tokenInExact = true;
+  showTransactionDetails: boolean = true;
 
   get tokenInAmount(): FormControl {
     return this.form.get('tokenInAmount') as FormControl;
@@ -72,8 +79,9 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
     private _indexService: IndexService,
-    private _tokensService: TokensService,
+    private _liquidityPoolsService: LiquidityPoolsService,
     private _env: EnvironmentsService,
+    private _marketsService: MarketsService,
     protected _injector: Injector
   ) {
     super(_injector);
@@ -110,8 +118,9 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
       this._indexService.getLatestBlock$()
         .pipe(
           tap(block => this.latestBlock = block?.height),
-          tap(_ => this.refreshToken(this.tokenIn?.address)),
-          tap(_ => this.refreshToken(this.tokenOut?.address)),
+          tap(_ => this.calcDeadline(this.deadlineThreshold)),
+          filter(_ => !!this.tokenIn && !!this.tokenOut),
+          switchMap(_ => this.refreshTokens()),
           switchMap(_ => this.tokenInExact ? this.amountOutQuote(this.tokenInAmount.value) : this.amountInQuote(this.tokenOutAmount.value)),
           switchMap(_ => this.validateBalance()))
         .subscribe());
@@ -119,25 +128,18 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
 
   ngOnChanges() {
     if (this.data?.pool) {
-      this.tokenIn = this.data.pool.tokens.src;
-      this.tokenOut = this.data.pool.tokens.crs;
-    } else {
-      const topTokens = new TokensFilter({
-        limit: 2,
-        direction: 'DESC',
-        orderBy: TokenOrderByTypes.DailyPriceChangePercent,
-        includeZeroLiquidity: false,
-        tokenAttributes: [TokenAttributes.NonProvisional]
-      });
-      this._tokensService.getTokens(topTokens)
-        .pipe(take(1))
-        .subscribe(response => {
-          if (response?.results?.length >= 2) {
-            this.tokenIn = response.results[0] as IMarketToken;
-            this.tokenOut = response.results[1] as IMarketToken;
-          }
-        });
+      this.tokenIn = this.data.pool.tokens.crs;
+      this.tokenOut = this.data.pool.tokens.src;
+      this.poolIn = this.data.pool;
+      this.poolOut = this.data.pool;
     }
+
+    this._marketsService.getMarket()
+      .pipe(take(1))
+      .subscribe(market => {
+        if (!this.tokenIn) this.tokenIn = market.crsToken as IMarketToken;
+        this.marketFee = new FixedDecimal((market.transactionFeePercent * .01).toFixed(3), 3);
+      });
   }
 
   selectToken(tokenField: string, token: IToken): void {
@@ -157,9 +159,12 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
 
       this.allowance = null;
 
-      this.tokenInExact
-        ? this.amountOutQuote(this.tokenInAmount.value).pipe(take(1)).subscribe()
-        : this.amountInQuote(this.tokenOutAmount.value).pipe(take(1)).subscribe();
+      this.refreshTokens()
+        .pipe(take(1), switchMap(_ => {
+          return this.tokenInExact
+            ? this.amountOutQuote(this.tokenInAmount.value)
+            : this.amountInQuote(this.tokenOutAmount.value);
+        })).subscribe();
     }
   }
 
@@ -169,14 +174,11 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
   }
 
   submit() {
+    this.calcDeadline(this.deadlineThreshold);
     const tokenInAmount = new FixedDecimal(this.tokenInAmount.value, this.tokenIn.decimals);
     const tokenOutAmount = new FixedDecimal(this.tokenOutAmount.value, this.tokenOut.decimals);
-    const tokenInMax = this.tokenInExact
-      ? tokenInAmount
-      : new FixedDecimal(this.tokenInMax, this.tokenIn.decimals);
-    const tokenOutMin = !this.tokenInExact
-      ? tokenOutAmount
-      : new FixedDecimal(this.tokenOutMin, this.tokenOut.decimals);
+    const tokenInMax = this.tokenInExact ? tokenInAmount : this.tokenInMax;
+    const tokenOutMin = !this.tokenInExact ? tokenOutAmount : this.tokenOutMin;
 
     const request = new SwapRequest(
       this.tokenOut.address,
@@ -186,7 +188,7 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
       tokenOutMin,
       this.tokenInExact,
       this.context.wallet,
-      this.calcDeadline(this.deadlineThreshold)
+      this.deadlineBlock
     );
 
     this._platformApi
@@ -203,11 +205,15 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
     const tokenOut = this.tokenOut;
     const tokenInPercentageSelection = this.tokenInPercentageSelected;
     const tokenOutPercentageSelection = this.tokenOutPercentageSelected;
+    const poolIn = this.poolIn;
+    const poolOut = this.poolOut;
 
     this.tokenIn = tokenOut;
     this.tokenOut = tokenIn;
     this.tokenOutPercentageSelected = tokenInPercentageSelection;
     this.tokenInPercentageSelected = tokenOutPercentageSelection;
+    this.poolIn = poolOut;
+    this.poolOut = poolIn;
 
     if (this.tokenInExact) {
       this.tokenInExact = false;
@@ -224,53 +230,42 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
     if (tolerance) this.toleranceThreshold = tolerance;
     if (this.toleranceThreshold > 99.99 || this.toleranceThreshold < .01) return;
     if (!this.tokenInAmount.value || !this.tokenInAmount.value) return;
+    if (!this.poolIn || !this.poolOut) return;
 
-    const tokenInDecimals = this.tokenIn.decimals;
-    const tokenOutDecimals = this.tokenOut.decimals;
-    const tokenInAmount = new FixedDecimal(this.tokenInAmount.value, tokenInDecimals);
+    const one = FixedDecimal.One(8);
+    const negativeOneHundred = FixedDecimal.NegativeOneHundred(8);
+    const tokenInAmount = new FixedDecimal(this.tokenInAmount.value, this.tokenIn.decimals);
     const tokenInPrice = new FixedDecimal(this.tokenIn.summary.priceUsd.toString(), 8);
     const tokenInTolerance = new FixedDecimal((1 + (this.toleranceThreshold / 100)).toFixed(8), 8);
-    const tokenOutAmount = new FixedDecimal(this.tokenOutAmount.value, tokenOutDecimals);
+    const tokenOutAmount = new FixedDecimal(this.tokenOutAmount.value, this.tokenOut.decimals);
     const tokenOutPrice = new FixedDecimal(this.tokenOut.summary.priceUsd.toString(), 8);
     const tokenOutTolerancePercentage = new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8);
-    const tokenOutToleranceAmount = MathService.multiply(tokenOutAmount, tokenOutTolerancePercentage);
-    const tokenOutTolerance = new FixedDecimal(tokenOutToleranceAmount, tokenOutDecimals);
+    const tokenOutTolerance = tokenOutAmount.multiply(tokenOutTolerancePercentage);
 
-    this.tokenInMax = MathService.multiply(tokenInAmount, tokenInTolerance);
-    this.tokenOutMin = MathService.subtract(tokenOutAmount, tokenOutTolerance);
-    this.tokenInFiatValue = MathService.multiply(tokenInAmount, tokenInPrice);
-    this.tokenOutFiatValue = MathService.multiply(tokenOutAmount, tokenOutPrice);
+    this.tokenInMax = tokenInAmount.multiply(tokenInTolerance);
+    this.tokenOutMin = tokenOutAmount.subtract(tokenOutTolerance);
+    this.tokenInFiatValue = tokenInAmount.multiply(tokenInPrice);
+    this.tokenOutFiatValue = tokenOutAmount.multiply(tokenOutPrice);
+    this.priceImpact = SwapQuoteService.getPriceImpact(tokenInAmount, this.tokenIn, this.tokenOut, this.poolIn, this.poolOut, this.marketFee);
+    this.numInPerOneOut = tokenInAmount.divide(tokenOutAmount);
 
-    const tokenInMax = new FixedDecimal(this.tokenInMax, tokenInDecimals);
-    const tokenOutMin = new FixedDecimal(this.tokenOutMin, tokenOutDecimals);
-
-    this.tokenInMaxFiatValue = MathService.multiply(tokenInMax, tokenInPrice);
-    this.tokenOutMinFiatValue = MathService.multiply(tokenOutMin, tokenOutPrice);
-
-    // Calc token in fiat vs out fiat percentage difference
-    const tokenOutFiatFixed = new FixedDecimal(this.tokenOutFiatValue, 8);
-    const tokenInFiatFixed = new FixedDecimal(this.tokenInFiatValue, 8);
-    const oneHundred = new FixedDecimal('100', 8);
-    const negativeOneHundred = new FixedDecimal('-100', 8);
-    const one = new FixedDecimal('1', 8);
-    const percentageOutputOfInputFixed = new FixedDecimal(MathService.divide(tokenOutFiatFixed, tokenInFiatFixed), 8);
-    const isPositiveValue = percentageOutputOfInputFixed.bigInt > one.bigInt;
-    const multiplier = isPositiveValue ? oneHundred : negativeOneHundred;
-    const differenceFixed = isPositiveValue
-      ? new FixedDecimal(MathService.subtract(percentageOutputOfInputFixed, one), 8)
-      : new FixedDecimal(MathService.subtract(one, percentageOutputOfInputFixed), 8);
-
-    this.tokenOutFiatPercentageDifference = new FixedDecimal(MathService.multiply(differenceFixed, multiplier), 8);
+    const tokenOutFiatPercentageDifference = one.subtract(this.tokenOutFiatValue.divide(this.tokenInFiatValue)).multiply(negativeOneHundred);
+    tokenOutFiatPercentageDifference.resize(2);
+    this.tokenOutFiatPercentageDifference = parseFloat(tokenOutFiatPercentageDifference.formattedValue);
   }
 
   toggleShowMore(): void {
     this.showMore = !this.showMore;
   }
 
-  calcDeadline(minutes: number): number {
+  toggleShowTransactionDetails(): void {
+    this.showTransactionDetails = !this.showTransactionDetails;
+  }
+
+  calcDeadline(minutes: number): void {
     this.deadlineThreshold = minutes;
     const blocks = Math.ceil(60 * minutes / 16);
-    return blocks + this.latestBlock;
+    this.deadlineBlock = blocks + this.latestBlock;
   }
 
   handlePercentageSelect(field: string, value: any): void {
@@ -302,11 +297,10 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
 
     this.tokenInMax = null;
     this.tokenInFiatValue = null;
-    this.tokenInMaxFiatValue = null;
     this.tokenOutMin = null;
     this.tokenOutFiatValue = null;
-    this.tokenOutMinFiatValue = null;
     this.tokenOutFiatPercentageDifference = null;
+    this.priceImpact = null;
   }
 
   private amountInQuote(amountOut: string): Observable<boolean> {
@@ -377,24 +371,36 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
       return of(false);
     }
 
-    const amountNeededString = this.tokenInExact ? this.tokenInAmount.value : this.tokenInMax;
-    const amountNeeded = new FixedDecimal(amountNeededString, this.tokenIn.decimals);
+    const amountNeeded = this.tokenInExact
+      ? new FixedDecimal(this.tokenInAmount.value, this.tokenIn.decimals)
+      : this.tokenInMax;
 
     return this._validateBalance$(this.tokenIn, amountNeeded)
       .pipe(tap(result => this.balanceError = !result));
   }
 
-  private refreshToken(address: string): void {
-    if (address === null || address === undefined) return;
+  private refreshTokens(): Observable<ILiquidityPoolsResponse> {
+    if (!this.tokenIn || !this.tokenOut) return of(null);
 
-    this._tokensService.getMarketToken(address)
+    let tokens = [];
+
+    if (!!this.tokenIn && this.tokenIn.address !== 'CRS') tokens.push(this.tokenIn.address);
+    if (!!this.tokenOut && this.tokenOut.address !== 'CRS') tokens.push(this.tokenOut.address);
+
+    const request = new LiquidityPoolsFilter({
+      market: this._env.marketAddress,
+      tokens: tokens,
+      limit: 2
+    } as ILiquidityPoolsFilter);
+
+    return this._liquidityPoolsService.getLiquidityPools(request)
       .pipe(
-        tap(token => {
-          if (token.address === this.tokenIn?.address) this.tokenIn = token as IMarketToken;
-          else if (token.address === this.tokenOut?.address) this.tokenOut = token as IMarketToken;
-        }),
-        take(1))
-      .subscribe();
+        tap((pools: ILiquidityPoolsResponse) => {
+          this.poolIn = pools.results.find(pool => pool.tokens.crs.address === this.tokenIn.address || pool.tokens.src.address === this.tokenIn.address);
+          this.poolOut = pools.results.find(pool => pool.tokens.crs.address === this.tokenOut.address || pool.tokens.src.address === this.tokenOut.address);
+          this.tokenIn = (this.tokenIn.address === 'CRS' ? this.poolIn.tokens.crs : this.poolIn.tokens.src) as IMarketToken;
+          this.tokenOut = (this.tokenOut.address === 'CRS' ? this.poolOut.tokens.crs : this.poolOut.tokens.src) as IMarketToken;
+        }));
   }
 
   destroyContext$(): void {

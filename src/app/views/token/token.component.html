@@ -81,8 +81,8 @@
             </div>
 
             <div class="flex-row-center-between">
-              <p class="mb-0">~{{crsPerOlpt | shortNumber}} <smalL>{{liquidityPool.tokens.crs.symbol}}</smalL></p>
-              <p class="mb-0">~{{srcPerOlpt | shortNumber}} <small>{{liquidityPool.tokens.src.symbol}}</small></p>
+              <p class="mb-0">~{{crsPerOlpt.formattedValue | shortNumber}} <smalL>{{liquidityPool.tokens.crs.symbol}}</smalL></p>
+              <p class="mb-0">~{{srcPerOlpt.formattedValue | shortNumber}} <small>{{liquidityPool.tokens.src.symbol}}</small></p>
             </div>
           </ng-template>
         </opdex-card>

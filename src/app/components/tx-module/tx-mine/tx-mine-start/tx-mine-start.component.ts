@@ -1,5 +1,4 @@
 import { OnDestroy } from '@angular/core';
-import { MathService } from '@sharedServices/utility/math.service';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -29,7 +28,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
   pool: ILiquidityPoolResponse;
   allowance$ = new Subscription();
   transactionTypes = AllowanceRequiredTransactionTypes;
-  fiatValue: string;
+  fiatValue: FixedDecimal;
   allowance: AllowanceValidation;
   allowanceTransaction$ = new Subscription();
   latestSyncedBlock$: Subscription;
@@ -108,7 +107,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
     const lptFiat = new FixedDecimal(this.pool.tokens.lp.summary.priceUsd.toString(), 8);
     const amountDecimal = new FixedDecimal(amount, this.pool.tokens.lp.decimals);
 
-    this.fiatValue = MathService.multiply(amountDecimal, lptFiat);
+    this.fiatValue = lptFiat.multiply(amountDecimal);
   }
 
   private getAllowance$(amount?: string): Observable<AllowanceValidation> {

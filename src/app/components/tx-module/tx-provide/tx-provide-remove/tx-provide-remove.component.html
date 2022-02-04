@@ -2,18 +2,17 @@
   <form [formGroup]="form" name="remove-liquidity-form" id="remove-liquidity-form">
     <opdex-input-control
       [suffixDisabled]="true"
-      [prefixIcon]="icons.remove"
-      label="Liquidate"
+      label="Remove Liquidity"
       [formControl]="liquidity"
       [suffix]="pool.tokens.lp.symbol"
       [numbersOnly]="true">
       <div class="flex-row-center-between">
         <div class="tolerance-amounts">
-          <span *ngIf="crsOutMin && srcOutMin">Min: {{crsOutMin | shortNumber}} {{pool.tokens.crs.symbol}} <span style="opacity: .5">|</span> {{srcOutMin | shortNumber}} {{pool.tokens.src.symbol}}</span>
+          <span *ngIf="crsOutMin && srcOutMin">Min: {{crsOutMin.formattedValue | shortNumber}} {{pool.tokens.crs.symbol}} <span style="opacity: .5">|</span> {{srcOutMin.formattedValue | shortNumber}} {{pool.tokens.src.symbol}}</span>
         </div>
 
-        <div class="fiat-quote">
-          <span class="success ml-2" *ngIf="lptInFiatValue && lptInFiatValue !== 'NaN'">${{lptInFiatValue | shortNumber}}</span>
+        <div class="fiat-quote" *ngIf="!!lptInFiatValue">
+          <span class="success ml-2" *ngIf="lptInFiatValue.bigInt > 0">${{lptInFiatValue.formattedValue | shortNumber}}</span>
         </div>
       </div>
     </opdex-input-control>
@@ -39,25 +38,23 @@
     </div>
 
     <!-- Tolerance and Deadline -->
-    <ng-container *ngIf="!!context?.wallet">
-      <div class="flex-row-center-end">
-        <button mat-icon-button
-          color="primary"
-          [ngClass]="iconSizes.small"
-          (click)="toggleShowMore(!showMore)"
-          type="button">
-          <mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon>
-        </button>
-      </div>
+    <div class="flex-row-center-end">
+      <button mat-icon-button
+        color="primary"
+        [ngClass]="iconSizes.small"
+        (click)="toggleShowMore(!showMore)"
+        type="button">
+        <mat-icon>{{showMore ? icons.remove : icons.add}}</mat-icon>
+      </button>
+    </div>
 
-      <div [@collapse]="!showMore">
-        <opdex-tolerance [value]="toleranceThreshold" (onToleranceChange)="calcTolerance($event)"></opdex-tolerance>
+    <div [@collapse]="!showMore">
+      <opdex-tolerance [value]="toleranceThreshold" (onToleranceChange)="calcTolerance($event)"></opdex-tolerance>
 
-        <div class="mt-2">
-          <opdex-deadline [value]="deadlineThreshold" (onDeadlineChange)="calcDeadline($event)"></opdex-deadline>
-        </div>
+      <div class="mt-2">
+        <opdex-deadline [value]="deadlineThreshold" (onDeadlineChange)="calcDeadline($event)"></opdex-deadline>
       </div>
-    </ng-container>
+    </div>
     <!-- End Tolerance and Deadline -->
 
     <opdex-tx-quote-submit-button

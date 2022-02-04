@@ -71,7 +71,7 @@
               <mat-spinner style="position: relative; z-index: 1" class="xl"
                 color="primary"
                 mode="determinate"
-                [value]="getPledgePercentage(proposal)">
+                [value]="pledgePercentage.formattedValue">
               </mat-spinner>
               <mat-spinner style="position: absolute; z-index: 0;"
                 class="gray xl"
@@ -88,7 +88,7 @@
               <p class="light b-400">Votes</p>
 
               <div class="vote-bar-container">
-                <div class="vote-bar yes mb-1 no-wrap" [ngStyle]="{'min-width': getVotePercentage(proposal.yesAmount, proposal.noAmount) + '%' }">
+                <div class="vote-bar yes mb-1 no-wrap" [ngStyle]="{'min-width': getVotePercentage(proposal.yesAmount, proposal.noAmount).wholeNumber + '%' }">
                   <div class="flex-row-center">
                     <mat-icon class="mr-1 tiny">{{icons.thumbUp}}</mat-icon>
                     <div class="d-block">{{proposal.yesAmount | shortNumber}} <small>CRS</small></div>
@@ -97,7 +97,7 @@
               </div>
 
               <div class="vote-bar-container">
-                <div class="vote-bar no no-wrap flex-row-center" [ngStyle]="{'min-width': getVotePercentage(proposal.noAmount, proposal.yesAmount) + '%' }">
+                <div class="vote-bar no no-wrap flex-row-center" [ngStyle]="{'min-width': getVotePercentage(proposal.noAmount, proposal.yesAmount).wholeNumber + '%' }">
                   <mat-icon class="mr-1 tiny">{{icons.thumbDown}}</mat-icon>
                   <div class="d-block">{{proposal.noAmount | shortNumber}} <small>CRS</small></div>
                 </div>

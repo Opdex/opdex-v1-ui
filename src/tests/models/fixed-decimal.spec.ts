@@ -1,10 +1,5 @@
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 
-class FixedDecimalTest {
-  input: string | number;
-  expectedOutput: string;
-}
-
 const FixedDecimalSuccessfulTestsLookup = [
   { input: '1.00', formattedValue: '1.00', decimals: 2, whole: '1', fraction: '00', bigInt: BigInt('100'), isZero: false },
   { input: '0', formattedValue: '0.00000000',decimals: 8, whole: '0', fraction: '00000000', bigInt: BigInt('0'), isZero: true },
@@ -16,6 +11,12 @@ const FixedDecimalSuccessfulTestsLookup = [
   { input: '12', formattedValue: '12.00000000',decimals: 8, whole: '12', fraction: '00000000', bigInt: BigInt('1200000000'), isZero: false },
   { input: '12', formattedValue: '12',decimals: 0, whole: '12', fraction: '', bigInt: BigInt('12'), isZero: false },
 ];
+
+const FixedDecimalResizeTestsLookup = [
+  { input: new FixedDecimal('1.12345678', 8), resize: 18, expected: new FixedDecimal('1.123456780000000000', 18)},
+  { input: new FixedDecimal('1.123456780000000000', 18), resize: 8, expected: new FixedDecimal('1.12345678', 8)},
+  { input: new FixedDecimal('1.123456780000000000', 18), resize: 0, expected: new FixedDecimal('1', 0)}
+]
 
 describe('FixedDecimal', () => {
   FixedDecimalSuccessfulTestsLookup.forEach((test: any) => {
@@ -30,6 +31,18 @@ describe('FixedDecimal', () => {
       expect(value.fractionNumber).toBe(test.fraction);
       expect(value.bigInt).toBe(test.bigInt);
       expect(value.isZero).toBe(test.isZero);
+    });
+  });
+
+  FixedDecimalResizeTestsLookup.forEach((test: any) => {
+    it(`Resizes ${test.input.formattedValue} with ${test.resize} decimals as ${test.expected.formattedValue}`, () => {
+      test.input.resize(test.resize);
+
+      expect(test.expected).toBeTruthy();
+      expect(test.input.formattedValue).toBe(test.expected.formattedValue);
+      expect(test.input.decimals).toBe(test.expected.decimals);
+      expect(test.input.wholeNumber).toBe(test.expected.wholeNumber);
+      expect(test.input.fractionNumber).toBe(test.expected.fractionNumber);
     });
   });
 });

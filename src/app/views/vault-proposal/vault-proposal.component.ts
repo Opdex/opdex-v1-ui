@@ -18,7 +18,6 @@ import { tap, switchMap, map } from 'rxjs/operators';
 import { StatCardInfo } from '@sharedModels/stat-card-info';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
-import { MathService } from '@sharedServices/utility/math.service';
 import { IVaultProposalVotesFilter, VaultProposalVotesFilter } from '@sharedModels/platform-api/requests/vaults/vault-proposal-votes-filter';
 import { IVaultProposalVoteResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-vote-response-model.interface';
 import { IVaultProposalPledgeResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-pledge-response-model.interface';
@@ -124,11 +123,11 @@ export class VaultProposalComponent {
     return `${index}-${proposal.proposalId}-${proposal.status}-${proposal.expiration}-${proposal.pledgeAmount}-${proposal.yesAmount}-${proposal.noAmount}`;
   }
 
-  getPledgePercentage(proposal: IVaultProposalResponseModel) {
+  get pledgePercentage(): FixedDecimal {
     const minimum = new FixedDecimal(this.vault.totalPledgeMinimum, 8);
-    const pledge = new FixedDecimal(proposal.pledgeAmount, 8);
+    const pledge = new FixedDecimal(this.proposal.pledgeAmount, 8);
 
-    return MathService.multiply(new FixedDecimal(MathService.divide(pledge, minimum), 8), new FixedDecimal('100', 0));
+    return pledge.divide(minimum).multiply(FixedDecimal.OneHundred(0));
   }
 
   getExpirationPercentage(proposal: IVaultProposalResponseModel) {
@@ -143,14 +142,16 @@ export class VaultProposalComponent {
     return Math.floor((blocksPassed / duration) * 100);
   }
 
-  getVotePercentage(valueOne: string, valueTwo: string) {
+  getVotePercentage(valueOne: string, valueTwo: string): FixedDecimal {
     const first = new FixedDecimal(valueOne, 8);
     const second = new FixedDecimal(valueTwo, 8);
+    const oneHundred = FixedDecimal.OneHundred(0);
+    const zero = FixedDecimal.Zero(0);
 
-    if (second.bigInt === BigInt(0) && first.bigInt > BigInt(0)) return 100;
-    else if (second.bigInt === BigInt(0) && first.bigInt == BigInt(0)) return 0;
+    if (second.bigInt === BigInt(0) && first.bigInt > BigInt(0)) return oneHundred;
+    else if (second.bigInt === BigInt(0) && first.bigInt == BigInt(0)) return zero;
 
-    return MathService.multiply(new FixedDecimal(MathService.divide(first, second), 8), new FixedDecimal('100', 0));
+    return first.divide(second).multiply(oneHundred);
   }
 
   statCardTrackBy(index: number, statCard: StatCardInfo) {
