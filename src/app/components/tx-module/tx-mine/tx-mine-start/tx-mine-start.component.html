@@ -6,8 +6,8 @@
       [formControl]="amount"
       [suffix]="pool.tokens.lp.symbol"
       [numbersOnly]="true">
-      <div class="flex-row-center-end">
-        <span class="success" *ngIf="fiatValue">${{fiatValue.formattedValue | shortNumber}}</span>
+      <div class="flex-row-center">
+        <span *ngIf="fiatValue">${{fiatValue.formattedValue | formatNumber:2}}</span>
       </div>
     </opdex-input-control>
 

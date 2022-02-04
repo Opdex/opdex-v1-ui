@@ -7,13 +7,7 @@
       [suffix]="pool.tokens.lp.symbol"
       [numbersOnly]="true">
       <div class="flex-row-center-between">
-        <div class="tolerance-amounts">
-          <span *ngIf="crsOutMin && srcOutMin">Min: {{crsOutMin.formattedValue | shortNumber}} {{pool.tokens.crs.symbol}} <span style="opacity: .5">|</span> {{srcOutMin.formattedValue | shortNumber}} {{pool.tokens.src.symbol}}</span>
-        </div>
-
-        <div class="fiat-quote" *ngIf="!!lptInFiatValue">
-          <span class="success ml-2" *ngIf="lptInFiatValue.bigInt > 0">${{lptInFiatValue.formattedValue | shortNumber}}</span>
-        </div>
+        <span class="success" *ngIf="lptInFiatValue?.bigInt > 0">${{lptInFiatValue.formattedValue | formatNumber:2}}</span>
       </div>
     </opdex-input-control>
 
@@ -35,6 +29,46 @@
         message="Insufficient Balance"
         *ngIf="balanceError">
       </opdex-tx-quote-error>
+    </div>
+
+    <div *ngIf="!!crsOut && !!srcOut" class="mt-3 p-2 border" style="border-radius: 4px;">
+      <div class="flex-row-center-between">
+        <small class="b-400">
+          Removing <span class="error">{{percentageOfSupply.formattedValue | shortNumber}}%</span> Total Liquidity
+        </small>
+
+        <button mat-icon-button class="tiny" (click)="toggleShowTransactionDetails()">
+          <mat-icon>{{showTransactionDetails ? icons.arrowDown : icons.arrowRight}}</mat-icon>
+        </button>
+      </div>
+
+      <div [@collapse]="!showTransactionDetails">
+
+        <div class="flex-row-center-between">
+          <small class="b-400 light mr-1">Estimated Output</small>
+          <small class="text-right no-wrap">{{crsOut.formattedValue | formatNumber:(pool.tokens.crs.decimals > 8 ? 8 : pool.tokens.crs.decimals)}} {{pool.tokens.crs.symbol}}</small>
+        </div>
+
+        <div class="flex-row-center-between">
+          <small class="b-400 light mr-1">Minimum ({{toleranceThreshold}}% slippage)</small>
+          <small class="text-right no-wrap">{{crsOutMin.formattedValue | formatNumber:(pool.tokens.crs.decimals > 8 ? 8 : pool.tokens.crs.decimals)}} {{pool.tokens.crs.symbol}}</small>
+        </div>
+
+        <div class="flex-row-center-between">
+          <small class="b-400 light mr-1">Estimated Output</small>
+          <small class="text-right no-wrap">{{srcOut.formattedValue | formatNumber:(pool.tokens.src.decimals > 8 ? 8 : pool.tokens.src.decimals)}} {{pool.tokens.src.symbol}}</small>
+        </div>
+
+        <div class="flex-row-center-between">
+          <small class="b-400 light mr-1">Minimum ({{toleranceThreshold}}% slippage)</small>
+          <small class="text-right no-wrap">{{srcOutMin.formattedValue | formatNumber:(pool.tokens.src.decimals > 8 ? 8 : pool.tokens.src.decimals)}} {{pool.tokens.src.symbol}}</small>
+        </div>
+
+        <div class="flex-row-center-between">
+          <small class="b-400 light mr-1">Block Deadline ({{deadlineThreshold}} minutes)</small>
+          <small class="text-right">{{deadlineBlock | formatNumber:0}}</small>
+        </div>
+      </div>
     </div>
 
     <!-- Tolerance and Deadline -->

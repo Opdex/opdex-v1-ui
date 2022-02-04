@@ -1,3 +1,4 @@
+import { map } from 'rxjs/operators';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
@@ -40,6 +41,7 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
   crsOutMin: FixedDecimal;
   srcOut: FixedDecimal;
   srcOutMin: FixedDecimal;
+  deadlineBlock: number;
   toleranceThreshold = 0.1;
   deadlineThreshold = 10;
   allowanceTransaction$: Subscription;
@@ -48,9 +50,18 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
   latestBlock: number;
   percentageSelected: string;
   balanceError: boolean;
+  showTransactionDetails: boolean = true;
 
   get liquidity(): FormControl {
     return this.form.get('liquidity') as FormControl;
+  }
+
+  get percentageOfSupply() {
+    const { tokens } = this.pool;
+    const lpTotalSupply = new FixedDecimal(tokens.lp.totalSupply, tokens.lp.decimals);
+    const lpInput = new FixedDecimal(this.liquidity.value, tokens.lp.decimals);
+
+    return lpInput.divide(lpTotalSupply).multiply(FixedDecimal.OneHundred(0));
   }
 
   constructor(
@@ -78,15 +89,20 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
       .pipe(
         debounceTime(400),
         distinctUntilChanged(),
-        tap(_ => this.calcTolerance()),
-        filter(amount => !!this.context?.wallet && !!amount),
-        switchMap(amount => this.getAllowance$(amount)),
+        map(amount => {
+          const amountFixed = new FixedDecimal(amount || '0', this.pool.tokens.lp.decimals);
+          amountFixed.isZero ? this.reset() : this.calcTolerance();
+          return amountFixed;
+        }),
+        filter(amount => !!this.context?.wallet && amount.bigInt > 0),
+        switchMap(amount => this.getAllowance$(amount.formattedValue)),
         switchMap(allowance => this.validateBalance(allowance.requestToSpend)))
       .subscribe();
 
     this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
       .pipe(
         tap(block => this.latestBlock = block?.height),
+        tap(_ => this.calcDeadline(this.deadlineThreshold)),
         filter(_ => !!this.context?.wallet && !!this.pool),
         switchMap(_ => this.getAllowance$()))
       .subscribe();
@@ -108,12 +124,14 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
   }
 
   submit(): void {
+    this.calcDeadline(this.deadlineThreshold);
+
     const request = new RemoveLiquidityRequest(
       new FixedDecimal(this.liquidity.value, this.pool.tokens.lp.decimals),
       this.crsOutMin,
       this.srcOutMin,
       this.context.wallet,
-      this.calcDeadline(this.deadlineThreshold)
+      this.deadlineBlock
     );
 
     this._platformApi
@@ -160,11 +178,14 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
     this.showMore = value;
   }
 
-  calcDeadline(minutes: number): number {
+  toggleShowTransactionDetails(): void {
+    this.showTransactionDetails = !this.showTransactionDetails;
+  }
+
+  calcDeadline(minutes: number): void {
     this.deadlineThreshold = minutes;
     const blocks = Math.ceil(60 * minutes / 16);
-
-    return blocks + this.latestBlock;
+    this.deadlineBlock = blocks + this.latestBlock;
   }
 
   handlePercentageSelect(value: any): void {
