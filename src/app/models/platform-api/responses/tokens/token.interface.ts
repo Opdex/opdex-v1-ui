@@ -28,13 +28,16 @@ export interface IToken {
   attributes: string[];
   createdBlock: number;
   modifiedBlock: number;
-  nativeToken: INativeToken;
+  wrappedToken: IWrappedToken;
   balance?: any;
 }
 
-export interface INativeToken {
-  nativeChain: string;
-  nativeAddress: string;
+export interface IWrappedToken {
+  custodian: string;
+  chain: string;
+  address: string;
+  trusted: boolean;
+  modifiedBlock: number;
 }
 export interface ITokenSnapshot {
   price: IOhlcNumber;

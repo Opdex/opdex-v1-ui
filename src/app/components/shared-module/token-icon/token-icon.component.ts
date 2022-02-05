@@ -14,14 +14,14 @@ export class TokenIconComponent {
   public get iconPath(): string {
     if (!this.token) return '';
 
-    let { nativeToken } = this.token;
+    let { wrappedToken } = this.token;
 
-    if (!!nativeToken === false) return '';
+    if (!!wrappedToken === false) return '';
 
-    const { nativeChain, nativeAddress } = nativeToken;
+    const { chain, address } = wrappedToken;
 
-    return !!nativeAddress
-      ? `${this._baseUrl}/${nativeChain.toLowerCase()}/assets/${nativeAddress}/logo.png`
-      : `${this._baseUrl}/${nativeChain.toLowerCase()}/info/logo.png`;
+    return !!address
+      ? `${this._baseUrl}/${chain.toLowerCase()}/assets/${address}/logo.png`
+      : `${this._baseUrl}/${chain.toLowerCase()}/info/logo.png`;
   }
 }
