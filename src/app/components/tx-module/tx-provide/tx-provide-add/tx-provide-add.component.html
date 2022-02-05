@@ -74,7 +74,7 @@
     <div *ngIf="!!srcInMin && !!crsInMin" class="mt-3 p-2 border" style="border-radius: 4px;">
       <div class="flex-row-center-between">
         <small class="b-400">
-          Adding <span class="success">{{percentageOfSupply.formattedValue | shortNumber}}%</span> Total Liquidity
+          <span class="success">+{{percentageOfSupply.formattedValue | shortNumber}}%</span> Total Liquidity
         </small>
 
         <button mat-icon-button class="tiny" (click)="toggleShowTransactionDetails()">

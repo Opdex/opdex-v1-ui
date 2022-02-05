@@ -1,0 +1,13 @@
+@import '/src/scss//colors';
+
+.success {
+  color: $green-primary;
+}
+
+.orange, .warn {
+  color: $orange-primary;
+}
+
+.red, .error {
+  color: $red-primary;
+}

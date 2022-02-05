@@ -7,7 +7,7 @@
 
           <button mat-icon-button matPrefix type="button" class="mr-2" disabled><mat-icon>{{icons.liquidityPool}}</mat-icon></button>
 
-          <input matInput aria-label="Public Key" [matAutocomplete]="auto" [formControl]="poolControl" type="text" placeholder="torAyErDvMdZqNdVU8kmiLaykuE5L2UfwJ">
+          <input matInput aria-label="Public Key" [matAutocomplete]="auto" [formControl]="poolControl" type="text" placeholder="ODX-CRS">
 
           <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectPool($event)">
             <ng-container *ngIf="pools$ | async">

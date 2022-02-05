@@ -7,6 +7,7 @@
         label="Deposit"
         [formControl]="deposit"
         [numbersOnly]="true">
+        <small class="warn">Returned after proposal completion</small>
       </opdex-input-control>
 
       <div class="mt-2" *ngIf="balanceError">
@@ -44,7 +45,7 @@
       <opdex-input-control
         placeholder="torAyErDvMdZqNdVU8kmiLaykuE5L2UfwJ"
         [suffixDisabled]="true"
-        label="Recipient"
+        [label]="type.value === 2 ? 'Holder' : 'Recipient'"
         [formControl]="recipient"
         *ngIf="type.value <= 2">
       </opdex-input-control>

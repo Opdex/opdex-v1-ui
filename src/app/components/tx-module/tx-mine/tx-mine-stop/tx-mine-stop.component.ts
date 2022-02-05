@@ -32,6 +32,14 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
     return this.form.get('amount') as FormControl;
   }
 
+  get percentageOfSupply() {
+    const { miningPool, tokens } = this.pool;
+    const totalWeight = new FixedDecimal(miningPool.tokensMining, tokens.lp.decimals);
+    const outputWeight = new FixedDecimal(this.amount.value, tokens.lp.decimals);
+
+    return outputWeight.divide(totalWeight).multiply(FixedDecimal.OneHundred(0));
+  }
+
   constructor(
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,

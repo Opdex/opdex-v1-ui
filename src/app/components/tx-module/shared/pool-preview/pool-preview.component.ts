@@ -162,10 +162,9 @@ export class PoolPreviewComponent implements OnChanges, OnDestroy {
 
     return this.pools.filter(pool => {
       var addressMatch = pool.address.toLowerCase().includes(filterValue);
-      var symbolMatch = pool.tokens.src.symbol.toLowerCase().includes(filterValue);
-      var nameMatch = pool.tokens.src.name.toLowerCase().includes(filterValue);
+      var nameMatch = pool.name.toLowerCase().includes(filterValue);
 
-      return addressMatch || nameMatch || symbolMatch;
+      return addressMatch || nameMatch;
     });
   }
 

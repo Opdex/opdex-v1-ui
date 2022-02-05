@@ -35,6 +35,14 @@
       Liquidate Collected OLPT
     </mat-checkbox>
 
+    <div *ngIf="fiatValue" class="mt-3 p-2 border" style="border-radius: 4px;">
+      <div class="flex-row-center-between">
+        <small class="b-400">
+          <span class="error">-{{percentageOfSupply.formattedValue | shortNumber}}%</span> Total Mining Weight
+        </small>
+      </div>
+    </div>
+
     <opdex-tx-quote-submit-button
       [warn]="balanceError"
       [disabled]="!form.valid || !context?.wallet || balanceError === undefined"

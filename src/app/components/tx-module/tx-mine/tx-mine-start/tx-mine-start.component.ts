@@ -6,7 +6,7 @@ import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, of, Subscription } from 'rxjs';
-import { debounceTime, map, switchMap, take, distinctUntilChanged, tap, filter } from 'rxjs/operators';
+import { debounceTime, switchMap, take, distinctUntilChanged, tap, filter } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
@@ -37,6 +37,14 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
+  }
+
+  get percentageOfSupply() {
+    const { miningPool, tokens } = this.pool;
+    const totalWeight = new FixedDecimal(miningPool.tokensMining, tokens.lp.decimals);
+    const inputWeight = new FixedDecimal(this.amount.value, tokens.lp.decimals);
+
+    return inputWeight.divide(totalWeight).multiply(FixedDecimal.OneHundred(0));
   }
 
   constructor(

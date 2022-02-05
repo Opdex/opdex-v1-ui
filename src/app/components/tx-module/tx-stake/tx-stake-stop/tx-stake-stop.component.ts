@@ -36,6 +36,14 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
     return this.form.get('liquidate') as FormControl;
   }
 
+  get percentageOfSupply() {
+    const { summary } = this.pool;
+    const totalWeight = new FixedDecimal(summary.staking.weight, summary.staking.token.decimals);
+    const outputWeight = new FixedDecimal(this.amount.value, summary.staking.token.decimals);
+
+    return outputWeight.divide(totalWeight).multiply(FixedDecimal.OneHundred(0));
+  }
+
   constructor(
     private _fb: FormBuilder,
     protected _injector: Injector,

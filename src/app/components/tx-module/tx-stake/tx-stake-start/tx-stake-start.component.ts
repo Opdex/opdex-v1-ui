@@ -39,6 +39,14 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
     return this.form.get('amount') as FormControl;
   }
 
+  get percentageOfSupply() {
+    const { summary } = this.pool;
+    const totalWeight = new FixedDecimal(summary.staking.weight, summary.staking.token.decimals);
+    const inputWeight = new FixedDecimal(this.amount.value, summary.staking.token.decimals);
+
+    return inputWeight.divide(totalWeight).multiply(FixedDecimal.OneHundred(0));
+  }
+
   constructor(
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
