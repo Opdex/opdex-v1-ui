@@ -6,7 +6,7 @@ import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, of, Subscription } from 'rxjs';
-import { debounceTime, map, switchMap, take, distinctUntilChanged, tap, filter } from 'rxjs/operators';
+import { debounceTime, switchMap, take, distinctUntilChanged, tap, filter, map } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
@@ -39,6 +39,15 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
     return this.form.get('amount') as FormControl;
   }
 
+  get percentageOfSupply() {
+    const oneHundred = FixedDecimal.OneHundred(8);
+    const { miningPool, tokens } = this.pool;
+    const totalWeight = new FixedDecimal(miningPool.tokensMining, tokens.lp.decimals);
+    const inputWeight = new FixedDecimal(this.amount.value, tokens.lp.decimals);
+    if (totalWeight.isZero) return oneHundred;
+    return inputWeight.divide(totalWeight).multiply(oneHundred);
+  }
+
   constructor(
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
@@ -53,10 +62,15 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
 
     this.allowance$ = this.amount.valueChanges
       .pipe(
-        debounceTime(300),
+        debounceTime(400),
         distinctUntilChanged(),
-        tap(amount => this.setFiatValue(amount)),
-        switchMap((amount: string) => this.getAllowance$(amount)),
+        map(amount => {
+          const amountFixed = new FixedDecimal(amount || '0', this.pool.tokens.lp.decimals);
+          amountFixed.isZero ? this.reset() : this.setFiatValue(amountFixed);
+          return amountFixed;
+        }),
+        filter(amount => !!this.context?.wallet && amount.bigInt > 0),
+        switchMap(amount => this.getAllowance$(amount.formattedValue)),
         switchMap(_ => this.validateBalance()))
       .subscribe();
 
@@ -98,16 +112,9 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
       .pipe(tap(result => this.balanceError = !result));
   }
 
-  private setFiatValue(amount: string): void {
-    if (!!amount === false) {
-      this.fiatValue = null;
-      return;
-    }
-
+  private setFiatValue(amount: FixedDecimal): void {
     const lptFiat = new FixedDecimal(this.pool.tokens.lp.summary.priceUsd.toString(), 8);
-    const amountDecimal = new FixedDecimal(amount, this.pool.tokens.lp.decimals);
-
-    this.fiatValue = lptFiat.multiply(amountDecimal);
+    this.fiatValue = lptFiat.multiply(amount);
   }
 
   private getAllowance$(amount?: string): Observable<AllowanceValidation> {

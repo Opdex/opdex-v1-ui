@@ -7,7 +7,7 @@
 
           <button mat-icon-button matPrefix type="button" class="mr-2" disabled><mat-icon>{{icons.liquidityPool}}</mat-icon></button>
 
-          <input matInput aria-label="Public Key" [matAutocomplete]="auto" [formControl]="poolControl" type="text" placeholder="torAyErDvMdZqNdVU8kmiLaykuE5L2UfwJ">
+          <input matInput aria-label="Public Key" [matAutocomplete]="auto" [formControl]="poolControl" type="text" placeholder="ODX-CRS">
 
           <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectPool($event)">
             <ng-container *ngIf="pools$ | async">
@@ -29,14 +29,13 @@
   </div>
 
   <opdex-card class="pool-summary" *ngIf="pool">
-    <div class="flex-row-center mb-1">
+    <div class="flex-row-center mb-2">
       <opdex-token-icons [tokens]="[pool.tokens.crs, pool.tokens.src]"></opdex-token-icons>
 
       <a class="no-decoration ml-2" routerLink="/pools/{{pool?.address}}">
         <h4 class="d-flex mb-0">{{pool.name}}</h4>
       </a>
     </div>
-
 
     <button mat-icon-button [ngClass]="iconSizes.tiny" class="exit" (click)="clearPool()">
       <mat-icon>{{icons.close}}</mat-icon>

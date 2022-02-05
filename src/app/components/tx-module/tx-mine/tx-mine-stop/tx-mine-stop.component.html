@@ -6,8 +6,8 @@
       [formControl]="amount"
       [suffix]="pool.tokens.lp.symbol"
       [numbersOnly]="true">
-      <div class="flex-row-center-end">
-        <span class="success" *ngIf="fiatValue">${{fiatValue.formattedValue | shortNumber}}</span>
+      <div class="flex-row-center">
+        <span *ngIf="fiatValue">${{fiatValue.formattedValue | formatNumber:2}}</span>
       </div>
     </opdex-input-control>
 
@@ -24,6 +24,14 @@
         [warn]="true"
         message="Insufficient Mining Balance">
       </opdex-tx-quote-error>
+    </div>
+
+    <div *ngIf="fiatValue" class="mt-3 p-2 border" style="border-radius: 4px;">
+      <div class="flex-row-center-between">
+        <small class="b-400">
+          <span class="error">-{{percentageOfSupply.formattedValue | shortNumber}}%</span> Total Mining Weight
+        </small>
+      </div>
     </div>
 
     <opdex-tx-quote-submit-button

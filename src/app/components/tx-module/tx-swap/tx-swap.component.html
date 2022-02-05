@@ -12,7 +12,7 @@
       [numbersOnly]="true">
       <div class="flex-row-center-between">
         <div class="fiat-quote">
-          <span *ngIf="tokenInFiatValue">${{tokenInFiatValue.formattedValue | shortNumber}}</span>
+          <span *ngIf="tokenInFiatValue">${{tokenInFiatValue.formattedValue | formatNumber:2}}</span>
         </div>
       </div>
     </opdex-input-control>
@@ -69,7 +69,7 @@
       [numbersOnly]="true">
       <div class="flex-row-center-between">
         <div class="fiat-quote">
-          <span *ngIf="!!tokenOutFiatValue">${{tokenOutFiatValue.formattedValue | shortNumber}}</span>
+          <span *ngIf="!!tokenOutFiatValue">${{tokenOutFiatValue.formattedValue | formatNumber:2}}</span>
           <span class="ml-1"
             [ngClass]="{
               'orange': tokenOutFiatPercentageDifference < -1 && tokenOutFiatPercentageDifference > -5,

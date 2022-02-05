@@ -90,7 +90,7 @@ export class TransactionReceipt {
   private findTransactionType(): ITransactionType {
     const types = TransactionTypes
       .filter(txType => this._events.filter(event => txType.targetEvents.includes(event.eventType)).length > 0)
-      .sort((a, b) => a.priority - b.priority);
+      .sort((a, b) => a.eventPriority - b.eventPriority);
 
     return types.length > 0 ? {...types[0]} : null;
   }

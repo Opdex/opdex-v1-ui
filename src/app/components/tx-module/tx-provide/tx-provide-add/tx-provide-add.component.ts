@@ -41,13 +41,12 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
   transactionTypes = AllowanceRequiredTransactionTypes;
   showMore: boolean = false;
   crsInFiatValue: FixedDecimal;
-  crsInMinFiatValue: FixedDecimal;
   srcInFiatValue: FixedDecimal;
-  srcInMinFiatValue: FixedDecimal;
   toleranceThreshold = 0.1;
   deadlineThreshold = 10;
   crsInMin: FixedDecimal;
   srcInMin: FixedDecimal;
+  deadlineBlock: number;
   allowanceTransaction$: Subscription;
   latestSyncedBlock$: Subscription;
   latestBlock: number;
@@ -55,6 +54,7 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
   srcPercentageSelected: string;
   crsBalanceError: boolean;
   srcBalanceError: boolean;
+  showTransactionDetails: boolean = true;
 
   get amountCrs(): FormControl {
     return this.form.get('amountCrs') as FormControl;
@@ -62,6 +62,14 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
 
   get amountSrc(): FormControl {
     return this.form.get('amountSrc') as FormControl;
+  }
+
+  get percentageOfSupply() {
+    const { summary, tokens } = this.pool;
+    const crsReserves = new FixedDecimal(summary.reserves.crs, tokens.crs.decimals);
+    const crsInput = new FixedDecimal(this.amountCrs.value, tokens.crs.decimals);
+
+    return crsInput.divide(crsReserves).multiply(FixedDecimal.OneHundred(0));
   }
 
   constructor(
@@ -86,7 +94,7 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
       amountSrc: [null, [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
     });
 
-    // Bug -
+    // Investigate
     // Set CRS amount in (quotes and sets SRC amount)
     // Change SRC amount (quote and change CRS amount)
     // Change CRS amount (12.24999999 to 12.25) registers no change, no re-quote is given.
@@ -95,12 +103,20 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
     // Then changing CRS does not get triggered by DistinctUntilChanged(), it never knew about the auto populated quote changes so it thinks nothing changed.
     //
     // This isn't reproducible 100% of the time, there must be more to it.
+    // ----
+    // Working as expected - will circle back and remove 2/4/22
     this.subscription.add(
       this.amountCrs.valueChanges
         .pipe(
           debounceTime(400),
           distinctUntilChanged(),
-          switchMap(amount => this.quote$(amount, this.pool?.tokens?.crs)),
+          map(amount => {
+            const amountFixed = new FixedDecimal(amount || '0', this.pool.tokens.crs.decimals);
+            if (amountFixed.isZero) this.reset();
+            return amountFixed;
+          }),
+          filter(amount => amount.bigInt > 0),
+          switchMap(amount => this.quote$(amount.formattedValue, this.pool?.tokens?.crs)),
           tap(amount => {
             if (amount !== '') this.amountSrc.setValue(amount, { emitEvent: false })
           }),
@@ -115,7 +131,13 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
         .pipe(
           debounceTime(400),
           distinctUntilChanged(),
-          switchMap(amount => this.quote$(amount, this.pool?.tokens?.src)),
+          map(amount => {
+            const amountFixed = new FixedDecimal(amount || '0', this.pool.tokens.src.decimals);
+            if (amountFixed.isZero) this.reset();
+            return amountFixed;
+          }),
+          filter(amount => amount.bigInt > 0),
+          switchMap(amount => this.quote$(amount.formattedValue, this.pool?.tokens?.src)),
           tap(quoteAmount => {
             if (quoteAmount !== '') this.amountCrs.setValue(quoteAmount, { emitEvent: false })
           }),
@@ -128,6 +150,7 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
     this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
       .pipe(
         tap(block => this.latestBlock = block?.height),
+        tap(_ => this.calcDeadline(this.deadlineThreshold)),
         filter(_ => !!this.context.wallet),
         switchMap(_ => this.getAllowance$()),
         switchMap(_ => this.validateBalances()))
@@ -164,13 +187,14 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
   }
 
   submit(): void {
+    this.calcDeadline(this.deadlineThreshold);
     const request = new AddLiquidityRequest(
       new FixedDecimal(this.amountCrs.value, this.pool.tokens.crs.decimals),
       new FixedDecimal(this.amountSrc.value, this.pool.tokens.src.decimals),
       this.crsInMin,
       this.srcInMin,
       this.context.wallet,
-      this.calcDeadline(this.deadlineThreshold)
+      this.deadlineBlock
     );
 
     this._platformApi
@@ -200,20 +224,21 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
     const priceSrc = new FixedDecimal(this.pool.tokens.src.summary.priceUsd.toString(), 8);
 
     this.crsInFiatValue = amountCrs.multiply(priceCrs);
-    this.crsInMinFiatValue = this.crsInMin.multiply(priceCrs);
     this.srcInFiatValue = amountSrc.multiply(priceSrc);
-    this.srcInMinFiatValue = this.srcInMin.multiply(priceSrc);
   }
 
   toggleShowMore(value: boolean): void {
     this.showMore = value;
   }
 
-  calcDeadline(minutes: number): number {
+  toggleShowTransactionDetails(): void {
+    this.showTransactionDetails = !this.showTransactionDetails;
+  }
+
+  calcDeadline(minutes: number): void {
     this.deadlineThreshold = minutes;
     const blocks = Math.ceil(60 * minutes / 16);
-
-    return blocks + this.latestBlock;
+    this.deadlineBlock = blocks + this.latestBlock;
   }
 
   handlePercentageSelect(field: string, value: any): void {
@@ -260,12 +285,10 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
   }
 
   private reset(): void {
-    this.form.reset();
+    this.form.reset({}, {emitEvent: false});
     this.allowance = null;
     this.crsInFiatValue = null;
-    this.crsInMinFiatValue = null;
     this.srcInFiatValue = null;
-    this.srcInMinFiatValue = null;
     this.crsInMin = null;
     this.srcInMin = null;
     this.crsPercentageSelected = null;

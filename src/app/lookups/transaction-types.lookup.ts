@@ -3,7 +3,8 @@ import { TransactionView } from "@sharedModels/transaction-view";
 import { Icons } from "../enums/icons";
 
 export interface ITransactionType {
-  priority: number;
+  eventPriority: number;
+  viewSortOrder?: number;
   title: string,
   view?: TransactionView,
   viewRequiresAuth: boolean;
@@ -14,7 +15,8 @@ export interface ITransactionType {
 
 export const TransactionTypes: ITransactionType[] = [
   {
-    priority: 0,
+    eventPriority: 0,
+    viewSortOrder: 0,
     title: 'Swap',
     view: TransactionView.swap,
     viewRequiresAuth: false,
@@ -23,7 +25,8 @@ export const TransactionTypes: ITransactionType[] = [
     targetEvents: [TransactionEventTypes.SwapEvent]
   },
   {
-    priority: 1,
+    eventPriority: 1,
+    viewSortOrder: 2,
     title: 'Stake',
     view: TransactionView.stake,
     viewRequiresAuth: false,
@@ -37,7 +40,8 @@ export const TransactionTypes: ITransactionType[] = [
     ]
   },
   {
-    priority: 2,
+    eventPriority: 2,
+    viewSortOrder: 1,
     title: 'Provide',
     view: TransactionView.provide,
     viewRequiresAuth: false,
@@ -49,7 +53,8 @@ export const TransactionTypes: ITransactionType[] = [
     ]
   },
   {
-    priority: 3,
+    eventPriority: 3,
+    viewSortOrder: 3,
     title: 'Mine',
     view: TransactionView.mine,
     viewRequiresAuth: false,
@@ -62,7 +67,8 @@ export const TransactionTypes: ITransactionType[] = [
     ]
   },
   {
-    priority: 4,
+    eventPriority: 4,
+    viewSortOrder: 4,
     title: 'Create Pool',
     view: TransactionView.createPool,
     viewRequiresAuth: true,
@@ -71,7 +77,7 @@ export const TransactionTypes: ITransactionType[] = [
     targetEvents: [TransactionEventTypes.CreateLiquidityPoolEvent]
   },
   {
-    priority: 5,
+    eventPriority: 5,
     title: 'Enable Mining',
     view: null,
     viewRequiresAuth: true,
@@ -83,7 +89,7 @@ export const TransactionTypes: ITransactionType[] = [
     ]
   },
   {
-    priority: 6,
+    eventPriority: 6,
     title: 'Distribute',
     view: null,
     viewRequiresAuth: true,
@@ -92,7 +98,8 @@ export const TransactionTypes: ITransactionType[] = [
     targetEvents: [TransactionEventTypes.DistributionEvent]
   },
   {
-    priority: 7,
+    eventPriority: 7,
+    viewSortOrder: 5,
     title: 'Vault Proposal',
     view: TransactionView.vaultProposal,
     viewRequiresAuth: true,
@@ -108,7 +115,7 @@ export const TransactionTypes: ITransactionType[] = [
     ]
   },
   {
-    priority: 8,
+    eventPriority: 8,
     title: 'Vault Certificate',
     view: null,
     viewRequiresAuth: true,
@@ -121,7 +128,7 @@ export const TransactionTypes: ITransactionType[] = [
     ]
   },
   {
-    priority: 9,
+    eventPriority: 9,
     title: 'Ownership',
     view: null,
     viewRequiresAuth: true,
@@ -135,7 +142,7 @@ export const TransactionTypes: ITransactionType[] = [
     ]
   },
   {
-    priority: 10,
+    eventPriority: 10,
     title: 'Permissions',
     view: null,
     viewRequiresAuth: true,
@@ -144,7 +151,8 @@ export const TransactionTypes: ITransactionType[] = [
     targetEvents: [TransactionEventTypes.ChangeMarketPermissionEvent]
   },
   {
-    priority: 11,
+    eventPriority: 11,
+    viewSortOrder: 6,
     title: 'Allowance',
     view: TransactionView.allowance,
     viewRequiresAuth: true,

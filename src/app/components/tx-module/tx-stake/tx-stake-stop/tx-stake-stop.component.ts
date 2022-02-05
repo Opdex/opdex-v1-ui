@@ -1,6 +1,6 @@
 import { OnDestroy } from '@angular/core';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
-import { debounceTime, distinctUntilChanged, take, tap, switchMap, filter } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, take, tap, switchMap, filter, map } from 'rxjs/operators';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
@@ -36,6 +36,15 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
     return this.form.get('liquidate') as FormControl;
   }
 
+  get percentageOfSupply() {
+    const oneHundred = FixedDecimal.OneHundred(8);
+    const { summary } = this.pool;
+    const totalWeight = new FixedDecimal(summary.staking.weight, summary.staking.token.decimals);
+    if (totalWeight.isZero) return oneHundred;
+    const outputWeight = new FixedDecimal(this.amount.value, summary.staking.token.decimals);
+    return outputWeight.divide(totalWeight).multiply(oneHundred);
+  }
+
   constructor(
     private _fb: FormBuilder,
     protected _injector: Injector,
@@ -53,18 +62,12 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
         .pipe(
           debounceTime(400),
           distinctUntilChanged(),
-          tap(amount => {
-            if (!!amount === false) {
-              this.fiatValue = null;
-              return;
-            }
-
-            const stakingTokenFiat = new FixedDecimal(this.pool.summary.staking?.token.summary.priceUsd.toString(), 8);
-            const amountDecimal = new FixedDecimal(amount, this.pool.summary.staking?.token.decimals);
-
-            this.fiatValue = stakingTokenFiat.multiply(amountDecimal);
+          map(amount => {
+            const amountFixed = new FixedDecimal(amount || '0', this.pool.tokens.lp.decimals);
+            amountFixed.isZero ? this.reset() : this.setFiatValue(amountFixed);
+            return amountFixed;
           }),
-          filter(amount => !!amount),
+          filter(amount => !!this.context?.wallet && amount.bigInt > 0),
           switchMap(_ => this.validateStakingBalance()))
         .subscribe());
   }
@@ -87,6 +90,10 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
   handlePercentageSelect(value: any): void {
     this.percentageSelected = value.percentageOption;
     this.amount.setValue(value.result, {emitEvent: true});
+  }
+  private setFiatValue(amount: FixedDecimal): void {
+    const stakingTokenFiat = new FixedDecimal(this.pool.summary.staking?.token.summary.priceUsd.toString(), 8);
+    this.fiatValue = stakingTokenFiat.multiply(amount);
   }
 
   private validateStakingBalance(): Observable<boolean> {
