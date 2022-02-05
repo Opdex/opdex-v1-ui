@@ -123,7 +123,7 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
                   catchError(_ => this._tokensService.getToken(balance.token)),
                   take(1),
                   map(token => {
-                    token.balance = balance;
+                    token.balance = new FixedDecimal(balance.balance, token.decimals);
                     return token as IMarketToken;
                   })
                 );
@@ -135,12 +135,11 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
             .pipe(map(balances => {
               this.dataSource.data = balances.map(token => {
                 const price = new FixedDecimal(token.summary?.priceUsd?.toString() || '0', 8);
-                const balance = new FixedDecimal(token.balance.balance, token.decimals);
 
                 return {
                   token,
                   isCurrentMarket: token.market === this._env.marketAddress,
-                  total: price.multiply(balance)
+                  total: price.multiply(token.balance)
                 }
               });
 

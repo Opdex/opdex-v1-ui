@@ -1,0 +1,14 @@
+<div class="number" [matTooltip]="fixed | formatNumber:decimals">
+  <span class="prefix" *ngIf="prefix">{{prefix}}</span>
+
+  <ng-container *ngIf="!!short === true; else format">
+    <span class="short">{{fixed | shortNumber}}</span>
+  </ng-container>
+
+  <ng-template #format>
+    <span class="numerator">{{ numerator | formatNumber:0}}</span>
+    <span class="denominator light" *ngIf="denominator && decimals > 0">.{{ denominator }}</span>
+  </ng-template>
+
+  <span class="suffix ml-2" *ngIf="suffix">{{suffix}}</span>
+</div>

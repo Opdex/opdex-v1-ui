@@ -22,13 +22,17 @@
         <ng-container matColumnDef="position">
           <th mat-header-cell *matHeaderCellDef> Position </th>
           <td mat-cell *matCellDef="let element">
-            <span class="no-wrap">{{element.position.formattedValue | formatNumber:element.decimals}} <small>{{element.miningTokenSymbol}}</small></span>
+            <span class="flex-row-end no-wrap">
+              <opdex-number [value]="element.position" [suffix]="element.miningTokenSymbol"></opdex-number>
+            </span>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="value">
           <th mat-header-cell *matHeaderCellDef> Value </th>
-          <td mat-cell *matCellDef="let element"> <span class="positive-value">${{element.value.formattedValue | shortNumber}}</span> </td>
+          <td mat-cell *matCellDef="let element">
+            <opdex-number [value]="element.value" prefix="$" [short]="true"></opdex-number>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="actions">
