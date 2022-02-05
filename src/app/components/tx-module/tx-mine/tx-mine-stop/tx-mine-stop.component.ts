@@ -1,4 +1,4 @@
-import { debounceTime, distinctUntilChanged, filter, switchMap, take, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, switchMap, take, tap } from 'rxjs/operators';
 import { Injector, OnChanges, OnDestroy } from '@angular/core';
 import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -33,11 +33,12 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
   }
 
   get percentageOfSupply() {
+    const oneHundred = FixedDecimal.OneHundred(8);
     const { miningPool, tokens } = this.pool;
     const totalWeight = new FixedDecimal(miningPool.tokensMining, tokens.lp.decimals);
+    if (totalWeight.isZero) return oneHundred;
     const outputWeight = new FixedDecimal(this.amount.value, tokens.lp.decimals);
-
-    return outputWeight.divide(totalWeight).multiply(FixedDecimal.OneHundred(0));
+    return outputWeight.divide(totalWeight).multiply(oneHundred);
   }
 
   constructor(
@@ -56,18 +57,12 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
         .pipe(
           debounceTime(400),
           distinctUntilChanged(),
-          tap(amount => {
-            if (!!amount === false) {
-              this.fiatValue = null;
-              return;
-            }
-
-            const lptFiat = new FixedDecimal(this.pool.tokens.lp.summary.priceUsd.toString(), 8);
-            const amountDecimal = new FixedDecimal(amount, this.pool.tokens.lp.decimals);
-
-            this.fiatValue = lptFiat.multiply(amountDecimal);
+          map(amount => {
+            const amountFixed = new FixedDecimal(amount || '0', this.pool.tokens.lp.decimals);
+            amountFixed.isZero ? this.reset() : this.setFiatValue(amountFixed);
+            return amountFixed;
           }),
-          filter(amount => !!amount),
+          filter(amount => !!this.context?.wallet && amount.bigInt > 0),
           switchMap(_ => this.validateMiningBalance()))
         .subscribe());
   }
@@ -89,6 +84,11 @@ export class TxMineStopComponent extends TxBase implements OnChanges, OnDestroy 
   handlePercentageSelect(value: any): void {
     this.percentageSelected = value.percentageOption;
     this.amount.setValue(value.result, {emitEvent: true});
+  }
+
+  private setFiatValue(amount: FixedDecimal): void {
+    const lptFiat = new FixedDecimal(this.pool.tokens.lp.summary.priceUsd.toString(), 8);
+    this.fiatValue = lptFiat.multiply(amount);
   }
 
   private validateMiningBalance(): Observable<boolean> {

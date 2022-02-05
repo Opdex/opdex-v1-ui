@@ -94,7 +94,7 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
       amountSrc: [null, [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
     });
 
-    // Bug -
+    // Investigate
     // Set CRS amount in (quotes and sets SRC amount)
     // Change SRC amount (quote and change CRS amount)
     // Change CRS amount (12.24999999 to 12.25) registers no change, no re-quote is given.
@@ -103,6 +103,8 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
     // Then changing CRS does not get triggered by DistinctUntilChanged(), it never knew about the auto populated quote changes so it thinks nothing changed.
     //
     // This isn't reproducible 100% of the time, there must be more to it.
+    // ----
+    // Working as expected - will circle back and remove 2/4/22
     this.subscription.add(
       this.amountCrs.valueChanges
         .pipe(
