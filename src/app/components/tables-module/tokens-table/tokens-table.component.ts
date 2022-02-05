@@ -35,7 +35,7 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
 
   constructor(private _router: Router, private _tokensService: TokensService, private _indexService: IndexService) {
     this.dataSource = new MatTableDataSource<any>();
-    this.displayedColumns = ['token', 'name', 'price', 'history'];
+    this.displayedColumns = ['token', 'name', 'interflux', 'price', 'history'];
   }
 
   ngOnChanges() {

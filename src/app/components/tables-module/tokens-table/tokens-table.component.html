@@ -14,9 +14,15 @@
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef> Name </th>
         <td mat-cell *matCellDef="let element">
-          <span class="no-wrap">
-            {{element.name}}
-          </span>
+          <span class="no-wrap">{{element.name}}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="interflux">
+        <th mat-header-cell *matHeaderCellDef> Native Chain </th>
+        <td mat-cell *matCellDef="let element">
+          <span class="badge ethereum no-wrap" *ngIf="element.wrappedToken">{{element.wrappedToken.chain}}</span>
+          <span class="badge cirrus no-wrap" *ngIf="!element.wrappedToken">Cirrus</span>
         </td>
       </ng-container>
 

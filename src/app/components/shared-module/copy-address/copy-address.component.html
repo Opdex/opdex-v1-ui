@@ -3,7 +3,7 @@
   (click)="copyHandler($event)"
   *ngIf="address?.length > 0; else loading">
   <span class="address">{{address}}</span>
-  <mat-icon class="ml-2">{{copied ? icons.check : icons.copy}}</mat-icon>
+  <mat-icon class="ml-1">{{copied ? icons.checkOutline : icons.copy}}</mat-icon>
 </a>
 
 <ng-template #loading>

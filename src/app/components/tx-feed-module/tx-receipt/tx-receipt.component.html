@@ -6,7 +6,7 @@
       </div>
 
       <div class="flex-row-center-between w-100">
-        <small>{{tx?.transactionSummary}}</small>
+        <small class="b-400">{{tx?.transactionSummary}}</small>
         <small *ngIf="showTimeAgo">{{tx?.block?.medianTime | timeago}}</small>
       </div>
     </div>
@@ -26,8 +26,12 @@
     </div>
 
     <ng-template #invalid>
-      <div class="icon-container-offset flex-row-center">
+      <div class="icon-container-offset flex-row-center" *ngIf="tx.success">
         Unable to read transaction summary.
+      </div>
+
+      <div class="icon-container-offset flex-row-center" *ngIf="!tx.success">
+        {{tx.error.friendly}}
       </div>
     </ng-template>
 

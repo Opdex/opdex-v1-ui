@@ -1,3 +1,4 @@
+import { ITransactionError } from './platform-api/responses/transactions/transaction-quote.interface';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { Block } from "./block";
 import { IBlock } from "./platform-api/responses/blocks/block.interface";
@@ -13,6 +14,7 @@ export class TransactionReceipt {
   private _gasUsed: number;
   private _block: Block;
   private _success: boolean;
+  private _error: ITransactionError;
   private _events: ITransactionEvent[];
   private _transactionType: ITransactionType;
   private _transactionSummary: string;
@@ -52,6 +54,11 @@ export class TransactionReceipt {
     return this._success;
   }
 
+  public get error(): ITransactionError
+  {
+    return this._error;
+  }
+
   public get events(): ITransactionEvent[]
   {
     return this._events;
@@ -74,6 +81,7 @@ export class TransactionReceipt {
     this._block = new Block(receipt.block);
     this._success = receipt.success;
     this._events = receipt.events;
+    this._error = receipt.error;
     this._transactionType = this.findTransactionType();
     this._transactionSummary = this.getTransactionSummary();
   }
@@ -96,6 +104,8 @@ export class TransactionReceipt {
   }
 
   private getTransactionSummary(): string {
+    if (!this.success) return 'Error';
+
     switch (this.transactionType?.title) {
       case 'Provide': return this.getProvidingSummary();
       case 'Stake': return this.getStakingSummary();

@@ -39,6 +39,7 @@ export class VaultProposalComponent {
   context: UserContext;
   userVote: IVaultProposalVoteResponseModel;
   userPledge: IVaultProposalPledgeResponseModel;
+  pledgePercentage: FixedDecimal;
   icons = Icons;
   iconSizes = IconSizes;
 
@@ -82,7 +83,10 @@ export class VaultProposalComponent {
   getProposal$(proposalId: number): Observable<IVaultProposalResponseModel> {
     return this._vaultsService
       .getProposal(proposalId)
-      .pipe(tap(proposal => this.proposal = proposal));
+      .pipe(tap(proposal => {
+        this.proposal = proposal;
+        this.setPledgePercentage();
+      }));
   }
 
   getVault$(): Observable<IToken> {
@@ -123,11 +127,11 @@ export class VaultProposalComponent {
     return `${index}-${proposal.proposalId}-${proposal.status}-${proposal.expiration}-${proposal.pledgeAmount}-${proposal.yesAmount}-${proposal.noAmount}`;
   }
 
-  get pledgePercentage(): FixedDecimal {
+  private setPledgePercentage(): void {
     const minimum = new FixedDecimal(this.vault.totalPledgeMinimum, 8);
     const pledge = new FixedDecimal(this.proposal.pledgeAmount, 8);
 
-    return pledge.divide(minimum).multiply(FixedDecimal.OneHundred(0));
+    this.pledgePercentage = pledge.divide(minimum).multiply(FixedDecimal.OneHundred(0));
   }
 
   getExpirationPercentage(proposal: IVaultProposalResponseModel) {

@@ -23,4 +23,14 @@
   &.active, &.green {
     background: $green-primary;
   }
+
+  &.cirrus {
+    background: $cirrus-primary;
+    color: white;
+  }
+
+  &.ethereum {
+    background: $eth-primary;
+    color: white;
+  }
 }

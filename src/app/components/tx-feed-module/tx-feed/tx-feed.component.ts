@@ -95,7 +95,7 @@ export class TxFeedComponent implements OnChanges, OnDestroy {
           // map to transaction receipt
           var receipts = transactionsResponse.results
               .map(transaction => new TransactionReceipt(transaction))
-              .filter(tx => tx.events.length >= 1);
+              .filter(tx => tx.events.length >= 1 || !tx.success);
 
           // Next page only set after we've gotten something. If not set - this is first load,
           // If cursor exists, this request is getting more txs
