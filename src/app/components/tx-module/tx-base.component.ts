@@ -1,6 +1,6 @@
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
+import { Token } from '@sharedModels/ui/tokens/token';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { VaultsService } from '@sharedServices/platform/vaults.service';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { Injector } from '@angular/core';
 import { ReviewQuoteComponent } from './shared/review-quote/review-quote.component';
@@ -38,7 +38,7 @@ export abstract class TxBase {
     this._bottomSheet.open(ReviewQuoteComponent, { data: quote });
   }
 
-  protected _validateAllowance$(owner: string, spender: string, token: IToken, amount: string): Observable<AllowanceValidation> {
+  protected _validateAllowance$(owner: string, spender: string, token: Token, amount: string): Observable<AllowanceValidation> {
     if (!owner || !spender || !token || !amount) return of(null);
 
     const amountToSpend = new FixedDecimal(amount, token.decimals);
@@ -50,7 +50,7 @@ export abstract class TxBase {
         catchError(_ => of(null)));
   }
 
-  protected _validateBalance$(token: IToken, amountToSpend: FixedDecimal): Observable<boolean> {
+  protected _validateBalance$(token: Token, amountToSpend: FixedDecimal): Observable<boolean> {
     if (!token) return of(false);
     if (amountToSpend.bigInt === BigInt(0)) return of(true);
 
@@ -60,7 +60,7 @@ export abstract class TxBase {
         catchError(_ => of(false)));
   }
 
-  protected _validateStakingBalance$(liquidityPool: ILiquidityPoolResponse, amountToSpend: FixedDecimal): Observable<boolean> {
+  protected _validateStakingBalance$(liquidityPool: LiquidityPool, amountToSpend: FixedDecimal): Observable<boolean> {
     if (!liquidityPool) return of(false);
 
     return this._walletsService.getStakingPosition(this.context.wallet, liquidityPool.address)
@@ -69,7 +69,7 @@ export abstract class TxBase {
         catchError(_ => of(false)));
   }
 
-  protected _validateMiningBalance$(liquidityPool: ILiquidityPoolResponse, amountToSpend: FixedDecimal): Observable<boolean> {
+  protected _validateMiningBalance$(liquidityPool: LiquidityPool, amountToSpend: FixedDecimal): Observable<boolean> {
     if (!liquidityPool) return of(false);
 
     return this._walletsService.getMiningPosition(this.context.wallet, liquidityPool.miningPool.address)

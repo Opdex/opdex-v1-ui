@@ -1,3 +1,4 @@
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { IMarketHistoryResponse } from '@sharedModels/platform-api/responses/markets/market-history-response.interface';
 import { IMarket } from '@sharedModels/platform-api/responses/markets/market.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
@@ -6,7 +7,6 @@ import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { delay, map, switchMap, take, tap } from 'rxjs/operators';
@@ -30,7 +30,7 @@ export class MarketComponent implements OnInit, OnDestroy {
   subscription = new Subscription();
   market: IMarket;
   marketHistory: MarketHistory;
-  miningPools$: Observable<ILiquidityPoolResponse[]>
+  miningPools$: Observable<LiquidityPool[]>
   transactionsRequest: ITransactionsRequest;
   chartData: any[];
   chartOptions = [
@@ -59,7 +59,7 @@ export class MarketComponent implements OnInit, OnDestroy {
   liquidityPoolsFilter: LiquidityPoolsFilter;
   miningFilter: LiquidityPoolsFilter;
   historyFilter: HistoryFilter;
-  poolsWithEnabledMining: ILiquidityPoolResponse[];
+  poolsWithEnabledMining: LiquidityPool[];
 
   constructor(
     private _marketsService: MarketsService,
@@ -172,9 +172,9 @@ export class MarketComponent implements OnInit, OnDestroy {
     this._sidebar.openSidenav(TransactionView.createPool);
   }
 
-  poolsTrackBy(index: number, pool: ILiquidityPoolResponse) {
-    if (pool === null || pool === undefined) return index;
-    return `${index}-${pool.address}-${pool.summary.cost.crsPerSrc}-${pool.miningPool?.tokensMining}-${pool.summary.staking?.weight}`;
+  poolsTrackBy(index: number, pool: LiquidityPool) {
+    if (!!pool === false) return index;
+    return `${index}-${pool.address}-${pool.summary.cost.crsPerSrc.formattedValue}-${pool.miningPool?.tokensMining?.formattedValue}-${pool.summary.staking?.weight?.formattedValue}`;
   }
 
   statCardTrackBy(index: number, statCard: StatCardInfo) {

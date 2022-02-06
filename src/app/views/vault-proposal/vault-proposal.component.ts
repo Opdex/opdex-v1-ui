@@ -22,6 +22,7 @@ import { IVaultProposalVotesFilter, VaultProposalVotesFilter } from '@sharedMode
 import { IVaultProposalVoteResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-vote-response-model.interface';
 import { IVaultProposalPledgeResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-pledge-response-model.interface';
 import { UserContext } from '@sharedModels/user-context';
+import { Token } from '@sharedModels/ui/tokens/token';
 
 @Component({
   selector: 'opdex-vault-proposal',
@@ -31,7 +32,7 @@ import { UserContext } from '@sharedModels/user-context';
 export class VaultProposalComponent {
   subscription: Subscription = new Subscription();
   vault: IVaultResponseModel;
-  token: IToken;
+  token: Token;
   latestBlock: IBlock;
   pledgesFilter: VaultProposalPledgesFilter;
   votesFilter: VaultProposalVotesFilter;
@@ -89,13 +90,13 @@ export class VaultProposalComponent {
       }));
   }
 
-  getVault$(): Observable<IToken> {
+  getVault$(): Observable<Token> {
     return this._vaultsService.getVault()
       .pipe(
         tap(vault => this.vault = vault),
         switchMap(_ => this._tokensService.getToken(this.vault.token)),
         map(token => {
-          this.token = token as IToken;
+          this.token = token;
           return this.token;
         }));
   }

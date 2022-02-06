@@ -40,7 +40,7 @@
 
       <div class="right">
         <p class="sub-heading">Reward per Block</p>
-        <p class="value">{{ pool.miningPool?.rewardPerBlock | shortNumber}} <small>{{pool.summary.staking?.token.symbol}}</small></p>
+        <p class="value">{{ pool.miningPool?.rewardPerBlock?.formattedValue | shortNumber}} <small>{{pool.summary.staking?.token.symbol}}</small></p>
       </div>
     </div>
   </ng-container>

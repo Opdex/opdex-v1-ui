@@ -1,5 +1,6 @@
+import { LiquidityPools } from '@sharedModels/ui/liquidity-pools/liquidity-pools';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { HistoryFilter } from '@sharedModels/platform-api/requests/history-filter';
-import { ILiquidityPoolsResponse, ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -16,7 +17,7 @@ export class LiquidityPoolsService extends CacheService {
     super(_injector);
   }
 
-  getLiquidityPool(address: string): Observable<ILiquidityPoolResponse> {
+  getLiquidityPool(address: string): Observable<LiquidityPool> {
     return this.getItem(address, this._platformApi.getPool(address));
   }
 
@@ -24,7 +25,7 @@ export class LiquidityPoolsService extends CacheService {
     return this.getItem(`${address}-history-${request.buildQueryString()}`, this._platformApi.getLiquidityPoolHistory(address, request));
   }
 
-  getLiquidityPools(request: LiquidityPoolsFilter): Observable<ILiquidityPoolsResponse> {
+  getLiquidityPools(request: LiquidityPoolsFilter): Observable<LiquidityPools> {
     const market = this._env.marketAddress;
 
     if (request.markets.find(m => m === market) === undefined) {

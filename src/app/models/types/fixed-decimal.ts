@@ -43,7 +43,7 @@ export class FixedDecimal {
 
   constructor(value: string, decimals: number) {
     // Todo: Potentially throw
-    if (value === null || value === undefined) value = '0';
+    if (!!value === false) value = '0';
 
      // TS/JS suck, strings can still be interpreted as numbers
     value = value.toString().replace(/,/g, '');

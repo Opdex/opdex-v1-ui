@@ -1,3 +1,4 @@
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { AddressPosition } from '@sharedModels/address-position';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
@@ -6,7 +7,7 @@ import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
-import { TokenHistory } from '@sharedModels/token-history';
+import { TokenHistory } from '@sharedModels/ui/tokens/token-history';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { catchError, map } from 'rxjs/operators';
 import { TokensService } from '@sharedServices/platform/tokens.service';
@@ -21,7 +22,6 @@ import { Icons } from 'src/app/enums/icons';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { LiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { UserContext } from '@sharedModels/user-context';
@@ -34,7 +34,7 @@ import { UserContext } from '@sharedModels/user-context';
 export class TokenComponent implements OnInit {
   tokenAddress: string;
   token: any;
-  liquidityPool: ILiquidityPoolResponse;
+  liquidityPool: LiquidityPool;
   balance: AddressPosition;
   subscription = new Subscription();
   tokenHistory: TokenHistory;
@@ -157,7 +157,7 @@ export class TokenComponent implements OnInit {
       );
   }
 
-  private tryGetLiquidityPool(): Observable<ILiquidityPoolResponse> {
+  private tryGetLiquidityPool(): Observable<LiquidityPool> {
     if (!this.token || this.token.address === 'CRS') return of(null);
 
     if (this.token.symbol === 'OLPT') {
@@ -165,9 +165,9 @@ export class TokenComponent implements OnInit {
         .pipe(tap(pool => {
           this.liquidityPool = pool;
 
-          const olptSupply = new FixedDecimal(pool.tokens.lp.totalSupply, pool.tokens.lp.decimals);
-          const crsReserves = new FixedDecimal(pool.summary.reserves.crs, pool.tokens.crs.decimals);
-          const srcReserves = new FixedDecimal(pool.summary.reserves.src, pool.tokens.src.decimals);
+          const olptSupply = pool.tokens.lp.totalSupply;
+          const crsReserves = pool.summary.reserves.crs;
+          const srcReserves = pool.summary.reserves.src;
 
           this.crsPerOlpt = crsReserves.divide(olptSupply);
           this.srcPerOlpt = srcReserves.divide(olptSupply);
@@ -183,7 +183,6 @@ export class TokenComponent implements OnInit {
     return this._lpService.getLiquidityPools(filter)
       .pipe(map(pools => {
         const pool = pools?.results?.length ? pools.results[0] : null;
-
         this.liquidityPool = pool;
         return pool;
       }));

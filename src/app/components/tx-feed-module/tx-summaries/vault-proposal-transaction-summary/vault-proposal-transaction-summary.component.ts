@@ -1,9 +1,9 @@
+import { MarketToken } from '@sharedModels/ui/tokens/market-token';
 import { take } from 'rxjs/operators';
 import { IVaultResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-response-model.interface';
 import { IVaultProposalResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-response-model.interface';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
-import { IToken, IMarketToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { VaultsService } from '@sharedServices/platform/vaults.service';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
@@ -17,14 +17,15 @@ import { TransactionReceipt } from '@sharedModels/transaction-receipt';
 import { Observable, of, Subscription } from 'rxjs';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { IVaultProposalBaseEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vaults/vault-proposal-base-event.interface';
+import { Token } from '@sharedModels/ui/tokens/token';
 
 interface IVaultProposalSummary {
   vault: IVaultResponseModel,
   proposal: IVaultProposalResponseModel;
   pledgeOrVote: IVaultProposalPledgeOrVoteSummary;
   createOrComplete: IVaultProposalCreateOrCompleteSummary;
-  crs: IToken;
-  vaultToken: IMarketToken;
+  crs: Token;
+  vaultToken: MarketToken;
 }
 
 interface IVaultProposalPledgeOrVoteSummary {
@@ -141,7 +142,7 @@ export class VaultProposalTransactionSummaryComponent implements OnChanges, OnDe
           tap(vault => summary.vault = vault),
           switchMap(vault => this._tokensService.getMarketToken(vault.token)),
           map(token => {
-            summary.vaultToken = token as IMarketToken;
+            summary.vaultToken = token as MarketToken;
             summary.createOrComplete = { approved: null };
 
             if (summary.proposal?.type === 'Create' || createEvent?.type === 'Create') summary.createOrComplete.type = 'New Certificate';

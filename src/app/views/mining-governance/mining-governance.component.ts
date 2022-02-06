@@ -1,3 +1,4 @@
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { IIndexStatus } from '@sharedModels/platform-api/responses/index/index-status.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
@@ -11,7 +12,6 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LiquidityPoolsFilter, LpOrderBy, NominationStatus, MiningStatus } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable } from 'rxjs';
 import { IMiningGovernance } from '@sharedModels/platform-api/responses/mining-governances/mining-governance.interface';
@@ -31,8 +31,8 @@ import { UserContext } from '@sharedModels/user-context';
   styleUrls: ['./mining-governance.component.scss']
 })
 export class MiningGovernanceComponent implements OnInit, OnDestroy {
-  nominatedPools: ILiquidityPoolResponse[];
-  miningPools$: Observable<ILiquidityPoolResponse[]>;
+  nominatedPools: LiquidityPool[];
+  miningPools$: Observable<LiquidityPool[]>;
   miningGovernance: MiningGovernance;
   submitting: boolean;
   nominationPeriodEndDate: string;
@@ -110,8 +110,8 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
         .subscribe((quote: ITransactionQuote) => this._bottomSheet.open(ReviewQuoteComponent, { data: quote }));
   }
 
-  poolsTrackBy(index: number, pool: ILiquidityPoolResponse) {
-    if (pool === null || pool === undefined) return index;
+  poolsTrackBy(index: number, pool: LiquidityPool) {
+    if (!!pool === false) return index;
     return `${index}-${pool.address}-${pool.summary.cost.crsPerSrc}-${pool.miningPool?.tokensMining}-${pool.summary.staking?.weight}`;
   }
 

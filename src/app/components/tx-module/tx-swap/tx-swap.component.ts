@@ -1,6 +1,7 @@
+import { LiquidityPools } from '@sharedModels/ui/liquidity-pools/liquidity-pools';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { MarketsService } from '@sharedServices/platform/markets.service';
 import { SwapQuoteService } from '@sharedServices/utility/swap-quote.service';
-import { ILiquidityPoolResponse, ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { LiquidityPoolsFilter, ILiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
@@ -57,8 +58,8 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
   showMore: boolean;
   latestBlock: number;
   balanceError: boolean;
-  poolIn: ILiquidityPoolResponse;
-  poolOut: ILiquidityPoolResponse;
+  poolIn: LiquidityPool;
+  poolOut: LiquidityPool;
   marketFee: FixedDecimal;
   transactionTypes = AllowanceRequiredTransactionTypes;
   subscription = new Subscription();
@@ -379,7 +380,7 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
       .pipe(tap(result => this.balanceError = !result));
   }
 
-  private refreshTokens(): Observable<ILiquidityPoolsResponse> {
+  private refreshTokens(): Observable<LiquidityPools> {
     if (!this.tokenIn || !this.tokenOut) return of(null);
 
     let tokens = [];
@@ -395,7 +396,7 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
 
     return this._liquidityPoolsService.getLiquidityPools(request)
       .pipe(
-        tap((pools: ILiquidityPoolsResponse) => {
+        tap((pools: LiquidityPools) => {
           this.poolIn = pools.results.find(pool => pool.tokens.crs.address === this.tokenIn.address || pool.tokens.src.address === this.tokenIn.address);
           this.poolOut = pools.results.find(pool => pool.tokens.crs.address === this.tokenOut.address || pool.tokens.src.address === this.tokenOut.address);
           this.tokenIn = (this.tokenIn.address === 'CRS' ? this.poolIn.tokens.crs : this.poolIn.tokens.src) as IMarketToken;

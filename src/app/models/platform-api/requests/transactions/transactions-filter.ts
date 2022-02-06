@@ -52,7 +52,7 @@ export class TransactionRequest implements ITransactionsRequest {
   }
 
   private addToQuery(query: string, key: string, value: string | number) {
-    if (value === null || value === undefined) return query;
+    if (!!value === false) return query;
 
     var leading = query.length > 0 ? '&' : '?';
 

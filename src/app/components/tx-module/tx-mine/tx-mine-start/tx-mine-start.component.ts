@@ -1,9 +1,9 @@
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { OnDestroy } from '@angular/core';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, of, Subscription } from 'rxjs';
 import { debounceTime, switchMap, take, distinctUntilChanged, tap, filter, map } from 'rxjs/operators';
@@ -25,7 +25,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
   @Input() data;
   form: FormGroup;
   icons = Icons;
-  pool: ILiquidityPoolResponse;
+  pool: LiquidityPool;
   allowance$ = new Subscription();
   transactionTypes = AllowanceRequiredTransactionTypes;
   fiatValue: FixedDecimal;
@@ -42,10 +42,9 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
   get percentageOfSupply() {
     const oneHundred = FixedDecimal.OneHundred(8);
     const { miningPool, tokens } = this.pool;
-    const totalWeight = new FixedDecimal(miningPool.tokensMining, tokens.lp.decimals);
     const inputWeight = new FixedDecimal(this.amount.value, tokens.lp.decimals);
-    if (totalWeight.isZero) return oneHundred;
-    return inputWeight.divide(totalWeight).multiply(oneHundred);
+    if (miningPool.tokensMining.isZero) return oneHundred;
+    return inputWeight.divide(miningPool.tokensMining).multiply(oneHundred);
   }
 
   constructor(

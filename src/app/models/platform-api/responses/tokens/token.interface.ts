@@ -9,6 +9,7 @@ export interface ITokenGroup {
 export interface ITokenSummary {
   priceUsd: number;
   dailyPriceChangePercent: number;
+  // Todo: want to make sure we return createdBlock
   modifiedBlock: number;
 }
 
@@ -37,6 +38,8 @@ export interface IWrappedToken {
   chain: string;
   address: string;
   trusted: boolean;
+  // Todo: Double check response model
+  createdBlock: number;
   modifiedBlock: number;
 }
 export interface ITokenSnapshot {

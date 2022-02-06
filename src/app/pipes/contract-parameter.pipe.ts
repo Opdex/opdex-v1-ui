@@ -8,7 +8,7 @@ export class ContractParameterPipe implements PipeTransform {
   constructor(private _formatNumberPipe: FormatNumberPipe) { }
 
   transform(value: string): string {
-    if (value === null || value === undefined) {
+    if (!!value === false) {
       return null;
     }
 

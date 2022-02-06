@@ -1,4 +1,4 @@
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { FixedDecimal } from "@sharedModels/types/fixed-decimal";
 
@@ -130,24 +130,24 @@ export class SwapQuoteService {
     tokenInAmount: FixedDecimal,
     tokenIn: IToken,
     tokenOut: IToken,
-    poolIn: ILiquidityPoolResponse,
-    poolOut: ILiquidityPoolResponse,
+    poolIn: LiquidityPool,
+    poolOut: LiquidityPool,
     transactionFee: FixedDecimal
   ): number {
     const isSrcToSrc = tokenIn.address !== 'CRS' && tokenOut.address !== 'CRS';
     const isCrsToSrc = !isSrcToSrc && tokenIn.address === 'CRS';
-    const pool0CrsReserves = new FixedDecimal(poolIn.summary.reserves.crs, poolIn.tokens.crs.decimals);
-    const pool0SrcReserves = new FixedDecimal(poolIn.summary.reserves.src, poolIn.tokens.src.decimals);
-    const pool1CrsReserves = new FixedDecimal(poolOut.summary.reserves.crs, poolOut.tokens.crs.decimals);
-    const pool1SrcReserves = new FixedDecimal(poolOut.summary.reserves.src, poolOut.tokens.src.decimals);
+    const pool0CrsReserves = poolIn.summary.reserves.crs;
+    const pool0SrcReserves = poolIn.summary.reserves.src;
+    const pool1CrsReserves = poolOut.summary.reserves.crs;
+    const pool1SrcReserves = poolOut.summary.reserves.src;
 
     let currentMidPrice: FixedDecimal;
     let updatedMidPrice : FixedDecimal;
 
     if (isSrcToSrc) {
       const quote = this.getAmountOutMulti(tokenInAmount, pool0CrsReserves, pool0SrcReserves, pool1CrsReserves, pool1SrcReserves, transactionFee);
-      const crsPerSrcPoolIn = new FixedDecimal(poolIn.summary.cost.crsPerSrc, poolIn.tokens.crs.decimals);
-      const crsPerSrcPoolOut = new FixedDecimal(poolOut.summary.cost.crsPerSrc, poolOut.tokens.crs.decimals);
+      const crsPerSrcPoolIn = poolIn.summary.cost.crsPerSrc;
+      const crsPerSrcPoolOut = poolOut.summary.cost.crsPerSrc;
       const poolInUpdatedCrsReserves = pool0CrsReserves.subtract(quote[0].amountOut);
       const poolInUpdatedSrcReserves = pool0SrcReserves.add(quote[0].amountIn);
       const poolOutUpdatedCrsReserves = pool1CrsReserves.add(quote[1].amountIn);
@@ -162,14 +162,14 @@ export class SwapQuoteService {
       const updatedCrsReserves = pool0CrsReserves.add(quote.amountIn);
       const updatedSrcReserves = pool0SrcReserves.subtract(quote.amountOut);
 
-      currentMidPrice = new FixedDecimal(poolIn.summary.cost.srcPerCrs, poolIn.tokens.src.decimals);
+      currentMidPrice = poolIn.summary.cost.srcPerCrs;
       updatedMidPrice = updatedSrcReserves.divide(updatedCrsReserves);
     } else { // isSrcToCrs
       const quote = this.getAmountOut(tokenInAmount, pool0SrcReserves, pool0CrsReserves, transactionFee);
       const updatedCrsReserves = pool0CrsReserves.subtract(quote.amountOut);
       const updatedSrcReserves = pool0SrcReserves.add(quote.amountIn);
 
-      currentMidPrice = new FixedDecimal(poolIn.summary.cost.crsPerSrc, poolIn.tokens.crs.decimals);
+      currentMidPrice = poolIn.summary.cost.crsPerSrc;
       updatedMidPrice = updatedCrsReserves.divide(updatedSrcReserves);
     }
 

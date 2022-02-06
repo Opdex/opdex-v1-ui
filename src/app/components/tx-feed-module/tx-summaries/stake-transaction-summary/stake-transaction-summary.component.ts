@@ -1,6 +1,5 @@
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
+import { Token } from '@sharedModels/ui/tokens/token';
 import { IRemoveLiquidityEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/liquidity-pools/remove-liquidity-event.interface';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
 import { ICollectStakingRewardsEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/liquidity-pools/staking/collect-staking-rewards.interface';
 import { IStartStakingEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/liquidity-pools/staking/start-staking-event.interface';
@@ -11,6 +10,7 @@ import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.
 import { Subscription } from 'rxjs';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { take } from 'rxjs/operators';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 
 @Component({
   selector: 'opdex-stake-transaction-summary',
@@ -24,11 +24,11 @@ export class StakeTransactionSummaryComponent implements OnChanges, OnDestroy {
   isCollection: boolean;
   collectionLiquidatedRewards: boolean;
   stakingAmount: FixedDecimal;
-  amountOneToken: IToken;
-  amountTwoToken: IToken;
+  amountOneToken: Token;
+  amountTwoToken: Token;
   collectAmountOne: FixedDecimal; // Could be OLPT, or if liquidated, CRS
   collectAmountTwo: FixedDecimal; // If liquidated, SRC
-  pool: ILiquidityPoolResponse;
+  pool: LiquidityPool;
   subscription = new Subscription();
   error: string;
   eventTypes = [
@@ -66,7 +66,7 @@ export class StakeTransactionSummaryComponent implements OnChanges, OnDestroy {
     this.subscription.add(
       this._liquidityPoolService.getLiquidityPool(startEvent?.contract || stopEvent?.contract || collectEvent?.contract)
       .pipe(take(1))
-      .subscribe((liquidityPool: ILiquidityPoolResponse) => {
+      .subscribe((liquidityPool: LiquidityPool) => {
           this.pool = liquidityPool;
 
           const stakingAmount = startEvent?.amount || stopEvent?.amount || '0';

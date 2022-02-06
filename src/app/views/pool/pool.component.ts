@@ -1,3 +1,4 @@
+import { Token } from '@sharedModels/ui/tokens/token';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { AddressPosition } from '@sharedModels/address-position';
@@ -8,7 +9,6 @@ import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { StatCardInfo } from "@sharedModels/stat-card-info";
 import { ITransactionsRequest } from "@sharedModels/platform-api/requests/transactions/transactions-filter";
 import { IAddressBalance } from "@sharedModels/platform-api/responses/wallets/address-balance.interface";
-import { ILiquidityPoolResponse } from "@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface";
 import { ISidenavMessage, TransactionView } from "@sharedModels/transaction-view";
 import { LiquidityPoolsService } from "@sharedServices/platform/liquidity-pools.service";
 import { SidenavService } from "@sharedServices/utility/sidenav.service";
@@ -16,17 +16,17 @@ import { UserContextService } from "@sharedServices/utility/user-context.service
 import { Observable, Subscription, zip, of } from "rxjs";
 import { tap, switchMap, catchError, take, map, delay } from "rxjs/operators";
 import { IAddressMining } from "@sharedModels/platform-api/responses/wallets/address-mining.interface";
-import { IToken } from "@sharedModels/platform-api/responses/tokens/token.interface";
 import { IAddressStaking } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { Title } from '@angular/platform-browser';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
 import { Icons } from 'src/app/enums/icons';
-import { LiquidityPoolHistory } from '@sharedModels/liquidity-pool-history';
+import { LiquidityPoolHistory } from '@sharedModels/ui/liquidity-pools/liquidity-pool-history';
 import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { PoolStatCardsLookup } from '@sharedLookups/pool-stat-cards.lookup';
 import { ILiquidityPoolSnapshotHistoryResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-snapshots-responses.interface';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 
 @Component({
   selector: 'opdex-pool',
@@ -35,7 +35,7 @@ import { ILiquidityPoolSnapshotHistoryResponse } from '@sharedModels/platform-ap
 })
 export class PoolComponent implements OnInit, OnDestroy {
   poolAddress: string;
-  pool: ILiquidityPoolResponse;
+  pool: LiquidityPool;
   poolHistory: LiquidityPoolHistory;
   subscription = new Subscription();
   routerSubscription = new Subscription();
@@ -194,7 +194,7 @@ export class PoolComponent implements OnInit, OnDestroy {
       );
   }
 
-  private getTokenBalance(walletAddress: string, token: IToken): Observable<AddressPosition> {
+  private getTokenBalance(walletAddress: string, token: Token): Observable<AddressPosition> {
     return this._walletService.getBalance(walletAddress, token.address)
         .pipe(
           catchError(() => of(null)),
@@ -202,7 +202,7 @@ export class PoolComponent implements OnInit, OnDestroy {
           take(1));
   }
 
-  private getStakingPosition(walletAddress: string, liquidityPoolAddress: string, token: IToken): Observable<AddressPosition> {
+  private getStakingPosition(walletAddress: string, liquidityPoolAddress: string, token: Token): Observable<AddressPosition> {
     return this._walletService.getStakingPosition(walletAddress, liquidityPoolAddress)
         .pipe(
           catchError(() => of(null)),
@@ -210,7 +210,7 @@ export class PoolComponent implements OnInit, OnDestroy {
           take(1));
   }
 
-  private getMiningPosition(walletAddress: string, miningPoolAddress: string, token: IToken): Observable<AddressPosition> {
+  private getMiningPosition(walletAddress: string, miningPoolAddress: string, token: Token): Observable<AddressPosition> {
     return this._walletService.getMiningPosition(walletAddress, miningPoolAddress)
         .pipe(
           catchError(() => of(null)),

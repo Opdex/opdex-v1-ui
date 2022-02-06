@@ -1,6 +1,6 @@
+import { Token } from '@sharedModels/ui/tokens/token';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { TokensService } from '@sharedServices/platform/tokens.service';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { Component, Injector, Input, OnChanges, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -29,7 +29,7 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
   fiatValue: string;
   isWithdrawal = false;
   percentageSelected: string;
-  crs: IToken;
+  crs: Token;
   vaultAddress: string;
   positionType: 'Balance' | 'ProposalVote';
   subscription = new Subscription();

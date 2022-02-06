@@ -1,3 +1,5 @@
+import { Token } from '@sharedModels/ui/tokens/token';
+import { Tokens } from '@sharedModels/ui/tokens/tokens';
 import { ITokenHistoryResponse } from '@sharedModels/platform-api/responses/tokens/token-history-response.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
@@ -6,15 +8,13 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
-import { ITokensResponse } from '@sharedModels/platform-api/responses/tokens/tokens-response.interface';
 import { Observable, forkJoin, Subscription } from 'rxjs';
 import { switchMap, map, take } from 'rxjs/operators';
 import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
-import { TokenHistory } from '@sharedModels/token-history';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
+import { TokenHistory } from '@sharedModels/ui/tokens/token-history';
 
 @Component({
   selector: 'opdex-tokens-table',
@@ -26,7 +26,7 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
   paging: ICursor;
-  token$: Observable<ITokensResponse>;
+  token$: Observable<Tokens>;
   subscription: Subscription;
   icons = Icons;
   iconSizes = IconSizes;
@@ -48,12 +48,12 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
     }
   }
 
-  private getTokens$(cursor?: string): Observable<ITokensResponse> {
+  private getTokens$(cursor?: string): Observable<Tokens> {
     this.filter.cursor = cursor;
 
     return this._tokensService.getTokens(this.filter)
       .pipe(
-        switchMap((tokens: ITokensResponse) => {
+        switchMap((tokens: Tokens) => {
           this.paging = tokens.paging;
           const poolArray$: Observable<any>[] = [];
           tokens.results.forEach(token => poolArray$.push(this.getTokenHistory$(token)));
@@ -90,7 +90,7 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
     this._router.navigateByUrl(`/tokens/${name}`);
   }
 
-  trackBy(index: number, token: IToken) {
+  trackBy(index: number, token: Token) {
     return `${index}-${token.address}-${token.summary.dailyPriceChangePercent}-${token.summary.priceUsd}`;
   }
 

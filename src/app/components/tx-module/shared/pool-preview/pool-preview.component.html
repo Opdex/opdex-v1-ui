@@ -51,7 +51,7 @@
 
           <div class="flex-column" style="width: 30%;">
             <small class="light" *ngIf="i === 0">{{showStaking || showMining ? 'Weight' : 'Supply'}}</small>
-            <small class="w-25">{{preview.supply | shortNumber}}</small>
+            <small class="w-25">{{preview.supply.formattedValue | shortNumber}}</small>
           </div>
 
           <div class="flex-column" style="width: 40%">

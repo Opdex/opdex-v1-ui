@@ -1,6 +1,6 @@
 import { TransactionView } from '@sharedModels/transaction-view';
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 
 @Component({
   selector: 'opdex-tx-provide',
@@ -9,8 +9,8 @@ import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liq
 })
 export class TxProvideComponent implements OnChanges {
   @Input() data: any;
-  @Output() onPoolSelection = new EventEmitter<ILiquidityPoolResponse>();
-  pool: ILiquidityPoolResponse;
+  @Output() onPoolSelection = new EventEmitter<LiquidityPool>();
+  pool: LiquidityPool;
   child: number = 1;
   view = TransactionView.provide;
   txOptions = [
@@ -23,7 +23,7 @@ export class TxProvideComponent implements OnChanges {
     this.pool = this.data?.pool;
   }
 
-  handlePoolChange(pool: ILiquidityPoolResponse) {
+  handlePoolChange(pool: LiquidityPool) {
     this.onPoolSelection.emit(pool);
   }
 }

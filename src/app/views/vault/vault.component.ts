@@ -1,3 +1,4 @@
+import { Token } from '@sharedModels/ui/tokens/token';
 import { IVaultProposalsFilter } from '@sharedModels/platform-api/requests/vaults/vault-proposals-filter';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Icons } from 'src/app/enums/icons';
@@ -5,7 +6,6 @@ import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interf
 import { IVaultProposalResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-response-model.interface';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { IVaultResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-response-model.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
@@ -33,7 +33,7 @@ export class VaultComponent implements OnInit {
 
   subscription: Subscription = new Subscription();
   vault: IVaultResponseModel;
-  token: IToken;
+  token: Token;
   latestBlock: IBlock;
   statCards: StatCardInfo[];
   proposals: IVaultProposalsResponseModel;
@@ -94,13 +94,13 @@ export class VaultComponent implements OnInit {
       .pipe(tap(proposals => this.proposals = proposals));
   }
 
-  getVault$(): Observable<IToken> {
+  getVault$(): Observable<Token> {
     return this._vaultsService.getVault()
       .pipe(
         tap(vault => this.vault = vault),
         switchMap(_ => this._tokensService.getToken(this.vault.token)),
         map(token => {
-          this.token = token as IToken;
+          this.token = token;
           this.statCards = VaultStatCardsLookup.getStatCards(this.vault, this.token);
           return this.token;
         }));

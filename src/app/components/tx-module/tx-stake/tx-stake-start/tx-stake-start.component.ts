@@ -1,3 +1,4 @@
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { OnDestroy } from '@angular/core';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
@@ -5,7 +6,6 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -25,7 +25,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
   @Input() data;
   icons = Icons;
   form: FormGroup;
-  pool: ILiquidityPoolResponse;
+  pool: LiquidityPool;
   allowance$: Subscription;
   transactionTypes = AllowanceRequiredTransactionTypes;
   fiatValue: FixedDecimal;
@@ -42,10 +42,9 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
   get percentageOfSupply() {
     const oneHundred = FixedDecimal.OneHundred(8);
     const { summary } = this.pool;
-    const totalWeight = new FixedDecimal(summary.staking.weight, summary.staking.token.decimals);
-    if (totalWeight.isZero) return oneHundred;
+    if (summary.staking.weight.isZero) return oneHundred;
     const inputWeight = new FixedDecimal(this.amount.value, summary.staking.token.decimals);
-    return inputWeight.divide(totalWeight).multiply(oneHundred);
+    return inputWeight.divide(summary.staking.weight).multiply(oneHundred);
   }
 
   constructor(

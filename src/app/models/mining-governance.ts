@@ -1,4 +1,4 @@
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
+import { Token } from '@sharedModels/ui/tokens/token';
 import { IMiningGovernance } from '@sharedModels/platform-api/responses/mining-governances/mining-governance.interface';
 
 export class MiningGovernance {
@@ -10,7 +10,7 @@ export class MiningGovernance {
   private _miningPoolRewardPerPeriod: string;
   private _nominationPeriodEndDate: string;
   private _totalRewardsPerPeriod: string;
-  private _minedToken: IToken;
+  private _minedToken: Token;
 
   public get address(): string {
     return this._address;
@@ -40,7 +40,7 @@ export class MiningGovernance {
     return this._totalRewardsPerPeriod;
   }
 
-  public get minedToken(): IToken {
+  public get minedToken(): Token {
     return this._minedToken;
   }
 
@@ -63,7 +63,7 @@ export class MiningGovernance {
     this._nominationPeriodEndDate = date.toISOString();
   }
 
-  setMinedToken(token: IToken) {
+  setMinedToken(token: Token) {
     this._minedToken = token;
   }
 }

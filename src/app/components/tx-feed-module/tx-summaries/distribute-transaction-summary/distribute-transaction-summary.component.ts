@@ -1,7 +1,6 @@
 import { Icons } from 'src/app/enums/icons';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IDistributionEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/tokens/distribution-event.interface';
 import { TransactionReceipt } from '@sharedModels/transaction-receipt';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
@@ -9,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { take } from 'rxjs/operators';
+import { Token } from '@sharedModels/ui/tokens/token';
 
 @Component({
   selector: 'opdex-distribute-transaction-summary',
@@ -22,7 +22,7 @@ export class DistributeTransactionSummaryComponent implements OnChanges, OnDestr
   iconSizes = IconSizes;
   miningGovernanceAmount: FixedDecimal;
   vaultAmount: FixedDecimal;
-  token: IToken;
+  token: Token;
   subscription = new Subscription();
   error: string;
   eventTypes = [

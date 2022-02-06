@@ -1,3 +1,8 @@
+import { MarketTokens } from '@sharedModels/ui/tokens/market-tokens';
+import { Tokens } from '@sharedModels/ui/tokens/tokens';
+import { LiquidityPools } from '@sharedModels/ui/liquidity-pools/liquidity-pools';
+import { Token } from '@sharedModels/ui/tokens/token';
+import { map } from 'rxjs/operators';
 import { MiningPositionsFilter } from '@sharedModels/platform-api/requests/wallets/mining-positions-filter';
 import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { IMarketToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
@@ -14,7 +19,7 @@ import { HttpClient } from '@angular/common/http';
 import { RestApiService } from './rest-api.service';
 import { ErrorService } from '@sharedServices/utility/error.service';
 import { Observable } from 'rxjs';
-import { ILiquidityPoolsResponse, ILiquidityPoolResponse, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
+import { ILiquidityPoolsResponse, ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { LiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { TransactionRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { ITransactionReceipt, ITransactionReceipts } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
@@ -23,7 +28,7 @@ import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interf
 import { IVaultCertificates } from '@sharedModels/platform-api/responses/vaults/vault-certificate.interface';
 import { IMiningQuote } from '@sharedModels/platform-api/requests/mining-pools/mining-quote';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
-import { IMiningPools } from '@sharedModels/platform-api/responses/mining-pools/mining-pool.interface';
+import { IMiningPool, IMiningPools } from '@sharedModels/platform-api/responses/mining-pools/mining-pool.interface';
 import { IApproveAllowanceRequest } from '@sharedModels/platform-api/requests/tokens/approve-allowance-request';
 import { ICreateLiquidityPoolRequest } from '@sharedModels/platform-api/requests/liquidity-pools/create-liquidity-pool-request';
 import { IStartStakingRequest } from '@sharedModels/platform-api/requests/liquidity-pools/start-staking-request';
@@ -68,6 +73,8 @@ import { VaultCertificatesFilter } from '@sharedModels/platform-api/requests/vau
 import { IIndexStatus } from '@sharedModels/platform-api/responses/index/index-status.interface';
 import { WalletBalancesFilter } from '@sharedModels/platform-api/requests/wallets/wallet-balances-filter';
 import { StakingPositionsFilter } from '@sharedModels/platform-api/requests/wallets/staking-positions-filter';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
+import { MarketToken } from '@sharedModels/ui/tokens/market-token';
 
 @Injectable({
   providedIn: 'root'
@@ -101,12 +108,14 @@ export class PlatformApiService extends RestApiService {
   // Market Tokens
   ////////////////////////////
 
-  public getMarketToken(address: string): Observable<IMarketToken> {
-    return this.get<IMarketToken>(`${this.api}/markets/${this.marketAddress}/tokens/${address}`);
+  public getMarketToken(address: string): Observable<MarketToken> {
+    const endpoint = `${this.api}/markets/${this.marketAddress}/tokens/${address}`;
+    return this.get<IMarketToken>(endpoint).pipe(map(token => new MarketToken(token)));
   }
 
-  public getMarketTokens(request: TokensFilter): Observable<IMarketTokensResponse> {
-    return this.get<IMarketTokensResponse>(`${this.api}/markets/${this.marketAddress}/tokens${request.buildQueryString()}`);
+  public getMarketTokens(request: TokensFilter): Observable<MarketTokens> {
+    const endpoint = `${this.api}/markets/${this.marketAddress}/tokens${request.buildQueryString()}`;
+    return this.get<IMarketTokensResponse>(endpoint).pipe(map(tokens => new MarketTokens(tokens)));
   }
 
   public getMarketTokenHistory(tokenAddress: string, request: HistoryFilter): Observable<ITokenHistoryResponse> {
@@ -129,16 +138,19 @@ export class PlatformApiService extends RestApiService {
   // Tokens
   ////////////////////////////
 
-  public getTokens(request: TokensFilter): Observable<ITokensResponse> {
-    return this.get<ITokensResponse>(`${this.api}/tokens${request.buildQueryString()}`);
+  public getTokens(request: TokensFilter): Observable<Tokens> {
+    const endpoint = `${this.api}/tokens${request.buildQueryString()}`;
+    return this.get<ITokensResponse>(endpoint).pipe(map(tokens => new Tokens(tokens)));
   }
 
-  public getToken(address: string): Observable<IToken> {
-    return this.get<IToken>(`${this.api}/tokens/${address}`);
+  public getToken(address: string): Observable<Token> {
+    const endpoint = `${this.api}/tokens/${address}`;
+    return this.get<IToken>(endpoint).pipe(map(token => new Token(token)));
   }
 
-  public addToken(payload: IAddTokenRequest): Observable<IToken> {
-    return this.post<IToken>(`${this.api}/tokens`, payload);
+  public addToken(payload: IAddTokenRequest): Observable<Token> {
+    const endpoint = `${this.api}/tokens`;
+    return this.post<IToken>(endpoint, payload).pipe(map(token => new Token(token)));
   }
 
   public getTokenHistory(tokenAddress: string, request: HistoryFilter): Observable<ITokenHistoryResponse> {
@@ -162,12 +174,14 @@ export class PlatformApiService extends RestApiService {
     return this.post<ITransactionQuote>(`${this.api}/liquidity-pools`, payload);
   }
 
-  public getPool(address: string): Observable<ILiquidityPoolResponse> {
-    return this.get<ILiquidityPoolResponse>(`${this.api}/liquidity-pools/${address}`);
+  public getPool(address: string): Observable<LiquidityPool> {
+    const endpoint = `${this.api}/liquidity-pools/${address}`;
+    return this.get<ILiquidityPoolResponse>(endpoint).pipe(map(pool => new LiquidityPool(pool)));
   }
 
-  public getLiquidityPools(query?: LiquidityPoolsFilter): Observable<ILiquidityPoolsResponse> {
-    return this.get<ILiquidityPoolsResponse>(`${this.api}/liquidity-pools${query.buildQueryString()}`);
+  public getLiquidityPools(query?: LiquidityPoolsFilter): Observable<LiquidityPools> {
+    const endpoint = `${this.api}/liquidity-pools${query.buildQueryString()}`;
+    return this.get<ILiquidityPoolsResponse>(endpoint).pipe(map(pools => new LiquidityPools(pools)));
   }
 
   public getLiquidityPoolHistory(address: string, request: HistoryFilter): Observable<ILiquidityPoolSnapshotHistoryResponse> {

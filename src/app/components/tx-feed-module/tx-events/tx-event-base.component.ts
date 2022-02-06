@@ -1,10 +1,10 @@
+import { Token } from '@sharedModels/ui/tokens/token';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { Observable } from 'rxjs';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { ITransactionEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/transaction-event.interface';
 import { Injector } from '@angular/core';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 
 export abstract class TxEventBaseComponent {
   abstract txEvent: ITransactionEvent;
@@ -17,11 +17,11 @@ export abstract class TxEventBaseComponent {
     this._tokensService = injector.get(TokensService);
   }
 
-  getLiquidityPool$(address: string): Observable<ILiquidityPoolResponse> {
-    return this._liquidityPoolsService.getLiquidityPool(address, true);
+  getLiquidityPool$(address: string): Observable<LiquidityPool> {
+    return this._liquidityPoolsService.getLiquidityPool(address);
   }
 
-  getToken$(address: string): Observable<IToken> {
-    return this._tokensService.getToken(address, true);
+  getToken$(address: string): Observable<Token> {
+    return this._tokensService.getToken(address);
   }
 }

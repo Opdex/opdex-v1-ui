@@ -12,10 +12,10 @@ import { ITransactionQuote } from '@sharedModels/platform-api/responses/transact
 import { CreateLiquidityPoolRequest } from '@sharedModels/platform-api/requests/liquidity-pools/create-liquidity-pool-request';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { AddTokenRequest } from '@sharedModels/platform-api/requests/tokens/add-token-request';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 import { UserContext } from '@sharedModels/user-context';
+import { Token } from '@sharedModels/ui/tokens/token';
 
 @Component({
   selector: 'opdex-tx-create-pool',
@@ -33,7 +33,7 @@ export class TxCreatePoolComponent extends TxBase {
   subscription: Subscription = new Subscription();
   isTokenKnown: boolean;
   isValidToken: boolean;
-  validatedToken: IToken = null;
+  validatedToken: Token = null;
   context: UserContext;
 
   get token(): FormControl {
@@ -93,7 +93,7 @@ export class TxCreatePoolComponent extends TxBase {
       .pipe(
         catchError(_ => of(null)),
         take(1))
-      .subscribe((token: IToken) => {
+      .subscribe((token: Token) => {
         if(!token){
           this.isValidToken = false;
         } else {

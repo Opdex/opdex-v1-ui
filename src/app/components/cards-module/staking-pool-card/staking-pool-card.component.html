@@ -14,16 +14,16 @@
       </button>
 
       <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
-        <button mat-menu-item [ngClass]="iconSizes.small" (click)="swap()">
+        <button mat-menu-item [ngClass]="iconSizes.small" (click)="transact(txView.swap)">
           <mat-icon class="swap">{{icons.swap}}</mat-icon> Swap {{pool.tokens.src?.symbol}}
         </button>
-        <button mat-menu-item [ngClass]="iconSizes.small" (click)="provide()">
+        <button mat-menu-item [ngClass]="iconSizes.small" (click)="transact(txView.provide)">
           <mat-icon class="provide">{{icons.provide}}</mat-icon> Provide {{pool.tokens.src?.symbol}}
         </button>
-        <button mat-menu-item [ngClass]="iconSizes.small" (click)="stake()" *ngIf="pool.summary.staking">
+        <button mat-menu-item [ngClass]="iconSizes.small" (click)="transact(txView.stake)" *ngIf="pool.summary.staking">
           <mat-icon class="stake">{{icons.staking}}</mat-icon> Stake {{pool.summary.staking?.token?.symbol}}
         </button>
-        <button mat-menu-item [ngClass]="iconSizes.small" (click)="mine()" *ngIf="pool.miningPool?.isActive">
+        <button mat-menu-item [ngClass]="iconSizes.small" (click)="transact(txView.mine)" *ngIf="pool.miningPool?.isActive">
           <mat-icon class="mine">{{icons.mining}}</mat-icon> Mine {{pool.summary.staking?.token?.symbol}}
         </button>
       </mat-menu>
@@ -32,7 +32,7 @@
     <div class="bottom-details">
       <div class="left">
         <p class="sub-heading">Staking</p>
-        <p class="value">{{pool.summary.staking.weight | shortNumber}} {{pool.summary.staking?.token.symbol}}</p>
+        <p class="value">{{pool.summary.staking.weight.formattedValue | shortNumber}} {{pool.summary.staking?.token.symbol}}</p>
       </div>
 
       <div class="right">

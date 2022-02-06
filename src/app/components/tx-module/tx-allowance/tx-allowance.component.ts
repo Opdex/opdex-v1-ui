@@ -1,9 +1,9 @@
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injector } from '@angular/core';
 import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { TxBase } from '../tx-base.component';
 import { Icons } from 'src/app/enums/icons';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
@@ -21,7 +21,7 @@ import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 export class TxAllowanceComponent extends TxBase {
   @Input() data: any;
   icons = Icons;
-  pool: ILiquidityPoolResponse;
+  pool: LiquidityPool;
   txHash: string;
   form: FormGroup;
 
