@@ -19,7 +19,7 @@ export class PoolStatCardsLookup {
       },
       {
         title: 'Staking',
-        value: pool?.summary?.staking?.weight,
+        value: pool?.summary?.staking?.weight?.formattedValue,
         suffix: pool?.summary?.staking?.token?.symbol,
         change: pool?.summary?.staking?.dailyWeightChangePercent || 0,
         show: pool?.summary?.staking !== null && pool?.summary?.staking !== undefined,
@@ -58,7 +58,7 @@ export class PoolStatCardsLookup {
       },
       {
         title: 'Mining',
-        value: pool?.miningPool?.tokensMining,
+        value: pool?.miningPool?.tokensMining?.formattedValue,
         suffix: pool?.tokens?.lp?.symbol,
         show: (pool?.miningPool !== null && pool?.miningPool !== undefined) && (pool?.miningPool?.isActive || pool?.miningPool?.tokensMining?.isZero !== true),
         icon: Icons.mining,

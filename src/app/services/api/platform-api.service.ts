@@ -1,3 +1,4 @@
+import { Market } from '@sharedModels/ui/markets/market';
 import { MarketTokens } from '@sharedModels/ui/tokens/market-tokens';
 import { Tokens } from '@sharedModels/ui/tokens/tokens';
 import { LiquidityPools } from '@sharedModels/ui/liquidity-pools/liquidity-pools';
@@ -332,8 +333,9 @@ export class PlatformApiService extends RestApiService {
   // Markets
   ////////////////////////////
 
-  public getMarketOverview(): Observable<IMarket> {
-    return this.get<IMarket>(`${this.api}/markets/${this.marketAddress}`);
+  public getMarketOverview(): Observable<Market> {
+    const endpoint = `${this.api}/markets/${this.marketAddress}`;
+    return this.get<IMarket>(endpoint).pipe(map(market => new Market(market)));
   }
 
   public getMarketHistory(request: HistoryFilter): Observable<IMarketHistoryResponse> {

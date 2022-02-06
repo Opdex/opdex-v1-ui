@@ -1,9 +1,9 @@
-import { IMarket } from "@sharedModels/platform-api/responses/markets/market.interface";
+import { Market } from '@sharedModels/ui/markets/market';
 import { StatCardInfo } from "@sharedModels/stat-card-info";
 import { Icons } from "../enums/icons";
 
 export class MarketStatCardsLookup {
-  public static getStatCards(market: IMarket): StatCardInfo[] {
+  public static getStatCards(market: Market): StatCardInfo[] {
     return [
       {
         title: 'Liquidity',
@@ -20,7 +20,7 @@ export class MarketStatCardsLookup {
       },
       {
         title: 'Staking',
-        value: market?.summary?.staking?.stakingWeight,
+        value: market?.summary?.staking?.stakingWeight?.formattedValue,
         suffix: market?.stakingToken?.symbol,
         change: market?.summary?.staking?.dailyStakingWeightChangePercent,
         show: true,
@@ -46,7 +46,7 @@ export class MarketStatCardsLookup {
       },
       {
         title: 'Rewards',
-        value: market?.summary?.rewards?.totalDailyUsd,
+        value: market?.summary?.rewards?.totalDailyUsd?.toString(),
         daily: true,
         prefix: '$',
         show: true,

@@ -13,3 +13,9 @@ export interface IMarketStakingResponse {
   stakingUsd: number;
   dailyStakingUsdChangePercent: number;
 }
+
+export interface IMarketRewardsResponse {
+  providerDailyUsd: number;
+  marketDailyUsd: number;
+  totalDailyUsd: number;
+}

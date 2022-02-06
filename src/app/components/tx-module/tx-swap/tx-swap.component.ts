@@ -38,12 +38,12 @@ import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
   @Input() data: any;
   form: FormGroup;
-  tokenIn: IMarketToken;
+  tokenIn: IMarketToken | IToken;
   tokenInMax: FixedDecimal;
   tokenInFiatValue: FixedDecimal;
   tokenInPercentageSelected: string;
   changeTokenIn: boolean;
-  tokenOut: IMarketToken;
+  tokenOut: IMarketToken | IToken;
   tokenOutMin: FixedDecimal;
   tokenOutFiatValue: FixedDecimal;
   tokenOutPercentageSelected: string;

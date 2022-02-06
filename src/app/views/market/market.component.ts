@@ -1,6 +1,6 @@
+import { Market } from '@sharedModels/ui/markets/market';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { IMarketHistoryResponse } from '@sharedModels/platform-api/responses/markets/market-history-response.interface';
-import { IMarket } from '@sharedModels/platform-api/responses/markets/market.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { MarketHistory } from '@sharedModels/market-history';
 import { Icons } from 'src/app/enums/icons';
@@ -28,7 +28,7 @@ export class MarketComponent implements OnInit, OnDestroy {
   iconSizes = IconSizes;
   icons = Icons;
   subscription = new Subscription();
-  market: IMarket;
+  market: Market;
   marketHistory: MarketHistory;
   miningPools$: Observable<LiquidityPool[]>
   transactionsRequest: ITransactionsRequest;

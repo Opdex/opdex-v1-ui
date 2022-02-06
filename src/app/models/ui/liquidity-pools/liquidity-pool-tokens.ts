@@ -1,27 +1,26 @@
-import { MarketToken } from '@sharedModels/ui/tokens/market-token';
 import { Token } from '@sharedModels/ui/tokens/token';
 import { ITokenGroup } from '@sharedModels/platform-api/responses/tokens/token.interface';
 
 export class LiquidityPoolTokens {
   private _crs: Token;
-  private _src: MarketToken;
-  private _lp: MarketToken;
+  private _src: Token;
+  private _lp: Token;
 
   public get crs(): Token {
     return this._crs;
   }
 
-  public get src(): MarketToken {
+  public get src(): Token {
     return this._src;
   }
 
-  public get lp(): MarketToken {
+  public get lp(): Token {
     return this._lp;
   }
 
   constructor(tokens: ITokenGroup) {
     this._crs = new Token(tokens.crs);
-    this._src = new MarketToken(tokens.src);
-    this._lp = new MarketToken(tokens.lp);
+    this._src = new Token(tokens.src);
+    this._lp = new Token(tokens.lp);
   }
 }

@@ -6,8 +6,8 @@ export interface IMarket {
   owner: string;
   stakingToken: IToken;
   crsToken: IToken;
-  authPoolCreators: string;
-  authTraders: string;
+  authPoolCreators: boolean;
+  authTraders: boolean;
   authProviders: boolean;
   marketFeeEnabled: boolean;
   transactionFeePercent: number;
