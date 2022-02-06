@@ -49,6 +49,8 @@ export class MiningPool {
   }
 
   constructor(pool: IMiningPool) {
+    if (!!pool === false) return;
+
     this._address = pool.address;
     this._liquidityPool = pool.liquidityPool;
     this._miningPeriodEndBlock = pool.miningPeriodEndBlock;

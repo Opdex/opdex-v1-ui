@@ -49,9 +49,9 @@ export class EnableMiningTransactionSummaryComponent implements OnChanges, OnDes
         }));
   }
 
-  poolsTrackBy(index: number, pool: LiquidityPool) {
-    if (!!pool === false) return index;
-    return `${index}-${pool.address}-${pool.summary.cost.crsPerSrc.formattedValue}-${pool.miningPool?.tokensMining.formattedValue}-${pool.summary.staking?.weight.formattedValue}`;
+  poolsTrackBy(index: number, pool: LiquidityPool): string {
+    if (!!pool === false) return index.toString();;
+    return `${index}-${pool.trackBy}`;
   }
 
   ngOnDestroy(): void {

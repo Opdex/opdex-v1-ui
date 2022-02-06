@@ -14,6 +14,8 @@ export class MarketToken extends Token {
   }
 
   constructor(token: IMarketToken) {
+    if (!!token === false) return;
+
     super(token);
 
     this._market = token.market;

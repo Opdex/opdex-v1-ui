@@ -1,3 +1,4 @@
+import { TokenHistory } from './token-history';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { TokenSummary } from '@sharedModels/ui/tokens/token-summary';
@@ -16,6 +17,7 @@ export class Token {
   private _createdBlock: number;
   private _modifiedBlock: number;
   private _balance?: any;
+  private _history?: TokenHistory;
 
   public get address(): string {
     return this._address;
@@ -61,7 +63,17 @@ export class Token {
     return this._modifiedBlock;
   }
 
+  public get balance(): any {
+    return this._balance;
+  }
+
+  public get history(): TokenHistory {
+    return this._history;
+  }
+
   constructor(token: IToken) {
+    if (!!token === false) return;
+
     this._address = token.address;
     this._name = token.name;
     this._symbol = token.symbol;
@@ -73,5 +85,13 @@ export class Token {
     this._wrappedToken = !!token.wrappedToken ? new WrappedToken(token.wrappedToken) : null;
     this._createdBlock = token.createdBlock;
     this._modifiedBlock = token.modifiedBlock;
+  }
+
+  public setBalance(balance: any) {
+    this._balance = balance;
+  }
+
+  public setHistory(history: TokenHistory) {
+    this._history = history;
   }
 }

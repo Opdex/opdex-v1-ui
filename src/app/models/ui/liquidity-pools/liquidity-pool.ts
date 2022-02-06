@@ -50,13 +50,20 @@ export class LiquidityPool {
     return this._modifiedBlock;
   }
 
+  public get trackBy(): string {
+    const { summary, miningPool } = this;
+    return `${this.address}-${summary.cost.crsPerSrc.formattedValue}-${miningPool?.tokensMining?.formattedValue || 0}-${summary.staking?.weight?.formattedValue || 0}`;
+  }
+
   constructor(pool: ILiquidityPoolResponse) {
+    if (!!pool === false) return;
+
     this._address = pool.address;
     this._name = pool.name;
     this._transactionFeePercent = pool.transactionFeePercent;
     this._market = pool.market;
     this._tokens = new LiquidityPoolTokens(pool.tokens);
-    this._miningPool = new MiningPool(pool.miningPool);
+    this._miningPool = !!pool.miningPool ? new MiningPool(pool.miningPool) : null;
     this._summary = new LiquidityPoolSummary(pool.summary);
     this._createdBlock = pool.createdBlock;
     this._modifiedBlock = pool.modifiedBlock;

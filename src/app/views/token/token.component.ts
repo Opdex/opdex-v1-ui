@@ -1,3 +1,4 @@
+import { MarketToken } from '@sharedModels/ui/tokens/market-token';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { AddressPosition } from '@sharedModels/address-position';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
@@ -33,7 +34,7 @@ import { UserContext } from '@sharedModels/user-context';
 })
 export class TokenComponent implements OnInit {
   tokenAddress: string;
-  token: any;
+  token: MarketToken;
   liquidityPool: LiquidityPool;
   balance: AddressPosition;
   subscription = new Subscription();

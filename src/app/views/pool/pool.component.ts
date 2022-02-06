@@ -198,24 +198,21 @@ export class PoolComponent implements OnInit, OnDestroy {
     return this._walletService.getBalance(walletAddress, token.address)
         .pipe(
           catchError(() => of(null)),
-          map((result: IAddressBalance) => new AddressPosition(walletAddress, token, 'Balance', new FixedDecimal(result?.balance || '0', token.decimals))),
-          take(1));
+          map((result: IAddressBalance) => new AddressPosition(walletAddress, token, 'Balance', new FixedDecimal(result?.balance || '0', token.decimals))));
   }
 
   private getStakingPosition(walletAddress: string, liquidityPoolAddress: string, token: Token): Observable<AddressPosition> {
     return this._walletService.getStakingPosition(walletAddress, liquidityPoolAddress)
         .pipe(
           catchError(() => of(null)),
-          map((result: IAddressStaking) => new AddressPosition(walletAddress, token, 'Staking', new FixedDecimal(result?.amount || '0', token.decimals))),
-          take(1));
+          map((result: IAddressStaking) => new AddressPosition(walletAddress, token, 'Staking', new FixedDecimal(result?.amount || '0', token.decimals))));
   }
 
   private getMiningPosition(walletAddress: string, miningPoolAddress: string, token: Token): Observable<AddressPosition> {
     return this._walletService.getMiningPosition(walletAddress, miningPoolAddress)
         .pipe(
           catchError(() => of(null)),
-          map((result: IAddressMining) => new AddressPosition(walletAddress, token, 'Mining', new FixedDecimal(result?.amount || '0', token.decimals))),
-          take(1));
+          map((result: IAddressMining) => new AddressPosition(walletAddress, token, 'Mining', new FixedDecimal(result?.amount || '0', token.decimals))));
   }
 
   private getWalletSummary(): Observable<AddressPosition[]> {
@@ -244,7 +241,7 @@ export class PoolComponent implements OnInit, OnDestroy {
         combo.push(this.getMiningPosition(context.wallet, this.pool.miningPool.address, lpToken));
       }
 
-      return zip(...combo).pipe(take(1), tap(results => this.positions = results));
+      return zip(...combo).pipe(tap(results => this.positions = results));
     }
 
     return of([]);
@@ -257,7 +254,6 @@ export class PoolComponent implements OnInit, OnDestroy {
 
     return this._liquidityPoolsService.getLiquidityPoolHistory(this.poolAddress, this.historyFilter)
       .pipe(
-        take(1),
         delay(10),
         tap(() => {
           this.chartOptions.map(o => {

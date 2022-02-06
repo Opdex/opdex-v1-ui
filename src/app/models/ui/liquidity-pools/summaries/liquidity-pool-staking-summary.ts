@@ -30,6 +30,8 @@ export class LiquidityPoolStakingSummary {
   }
 
   constructor(staking: IStakingSummaryResponse) {
+    if (!!staking === false) return;
+
     this._token = new MarketToken(staking.token);
     this._weight = new FixedDecimal(staking.weight, staking.weight.split('.')[1].length);
     this._usd = staking.usd;

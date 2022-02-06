@@ -54,7 +54,7 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
     private _env: EnvironmentsService,
     private _dialog: MatDialog
   ) {
-    this.nominatedPools = [ null, null, null, null ];
+    this.nominatedPools = [null, null, null, null];
   }
 
   ngOnInit(): void {
@@ -110,9 +110,9 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
         .subscribe((quote: ITransactionQuote) => this._bottomSheet.open(ReviewQuoteComponent, { data: quote }));
   }
 
-  poolsTrackBy(index: number, pool: LiquidityPool) {
-    if (!!pool === false) return index;
-    return `${index}-${pool.address}-${pool.summary.cost.crsPerSrc}-${pool.miningPool?.tokensMining}-${pool.summary.staking?.weight}`;
+  poolsTrackBy(index: number, pool: LiquidityPool): string {
+    if (!!pool === false) return index.toString();;
+    return `${index}-${pool.trackBy}`;
   }
 
   ngOnDestroy() {

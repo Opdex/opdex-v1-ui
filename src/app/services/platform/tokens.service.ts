@@ -21,9 +21,9 @@ export class TokensService extends CacheService {
     return this.getItem(`token-${address}`, this._platformApi.getToken(address))
   }
 
-  getMarketToken(address: string): Observable<Token | MarketToken> {
+  getMarketToken(address: string): Observable<MarketToken> {
     return address === 'CRS'
-      ? this.getToken(address)
+      ? this.getToken(address) as Observable<MarketToken>
       : this.getItem(`market-token-${address}`, this._platformApi.getMarketToken(address));
   }
 

@@ -45,7 +45,7 @@ export class LiquidityPoolSummary {
   constructor(summary: ILiquidityPoolSummaryResponse) {
     this._reserves = new LiquidityPoolReservesSummary(summary.reserves);
     this._rewards = new LiquidityPoolRewardsSummary(summary.rewards);
-    this._staking = new LiquidityPoolStakingSummary(summary.staking);
+    this._staking = !!summary.staking ? new LiquidityPoolStakingSummary(summary.staking) : null;
     this._volume = new LiquidityPoolVolumeSummary(summary.volume);
     this._cost = new LiquidityPoolCostSummary(summary.cost);
     // Todo: API Return

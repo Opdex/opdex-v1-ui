@@ -34,19 +34,15 @@ export class AddressPosition {
     // Balances of OLPT are the users position for providing liquidity
     this._position = position === 'Balance' && token?.symbol === 'OLPT' ? 'Providing' : position;
     this._amount = amount;
-    this._value = this.calcValue();
+    this._value = this._calcValue();
   }
 
-  private calcValue(): FixedDecimal {
-    const valueDecimals = 8;
-    let result = FixedDecimal.Zero(valueDecimals);
-
+  private _calcValue(): FixedDecimal {
     if (this._token) {
-      const price = new FixedDecimal(this._token.summary.priceUsd.toString(), valueDecimals);
-
-      result = price.multiply(this._amount);
+      const price = new FixedDecimal(this._token.summary.priceUsd.toString(), 8);
+      return price.multiply(this._amount);
     }
 
-    return result;
+    return FixedDecimal.Zero(8);
   }
 }

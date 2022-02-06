@@ -39,10 +39,7 @@ export class PoolsComponent implements OnInit, OnDestroy {
 
     // Initialize dummy results for skeleton placeholders
     this.pools = {
-      topVolume: new LiquidityPools({
-        results: [null, null, null, null],
-        paging: null
-      }),
+      topVolume: null,
       mining: null
     }
 
@@ -77,9 +74,9 @@ export class PoolsComponent implements OnInit, OnDestroy {
     this._sidebar.openSidenav(TransactionView.createPool);
   }
 
-  poolsTrackBy(index: number, pool: LiquidityPool) {
-    if (!!pool === false) return index;
-    return `${index}-${pool.address}-${pool.summary.cost.crsPerSrc.formattedValue}-${pool.miningPool?.tokensMining?.formattedValue}-${pool.summary.staking?.weight?.formattedValue}`;
+  poolsTrackBy(index: number, pool: LiquidityPool): string {
+    if (!!pool === false) return index.toString();;
+    return `${index}-${pool.trackBy}`;
   }
 
   ngOnDestroy() {

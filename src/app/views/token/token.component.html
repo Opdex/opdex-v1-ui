@@ -47,7 +47,7 @@
         <opdex-card [fullHeight]="true">
           <div class="flex-row-center-between">
             <p class="mb-0">Total Supply</p>
-            <p class="mb-0">{{token.totalSupply | shortNumber}}</p>
+            <p class="mb-0">{{token.totalSupply?.formattedValue | shortNumber}}</p>
           </div>
         </opdex-card>
       </div>

@@ -2,7 +2,8 @@ import { LiquidityPool } from "@sharedModels/ui/liquidity-pools/liquidity-pool";
 import { Icons } from "../enums/icons";
 
 export class PoolStatCardsLookup {
-  public static getStatCards(pool: LiquidityPool){
+  public static getStatCards(pool: LiquidityPool) {
+    console.log(pool?.miningPool)
     return [
       {
         title: 'Liquidity',
@@ -60,7 +61,7 @@ export class PoolStatCardsLookup {
         title: 'Mining',
         value: pool?.miningPool?.tokensMining?.formattedValue,
         suffix: pool?.tokens?.lp?.symbol,
-        show: (pool?.miningPool !== null && pool?.miningPool !== undefined) && (pool?.miningPool?.isActive || pool?.miningPool?.tokensMining?.isZero !== true),
+        show: !!pool?.miningPool && (pool.miningPool.isActive || pool.miningPool.tokensMining?.isZero !== true),
         icon: Icons.mining,
         iconColor: 'mine',
         helpInfo: {

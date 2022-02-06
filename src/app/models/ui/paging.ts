@@ -13,7 +13,7 @@ export class Paging {
   }
 
   constructor(paging: ICursor) {
-    this._next = paging.next;
-    this._previous = paging.previous;
+    this._next = paging?.next;
+    this._previous = paging?.previous;
   }
 }
