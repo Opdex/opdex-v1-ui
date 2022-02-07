@@ -1,4 +1,4 @@
-import { TransactionReceipt } from '@sharedModels/transaction-receipt';
+import { TransactionReceipt } from '@sharedModels/ui/transactions/transaction-receipt';
 import { Component, Inject } from '@angular/core';
 import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
 import { Icons } from 'src/app/enums/icons';

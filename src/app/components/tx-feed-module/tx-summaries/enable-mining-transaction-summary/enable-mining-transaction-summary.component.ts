@@ -2,7 +2,7 @@ import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { take } from 'rxjs/operators';
 import { IRewardMiningPoolEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/governances/reward-mining-pool-event.interface';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
-import { TransactionReceipt } from '@sharedModels/transaction-receipt';
+import { TransactionReceipt } from '@sharedModels/ui/transactions/transaction-receipt';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { combineLatest, Subscription } from 'rxjs';

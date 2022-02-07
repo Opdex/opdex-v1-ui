@@ -16,7 +16,7 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable } from 'rxjs';
 import { IMiningGovernance } from '@sharedModels/platform-api/responses/mining-governances/mining-governance.interface';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
-import { MiningGovernance } from '@sharedModels/mining-governance';
+import { MiningGovernance } from '@sharedModels/ui/mining-governances/mining-governance';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';

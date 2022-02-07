@@ -2,7 +2,7 @@ import { IRemoveLiquidityEvent } from '@sharedModels/platform-api/responses/tran
 import { IAddLiquidityEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/liquidity-pools/add-liquidity-event.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
-import { TransactionReceipt } from '@sharedModels/transaction-receipt';
+import { TransactionReceipt } from '@sharedModels/ui/transactions/transaction-receipt';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Subscription } from 'rxjs';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';

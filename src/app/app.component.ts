@@ -1,6 +1,6 @@
 import { IIndexStatus } from './models/platform-api/responses/index/index-status.interface';
 import { AppUpdateModalComponent } from './components/modals-module/app-update-modal/app-update-modal.component';
-import { TransactionReceipt } from './models/transaction-receipt';
+import { TransactionReceipt } from './models/ui/transactions/transaction-receipt';
 import { ITransactionReceipt } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
 import { catchError, switchMap, take } from 'rxjs/operators';
 import { TransactionsService } from '@sharedServices/platform/transactions.service';

@@ -2,7 +2,7 @@ import { Market } from '@sharedModels/ui/markets/market';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { IMarketHistoryResponse } from '@sharedModels/platform-api/responses/markets/market-history-response.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
-import { MarketHistory } from '@sharedModels/market-history';
+import { MarketHistory } from '@sharedModels/ui/markets/market-history';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';

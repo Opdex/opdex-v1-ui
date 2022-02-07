@@ -5,7 +5,7 @@ import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.
 import { ISwapEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/liquidity-pools/swap-event.interface';
 import { combineLatest, Subscription } from 'rxjs';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
-import { TransactionReceipt } from '@sharedModels/transaction-receipt';
+import { TransactionReceipt } from '@sharedModels/ui/transactions/transaction-receipt';
 import { Component, Input, OnDestroy, OnChanges } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';

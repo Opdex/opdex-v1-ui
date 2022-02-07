@@ -4,7 +4,7 @@ import { TokensService } from '@sharedServices/platform/tokens.service';
 import { Icons } from 'src/app/enums/icons';
 import { ICreateLiquidityPoolEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/markets/create-liquidity-pool-event.interface';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
-import { TransactionReceipt } from '@sharedModels/transaction-receipt';
+import { TransactionReceipt } from '@sharedModels/ui/transactions/transaction-receipt';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Subscription } from 'rxjs';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';

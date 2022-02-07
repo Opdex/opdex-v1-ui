@@ -3,7 +3,6 @@ import { Icons } from "../enums/icons";
 
 export class PoolStatCardsLookup {
   public static getStatCards(pool: LiquidityPool) {
-    console.log(pool?.miningPool)
     return [
       {
         title: 'Liquidity',

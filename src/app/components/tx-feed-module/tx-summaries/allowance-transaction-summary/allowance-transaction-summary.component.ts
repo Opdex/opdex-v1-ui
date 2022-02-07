@@ -3,7 +3,7 @@ import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { IApprovalEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/tokens/approve-event.interface';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
-import { TransactionReceipt } from '@sharedModels/transaction-receipt';
+import { TransactionReceipt } from '@sharedModels/ui/transactions/transaction-receipt';
 import { Subscription } from 'rxjs';
 import { Icons } from 'src/app/enums/icons';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';

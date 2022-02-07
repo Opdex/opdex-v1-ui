@@ -1,9 +1,9 @@
-import { ITransactionError } from './platform-api/responses/transactions/transaction-quote.interface';
+import { ITransactionError } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
-import { Block } from "./block";
-import { IBlock } from "./platform-api/responses/blocks/block.interface";
-import { ITransactionEvent } from "./platform-api/responses/transactions/transaction-events/transaction-event.interface";
-import { ITransactionReceipt } from "./platform-api/responses/transactions/transaction.interface";
+import { Block } from "../blocks/block";
+import { IBlock } from "@sharedModels/platform-api/responses/blocks/block.interface";
+import { ITransactionEvent } from "@sharedModels/platform-api/responses/transactions/transaction-events/transaction-event.interface";
+import { ITransactionReceipt } from "@sharedModels/platform-api/responses/transactions/transaction.interface";
 import { ITransactionType, TransactionTypes } from '@sharedLookups/transaction-types.lookup';
 
 export class TransactionReceipt {

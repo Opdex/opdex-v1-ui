@@ -13,7 +13,7 @@ import { IVaultProposalPledgeEvent } from '@sharedModels/platform-api/responses/
 import { IVaultProposalVoteEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vaults/vault-proposal-vote-event.interface';
 import { IVaultProposalWithdrawPledgeEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vaults/vault-proposal-withdraw-pledge-event.interface';
 import { IVaultProposalWithdrawVoteEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vaults/vault-proposal-withdraw-vote-event.interface';
-import { TransactionReceipt } from '@sharedModels/transaction-receipt';
+import { TransactionReceipt } from '@sharedModels/ui/transactions/transaction-receipt';
 import { Observable, of, Subscription } from 'rxjs';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { IVaultProposalBaseEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/vaults/vault-proposal-base-event.interface';

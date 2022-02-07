@@ -22,10 +22,9 @@ export class MiningCardComponent implements OnChanges {
   ngOnChanges() {
     if (!!this.pool.miningPool === false) return;
 
-    const tokensMining =this.pool.miningPool.tokensMining;
     const price = new FixedDecimal(this.pool.tokens.lp.summary.priceUsd.toString(), 8);
 
-    this.miningUsd = price.multiply(tokensMining);
+    this.miningUsd = price.multiply(this.pool.miningPool.tokensMining);
   }
 
   transact(childView: string) {

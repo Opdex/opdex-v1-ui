@@ -4,7 +4,7 @@ import { IStartMiningEvent } from '@sharedModels/platform-api/responses/transact
 import { ICollectMiningRewardsEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/mining-pools/collect-mining-rewards-event.interface';
 import { MiningPoolsService } from '@sharedServices/platform/mining-pools.service';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
-import { TransactionReceipt } from '@sharedModels/transaction-receipt';
+import { TransactionReceipt } from '@sharedModels/ui/transactions/transaction-receipt';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Subscription } from 'rxjs';

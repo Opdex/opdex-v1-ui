@@ -31,16 +31,16 @@
       <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
         <opdex-liquidity-pool-token-card
           [token]="pool?.tokens?.src"
-          [reserves]="pool?.summary?.reserves?.src?.formattedValue"
-          [swapRate]="pool?.summary?.cost?.crsPerSrc?.formattedValue"
+          [reserves]="pool?.summary?.reserves?.src"
+          [swapRate]="pool?.summary?.cost?.crsPerSrc"
           [swapToken]="pool?.tokens?.crs"></opdex-liquidity-pool-token-card>
       </div>
 
       <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
         <opdex-liquidity-pool-token-card
           [token]="pool?.tokens?.crs"
-          [reserves]="pool?.summary?.reserves?.crs?.formattedValue"
-          [swapRate]="pool?.summary?.cost?.srcPerCrs?.formattedValue"
+          [reserves]="pool?.summary?.reserves?.crs"
+          [swapRate]="pool?.summary?.cost?.srcPerCrs"
           [swapToken]="pool?.tokens?.src"></opdex-liquidity-pool-token-card>
       </div>
     </div>
