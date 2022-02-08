@@ -1,15 +1,16 @@
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { IStopMiningEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/mining-pools/stop-mining-event.interface';
 import { IStartMiningEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/mining-pools/start-mining-event.interface';
 import { ICollectMiningRewardsEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/mining-pools/collect-mining-rewards-event.interface';
 import { MiningPoolsService } from '@sharedServices/platform/mining-pools.service';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
-import { ILiquidityPoolResponse, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
-import { TransactionReceipt } from '@sharedModels/transaction-receipt';
+import { TransactionReceipt } from '@sharedModels/ui/transactions/transaction-receipt';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Subscription } from 'rxjs';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { switchMap, take } from 'rxjs/operators';
+import { IMiningPool } from '@sharedModels/platform-api/responses/mining-pools/mining-pool.interface';
 
 @Component({
   selector: 'opdex-mine-transaction-summary',
@@ -22,7 +23,7 @@ export class MineTransactionSummaryComponent implements OnChanges, OnDestroy {
   isAddition: boolean;
   lptAmount: FixedDecimal;
   collectAmount: FixedDecimal;
-  pool: ILiquidityPoolResponse;
+  pool: LiquidityPool;
   subscription = new Subscription();
   error: string;
   eventTypes = [
@@ -56,11 +57,11 @@ export class MineTransactionSummaryComponent implements OnChanges, OnDestroy {
         .pipe(
           switchMap((miningPool: IMiningPool) => this._liquidityPoolService.getLiquidityPool(miningPool.liquidityPool)),
           take(1))
-        .subscribe((liquidityPool: ILiquidityPoolResponse) => {
+        .subscribe((liquidityPool: LiquidityPool) => {
           this.pool = liquidityPool;
 
           const collectAmount = collectEvent === undefined ? '0' : collectEvent.amount;
-          this.collectAmount = new FixedDecimal(collectAmount, liquidityPool.summary.staking?.token.decimals);
+          this.collectAmount = new FixedDecimal(collectAmount, liquidityPool.tokens.staking?.decimals);
 
           let lptAmount = FixedDecimal.Zero(liquidityPool.tokens.lp.decimals);
 

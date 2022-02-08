@@ -1,5 +1,4 @@
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
@@ -11,6 +10,7 @@ import { UserContextService } from '@sharedServices/utility/user-context.service
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { UserContext } from '@sharedModels/user-context';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 
 @Component({
   selector: 'opdex-tx-sidebar',
@@ -30,7 +30,7 @@ export class TxSidebarComponent implements OnChanges {
   context: UserContext;
   icons = Icons;
   iconSizes = IconSizes;
-  pool: ILiquidityPoolResponse;
+  pool: LiquidityPool;
 
   constructor(
     private _breakpointObserver: BreakpointObserver,
@@ -90,7 +90,7 @@ export class TxSidebarComponent implements OnChanges {
     this._sidenav.closeSidenav();
   }
 
-  handlePoolSelection($event: ILiquidityPoolResponse) {
+  handlePoolSelection($event: LiquidityPool) {
     this.pool = $event;
     this.message.data = { pool: this.pool };
   }

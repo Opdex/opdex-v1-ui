@@ -17,6 +17,7 @@ export enum TransactionEventTypes {
   StartStakingEvent = 'StartStakingEvent',
   StopStakingEvent = 'StopStakingEvent',
   CollectStakingRewardsEvent = 'CollectStakingRewardsEvent',
+  ReservesChangeEvent = 'ReservesChangeEvent',
 
   // Mining pool logs
   StartMiningEvent = 'StartMiningEvent',
@@ -28,6 +29,7 @@ export enum TransactionEventTypes {
   ApprovalEvent = 'ApprovalEvent',
   TransferEvent = 'TransferEvent',
   DistributionEvent = 'DistributionEvent',
+
 
   // Mining governance logs
   RewardMiningPoolEvent = 'RewardMiningPoolEvent',
@@ -43,6 +45,10 @@ export enum TransactionEventTypes {
   VaultProposalWithdrawPledgeEvent = 'VaultProposalWithdrawPledgeEvent',
   VaultProposalVoteEvent = 'VaultProposalVoteEvent',
   VaultProposalWithdrawVoteEvent = 'VaultProposalWithdrawVoteEvent',
+
+  // Interflux
+  SetInterfluxCustodianEvent = 'SetInterfluxCustodianEvent',
+  SupplyChangeEvent = 'SupplyChangeEvent'
 }
 
 export function txEventConverter(value: string): TransactionEventTypes {

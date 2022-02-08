@@ -1,8 +1,8 @@
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { Component, Input, OnChanges } from '@angular/core';
 import { TransactionView } from '@sharedModels/transaction-view';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 
@@ -12,7 +12,7 @@ import { IconSizes } from 'src/app/enums/icon-sizes';
   styleUrls: ['./mining-card.component.scss']
 })
 export class MiningCardComponent implements OnChanges {
-  @Input() pool: ILiquidityPoolResponse;
+  @Input() pool: LiquidityPool;
   miningUsd: FixedDecimal;
   icons = Icons;
   iconSizes = IconSizes;
@@ -22,10 +22,9 @@ export class MiningCardComponent implements OnChanges {
   ngOnChanges() {
     if (!!this.pool.miningPool === false) return;
 
-    const tokensMining = new FixedDecimal(this.pool.miningPool.tokensMining, this.pool.tokens.lp.decimals);
     const price = new FixedDecimal(this.pool.tokens.lp.summary.priceUsd.toString(), 8);
 
-    this.miningUsd = price.multiply(tokensMining);
+    this.miningUsd = price.multiply(this.pool.miningPool.tokensMining);
   }
 
   transact(childView: string) {

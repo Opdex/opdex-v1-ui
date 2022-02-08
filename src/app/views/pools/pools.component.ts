@@ -1,3 +1,4 @@
+import { LiquidityPools } from '@sharedModels/ui/liquidity-pools/liquidity-pools';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
@@ -8,13 +9,14 @@ import { map, switchMap } from 'rxjs/operators';
 import { combineLatest, Subscription } from 'rxjs';
 import { Icons } from 'src/app/enums/icons';
 import { LiquidityPoolsFilter, LpOrderBy, MiningStatus } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
-import { ILiquidityPoolsResponse, ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { UserContext } from '@sharedModels/user-context';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 
 interface IPoolsView {
-  topVolume: ILiquidityPoolsResponse,
-  mining: ILiquidityPoolsResponse
+  topVolume: LiquidityPools,
+  mining: LiquidityPools
 }
+
 @Component({
   selector: 'opdex-pools',
   templateUrl: './pools.component.html',
@@ -37,10 +39,7 @@ export class PoolsComponent implements OnInit, OnDestroy {
 
     // Initialize dummy results for skeleton placeholders
     this.pools = {
-      topVolume: {
-        results: [null, null, null, null],
-        paging: null
-      },
+      topVolume: null,
       mining: null
     }
 
@@ -58,7 +57,7 @@ export class PoolsComponent implements OnInit, OnDestroy {
         return combineLatest([
           this._liquidityPoolsService.getLiquidityPools(volumeFilter),
           this._liquidityPoolsService.getLiquidityPools(miningFilter)
-        ]).pipe(map((summaries: ILiquidityPoolsResponse[]) => {
+        ]).pipe(map((summaries: LiquidityPools[]) => {
           this.pools = {
             topVolume: summaries[0],
             mining: summaries[1]
@@ -75,9 +74,9 @@ export class PoolsComponent implements OnInit, OnDestroy {
     this._sidebar.openSidenav(TransactionView.createPool);
   }
 
-  poolsTrackBy(index: number, pool: ILiquidityPoolResponse) {
-    if (pool === null || pool === undefined) return index;
-    return `${index}-${pool.address}-${pool.summary.cost.crsPerSrc}-${pool.miningPool?.tokensMining}-${pool.summary.staking?.weight}`;
+  poolsTrackBy(index: number, pool: LiquidityPool): string {
+    if (!!pool === false) return index.toString();;
+    return `${index}-${pool.trackBy}`;
   }
 
   ngOnDestroy() {

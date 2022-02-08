@@ -1,17 +1,17 @@
 import { IApprovalEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/tokens/approve-event.interface';
-import { IToken } from './platform-api/responses/tokens/token.interface';
 import { IAddressAllowanceResponse } from './platform-api/responses/wallets/address-allowance.interface';
 import { FixedDecimal } from './types/fixed-decimal';
+import { Token } from '@sharedModels/ui/tokens/token';
 
 export class AllowanceValidation {
   owner: string;
   spender: string;
-  token: IToken;
+  token: Token;
   allowance: FixedDecimal;
   requestToSpend: FixedDecimal;
   isApproved: boolean;
 
-  constructor(allowanceResponse: IAddressAllowanceResponse, requestToSpend: string, token: IToken) {
+  constructor(allowanceResponse: IAddressAllowanceResponse, requestToSpend: string, token: Token) {
     this.owner = allowanceResponse.owner;
     this.spender = allowanceResponse.spender;
     this.allowance = new FixedDecimal(allowanceResponse.allowance, token.decimals);

@@ -1,6 +1,6 @@
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
-import { TransactionReceipt } from '@sharedModels/transaction-receipt';
+import { TransactionReceipt } from '@sharedModels/ui/transactions/transaction-receipt';
 import { Component, Input } from '@angular/core';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
 

@@ -1,9 +1,11 @@
+import { Token } from '@sharedModels/ui/tokens/token';
+import { MarketToken } from '@sharedModels/ui/tokens/market-token';
+import { LiquidityPools } from '@sharedModels/ui/liquidity-pools/liquidity-pools';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { MarketsService } from '@sharedServices/platform/markets.service';
 import { SwapQuoteService } from '@sharedServices/utility/swap-quote.service';
-import { ILiquidityPoolResponse, ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { LiquidityPoolsFilter, ILiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { ISwapAmountInQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-in-quote-response.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
@@ -19,7 +21,6 @@ import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-requi
 import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { TxBase } from '../tx-base.component';
-import { IMarketToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { SwapRequest } from '@sharedModels/platform-api/requests/tokens/swap-request';
 import { SwapAmountInQuoteRequest } from '@sharedModels/platform-api/requests/tokens/swap-amount-in-quote-request';
 import { SwapAmountOutQuoteRequest } from '@sharedModels/platform-api/requests/tokens/swap-amount-out-quote-request';
@@ -37,12 +38,12 @@ import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
   @Input() data: any;
   form: FormGroup;
-  tokenIn: IMarketToken;
+  tokenIn: MarketToken | Token;
   tokenInMax: FixedDecimal;
   tokenInFiatValue: FixedDecimal;
   tokenInPercentageSelected: string;
   changeTokenIn: boolean;
-  tokenOut: IMarketToken;
+  tokenOut: MarketToken | Token;
   tokenOutMin: FixedDecimal;
   tokenOutFiatValue: FixedDecimal;
   tokenOutPercentageSelected: string;
@@ -57,8 +58,8 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
   showMore: boolean;
   latestBlock: number;
   balanceError: boolean;
-  poolIn: ILiquidityPoolResponse;
-  poolOut: ILiquidityPoolResponse;
+  poolIn: LiquidityPool;
+  poolOut: LiquidityPool;
   marketFee: FixedDecimal;
   transactionTypes = AllowanceRequiredTransactionTypes;
   subscription = new Subscription();
@@ -137,12 +138,12 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
     this._marketsService.getMarket()
       .pipe(take(1))
       .subscribe(market => {
-        if (!this.tokenIn) this.tokenIn = market.crsToken as IMarketToken;
+        if (!this.tokenIn) this.tokenIn = market.tokens.crs as MarketToken;
         this.marketFee = new FixedDecimal((market.transactionFeePercent * .01).toFixed(3), 3);
       });
   }
 
-  selectToken(tokenField: string, token: IToken): void {
+  selectToken(tokenField: string, token: Token): void {
     const isTokenInField = tokenField === 'tokenIn';
 
     if (isTokenInField) {
@@ -154,8 +155,8 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
     }
 
     if (!!token) {
-      if (isTokenInField) this.tokenIn = token as IMarketToken;
-      else this.tokenOut = token as IMarketToken;
+      if (isTokenInField) this.tokenIn = token as MarketToken;
+      else this.tokenOut = token as MarketToken;
 
       this.allowance = null;
 
@@ -379,7 +380,7 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
       .pipe(tap(result => this.balanceError = !result));
   }
 
-  private refreshTokens(): Observable<ILiquidityPoolsResponse> {
+  private refreshTokens(): Observable<LiquidityPools> {
     if (!this.tokenIn || !this.tokenOut) return of(null);
 
     let tokens = [];
@@ -395,11 +396,11 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
 
     return this._liquidityPoolsService.getLiquidityPools(request)
       .pipe(
-        tap((pools: ILiquidityPoolsResponse) => {
+        tap((pools: LiquidityPools) => {
           this.poolIn = pools.results.find(pool => pool.tokens.crs.address === this.tokenIn.address || pool.tokens.src.address === this.tokenIn.address);
           this.poolOut = pools.results.find(pool => pool.tokens.crs.address === this.tokenOut.address || pool.tokens.src.address === this.tokenOut.address);
-          this.tokenIn = (this.tokenIn.address === 'CRS' ? this.poolIn.tokens.crs : this.poolIn.tokens.src) as IMarketToken;
-          this.tokenOut = (this.tokenOut.address === 'CRS' ? this.poolOut.tokens.crs : this.poolOut.tokens.src) as IMarketToken;
+          this.tokenIn = (this.tokenIn.address === 'CRS' ? this.poolIn.tokens.crs : this.poolIn.tokens.src) as MarketToken;
+          this.tokenOut = (this.tokenOut.address === 'CRS' ? this.poolOut.tokens.crs : this.poolOut.tokens.src) as MarketToken;
         }));
   }
 

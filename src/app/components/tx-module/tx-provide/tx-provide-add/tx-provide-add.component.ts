@@ -1,3 +1,5 @@
+import { Token } from '@sharedModels/ui/tokens/token';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { OnDestroy } from '@angular/core';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { IndexService } from '@sharedServices/platform/index.service';
@@ -5,14 +7,12 @@ import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { Component, Input, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable, throwError } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, switchMap, tap, catchError, take, filter } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { Icons } from 'src/app/enums/icons';
 import { AllowanceRequiredTransactionTypes } from 'src/app/enums/allowance-required-transaction-types';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
@@ -31,7 +31,7 @@ import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
   animations: [CollapseAnimation]
 })
 export class TxProvideAddComponent extends TxBase implements OnDestroy {
-  @Input() pool: ILiquidityPoolResponse;
+  @Input() pool: LiquidityPool;
   icons = Icons;
   iconSizes = IconSizes;
   txHash: string;
@@ -66,10 +66,9 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
 
   get percentageOfSupply() {
     const { summary, tokens } = this.pool;
-    const crsReserves = new FixedDecimal(summary.reserves.crs, tokens.crs.decimals);
     const crsInput = new FixedDecimal(this.amountCrs.value, tokens.crs.decimals);
-
-    return crsInput.divide(crsReserves).multiply(FixedDecimal.OneHundred(0));
+    if (summary.reserves.crs.isZero) return FixedDecimal.OneHundred(8);
+    return crsInput.divide(summary.reserves.crs).multiply(FixedDecimal.OneHundred(0));
   }
 
   constructor(
@@ -161,9 +160,9 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
     this.reset();
   }
 
-  quote$(value: string, tokenIn: IToken): Observable<string> {
+  quote$(value: string, tokenIn: Token): Observable<string> {
     if (!tokenIn) throwError('Invalid token');
-    if (!value || !this.pool.summary.reserves?.crs || this.pool.summary.reserves.crs === '0.00000000') return of('');
+    if (!value || !this.pool.summary.reserves?.crs || this.pool.summary.reserves.crs.isZero) return of('');
 
     // Technically the input should be made invalid in this case using form validations, cannot end with decimal point
     if (value.endsWith('.')) value = `${value}00`;
@@ -269,7 +268,7 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
         map(_ => null));
   }
 
-  private validateBalance(token: IToken, amount: FixedDecimal): Observable<boolean> {
+  private validateBalance(token: Token, amount: FixedDecimal): Observable<boolean> {
     if (!this.context?.wallet || !this.pool) {
       return of(false);
     }

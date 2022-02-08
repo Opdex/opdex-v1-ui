@@ -1,5 +1,7 @@
-import { IToken, ITokenGroup } from "../tokens/token.interface";
+import { IMarketToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
+import { ITokenGroup } from "../tokens/token.interface";
 import { IPaging } from '../paging.interface';
+import { IMiningPool } from "../mining-pools/mining-pool.interface";
 
 export interface ILiquidityPoolsResponse extends IPaging<ILiquidityPoolResponse> { }
 
@@ -21,6 +23,7 @@ export interface ILiquidityPoolSummaryResponse {
   staking: IStakingSummaryResponse;
   volume: IVolumeSummaryResponse;
   cost: ICostSummaryResponse;
+  createdBlock: number;
   modifiedBlock: number;
 }
 
@@ -42,7 +45,6 @@ export interface IVolumeSummaryResponse {
 }
 
 export interface IStakingSummaryResponse {
-  token: IToken;
   weight: string;
   usd: number;
   dailyWeightChangePercent: number;
@@ -52,14 +54,4 @@ export interface IStakingSummaryResponse {
 export interface ICostSummaryResponse {
   crsPerSrc: string;
   srcPerCrs: string;
-}
-
-export interface IMiningPool {
-  address: string;
-  liquidityPool: string;
-  rewardPerBlock: string;
-  miningPeriodEndBlock: number;
-  rewardPerLpt: string;
-  tokensMining: string;
-  isActive: boolean;
 }

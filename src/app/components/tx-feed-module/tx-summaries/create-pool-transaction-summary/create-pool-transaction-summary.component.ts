@@ -1,13 +1,13 @@
+import { Token } from '@sharedModels/ui/tokens/token';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { Icons } from 'src/app/enums/icons';
 import { ICreateLiquidityPoolEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/markets/create-liquidity-pool-event.interface';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
-import { TransactionReceipt } from '@sharedModels/transaction-receipt';
+import { TransactionReceipt } from '@sharedModels/ui/transactions/transaction-receipt';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Subscription } from 'rxjs';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { switchMap, take, tap } from 'rxjs/operators';
 
 @Component({
@@ -19,9 +19,9 @@ export class CreatePoolTransactionSummaryComponent implements OnChanges, OnDestr
   @Input() transaction: TransactionReceipt;
 
   icons = Icons;
-  pool: ILiquidityPoolResponse;
-  crs: IToken;
-  src: IToken;
+  pool: LiquidityPool;
+  crs: Token;
+  src: Token;
   subscription = new Subscription();
   error: string;
   isQuote: boolean;
@@ -58,7 +58,7 @@ export class CreatePoolTransactionSummaryComponent implements OnChanges, OnDestr
         this._liquidityPoolService.getLiquidityPool(createEvents[0].liquidityPool)
           .pipe(take(1))
           .subscribe(
-            (pool: ILiquidityPoolResponse) => this.pool = pool,
+            (pool: LiquidityPool) => this.pool = pool,
             (error: string) => this.error = 'Oops, something is wrong.'));
     }
   }

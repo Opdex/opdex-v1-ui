@@ -1,7 +1,8 @@
 import { Component, Injector, Input } from '@angular/core';
-import { ILiquidityPoolResponse, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
+import { IMiningPool } from '@sharedModels/platform-api/responses/mining-pools/mining-pool.interface';
 import { IStopMiningEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/mining-pools/stop-mining-event.interface';
 import { ITransactionEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/transaction-event.interface';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { MiningPoolsService } from '@sharedServices/platform/mining-pools.service';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -15,7 +16,7 @@ import { TxEventBaseComponent } from '../../tx-event-base.component';
 export class StopMiningEventComponent extends TxEventBaseComponent {
   @Input() txEvent: ITransactionEvent;
   event: IStopMiningEvent;
-  pool$: Observable<ILiquidityPoolResponse>;
+  pool$: Observable<LiquidityPool>;
 
   constructor(protected injector: Injector, private _miningPoolService: MiningPoolsService) {
     super(injector);

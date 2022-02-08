@@ -1,8 +1,9 @@
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
+import { Token } from '@sharedModels/ui/tokens/token';
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { IconSizes } from 'src/app/enums/icon-sizes';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { Observable, Subscription } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TransactionView } from '@sharedModels/transaction-view';
@@ -13,8 +14,8 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Icons } from 'src/app/enums/icons';
 
 interface IPoolPreviewRecord {
-  token: IToken;
-  supply: string;
+  token: Token;
+  supply: FixedDecimal;
   percentageChange: number;
   price: number;
 }
@@ -25,18 +26,18 @@ interface IPoolPreviewRecord {
   styleUrls: ['./pool-preview.component.scss']
 })
 export class PoolPreviewComponent implements OnChanges, OnDestroy {
-  @Input() pool: ILiquidityPoolResponse;
+  @Input() pool: LiquidityPool;
   @Input() view: TransactionView;
   poolForm: FormGroup;
-  pools: ILiquidityPoolResponse[];
-  filteredPools$: Observable<ILiquidityPoolResponse[]>;
-  pools$: Observable<ILiquidityPoolResponse[]>;
+  pools: LiquidityPool[];
+  filteredPools$: Observable<LiquidityPool[]>;
+  pools$: Observable<LiquidityPool[]>;
   iconSizes = IconSizes;
   icons = Icons;
   subscription = new Subscription();
   poolPreviewRecords: IPoolPreviewRecord[] = [];
 
-  @Output() onPoolChange: EventEmitter<ILiquidityPoolResponse> = new EventEmitter();
+  @Output() onPoolChange: EventEmitter<LiquidityPool> = new EventEmitter();
 
   get poolControl(): FormControl {
     return this.poolForm.get('poolControl') as FormControl;
@@ -137,17 +138,17 @@ export class PoolPreviewComponent implements OnChanges, OnDestroy {
     // Staking
     if (this.showStaking && !!this.pool.summary.staking) {
       this.poolPreviewRecords.push({
-        token: this.pool.summary.staking.token,
+        token: this.pool.tokens.staking,
         supply: this.pool.summary.staking.weight,
-        percentageChange: this.pool.summary.staking.token.summary.dailyPriceChangePercent,
-        price: this.pool.summary.staking.token.summary.priceUsd
+        percentageChange: this.pool.tokens.staking.summary.dailyPriceChangePercent,
+        price: this.pool.tokens.staking.summary.priceUsd
       });
     }
 
     // Mining
     if (this.showMining && !!this.pool.miningPool) {
       this.poolPreviewRecords.push({
-        token: this.pool.summary.staking.token,
+        token: this.pool.tokens.staking,
         supply: this.pool.miningPool.tokensMining,
         percentageChange: this.pool.tokens.lp.summary.dailyPriceChangePercent,
         price: this.pool.tokens.lp.summary.priceUsd
@@ -155,7 +156,7 @@ export class PoolPreviewComponent implements OnChanges, OnDestroy {
     }
   }
 
-  private _filterPools(value: string): ILiquidityPoolResponse[] {
+  private _filterPools(value: string): LiquidityPool[] {
     if (!value) [];
 
     const filterValue = value.toString().toLowerCase();

@@ -2,13 +2,15 @@ import { IOhlcNumber } from './../Ohlc.interface';
 
 export interface ITokenGroup {
   crs: IToken;
-  src: IMarketToken;
-  lp: IMarketToken;
+  src: IToken;
+  lp: IToken;
+  staking?: IToken;
 }
 
 export interface ITokenSummary {
   priceUsd: number;
   dailyPriceChangePercent: number;
+  createdBlock: number;
   modifiedBlock: number;
 }
 
@@ -37,6 +39,7 @@ export interface IWrappedToken {
   chain: string;
   address: string;
   trusted: boolean;
+  createdBlock: number;
   modifiedBlock: number;
 }
 export interface ITokenSnapshot {

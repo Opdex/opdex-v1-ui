@@ -1,3 +1,5 @@
+import { MarketToken } from '@sharedModels/ui/tokens/market-token';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
@@ -13,13 +15,11 @@ import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
-import { IMarketToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { of, Observable, forkJoin, Subscription } from 'rxjs';
 import { switchMap, catchError, take, map } from 'rxjs/operators';
 import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
 import { WalletBalancesFilter } from '@sharedModels/platform-api/requests/wallets/wallet-balances-filter';
 import { LiquidityPoolsFilter, ILiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 
 @Component({
   selector: 'opdex-wallet-balances-table',
@@ -72,7 +72,7 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
     });
   }
 
-  private tryGetLiquidityPool(tokenAddress: string): Observable<ILiquidityPoolResponse> {
+  private tryGetLiquidityPool(tokenAddress: string): Observable<LiquidityPool> {
     const filter = new LiquidityPoolsFilter({
       tokens: [tokenAddress],
       market: this._env.marketAddress,
@@ -112,19 +112,19 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
             return of(response);
           }
 
-          const balances$: Observable<IMarketToken>[] = [];
+          const balances$: Observable<MarketToken>[] = [];
 
           response.results.forEach(balance => {
-            const tokenDetails$: Observable<IMarketToken> =
+            const tokenDetails$: Observable<MarketToken> =
               this._tokensService.getMarketToken(balance.token)
                 .pipe(
                   // Fallback to tokens when necessary
                   // Todo: Backend really should return average token prices
-                  catchError(_ => this._tokensService.getToken(balance.token)),
+                  catchError(_ => this._tokensService.getToken(balance.token) as Observable<MarketToken>),
                   take(1),
                   map(token => {
-                    token.balance = balance;
-                    return token as IMarketToken;
+                    token.setBalance(balance);
+                    return token;
                   })
                 );
 

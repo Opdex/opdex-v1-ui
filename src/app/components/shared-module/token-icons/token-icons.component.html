@@ -1,4 +1,4 @@
-<div class="flex-row-center" [ngStyle]="{'width': width }">
+<div class="reverse" [ngStyle]="{'width': width }">
   <ng-container *ngFor="let token of tokens; trackBy: trackBy">
     <opdex-token-icon [token]="token" *ngIf="!!token"></opdex-token-icon>
   </ng-container>

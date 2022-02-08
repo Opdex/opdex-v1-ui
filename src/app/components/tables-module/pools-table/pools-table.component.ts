@@ -12,7 +12,8 @@ import { IndexService } from '@sharedServices/platform/index.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { switchMap, take, tap } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
-import { ILiquidityPoolResponse, ILiquidityPoolsResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
+import { LiquidityPools } from '@sharedModels/ui/liquidity-pools/liquidity-pools';
 
 @Component({
   selector: 'opdex-pools-table',
@@ -23,7 +24,7 @@ export class PoolsTableComponent implements OnChanges, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   @Input() filter: LiquidityPoolsFilter;
   displayedColumns: string[];
-  dataSource: MatTableDataSource<ILiquidityPoolResponse>;
+  dataSource: MatTableDataSource<LiquidityPool>;
   subscription: Subscription;
   paging: ICursor;
   icons = Icons;
@@ -35,7 +36,7 @@ export class PoolsTableComponent implements OnChanges, OnDestroy {
     private _liquidityPoolsService: LiquidityPoolsService,
     private _sidebar: SidenavService
   ) {
-    this.dataSource = new MatTableDataSource<ILiquidityPoolResponse>();
+    this.dataSource = new MatTableDataSource<LiquidityPool>();
     this.displayedColumns = ['name', 'liquidity', 'stakingWeight', 'volumeDaily', 'rewards', 'options'];
   }
 
@@ -54,7 +55,7 @@ export class PoolsTableComponent implements OnChanges, OnDestroy {
     }
   }
 
-  private getLiquidityPools$(cursor?: string): Observable<ILiquidityPoolsResponse> {
+  private getLiquidityPools$(cursor?: string): Observable<LiquidityPools> {
     this.filter.cursor = cursor;
 
     return this._liquidityPoolsService.getLiquidityPools(this.filter)
@@ -68,7 +69,7 @@ export class PoolsTableComponent implements OnChanges, OnDestroy {
     this._router.navigateByUrl(`/pools/${name}`);
   }
 
-  trackBy(index: number, pool: ILiquidityPoolResponse): string {
+  trackBy(index: number, pool: LiquidityPool): string {
     return `${index}-${pool.address}-${pool.summary.reserves.usd}-${pool.summary.staking?.weight || 0}-${pool.summary.volume.dailyUsd}`;
   }
 

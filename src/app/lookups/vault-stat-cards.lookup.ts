@@ -1,9 +1,9 @@
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { StatCardInfo } from "@sharedModels/stat-card-info";
 import { IVaultResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-response-model.interface';
+import { Token } from "@sharedModels/ui/tokens/token";
 
 export class VaultStatCardsLookup {
-  public static getStatCards(vault: IVaultResponseModel, token: IToken): StatCardInfo[] {
+  public static getStatCards(vault: IVaultResponseModel, token: Token): StatCardInfo[] {
     return  [
       {
         title: 'Locked',

@@ -1,9 +1,9 @@
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { CollectStakingRewardsRequest } from '@sharedModels/platform-api/requests/liquidity-pools/collect-staking-rewards-request';
 import { Component, Input, OnChanges, Injector, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { take, tap, switchMap } from 'rxjs/operators';
@@ -18,7 +18,7 @@ import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 })
 export class TxStakeCollectComponent extends TxBase implements OnChanges, OnDestroy {
   @Input() data;
-  pool: ILiquidityPoolResponse;
+  pool: LiquidityPool;
   form: FormGroup;
   balanceError: boolean;
   subscription = new Subscription();
@@ -70,11 +70,11 @@ export class TxStakeCollectComponent extends TxBase implements OnChanges, OnDest
   }
 
   private validateStakingBalance(): Observable<boolean> {
-    if (!!this.pool.summary.staking?.token === false || !this.context?.wallet) {
+    if (!!this.pool.tokens.staking === false || !this.context?.wallet) {
       return of(false);
     }
 
-    return this._validateStakingBalance$(this.pool, FixedDecimal.Zero(this.pool.summary.staking.token.decimals))
+    return this._validateStakingBalance$(this.pool, FixedDecimal.Zero(this.pool.tokens.staking.decimals))
       .pipe(tap(result => this.balanceError = !result))
   }
 

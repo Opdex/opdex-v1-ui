@@ -6,7 +6,6 @@ import { Component, Input, Injector, OnDestroy, OnChanges } from '@angular/core'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { switchMap, take, filter, debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { Observable, of, Subscription } from 'rxjs';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
@@ -19,6 +18,7 @@ import { IconSizes } from 'src/app/enums/icon-sizes';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
 import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 import { UserContext } from '@sharedModels/user-context';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 
 @Component({
   selector: 'opdex-tx-provide-remove',
@@ -27,7 +27,7 @@ import { UserContext } from '@sharedModels/user-context';
   animations: [CollapseAnimation]
 })
 export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDestroy {
-  @Input() pool: ILiquidityPoolResponse;
+  @Input() pool: LiquidityPool;
   icons = Icons;
   iconSizes = IconSizes;
   form: FormGroup;
@@ -58,10 +58,8 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
 
   get percentageOfSupply() {
     const { tokens } = this.pool;
-    const lpTotalSupply = new FixedDecimal(tokens.lp.totalSupply, tokens.lp.decimals);
     const lpInput = new FixedDecimal(this.liquidity.value, tokens.lp.decimals);
-
-    return lpInput.divide(lpTotalSupply).multiply(FixedDecimal.OneHundred(0));
+    return lpInput.divide(tokens.lp.totalSupply).multiply(FixedDecimal.OneHundred(0));
   }
 
   constructor(
@@ -149,13 +147,10 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
 
     const lptDecimals = this.pool.tokens.lp.decimals;
     const liquidityValue = new FixedDecimal(this.liquidity.value, lptDecimals);
-    const totalSupply = new FixedDecimal(this.pool.tokens.lp.totalSupply.toString(), lptDecimals);
-
-    const crsDecimals = this.pool.tokens.crs.decimals;
-    const srcDecimals = this.pool.tokens.src.decimals;
+    const totalSupply = this.pool.tokens.lp.totalSupply;
     const reservesUsd = new FixedDecimal(this.pool.summary.reserves.usd.toFixed(8), 8);
-    const reserveCrs = new FixedDecimal(this.pool.summary.reserves.crs, crsDecimals);
-    const reserveSrc = new FixedDecimal(this.pool.summary.reserves.src, srcDecimals);
+    const reserveCrs = this.pool.summary.reserves.crs;
+    const reserveSrc = this.pool.summary.reserves.src;
 
     const percentageLiquidity = liquidityValue.divide(totalSupply);
 

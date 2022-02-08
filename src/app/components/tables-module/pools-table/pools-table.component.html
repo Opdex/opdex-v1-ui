@@ -28,7 +28,7 @@
             <div class="no-wrap flex-row-center">
               <opdex-change-indicator [value]="element.summary.staking?.dailyWeightChangePercent" class="mr-2" [forceDisplay]="true"></opdex-change-indicator>
               <span class="d-flex align-items-baseline">
-                {{element.summary.staking?.weight | shortNumber}}
+                {{element.summary.staking?.weight?.formattedValue | shortNumber}}
                 <small class="ml-1">{{element.staking?.token.symbol}}</small>
               </span>
             </div>

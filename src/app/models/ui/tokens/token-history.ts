@@ -1,4 +1,4 @@
-import { ITokenHistoryResponse } from './platform-api/responses/tokens/token-history-response.interface';
+import { ITokenHistoryResponse } from '@sharedModels/platform-api/responses/tokens/token-history-response.interface';
 
 export class TokenHistory {
   line: any;

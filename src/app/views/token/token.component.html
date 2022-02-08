@@ -47,7 +47,7 @@
         <opdex-card [fullHeight]="true">
           <div class="flex-row-center-between">
             <p class="mb-0">Total Supply</p>
-            <p class="mb-0">{{token.totalSupply | shortNumber}}</p>
+            <p class="mb-0">{{token.totalSupply?.formattedValue | shortNumber}}</p>
           </div>
         </opdex-card>
       </div>
@@ -62,7 +62,7 @@
               <p class="mb-0 flex-row-center">
                 <mat-icon class="ml-1 mr-1" [ngClass]="iconSizes.tiny">{{icons.lock}}</mat-icon>
                 <span class="align-items-end">
-                  {{liquidityPool.summary.reserves.src | shortNumber}} <small>{{token.symbol}}</small>
+                  {{liquidityPool.summary.reserves.src.formattedValue | shortNumber}} <small>{{token.symbol}}</small>
                 </span>
               </p>
             </div>
@@ -75,7 +75,7 @@
               <mat-icon class="ml-1 mr-1" [ngClass]="iconSizes.tiny">{{icons.swap}}</mat-icon>
 
               <span class="align-items-end">
-                {{liquidityPool.summary.cost.crsPerSrc | shortNumber}} <small>{{liquidityPool.tokens.crs.symbol}}</small>
+                {{liquidityPool.summary.cost.crsPerSrc.formattedValue | shortNumber}} <small>{{liquidityPool.tokens.crs.symbol}}</small>
               </span>
             </div>
           </ng-container>

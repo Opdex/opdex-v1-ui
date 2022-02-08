@@ -7,9 +7,9 @@ import { UserContextService } from '@sharedServices/utility/user-context.service
 import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { Observable, of, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { UserContext } from '@sharedModels/user-context';
+import { Token } from '@sharedModels/ui/tokens/token';
 
 @Component({
   selector: 'opdex-percentage-amount-buttons',
@@ -18,7 +18,7 @@ import { UserContext } from '@sharedModels/user-context';
 })
 export class PercentageAmountButtonsComponent implements OnChanges {
   @Input() contract: string; // The Mining/Liquidity/Token where the balance would be checked
-  @Input() token: IToken;
+  @Input() token: Token;
   @Input() positionType: 'Balance' | 'Staking' | 'Mining' | 'ProposalVote' | 'ProposalPledge';
   @Input() selected: string;
   @Input() proposalId: number;

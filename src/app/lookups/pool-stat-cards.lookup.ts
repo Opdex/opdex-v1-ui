@@ -1,8 +1,8 @@
-import { ILiquidityPoolResponse } from "@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface";
+import { LiquidityPool } from "@sharedModels/ui/liquidity-pools/liquidity-pool";
 import { Icons } from "../enums/icons";
 
 export class PoolStatCardsLookup {
-  public static getStatCards(pool:ILiquidityPoolResponse){
+  public static getStatCards(pool: LiquidityPool) {
     return [
       {
         title: 'Liquidity',
@@ -19,8 +19,8 @@ export class PoolStatCardsLookup {
       },
       {
         title: 'Staking',
-        value: pool?.summary?.staking?.weight,
-        suffix: pool?.summary?.staking?.token?.symbol,
+        value: pool?.summary?.staking?.weight?.formattedValue,
+        suffix: pool?.tokens?.staking?.symbol,
         change: pool?.summary?.staking?.dailyWeightChangePercent || 0,
         show: pool?.summary?.staking !== null && pool?.summary?.staking !== undefined,
         icon: Icons.staking,
@@ -58,9 +58,9 @@ export class PoolStatCardsLookup {
       },
       {
         title: 'Mining',
-        value: pool?.miningPool?.tokensMining,
+        value: pool?.miningPool?.tokensMining?.formattedValue,
         suffix: pool?.tokens?.lp?.symbol,
-        show: (pool?.miningPool !== null && pool?.miningPool !== undefined) && (pool?.miningPool?.isActive || pool?.miningPool?.tokensMining !== '0.00000000'),
+        show: !!pool?.miningPool && (pool.miningPool.isActive || pool.miningPool.tokensMining?.isZero !== true),
         icon: Icons.mining,
         iconColor: 'mine',
         helpInfo: {

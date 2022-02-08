@@ -19,13 +19,13 @@
     <div class="flex-row-center-between mt-2">
       <div class="flex-row-center">
         <mat-icon color="primary" class="mr-2 tiny">{{icons.lock}}</mat-icon>
-        <h5 class="mb-0">{{reserves | shortNumber}}</h5>
+        <h5 class="mb-0">{{reserves?.formattedValue | shortNumber}}</h5>
       </div>
 
       <div class="flex-row-center">
         <mat-icon color="primary" class="mr-2 tiny">{{icons.swap}}</mat-icon>
         <h5 class="flex-row-center-end mb-0">
-          <span>{{swapRate | shortNumber }}</span>
+          <span>{{swapRate?.formattedValue | shortNumber }}</span>
           <small class="ml-1">{{swapToken.symbol}}</small>
         </h5>
       </div>

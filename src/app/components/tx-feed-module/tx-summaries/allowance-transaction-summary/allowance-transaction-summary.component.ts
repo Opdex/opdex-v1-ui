@@ -1,9 +1,9 @@
+import { Token } from '@sharedModels/ui/tokens/token';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { IApprovalEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/tokens/approve-event.interface';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
-import { TransactionReceipt } from '@sharedModels/transaction-receipt';
+import { TransactionReceipt } from '@sharedModels/ui/transactions/transaction-receipt';
 import { Subscription } from 'rxjs';
 import { Icons } from 'src/app/enums/icons';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
@@ -20,7 +20,7 @@ export class AllowanceTransactionSummaryComponent implements OnChanges, OnDestro
 
   icons = Icons;
   iconSizes = IconSizes;
-  token: IToken;
+  token: Token;
   amount: FixedDecimal;
   to: string;
   subscription = new Subscription();
@@ -46,7 +46,7 @@ export class AllowanceTransactionSummaryComponent implements OnChanges, OnDestro
       this._tokenService.getToken(approveEvents[0].contract)
         .pipe(take(1))
         .subscribe(
-          (token: IToken) => {
+          (token: Token) => {
             this.token = token;
             this.amount = new FixedDecimal(approveEvents[0].amount, this.token.decimals);
             this.to = approveEvents[0].spender;

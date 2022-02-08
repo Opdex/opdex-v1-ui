@@ -2,7 +2,7 @@ import { EnvironmentsService } from '@sharedServices/utility/environments.servic
 import { IndexService } from '@sharedServices/platform/index.service';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
 import { ITransactionReceipt } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
-import { TransactionReceipt } from '@sharedModels/transaction-receipt';
+import { TransactionReceipt } from '@sharedModels/ui/transactions/transaction-receipt';
 import { TransactionsService } from '@sharedServices/platform/transactions.service';
 import { filter, switchMap } from 'rxjs/operators';
 import { tap } from 'rxjs/operators';

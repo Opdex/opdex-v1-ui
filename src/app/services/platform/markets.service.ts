@@ -1,5 +1,5 @@
+import { Market } from '@sharedModels/ui/markets/market';
 import { HistoryFilter } from '@sharedModels/platform-api/requests/history-filter';
-import { IMarket } from '@sharedModels/platform-api/responses/markets/market.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable, Injector } from '@angular/core';
 import { CacheService } from '@sharedServices/utility/cache.service';
@@ -12,7 +12,7 @@ export class MarketsService extends CacheService {
     super(_injector);
   }
 
-  getMarket(): Observable<IMarket> {
+  getMarket(): Observable<Market> {
     return this.getItem('market', this._platformApi.getMarketOverview());
   }
 

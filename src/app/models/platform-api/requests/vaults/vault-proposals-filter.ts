@@ -60,7 +60,7 @@ export class VaultProposalsFilter implements IVaultProposalsFilter {
   }
 
   private addToQuery(query: string, key: string, value: string | number): string {
-    if (value === null || value === undefined) return query;
+    if (!!value === false) return query;
 
     const leading = query.length > 0 ? '&' : '?';
 
