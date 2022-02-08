@@ -70,11 +70,11 @@ export class TxStakeCollectComponent extends TxBase implements OnChanges, OnDest
   }
 
   private validateStakingBalance(): Observable<boolean> {
-    if (!!this.pool.summary.staking?.token === false || !this.context?.wallet) {
+    if (!!this.pool.tokens.staking === false || !this.context?.wallet) {
       return of(false);
     }
 
-    return this._validateStakingBalance$(this.pool, FixedDecimal.Zero(this.pool.summary.staking.token.decimals))
+    return this._validateStakingBalance$(this.pool, FixedDecimal.Zero(this.pool.tokens.staking.decimals))
       .pipe(tap(result => this.balanceError = !result))
   }
 

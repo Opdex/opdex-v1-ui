@@ -44,8 +44,8 @@ export class EnableMiningTransactionSummaryComponent implements OnChanges, OnDes
         .pipe(take(1))
         .subscribe((pools: LiquidityPool[]) => {
           this.pools = pools;
-          this.poolAmount = new FixedDecimal(rewardEvents[0].amount, pools[0].summary?.staking?.token?.decimals);
-          this.stakingToken = pools[0].summary.staking?.token;
+          this.poolAmount = new FixedDecimal(rewardEvents[0].amount, pools[0].tokens.staking?.decimals);
+          this.stakingToken = pools[0].tokens.staking;
         }));
   }
 

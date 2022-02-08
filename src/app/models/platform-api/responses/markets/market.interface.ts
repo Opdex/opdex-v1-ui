@@ -4,8 +4,7 @@ import { IToken } from "../tokens/token.interface";
 export interface IMarket {
   address: string;
   owner: string;
-  stakingToken: IToken;
-  crsToken: IToken;
+  tokens: IMarketTokenGroupResponse;
   authPoolCreators: boolean;
   authTraders: boolean;
   authProviders: boolean;
@@ -14,4 +13,9 @@ export interface IMarket {
   summary: IMarketSummaryResponse;
   createdBlock: number;
   modifiedBlock: number;
+}
+
+export interface IMarketTokenGroupResponse {
+  staking: IToken;
+  crs: IToken;
 }

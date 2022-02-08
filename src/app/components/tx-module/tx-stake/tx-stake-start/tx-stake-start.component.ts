@@ -41,9 +41,9 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
 
   get percentageOfSupply() {
     const oneHundred = FixedDecimal.OneHundred(8);
-    const { summary } = this.pool;
+    const { summary, tokens } = this.pool;
     if (summary.staking.weight.isZero) return oneHundred;
-    const inputWeight = new FixedDecimal(this.amount.value, summary.staking.token.decimals);
+    const inputWeight = new FixedDecimal(this.amount.value, tokens.staking.decimals);
     return inputWeight.divide(summary.staking.weight).multiply(oneHundred);
   }
 
@@ -87,7 +87,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
   }
 
   submit(): void {
-    const request = new StartStakingRequest(new FixedDecimal(this.amount.value, this.pool.summary.staking.token.decimals));
+    const request = new StartStakingRequest(new FixedDecimal(this.amount.value, this.pool.tokens.staking.decimals));
 
     this._platformApi
       .startStakingQuote(this.pool.address, request.payload)
@@ -108,19 +108,19 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
 
     const amountNeeded = new FixedDecimal(this.amount.value, this.pool.tokens.lp.decimals);
 
-    return this._validateBalance$(this.pool.summary.staking.token, amountNeeded)
+    return this._validateBalance$(this.pool.tokens.staking, amountNeeded)
       .pipe(tap(result => this.balanceError = !result));
   }
 
   private setFiatValue(amount: FixedDecimal): void {
-    const stakingTokenFiat = new FixedDecimal(this.pool.summary.staking?.token.summary.priceUsd.toString(), 8);
+    const stakingTokenFiat = new FixedDecimal(this.pool.tokens.staking?.summary?.priceUsd?.toString(), 8);
     this.fiatValue = stakingTokenFiat.multiply(amount);
   }
 
   private getAllowance$(amount?: string): Observable<AllowanceValidation> {
     amount = amount || this.amount.value;
     const spender = this.pool?.address;
-    const token = this.pool?.summary?.staking?.token;
+    const token = this.pool?.tokens?.staking;
 
     return this._validateAllowance$(this.context.wallet, spender, token, amount)
       .pipe(tap(allowance => this.allowance = allowance));

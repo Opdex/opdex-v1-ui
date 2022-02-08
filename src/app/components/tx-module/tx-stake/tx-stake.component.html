@@ -11,7 +11,7 @@
 
   <ng-container *ngIf="pool">
     <opdex-wallet-preview
-      [balanceTokens]="[pool.summary.staking?.token?.address]"
+      [balanceTokens]="[pool.tokens?.staking?.address]"
       [positionStaking]="[pool.address]"></opdex-wallet-preview>
 
     <opdex-card *ngIf="pool?.summary?.staking; else noStaking">

@@ -65,7 +65,7 @@ export abstract class TxBase {
 
     return this._walletsService.getStakingPosition(this.context.wallet, liquidityPool.address)
       .pipe(
-        map(position => this._isEnough(new FixedDecimal(position.amount, liquidityPool.summary.staking.token.decimals), amountToSpend)),
+        map(position => this._isEnough(new FixedDecimal(position.amount, liquidityPool.tokens.staking.decimals), amountToSpend)),
         catchError(_ => of(false)));
   }
 

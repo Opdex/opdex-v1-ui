@@ -38,9 +38,9 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
 
   get percentageOfSupply() {
     const oneHundred = FixedDecimal.OneHundred(8);
-    const { summary } = this.pool;
+    const { summary, tokens } = this.pool;
     if (summary.staking.weight.isZero) return oneHundred;
-    const outputWeight = new FixedDecimal(this.amount.value, summary.staking.token.decimals);
+    const outputWeight = new FixedDecimal(this.amount.value, tokens.staking?.decimals);
     return outputWeight.divide(summary.staking.weight).multiply(oneHundred);
   }
 
@@ -77,7 +77,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
   }
 
   submit(): void {
-    const request = new StopStakingRequest(new FixedDecimal(this.amount.value, this.pool.summary.staking.token.decimals), this.liquidate.value);
+    const request = new StopStakingRequest(new FixedDecimal(this.amount.value, this.pool.tokens.staking.decimals), this.liquidate.value);
 
     this._platformApi
       .stopStakingQuote(this.pool.address, request.payload)
@@ -91,16 +91,16 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
     this.amount.setValue(value.result, {emitEvent: true});
   }
   private setFiatValue(amount: FixedDecimal): void {
-    const stakingTokenFiat = new FixedDecimal(this.pool.summary.staking?.token.summary.priceUsd.toString(), 8);
+    const stakingTokenFiat = new FixedDecimal(this.pool.tokens.staking?.summary?.priceUsd?.toString(), 8);
     this.fiatValue = stakingTokenFiat.multiply(amount);
   }
 
   private validateStakingBalance(): Observable<boolean> {
-    if (!this.amount.value || !this.context?.wallet || !this.pool?.summary?.staking?.token) {
+    if (!this.amount.value || !this.context?.wallet || !this.pool?.tokens?.staking) {
       return of(false);
     }
 
-    const amountNeeded = new FixedDecimal(this.amount.value, this.pool.summary.staking.token.decimals);
+    const amountNeeded = new FixedDecimal(this.amount.value, this.pool.tokens?.staking?.decimals);
 
     return this._validateStakingBalance$(this.pool, amountNeeded)
       .pipe(tap(result => this.balanceError = !result));

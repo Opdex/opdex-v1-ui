@@ -1,3 +1,4 @@
+import { MarketTokenGroup } from './market-token-group';
 import { MarketSummary } from '@sharedModels/ui/markets/market-summary';
 import { Token } from '@sharedModels/ui/tokens/token';
 import { IMarket } from '@sharedModels/platform-api/responses/markets/market.interface';
@@ -5,8 +6,7 @@ import { IMarket } from '@sharedModels/platform-api/responses/markets/market.int
 export class Market {
   private _address: string;
   private _owner: string;
-  private _stakingToken: Token;
-  private _crsToken: Token;
+  private _tokens: MarketTokenGroup;
   private _authPoolCreators: boolean;
   private _authTraders: boolean;
   private _authProviders: boolean;
@@ -24,12 +24,8 @@ export class Market {
     return this._owner;
   }
 
-  public get stakingToken(): Token {
-    return this._stakingToken;
-  }
-
-  public get crsToken(): Token {
-    return this._crsToken;
+  public get tokens(): MarketTokenGroup {
+    return this._tokens;
   }
 
   public get authPoolCreators(): boolean {
@@ -67,14 +63,14 @@ export class Market {
   constructor(market: IMarket) {
     this._address = market.address;
     this._owner = market.owner;
-    this._stakingToken = new Token(market.stakingToken);
-    this._crsToken = new Token(market.crsToken);
+    this._tokens = new MarketTokenGroup(market.tokens);
     this._authPoolCreators = market.authPoolCreators;
     this._authTraders = market.authTraders;
     this._authProviders = market.authProviders;
     this._marketFeeEnabled = market.marketFeeEnabled;
     this._transactionFeePercent = market.transactionFeePercent;
     this._summary = new MarketSummary(market.summary);
-
+    this._createdBlock = market.createdBlock;
+    this._modifiedBlock = market.modifiedBlock;
   }
 }

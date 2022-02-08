@@ -2,8 +2,9 @@ import { IOhlcNumber } from './../Ohlc.interface';
 
 export interface ITokenGroup {
   crs: IToken;
-  src: IMarketToken;
-  lp: IMarketToken;
+  src: IToken;
+  lp: IToken;
+  staking?: IToken;
 }
 
 export interface ITokenSummary {

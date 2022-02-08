@@ -109,8 +109,8 @@ export class WalletPreviewComponent implements OnDestroy {
           // Governance token does not have staking, return null
           if (!liquidityPool.summary.staking) return null as AddressPosition;
 
-          const amount = new FixedDecimal(result.amount, liquidityPool.summary.staking?.token.decimals);
-          return new AddressPosition(walletAddress, liquidityPool.summary.staking?.token, 'Staking', amount);
+          const amount = new FixedDecimal(result.amount, liquidityPool.tokens.staking?.decimals);
+          return new AddressPosition(walletAddress, liquidityPool.tokens.staking, 'Staking', amount);
         }),
         take(1));
   }

@@ -114,7 +114,7 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
                 return {
                   name: pool.name,
                   poolTokens: [pool.tokens.crs, pool.tokens.src],
-                  stakingTokenSymbol: pool.summary.staking?.token.symbol,
+                  stakingTokenSymbol: pool.tokens.staking?.symbol,
                   liquidityPoolAddress: pool.address,
                   position: amount,
                   decimals: pool.tokens.lp.decimals,

@@ -21,7 +21,7 @@ export class MarketStatCardsLookup {
       {
         title: 'Staking',
         value: market?.summary?.staking?.stakingWeight?.formattedValue,
-        suffix: market?.stakingToken?.symbol,
+        suffix: market?.tokens?.staking?.symbol,
         change: market?.summary?.staking?.dailyStakingWeightChangePercent,
         show: true,
         icon: Icons.staking,

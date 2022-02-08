@@ -70,7 +70,7 @@ export class StakeTransactionSummaryComponent implements OnChanges, OnDestroy {
           this.pool = liquidityPool;
 
           const stakingAmount = startEvent?.amount || stopEvent?.amount || '0';
-          this.stakingAmount = new FixedDecimal(stakingAmount, liquidityPool.summary.staking?.token.decimals);
+          this.stakingAmount = new FixedDecimal(stakingAmount, liquidityPool.tokens.staking?.decimals);
 
           if (this.isCollection) {
             if (this.collectionLiquidatedRewards) {

@@ -108,7 +108,7 @@ export class MarketComponent implements OnInit, OnDestroy {
         this.market = market;
         this.statCards = MarketStatCardsLookup.getStatCards(this.market);
         this.chartOptions.map(o => {
-          if (o.category === 'Staking') o.suffix = this.market.stakingToken.symbol;
+          if (o.category === 'Staking') o.suffix = this.market.tokens.staking?.symbol;
           return 0;
         });
       }));

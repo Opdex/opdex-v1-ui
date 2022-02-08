@@ -138,17 +138,17 @@ export class PoolPreviewComponent implements OnChanges, OnDestroy {
     // Staking
     if (this.showStaking && !!this.pool.summary.staking) {
       this.poolPreviewRecords.push({
-        token: this.pool.summary.staking.token,
+        token: this.pool.tokens.staking,
         supply: this.pool.summary.staking.weight,
-        percentageChange: this.pool.summary.staking.token.summary.dailyPriceChangePercent,
-        price: this.pool.summary.staking.token.summary.priceUsd
+        percentageChange: this.pool.tokens.staking.summary.dailyPriceChangePercent,
+        price: this.pool.tokens.staking.summary.priceUsd
       });
     }
 
     // Mining
     if (this.showMining && !!this.pool.miningPool) {
       this.poolPreviewRecords.push({
-        token: this.pool.summary.staking.token,
+        token: this.pool.tokens.staking,
         supply: this.pool.miningPool.tokensMining,
         percentageChange: this.pool.tokens.lp.summary.dailyPriceChangePercent,
         price: this.pool.tokens.lp.summary.priceUsd

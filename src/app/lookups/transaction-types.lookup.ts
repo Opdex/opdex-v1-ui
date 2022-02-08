@@ -138,7 +138,8 @@ export const TransactionTypes: ITransactionType[] = [
       TransactionEventTypes.SetPendingDeployerOwnershipEvent,
       TransactionEventTypes.SetPendingMarketOwnershipEvent,
       TransactionEventTypes.ClaimPendingDeployerOwnershipEvent,
-      TransactionEventTypes.ClaimPendingMarketOwnershipEvent
+      TransactionEventTypes.ClaimPendingMarketOwnershipEvent,
+      TransactionEventTypes.SetInterfluxCustodianEvent
     ]
   },
   {

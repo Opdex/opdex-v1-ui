@@ -45,7 +45,6 @@ export interface IVolumeSummaryResponse {
 }
 
 export interface IStakingSummaryResponse {
-  token: IMarketToken;
   weight: string;
   usd: number;
   dailyWeightChangePercent: number;
