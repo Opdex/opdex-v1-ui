@@ -19,48 +19,39 @@ export class TransactionReceipt {
   private _transactionType: ITransactionType;
   private _transactionSummary: string;
 
-  public get hash(): string
-  {
+  public get hash(): string {
     return this._hash;
   }
 
-  public get from(): string
-  {
+  public get from(): string {
     return this._from;
   }
 
-  public get to(): string
-  {
+  public get to(): string {
     return this._to;
   }
 
-  public get newContractAddress(): string | null
-  {
+  public get newContractAddress(): string | null {
     return this._newContractAddress;
   }
 
-  public get gasUsed(): number
-  {
+  public get gasUsed(): number {
     return this._gasUsed;
   }
 
-  public get block(): IBlock
-  {
+  public get block(): IBlock {
     return this._block;
   }
 
-  public get success(): boolean
-  {
+  public get success(): boolean {
     return this._success;
   }
 
-  public get error(): ITransactionError
-  {
+  public get error(): ITransactionError {
     return this._error;
   }
 
-  public get events(): ITransactionEvent[]
-  {
+  public get events(): ITransactionEvent[] {
     return this._events;
   }
 

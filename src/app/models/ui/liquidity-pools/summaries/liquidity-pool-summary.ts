@@ -48,8 +48,7 @@ export class LiquidityPoolSummary {
     this._staking = !!summary.staking ? new LiquidityPoolStakingSummary(summary.staking) : null;
     this._volume = new LiquidityPoolVolumeSummary(summary.volume);
     this._cost = new LiquidityPoolCostSummary(summary.cost);
-    // Todo: API Return
-    // this._createdBlock = summary.createdBlock;
+    this._createdBlock = summary.createdBlock;
     this._modifiedBlock = summary.modifiedBlock;
   }
 }

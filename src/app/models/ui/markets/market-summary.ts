@@ -8,7 +8,6 @@ export class MarketSummary {
   private _volumeUsd: number;
   private _staking: MarketStakingSummary;
   private _rewards: MarketRewardsSummary;
-  // Todo: API return
   private _createdBlock: number;
   private _modifiedBlock: number;
 
@@ -46,7 +45,7 @@ export class MarketSummary {
     this._volumeUsd = summary.volumeUsd;
     this._staking = new MarketStakingSummary(summary.staking);
     this._rewards = new MarketRewardsSummary(summary.rewards);
-    // this._createdBlock = summary.createdBlock;
+    this._createdBlock = summary.createdBlock;
     this._modifiedBlock = summary.modifiedBlock;
   }
 }

@@ -3,7 +3,8 @@ export interface IMarketSummaryResponse {
   dailyLiquidityUsdChangePercent: number;
   volumeUsd: number;
   staking: IMarketStakingResponse;
-  rewards: any;
+  rewards: IMarketRewardsResponse;
+  createdBlock: number;
   modifiedBlock: number;
 }
 

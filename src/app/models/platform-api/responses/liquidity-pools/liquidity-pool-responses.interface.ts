@@ -1,5 +1,5 @@
 import { IMarketToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
-import { IToken, ITokenGroup } from "../tokens/token.interface";
+import { ITokenGroup } from "../tokens/token.interface";
 import { IPaging } from '../paging.interface';
 import { IMiningPool } from "../mining-pools/mining-pool.interface";
 
@@ -23,6 +23,7 @@ export interface ILiquidityPoolSummaryResponse {
   staking: IStakingSummaryResponse;
   volume: IVolumeSummaryResponse;
   cost: ICostSummaryResponse;
+  createdBlock: number;
   modifiedBlock: number;
 }
 
