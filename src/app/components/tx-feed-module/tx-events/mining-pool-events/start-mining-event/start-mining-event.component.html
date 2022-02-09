@@ -1,5 +1,5 @@
 <p class="mb-0" *ngIf="pool$ | async as pool; else loading">
-  Started mining <a class="no-decoration" routerLink="/tokens/{{pool.summary.staking?.token.address}}">{{pool.tokens.staking?.symbol}}</a> with
+  Started mining <a class="no-decoration" routerLink="/tokens/{{pool.tokens.staking?.address}}">{{pool.tokens.staking?.symbol}}</a> with
   <strong>{{event.amount | shortNumber}} </strong> <a class="no-decoration" routerLink="/tokens/{{pool.tokens.lp.address}}">{{pool.tokens.lp.symbol}}</a> in
   <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.name}}</a>.
 </p>

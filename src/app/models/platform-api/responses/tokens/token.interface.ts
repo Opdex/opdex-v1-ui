@@ -38,6 +38,7 @@ export interface IWrappedToken {
   custodian: string;
   chain: string;
   address: string;
+  validated: boolean;
   trusted: boolean;
   createdBlock: number;
   modifiedBlock: number;

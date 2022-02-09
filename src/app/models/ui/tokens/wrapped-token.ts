@@ -4,6 +4,7 @@ export class WrappedToken {
   private _custodian: string;
   private _chain: string;
   private _address: string;
+  private _validated: boolean;
   private _trusted: boolean;
   private _createdBlock: number;
   private _modifiedBlock: number;
@@ -18,6 +19,10 @@ export class WrappedToken {
 
   public get address(): string {
     return this._address;
+  }
+
+  public get validated(): boolean {
+    return this._validated;
   }
 
   public get trusted(): boolean {
@@ -36,6 +41,7 @@ export class WrappedToken {
     this._custodian = wrapped.custodian;
     this._chain = wrapped.chain;
     this._address = wrapped.address;
+    this._validated = wrapped.validated;
     this._trusted = wrapped.trusted;
     this._createdBlock = wrapped.createdBlock;
     this._modifiedBlock = wrapped.modifiedBlock;
