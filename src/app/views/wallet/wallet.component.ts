@@ -2,7 +2,6 @@ import { Token } from '@sharedModels/ui/tokens/token';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { TokenAttributes } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
-import { ThemeService } from '@sharedServices/utility/theme.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { IAddressBalance } from '@sharedModels/platform-api/responses/wallets/address-balance.interface';
 import { Router } from '@angular/router';
@@ -55,7 +54,6 @@ export class WalletComponent implements OnInit {
     private _tokensService: TokensService,
     private _walletsService: WalletsService,
     private _router: Router,
-    private _theme: ThemeService,
     private _sidebar: SidenavService,
     private _env: EnvironmentsService
   ) {
@@ -118,10 +116,10 @@ export class WalletComponent implements OnInit {
         tap((token: Token) => {
           const costFixed = new FixedDecimal(token.summary.priceUsd.toString(), 8);
           const crsBalanceFixed = new FixedDecimal(this.crsBalance.balance, 8);
-
           this.crsBalanceValue = crsBalanceFixed.multiply(costFixed);
         }),
-        take(1)).subscribe();
+        take(1))
+      .subscribe();
   }
 
   handleDeadlineChange(threshold: number): void {
@@ -132,12 +130,6 @@ export class WalletComponent implements OnInit {
   handleToleranceChange(threshold: number): void {
     this.wallet.preferences.toleranceThreshold = threshold;
     this._context.setUserPreferences(this.wallet.wallet, this.wallet.preferences);
-  }
-
-  toggleTheme(theme: string): void {
-    this.wallet.preferences.theme = theme;
-    this._context.setUserPreferences(this.wallet.wallet, this.wallet.preferences);
-    this._theme.setTheme(theme);
   }
 
   togglePreferences(): void {

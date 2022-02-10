@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, Output, OnChanges, OnDestroy } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, max, min, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-tolerance',
@@ -13,12 +14,8 @@ export class ToleranceComponent implements OnChanges, OnDestroy {
   @Output() onToleranceChange: EventEmitter<number> = new EventEmitter();
   customTolerance: FormControl;
   subscription = new Subscription();
-  toleranceLevels = [
-    { id: 1, tolerance: 0.1 },
-    { id: 2, tolerance: 0.5 },
-    { id: 3, tolerance: 1.0 }
-  ];
-  selectedToleranceLevel: number = this.toleranceLevels[0].id;
+  toleranceOptions: number[] = [ .1, .5, 1, 1.5, 2, 2.5, 3, 5, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 99];
+  filteredTolerances: number[] = [];
 
   constructor() {
     // validates min and max and regex - only 2 decimal places.
@@ -30,27 +27,32 @@ export class ToleranceComponent implements OnChanges, OnDestroy {
         .pipe(
           debounceTime(400),
           distinctUntilChanged(),
-          filter(value => value >= .01 && value <= 99.99 && this.customTolerance.valid),
-          tap(value => this.outputTolerance(value)))
+          tap((tolerance: number) => this._filterTolerances(tolerance)),
+          filter(tolerance => tolerance >= .01 && tolerance <= 99.99 && this.customTolerance.valid),
+          tap(tolerance => this.onToleranceChange.emit(tolerance)))
         .subscribe());
   }
 
   ngOnChanges() {
-    if (this.value) {
-      const level = this.toleranceLevels.find(l => l.tolerance === this.value);
-      if (level !== undefined) {
-        this.outputTolerance(this.value);
-      } else {
-        this.customTolerance.setValue(this.value);
-      }
+    if (this.value && this.value !== this.customTolerance.value) {
+      this.customTolerance.setValue(this.value);
+      this._setDefaultToleranceOptions();
     }
   }
 
-  outputTolerance(tolerance: number) {
-    const level = this.toleranceLevels.find(l => l.tolerance === tolerance);
-    this.selectedToleranceLevel = level === undefined ? 4 : level.id;
+  selectTolerance($event: MatAutocompleteSelectedEvent) {
+    this._setDefaultToleranceOptions();
+  }
 
-    this.onToleranceChange.emit(tolerance);
+  private _setDefaultToleranceOptions(): void {
+    this.filteredTolerances = [...this.toleranceOptions];
+  }
+
+  private _filterTolerances(filter: number): void {
+    if (!filter) return this._setDefaultToleranceOptions();
+
+    this.filteredTolerances = this.toleranceOptions
+      .filter(tolerance => tolerance.toString().includes(filter.toString()));
   }
 
   ngOnDestroy() {

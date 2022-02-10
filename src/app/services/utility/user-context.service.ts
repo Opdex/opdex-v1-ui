@@ -28,13 +28,17 @@ export class UserContextService {
 
     this._jwtService.setToken(token);
 
-    const data = this.getUserContext();
+    const updatedContext = this.getUserContext();
 
-    this.userContext$.next(data);
+    this.userContext$.next(updatedContext);
   }
 
   setUserPreferences(wallet: string, preferences: UserContextPreferences): void {
     this._storage.setLocalStorage(wallet, preferences, true);
+
+    const updatedContext = this.getUserContext();
+
+    this.userContext$.next(updatedContext)
   }
 
   getUserContext(): UserContext {
@@ -43,8 +47,9 @@ export class UserContextService {
     if (!data) return new UserContext();
 
     let preferences = new UserContextPreferences();
+
     if (data.wallet) {
-      preferences = this._storage.getLocalStorage(data?.wallet, true) || new UserContextPreferences();
+      preferences = this._storage.getLocalStorage(data?.wallet, true);
     }
 
     return new UserContext(data.wallet, preferences);

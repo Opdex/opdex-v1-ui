@@ -1,3 +1,4 @@
+import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Market } from '@sharedModels/ui/markets/market';
 import { MarketTokens } from '@sharedModels/ui/tokens/market-tokens';
 import { Tokens } from '@sharedModels/ui/tokens/tokens';
@@ -89,9 +90,10 @@ export class PlatformApiService extends RestApiService {
     protected _error: ErrorService,
     protected _jwt: JwtService,
     protected _router: Router,
+    protected _context: UserContextService,
     private _env: EnvironmentsService
   ) {
-    super(_http, _error, _jwt, _router);
+    super(_http, _error, _jwt, _context, _router);
     this.api = this._env.apiUrl;
     this.marketAddress = this._env.marketAddress;
   }

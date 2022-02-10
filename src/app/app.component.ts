@@ -164,7 +164,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     const tokenIsExpired = this._jwt.isTokenExpired();
 
     if (userIsLoggedIn && tokenIsExpired) {
-      this._jwt.removeToken();
+      this._context.setToken('');
     }
   }
 

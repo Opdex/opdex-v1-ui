@@ -1,3 +1,4 @@
+import { SharedModule } from '@sharedComponents/shared-module/shared.module';
 import { SharedPipesModule } from '@sharedPipes/shared-pipes.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -30,7 +31,8 @@ import { MobileNavComponent } from './mobile-nav/mobile-nav.component';
     MatTooltipModule,
     MatProgressSpinnerModule,
     MatMenuModule,
-    SharedPipesModule
+    SharedPipesModule,
+    SharedModule
   ],
   exports: [
     SideNavComponent,

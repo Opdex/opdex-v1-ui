@@ -42,7 +42,7 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
   srcOut: FixedDecimal;
   srcOutMin: FixedDecimal;
   deadlineBlock: number;
-  toleranceThreshold = 0.1;
+  toleranceThreshold = 5;
   deadlineThreshold = 10;
   allowanceTransaction$: Subscription;
   allowance: AllowanceValidation;

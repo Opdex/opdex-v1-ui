@@ -1,0 +1,39 @@
+@import 'src/scss/colors';
+
+.toggle {
+  position: relative;
+  width: 40px;
+  height: 24px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  .pipe {
+    width: 30px;
+    height: 10px;
+    background: #474747;
+    border-radius: 4px;
+  }
+
+  .toggle-option {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    border-radius: 50%;
+    transition: left .1s ease-in;
+    cursor: pointer;
+
+    &.dark-mode {
+      left: 16px;
+      background: $dark-primary;
+      border: 1px solid #f4f4f4;
+    }
+
+    &.light-mode {
+      background: white;
+      left: 0;
+      border: 1px solid #474747;
+    }
+  }
+}

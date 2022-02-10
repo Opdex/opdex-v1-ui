@@ -11,7 +11,7 @@ import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bott
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Subscription } from 'rxjs';
-import { TransactionQuoteRequest } from '@sharedModels/platform-api/requests/transactions/transaction-quote-request';
+import { TransactionQuoteRequest, ITransactionQuoteRequest } from '@sharedModels/platform-api/requests/transactions/transaction-quote-request';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
@@ -26,7 +26,7 @@ export class ReviewQuoteComponent implements OnDestroy {
   txHash: string;
   submitting = false;
   quote: ITransactionQuote;
-  quoteRequest: any;
+  quoteRequest: ITransactionQuoteRequest;
   subscription = new Subscription();
   quoteReceipt: TransactionReceipt;
   showMethodDetails = true;

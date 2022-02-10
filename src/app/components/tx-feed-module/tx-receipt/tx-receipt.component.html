@@ -26,12 +26,9 @@
     </div>
 
     <ng-template #invalid>
-      <div class="icon-container-offset flex-row-center" *ngIf="tx.success">
-        Unable to read transaction summary.
-      </div>
-
-      <div class="icon-container-offset flex-row-center" *ngIf="!tx.success">
-        {{tx.error.friendly}}
+      <div class="icon-container-offset flex-row-center" >
+        <span *ngIf="tx.success">Unable to read transaction summary.</span>
+        <span *ngIf="!tx.success">{{tx.error.friendly}}</span>
       </div>
     </ng-template>
 
@@ -43,7 +40,8 @@
             [value]="tx.hash"
             [icon]="icons.receipt"
             [size]="iconSizes.tiny"
-            color="primary" [stopPropagation]="true"></opdex-copy-button>
+            color="primary"
+            [stopPropagation]="true"></opdex-copy-button>
 
           <span class="ml-2"><small>{{tx.hash | shortAddress:3}}</small></span>
         </div>

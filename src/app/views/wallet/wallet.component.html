@@ -24,7 +24,7 @@
   <div class="standard-section pt-5 pb-3">
     <div class="container">
       <div class="row">
-        <div class="col-12 col-lg-6 col-xl-8">
+        <div class="col-12 col-sm-6 col-xl-8">
           <div class="mb-3">
             <div class="flex-row-center-between">
               <h4 class="mb-0 flex-row-center">
@@ -114,7 +114,7 @@
           </div>
         </div>
 
-        <div class="col-12 col-lg-6 col-xl-4">
+        <div class="col-12 col-sm-6 col-xl-4">
           <opdex-card>
             <div class="preferences">
               <div class="flex-row-center-between">
@@ -125,18 +125,15 @@
 
             <div [@collapse]="!showPreferences">
               <div class="theme mt-3 mb-3">
-                <label class="d-block mb-3">Theme</label>
+                <label class="d-block mb-2">Theme</label>
 
-                <button mat-stroked-button class="mr-2 tiny pt-2 pb-2" (click)="toggleTheme('light-mode')" color="{{ wallet.preferences.theme === 'light-mode' ? 'primary' : '' }}" >
-                  <mat-icon>{{icons.lightMode}}</mat-icon> Light Mode
-                </button>
-
-                <button mat-stroked-button class="tiny pt-2 pb-2" (click)="toggleTheme('dark-mode')" color="{{ wallet.preferences.theme === 'dark-mode' ? 'primary' : '' }}">
-                  <mat-icon>{{icons.darkMode}}</mat-icon> Dark Mode
-                </button>
+                <opdex-theme-toggle></opdex-theme-toggle>
               </div>
 
-              <opdex-tolerance [value]="wallet?.preferences?.toleranceThreshold" (onToleranceChange)="handleToleranceChange($event)"></opdex-tolerance>
+              <div class="mb-3">
+                <opdex-tolerance [value]="wallet?.preferences?.toleranceThreshold" (onToleranceChange)="handleToleranceChange($event)"></opdex-tolerance>
+              </div>
+
               <opdex-deadline [value]="wallet?.preferences?.deadlineThreshold" (onDeadlineChange)="handleDeadlineChange($event)"></opdex-deadline>
             </div>
           </opdex-card>

@@ -7,7 +7,7 @@ import { Icons } from 'src/app/enums/icons';
   styleUrls: ['./qr-code.component.scss']
 })
 export class QrCodeComponent implements OnChanges {
-  @Input() data: string;
+  @Input() data: string | object;
   copied: boolean;
   icons = Icons;
   qr: string;

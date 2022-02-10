@@ -1,26 +1,19 @@
 <div class="deadline-widget">
-  <label>Deadline</label>
-  <div class="levels">
-    <div class="button-group">
-      <button mat-stroked-button
-            type="button"
-            color="{{ selectedDeadlineLevel === level.id ? 'primary' : 'default' }}"
-            (click)="outputDeadline(level.deadline)"
-            *ngFor="let level of deadlineLevels">{{level.deadline}}</button>
-    </div>
+  <mat-form-field floatLabel="always">
+    <mat-label>Deadline</mat-label>
 
-    <opdex-input-control
-      [formControl]="customDeadline"
-      suffix="Minutes"
-      [active]="selectedDeadlineLevel === 4"
-      label="Custom Deadline"
-      [showLabel]="false"
-      [suffixDisabled]="true"
-      [placeholder]="'0'"
-      [numbersOnly]="true">
-      <ng-container *ngIf="!customDeadline.valid">
-        <span class="error">0 minimum and 120 maximum</span>
-      </ng-container>
-    </opdex-input-control>
-  </div>
+    <input matInput aria-label="Transaction Deadline" [matAutocomplete]="auto" [formControl]="customDeadline" type="text" placeholder="10">
+
+    <span matSuffix>Minutes</span>
+
+    <mat-hint class="w-100" *ngIf="estimatedBlocks">
+      {{estimatedBlocks}} Blocks
+    </mat-hint>
+
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectDeadline($event)">
+      <mat-option *ngFor="let option of filteredDeadlines" [value]="option">
+        <small style="font-size: 15px; line-height: 20px">{{option}} Minutes</small>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
 </div>

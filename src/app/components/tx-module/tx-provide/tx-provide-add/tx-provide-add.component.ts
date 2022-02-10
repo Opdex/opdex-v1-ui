@@ -42,7 +42,7 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
   showMore: boolean = false;
   crsInFiatValue: FixedDecimal;
   srcInFiatValue: FixedDecimal;
-  toleranceThreshold = 0.1;
+  toleranceThreshold = 5;
   deadlineThreshold = 10;
   crsInMin: FixedDecimal;
   srcInMin: FixedDecimal;

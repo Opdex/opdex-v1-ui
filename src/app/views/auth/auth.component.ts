@@ -63,8 +63,6 @@ export class AuthComponent implements OnInit, OnDestroy {
 
     await this.hubConnection.start();
 
-    console.log(this.hubConnection.connectionId);
-
     await this.getStratisId();
 
     this.hubConnection.on('OnAuthenticated', async (token: string) => {

@@ -1,3 +1,5 @@
+import { UserContextService } from '@sharedServices/utility/user-context.service';
+import { UserContext } from '@sharedModels/user-context';
 import { JwtService } from './../utility/jwt.service';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -20,6 +22,7 @@ export class RestApiService {
     protected _http: HttpClient,
     protected _error: ErrorService,
     protected _jwt: JwtService,
+    protected _context: UserContextService,
     protected _router: Router
   ) { }
 
@@ -80,7 +83,7 @@ export class RestApiService {
     } else if (error.status === 401) {
       // Hack, reload the entire view if we have an expired token
       if (this._jwt.isTokenExpired()) {
-        this._jwt.removeToken();
+        this._context.setToken('');
         this._router.navigateByUrl('/auth');
       }
     }

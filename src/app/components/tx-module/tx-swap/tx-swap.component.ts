@@ -88,7 +88,7 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
     super(_injector);
 
     this.deadlineThreshold = this.context?.preferences?.deadlineThreshold || 10;
-    this.toleranceThreshold = this.context?.preferences?.toleranceThreshold || 0.1;
+    this.toleranceThreshold = this.context?.preferences?.toleranceThreshold || 5;
 
     this.form = this._fb.group({
       tokenInAmount: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
