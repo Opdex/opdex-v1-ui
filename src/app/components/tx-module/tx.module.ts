@@ -56,7 +56,6 @@ import { TxQuoteErrorsComponent } from './shared/tx-quote-errors/tx-quote-errors
 import { TxQuoteSubmitButtonComponent } from './shared/tx-quote-submit-button/tx-quote-submit-button.component';
 import { TxQuoteErrorComponent } from './shared/tx-quote-error/tx-quote-error.component';
 
-
 @NgModule({
   declarations: [
     TxSwapComponent,
@@ -123,7 +122,8 @@ import { TxQuoteErrorComponent } from './shared/tx-quote-error/tx-quote-error.co
     TxAllowanceComponent,
     TxCreatePoolComponent,
     TxSidebarComponent,
-    TxButtonsComponent
+    TxButtonsComponent,
+    TxQuoteSubmitButtonComponent
   ]
 })
 export class TransactionModule { }

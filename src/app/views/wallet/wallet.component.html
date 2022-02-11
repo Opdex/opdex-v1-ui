@@ -26,11 +26,13 @@
       <div class="row">
         <div class="col-12 col-sm-6 col-xl-8">
           <div class="mb-3">
-            <div class="flex-row-center-between">
-              <h4 class="mb-0 flex-row-center">
-                <mat-icon color="primary" class="mr-2">{{icons.tokens}}</mat-icon>Balances
-              </h4>
-              <button mat-icon-button color="primary" class="small" (click)="toggleBalanceCollapse()"><mat-icon>{{balanceCollapse ? icons.add : icons.remove}}</mat-icon></button>
+            <div class="flex-row-center-between clickable" (click)="toggleBalanceCollapse()">
+              <div class="flex-row-center">
+                <mat-icon color="primary" class="small mr-2">{{icons.tokens}}</mat-icon>
+                <h4 class="mb-0">Balances</h4>
+              </div>
+
+              <button mat-icon-button color="primary" class="small"><mat-icon>{{balanceCollapse ? icons.add : icons.remove}}</mat-icon></button>
             </div>
 
             <div [@collapse]="balanceCollapse">
@@ -41,11 +43,13 @@
           </div>
 
           <div class="mb-3">
-            <div class="flex-row-center-between">
-              <h4 class="mb-0 flex-row-center">
-                <mat-icon class="provide mr-2">{{icons.provide}}</mat-icon>Providing
-              </h4>
-              <button mat-icon-button color="primary" class="small" (click)="toggleProvidingCollapse()"><mat-icon>{{providingCollapse ? icons.add : icons.remove}}</mat-icon></button>
+            <div class="flex-row-center-between clickable" (click)="toggleProvidingCollapse()">
+              <div class="flex-row-center">
+                <mat-icon class="small provide mr-2">{{icons.provide}}</mat-icon>
+                <h4 class="mb-0">Providing</h4>
+              </div>
+
+              <button mat-icon-button color="primary" class="small"><mat-icon>{{providingCollapse ? icons.add : icons.remove}}</mat-icon></button>
             </div>
 
             <div [@collapse]="providingCollapse">
@@ -56,11 +60,13 @@
           </div>
 
           <div class="mb-3">
-            <div class="flex-row-center-between">
-              <h4 class="mb-0 flex-row-center">
-                <mat-icon class="mine mr-2">{{icons.mining}}</mat-icon>Mining
-              </h4>
-              <button mat-icon-button color="primary" class="small" (click)="toggleMiningCollapse()"><mat-icon>{{miningCollapse ? icons.add : icons.remove}}</mat-icon></button>
+            <div class="flex-row-center-between clickable" (click)="toggleMiningCollapse()">
+              <div class="flex-row-center">
+                <mat-icon class="small mine mr-2">{{icons.mining}}</mat-icon>
+                <h4 class="mb-0">Mining</h4>
+              </div>
+
+              <button mat-icon-button color="primary" class="small"><mat-icon>{{miningCollapse ? icons.add : icons.remove}}</mat-icon></button>
             </div>
 
             <div [@collapse]="miningCollapse">
@@ -71,11 +77,13 @@
           </div>
 
           <div class="mb-3">
-            <div class="flex-row-center-between">
-              <h4 class="mb-0 flex-row-center">
-                <mat-icon class="stake mr-2">{{icons.staking}}</mat-icon>Staking
-              </h4>
-              <button mat-icon-button color="primary" class="small" (click)="toggleStakingCollapse()"><mat-icon>{{stakingCollapse ? icons.add : icons.remove}}</mat-icon></button>
+            <div class="flex-row-center-between clickable" (click)="toggleStakingCollapse()">
+              <div class="flex-row-center">
+                <mat-icon class="small stake mr-2">{{icons.staking}}</mat-icon>
+                <h4 class="mb-0">Staking</h4>
+              </div>
+
+              <button mat-icon-button color="primary" class="small"><mat-icon>{{stakingCollapse ? icons.add : icons.remove}}</mat-icon></button>
             </div>
 
             <div [@collapse]="stakingCollapse">
@@ -86,11 +94,13 @@
           </div>
 
           <div class="mb-3" *ngIf="showProposals">
-            <div class="flex-row-center-between">
-              <h4 class="mb-0 flex-row-center">
-                <mat-icon class="blue mr-2">{{icons.pledge}}</mat-icon>Proposal Pledges
-              </h4>
-              <button mat-icon-button color="primary" class="small" (click)="togglePledgingCollapse()"><mat-icon>{{pledgingCollapse ? icons.add : icons.remove}}</mat-icon></button>
+            <div class="flex-row-center-between clickable" (click)="togglePledgingCollapse()">
+              <div class="flex-row-center">
+                <mat-icon class="small blue mr-2">{{icons.pledge}}</mat-icon>
+                <h4 class="mb-0">Proposal Pledges</h4>
+              </div>
+
+              <button mat-icon-button color="primary" class="small"><mat-icon>{{pledgingCollapse ? icons.add : icons.remove}}</mat-icon></button>
             </div>
 
             <div [@collapse]="pledgingCollapse">
@@ -101,11 +111,13 @@
           </div>
 
           <div class="mb-3" *ngIf="showProposals">
-            <div class="flex-row-center-between">
-              <h4 class="mb-0 flex-row-center">
-                <mat-icon class="stake mr-2">{{icons.proposal}}</mat-icon>Proposal Votes
-              </h4>
-              <button mat-icon-button color="primary" class="small" (click)="toggleVotingCollapse()"><mat-icon>{{votingCollapse ? icons.add : icons.remove}}</mat-icon></button>
+            <div class="flex-row-center-between clickable" (click)="toggleVotingCollapse()">
+              <div class="flex-row-center">
+                <mat-icon class="small stake mr-2">{{icons.proposal}}</mat-icon>
+                <h4 class="mb-0">Proposal Votes</h4>
+              </div>
+
+              <button mat-icon-button color="primary" class="small"><mat-icon>{{votingCollapse ? icons.add : icons.remove}}</mat-icon></button>
             </div>
 
             <div [@collapse]="votingCollapse">

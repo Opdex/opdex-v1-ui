@@ -21,6 +21,7 @@ export class TxQuoteSubmitButtonComponent implements OnDestroy {
   @Input() label: string = 'Quote';
   @Input() disabled: boolean;
   @Input() warn: boolean;
+  @Input() size: string;
   @Output() onSubmit = new EventEmitter();
   context: UserContext;
   indexStatus: IIndexStatus;

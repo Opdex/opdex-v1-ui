@@ -1,0 +1,8 @@
+<span class="badge ethereum no-wrap" *ngIf="wrappedToken">
+  <mat-icon class="mr-1" [matTooltip]="wrappedToken.status">
+    {{wrappedToken.statusIcon}}
+  </mat-icon>
+
+  {{wrappedToken.chain}}
+</span>
+<span class="badge cirrus no-wrap" *ngIf="!wrappedToken">Cirrus</span>

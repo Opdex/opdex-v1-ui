@@ -1,6 +1,11 @@
 <opdex-card>
   <ng-container *ngIf="swapToken && token; else loading">
-    <small class="light">{{token.name}}</small>
+    <div class="flex-row-center-between mb-1">
+      <small class="light">{{token.name}}</small>
+
+      <opdex-token-native-chain-badge [wrappedToken]="token.wrappedToken"></opdex-token-native-chain-badge>
+    </div>
+
     <div class="flex-row-center-between">
       <div class="flex-row-center">
         <opdex-token-icon [token]="token"></opdex-token-icon>
@@ -19,15 +24,13 @@
     <div class="flex-row-center-between mt-2">
       <div class="flex-row-center">
         <mat-icon color="primary" class="mr-2 tiny">{{icons.lock}}</mat-icon>
-        <h5 class="mb-0">{{reserves?.formattedValue | shortNumber}}</h5>
+        <small>{{reserves?.formattedValue | shortNumber}}</small>
       </div>
 
       <div class="flex-row-center">
-        <mat-icon color="primary" class="mr-2 tiny">{{icons.swap}}</mat-icon>
-        <h5 class="flex-row-center-end mb-0">
-          <span>{{swapRate?.formattedValue | shortNumber }}</span>
-          <small class="ml-1">{{swapToken.symbol}}</small>
-        </h5>
+        <small class="mb-0">1 {{token.symbol}}</small>
+        <mat-icon color="primary" class="ml-2 mr-2 tiny">{{icons.swap}}</mat-icon>
+        <small>{{swapRate?.formattedValue | shortNumber }} {{swapToken.symbol}}</small>
       </div>
     </div>
   </ng-container>

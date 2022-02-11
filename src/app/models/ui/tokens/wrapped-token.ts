@@ -1,3 +1,4 @@
+import { Icons } from 'src/app/enums/icons';
 import { IWrappedToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 
 export class WrappedToken {
@@ -35,6 +36,21 @@ export class WrappedToken {
 
   public get modifiedBlock(): number {
     return this._modifiedBlock;
+  }
+
+  public get status(): string {
+    const trust = this.trusted ? 'Trusted' : 'Untrusted'
+    const validated = this.validated ? ' and valid' : ' but invalid';
+
+    return `${trust}${!!this.address ? validated : ''}`;
+  }
+
+  public get statusIcon(): string {
+    if (this.address) {
+      return this.trusted && this.validated ? Icons.check : Icons.warning;
+    }
+
+    return this.trusted ? Icons.check : Icons.warning;
   }
 
   constructor(wrapped: IWrappedToken) {

@@ -1,8 +1,10 @@
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
 import { TransactionReceipt } from '@sharedModels/ui/transactions/transaction-receipt';
 import { Component, Input } from '@angular/core';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
+import { Network } from 'src/app/enums/networks';
 
 @Component({
   selector: 'opdex-tx-receipt',
@@ -18,6 +20,12 @@ export class TxReceiptComponent {
 
   icons = Icons;
   iconSizes = IconSizes;
+
+  public get chain() {
+    return this._env.network === Network.Mainnet ? 'crs' : 'tcrs';
+  }
+
+  constructor(private _env: EnvironmentsService) {}
 
   toggleCollapse(): void {
     this.collapsed = !this.collapsed;

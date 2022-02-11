@@ -24,6 +24,7 @@ import { QrCodeModule } from 'ng-qrcode';
 import { TokenIconComponent } from './token-icon/token-icon.component';
 import { TokenIconsComponent } from './token-icons/token-icons.component';
 import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
+import { TokenNativeChainBadgeComponent } from './token-native-chain-badge/token-native-chain-badge.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
     CopyAddressComponent,
     TokenIconComponent,
     TokenIconsComponent,
-    ThemeToggleComponent
+    ThemeToggleComponent,
+    TokenNativeChainBadgeComponent
   ],
   imports: [
     CommonModule,
@@ -57,7 +59,8 @@ import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
     CopyAddressComponent,
     TokenIconComponent,
     TokenIconsComponent,
-    ThemeToggleComponent
+    ThemeToggleComponent,
+    TokenNativeChainBadgeComponent
   ]
 })
 export class SharedModule { }

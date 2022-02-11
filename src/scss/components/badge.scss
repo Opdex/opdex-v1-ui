@@ -4,7 +4,7 @@
   border-radius: 4px;
   color: #fff;
   font-weight: 400;
-  // display: inline-flex;
+  display: inline-flex;
   align-items: center;
   line-height: 1em;
 
@@ -32,5 +32,12 @@
   &.ethereum {
     background: $eth-primary;
     color: white;
+  }
+
+  .mat-icon {
+    font-size: 1em !important;
+    line-height: 1em !important;
+    height: 1em !important;
+    width: 1em !important;
   }
 }

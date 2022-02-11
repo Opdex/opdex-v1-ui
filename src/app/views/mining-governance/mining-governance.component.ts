@@ -1,6 +1,5 @@
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { IIndexStatus } from '@sharedModels/platform-api/responses/index/index-status.interface';
-import { MatDialog } from '@angular/material/dialog';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { MiningGovernancesService } from '@sharedServices/platform/mining-governances.service';
@@ -22,7 +21,6 @@ import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { MiningGovernanceStatCardsLookup } from '@sharedLookups/mining-governance-stat-cards.lookup';
 import { RewardMiningPoolsRequest } from '@sharedModels/platform-api/requests/mining-governances/reward-mining-pools-request';
-import { MaintenanceNotificationModalComponent } from '@sharedComponents/modals-module/maintenance-notification-modal/maintenance-notification-modal.component';
 import { UserContext } from '@sharedModels/user-context';
 
 @Component({
@@ -51,8 +49,7 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
     private _tokenService: TokensService,
     private _liquidityPoolsService: LiquidityPoolsService,
     private _indexService: IndexService,
-    private _env: EnvironmentsService,
-    private _dialog: MatDialog
+    private _env: EnvironmentsService
   ) {
     this.nominatedPools = [null, null, null, null];
   }
@@ -89,19 +86,6 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
   quoteDistribution(): void {
     if (!this.context?.wallet) return;
 
-    if (!!this.indexStatus?.available === false) {
-      this._dialog.open(MaintenanceNotificationModalComponent, {width: '500px', autoFocus: false})
-        .afterClosed()
-        .pipe(take(1))
-        .subscribe(result => {
-          if (result) this.quoteExecute();
-        });
-    } else {
-      this.quoteExecute()
-    }
-  }
-
-  private quoteExecute(): void {
     const request = new RewardMiningPoolsRequest(true);
 
     this._platformApiService

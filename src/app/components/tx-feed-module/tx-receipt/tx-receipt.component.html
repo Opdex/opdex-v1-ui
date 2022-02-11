@@ -7,7 +7,21 @@
 
       <div class="flex-row-center-between w-100">
         <small class="b-400">{{tx?.transactionSummary}}</small>
-        <small *ngIf="showTimeAgo">{{tx?.block?.medianTime | timeago}}</small>
+
+        <div class="flex-row-center">
+          <small *ngIf="showTimeAgo">{{tx?.block?.medianTime | timeago}}</small>
+
+          <a mat-button
+            color="primary"
+            class="tiny p-0 ml-2"
+            style="font-size: .8em; line-height: .8em; min-width: 0;"
+            href="https://explorer.blockcore.net/{{chain}}/explorer/transaction/{{tx.hash}}"
+            target="_blank"
+            *ngIf="!!tx.hash"
+            matTooltip="View in Explorer">
+            <mat-icon class="tiny">{{icons.exit}}</mat-icon>
+          </a>
+        </div>
       </div>
     </div>
 
