@@ -1,25 +1,19 @@
 <div class="tolerance-widget">
-  <label>Tolerance</label>
-  <div class="levels">
-    <div class="button-group">
-      <button mat-stroked-button
-            type="button"
-            color="{{ selectedToleranceLevel === level.id ? 'primary' : 'default' }}"
-            (click)="outputTolerance(level.tolerance)"
-            *ngFor="let level of toleranceLevels">{{level.tolerance}}%</button>
-    </div>
+  <mat-form-field floatLabel="always">
+    <mat-label>Slippage Tolerance</mat-label>
 
-    <opdex-input-control
-      [formControl]="customTolerance"
-      suffix="%"
-      [active]="selectedToleranceLevel === 4"
-      label="Custom Tolerance"
-      [showLabel]="false"
-      [suffixDisabled]="true"
-      [numbersOnly]="true">
-      <ng-container *ngIf="!customTolerance.valid">
-        <span class="error">0.01 minimum and 99.99 maximum</span>
-      </ng-container>
-    </opdex-input-control>
-  </div>
+    <input matInput aria-label="Slippage Tolerance" [matAutocomplete]="auto" [formControl]="customTolerance" type="text" placeholder="10">
+
+    <span matSuffix>%</span>
+
+    <mat-hint class="w-100" *ngIf="!customTolerance.valid">
+      <span class="error">0.01 minimum and 99.99 maximum</span>
+    </mat-hint>
+
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectTolerance($event)">
+      <mat-option *ngFor="let option of filteredTolerances" [value]="option">
+        <small style="font-size: 15px; line-height: 20px">{{option}}%</small>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
 </div>

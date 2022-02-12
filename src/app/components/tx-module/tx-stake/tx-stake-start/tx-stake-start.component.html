@@ -4,7 +4,7 @@
       [suffixDisabled]="true"
       label="Start Staking"
       [formControl]="amount"
-      [suffix]="pool.summary.staking?.token.symbol"
+      [suffix]="pool.tokens.staking?.symbol"
       [numbersOnly]="true">
       <div class="flex-row-center">
         <span *ngIf="fiatValue">${{fiatValue.formattedValue | formatNumber:2}}</span>
@@ -12,8 +12,8 @@
     </opdex-input-control>
 
     <opdex-percentage-amount-buttons
-      [contract]="pool.summary.staking?.token.address"
-      [token]="pool.summary.staking?.token"
+      [contract]="pool.tokens.staking?.address"
+      [token]="pool.tokens.staking"
       positionType="Balance"
       [selected]="percentageSelected"
       (onPercentageSelect)="handlePercentageSelect($event)"></opdex-percentage-amount-buttons>

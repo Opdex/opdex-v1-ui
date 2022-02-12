@@ -1,5 +1,5 @@
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { IIndexStatus } from '@sharedModels/platform-api/responses/index/index-status.interface';
-import { MatDialog } from '@angular/material/dialog';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { MiningGovernancesService } from '@sharedServices/platform/mining-governances.service';
@@ -11,18 +11,16 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LiquidityPoolsFilter, LpOrderBy, NominationStatus, MiningStatus } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Observable } from 'rxjs';
 import { IMiningGovernance } from '@sharedModels/platform-api/responses/mining-governances/mining-governance.interface';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
-import { MiningGovernance } from '@sharedModels/mining-governance';
+import { MiningGovernance } from '@sharedModels/ui/mining-governances/mining-governance';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { MiningGovernanceStatCardsLookup } from '@sharedLookups/mining-governance-stat-cards.lookup';
 import { RewardMiningPoolsRequest } from '@sharedModels/platform-api/requests/mining-governances/reward-mining-pools-request';
-import { MaintenanceNotificationModalComponent } from '@sharedComponents/modals-module/maintenance-notification-modal/maintenance-notification-modal.component';
 import { UserContext } from '@sharedModels/user-context';
 
 @Component({
@@ -31,8 +29,8 @@ import { UserContext } from '@sharedModels/user-context';
   styleUrls: ['./mining-governance.component.scss']
 })
 export class MiningGovernanceComponent implements OnInit, OnDestroy {
-  nominatedPools: ILiquidityPoolResponse[];
-  miningPools$: Observable<ILiquidityPoolResponse[]>;
+  nominatedPools: LiquidityPool[];
+  miningPools$: Observable<LiquidityPool[]>;
   miningGovernance: MiningGovernance;
   submitting: boolean;
   nominationPeriodEndDate: string;
@@ -51,10 +49,9 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
     private _tokenService: TokensService,
     private _liquidityPoolsService: LiquidityPoolsService,
     private _indexService: IndexService,
-    private _env: EnvironmentsService,
-    private _dialog: MatDialog
+    private _env: EnvironmentsService
   ) {
-    this.nominatedPools = [ null, null, null, null ];
+    this.nominatedPools = [null, null, null, null];
   }
 
   ngOnInit(): void {
@@ -89,19 +86,6 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
   quoteDistribution(): void {
     if (!this.context?.wallet) return;
 
-    if (!!this.indexStatus?.available === false) {
-      this._dialog.open(MaintenanceNotificationModalComponent, {width: '500px', autoFocus: false})
-        .afterClosed()
-        .pipe(take(1))
-        .subscribe(result => {
-          if (result) this.quoteExecute();
-        });
-    } else {
-      this.quoteExecute()
-    }
-  }
-
-  private quoteExecute(): void {
     const request = new RewardMiningPoolsRequest(true);
 
     this._platformApiService
@@ -110,9 +94,9 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
         .subscribe((quote: ITransactionQuote) => this._bottomSheet.open(ReviewQuoteComponent, { data: quote }));
   }
 
-  poolsTrackBy(index: number, pool: ILiquidityPoolResponse) {
-    if (pool === null || pool === undefined) return index;
-    return `${index}-${pool.address}-${pool.summary.cost.crsPerSrc}-${pool.miningPool?.tokensMining}-${pool.summary.staking?.weight}`;
+  poolsTrackBy(index: number, pool: LiquidityPool): string {
+    if (!!pool === false) return index.toString();;
+    return `${index}-${pool.trackBy}`;
   }
 
   ngOnDestroy() {

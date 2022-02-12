@@ -1,5 +1,5 @@
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { tap } from 'rxjs/operators';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
@@ -18,7 +18,7 @@ import { Subscription } from 'rxjs';
 export class TokensComponent implements OnDestroy {
   filter: TokensFilter;
   subscription = new Subscription();
-  poolsByVolume: ILiquidityPoolResponse[] = [];
+  poolsByVolume: LiquidityPool[] = [];
 
   constructor(
     private _sidebar: SidenavService,
@@ -45,9 +45,9 @@ export class TokensComponent implements OnDestroy {
         .subscribe());
   }
 
-  poolsTrackBy(index: number, pool: ILiquidityPoolResponse) {
-    if (pool === null || pool === undefined) return index;
-    return `${index}-${pool.address}-${pool.summary.cost.crsPerSrc}-${pool.miningPool?.tokensMining}-${pool.summary.staking?.weight}`;
+  poolsTrackBy(index: number, pool: LiquidityPool): string {
+    if (!!pool === false) return index.toString();;
+    return `${index}-${pool.trackBy}`;
   }
 
   handleTxOption($event: TransactionView) {

@@ -13,11 +13,11 @@
 
     <div class="row">
       <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-        <opdex-market-token-card [token]="market?.crsToken" [icon]="icons.tokens" iconColor="swap"></opdex-market-token-card>
+        <opdex-market-token-card [token]="market?.tokens?.crs" [icon]="icons.tokens" iconColor="swap"></opdex-market-token-card>
       </div>
 
-      <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *ngIf="market?.stakingToken">
-        <opdex-market-token-card [token]="market.stakingToken" [icon]="icons.staking" iconColor="stake"></opdex-market-token-card>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *ngIf="market?.tokens?.staking">
+        <opdex-market-token-card [token]="market?.tokens?.staking" [icon]="icons.staking" iconColor="stake"></opdex-market-token-card>
       </div>
     </div>
 

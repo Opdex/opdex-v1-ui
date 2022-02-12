@@ -1,4 +1,4 @@
-import { TransactionReceipt } from '@sharedModels/transaction-receipt';
+import { TransactionReceipt } from '@sharedModels/ui/transactions/transaction-receipt';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TransactionBroadcastNotificationComponent } from '@sharedComponents/notifications-module/transaction-broadcast-notification/transaction-broadcast-notification.component';

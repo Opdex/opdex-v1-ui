@@ -1,5 +1,5 @@
 import { NotificationService } from '@sharedServices/utility/notification.service';
-import { TransactionReceipt } from '@sharedModels/transaction-receipt';
+import { TransactionReceipt } from '@sharedModels/ui/transactions/transaction-receipt';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable, Injector } from '@angular/core';

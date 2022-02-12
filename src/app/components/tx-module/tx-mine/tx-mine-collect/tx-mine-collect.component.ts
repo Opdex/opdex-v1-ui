@@ -1,8 +1,8 @@
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { OnDestroy } from '@angular/core';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -17,7 +17,7 @@ import { switchMap, take, tap } from 'rxjs/operators';
 })
 export class TxMineCollectComponent extends TxBase implements OnChanges, OnDestroy {
   @Input() data: any;
-  pool: ILiquidityPoolResponse;
+  pool: LiquidityPool;
   balanceError: boolean;
   subscription = new Subscription();
 

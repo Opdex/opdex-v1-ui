@@ -1,5 +1,5 @@
+import { Token } from '@sharedModels/ui/tokens/token';
 import { Component, Input } from '@angular/core';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 
 @Component({
   selector: 'opdex-token-icons',
@@ -7,7 +7,7 @@ import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interf
   styleUrls: ['./token-icons.component.scss']
 })
 export class TokenIconsComponent {
-  @Input() tokens: IToken[];
+  @Input() tokens: Token[];
 
   get width(): string {
     let width = 0;
@@ -20,7 +20,7 @@ export class TokenIconsComponent {
     return `${width}px`;
   }
 
-  trackBy(index: number, token: IToken): string {
+  trackBy(index: number, token: Token): string {
     if (!!token === false) return '';
     return `${index}-${token.address}`;
   }

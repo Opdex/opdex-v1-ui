@@ -1,4 +1,4 @@
-import { ILiquidityPoolSnapshotHistoryResponse } from "./platform-api/responses/liquidity-pools/liquidity-pool-snapshots-responses.interface";
+import { ILiquidityPoolSnapshotHistoryResponse } from "@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-snapshots-responses.interface";
 
 export class LiquidityPoolHistory {
   liquidity: any;

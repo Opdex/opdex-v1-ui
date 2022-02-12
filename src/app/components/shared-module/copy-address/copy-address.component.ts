@@ -10,11 +10,9 @@ import { Icons } from 'src/app/enums/icons';
 export class CopyAddressComponent {
   @Input() address: string;
   @Input() stopPropagation = false;
+  @Input() short = false;
   icons = Icons;
   iconSizes = IconSizes;
-
-  constructor() { }
-
   copied = false;
 
   copyHandler(event: Event) {

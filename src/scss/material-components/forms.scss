@@ -6,6 +6,10 @@
     .mat-form-field-label {
       margin-top: .4em !important;
     }
+
+    .mat-form-field-infix {
+      border-top: 0px !important;
+    }
   }
 
   &.ng-invalid.ng-touched {

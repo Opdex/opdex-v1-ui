@@ -1,14 +1,14 @@
+import { Token } from '@sharedModels/ui/tokens/token';
 import { take } from 'rxjs/operators';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { ISwapEvent } from '@sharedModels/platform-api/responses/transactions/transaction-events/liquidity-pools/swap-event.interface';
 import { combineLatest, Subscription } from 'rxjs';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
-import { TransactionReceipt } from '@sharedModels/transaction-receipt';
+import { TransactionReceipt } from '@sharedModels/ui/transactions/transaction-receipt';
 import { Component, Input, OnDestroy, OnChanges } from '@angular/core';
 import { tap } from 'rxjs/operators';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 
 @Component({
   selector: 'opdex-swap-transaction-summary',
@@ -18,8 +18,8 @@ import { tap } from 'rxjs/operators';
 export class SwapTransactionSummaryComponent implements OnChanges, OnDestroy {
   @Input() transaction: TransactionReceipt;
 
-  tokenIn: IToken;
-  tokenOut: IToken;
+  tokenIn: Token;
+  tokenOut: Token;
   tokenInAmount: FixedDecimal;
   tokenOutAmount: FixedDecimal;
   subscription = new Subscription();
@@ -45,7 +45,7 @@ export class SwapTransactionSummaryComponent implements OnChanges, OnDestroy {
         this._liquidityPoolService.getLiquidityPool(event.contract)
           .pipe(
             take(1),
-            tap((pool: ILiquidityPoolResponse) => {
+            tap((pool: LiquidityPool) => {
             const crsIn = new FixedDecimal(event.amountCrsIn, 8);
 
             this.tokenIn = crsIn.isZero ? pool.tokens.src : pool.tokens.crs;
@@ -67,7 +67,7 @@ export class SwapTransactionSummaryComponent implements OnChanges, OnDestroy {
           this._liquidityPoolService.getLiquidityPool(secondEvent.contract)
         ])
         .pipe(take(1))
-        .subscribe(([firstPool, secondPool]: [ILiquidityPoolResponse, ILiquidityPoolResponse]) => {
+        .subscribe(([firstPool, secondPool]: [LiquidityPool, LiquidityPool]) => {
           this.tokenIn = firstPool.tokens.src;
           this.tokenOut = secondPool.tokens.src;
           this.tokenInAmount = new FixedDecimal(firstEvent.amountSrcIn, this.tokenIn.decimals);

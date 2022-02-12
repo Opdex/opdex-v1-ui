@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { TransactionView } from '@sharedModels/transaction-view';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 
 @Component({
   selector: 'opdex-tx-stake',
@@ -9,8 +9,8 @@ import { TransactionView } from '@sharedModels/transaction-view';
 })
 export class TxStakeComponent {
   @Input() data: any = {};
-  @Output() onPoolSelection = new EventEmitter<ILiquidityPoolResponse>();
-  pool: ILiquidityPoolResponse;
+  @Output() onPoolSelection = new EventEmitter<LiquidityPool>();
+  pool: LiquidityPool;
   view = TransactionView.stake;
   child: number = 1;
   txOptions = [
@@ -24,7 +24,7 @@ export class TxStakeComponent {
     this.pool = this.data?.pool;
   }
 
-  handlePoolChange(pool: ILiquidityPoolResponse) {
+  handlePoolChange(pool: LiquidityPool) {
     // this.pool = pool;
     // this.data = { pool };
     this.onPoolSelection.emit(pool);

@@ -2,7 +2,6 @@ import { EnvironmentsService } from '@sharedServices/utility/environments.servic
 import { Router } from '@angular/router';
 import { TransactionsService } from '@sharedServices/platform/transactions.service';
 import { IconSizes } from 'src/app/enums/icon-sizes';
-import { ThemeService } from '@sharedServices/utility/theme.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
@@ -23,7 +22,6 @@ export class SideNavComponent implements OnDestroy {
   @Output() onRouteChanged = new EventEmitter<string>();
   @Input() mobileMenuOpen: boolean;
   isPinned: boolean = true;
-  theme: string;
   latestSyncedBlock$: Observable<IBlock>;
   icons = Icons;
   iconSizes = IconSizes;
@@ -36,23 +34,16 @@ export class SideNavComponent implements OnDestroy {
   constructor(
     public dialog: MatDialog,
     private _context: UserContextService,
-    private _theme: ThemeService,
     private _indexService: IndexService,
     private _transactionsService: TransactionsService,
     private _router: Router,
     private _env: EnvironmentsService
   ) {
     this.subscription.add(this._context.getUserContext$().subscribe(context => this.context = context));
-    this.subscription.add(this._theme.getTheme().subscribe(theme => this.theme = theme))
     this.subscription.add(this._transactionsService.getBroadcastedTransactions$().subscribe(txs => this.pendingTransactions = txs));
     this.latestSyncedBlock$ = this._indexService.getLatestBlock$();
     this.network = this._env.network;
     this.usesVault = !!this._env.vaultAddress;
-  }
-
-  toggleTheme(): void {
-    const theme = this.theme === 'light-mode' ? 'dark-mode' : 'light-mode';
-    this._theme.setTheme(theme);
   }
 
   togglePin(): void {

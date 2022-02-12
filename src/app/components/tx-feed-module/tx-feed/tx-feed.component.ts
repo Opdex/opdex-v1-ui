@@ -5,7 +5,7 @@ import { IconSizes } from 'src/app/enums/icon-sizes';
 import { TransactionsService } from '@sharedServices/platform/transactions.service';
 import { Component, OnChanges, OnDestroy, ViewChild, ElementRef, Input } from '@angular/core';
 import { ITransactionsRequest, TransactionRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
-import { TransactionReceipt } from '@sharedModels/transaction-receipt';
+import { TransactionReceipt } from '@sharedModels/ui/transactions/transaction-receipt';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { Icons } from 'src/app/enums/icons';
 

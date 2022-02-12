@@ -62,8 +62,9 @@ export enum Icons {
     inProgress = 'sync',
     thumbUp = 'thumb_up_alt',
     thumbDown = 'thumb_down_alt',
-    pledge = 'favorite',
     warning = 'warning',
     rewind = 'sync_problem',
-    maintenance = 'sync_disabled'
+    maintenance = 'sync_disabled',
+    closeOutline = 'highlight_off',
+    pledge = 'how_to_vote'
 }

@@ -1,14 +1,14 @@
+import { MarketTokens } from '@sharedModels/ui/tokens/market-tokens';
+import { MarketToken } from '@sharedModels/ui/tokens/market-token';
 import { HistoryFilter } from '@sharedModels/platform-api/requests/history-filter';
-import { ITokensResponse } from '@sharedModels/platform-api/responses/tokens/tokens-response.interface';
-import { IMarketToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { CacheService } from '../utility/cache.service';
 import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { ITokenHistoryResponse } from '@sharedModels/platform-api/responses/tokens/token-history-response.interface';
 import { tap } from 'rxjs/operators';
+import { Token } from '@sharedModels/ui/tokens/token';
 
 @Injectable({providedIn: 'root'})
 export class TokensService extends CacheService {
@@ -17,17 +17,17 @@ export class TokensService extends CacheService {
     super(_injector);
   }
 
-  getToken(address: string): Observable<IToken> {
+  getToken(address: string): Observable<Token> {
     return this.getItem(`token-${address}`, this._platformApi.getToken(address))
   }
 
-  getMarketToken(address: string): Observable<IToken | IMarketToken> {
+  getMarketToken(address: string): Observable<MarketToken> {
     return address === 'CRS'
-      ? this.getToken(address)
+      ? this.getToken(address) as Observable<MarketToken>
       : this.getItem(`market-token-${address}`, this._platformApi.getMarketToken(address));
   }
 
-  getTokens(request: TokensFilter): Observable<ITokensResponse> {
+  getTokens(request: TokensFilter): Observable<MarketTokens> {
     return this.getItem(`tokens-${request.buildQueryString()}`, this._platformApi.getMarketTokens(request))
       .pipe(tap(tokens => tokens.results.forEach(token => this.cacheItem(`market-token-${token.address}`, token))));
   }

@@ -2,10 +2,13 @@
   <ng-container *ngIf="proposal; else loading">
     <div class="flex-row-center-between flex-wrap">
       <a routerLink="/vault/proposal/{{proposal.proposalId}}" class="no-decoration">
-        <h4 class="d-flex no-wrap mb-0">
-          Proposal #{{proposal.proposalId}}
-        </h4>
+        <h4 class="d-flex no-wrap mb-0">Proposal #{{proposal.proposalId}}</h4>
       </a>
+
+      <span class="badge flex-row-center-center {{proposal.approved ? 'green' : 'red'}}" *ngIf="proposal.status === 'Complete' && proposal.expiration < latestBlock.height">
+        <span>{{proposal.approved ? 'Approved' : 'Denied'}}</span>
+        <mat-icon class="ml-1">{{proposal.approved ? icons.checkOutline : icons.closeOutline}}</mat-icon>
+      </span>
     </div>
 
     <div class="flex-row-center mb-2">
@@ -17,7 +20,7 @@
       </small>
     </div>
 
-    <p class="mb-2" style="font-size: 2em; line-height: 1.2em" *ngIf="proposal.type !== 'Revoke'">
+    <p class="mb-2" style="font-size: 1.4em; line-height: 1.2em" *ngIf="proposal.type !== 'Revoke'">
       <span class="b-400 mr-2">{{proposal.amount | shortNumber}}</span>
       <small *ngIf="proposal.type === 'Create'">ODX</small>
       <small *ngIf="proposal.type !== 'Create'">CRS</small>
@@ -34,8 +37,8 @@
         </small>
 
         <small class="flex-row-center">
-          <button mat-icon-button color="primary" class="mr-1" (click)="openSidenav('Pledge')" [ngClass]="iconSizes.tiny" [disabled]="!!this.context?.wallet === false">
-            <mat-icon class="blue">{{icons.add}}</mat-icon>
+          <button mat-flat-button class="mr-1 p-1 blue" style="min-width: 0" (click)="openSidenav('Pledge')" [ngClass]="iconSizes.tiny" [disabled]="!!this.context?.wallet === false">
+            <mat-icon>{{icons.add}}</mat-icon>
           </button>
 
           {{proposal.pledgeAmount | shortNumber}}
@@ -51,16 +54,16 @@
         <div class="flex-row-center-between">
 
           <small class="flex-row-center mr-3">
-            <button mat-icon-button class="mr-1" (click)="openSidenav('Vote', true)" [ngClass]="iconSizes.tiny" [disabled]="!!this.context?.wallet === false">
-              <mat-icon class="positive-value">{{icons.thumbUp}}</mat-icon>
+            <button mat-flat-button class="mr-1 p-1 green" style="min-width: 0" (click)="openSidenav('Vote', true)" [ngClass]="iconSizes.tiny" [disabled]="!!this.context?.wallet === false">
+              <mat-icon>{{icons.thumbUp}}</mat-icon>
             </button>
 
             {{proposal.yesAmount | shortNumber}}
           </small>
 
           <small class="flex-row-center">
-            <button mat-icon-button color="warn" class="mr-1" (click)="openSidenav('Vote', false)" [ngClass]="iconSizes.tiny" [disabled]="!!this.context?.wallet === false">
-              <mat-icon class="red">{{icons.thumbDown}}</mat-icon>
+            <button mat-flat-button class="mr-1 p-1 red" style="min-width: 0" (click)="openSidenav('Vote', false)" [ngClass]="iconSizes.tiny" [disabled]="!!this.context?.wallet === false">
+              <mat-icon>{{icons.thumbDown}}</mat-icon>
             </button>
 
             {{proposal.noAmount | shortNumber}}
@@ -69,19 +72,25 @@
       </div>
     </div>
 
-    <mat-progress-bar [color]="proposal.expiration >= latestBlock.height ? 'primary' : 'warn'"
-                      class="mt-2 green"
-                      mode="determinate"
-                      [value]="getExpirationPercentage()"
-                      *ngIf="proposal.expiration >= latestBlock.height || proposal.status === 'Complete'"></mat-progress-bar>
+    <ng-container *ngIf="proposal.expiration >= latestBlock.height && proposal.status !== 'Complete'">
+      <mat-progress-bar [color]="proposal.expiration >= latestBlock.height ? 'primary' : 'warn'"
+        class="mt-2 green"
+        mode="determinate"
+        [value]="getExpirationPercentage()">
+      </mat-progress-bar>
 
-    <div class="mt-2 flex-row-center-between">
-      <small class="light" *ngIf="proposal.expiration >= latestBlock.height">{{proposal.expiration - latestBlock.height | formatNumber:0}} blocks remaining</small>
-      <!-- <small class="light float-right">{{miningGovernance.nominationPeriodEndDate | timeago}}</small> -->
+      <small class="light">{{proposal.expiration - latestBlock.height | formatNumber:0}} blocks remaining</small>
+    </ng-container>
 
-      <button mat-stroked-button color="primary" class="small w-100" *ngIf="proposal.status !== 'Complete' && proposal.expiration < latestBlock.height" (click)="completeProposal()" [disabled]="!!context?.wallet === false">Complete Proposal</button>
-      <span class="badge {{proposal.approved ? 'green' : 'red'}}" *ngIf="proposal.status === 'Complete' && proposal.expiration < latestBlock.height">{{proposal.approved ? 'Approved' : 'Denied'}}</span>
-    </div>
+    <button
+      mat-stroked-button
+      color="primary"
+      class="mt-2 small w-100"
+      *ngIf="proposal.status !== 'Complete' && proposal.expiration < latestBlock.height"
+      (click)="completeProposal()"
+      [disabled]="!!context?.wallet === false">
+      Complete Proposal
+    </button>
   </ng-container>
 
   <ng-template #loading>

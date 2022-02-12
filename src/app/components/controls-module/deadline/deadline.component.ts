@@ -1,3 +1,4 @@
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Component, Input, EventEmitter, Output, OnDestroy, OnChanges } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -13,14 +14,15 @@ export class DeadlineComponent implements OnChanges, OnDestroy {
   @Output() onDeadlineChange: EventEmitter<number> = new EventEmitter();
   customDeadline: FormControl;
   subscription: Subscription;
-  deadlineLevels = [
-    { id: 1, deadline: 10 },
-    { id: 2, deadline: 30 },
-    { id: 3, deadline: 60 }
-  ];
-  selectedDeadlineLevel: number = this.deadlineLevels[0].id;
+  estimatedBlocks: number;
+  deadlineOptions: number[] = [];
+  filteredDeadlines: number[] = [];
 
   constructor() {
+    for (var i = 5; i < 125; i += 5) {
+      this.deadlineOptions.push(i);
+    }
+
     this.customDeadline = new FormControl('', [Validators.min(0), Validators.max(120), Validators.pattern(/^[0-9]*$/)]);
     this.subscription = new Subscription();
 
@@ -29,27 +31,33 @@ export class DeadlineComponent implements OnChanges, OnDestroy {
         .pipe(
           debounceTime(400),
           distinctUntilChanged(),
-          filter(value => value >= 1 && value <= 120 && this.customDeadline.valid),
-          tap(value => this.outputDeadline(value)))
+          tap((deadline: number) => this._filterDeadlines(deadline)),
+          filter(deadline => deadline >= 1 && deadline <= 120 && this.customDeadline.valid),
+          tap(deadline => this.estimatedBlocks = Math.ceil(60 * deadline / 16)),
+          tap(deadline => this.onDeadlineChange.emit(deadline)))
         .subscribe());
   }
 
   ngOnChanges() {
-    if (this.value) {
-      const level = this.deadlineLevels.find(l => l.deadline === this.value);
-      if (level !== undefined) {
-        this.outputDeadline(this.value);
-      } else {
-        this.customDeadline.setValue(this.value);
-      }
+    if (this.value && this.value !== this.customDeadline.value) {
+      this.customDeadline.setValue(this.value);
+      this._setDefaultDeadlineOptions();
     }
   }
 
-  outputDeadline(deadline: number) {
-    const level = this.deadlineLevels.find(l => l.deadline === deadline);
-    this.selectedDeadlineLevel = level === undefined ? 4 : level.id;
+  selectDeadline($event: MatAutocompleteSelectedEvent) {
+    this._setDefaultDeadlineOptions();
+  }
 
-    this.onDeadlineChange.emit(deadline);
+  private _setDefaultDeadlineOptions(): void {
+    this.filteredDeadlines = [...this.deadlineOptions];
+  }
+
+  private _filterDeadlines(filter: number): void {
+    if (!filter) return this._setDefaultDeadlineOptions();
+
+    this.filteredDeadlines = this.deadlineOptions
+      .filter(deadline => deadline.toString().includes(filter.toString()));
   }
 
   ngOnDestroy() {

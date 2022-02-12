@@ -1,3 +1,8 @@
+import { MarketTokens } from '@sharedModels/ui/tokens/market-tokens';
+import { MarketToken } from '@sharedModels/ui/tokens/market-token';
+import { Paging } from '@sharedModels/ui/paging';
+import { Token } from '@sharedModels/ui/tokens/token';
+import { Tokens } from '@sharedModels/ui/tokens/tokens';
 import { ITokenHistoryResponse } from '@sharedModels/platform-api/responses/tokens/token-history-response.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
@@ -6,15 +11,12 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
-import { ITokensResponse } from '@sharedModels/platform-api/responses/tokens/tokens-response.interface';
 import { Observable, forkJoin, Subscription } from 'rxjs';
-import { switchMap, map, take } from 'rxjs/operators';
-import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
+import { switchMap, map, take, tap } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
-import { TokenHistory } from '@sharedModels/token-history';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
+import { TokenHistory } from '@sharedModels/ui/tokens/token-history';
 
 @Component({
   selector: 'opdex-tokens-table',
@@ -25,8 +27,8 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
   @Input() filter: TokensFilter;
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
-  paging: ICursor;
-  token$: Observable<ITokensResponse>;
+  paging: Paging;
+  token$: Observable<Tokens>;
   subscription: Subscription;
   icons = Icons;
   iconSizes = IconSizes;
@@ -48,26 +50,22 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
     }
   }
 
-  private getTokens$(cursor?: string): Observable<ITokensResponse> {
+  private getTokens$(cursor?: string): Observable<MarketToken[]> {
     this.filter.cursor = cursor;
 
     return this._tokensService.getTokens(this.filter)
       .pipe(
-        switchMap((tokens: ITokensResponse) => {
+        switchMap((tokens: MarketTokens) => {
           this.paging = tokens.paging;
-          const poolArray$: Observable<any>[] = [];
-          tokens.results.forEach(token => poolArray$.push(this.getTokenHistory$(token)));
-          return forkJoin(poolArray$);
+          const tokens$: Observable<MarketToken>[] = [];
+          tokens.results.forEach(token => tokens$.push(this.getTokenHistory$(token)));
+          return forkJoin(tokens$);
         }),
-        map(tokens => {
-          this.dataSource.data = [...tokens];
-          return {results: tokens, paging: this.paging}
-        }),
-        take(1)
-      );
+        tap(tokens => this.dataSource.data = [...tokens]),
+        take(1));
   }
 
-  private getTokenHistory$(token: any): Observable<any> {
+  private getTokenHistory$(token: MarketToken): Observable<MarketToken> {
     const startDate = HistoryFilter.historicalDate(HistoryFilter.startOfDay(new Date()), 30);;
     const endDate = HistoryFilter.endOfDay(new Date());
     const historyFilter = new HistoryFilter(startDate, endDate, HistoryInterval.Daily);
@@ -76,8 +74,7 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
       .pipe(
         take(1),
         map((tokenHistory: ITokenHistoryResponse) => {
-          const history = new TokenHistory(tokenHistory);
-          token.snapshotHistory = history.line;
+          token.setHistory(new TokenHistory(tokenHistory));
           return token;
         }));
   }
@@ -90,7 +87,7 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
     this._router.navigateByUrl(`/tokens/${name}`);
   }
 
-  trackBy(index: number, token: IToken) {
+  trackBy(index: number, token: Token) {
     return `${index}-${token.address}-${token.summary.dailyPriceChangePercent}-${token.summary.priceUsd}`;
   }
 

@@ -1,4 +1,4 @@
-import { IMarketHistoryResponse } from './platform-api/responses/markets/market-history-response.interface';
+import { IMarketHistoryResponse } from '@sharedModels/platform-api/responses/markets/market-history-response.interface';
 
 export class MarketHistory {
   liquidity: any;

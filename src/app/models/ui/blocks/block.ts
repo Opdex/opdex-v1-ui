@@ -1,4 +1,4 @@
-import { IBlock } from "./platform-api/responses/blocks/block.interface";
+import { IBlock } from "@sharedModels/platform-api/responses/blocks/block.interface";
 
 export class Block {
   private _height: number;

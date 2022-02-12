@@ -1,10 +1,10 @@
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { OnDestroy } from '@angular/core';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { debounceTime, distinctUntilChanged, take, tap, switchMap, filter, map } from 'rxjs/operators';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
-import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Icons } from 'src/app/enums/icons';
 import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
@@ -22,7 +22,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
   @Input() data;
   icons = Icons;
   form: FormGroup;
-  pool: ILiquidityPoolResponse;
+  pool: LiquidityPool;
   subscription = new Subscription();
   fiatValue: FixedDecimal;
   percentageSelected: string;
@@ -38,11 +38,10 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
 
   get percentageOfSupply() {
     const oneHundred = FixedDecimal.OneHundred(8);
-    const { summary } = this.pool;
-    const totalWeight = new FixedDecimal(summary.staking.weight, summary.staking.token.decimals);
-    if (totalWeight.isZero) return oneHundred;
-    const outputWeight = new FixedDecimal(this.amount.value, summary.staking.token.decimals);
-    return outputWeight.divide(totalWeight).multiply(oneHundred);
+    const { summary, tokens } = this.pool;
+    if (summary.staking.weight.isZero) return oneHundred;
+    const outputWeight = new FixedDecimal(this.amount.value, tokens.staking?.decimals);
+    return outputWeight.divide(summary.staking.weight).multiply(oneHundred);
   }
 
   constructor(
@@ -78,7 +77,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
   }
 
   submit(): void {
-    const request = new StopStakingRequest(new FixedDecimal(this.amount.value, this.pool.summary.staking.token.decimals), this.liquidate.value);
+    const request = new StopStakingRequest(new FixedDecimal(this.amount.value, this.pool.tokens.staking.decimals), this.liquidate.value);
 
     this._platformApi
       .stopStakingQuote(this.pool.address, request.payload)
@@ -92,16 +91,16 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
     this.amount.setValue(value.result, {emitEvent: true});
   }
   private setFiatValue(amount: FixedDecimal): void {
-    const stakingTokenFiat = new FixedDecimal(this.pool.summary.staking?.token.summary.priceUsd.toString(), 8);
+    const stakingTokenFiat = new FixedDecimal(this.pool.tokens.staking?.summary?.priceUsd?.toFixed(8), 8);
     this.fiatValue = stakingTokenFiat.multiply(amount);
   }
 
   private validateStakingBalance(): Observable<boolean> {
-    if (!this.amount.value || !this.context?.wallet || !this.pool?.summary?.staking?.token) {
+    if (!this.amount.value || !this.context?.wallet || !this.pool?.tokens?.staking) {
       return of(false);
     }
 
-    const amountNeeded = new FixedDecimal(this.amount.value, this.pool.summary.staking.token.decimals);
+    const amountNeeded = new FixedDecimal(this.amount.value, this.pool.tokens?.staking?.decimals);
 
     return this._validateStakingBalance$(this.pool, amountNeeded)
       .pipe(tap(result => this.balanceError = !result));

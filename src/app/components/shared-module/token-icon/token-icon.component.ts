@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
+import { Token } from '@sharedModels/ui/tokens/token';
 
 @Component({
   selector: 'opdex-token-icon',
@@ -9,7 +9,7 @@ import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interf
 export class TokenIconComponent {
   private readonly _baseUrl = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains';
 
-  @Input() token: IToken;
+  @Input() token: Token;
 
   public get iconPath(): string {
     if (!this.token) return '';

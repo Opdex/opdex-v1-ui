@@ -1,4 +1,4 @@
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
+import { Token } from '@sharedModels/ui/tokens/token';
 import { Component, Injector, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TxEventBaseComponent } from '../../tx-event-base.component';
@@ -13,7 +13,7 @@ import { IApprovalEvent } from '@sharedModels/platform-api/responses/transaction
 export class ApprovalEventComponent extends TxEventBaseComponent {
   @Input() txEvent: ITransactionEvent;
   event: IApprovalEvent;
-  token$: Observable<IToken>;
+  token$: Observable<Token>;
 
   constructor(protected injector: Injector) {
     super(injector);

@@ -1,9 +1,9 @@
+import { Token } from '@sharedModels/ui/tokens/token';
 import { FixedDecimal } from './types/fixed-decimal';
-import { IToken } from "./platform-api/responses/tokens/token.interface";
 
 export class AddressPosition {
   private _walletAddress: string;
-  private _token: IToken;
+  private _token: Token;
   private _position: 'Staking' | 'Mining' | 'Balance' | 'Providing';
   private _amount: FixedDecimal;
   private _value: FixedDecimal;
@@ -12,7 +12,7 @@ export class AddressPosition {
     return this._walletAddress;
   }
 
-  public get token(): IToken {
+  public get token(): Token {
     return this._token;
   }
 
@@ -28,26 +28,21 @@ export class AddressPosition {
     return this._value;
   }
 
-  constructor(walletAddress: string, token: IToken, position: 'Staking' | 'Mining' | 'Balance', amount: FixedDecimal) {
+  constructor(walletAddress: string, token: Token, position: 'Staking' | 'Mining' | 'Balance', amount: FixedDecimal) {
     this._walletAddress = walletAddress;
     this._token = token;
     // Balances of OLPT are the users position for providing liquidity
     this._position = position === 'Balance' && token?.symbol === 'OLPT' ? 'Providing' : position;
     this._amount = amount;
-    this._value = this.calcValue();
+    this._value = this._calcValue();
   }
 
-  private calcValue(): FixedDecimal {
-    const valueDecimals = 8;
-    let result = FixedDecimal.Zero(valueDecimals);
-
+  private _calcValue(): FixedDecimal {
     if (this._token) {
-      const price = new FixedDecimal(this._token.summary.priceUsd.toString(), valueDecimals);
-      const amount = new FixedDecimal(this._amount.formattedValue, this._token.decimals);
-
-      result = price.multiply(amount);
+      const price = new FixedDecimal(this._token.summary.priceUsd.toFixed(8), 8);
+      return price.multiply(this._amount);
     }
 
-    return result;
+    return FixedDecimal.Zero(8);
   }
 }

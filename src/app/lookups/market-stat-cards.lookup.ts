@@ -1,13 +1,13 @@
-import { IMarket } from "@sharedModels/platform-api/responses/markets/market.interface";
+import { Market } from '@sharedModels/ui/markets/market';
 import { StatCardInfo } from "@sharedModels/stat-card-info";
 import { Icons } from "../enums/icons";
 
 export class MarketStatCardsLookup {
-  public static getStatCards(market: IMarket): StatCardInfo[] {
+  public static getStatCards(market: Market): StatCardInfo[] {
     return [
       {
         title: 'Liquidity',
-        value: market?.summary?.liquidityUsd?.toString(),
+        value: market?.summary?.liquidityUsd?.toFixed(8),
         prefix: '$',
         change: market?.summary?.dailyLiquidityUsdChangePercent,
         show: true,
@@ -20,8 +20,8 @@ export class MarketStatCardsLookup {
       },
       {
         title: 'Staking',
-        value: market?.summary?.staking?.stakingWeight,
-        suffix: market?.stakingToken?.symbol,
+        value: market?.summary?.staking?.stakingWeight?.formattedValue,
+        suffix: market?.tokens?.staking?.symbol,
         change: market?.summary?.staking?.dailyStakingWeightChangePercent,
         show: true,
         icon: Icons.staking,
@@ -33,7 +33,7 @@ export class MarketStatCardsLookup {
       },
       {
         title: 'Volume',
-        value: market?.summary?.volumeUsd?.toString(),
+        value: market?.summary?.volumeUsd?.toFixed(8),
         prefix: '$',
         daily: true,
         show: true,
@@ -46,7 +46,7 @@ export class MarketStatCardsLookup {
       },
       {
         title: 'Rewards',
-        value: market?.summary?.rewards?.totalDailyUsd,
+        value: market?.summary?.rewards?.totalDailyUsd?.toFixed(8),
         daily: true,
         prefix: '$',
         show: true,

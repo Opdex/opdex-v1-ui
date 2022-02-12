@@ -1,0 +1,11 @@
+<div class="flex-row-center">
+  <div class="toggle">
+    <div [ngClass]="theme" class="toggle-option flex-row-center-center" (click)="toggleTheme()">
+      <mat-icon class="tiny">{{theme === 'light-mode' ? icons.lightMode : icons.darkMode}}</mat-icon>
+    </div>
+
+    <div class="pipe"></div>
+  </div>
+
+  <small class="b-400 ml-1">{{themeName}}</small>
+</div>

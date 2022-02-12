@@ -1,6 +1,6 @@
-import { ITokensResponse } from '@sharedModels/platform-api/responses/tokens/tokens-response.interface';
+import { Tokens } from '@sharedModels/ui/tokens/tokens';
+import { Token } from '@sharedModels/ui/tokens/token';
 import { OnInit, OnDestroy } from '@angular/core';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { debounceTime, distinctUntilChanged, map, switchMap, take, tap } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { Icons } from 'src/app/enums/icons';
@@ -19,14 +19,14 @@ export class TokenKeywordFilterControlComponent implements OnInit, OnDestroy {
   @ViewChild('filterInput') filterInput: ElementRef;
 
   @Input() includeProvisional = false;
-  @Output() onTokenSelect = new EventEmitter<IToken>();
+  @Output() onTokenSelect = new EventEmitter<Token>();
 
   control: FormControl;
   filter: TokensFilter;
   icons = Icons;
   subscription = new Subscription();
-  tokens: IToken[];
-  crs: IToken;
+  tokens: Token[];
+  crs: Token;
 
   constructor(private _tokensService: TokensService) {
     // init loader w/ fake tokens
@@ -70,11 +70,11 @@ export class TokenKeywordFilterControlComponent implements OnInit, OnDestroy {
     this.filter.keyword = keyword;
 
     return this._tokensService.getTokens(this.filter)
-      .pipe(map((response: ITokensResponse) => {
+      .pipe(map((response: Tokens) => {
         this.tokens = [...response.results];
 
         if (!keyword || 'crs'.includes(keyword.toLowerCase()) && this.crs) {
-          this.tokens.unshift({...this.crs});
+          this.tokens.unshift(this.crs);
         }
       }));
   }

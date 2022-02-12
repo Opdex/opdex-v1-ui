@@ -14,13 +14,13 @@
         </div>
 
         <div class="flex-row-center mb-1">
-          <span class="badge cirrus no-wrap mr-2">Cirrus</span>
+          <opdex-token-native-chain-badge class="mr-2"></opdex-token-native-chain-badge>
           <opdex-copy-address [address]="token?.address" *ngIf="token?.address !== 'CRS'"></opdex-copy-address>
         </div>
 
-        <div class="flex-row-center" *ngIf="token?.wrappedToken">
-          <span class="badge ethereum no-wrap mr-2" >{{token.wrappedToken.chain}}</span>
-          <opdex-copy-address [address]="token.wrappedToken.address" *ngIf="token.wrappedToken.address"></opdex-copy-address>
+        <div class="flex-row-center" *ngIf="token.wrappedToken">
+          <opdex-token-native-chain-badge class="mr-2" [wrappedToken]="token.wrappedToken" *ngIf="token?.wrappedToken"></opdex-token-native-chain-badge>
+          <opdex-copy-address [address]="token.wrappedToken.address || 'Native Token'"></opdex-copy-address>
         </div>
       </div>
 
@@ -47,7 +47,7 @@
         <opdex-card [fullHeight]="true">
           <div class="flex-row-center-between">
             <p class="mb-0">Total Supply</p>
-            <p class="mb-0">{{token.totalSupply | shortNumber}}</p>
+            <p class="mb-0">{{token.totalSupply?.formattedValue | shortNumber}}</p>
           </div>
         </opdex-card>
       </div>
@@ -62,7 +62,7 @@
               <p class="mb-0 flex-row-center">
                 <mat-icon class="ml-1 mr-1" [ngClass]="iconSizes.tiny">{{icons.lock}}</mat-icon>
                 <span class="align-items-end">
-                  {{liquidityPool.summary.reserves.src | shortNumber}} <small>{{token.symbol}}</small>
+                  {{liquidityPool.summary.reserves.src.formattedValue | shortNumber}} <small>{{token.symbol}}</small>
                 </span>
               </p>
             </div>
@@ -75,7 +75,7 @@
               <mat-icon class="ml-1 mr-1" [ngClass]="iconSizes.tiny">{{icons.swap}}</mat-icon>
 
               <span class="align-items-end">
-                {{liquidityPool.summary.cost.crsPerSrc | shortNumber}} <small>{{liquidityPool.tokens.crs.symbol}}</small>
+                {{liquidityPool.summary.cost.crsPerSrc.formattedValue | shortNumber}} <small>{{liquidityPool.tokens.crs.symbol}}</small>
               </span>
             </div>
           </ng-container>

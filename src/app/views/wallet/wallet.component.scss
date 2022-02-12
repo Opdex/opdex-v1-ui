@@ -8,3 +8,9 @@
     font-size: .5em;
   }
 }
+
+.clickable {
+  &:hover {
+    cursor: pointer;
+  }
+}

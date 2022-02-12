@@ -1,3 +1,4 @@
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { MiningPoolsService } from '@sharedServices/platform/mining-pools.service';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
@@ -9,15 +10,15 @@ import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Component, Input, OnDestroy } from '@angular/core';
 import { AddressPosition } from '@sharedModels/address-position';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { IAddressBalance } from '@sharedModels/platform-api/responses/wallets/address-balance.interface';
 import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { IAddressStaking } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { catchError, map, skip, switchMap, take, tap } from 'rxjs/operators';
-import { ILiquidityPoolResponse, IMiningPool } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
 import { UserContext } from '@sharedModels/user-context';
+import { IMiningPool } from '@sharedModels/platform-api/responses/mining-pools/mining-pool.interface';
+import { Token } from '@sharedModels/ui/tokens/token';
 
 @Component({
   selector: 'opdex-wallet-preview',
@@ -89,7 +90,7 @@ export class WalletPreviewComponent implements OnDestroy {
 
     return combineLatest(combo)
       .pipe(
-        map(([token, result]: [IToken, IAddressBalance]) => {
+        map(([token, result]: [Token, IAddressBalance]) => {
           const amount = new FixedDecimal(result.balance, token.decimals);
           return new AddressPosition(walletAddress, token, 'Balance', amount);
         }),
@@ -104,12 +105,12 @@ export class WalletPreviewComponent implements OnDestroy {
 
     return combineLatest(combo)
       .pipe(
-        map(([liquidityPool, result]: [ILiquidityPoolResponse, IAddressStaking]) => {
+        map(([liquidityPool, result]: [LiquidityPool, IAddressStaking]) => {
           // Governance token does not have staking, return null
           if (!liquidityPool.summary.staking) return null as AddressPosition;
 
-          const amount = new FixedDecimal(result.amount, liquidityPool.summary.staking?.token.decimals);
-          return new AddressPosition(walletAddress, liquidityPool.summary.staking?.token, 'Staking', amount);
+          const amount = new FixedDecimal(result.amount, liquidityPool.tokens.staking?.decimals);
+          return new AddressPosition(walletAddress, liquidityPool.tokens.staking, 'Staking', amount);
         }),
         take(1));
   }

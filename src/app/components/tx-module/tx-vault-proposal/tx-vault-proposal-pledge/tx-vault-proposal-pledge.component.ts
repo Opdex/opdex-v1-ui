@@ -11,10 +11,10 @@ import { Observable, of, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, take, tap } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { VaultProposalPledgeQuoteRequest } from '@sharedModels/platform-api/requests/vaults/vault-proposal-pledge-quote-request.interface';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
+import { Token } from '@sharedModels/ui/tokens/token';
 
 @Component({
   selector: 'opdex-tx-vault-proposal-pledge',
@@ -29,7 +29,7 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
   fiatValue: string;
   isWithdrawal = false;
   percentageSelected: string;
-  crs: IToken;
+  crs: Token;
   vaultAddress: string;
   positionType: 'Balance' | 'ProposalPledge';
   subscription = new Subscription();

@@ -7,7 +7,21 @@
 
       <div class="flex-row-center-between w-100">
         <small class="b-400">{{tx?.transactionSummary}}</small>
-        <small *ngIf="showTimeAgo">{{tx?.block?.medianTime | timeago}}</small>
+
+        <div class="flex-row-center">
+          <small *ngIf="showTimeAgo">{{tx?.block?.medianTime | timeago}}</small>
+
+          <a mat-button
+            color="primary"
+            class="tiny p-0 ml-2"
+            style="font-size: .8em; line-height: .8em; min-width: 0;"
+            href="https://explorer.coinvault.io/{{chain}}/explorer/transaction/{{tx.hash}}"
+            target="_blank"
+            *ngIf="!!tx.hash"
+            matTooltip="View in Explorer">
+            <mat-icon class="tiny">{{icons.exit}}</mat-icon>
+          </a>
+        </div>
       </div>
     </div>
 
@@ -26,12 +40,9 @@
     </div>
 
     <ng-template #invalid>
-      <div class="icon-container-offset flex-row-center" *ngIf="tx.success">
-        Unable to read transaction summary.
-      </div>
-
-      <div class="icon-container-offset flex-row-center" *ngIf="!tx.success">
-        {{tx.error.friendly}}
+      <div class="icon-container-offset flex-row-center" >
+        <span *ngIf="tx.success">Unable to read transaction summary.</span>
+        <span *ngIf="!tx.success">{{tx.error.friendly}}</span>
       </div>
     </ng-template>
 
@@ -43,7 +54,8 @@
             [value]="tx.hash"
             [icon]="icons.receipt"
             [size]="iconSizes.tiny"
-            color="primary" [stopPropagation]="true"></opdex-copy-button>
+            color="primary"
+            [stopPropagation]="true"></opdex-copy-button>
 
           <span class="ml-2"><small>{{tx.hash | shortAddress:3}}</small></span>
         </div>
