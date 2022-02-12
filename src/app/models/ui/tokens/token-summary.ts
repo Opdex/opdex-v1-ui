@@ -23,9 +23,9 @@ export class TokenSummary {
   }
 
   constructor(summary: ITokenSummary) {
-    this._priceUsd = summary.priceUsd;
-    this._dailyPriceChangePercent = summary.dailyPriceChangePercent;
-    this._createdBlock = summary.createdBlock;
-    this._modifiedBlock = summary.modifiedBlock;
+    this._priceUsd = summary?.priceUsd || 0.00000000;
+    this._dailyPriceChangePercent = summary?.dailyPriceChangePercent || 0.00000000;;
+    this._createdBlock = summary?.createdBlock || 0;
+    this._modifiedBlock = summary?.modifiedBlock || 0;
   }
 }

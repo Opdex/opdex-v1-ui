@@ -1,34 +1,71 @@
 <div class="create-pool">
   <opdex-card>
-    <form [formGroup]="form" name="create-pool-form" id="swap-form">
-      <opdex-input-control [suffixDisabled]="true" [prefixIcon]="icons.link" label="Token" [formControl]="token" placeholder="torAyErDvMdZqNdVU8kmiLaykuE5L2UfwJ"></opdex-input-control>
-      <ng-container *ngIf="isTokenKnown && isValidToken">
-        <div class="flex-row-center ml-1 mt-2">
-          <mat-icon [ngClass]="iconSizes.tiny" class="green">{{icons.checkOutline}}</mat-icon>
-          <span class="ml-2">{{validatedToken.name}} <small class="light">({{validatedToken.symbol}})</small></span>
+    <form [formGroup]="form" name="create-pool-form" id="create-pool-form">
+      <opdex-input-control
+        [suffixDisabled]="true"
+        [prefixIcon]="icons.link"
+        label="Token"
+        [formControl]="token"
+        placeholder="torAyErDvMdZqNdVU8kmiLaykuE5L2UfwJ">
+      </opdex-input-control>
+
+      <ng-container *ngIf="form.valid && validatedToken">
+        <div class="flex-row-center-between mt-2">
+          <div class="flex-row-center">
+            <opdex-token-icon [token]="validatedToken"></opdex-token-icon>
+            <div class="flex-col-center ml-2">
+              <small class="overflow-ellipsis d-block">{{validatedToken.symbol}}</small>
+              <small class=" light overflow-ellipsis d-block">{{validatedToken.name}}</small>
+            </div>
+          </div>
+
+          <span class="badge {{isTokenValid ? 'green' : 'red'}}" *ngIf="!validatedTokenPool">
+            <mat-icon class="mr-1">{{isTokenValid ? icons.check : icons.error}}</mat-icon>
+            {{isTokenValid ? 'Valid' : 'Invalid'}}
+          </span>
+
+          <span class="badge orange" *ngIf="!!validatedTokenPool">
+            <mat-icon class="mr-1">{{icons.warning}}</mat-icon>
+            {{validatedTokenPool.name}} Exists
+          </span>
         </div>
-        <div class="flex-row-center ml-2 mt-1">
-          <small class="ml-2 light overflow-ellipsis d-block">{{validatedToken.address}}</small>
+
+        <div class="flex-row-center-between mt-2 mb-1">
+          <opdex-token-native-chain-badge class="mr-2"></opdex-token-native-chain-badge>
+          <opdex-copy-address [address]="validatedToken.address" [short]="true"></opdex-copy-address>
         </div>
+
+        <div class="flex-row-center-between" *ngIf="validatedToken.wrappedToken">
+          <opdex-token-native-chain-badge
+            class="mr-2"
+            [wrappedToken]="validatedToken.wrappedToken">
+          </opdex-token-native-chain-badge>
+          <opdex-copy-address
+            *ngIf="validatedToken.wrappedToken?.address"
+            [address]="validatedToken.wrappedToken.address"
+            [short]="true">
+          </opdex-copy-address>
+        </div>
+
+        <opdex-tx-quote-submit-button
+          label="Add Liquidity Pool"
+          [disabled]="!form.valid || !context?.wallet || !isTokenValid || !!validatedTokenPool"
+          (onSubmit)="submit()">
+        </opdex-tx-quote-submit-button>
       </ng-container>
 
-      <opdex-tx-quote-submit-button [disabled]="!form.valid || !context?.wallet || !isTokenKnown" (onSubmit)="submit()" *ngIf="isTokenKnown && isValidToken"></opdex-tx-quote-submit-button>
-
-      <ng-container *ngIf="form.valid && isTokenKnown == false">
-        <div class="flex-row-center ml-1 mt-2" *ngIf="isValidToken !== false">
-          <mat-icon [ngClass]="iconSizes.tiny" class="mine">{{icons.error}}</mat-icon>
-          <span class="ml-2">Unknown token, please validate</span>
-        </div>
-
-        <div *ngIf="isValidToken === false" class="row flex-row-center ml-1">
-          <mat-icon [ngClass]="iconSizes.tiny" class="mine">{{icons.error}}</mat-icon>
-          <span class="ml-2">Invalid Token</span>
-        </div>
-
-        <opdex-tx-quote-submit-button [disabled]="!form.valid || !context?.wallet" (onSubmit)="validateToken()" label="Validate Token"></opdex-tx-quote-submit-button>
-      </ng-container>
+      <opdex-tx-quote-submit-button
+        [disabled]="!form.valid || !context?.wallet || quoteErrors?.length > 0"
+        (onSubmit)="validateToken()"
+        label="Validate New Token"
+        *ngIf="form.valid && !validatedToken">
+      </opdex-tx-quote-submit-button>
 
       <opdex-tx-quote-errors [quoteErrors]="quoteErrors"></opdex-tx-quote-errors>
     </form>
   </opdex-card>
 </div>
+
+<!-- Link: tVWKnAPSMpDAVAf6Zgmd1DPksXiKJUkmpm -->
+<!-- USDT/CRS Pool: tCorSgPVt6pF5Q4gzcrZWDZ8f7ERVxhwAd -->
+<!-- WBTC: tGSk2dVENuqAQ2rNXbui37XHuurFCTqadD -->
