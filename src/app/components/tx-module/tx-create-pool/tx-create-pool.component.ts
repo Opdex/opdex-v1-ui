@@ -1,8 +1,11 @@
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
+import { LiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
+import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { catchError, distinctUntilChanged, switchMap, take} from 'rxjs/operators';
-import { Observable, of, Subscription } from 'rxjs';
+import { distinctUntilChanged, map, switchMap, take, catchError, tap } from 'rxjs/operators';
+import { of, Subscription } from 'rxjs';
 import { Component, Input, Injector } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TransactionView } from '@sharedModels/transaction-view';
@@ -14,7 +17,6 @@ import { TokensService } from '@sharedServices/platform/tokens.service';
 import { AddTokenRequest } from '@sharedModels/platform-api/requests/tokens/add-token-request';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
-import { UserContext } from '@sharedModels/user-context';
 import { Token } from '@sharedModels/ui/tokens/token';
 
 @Component({
@@ -28,16 +30,16 @@ export class TxCreatePoolComponent extends TxBase {
   form: FormGroup;
   icons = Icons;
   iconSizes = IconSizes;
-  txHash: string;
-  token$: Observable<string>;
-  subscription: Subscription = new Subscription();
-  isTokenKnown: boolean;
-  isValidToken: boolean;
+  subscription = new Subscription();
   validatedToken: Token = null;
-  context: UserContext;
+  validatedTokenPool: LiquidityPool = null;
 
   get token(): FormControl {
     return this.form.get('token') as FormControl;
+  }
+
+  get isTokenValid(): boolean {
+    return this.validatedToken && !this.validatedToken.attributes.includes('Provisional');
   }
 
   constructor(
@@ -45,7 +47,8 @@ export class TxCreatePoolComponent extends TxBase {
     private _platform: PlatformApiService,
     protected _injector: Injector,
     private _tokensService: TokensService,
-    private _env: EnvironmentsService
+    private _env: EnvironmentsService,
+    private _liquidityPoolsService: LiquidityPoolsService
   ) {
     super(_injector);
 
@@ -58,23 +61,22 @@ export class TxCreatePoolComponent extends TxBase {
         .pipe(
           distinctUntilChanged(),
           debounceTime(400),
-          switchMap((value: string) => this._tokensService.getToken(value).pipe(catchError(_ => of(null)))),
-        ).subscribe(token => {
-          if (!token) {
-            this.isTokenKnown = false;
-          } else {
-            this.isTokenKnown = true;
-            this.isValidToken = true;
-            this.validatedToken = token;
-          }
-        })
-    )
+          switchMap((value: string) => {
+            return this._tokensService.getToken(value)
+              .pipe(
+                tap(token => this._validateToken(token, null)),
+                catchError((error: OpdexHttpError) => {
+                  this._validateToken(null, error.status === 404 ? null : error.errors);
+                  return of(null);
+                }))
+        }))
+        .subscribe());
   }
 
   submit() {
     const request = new CreateLiquidityPoolRequest(this.token.value, this._env.marketAddress);
 
-    if (!this.isTokenKnown) {
+    if (!this.validatedToken) {
       this.validateToken();
       return;
     }
@@ -91,25 +93,42 @@ export class TxCreatePoolComponent extends TxBase {
 
     this._platform.addToken(request.payload)
       .pipe(
-        catchError(_ => of(null)),
+        // return token or fetch token - token already exists vs 201 created
+        switchMap((token: Token) => !!token ? of(token) : this._tokensService.getToken(this.token.value)),
         take(1))
-      .subscribe((token: Token) => {
-        if(!token){
-          this.isValidToken = false;
-        } else {
-          this.isTokenKnown = true;
-          this.isValidToken = true;
-          this.validatedToken = token;
-        }
-      },
-      (error: OpdexHttpError) => this.quoteErrors = error.errors);
+      .subscribe((token: Token) => this._validateToken(token, null),
+                 (error: OpdexHttpError) => this._validateToken(null, error.errors));
   }
 
-  destroyContext$() {
+  private _validateToken(token: Token, errors: string[]) {
+    if (token && !errors) {
+      const filter = new LiquidityPoolsFilter({
+        markets: [this._env.marketAddress],
+        tokens: [token.address],
+        limit: 1
+      });
+
+      this._liquidityPoolsService.getLiquidityPools(filter)
+        .pipe(
+          take(1),
+          map(results => results.results[0]))
+        .subscribe(pool => this._setValidations(token, pool, null));
+    } else {
+      this._setValidations(null, null, errors)
+    }
+  }
+
+  private _setValidations(token: Token, pool: LiquidityPool, errors: string[]): void {
+    this.validatedToken = token;
+    this.validatedTokenPool = pool;
+    this.quoteErrors = errors;
+  }
+
+  destroyContext$(): void {
     this.context$.unsubscribe();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroyContext$();
     this.subscription.unsubscribe();
   }

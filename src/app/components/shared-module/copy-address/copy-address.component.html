@@ -2,7 +2,8 @@
   [cdkCopyToClipboard]="address"
   (click)="copyHandler($event)"
   *ngIf="address?.length > 0; else loading">
-  <span class="address">{{address}}</span>
+  <span class="address" *ngIf="short">{{address | shortAddress:6}}</span>
+  <span class="address" *ngIf="!short">{{address}}</span>
   <mat-icon class="ml-1">{{copied ? icons.checkOutline : icons.copy}}</mat-icon>
 </a>
 

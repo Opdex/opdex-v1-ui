@@ -5,16 +5,28 @@
 
 .dark-mode {
   .mat-snack-bar-container {
-    background: rgba(18, 17, 32, 0.97);
+    background: #131221;
     color: white;
     border: 1px solid #292929;
+
+    .close {
+      background: #131221;
+      box-shadow: 0px 1px 2px rgb(0 0 0 / 30%);
+      border: 1px solid #292929;
+    }
   }
 }
 
 .light-mode {
   .mat-snack-bar-container {
-    background: rgba(255,255,255, 0.97);
-    border: 1px solid rgb(228, 228, 228);
+    background: white;
+    border: 1px solid #e4e4e4;
     color: $dark-primary !important;
+
+    .close {
+      background: white;
+      border: 1px solid #e4e4e4;
+      box-shadow: 0px 1px 2px rgb(0 0 0 / 30%);
+    }
   }
 }

@@ -107,7 +107,7 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
             .pipe(
               map(positions => {
                 this.dataSource.data = positions.map(({ pool, position }) => {
-                  const price = new FixedDecimal(pool.tokens.lp.summary.priceUsd.toString(), 8);
+                  const price = new FixedDecimal(pool.tokens.lp.summary.priceUsd.toFixed(8), 8);
                   const amount = new FixedDecimal(position.amount, pool.tokens.lp.decimals);
 
                   return {

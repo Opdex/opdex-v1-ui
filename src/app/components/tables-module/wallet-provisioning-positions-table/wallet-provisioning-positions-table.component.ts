@@ -111,7 +111,7 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
             .pipe(map(balances => {
               this.dataSource.data = balances.map(({pool, balance}) => {
                 const src = pool.tokens.src;
-                const price = new FixedDecimal(src.summary?.priceUsd?.toString() || '0', 8);
+                const price = new FixedDecimal(src.summary?.priceUsd?.toFixed(8) || '0', 8);
                 const amount = new FixedDecimal(balance.balance, src.decimals);
 
                 return {

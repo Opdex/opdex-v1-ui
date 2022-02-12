@@ -91,7 +91,7 @@ export class TxStakeStopComponent extends TxBase implements OnChanges, OnDestroy
     this.amount.setValue(value.result, {emitEvent: true});
   }
   private setFiatValue(amount: FixedDecimal): void {
-    const stakingTokenFiat = new FixedDecimal(this.pool.tokens.staking?.summary?.priceUsd?.toString(), 8);
+    const stakingTokenFiat = new FixedDecimal(this.pool.tokens.staking?.summary?.priceUsd?.toFixed(8), 8);
     this.fiatValue = stakingTokenFiat.multiply(amount);
   }
 
