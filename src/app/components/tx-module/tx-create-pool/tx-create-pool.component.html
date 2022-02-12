@@ -26,16 +26,27 @@
 
           <span class="badge orange" *ngIf="!!validatedTokenPool">
             <mat-icon class="mr-1">{{icons.warning}}</mat-icon>
-            {{validatedTokenPool.name}} Exists
+            Pool Exists
           </span>
         </div>
 
         <div class="flex-row-center-between mt-2 mb-1">
-          <opdex-token-native-chain-badge class="mr-2"></opdex-token-native-chain-badge>
-          <opdex-copy-address [address]="validatedToken.address" [short]="true"></opdex-copy-address>
+          <div class="flex-row-center">
+            <opdex-token-native-chain-badge class="mr-2"></opdex-token-native-chain-badge>
+            <opdex-copy-address [address]="validatedToken.address" [short]="true"></opdex-copy-address>
+          </div>
+
+          <a class="no-decoration"
+            routerLink="/pools/{{validatedTokenPool.address}}"
+            *ngIf="validatedTokenPool">
+            <small class="flex-row-center b-400">
+              View {{validatedTokenPool.name}}
+              <mat-icon class="tiny ml-1">{{icons.transfer}}</mat-icon>
+            </small>
+          </a>
         </div>
 
-        <div class="flex-row-center-between" *ngIf="validatedToken.wrappedToken">
+        <div class="flex-row-center" *ngIf="validatedToken.wrappedToken">
           <opdex-token-native-chain-badge
             class="mr-2"
             [wrappedToken]="validatedToken.wrappedToken">
@@ -65,7 +76,3 @@
     </form>
   </opdex-card>
 </div>
-
-<!-- Link: tVWKnAPSMpDAVAf6Zgmd1DPksXiKJUkmpm -->
-<!-- USDT/CRS Pool: tCorSgPVt6pF5Q4gzcrZWDZ8f7ERVxhwAd -->
-<!-- WBTC: tGSk2dVENuqAQ2rNXbui37XHuurFCTqadD -->

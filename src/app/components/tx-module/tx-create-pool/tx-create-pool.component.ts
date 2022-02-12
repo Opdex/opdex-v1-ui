@@ -66,7 +66,7 @@ export class TxCreatePoolComponent extends TxBase {
               .pipe(
                 tap(token => this._validateToken(token, null)),
                 catchError((error: OpdexHttpError) => {
-                  this._validateToken(null, error.status === 404 ? error.errors : null);
+                  this._validateToken(null, error.status === 404 ? null : error.errors);
                   return of(null);
                 }))
         }))
