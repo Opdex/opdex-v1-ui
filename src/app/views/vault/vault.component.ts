@@ -1,13 +1,14 @@
+import { VaultProposals } from '@sharedModels/ui/vaults/vault-proposals';
+import { VaultCertificates } from '@sharedModels/ui/vaults/vault-certificates';
+import { Vault } from '@sharedModels/ui/vaults/vault';
 import { Token } from '@sharedModels/ui/tokens/token';
 import { IVaultProposalsFilter } from '@sharedModels/platform-api/requests/vaults/vault-proposals-filter';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Icons } from 'src/app/enums/icons';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
-import { IVaultProposalResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-response-model.interface';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { IVaultResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-response-model.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { VaultsService } from '@sharedServices/platform/vaults.service';
@@ -15,13 +16,12 @@ import { Observable, Subscription } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { VaultStatCardsLookup } from '@sharedLookups/vault-stat-cards.lookup';
 import { StatCardInfo } from '@sharedModels/stat-card-info';
-import { IVaultProposalsResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposals-response-model.interface';
 import { VaultProposalsFilter } from '@sharedModels/platform-api/requests/vaults/vault-proposals-filter';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { VaultCertificatesFilter, IVaultCertificatesFilter, VaultCertificateStatusFilter } from '@sharedModels/platform-api/requests/vaults/vault-certificates-filter';
-import { IVaultCertificates } from '@sharedModels/platform-api/responses/vaults/vault-certificate.interface';
 import { UserContext } from '@sharedModels/user-context';
+import { VaultProposal } from '@sharedModels/ui/vaults/vault-proposal';
 
 @Component({
   selector: 'opdex-vault',
@@ -32,18 +32,18 @@ export class VaultComponent implements OnInit {
   @ViewChild('proposalScrollBar') proposalScrollBar: ElementRef;
 
   subscription: Subscription = new Subscription();
-  vault: IVaultResponseModel;
+  vault: Vault;
   token: Token;
   latestBlock: IBlock;
   statCards: StatCardInfo[];
-  proposals: IVaultProposalsResponseModel;
+  proposals: VaultProposals;
   transactionsRequest: ITransactionsRequest;
   transactionViews = TransactionView;
   icons = Icons;
   context: UserContext;
   proposalsFilter: VaultProposalsFilter;
   certificatesFilter: VaultCertificatesFilter;
-  certificates: IVaultCertificates;
+  certificates: VaultCertificates;
 
   constructor(
     private _vaultsService: VaultsService,
@@ -55,7 +55,7 @@ export class VaultComponent implements OnInit {
   ) {
     // Init with null to get default/loading animations
     this.statCards = VaultStatCardsLookup.getStatCards(null, null);
-    this.proposals = { results: [null, null, null, null], paging: {} } as IVaultProposalsResponseModel;
+    this.proposals = { results: [null, null, null, null], paging: {} } as VaultProposals;
 
     this.proposalsFilter = new VaultProposalsFilter({
       limit: 4,
@@ -88,7 +88,7 @@ export class VaultComponent implements OnInit {
         .subscribe());
   }
 
-  getOpenProposals$(): Observable<IVaultProposalsResponseModel> {
+  getOpenProposals$(): Observable<VaultProposals> {
     return this._vaultsService
       .getProposals(this.proposalsFilter, this._env.vaultAddress)
       .pipe(tap(proposals => this.proposals = proposals));
@@ -106,7 +106,7 @@ export class VaultComponent implements OnInit {
         }));
   }
 
-  getVaultCertificates$(): Observable<IVaultCertificates> {
+  getVaultCertificates$(): Observable<VaultCertificates> {
     return this._vaultsService.getCertificates(this.certificatesFilter, this._env.vaultAddress)
       .pipe(tap(response => this.certificates = response));
   }
@@ -122,14 +122,14 @@ export class VaultComponent implements OnInit {
 
   proposalsPageChange(cursor: string) {
     this.proposalsFilter.cursor = cursor;
-    this.proposals = { results: [null, null, null, null], paging: {} } as IVaultProposalsResponseModel;
+    this.proposals = { results: [null, null, null, null], paging: {} } as VaultProposals;
     this.proposalScrollBar.nativeElement.scrollTo({left: 0, behavior: 'smooth'});
     this.getOpenProposals$().pipe(take(1)).subscribe();
   }
 
-  proposalsTrackBy(index: number, proposal: IVaultProposalResponseModel) {
+  proposalsTrackBy(index: number, proposal: VaultProposal) {
     if (proposal === null || proposal === undefined) return index;
-    return `${index}-${proposal.proposalId}-${proposal.status}-${proposal.expiration}-${proposal.pledgeAmount}-${proposal.yesAmount}-${proposal.noAmount}`;
+    return `${index}-${proposal.proposalId}-${proposal.status}-${proposal.expiration}-${proposal.pledgeAmount.formattedValue}-${proposal.yesAmount.formattedValue}-${proposal.noAmount.formattedValue}`;
   }
 
   statCardTrackBy(index: number, statCard: StatCardInfo) {

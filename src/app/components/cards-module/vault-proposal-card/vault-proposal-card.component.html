@@ -21,7 +21,7 @@
     </div>
 
     <p class="mb-2" style="font-size: 1.4em; line-height: 1.2em" *ngIf="proposal.type !== 'Revoke'">
-      <span class="b-400 mr-2">{{proposal.amount | shortNumber}}</span>
+      <span class="b-400 mr-2">{{proposal.amount.formattedValue | shortNumber}}</span>
       <small *ngIf="proposal.type === 'Create'">ODX</small>
       <small *ngIf="proposal.type !== 'Create'">CRS</small>
     </p>
@@ -41,7 +41,7 @@
             <mat-icon>{{icons.add}}</mat-icon>
           </button>
 
-          {{proposal.pledgeAmount | shortNumber}}
+          {{proposal.pledgeAmount.formattedValue | shortNumber}}
         </small>
       </div>
 
@@ -58,7 +58,7 @@
               <mat-icon>{{icons.thumbUp}}</mat-icon>
             </button>
 
-            {{proposal.yesAmount | shortNumber}}
+            {{proposal.yesAmount.formattedValue | shortNumber}}
           </small>
 
           <small class="flex-row-center">
@@ -66,7 +66,7 @@
               <mat-icon>{{icons.thumbDown}}</mat-icon>
             </button>
 
-            {{proposal.noAmount | shortNumber}}
+            {{proposal.noAmount.formattedValue | shortNumber}}
           </small>
         </div>
       </div>

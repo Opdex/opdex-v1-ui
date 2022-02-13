@@ -6,23 +6,19 @@ export class Block {
   private _time: Date;
   private _medianTime: Date;
 
-  public get height(): number
-  {
+  public get height(): number {
     return this._height;
   }
 
-  public get hash(): string
-  {
+  public get hash(): string {
     return this._hash;
   }
 
-  public get time(): Date
-  {
+  public get time(): Date {
     return this._time;
   }
 
-  public get medianTime(): Date
-  {
+  public get medianTime(): Date {
     return this._medianTime;
   }
 

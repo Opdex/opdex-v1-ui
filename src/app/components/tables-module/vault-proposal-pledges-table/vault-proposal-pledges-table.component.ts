@@ -1,7 +1,6 @@
-import { SidenavService } from './../../../services/utility/sidenav.service';
+import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { OnDestroy } from '@angular/core';
 import { VaultProposalPledgesFilter } from '@sharedModels/platform-api/requests/vaults/vault-proposal-pledges-filter';
-import { IVaultProposalPledgesResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-pledges-response-model.interface';
 import { Component, Input, OnChanges, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -14,6 +13,7 @@ import { switchMap, take, tap } from 'rxjs/operators';
 import { VaultsService } from '@sharedServices/platform/vaults.service';
 import { IVaultProposalPledgeResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-pledge-response-model.interface';
 import { TransactionView } from '@sharedModels/transaction-view';
+import { VaultProposalPledges } from '@sharedModels/ui/vaults/vault-proposal-pledges';
 
 @Component({
   selector: 'opdex-vault-proposal-pledges-table',
@@ -27,7 +27,6 @@ export class VaultProposalPledgesTableComponent implements OnChanges, OnDestroy 
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
   paging: ICursor;
-  token$: Observable<IVaultProposalPledgesResponseModel>;
   subscription: Subscription;
   icons = Icons;
   iconSizes = IconSizes;
@@ -62,12 +61,12 @@ export class VaultProposalPledgesTableComponent implements OnChanges, OnDestroy 
     this._sidebar.openSidenav(TransactionView.vaultProposal, { child: 'Pledge', proposalId, withdraw })
   }
 
-  private getPledges$(cursor?: string): Observable<IVaultProposalPledgesResponseModel> {
+  private getPledges$(cursor?: string): Observable<VaultProposalPledges> {
     this.filter.cursor = cursor;
 
     return this._vaultsService.getPledges(this.filter)
       .pipe(
-        tap((pledges: IVaultProposalPledgesResponseModel) => {
+        tap((pledges: VaultProposalPledges) => {
           this.paging = pledges.paging;
           this.dataSource.data = pledges.results;
         }),

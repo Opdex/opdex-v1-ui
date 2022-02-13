@@ -1,3 +1,6 @@
+import { VaultProposalVote } from '@sharedModels/ui/vaults/vault-proposal-vote';
+import { VaultProposalPledge } from '@sharedModels/ui/vaults/vault-proposal-pledge';
+import { Vault } from '@sharedModels/ui/vaults/vault';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
 import { catchError } from 'rxjs/operators';
@@ -6,9 +9,6 @@ import { VaultProposalPledgesFilter, IVaultProposalPledgesFilter } from '@shared
 import { ActivatedRoute } from '@angular/router';
 import { Component } from '@angular/core';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
-import { IVaultResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-response-model.interface';
-import { IVaultProposalResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-response-model.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { VaultsService } from '@sharedServices/platform/vaults.service';
@@ -19,10 +19,9 @@ import { StatCardInfo } from '@sharedModels/stat-card-info';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { IVaultProposalVotesFilter, VaultProposalVotesFilter } from '@sharedModels/platform-api/requests/vaults/vault-proposal-votes-filter';
-import { IVaultProposalVoteResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-vote-response-model.interface';
-import { IVaultProposalPledgeResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-pledge-response-model.interface';
 import { UserContext } from '@sharedModels/user-context';
 import { Token } from '@sharedModels/ui/tokens/token';
+import { VaultProposal } from '@sharedModels/ui/vaults/vault-proposal';
 
 @Component({
   selector: 'opdex-vault-proposal',
@@ -31,15 +30,15 @@ import { Token } from '@sharedModels/ui/tokens/token';
 })
 export class VaultProposalComponent {
   subscription: Subscription = new Subscription();
-  vault: IVaultResponseModel;
+  vault: Vault;
   token: Token;
   latestBlock: IBlock;
   pledgesFilter: VaultProposalPledgesFilter;
   votesFilter: VaultProposalVotesFilter;
-  proposal: IVaultProposalResponseModel;
+  proposal: VaultProposal;
   context: UserContext;
-  userVote: IVaultProposalVoteResponseModel;
-  userPledge: IVaultProposalPledgeResponseModel;
+  userVote: VaultProposalVote;
+  userPledge: VaultProposalPledge;
   pledgePercentage: FixedDecimal;
   icons = Icons;
   iconSizes = IconSizes;
@@ -81,7 +80,7 @@ export class VaultProposalComponent {
     } as IVaultProposalVotesFilter);
   }
 
-  getProposal$(proposalId: number): Observable<IVaultProposalResponseModel> {
+  getProposal$(proposalId: number): Observable<VaultProposal> {
     return this._vaultsService
       .getProposal(proposalId)
       .pipe(tap(proposal => {
@@ -101,41 +100,41 @@ export class VaultProposalComponent {
         }));
   }
 
-  getVote$(): Observable<IVaultProposalVoteResponseModel> {
+  getVote$(): Observable<VaultProposalVote> {
     if (this.proposal.status === 'Pledge' || !!this.context?.wallet === false) return of(null);
 
     return this._vaultsService.getVote(this.proposal.proposalId, this.context.wallet, this.proposal.vault)
       .pipe(
         catchError(_ => of(null)),
-        tap(vote => this.userVote = vote));
+        tap((vote: VaultProposalVote) => this.userVote = vote));
   }
 
-  getPledge$(): Observable<IVaultProposalVoteResponseModel> {
+  getPledge$(): Observable<VaultProposalPledge> {
     if (!!this.context?.wallet === false) return of(null);
 
     return this._vaultsService.getPledge(this.proposal.proposalId, this.context.wallet, this.proposal.vault)
       .pipe(
         catchError(_ => of(null)),
-        tap(pledge => this.userPledge = pledge));
+        tap((pledge: VaultProposalPledge) => this.userPledge = pledge));
   }
 
   openTransactionView(view: string, withdraw: boolean) {
     this._sidebar.openSidenav(TransactionView.vaultProposal, { child: view, withdraw, proposalId: this.proposal.proposalId });
   }
 
-  proposalsTrackBy(index: number, proposal: IVaultProposalResponseModel) {
+  proposalsTrackBy(index: number, proposal: VaultProposal) {
     if (proposal === null || proposal === undefined) return index;
     return `${index}-${proposal.proposalId}-${proposal.status}-${proposal.expiration}-${proposal.pledgeAmount}-${proposal.yesAmount}-${proposal.noAmount}`;
   }
 
   private setPledgePercentage(): void {
-    const minimum = new FixedDecimal(this.vault.totalPledgeMinimum, 8);
-    const pledge = new FixedDecimal(this.proposal.pledgeAmount, 8);
+    const minimum = this.vault.totalPledgeMinimum;
+    const pledge = this.proposal.pledgeAmount;
 
     this.pledgePercentage = pledge.divide(minimum).multiply(FixedDecimal.OneHundred(0));
   }
 
-  getExpirationPercentage(proposal: IVaultProposalResponseModel) {
+  getExpirationPercentage(proposal: VaultProposal) {
     if (proposal.status === 'Complete' || proposal.expiration <= this.latestBlock.height) return 100;
 
     const threeDays = 60 * 60 * 24 * 3 / 16;

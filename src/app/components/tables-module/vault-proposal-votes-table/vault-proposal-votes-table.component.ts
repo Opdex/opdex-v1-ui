@@ -1,3 +1,4 @@
+import { VaultProposalVotes } from '@sharedModels/ui/vaults/vault-proposal-votes';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { IVaultProposalVoteResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-vote-response-model.interface';
 import { Component, Input, ViewChild, OnChanges, OnDestroy } from '@angular/core';
@@ -62,12 +63,12 @@ export class VaultProposalVotesTableComponent implements OnChanges, OnDestroy {
     this._sidebar.openSidenav(TransactionView.vaultProposal, { child: 'Vote', proposalId, withdraw })
   }
 
-  private getVotes$(cursor?: string): Observable<IVaultProposalVotesResponseModel> {
+  private getVotes$(cursor?: string): Observable<VaultProposalVotes> {
     this.filter.cursor = cursor;
 
     return this._vaultsService.getVotes(this.filter)
       .pipe(
-        tap((votes: IVaultProposalVotesResponseModel) => {
+        tap((votes: VaultProposalVotes) => {
           this.paging = votes.paging;
           this.dataSource.data = votes.results;
         }),
