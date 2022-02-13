@@ -6,7 +6,6 @@
     </div>
 
     <div class="d-inline-flex align-items-center no-wrap" *ngIf="statInfo.value !== null && statInfo.value !== undefined; else loadingStatValue">
-      <!-- <p class="mr-2 mb-0">{{statInfo.prefix}}{{statInfo.value | shortNumber }} <small class="ml-1">{{statInfo.suffix}}</small></p> -->
       <opdex-number class="mr-2" [prefix]="statInfo.prefix" [suffix]="statInfo.suffix" [value]="statInfo.value" [short]="true"></opdex-number>
       <opdex-change-indicator [value]="statInfo.change" *ngIf="statInfo.change !== null && statInfo.change !== undefined"></opdex-change-indicator>
     </div>

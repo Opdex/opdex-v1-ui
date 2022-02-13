@@ -31,7 +31,7 @@ export class NumberComponent {
   }
 
   get showTooltip(): boolean {
-    return (this.precision >= 0 && this.precision < this.decimals) || this.short;
+    return this.value.bigInt > 0 && ((this.precision >= 0 && this.precision < this.decimals) || this.short);
   }
 
   private _precision(): FixedDecimal {
