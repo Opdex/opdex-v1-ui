@@ -11,13 +11,15 @@ export class NumberComponent {
   @Input() short: boolean = false;
   @Input() prefix: string;
   @Input() suffix: string;
+  @Input() precision: number;
 
   get numerator(): string {
     return this.value.wholeNumber || '0';
   }
 
   get denominator(): string {
-    return this.value.fractionNumber || '';
+    const value = this._precision();
+    return value.fractionNumber || '';
   }
 
   get fixed(): string {
@@ -26,5 +28,17 @@ export class NumberComponent {
 
   get decimals(): number {
     return this.value.decimals;
+  }
+
+  get showTooltip(): boolean {
+    return (this.precision >= 0 && this.precision < this.decimals) || this.short;
+  }
+
+  private _precision(): FixedDecimal {
+    if (this.precision >= 0 && this.precision < this.value.decimals) {
+      return new FixedDecimal(this.value.formattedValue, this.precision);
+    }
+
+    return this.value;
   }
 }

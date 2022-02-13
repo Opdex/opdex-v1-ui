@@ -57,7 +57,7 @@
           <div class="flex-column" style="width: 40%">
             <small class="light" *ngIf="i === 0">Price</small>
             <div class="flex-row-center-between">
-              <small class="mr-2">${{preview.price | shortNumber}}</small>
+              <small class="mr-2">${{preview.price.formattedValue | shortNumber}}</small>
               <opdex-change-indicator [value]="preview.percentageChange" [forceDisplay]="true"></opdex-change-indicator>
             </div>
           </div>

@@ -36,7 +36,7 @@
             <p class="mb-0">{{token.symbol}}</p>
 
             <div class="flex-row-center-end">
-              <p class="mb-0 mr-2">${{token.summary.priceUsd | shortNumber}}</p>
+              <opdex-number prefix="$" [value]="token.summary.priceUsd" [short]="true" class="mr-2"></opdex-number>
               <opdex-change-indicator [value]="token.summary.dailyPriceChangePercent" *ngIf="token.summary.dailyPriceChangePercent !== null && token.summary.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
             </div>
           </div>

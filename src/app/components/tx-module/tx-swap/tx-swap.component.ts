@@ -236,10 +236,10 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
     const one = FixedDecimal.One(8);
     const negativeOneHundred = FixedDecimal.NegativeOneHundred(8);
     const tokenInAmount = new FixedDecimal(this.tokenInAmount.value, this.tokenIn.decimals);
-    const tokenInPrice = new FixedDecimal(this.tokenIn.summary.priceUsd.toFixed(8), 8);
+    const tokenInPrice = this.tokenIn.summary.priceUsd;
     const tokenInTolerance = new FixedDecimal((1 + (this.toleranceThreshold / 100)).toFixed(8), 8);
     const tokenOutAmount = new FixedDecimal(this.tokenOutAmount.value, this.tokenOut.decimals);
-    const tokenOutPrice = new FixedDecimal(this.tokenOut.summary.priceUsd.toFixed(8), 8);
+    const tokenOutPrice = this.tokenOut.summary.priceUsd;
     const tokenOutTolerancePercentage = new FixedDecimal((this.toleranceThreshold / 100).toFixed(8), 8);
     const tokenOutTolerance = tokenOutAmount.multiply(tokenOutTolerancePercentage);
 

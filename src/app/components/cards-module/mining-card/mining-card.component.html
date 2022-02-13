@@ -34,13 +34,12 @@
     <div class="bottom-details">
       <div class="left">
         <p class="sub-heading">Mining</p>
-        <!--{{ pool.miningPool?.tokensMining | shortNumber}} -->
-        <p class="value"><span class="b-400">${{ miningUsd?.formattedValue | shortNumber}}</span> <small> {{pool.tokens.lp.symbol}}</small></p>
+        <opdex-number [short]="true" prefix="$" [suffix]="pool.tokens.lp.symbol" [value]="miningUsd"></opdex-number>
       </div>
 
       <div class="right">
         <p class="sub-heading">Reward per Block</p>
-        <p class="value">{{ pool.miningPool?.rewardPerBlock?.formattedValue | shortNumber}} <small>{{pool.tokens.staking?.symbol}}</small></p>
+        <opdex-number [short]="true" [suffix]="pool.tokens.staking?.symbol" [value]="pool.miningPool?.rewardPerBlock"></opdex-number>
       </div>
     </div>
   </ng-container>

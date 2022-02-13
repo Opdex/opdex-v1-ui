@@ -1,4 +1,11 @@
+.short, .numerator, .denominator {
+  font-family: 'Inconsolata', monospace !important;
+  letter-spacing: 0px;
+  font-size: 1.1em;
+}
+
 .number {
-  font-family: 'Roboto Mono', monospace !important;
-  letter-spacing: 1px;
+  display: inline-flex;
+  align-items: center;
+  flex-direction: row;
 }

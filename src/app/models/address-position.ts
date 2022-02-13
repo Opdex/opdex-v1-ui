@@ -39,8 +39,7 @@ export class AddressPosition {
 
   private _calcValue(): FixedDecimal {
     if (this._token) {
-      const price = new FixedDecimal(this._token.summary.priceUsd.toFixed(8), 8);
-      return price.multiply(this._amount);
+      return this._token.summary.priceUsd.multiply(this._amount);
     }
 
     return FixedDecimal.Zero(8);

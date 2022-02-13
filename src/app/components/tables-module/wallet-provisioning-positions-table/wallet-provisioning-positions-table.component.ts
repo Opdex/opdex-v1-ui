@@ -110,15 +110,13 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
           return forkJoin(balances$)
             .pipe(map(balances => {
               this.dataSource.data = balances.map(({pool, balance}) => {
-                const src = pool.tokens.src;
-                const price = new FixedDecimal(src.summary?.priceUsd?.toFixed(8) || '0', 8);
-                const amount = new FixedDecimal(balance.balance, src.decimals);
+                const amount = new FixedDecimal(balance.balance, pool.tokens.src.decimals);
 
                 return {
                   pool,
                   balance: amount,
                   isCurrentMarket: pool.market === this._env.marketAddress,
-                  total: price.multiply(amount)
+                  total: pool.tokens.src.summary.priceUsd.multiply(amount)
                 }
               });
 

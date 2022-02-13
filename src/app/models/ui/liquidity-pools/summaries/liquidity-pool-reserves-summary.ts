@@ -4,7 +4,7 @@ import { IReservesSummaryResponse } from "@sharedModels/platform-api/responses/l
 export class LiquidityPoolReservesSummary {
   private _crs: FixedDecimal;
   private _src: FixedDecimal;
-  private _usd: number;
+  private _usd: FixedDecimal;
   private _dailyUsdChangePercent: number;
 
   public get crs(): FixedDecimal {
@@ -15,7 +15,7 @@ export class LiquidityPoolReservesSummary {
     return this._src;
   }
 
-  public get usd(): number {
+  public get usd(): FixedDecimal {
     return this._usd;
   }
 
@@ -26,7 +26,7 @@ export class LiquidityPoolReservesSummary {
   constructor(reserves: IReservesSummaryResponse) {
     this._crs = new FixedDecimal(reserves.crs, 8);
     this._src = new FixedDecimal(reserves.src, reserves.src.split('.')[1].length);
-    this._usd = reserves.usd;
+    this._usd = new FixedDecimal(reserves.usd.toFixed(8), 8);
     this._dailyUsdChangePercent = reserves.dailyUsdChangePercent;
   }
 }

@@ -134,13 +134,10 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
           return forkJoin(balances$)
             .pipe(map(balances => {
               this.dataSource.data = balances.map(token => {
-                const price = new FixedDecimal(token.summary?.priceUsd?.toFixed(8) || '0', 8);
-
-                console.log(token)
                 return {
                   token,
                   isCurrentMarket: token.market === this._env.marketAddress,
-                  total: price.multiply(token.balance)
+                  total: token.summary.priceUsd.multiply(token.balance)
                 }
               });
 

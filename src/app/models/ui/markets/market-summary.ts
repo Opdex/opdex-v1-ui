@@ -1,17 +1,18 @@
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MarketStakingSummary } from '@sharedModels/ui/markets/market-staking-summary';
 import { IMarketSummaryResponse } from '@sharedModels/platform-api/responses/markets/market-summary-response.interface';
 import { MarketRewardsSummary } from '@sharedModels/ui/markets/market-rewards-summary';
 
 export class MarketSummary {
-  private _liquidityUsd: number;
+  private _liquidityUsd: FixedDecimal;
   private _dailyLiquidityUsdChangePercent: number;
-  private _volumeUsd: number;
+  private _volumeUsd: FixedDecimal;
   private _staking: MarketStakingSummary;
   private _rewards: MarketRewardsSummary;
   private _createdBlock: number;
   private _modifiedBlock: number;
 
-  public get liquidityUsd(): number {
+  public get liquidityUsd(): FixedDecimal {
     return this._liquidityUsd;
   }
 
@@ -19,7 +20,7 @@ export class MarketSummary {
     return this._dailyLiquidityUsdChangePercent;
   }
 
-  public get volumeUsd(): number {
+  public get volumeUsd(): FixedDecimal {
     return this._volumeUsd;
   }
 
@@ -40,9 +41,9 @@ export class MarketSummary {
   }
 
   constructor(summary: IMarketSummaryResponse) {
-    this._liquidityUsd = summary.liquidityUsd;
+    this._liquidityUsd = new FixedDecimal(summary.liquidityUsd.toFixed(8), 8);
     this._dailyLiquidityUsdChangePercent = summary.dailyLiquidityUsdChangePercent;
-    this._volumeUsd = summary.volumeUsd;
+    this._volumeUsd = new FixedDecimal(summary.volumeUsd.toFixed(8), 8);
     this._staking = new MarketStakingSummary(summary.staking);
     this._rewards = new MarketRewardsSummary(summary.rewards);
     this._createdBlock = summary.createdBlock;

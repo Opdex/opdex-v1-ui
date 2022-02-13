@@ -3,7 +3,7 @@ import { IStakingSummaryResponse } from "@sharedModels/platform-api/responses/li
 
 export class LiquidityPoolStakingSummary {
   private _weight: FixedDecimal;
-  private _usd: number;
+  private _usd: FixedDecimal;
   private _dailyWeightChangePercent: number;
   private _nominated: boolean;
 
@@ -11,7 +11,7 @@ export class LiquidityPoolStakingSummary {
     return this._weight;
   }
 
-  public get usd(): number {
+  public get usd(): FixedDecimal {
     return this._usd;
   }
 
@@ -27,7 +27,7 @@ export class LiquidityPoolStakingSummary {
     if (!!staking === false) return;
 
     this._weight = new FixedDecimal(staking.weight, staking.weight.split('.')[1].length);
-    this._usd = staking.usd;
+    this._usd = new FixedDecimal(staking.usd.toFixed(8), 8);
     this._dailyWeightChangePercent = staking.dailyWeightChangePercent;
     this._nominated = staking.nominated;
   }

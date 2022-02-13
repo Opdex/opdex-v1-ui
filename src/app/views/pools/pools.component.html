@@ -21,20 +21,20 @@
         </div>
 
         <div class="scrollable-row">
-          <div class="scrollable-card" *ngFor="let pool of pools?.topVolume?.results; trackBy: poolsTrackBy">
+          <div class="scrollable-card" *ngFor="let pool of pools?.topVolume; trackBy: poolsTrackBy">
             <opdex-liquidity-pool-card [pool]="pool"></opdex-liquidity-pool-card>
           </div>
         </div>
       </div>
 
-      <div class="row" *ngIf="pools?.mining?.results?.length">
+      <div class="row" *ngIf="pools?.mining?.length">
         <div class="col-12">
           <h2 class="flex-row-center">
             <mat-icon class="mr-2 mine">{{icons.mining}}</mat-icon> Liquidity Mining
           </h2>
 
           <div class="scrollable-row">
-            <div class="scrollable-card" *ngFor="let pool of pools.mining.results; trackBy: poolsTrackBy">
+            <div class="scrollable-card" *ngFor="let pool of pools.mining; trackBy: poolsTrackBy">
               <opdex-mining-card [pool]="pool"></opdex-mining-card>
             </div>
           </div>

@@ -17,7 +17,7 @@ interface IPoolPreviewRecord {
   token: Token;
   supply: FixedDecimal;
   percentageChange: number;
-  price: number;
+  price: FixedDecimal;
 }
 
 @Component({

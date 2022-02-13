@@ -1,25 +1,26 @@
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { IMarketRewardsResponse } from "@sharedModels/platform-api/responses/markets/market-summary-response.interface";
 
 export class MarketRewardsSummary {
-  private _providerDailyUsd: number;
-  private _marketDailyUsd: number;
-  private _totalDailyUsd: number;
+  private _providerDailyUsd: FixedDecimal;
+  private _marketDailyUsd: FixedDecimal;
+  private _totalDailyUsd: FixedDecimal;
 
-  public get providerDailyUsd(): number {
+  public get providerDailyUsd(): FixedDecimal {
     return this._providerDailyUsd;
   }
 
-  public get marketDailyUsd(): number {
+  public get marketDailyUsd(): FixedDecimal {
     return this._marketDailyUsd;
   }
 
-  public get totalDailyUsd(): number {
+  public get totalDailyUsd(): FixedDecimal {
     return this._totalDailyUsd;
   }
 
   constructor(rewards: IMarketRewardsResponse) {
-    this._providerDailyUsd = rewards.providerDailyUsd;
-    this._marketDailyUsd = rewards.marketDailyUsd;
-    this._totalDailyUsd = rewards.totalDailyUsd;
+    this._providerDailyUsd = new FixedDecimal(rewards.providerDailyUsd.toFixed(8), 8);
+    this._marketDailyUsd = new FixedDecimal(rewards.marketDailyUsd.toFixed(8), 8);
+    this._totalDailyUsd = new FixedDecimal(rewards.totalDailyUsd.toFixed(8), 8);
   }
 }

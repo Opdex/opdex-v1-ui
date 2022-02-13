@@ -1,12 +1,13 @@
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { ITokenSummary } from '@sharedModels/platform-api/responses/tokens/token.interface';
 
 export class TokenSummary {
-  private _priceUsd: number;
+  private _priceUsd: FixedDecimal;
   private _dailyPriceChangePercent: number;
   private _createdBlock: number;
   private _modifiedBlock: number;
 
-  public get priceUsd(): number {
+  public get priceUsd(): FixedDecimal {
     return this._priceUsd;
   }
 
@@ -23,7 +24,7 @@ export class TokenSummary {
   }
 
   constructor(summary: ITokenSummary) {
-    this._priceUsd = summary?.priceUsd || 0.00000000;
+    this._priceUsd = !summary?.priceUsd ? FixedDecimal.Zero(8) : new FixedDecimal(summary.priceUsd.toFixed(8), 8);
     this._dailyPriceChangePercent = summary?.dailyPriceChangePercent || 0.00000000;;
     this._createdBlock = summary?.createdBlock || 0;
     this._modifiedBlock = summary?.modifiedBlock || 0;

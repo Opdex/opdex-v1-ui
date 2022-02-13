@@ -108,7 +108,7 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
           return forkJoin(positions$)
             .pipe(map(positions => {
               this.dataSource.data = positions.map(({pool, position}) => {
-                const price = new FixedDecimal(pool.tokens.staking?.summary?.priceUsd?.toFixed(8), 8);
+                const price = !pool.tokens.staking?.summary ? FixedDecimal.Zero(8) : pool.tokens.staking.summary.priceUsd;
                 const amount = new FixedDecimal(position.amount, pool.tokens.staking?.decimals);
 
                 return {

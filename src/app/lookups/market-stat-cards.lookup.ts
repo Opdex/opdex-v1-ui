@@ -7,7 +7,7 @@ export class MarketStatCardsLookup {
     return [
       {
         title: 'Liquidity',
-        value: market?.summary?.liquidityUsd?.toFixed(8),
+        value: market?.summary?.liquidityUsd,
         prefix: '$',
         change: market?.summary?.dailyLiquidityUsdChangePercent,
         show: true,
@@ -20,7 +20,7 @@ export class MarketStatCardsLookup {
       },
       {
         title: 'Staking',
-        value: market?.summary?.staking?.stakingWeight?.formattedValue,
+        value: market?.summary?.staking?.stakingWeight,
         suffix: market?.tokens?.staking?.symbol,
         change: market?.summary?.staking?.dailyStakingWeightChangePercent,
         show: true,
@@ -33,7 +33,7 @@ export class MarketStatCardsLookup {
       },
       {
         title: 'Volume',
-        value: market?.summary?.volumeUsd?.toFixed(8),
+        value: market?.summary?.volumeUsd,
         prefix: '$',
         daily: true,
         show: true,
@@ -46,7 +46,7 @@ export class MarketStatCardsLookup {
       },
       {
         title: 'Rewards',
-        value: market?.summary?.rewards?.totalDailyUsd?.toFixed(8),
+        value: market?.summary?.rewards?.totalDailyUsd,
         daily: true,
         prefix: '$',
         show: true,

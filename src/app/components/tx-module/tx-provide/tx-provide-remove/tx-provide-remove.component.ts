@@ -148,7 +148,7 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
     const lptDecimals = this.pool.tokens.lp.decimals;
     const liquidityValue = new FixedDecimal(this.liquidity.value, lptDecimals);
     const totalSupply = this.pool.tokens.lp.totalSupply;
-    const reservesUsd = new FixedDecimal(this.pool.summary.reserves.usd.toFixed(8), 8);
+    const reservesUsd = this.pool.summary.reserves.usd;
     const reserveCrs = this.pool.summary.reserves.crs;
     const reserveSrc = this.pool.summary.reserves.src;
 

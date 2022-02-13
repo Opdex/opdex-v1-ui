@@ -2,14 +2,14 @@ import { StatCardInfo } from "@sharedModels/stat-card-info";
 import { IVaultResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-response-model.interface';
 import { Token } from "@sharedModels/ui/tokens/token";
 import { Icons } from "../enums/icons";
-import { reduce } from "rxjs/operators";
+import { FixedDecimal } from "@sharedModels/types/fixed-decimal";
 
 export class VaultStatCardsLookup {
   public static getStatCards(vault: IVaultResponseModel, token: Token): StatCardInfo[] {
     return  [
       {
         title: 'Locked',
-        value: vault?.tokensLocked,
+        value: new FixedDecimal(vault?.tokensLocked, 8),
         suffix: token?.symbol,
         icon: Icons.lock,
         iconColor: 'red',
@@ -21,7 +21,7 @@ export class VaultStatCardsLookup {
       },
       {
         title: 'Unassigned',
-        value: vault?.tokensUnassigned,
+        value: new FixedDecimal(vault?.tokensUnassigned, 8),
         suffix: token?.symbol,
         icon: Icons.tokens,
         iconColor: 'green',
@@ -33,7 +33,7 @@ export class VaultStatCardsLookup {
       },
       {
         title: 'Pledge Minimum',
-        value: vault?.totalPledgeMinimum,
+        value: new FixedDecimal(vault?.totalPledgeMinimum, 8),
         suffix: 'CRS',
         icon: Icons.pledge,
         helpInfo: {
@@ -44,7 +44,7 @@ export class VaultStatCardsLookup {
       },
       {
         title: 'Vote Minimum',
-        value: vault?.totalVoteMinimum,
+        value: new FixedDecimal(vault?.totalVoteMinimum, 8),
         suffix: 'CRS',
         icon: Icons.proposal,
         iconColor: 'purple',
