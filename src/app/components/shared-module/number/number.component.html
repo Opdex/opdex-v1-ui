@@ -2,6 +2,7 @@
   class="number"
   *ngIf="value"
   [matTooltip]="showTooltip ? (fixed | formatNumber:decimals) : null"
+  matTooltipClass="number-tooltip"
   [cdkCopyToClipboard]="value.formattedValue"
   (click)="copyHandler($event)">
 
