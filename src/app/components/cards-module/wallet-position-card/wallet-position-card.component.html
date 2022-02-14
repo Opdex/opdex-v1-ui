@@ -2,7 +2,9 @@
   <ng-container *ngIf="position?.value !== null && position?.value !== undefined; else loadingPositions">
     <div class="flex-row-center-between">
       <small class="light">{{position.position}}</small>
-      <small class="light">${{position.value.formattedValue | shortNumber}}</small>
+      <small>
+        <opdex-number prefix="$" [value]="position.value" [precision]="2"></opdex-number>
+      </small>
     </div>
 
     <div class="flex-row-center-between">
@@ -19,7 +21,7 @@
         </p>
       </a>
 
-      <p class="mb-0">{{position.amount.formattedValue | formatNumber:position.token.decimals > 8 ? 8 : position.token.decimals}}</p>
+      <opdex-number [value]="position.amount" [precision]="8"></opdex-number>
     </div>
   </ng-container>
 

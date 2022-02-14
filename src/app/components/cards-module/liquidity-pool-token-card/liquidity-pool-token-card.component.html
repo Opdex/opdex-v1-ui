@@ -16,7 +16,10 @@
       </div>
 
       <div class="flex-row-center-end">
-        <h3 class="mb-0 mr-2 b-300">${{token?.summary?.priceUsd | shortNumber}}</h3>
+        <h3 class="mb-0 mr-2 b-300">
+          <opdex-number prefix="$" [value]="token?.summary?.priceUsd" [short]="true"></opdex-number>
+        </h3>
+
         <opdex-change-indicator [value]="token?.summary?.dailyPriceChangePercent" *ngIf="token?.summary?.dailyPriceChangePercent !== null && token?.summary?.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
       </div>
     </div>
@@ -24,13 +27,22 @@
     <div class="flex-row-center-between mt-2">
       <div class="flex-row-center">
         <mat-icon color="primary" class="mr-2 tiny">{{icons.lock}}</mat-icon>
-        <small>{{reserves?.formattedValue | shortNumber}}</small>
+
+        <small>
+          <opdex-number [value]="reserves" [short]="true"></opdex-number>
+        </small>
       </div>
 
       <div class="flex-row-center">
-        <small class="mb-0">1 {{token.symbol}}</small>
+        <small class="mb-0">
+          <opdex-number [value]="one" [suffix]="token.symbol"></opdex-number>
+        </small>
+
         <mat-icon color="primary" class="ml-2 mr-2 tiny">{{icons.swap}}</mat-icon>
-        <small>{{swapRate?.formattedValue | shortNumber }} {{swapToken.symbol}}</small>
+
+        <small>
+          <opdex-number [value]="swapRate" [short]="true" [suffix]="swapToken.symbol"></opdex-number>
+        </small>
       </div>
     </div>
   </ng-container>

@@ -1,3 +1,11 @@
+import { VaultProposals } from '@sharedModels/ui/vaults/vault-proposals';
+import { VaultProposal } from '@sharedModels/ui/vaults/vault-proposal';
+import { VaultProposalPledges } from '@sharedModels/ui/vaults/vault-proposal-pledges';
+import { VaultProposalVotes } from '@sharedModels/ui/vaults/vault-proposal-votes';
+import { VaultProposalVote } from '@sharedModels/ui/vaults/vault-proposal-vote';
+import { VaultProposalPledge } from '@sharedModels/ui/vaults/vault-proposal-pledge';
+import { VaultCertificates } from '@sharedModels/ui/vaults/vault-certificates';
+import { Vault } from '@sharedModels/ui/vaults/vault';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Market } from '@sharedModels/ui/markets/market';
 import { MarketTokens } from '@sharedModels/ui/tokens/market-tokens';
@@ -283,14 +291,14 @@ export class PlatformApiService extends RestApiService {
   // Vaults
   ////////////////////////////
 
-  public getVault(address: string): Observable<IVaultResponseModel> {
+  public getVault(address: string): Observable<Vault> {
     const endpoint = `${this.api}/vaults/${address}`;
-    return this.get<IVaultResponseModel>(endpoint);
+    return this.get<IVaultResponseModel>(endpoint).pipe(map(vault => new Vault(vault)));
   }
 
-  public getVaultCertificates(address: string, request: VaultCertificatesFilter): Observable<IVaultCertificates> {
+  public getVaultCertificates(address: string, request: VaultCertificatesFilter): Observable<VaultCertificates> {
     const endpoint = `${this.api}/vaults/${address}/certificates${request.buildQueryString()}`;
-    return this.get<IVaultCertificates>(endpoint);
+    return this.get<IVaultCertificates>(endpoint).pipe(map(certs => new VaultCertificates(certs)));
   }
 
   public redeemVaultCertificate(vault: string): Observable<ITransactionQuote> {
@@ -298,24 +306,24 @@ export class PlatformApiService extends RestApiService {
     return this.post<ITransactionQuote>(endpoint, {});
   }
 
-  public getVaultProposals(address: string, request: VaultProposalsFilter): Observable<IVaultProposalsResponseModel> {
+  public getVaultProposals(address: string, request: VaultProposalsFilter): Observable<VaultProposals> {
     const endpoint = `${this.api}/vaults/${address}/proposals${request.buildQueryString()}`;
-    return this.get<IVaultProposalsResponseModel>(endpoint);
+    return this.get<IVaultProposalsResponseModel>(endpoint).pipe(map(proposals => new VaultProposals(proposals)));
   }
 
-  public getVaultProposalPledges(address: string, request: any): Observable<IVaultProposalPledgesResponseModel> {
+  public getVaultProposalPledges(address: string, request: any): Observable<VaultProposalPledges> {
     const endpoint = `${this.api}/vaults/${address}/pledges${request.buildQueryString()}`;
-    return this.get<IVaultProposalPledgesResponseModel>(endpoint);
+    return this.get<IVaultProposalPledgesResponseModel>(endpoint).pipe(map(pledges => new VaultProposalPledges(pledges)));
   }
 
-  public getVaultProposalVotes(address: string, request: any): Observable<IVaultProposalVotesResponseModel> {
+  public getVaultProposalVotes(address: string, request: any): Observable<VaultProposalVotes> {
     const endpoint = `${this.api}/vaults/${address}/votes${request.buildQueryString()}`;
-    return this.get<IVaultProposalVotesResponseModel>(endpoint);
+    return this.get<IVaultProposalVotesResponseModel>(endpoint).pipe(map(votes => new VaultProposalVotes(votes)));
   }
 
-  public getVaultProposal(address: string, proposalId: number): Observable<IVaultProposalResponseModel> {
+  public getVaultProposal(address: string, proposalId: number): Observable<VaultProposal> {
     const endpoint = `${this.api}/vaults/${address}/proposals/${proposalId}`;
-    return this.get<IVaultProposalResponseModel>(endpoint);
+    return this.get<IVaultProposalResponseModel>(endpoint).pipe(map(proposal => new VaultProposal(proposal)));
   }
 
   public createCertificateVaultProposal(vault: string, request: ICreateCertificateVaultProposalQuoteRequest): Observable<ITransactionQuote> {
@@ -343,9 +351,9 @@ export class PlatformApiService extends RestApiService {
     return this.post<ITransactionQuote>(endpoint, {});
   }
 
-  public getVaultProposalPledge(address: string, proposalId: number, pledger: string): Observable<IVaultProposalPledgeResponseModel> {
+  public getVaultProposalPledge(address: string, proposalId: number, pledger: string): Observable<VaultProposalPledge> {
     const endpoint = `${this.api}/vaults/${address}/proposals/${proposalId}/pledges/${pledger}`;
-    return this.get<IVaultProposalPledgeResponseModel>(endpoint);
+    return this.get<IVaultProposalPledgeResponseModel>(endpoint).pipe(map(pledge => new VaultProposalPledge(pledge)));
   }
 
   public pledgeToVaultProposal(vault: string, proposalId: number, request: IVaultProposalPledgeQuoteRequest): Observable<ITransactionQuote> {
@@ -358,9 +366,9 @@ export class PlatformApiService extends RestApiService {
     return this.post<ITransactionQuote>(endpoint, request);
   }
 
-  public getVaultProposalVote(address: string, proposalId: number, voter: string): Observable<IVaultProposalVoteResponseModel> {
+  public getVaultProposalVote(address: string, proposalId: number, voter: string): Observable<VaultProposalVote> {
     const endpoint = `${this.api}/vaults/${address}/proposals/${proposalId}/votes/${voter}`;
-    return this.get<IVaultProposalVoteResponseModel>(endpoint);
+    return this.get<IVaultProposalVoteResponseModel>(endpoint).pipe(map(vote => new VaultProposalVote(vote)));
   }
 
   public voteOnVaultProposal(vault: string, proposalId: number, request: IVaultProposalVoteQuoteRequest): Observable<ITransactionQuote> {

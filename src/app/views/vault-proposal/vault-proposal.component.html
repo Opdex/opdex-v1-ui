@@ -31,9 +31,7 @@
         </div>
 
         <p class="mb-0" style="font-size: 2.4em; line-height: 1.3em" *ngIf="proposal.type !== 'Revoke'">
-          <span class="b-400 mr-2">{{proposal.amount | shortNumber}}</span>
-          <small *ngIf="proposal.type === 'Create'">ODX</small>
-          <small *ngIf="proposal.type !== 'Create'">CRS</small>
+          <opdex-number [suffix]="proposal.type === 'Create' ? 'ODX' : 'CRS'" [value]="proposal.amount" [short]="true"></opdex-number>
         </p>
 
         <p class="mb-0 flex-row align-items-end">
@@ -57,7 +55,6 @@
 
           <div class="mt-2 flex-row-center-between">
             <small class="light">{{proposal.expiration - latestBlock.height | formatNumber:0}} blocks remaining</small>
-            <!-- <small class="light float-right">{{miningGovernance.nominationPeriodEndDate | timeago}}</small> -->
           </div>
         </div>
       </div>
@@ -79,7 +76,9 @@
                 value="100">
               </mat-spinner>
 
-              <p style="position: absolute; left: 0; right: 0; margin: 0; text-align: center;">{{proposal.pledgeAmount | shortNumber}} <small>CRS</small></p>
+              <p style="position: absolute; left: 0; right: 0; margin: 0; text-align: center;">
+                <opdex-number [value]="proposal.pledgeAmount" suffix="CRS" [short]="true"></opdex-number>
+              </p>
             </div>
           </ng-container>
 
@@ -91,7 +90,7 @@
                 <div class="vote-bar yes mb-1 no-wrap" [ngStyle]="{'min-width': getVotePercentage(proposal.yesAmount, proposal.noAmount).wholeNumber + '%' }">
                   <div class="flex-row-center">
                     <mat-icon class="mr-1 tiny">{{icons.thumbUp}}</mat-icon>
-                    <div class="d-block">{{proposal.yesAmount | shortNumber}} <small>CRS</small></div>
+                    <opdex-number [value]="proposal.yesAmount" [short]="true" suffix="CRS"></opdex-number>
                   </div>
                 </div>
               </div>
@@ -99,7 +98,7 @@
               <div class="vote-bar-container">
                 <div class="vote-bar no no-wrap flex-row-center" [ngStyle]="{'min-width': getVotePercentage(proposal.noAmount, proposal.yesAmount).wholeNumber + '%' }">
                   <mat-icon class="mr-1 tiny">{{icons.thumbDown}}</mat-icon>
-                  <div class="d-block">{{proposal.noAmount | shortNumber}} <small>CRS</small></div>
+                  <opdex-number [value]="proposal.noAmount" [short]="true" suffix="CRS"></opdex-number>
                 </div>
               </div>
             </div>
@@ -110,24 +109,24 @@
   </div>
 </div>
 
-<div class="offset-section pt-5 pb-4" *ngIf="!!context?.wallet">
+<div class="offset-section pt-5 pb-4" *ngIf="!!context?.wallet && (userPledge || userVote)">
   <div class="container">
     <div class="row">
       <div class="col-12">
         <h3>Positions</h3>
       </div>
 
-      <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+      <div class="col-12 col-md-6 col-lg-4 col-xl-3" *ngIf="userPledge">
         <opdex-card>
           <div class="flex-row-center-between mb-2">
             <div class="flex-column">
               <p class="light mb-1">Pledged</p>
-              <span>{{(userPledge?.pledge || 0) | shortNumber}} <small>CRS</small></span>
+              <opdex-number [value]="userPledge?.pledge" [short]="true" suffix="CRS"></opdex-number>
             </div>
 
             <div class="flex-column">
               <p class="light mb-1">Balance</p>
-              <span>{{ userPledge?.balance || 0}} <small>CRS</small></span>
+              <opdex-number [value]="userPledge?.balance" suffix="CRS"></opdex-number>
             </div>
           </div>
 
@@ -138,7 +137,7 @@
         </opdex-card>
       </div>
 
-      <div class="col-12 col-md-6 col-lg-4 col-xl-3" *ngIf="proposal && proposal.status !== 'Pledge'">
+      <div class="col-12 col-md-6 col-lg-4 col-xl-3" *ngIf="proposal && proposal.status !== 'Pledge' && userVote">
         <opdex-card>
           <div class="flex-row-center-between mb-2">
             <div class="flex-column">
@@ -146,16 +145,13 @@
 
               <div class="flex-row-center">
                 <mat-icon *ngIf="userVote" class="{{userVote.inFavor ? 'green' : 'red'}}" [ngClass]="iconSizes.tiny" class="mr-1">{{userVote.inFavor ? icons.thumbUp : icons.thumbDown}}</mat-icon>
-                <div class="d-block">
-                  {{(userVote?.vote || 0) | shortNumber}}
-                  <small>CRS</small>
-                </div>
+                <opdex-number [value]="userVote?.vote" [short]="true" suffix="CRS"></opdex-number>
               </div>
             </div>
 
             <div class="flex-column">
               <p class="light mb-1">Balance</p>
-              <span>{{ userVote?.balance || 0}} <small>CRS</small></span>
+              <opdex-number [value]="userVote?.balance" suffix="CRS"></opdex-number>
             </div>
           </div>
 
@@ -177,7 +173,9 @@
           <mat-tab>
             <ng-template mat-tab-label>
               Pledges
-              <span class="ml-1 badge blue">{{(proposal?.pledgeAmount || 0) | shortNumber}}</span>
+              <span class="ml-1 badge blue">
+                <opdex-number [value]="proposal?.pledgeAmount" [short]="true"></opdex-number>
+              </span>
             </ng-template>
 
             <ng-template matTabContent>
@@ -189,8 +187,13 @@
             <ng-template mat-tab-label>
               Votes
               <ng-container *ngIf="proposal && proposal.status !== 'Pledge'">
-                <span class="ml-1 badge green flex-row-center">{{(proposal?.yesAmount || 0) | shortNumber}}</span>
-                <span class="ml-1 badge red flex-row-center">{{(proposal?.noAmount || 0) | shortNumber}}</span>
+                <span class="ml-1 badge green flex-row-center">
+                  <opdex-number [value]="proposal?.yesAmount" [short]="true"></opdex-number>
+                </span>
+
+                <span class="ml-1 badge red flex-row-center">
+                  <opdex-number [value]="proposal?.noAmount" [short]="true"></opdex-number>
+                </span>
               </ng-container>
             </ng-template>
 

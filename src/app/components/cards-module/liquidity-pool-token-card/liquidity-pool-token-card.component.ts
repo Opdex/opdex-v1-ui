@@ -14,4 +14,5 @@ export class LiquidityPoolTokenCardComponent {
   @Input() swapRate: FixedDecimal;
   @Input() swapToken: Token;
   icons = Icons;
+  one = FixedDecimal.One(0);
 }

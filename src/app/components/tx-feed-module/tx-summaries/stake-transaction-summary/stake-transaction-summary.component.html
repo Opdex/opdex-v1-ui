@@ -1,7 +1,14 @@
 <ng-container *ngIf="pool && !error">
   <div class="flex-row-center" *ngIf="!stakingAmount.isZero" [ngClass]="{'mb-2': isCollection}">
     <div class="no-wrap">
-      {{isAddition ? '+' : '-'}}{{stakingAmount.formattedValue | shortNumber}}
+      <opdex-number
+        class="mr-2"
+        [prefix]="isAddition ? '+' : '-'"
+        [value]="stakingAmount"
+        [short]="true"
+        [stopPropagation]="true">
+      </opdex-number>
+
       <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.name}}</a>
       <a class="ml-1 no-decoration" routerLink="/tokens/{{pool.tokens.staking?.address}}">{{pool.tokens.staking?.symbol}}</a>
     </div>
@@ -9,13 +16,28 @@
 
   <div class="flex-row-center" *ngIf="isCollection">
     <div class="col no-wrap flex-shrink">
-      +{{collectAmountOne.formattedValue | shortNumber}}
+      <opdex-number
+        class="mr-2"
+        prefix="+"
+        [value]="collectAmountOne"
+        [short]="true"
+        [stopPropagation]="true">
+      </opdex-number>
+
       <a class="no-decoration" routerLink="/pools/{{pool.address}}" *ngIf="!collectionLiquidatedRewards">{{pool.name}}</a>
       <a class="ml-1 no-decoration" routerLink="/tokens/{{amountOneToken.address}}">{{amountOneToken.symbol}}</a>
     </div>
 
     <div class="col no-wrap" *ngIf="collectAmountTwo && amountTwoToken">
-      +{{collectAmountTwo.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/tokens/{{amountTwoToken.address}}">{{amountTwoToken.symbol}}</a>
+      <opdex-number
+        class="mr-2"
+        prefix="+"
+        [value]="collectAmountTwo"
+        [short]="true"
+        [stopPropagation]="true">
+      </opdex-number>
+
+      <a class="no-decoration" routerLink="/tokens/{{amountTwoToken.address}}">{{amountTwoToken.symbol}}</a>
     </div>
   </div>
 </ng-container>

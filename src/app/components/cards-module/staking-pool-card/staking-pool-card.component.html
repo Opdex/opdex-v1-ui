@@ -32,12 +32,12 @@
     <div class="bottom-details">
       <div class="left">
         <p class="sub-heading">Staking</p>
-        <p class="value">{{pool.summary.staking.weight.formattedValue | shortNumber}} {{pool.tokens.staking?.symbol}}</p>
+        <opdex-number [short]="true" [suffix]="pool.tokens.staking?.symbol" [value]="pool.summary.staking.weight"></opdex-number>
       </div>
 
       <div class="right">
         <p class="sub-heading">Liquidity</p>
-        <p class="value">${{pool.summary.reserves.usd | shortNumber}}</p>
+        <opdex-number [short]="true" prefix="$" [value]="pool.summary.reserves.usd"></opdex-number>
       </div>
     </div>
   </ng-container>

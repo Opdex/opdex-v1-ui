@@ -1,3 +1,4 @@
+import { MarketToken } from '@sharedModels/ui/tokens/market-token';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { MiningPoolsService } from '@sharedServices/platform/mining-pools.service';
 import { IconSizes } from 'src/app/enums/icon-sizes';
@@ -18,7 +19,6 @@ import { catchError, map, skip, switchMap, take, tap } from 'rxjs/operators';
 import { CollapseAnimation } from '@sharedServices/animations/collapse';
 import { UserContext } from '@sharedModels/user-context';
 import { IMiningPool } from '@sharedModels/platform-api/responses/mining-pools/mining-pool.interface';
-import { Token } from '@sharedModels/ui/tokens/token';
 
 @Component({
   selector: 'opdex-wallet-preview',
@@ -90,7 +90,7 @@ export class WalletPreviewComponent implements OnDestroy {
 
     return combineLatest(combo)
       .pipe(
-        map(([token, result]: [Token, IAddressBalance]) => {
+        map(([token, result]: [MarketToken, IAddressBalance]) => {
           const amount = new FixedDecimal(result.balance, token.decimals);
           return new AddressPosition(walletAddress, token, 'Balance', amount);
         }),

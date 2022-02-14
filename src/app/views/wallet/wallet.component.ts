@@ -114,9 +114,8 @@ export class WalletComponent implements OnInit {
         tap(crsBalance => this.crsBalance = crsBalance),
         switchMap(crsBalance => this._tokensService.getMarketToken(crsBalance.token)),
         tap((token: Token) => {
-          const costFixed = new FixedDecimal(token.summary.priceUsd.toFixed(8), 8);
           const crsBalanceFixed = new FixedDecimal(this.crsBalance.balance, 8);
-          this.crsBalanceValue = crsBalanceFixed.multiply(costFixed);
+          this.crsBalanceValue = crsBalanceFixed.multiply(token.summary.priceUsd);
         }),
         take(1))
       .subscribe();

@@ -7,9 +7,7 @@
         [formControl]="amountCrs"
         [suffix]="pool.tokens.crs.symbol"
         [numbersOnly]="true">
-        <div class="flex-row-center-between">
-          <span *ngIf="crsInFiatValue">${{crsInFiatValue.formattedValue | formatNumber:2}}</span>
-        </div>
+        <opdex-number [value]="crsInFiatValue" prefix="$" [precision]="2"></opdex-number>
       </opdex-input-control>
 
       <opdex-percentage-amount-buttons
@@ -40,9 +38,7 @@
       [formControl]="amountSrc"
       [suffix]="pool.tokens.src.symbol"
       [numbersOnly]="true">
-      <div class="flex-row-center-between">
-        <span *ngIf="srcInFiatValue">${{srcInFiatValue.formattedValue | formatNumber:2}}</span>
-      </div>
+      <opdex-number [value]="srcInFiatValue" prefix="$" [precision]="2"></opdex-number>
     </opdex-input-control>
 
     <opdex-percentage-amount-buttons
@@ -85,12 +81,16 @@
       <div [@collapse]="!showTransactionDetails">
         <div class="flex-row-center-between">
           <small class="b-400 light mr-1">Minimum ({{toleranceThreshold}}% slippage)</small>
-          <small class="text-right no-wrap">{{crsInMin.formattedValue | formatNumber:(pool.tokens.crs.decimals > 4 ? 4 : pool.tokens.crs.decimals)}} {{pool.tokens.crs.symbol}} </small>
+          <small>
+            <opdex-number [value]="crsInMin" [precision]="4" [suffix]="pool.tokens.crs.symbol"></opdex-number>
+          </small>
         </div>
 
         <div class="flex-row-center-between">
           <small class="b-400 light mr-1">Minimum ({{toleranceThreshold}}% slippage)</small>
-          <small class="text-right no-wrap">{{srcInMin.formattedValue | formatNumber:(pool.tokens.src.decimals > 4 ? 4 : pool.tokens.src.decimals)}} {{pool.tokens.src.symbol}}</small>
+          <small>
+            <opdex-number [value]="srcInMin" [precision]="4" [suffix]="pool.tokens.src.symbol"></opdex-number>
+          </small>
         </div>
 
         <div class="flex-row-center-between">

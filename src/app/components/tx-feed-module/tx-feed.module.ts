@@ -136,6 +136,7 @@ import { VaultProposalTransactionSummaryComponent } from './tx-summaries/vault-p
     PermissionsTransactionSummaryComponent,
     AllowanceTransactionSummaryComponent,
     TxReceiptComponent,
+    SharedModule
     // SwapEventComponent,
     // CollectStakingRewardsEventComponent,
     // CollectMiningRewardsEventComponent,

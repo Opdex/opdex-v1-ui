@@ -123,7 +123,7 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
                   catchError(_ => this._tokensService.getToken(balance.token) as Observable<MarketToken>),
                   take(1),
                   map(token => {
-                    token.setBalance(balance);
+                    token.setBalance(new FixedDecimal(balance.balance, token.decimals));
                     return token;
                   })
                 );
@@ -134,13 +134,10 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
           return forkJoin(balances$)
             .pipe(map(balances => {
               this.dataSource.data = balances.map(token => {
-                const price = new FixedDecimal(token.summary?.priceUsd?.toFixed(8) || '0', 8);
-                const balance = new FixedDecimal(token.balance.balance, token.decimals);
-
                 return {
                   token,
                   isCurrentMarket: token.market === this._env.marketAddress,
-                  total: price.multiply(balance)
+                  total: token.summary.priceUsd.multiply(token.balance)
                 }
               });
 

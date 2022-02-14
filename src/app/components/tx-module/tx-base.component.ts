@@ -83,7 +83,7 @@ export abstract class TxBase {
 
     return this._vaultsService.getPledge(proposalId, this.context.wallet)
       .pipe(
-        map(pledge => this._isEnough(new FixedDecimal(pledge.balance, 8), amountToSpend)),
+        map(pledge => this._isEnough(pledge.balance, amountToSpend)),
         catchError(_ => of(false)));
   }
 
@@ -92,7 +92,7 @@ export abstract class TxBase {
 
     return this._vaultsService.getVote(proposalId, this.context.wallet)
       .pipe(
-        map(vote => this._isEnough(new FixedDecimal(vote.balance, 8), amountToSpend)),
+        map(vote => this._isEnough(vote.balance, amountToSpend)),
         catchError(_ => of(false)));
   }
 

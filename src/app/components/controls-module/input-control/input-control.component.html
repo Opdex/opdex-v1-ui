@@ -5,7 +5,7 @@
     <mat-icon matPrefix>{{prefixIcon}}</mat-icon>
   </button>
 
-  <input matInput type="text" [formControl]="formControl" [placeholder]="placeholder" autocomplete="off" (keydown)="decimalNumberKeyValidator($event)" [attr.aria-label]="label">
+  <input matInput type="text" [ngClass]="{'numbersInput': numbersOnly}" [formControl]="formControl" [placeholder]="placeholder" autocomplete="off" (keydown)="decimalNumberKeyValidator($event)" [attr.aria-label]="label">
 
   <button *ngIf="suffix" color="primary" mat-button matSuffix (click)="changeToken()" [disabled]="suffixDisabled" style="min-width: auto;" type="button">
     {{suffix}}

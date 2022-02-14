@@ -1,4 +1,4 @@
-import { IVaultCertificates } from '@sharedModels/platform-api/responses/vaults/vault-certificate.interface';
+import { VaultCertificates } from '@sharedModels/ui/vaults/vault-certificates';
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -10,7 +10,7 @@ import { Icons } from 'src/app/enums/icons';
   styleUrls: ['./vault-certificates-table.component.scss']
 })
 export class VaultCertificatesTableComponent implements OnChanges {
-  @Input() certificates: IVaultCertificates;
+  @Input() certificates: VaultCertificates;
 
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;

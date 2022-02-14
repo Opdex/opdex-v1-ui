@@ -1,3 +1,4 @@
+import { VaultProposal } from '@sharedModels/ui/vaults/vault-proposal';
 import { MatDialog } from '@angular/material/dialog';
 import { IIndexStatus } from '@sharedModels/platform-api/responses/index/index-status.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
@@ -10,7 +11,6 @@ import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
 import { Component, Input, OnDestroy } from '@angular/core';
-import { IVaultProposalResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-response-model.interface';
 import { ReviewQuoteComponent } from '@sharedComponents/tx-module/shared/review-quote/review-quote.component';
 import { take } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
@@ -23,7 +23,7 @@ import { UserContext } from '@sharedModels/user-context';
   styleUrls: ['./vault-proposal-card.component.scss']
 })
 export class VaultProposalCardComponent implements OnDestroy {
-  @Input() proposal: IVaultProposalResponseModel;
+  @Input() proposal: VaultProposal;
   @Input() latestBlock: IBlock;
 
   icons = Icons;

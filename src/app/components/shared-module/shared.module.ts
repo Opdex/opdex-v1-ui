@@ -23,6 +23,7 @@ import { QrCodeComponent } from './qr-code/qr-code.component';
 import { QrCodeModule } from 'ng-qrcode';
 import { TokenIconComponent } from './token-icon/token-icon.component';
 import { TokenIconsComponent } from './token-icons/token-icons.component';
+import { NumberComponent } from './number/number.component';
 import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
 import { TokenNativeChainBadgeComponent } from './token-native-chain-badge/token-native-chain-badge.component';
 
@@ -35,6 +36,7 @@ import { TokenNativeChainBadgeComponent } from './token-native-chain-badge/token
     CopyAddressComponent,
     TokenIconComponent,
     TokenIconsComponent,
+    NumberComponent,
     ThemeToggleComponent,
     TokenNativeChainBadgeComponent
   ],
@@ -59,6 +61,7 @@ import { TokenNativeChainBadgeComponent } from './token-native-chain-badge/token
     CopyAddressComponent,
     TokenIconComponent,
     TokenIconsComponent,
+    NumberComponent,
     ThemeToggleComponent,
     TokenNativeChainBadgeComponent
   ]

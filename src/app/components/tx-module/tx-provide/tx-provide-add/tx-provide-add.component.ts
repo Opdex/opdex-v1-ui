@@ -218,9 +218,9 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
     this.srcInMin = srcInValue.subtract(srcMinTolerance);
 
     const amountCrs = new FixedDecimal(this.amountCrs.value, this.pool.tokens.crs.decimals);
-    const priceCrs = new FixedDecimal(this.pool.tokens.crs.summary.priceUsd.toFixed(8), 8);
+    const priceCrs = this.pool.tokens.crs.summary.priceUsd;
     const amountSrc = new FixedDecimal(this.amountSrc.value, this.pool.tokens.src.decimals);
-    const priceSrc = new FixedDecimal(this.pool.tokens.src.summary.priceUsd.toFixed(8), 8);
+    const priceSrc = this.pool.tokens.src.summary.priceUsd;
 
     this.crsInFiatValue = amountCrs.multiply(priceCrs);
     this.srcInFiatValue = amountSrc.multiply(priceSrc);

@@ -16,7 +16,7 @@ export class Token {
   private _wrappedToken: WrappedToken;
   private _createdBlock: number;
   private _modifiedBlock: number;
-  private _balance?: any;
+  private _balance?: FixedDecimal;
   private _history?: TokenHistory;
 
   public get address(): string {
@@ -63,7 +63,7 @@ export class Token {
     return this._modifiedBlock;
   }
 
-  public get balance(): any {
+  public get balance(): FixedDecimal {
     return this._balance;
   }
 
@@ -87,7 +87,7 @@ export class Token {
     this._modifiedBlock = token.modifiedBlock;
   }
 
-  public setBalance(balance: any) {
+  public setBalance(balance: FixedDecimal): void {
     this._balance = balance;
   }
 

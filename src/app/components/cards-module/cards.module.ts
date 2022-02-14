@@ -47,7 +47,8 @@ import { VaultProposalCardComponent } from './vault-proposal-card/vault-proposal
     SharedPipesModule,
     SharedModule,
     ModalsModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    SharedModule
   ],
   exports: [
     CardComponent,

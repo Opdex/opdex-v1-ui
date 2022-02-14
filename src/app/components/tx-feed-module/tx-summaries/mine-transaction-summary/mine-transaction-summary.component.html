@@ -1,13 +1,29 @@
 <ng-container *ngIf="pool && !error">
   <div class="flex-row-center" *ngIf="!lptAmount.isZero" [ngClass]="{'mb-2': !collectAmount.isZero}">
     <div class="no-wrap">
-      {{isAddition ? '+' : '-'}}{{lptAmount.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.name}}</a> <a class="ml-1 no-decoration" routerLink="/tokens/{{pool.address}}">{{pool.tokens.lp.symbol}}</a>
+      <opdex-number
+        class="mr-2"
+        [prefix]="isAddition ? '+' : '-'"
+        [value]="lptAmount"
+        [short]="true"
+        [stopPropagation]="true">
+      </opdex-number>
+
+      <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.name}}</a> <a class="ml-1 no-decoration" routerLink="/tokens/{{pool.address}}">{{pool.tokens.lp.symbol}}</a>
     </div>
   </div>
 
   <div class="flex-row-center" *ngIf="!collectAmount.isZero">
     <div class="no-wrap">
-      {{isAddition ? '-' : '+'}}{{collectAmount.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/tokens/{{pool.tokens.staking?.address}}">{{pool.tokens.staking?.symbol}}</a>
+      <opdex-number
+        class="mr-2"
+        [prefix]="isAddition ? '-' : '+'"
+        [value]="collectAmount"
+        [short]="true"
+        [stopPropagation]="true">
+      </opdex-number>
+
+      <a class="no-decoration" routerLink="/tokens/{{pool.tokens.staking?.address}}">{{pool.tokens.staking?.symbol}}</a>
     </div>
   </div>
 </ng-container>

@@ -1,12 +1,13 @@
+import { StatCardInfo } from "@sharedModels/stat-card-info";
 import { LiquidityPool } from "@sharedModels/ui/liquidity-pools/liquidity-pool";
 import { Icons } from "../enums/icons";
 
 export class PoolStatCardsLookup {
-  public static getStatCards(pool: LiquidityPool) {
+  public static getStatCards(pool: LiquidityPool): StatCardInfo[] {
     return [
       {
         title: 'Liquidity',
-        value: pool?.summary?.reserves?.usd?.toFixed(8),
+        value: pool?.summary?.reserves?.usd,
         prefix: '$',
         change: pool?.summary?.reserves?.dailyUsdChangePercent,
         show: true,
@@ -19,7 +20,7 @@ export class PoolStatCardsLookup {
       },
       {
         title: 'Staking',
-        value: pool?.summary?.staking?.weight?.formattedValue,
+        value: pool?.summary?.staking?.weight,
         suffix: pool?.tokens?.staking?.symbol,
         change: pool?.summary?.staking?.dailyWeightChangePercent || 0,
         show: pool?.summary?.staking !== null && pool?.summary?.staking !== undefined,
@@ -32,7 +33,7 @@ export class PoolStatCardsLookup {
       },
       {
         title: 'Volume',
-        value: pool?.summary?.volume?.dailyUsd?.toFixed(8),
+        value: pool?.summary?.volume?.dailyUsd,
         prefix: '$',
         daily: true,
         show: true,
@@ -45,7 +46,7 @@ export class PoolStatCardsLookup {
       },
       {
         title: 'Rewards',
-        value: pool?.summary?.rewards?.totalDailyUsd?.toFixed(8),
+        value: pool?.summary?.rewards?.totalDailyUsd,
         daily: true,
         prefix: '$',
         show: true,
@@ -58,7 +59,7 @@ export class PoolStatCardsLookup {
       },
       {
         title: 'Mining',
-        value: pool?.miningPool?.tokensMining?.formattedValue,
+        value: pool?.miningPool?.tokensMining,
         suffix: pool?.tokens?.lp?.symbol,
         show: !!pool?.miningPool && (pool.miningPool.isActive || pool.miningPool.tokensMining?.isZero !== true),
         icon: Icons.mining,

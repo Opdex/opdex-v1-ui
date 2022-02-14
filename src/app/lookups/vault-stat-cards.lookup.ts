@@ -1,11 +1,10 @@
+import { Vault } from '@sharedModels/ui/vaults/vault';
 import { StatCardInfo } from "@sharedModels/stat-card-info";
-import { IVaultResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-response-model.interface';
 import { Token } from "@sharedModels/ui/tokens/token";
 import { Icons } from "../enums/icons";
-import { reduce } from "rxjs/operators";
 
 export class VaultStatCardsLookup {
-  public static getStatCards(vault: IVaultResponseModel, token: Token): StatCardInfo[] {
+  public static getStatCards(vault: Vault, token: Token): StatCardInfo[] {
     return  [
       {
         title: 'Locked',

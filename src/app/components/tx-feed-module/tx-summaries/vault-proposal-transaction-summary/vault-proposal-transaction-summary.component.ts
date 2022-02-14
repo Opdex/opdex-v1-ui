@@ -1,6 +1,6 @@
+import { Vault } from '@sharedModels/ui/vaults/vault';
 import { MarketToken } from '@sharedModels/ui/tokens/market-token';
 import { take } from 'rxjs/operators';
-import { IVaultResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-response-model.interface';
 import { IVaultProposalResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-response-model.interface';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
@@ -20,7 +20,7 @@ import { IVaultProposalBaseEvent } from '@sharedModels/platform-api/responses/tr
 import { Token } from '@sharedModels/ui/tokens/token';
 
 interface IVaultProposalSummary {
-  vault: IVaultResponseModel,
+  vault: Vault,
   proposal: IVaultProposalResponseModel;
   pledgeOrVote: IVaultProposalPledgeOrVoteSummary;
   createOrComplete: IVaultProposalCreateOrCompleteSummary;

@@ -16,7 +16,9 @@
 
         <ng-container matColumnDef="vote">
           <th mat-header-cell *matHeaderCellDef> Vote </th>
-          <td mat-cell *matCellDef="let element"> <span class="no-wrap">{{element.vote | formatNumber:8}}</span> </td>
+          <td mat-cell *matCellDef="let element">
+            <opdex-number suffix="CRS" [value]="element.vote" [short]="true"></opdex-number>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="inFavor">
@@ -26,7 +28,9 @@
 
         <ng-container matColumnDef="balance">
           <th mat-header-cell *matHeaderCellDef> Balance </th>
-          <td mat-cell *matCellDef="let element"> <span class="no-wrap">{{element.balance | formatNumber:8}}</span> </td>
+          <td mat-cell *matCellDef="let element">
+            <opdex-number suffix="CRS" [value]="element.balance"></opdex-number>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="actions">

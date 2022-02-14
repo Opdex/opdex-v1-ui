@@ -13,8 +13,8 @@ import { UserContext } from '@sharedModels/user-context';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 
 interface IPoolsView {
-  topVolume: LiquidityPools,
-  mining: LiquidityPools
+  topVolume: LiquidityPool[],
+  mining: LiquidityPool[]
 }
 
 @Component({
@@ -39,7 +39,7 @@ export class PoolsComponent implements OnInit, OnDestroy {
 
     // Initialize dummy results for skeleton placeholders
     this.pools = {
-      topVolume: null,
+      topVolume: [ null, null, null, null ],
       mining: null
     }
 
@@ -59,8 +59,8 @@ export class PoolsComponent implements OnInit, OnDestroy {
           this._liquidityPoolsService.getLiquidityPools(miningFilter)
         ]).pipe(map((summaries: LiquidityPools[]) => {
           this.pools = {
-            topVolume: summaries[0],
-            mining: summaries[1]
+            topVolume: summaries[0].results,
+            mining: summaries[1].results
           }
         }));
       })).subscribe());

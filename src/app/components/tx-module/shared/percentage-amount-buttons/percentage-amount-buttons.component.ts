@@ -60,11 +60,11 @@ export class PercentageAmountButtonsComponent implements OnChanges {
       }
       else if (this.positionType === 'ProposalVote' && this.proposalId > 0) {
         balance$ = this._vaultService.getVote(this.proposalId, this.context.wallet, this.contract)
-          .pipe(map(result => result.balance));
+          .pipe(map(result => result.balance.formattedValue));
       }
       else if (this.positionType === 'ProposalPledge' && this.proposalId > 0) {
         balance$ = this._vaultService.getPledge(this.proposalId, this.context.wallet, this.contract)
-          .pipe(map(result => result.balance));
+          .pipe(map(result => result.balance.formattedValue));
       }
       else {
         balance$ = of('0');
