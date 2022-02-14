@@ -25,6 +25,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   expirationLength: number;
   timeRemaining: string;
   percentageTimeRemaining: number;
+  connectionId: string;
 
   constructor(
     private _context: UserContextService,
@@ -54,7 +55,7 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   private async connectToSignalR(): Promise<void> {
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(`${this._env.apiUrl}/socket`,  { accessTokenFactory: () => this._jwt.getToken() })
+      .withUrl(`${this._env.apiUrl}/socket`, { accessTokenFactory: () => this._jwt.getToken() })
       .configureLogging(LogLevel.Error)
       .withAutomaticReconnect()
       .build();
@@ -62,6 +63,9 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.hubConnection.onclose(_ => console.log('closing connection'));
 
     await this.hubConnection.start();
+
+    this.hubConnection.onreconnected(async _ =>
+      await this.hubConnection.invoke("Reconnect", this.connectionId, this.stratisId));
 
     await this.getStratisId();
 
@@ -72,6 +76,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   private async getStratisId() {
+    this.connectionId = this.hubConnection.connectionId;
     this.stratisId = await this.hubConnection.invoke('GetStratisId');
 
     if (!!this.stratisId === false || !this.stratisId.startsWith('sid:')) return;
