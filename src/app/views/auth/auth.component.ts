@@ -55,7 +55,7 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   private async connectToSignalR(): Promise<void> {
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(`${this._env.apiUrl}/socket`,  { accessTokenFactory: () => this._jwt.getToken() })
+      .withUrl(`${this._env.apiUrl}/socket`, { accessTokenFactory: () => this._jwt.getToken() })
       .configureLogging(LogLevel.Error)
       .withAutomaticReconnect()
       .build();
@@ -64,7 +64,8 @@ export class AuthComponent implements OnInit, OnDestroy {
 
     await this.hubConnection.start();
 
-    this.hubConnection.onreconnected(async _ => await this.hubConnection.invoke("Reconnect"));
+    this.hubConnection.onreconnected(async _ =>
+      await this.hubConnection.invoke("Reconnect", this.connectionId, this.stratisId));
 
     await this.getStratisId();
 
