@@ -47,7 +47,7 @@
         <opdex-card [fullHeight]="true">
           <div class="flex-row-center-between">
             <p class="mb-0">Total Supply</p>
-            <p class="mb-0">{{token.totalSupply?.formattedValue | shortNumber}}</p>
+            <opdex-number [value]="token.totalSupply" [short]="true"></opdex-number>
           </div>
         </opdex-card>
       </div>
@@ -59,24 +59,16 @@
           <ng-container *ngIf="token.address !== liquidityPool.address; else olpt">
             <div class="flex-row-center-between">
               <a class="b-400 no-decoration" routerLink="/pools/{{liquidityPool.address}}">{{liquidityPool.name}}</a>
-              <p class="mb-0 flex-row-center">
-                <mat-icon class="ml-1 mr-1" [ngClass]="iconSizes.tiny">{{icons.lock}}</mat-icon>
-                <span class="align-items-end">
-                  {{liquidityPool.summary.reserves.src.formattedValue | shortNumber}} <small>{{token.symbol}}</small>
-                </span>
-              </p>
+              <div class="flex-row-center">
+                <mat-icon class="ml-1 mr-1 blue" [ngClass]="iconSizes.tiny">{{icons.lock}}</mat-icon>
+                <opdex-number [value]="liquidityPool.summary.reserves.src" [short]="true" [suffix]="token.symbol"></opdex-number>
+              </div>
             </div>
 
             <div class="flex-row-center-between">
-              <span class="align-items-end">
-                1 <small>{{token.symbol}}</small>
-              </span>
-
-              <mat-icon class="ml-1 mr-1" [ngClass]="iconSizes.tiny">{{icons.swap}}</mat-icon>
-
-              <span class="align-items-end">
-                {{liquidityPool.summary.cost.crsPerSrc.formattedValue | shortNumber}} <small>{{liquidityPool.tokens.crs.symbol}}</small>
-              </span>
+              <opdex-number [value]="one" [suffix]="token.symbol"></opdex-number>
+              <mat-icon class="ml-1 mr-1 blue" [ngClass]="iconSizes.tiny">{{icons.swap}}</mat-icon>
+              <opdex-number [value]="liquidityPool.summary.cost.crsPerSrc" [short]="true" [suffix]="liquidityPool.tokens.crs.symbol"></opdex-number>
             </div>
           </ng-container>
 
@@ -89,8 +81,8 @@
             </div>
 
             <div class="flex-row-center-between">
-              <p class="mb-0">~{{crsPerOlpt.formattedValue | shortNumber}} <smalL>{{liquidityPool.tokens.crs.symbol}}</smalL></p>
-              <p class="mb-0">~{{srcPerOlpt.formattedValue | shortNumber}} <small>{{liquidityPool.tokens.src.symbol}}</small></p>
+              <opdex-number [value]="crsPerOlpt" [short]="true" [suffix]="liquidityPool.tokens.crs.symbol"></opdex-number>
+              <opdex-number [value]="srcPerOlpt" [short]="true" [suffix]="liquidityPool.tokens.src.symbol"></opdex-number>
             </div>
           </ng-template>
         </opdex-card>

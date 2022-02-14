@@ -146,14 +146,11 @@ export class VaultProposalComponent {
     return Math.floor((blocksPassed / duration) * 100);
   }
 
-  getVotePercentage(valueOne: string, valueTwo: string): FixedDecimal {
-    const first = new FixedDecimal(valueOne, 8);
-    const second = new FixedDecimal(valueTwo, 8);
+  getVotePercentage(first: FixedDecimal, second: FixedDecimal): FixedDecimal {
     const oneHundred = FixedDecimal.OneHundred(0);
-    const zero = FixedDecimal.Zero(0);
 
     if (second.bigInt === BigInt(0) && first.bigInt > BigInt(0)) return oneHundred;
-    else if (second.bigInt === BigInt(0) && first.bigInt == BigInt(0)) return zero;
+    else if (second.bigInt === BigInt(0) && first.bigInt == BigInt(0)) return FixedDecimal.Zero(0);
 
     return first.divide(second).multiply(oneHundred);
   }

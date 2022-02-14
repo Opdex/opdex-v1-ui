@@ -6,9 +6,7 @@
       [formControl]="amount"
       [suffix]="pool.tokens.lp.symbol"
       [numbersOnly]="true">
-      <div class="flex-row-center">
-        <span *ngIf="fiatValue">${{fiatValue.formattedValue | formatNumber:2}}</span>
-      </div>
+      <opdex-number [value]="fiatValue" prefix="$" [precision]="2"></opdex-number>
     </opdex-input-control>
 
     <opdex-percentage-amount-buttons

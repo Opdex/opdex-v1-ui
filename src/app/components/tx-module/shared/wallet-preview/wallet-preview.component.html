@@ -55,13 +55,15 @@
               </div>
 
               <div class="col flex-column justify-content-end">
-                <a class="no-decoration" [matTooltip]="position.amount.formattedValue" [cdkCopyToClipboard]="position.amount.formattedValue" href="javascript:void(0)">
-                  <small>{{position.amount.formattedValue | shortNumber}}</small>
-                </a>
+                <small>
+                  <opdex-number [value]="position.amount" [short]="true"></opdex-number>
+                </small>
               </div>
 
               <div class="col flex-column-end">
-                <small>${{position.value.formattedValue | shortNumber}}</small>
+                <small>
+                  <opdex-number [value]="position.value" [short]="true" prefix="$"></opdex-number>
+                </small>
               </div>
             </div>
           </ng-container>

@@ -1,14 +1,26 @@
-<div class="number" [matTooltip]="showTooltip ? (fixed | formatNumber:decimals) : null">
-  <span class="prefix" *ngIf="prefix">{{prefix}}</span>
+<div
+  class="number"
+  *ngIf="value"
+  [matTooltip]="showTooltip ? (fixed | formatNumber:decimals) : null"
+  [cdkCopyToClipboard]="value.formattedValue"
+  (click)="copyHandler($event)">
 
-  <ng-container *ngIf="!!short === true; else format">
-    <span class="short">{{fixed | shortNumber}}</span>
+  <ng-container *ngIf="!copied; else copyMessage">
+    <span class="prefix" *ngIf="prefix">{{prefix}}</span>
+
+    <ng-container *ngIf="!!short === true; else format">
+      <span class="short">{{fixed | shortNumber}}</span>
+    </ng-container>
+
+    <ng-template #format>
+      <span class="numerator">{{numerator | formatNumber:0}}</span>
+      <span class="denominator light" *ngIf="denominator && decimals > 0">.{{denominator}}</span>
+    </ng-template>
+
+    <small class="suffix ml-1" *ngIf="suffix">{{suffix}}</small>
   </ng-container>
 
-  <ng-template #format>
-    <span class="numerator">{{ numerator | formatNumber:0}}</span>
-    <span class="denominator light" *ngIf="denominator && decimals > 0">.{{ denominator }}</span>
+  <ng-template #copyMessage>
+    <small class="light" style="font-weight: 300 !important">copied</small>
   </ng-template>
-
-  <small class="suffix ml-2" *ngIf="suffix">{{suffix}}</small>
 </div>

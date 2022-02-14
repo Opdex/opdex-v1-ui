@@ -1,3 +1,4 @@
+import { Icons } from 'src/app/enums/icons';
 import { Component, Input } from '@angular/core';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 
@@ -12,6 +13,10 @@ export class NumberComponent {
   @Input() prefix: string;
   @Input() suffix: string;
   @Input() precision: number;
+  @Input() stopPropagation = false;
+  @Input() preventCopy = false;
+  copied = false;
+  icons = Icons;
 
   get numerator(): string {
     return this.value.wholeNumber || '0';
@@ -32,6 +37,13 @@ export class NumberComponent {
 
   get showTooltip(): boolean {
     return this.value.bigInt > 0 && ((this.precision >= 0 && this.precision < this.decimals) || this.short);
+  }
+
+  copyHandler(event: Event): void {
+    if (this.stopPropagation) event.stopPropagation();
+    if (this.preventCopy) return;
+    this.copied = true;
+    setTimeout(() => this.copied = false, 500);
   }
 
   private _precision(): FixedDecimal {

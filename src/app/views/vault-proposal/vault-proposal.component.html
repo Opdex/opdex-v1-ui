@@ -31,9 +31,7 @@
         </div>
 
         <p class="mb-0" style="font-size: 2.4em; line-height: 1.3em" *ngIf="proposal.type !== 'Revoke'">
-          <span class="b-400 mr-2">{{proposal.amount.formattedValue | shortNumber}}</span>
-          <small *ngIf="proposal.type === 'Create'">ODX</small>
-          <small *ngIf="proposal.type !== 'Create'">CRS</small>
+          <opdex-number [suffix]="proposal.type === 'Create' ? 'ODX' : 'CRS'" [value]="proposal.amount" [short]="true"></opdex-number>
         </p>
 
         <p class="mb-0 flex-row align-items-end">
@@ -57,7 +55,6 @@
 
           <div class="mt-2 flex-row-center-between">
             <small class="light">{{proposal.expiration - latestBlock.height | formatNumber:0}} blocks remaining</small>
-            <!-- <small class="light float-right">{{miningGovernance.nominationPeriodEndDate | timeago}}</small> -->
           </div>
         </div>
       </div>
@@ -79,7 +76,9 @@
                 value="100">
               </mat-spinner>
 
-              <p style="position: absolute; left: 0; right: 0; margin: 0; text-align: center;">{{proposal.pledgeAmount.formattedValue | shortNumber}} <small>CRS</small></p>
+              <p style="position: absolute; left: 0; right: 0; margin: 0; text-align: center;">
+                <opdex-number [value]="proposal.pledgeAmount" suffix="CRS" [short]="true"></opdex-number>
+              </p>
             </div>
           </ng-container>
 
@@ -88,18 +87,18 @@
               <p class="light b-400">Votes</p>
 
               <div class="vote-bar-container">
-                <div class="vote-bar yes mb-1 no-wrap" [ngStyle]="{'min-width': getVotePercentage(proposal.yesAmount.formattedValue, proposal.noAmount.formattedValue).wholeNumber + '%' }">
+                <div class="vote-bar yes mb-1 no-wrap" [ngStyle]="{'min-width': getVotePercentage(proposal.yesAmount, proposal.noAmount).wholeNumber + '%' }">
                   <div class="flex-row-center">
                     <mat-icon class="mr-1 tiny">{{icons.thumbUp}}</mat-icon>
-                    <div class="d-block">{{proposal.yesAmount.formattedValue | shortNumber}} <small>CRS</small></div>
+                    <opdex-number [value]="proposal.yesAmount" [short]="true" suffix="CRS"></opdex-number>
                   </div>
                 </div>
               </div>
 
               <div class="vote-bar-container">
-                <div class="vote-bar no no-wrap flex-row-center" [ngStyle]="{'min-width': getVotePercentage(proposal.noAmount.formattedValue, proposal.yesAmount.formattedValue).wholeNumber + '%' }">
+                <div class="vote-bar no no-wrap flex-row-center" [ngStyle]="{'min-width': getVotePercentage(proposal.noAmount, proposal.yesAmount).wholeNumber + '%' }">
                   <mat-icon class="mr-1 tiny">{{icons.thumbDown}}</mat-icon>
-                  <div class="d-block">{{proposal.noAmount.formattedValue | shortNumber}} <small>CRS</small></div>
+                  <opdex-number [value]="proposal.noAmount" [short]="true" suffix="CRS"></opdex-number>
                 </div>
               </div>
             </div>
@@ -174,7 +173,9 @@
           <mat-tab>
             <ng-template mat-tab-label>
               Pledges
-              <span class="ml-1 badge blue">{{(proposal?.pledgeAmount?.formattedValue || 0) | shortNumber}}</span>
+              <span class="ml-1 badge blue">
+                <opdex-number [value]="proposal?.pledgeAmount" [short]="true"></opdex-number>
+              </span>
             </ng-template>
 
             <ng-template matTabContent>
@@ -186,8 +187,13 @@
             <ng-template mat-tab-label>
               Votes
               <ng-container *ngIf="proposal && proposal.status !== 'Pledge'">
-                <span class="ml-1 badge green flex-row-center">{{(proposal?.yesAmount?.formattedValue || 0) | shortNumber}}</span>
-                <span class="ml-1 badge red flex-row-center">{{(proposal?.noAmount?.formattedValue || 0) | shortNumber}}</span>
+                <span class="ml-1 badge green flex-row-center">
+                  <opdex-number [value]="proposal?.yesAmount" [short]="true"></opdex-number>
+                </span>
+
+                <span class="ml-1 badge red flex-row-center">
+                  <opdex-number [value]="proposal?.noAmount" [short]="true"></opdex-number>
+                </span>
               </ng-container>
             </ng-template>
 

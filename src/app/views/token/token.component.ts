@@ -65,6 +65,7 @@ export class TokenComponent implements OnInit {
   crsPerOlpt: FixedDecimal;
   srcPerOlpt: FixedDecimal;
   isCurrentMarket: boolean;
+  one = FixedDecimal.One(0);
 
   constructor(
     private _route: ActivatedRoute,

@@ -55,6 +55,11 @@
   align-items: flex-end;
 }
 
+%flexRowBaseline {
+  @extend %flexRow;
+  align-items: baseline;
+}
+
 // Classes
 
 .flex-row {
@@ -67,6 +72,10 @@
 
 .flex-row-end {
   @extend %flexRowEnd;
+}
+
+.flex-row-baseline {
+  @extend %flexRowBaseline;
 }
 
 // Flex Row Align Center Justify Content
@@ -109,6 +118,23 @@
 
 .flex-row-end-start {
   @extend %flexRowEnd;
+  justify-content: start;
+}
+
+// Flex Row Align Baseline Justify Content
+.flex-row-baseline-between {
+  @extend %flexRowBaseline;
+  justify-content: space-between;
+}
+
+.flex-row-baseline-end {
+  @extend %flexRowBaseline;
+  justify-content: end;
+  justify-content: flex-end;
+}
+
+.flex-row-baseline-start {
+  @extend %flexRowBaseline;
   justify-content: start;
 }
 

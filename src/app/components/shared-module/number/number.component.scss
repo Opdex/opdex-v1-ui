@@ -6,6 +6,10 @@
 
 .number {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   flex-direction: row;
+
+  &:hover {
+    cursor: pointer;
+  }
 }

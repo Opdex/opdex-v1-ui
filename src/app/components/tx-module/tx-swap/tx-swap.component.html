@@ -10,11 +10,7 @@
       [suffix]="tokenIn?.symbol || 'Select Token'"
       (handleChangeToken)="changeToken('tokenIn')"
       [numbersOnly]="true">
-      <div class="flex-row-center-between">
-        <div class="fiat-quote">
-          <span *ngIf="tokenInFiatValue">${{tokenInFiatValue.formattedValue | formatNumber:2}}</span>
-        </div>
-      </div>
+      <opdex-number [value]="tokenInFiatValue" prefix="$" [precision]="2"></opdex-number>
     </opdex-input-control>
 
     <opdex-token-keyword-filter-control
@@ -69,7 +65,7 @@
       [numbersOnly]="true">
       <div class="flex-row-center-between">
         <div class="fiat-quote">
-          <span *ngIf="!!tokenOutFiatValue">${{tokenOutFiatValue.formattedValue | formatNumber:2}}</span>
+          <opdex-number [value]="tokenOutFiatValue" prefix="$" [precision]="2"></opdex-number>
           <span class="ml-1"
             [ngClass]="{
               'orange': tokenOutFiatPercentageDifference < -1 && tokenOutFiatPercentageDifference > -5,
@@ -123,12 +119,18 @@
 
         <div class="flex-row-center-between" *ngIf="tokenOutMin && tokenInExact">
           <small class="b-400 light mr-1">Minimum Received ({{toleranceThreshold}}% slippage)</small>
-          <small class="text-right no-wrap">{{tokenOutMin.formattedValue | formatNumber:(tokenOut.decimals > 4 ? 4 : tokenOut.decimals)}} {{tokenOut.symbol}}</small>
+
+          <small>
+            <opdex-number [value]="tokenOutMin" [precision]="4" [suffix]="tokenOut.symbol"></opdex-number>
+          </small>
         </div>
 
         <div class="flex-row-center-between" *ngIf="tokenInMax && !tokenInExact">
           <small class="b-400 light mr-1">Maximum Sent ({{toleranceThreshold}}% slippage)</small>
-          <small class="text-right no-wrap">{{tokenInMax.formattedValue | formatNumber:(tokenIn.decimals > 4 ? 4 : tokenIn.decimals)}} {{tokenIn.symbol}}</small>
+
+          <small>
+            <opdex-number [value]="tokenInMax" [precision]="4" [suffix]="tokenIn.symbol"></opdex-number>
+          </small>
         </div>
 
         <div class="flex-row-center-between">

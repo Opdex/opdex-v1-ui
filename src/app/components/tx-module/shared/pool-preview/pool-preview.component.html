@@ -51,13 +51,18 @@
 
           <div class="flex-column" style="width: 30%;">
             <small class="light" *ngIf="i === 0">{{showStaking || showMining ? 'Weight' : 'Supply'}}</small>
-            <small class="w-25">{{preview.supply.formattedValue | shortNumber}}</small>
+            <small class="w-25">
+              <opdex-number [value]="preview.supply" [short]="true"></opdex-number>
+            </small>
           </div>
 
           <div class="flex-column" style="width: 40%">
             <small class="light" *ngIf="i === 0">Price</small>
             <div class="flex-row-center-between">
-              <small class="mr-2">${{preview.price.formattedValue | shortNumber}}</small>
+              <small class="mr-2">
+                <opdex-number [value]="preview.price" prefix="$" [short]="true"></opdex-number>
+              </small>
+
               <opdex-change-indicator [value]="preview.percentageChange" [forceDisplay]="true"></opdex-change-indicator>
             </div>
           </div>
