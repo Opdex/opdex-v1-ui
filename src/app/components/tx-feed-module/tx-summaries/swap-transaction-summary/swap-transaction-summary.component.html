@@ -1,10 +1,12 @@
 <div class="w-100 flex-row-center" *ngIf="tokenInAmount && tokenOutAmount && tokenIn && tokenOut && !error">
   <div class="col no-wrap flex-shrink">
-    -{{tokenInAmount.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/tokens/{{tokenIn.address}}">{{tokenIn.symbol}}</a>
+    <opdex-number class="mr-2" [value]="tokenInAmount" prefix="-" [short]="true" [stopPropagation]="true"></opdex-number>
+    <a class="no-decoration" routerLink="/tokens/{{tokenIn.address}}">{{tokenIn.symbol}}</a>
   </div>
 
   <div class="col no-wrap">
-    +{{tokenOutAmount.formattedValue | shortNumber}} <a class="no-decoration" routerLink="/tokens/{{tokenOut.address}}">{{tokenOut.symbol}}</a>
+    <opdex-number class="mr-2" [value]="tokenOutAmount" prefix="+" [short]="true" [stopPropagation]="true"></opdex-number>
+    <a class="no-decoration" routerLink="/tokens/{{tokenOut.address}}">{{tokenOut.symbol}}</a>
   </div>
 </div>
 

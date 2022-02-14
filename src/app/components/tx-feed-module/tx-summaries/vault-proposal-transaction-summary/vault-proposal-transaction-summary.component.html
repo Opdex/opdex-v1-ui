@@ -5,7 +5,15 @@
     </div>
 
     <div class="col no-wrap flex-shrink">
-      {{summary.pledgeOrVote.withdrawal ? '-' : '+' }}{{summary.pledgeOrVote.amount.formattedValue | shortNumber}} <a class="no-decoration" href="javascript:void(0)" routerLink="/tokens/{{summary.crs.address}}">{{summary.crs.symbol}}</a>
+      <opdex-number
+        class="mr-2"
+        [prefix]="summary.pledgeOrVote.withdrawal ? '-' : '+'"
+        [value]="summary.pledgeOrVote.amount"
+        [short]="true"
+        [stopPropagation]="true">
+      </opdex-number>
+
+      <a class="no-decoration" href="javascript:void(0)" routerLink="/tokens/{{summary.crs.address}}">{{summary.crs.symbol}}</a>
     </div>
 
     <div class="col no-wrap" *ngIf="summary.pledgeOrVote.inFavor !== null">
