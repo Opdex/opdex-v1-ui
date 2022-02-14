@@ -25,6 +25,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   expirationLength: number;
   timeRemaining: string;
   percentageTimeRemaining: number;
+  connectionId: string;
 
   constructor(
     private _context: UserContextService,
@@ -63,6 +64,8 @@ export class AuthComponent implements OnInit, OnDestroy {
 
     await this.hubConnection.start();
 
+    this.hubConnection.onreconnected(async _ => await this.hubConnection.invoke("Reconnect"));
+
     await this.getStratisId();
 
     this.hubConnection.on('OnAuthenticated', async (token: string) => {
@@ -72,6 +75,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   private async getStratisId() {
+    this.connectionId = this.hubConnection.connectionId;
     this.stratisId = await this.hubConnection.invoke('GetStratisId');
 
     if (!!this.stratisId === false || !this.stratisId.startsWith('sid:')) return;
