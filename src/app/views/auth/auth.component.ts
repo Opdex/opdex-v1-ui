@@ -64,8 +64,14 @@ export class AuthComponent implements OnInit, OnDestroy {
 
     await this.hubConnection.start();
 
-    this.hubConnection.onreconnected(async _ =>
-      await this.hubConnection.invoke("Reconnect", this.connectionId, this.stratisId));
+    this.hubConnection.onreconnected(async _ => {
+      try {
+        const success = await this.hubConnection.invoke("Reconnect", this.connectionId, this.stratisId);
+        window.alert(`Auth:${success ? 'successful' : 'Unsuccessful'}`);
+      } catch (error) {
+        window.alert(`Reconnect Error - ${error}`);
+      }
+    });
 
     await this.getStratisId();
 
