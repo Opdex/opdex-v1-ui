@@ -26,6 +26,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   timeRemaining: string;
   percentageTimeRemaining: number;
   connectionId: string;
+  reconnecting: boolean;
 
   constructor(
     private _context: UserContextService,
@@ -63,25 +64,36 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.hubConnection.onclose(_ => console.log('closing connection'));
 
     await this.hubConnection.start();
-
-    this.hubConnection.onreconnected(async _ => {
-      try {
-        const success = await this.hubConnection.invoke("Reconnect", this.connectionId, this.stratisId);
-        window.alert(`Auth:${success ? 'successful' : 'Unsuccessful'}`);
-      } catch (error) {
-        window.alert(`Reconnect Error - ${error}`);
-      }
-    });
-
     await this.getStratisId();
 
-    this.hubConnection.on('OnAuthenticated', async (token: string) => {
+    this.hubConnection.onreconnecting(_ => this.reconnecting = true);
+    this.hubConnection.onreconnected(async (connectionId: string) => await this._onReconnected(connectionId));
+    this.hubConnection.on('OnAuthenticated', async (token: string) => await this._onAuthenticated(token));
+  }
+
+  private async _onReconnected(newConnectionId: string): Promise<void> {
+    if (newConnectionId !== this.connectionId) {
+      try {
+        const success = await this.hubConnection.invoke('Reconnect', this.connectionId, this.stratisId);
+        if (!success) await this.getStratisId();
+      } catch (error) {
+        await this.getStratisId();
+      }
+    }
+
+    this.reconnecting = false;
+  }
+
+  private async _onAuthenticated(token: string): Promise<void> {
+    // Set timeout to allow all promises to finished before closing the connection
+    // Specifically during _onReconnected, wait to finish reconnecting
+    setTimeout(async _ => {
       await this.stopHubConnection();
       this._context.setToken(token);
     });
   }
 
-  private async getStratisId() {
+  private async getStratisId(): Promise<void> {
     this.connectionId = this.hubConnection.connectionId;
     this.stratisId = await this.hubConnection.invoke('GetStratisId');
 
