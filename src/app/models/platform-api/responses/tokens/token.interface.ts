@@ -30,7 +30,8 @@ export interface IToken {
   attributes: string[];
   createdBlock: number;
   modifiedBlock: number;
-  wrappedToken: IWrappedToken;
+  wrappedToken?: IWrappedToken;
+  distribution?: ITokenDistribution;
   balance?: any;
 }
 
@@ -46,4 +47,17 @@ export interface IWrappedToken {
 export interface ITokenSnapshot {
   price: IOhlcNumber;
   timestamp: Date;
+}
+
+export interface ITokenDistribution {
+  vault: string;
+  miningGovernance: string;
+  nextDistributionBlock: number;
+  history: ITokenDistributionHistory[];
+}
+
+export interface ITokenDistributionHistory {
+  vault: string;
+  miningGovernance: string;
+  block: number;
 }
