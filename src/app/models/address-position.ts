@@ -30,7 +30,7 @@ export class AddressPosition {
 
   public get trackBy(): string {
     const { value, amount, token } = this;
-    return `${value}-${amount}-${token.address}`;
+    return `${value.formattedValue}-${amount.formattedValue}-${token.address}`;
   }
 
   constructor(walletAddress: string, token: Token, position: 'Staking' | 'Mining' | 'Balance', amount: FixedDecimal) {

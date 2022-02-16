@@ -45,7 +45,7 @@ export class VaultCertificate {
 
   public get trackBy(): string {
     const { owner, amount, vestingEndBlock, redeemed, revoked } = this;
-    return `${owner}=${amount}-${vestingEndBlock}-${redeemed}-${revoked}`
+    return `${owner}-${amount.formattedValue}-${vestingEndBlock}-${redeemed}-${revoked}`
   }
 
   constructor(certificate: IVaultCertificate) {
