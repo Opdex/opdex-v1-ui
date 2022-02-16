@@ -123,8 +123,7 @@ export class VaultProposalComponent {
   }
 
   proposalsTrackBy(index: number, proposal: VaultProposal) {
-    if (proposal === null || proposal === undefined) return index;
-    return `${index}-${proposal.proposalId}-${proposal.status}-${proposal.expiration}-${proposal.pledgeAmount}-${proposal.yesAmount}-${proposal.noAmount}`;
+    return `${index}-${proposal?.trackBy}`;
   }
 
   private setPledgePercentage(): void {
@@ -156,7 +155,7 @@ export class VaultProposalComponent {
   }
 
   statCardTrackBy(index: number, statCard: StatCardInfo) {
-    return `${index}-${statCard.title}-${statCard.value}`;
+    return `${index}-${statCard?.title}-${statCard?.value?.formattedValue}`;
   }
 
   ngOnDestroy() {

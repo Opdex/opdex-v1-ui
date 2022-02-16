@@ -86,7 +86,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
       this._context.getUserContext$()
         .subscribe(async context => {
           if (!context?.wallet) this.stopHubConnection();
-          else if (!this.hubConnection?.connectionId) await this.connectToSignalR();
+          else if (!this.hubConnection) await this.connectToSignalR();
         }));
 
     // Get index status on timer

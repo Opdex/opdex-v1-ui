@@ -1,3 +1,4 @@
+import { TokenDistribution } from './token-distribution';
 import { TokenHistory } from './token-history';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
@@ -18,6 +19,7 @@ export class Token {
   private _modifiedBlock: number;
   private _balance?: FixedDecimal;
   private _history?: TokenHistory;
+  private _distribution?: TokenDistribution;
 
   public get address(): string {
     return this._address;
@@ -48,7 +50,7 @@ export class Token {
   }
 
   public get attributes(): string[] {
-    return this._attributes;
+    return this._attributes || [];
   }
 
   public get wrappedToken(): WrappedToken {
@@ -71,6 +73,35 @@ export class Token {
     return this._history;
   }
 
+  public get distribution(): TokenDistribution {
+    return this._distribution;
+  }
+
+  public get isStaking(): boolean {
+    return this.attributes.findIndex(attribute => attribute === 'Staking') >= 0;
+  }
+
+  public get isProvisional(): boolean {
+    return this.attributes.findIndex(attribute => attribute === 'Provisional') >= 0;
+  }
+
+  public get isNonProvisional(): boolean {
+    return this.attributes.findIndex(attribute => attribute === 'NonProvisional') >= 0;
+  }
+
+  public get isInterflux(): boolean {
+    return this.attributes.findIndex(attribute => attribute === 'Interflux') >= 0;
+  }
+
+  public get isCrs(): boolean {
+    return this.address === 'CRS';
+  }
+
+  public get trackBy(): string {
+    const { summary, address } = this;
+    return `${address}-${summary.dailyPriceChangePercent}-${summary.priceUsd.formattedValue}`;
+  }
+
   constructor(token: IToken) {
     if (!!token === false) return;
 
@@ -83,6 +114,7 @@ export class Token {
     this._summary = new TokenSummary(token.summary);
     this._attributes = [...token.attributes];
     this._wrappedToken = !!token.wrappedToken ? new WrappedToken(token.wrappedToken) : null;
+    this._distribution = !!token.distribution ? new TokenDistribution(token.distribution) : null;
     this._createdBlock = token.createdBlock;
     this._modifiedBlock = token.modifiedBlock;
   }

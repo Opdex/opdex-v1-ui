@@ -43,6 +43,11 @@ export class VaultProposalVote {
     return this._modifiedBlock;
   }
 
+  public get trackBy(): string {
+    const { voter, vote, balance } = this;
+    return `${voter}-${vote.formattedValue}-${balance.formattedValue}`;
+  }
+
   constructor(vote: IVaultProposalVoteResponseModel) {
     this._vault = vote.vault;
     this._proposalId = vote.proposalId;

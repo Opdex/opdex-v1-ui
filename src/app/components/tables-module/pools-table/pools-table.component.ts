@@ -70,7 +70,7 @@ export class PoolsTableComponent implements OnChanges, OnDestroy {
   }
 
   trackBy(index: number, pool: LiquidityPool): string {
-    return `${index}-${pool.address}-${pool.summary.reserves.usd}-${pool.summary.staking?.weight || 0}-${pool.summary.volume.dailyUsd}`;
+    return `${index}-${pool?.trackBy}`;
   }
 
   pageChange(cursor: string): void {

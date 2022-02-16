@@ -31,4 +31,8 @@ export class TokenDistribution {
     this._nextDistributionBlock = distribution.nextDistributionBlock;
     this._history = distribution.history.map(history => new TokenDistributionHistory(history));
   }
+
+  isReady(latestBlock: number): boolean {
+    return this._nextDistributionBlock <= latestBlock;
+  }
 }

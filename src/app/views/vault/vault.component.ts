@@ -128,12 +128,11 @@ export class VaultComponent implements OnInit {
   }
 
   proposalsTrackBy(index: number, proposal: VaultProposal) {
-    if (proposal === null || proposal === undefined) return index;
-    return `${index}-${proposal.proposalId}-${proposal.status}-${proposal.expiration}-${proposal.pledgeAmount.formattedValue}-${proposal.yesAmount.formattedValue}-${proposal.noAmount.formattedValue}`;
+    return `${index}-${proposal?.trackBy}`;
   }
 
   statCardTrackBy(index: number, statCard: StatCardInfo) {
-    return `${index}-${statCard.title}-${statCard.value}`;
+    return `${index}-${statCard?.title}-${statCard?.value?.formattedValue}`;
   }
 
   ngOnDestroy() {

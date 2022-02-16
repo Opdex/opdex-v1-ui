@@ -88,7 +88,7 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
   }
 
   trackBy(index: number, token: Token) {
-    return `${index}-${token.address}-${token.summary.dailyPriceChangePercent}-${token.summary.priceUsd}`;
+    return `${index}-${token?.trackBy}`;
   }
 
   ngOnDestroy() {

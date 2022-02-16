@@ -173,12 +173,11 @@ export class MarketComponent implements OnInit, OnDestroy {
   }
 
   poolsTrackBy(index: number, pool: LiquidityPool): string {
-    if (!!pool === false) return index.toString();;
-    return `${index}-${pool.trackBy}`;
+    return `${index}-${pool?.trackBy}`;
   }
 
   statCardTrackBy(index: number, statCard: StatCardInfo) {
-    return `${index}-${statCard.title}-${statCard.value}`;
+    return `${index}-${statCard?.title}-${statCard?.value?.formattedValue}`;
   }
 
   ngOnDestroy() {

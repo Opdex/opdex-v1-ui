@@ -43,6 +43,11 @@ export class VaultCertificate {
     return this._modifiedBlock;
   }
 
+  public get trackBy(): string {
+    const { owner, amount, vestingEndBlock, redeemed, revoked } = this;
+    return `${owner}=${amount}-${vestingEndBlock}-${redeemed}-${revoked}`
+  }
+
   constructor(certificate: IVaultCertificate) {
     this._owner = certificate.owner;
     this._amount = new FixedDecimal(certificate.amount, 8);

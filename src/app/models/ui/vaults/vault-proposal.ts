@@ -83,6 +83,11 @@ export class VaultProposal {
     return this._modifiedBlock;
   }
 
+  public get trackBy(): string {
+    const { proposalId, status, expiration, pledgeAmount, yesAmount, noAmount } = this;
+    return `${proposalId}-${status}-${expiration}-${pledgeAmount.formattedValue}-${yesAmount.formattedValue}-${noAmount.formattedValue}`;
+  }
+
   constructor(proposal: IVaultProposalResponseModel) {
     this._vault = proposal.vault;
     this._token = proposal.token;

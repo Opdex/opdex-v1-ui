@@ -1,7 +1,7 @@
 <opdex-card>
   <ng-container *ngIf="position?.value !== null && position?.value !== undefined; else loadingPositions">
     <div class="flex-row-center-between">
-      <small class="light">{{position.position}}</small>
+      <small class="light b-400">{{position.position}}</small>
       <small>
         <opdex-number prefix="$" [value]="position.value" [precision]="2"></opdex-number>
       </small>

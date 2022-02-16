@@ -50,8 +50,7 @@ export class EnableMiningTransactionSummaryComponent implements OnChanges, OnDes
   }
 
   poolsTrackBy(index: number, pool: LiquidityPool): string {
-    if (!!pool === false) return index.toString();;
-    return `${index}-${pool.trackBy}`;
+    return `${index}-${pool?.trackBy}`;
   }
 
   ngOnDestroy(): void {

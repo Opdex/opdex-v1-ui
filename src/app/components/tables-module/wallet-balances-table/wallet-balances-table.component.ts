@@ -91,7 +91,7 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
   }
 
   trackBy(index: number, position: any): string {
-    return `${index}-${position.name}-${position.address}-${position.balance}-${position.total}`;
+    return `${index}-${position.name}-${position.address}-${position.token.balance.formattedValue}-${position.total.formattedValue}`;
   }
 
   pageChange(cursor: string): void {

@@ -38,6 +38,11 @@ export class VaultProposalPledge {
     return this._modifiedBlock;
   }
 
+  public get trackBy(): string {
+    const { pledger, pledge, balance } = this;
+    return `${pledger}-${pledge.formattedValue}-${balance.formattedValue}`;
+  }
+
   constructor(pledge: IVaultProposalPledgeResponseModel) {
     this._vault = pledge.vault;
     this._proposalId = pledge.proposalId;
