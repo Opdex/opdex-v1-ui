@@ -56,11 +56,11 @@ export class LineChartComponent implements OnChanges, OnInit {
           .subscribe((result: BreakpointState) => {
 
             if (result.breakpoints['(min-width: 1440px)']) {
-              this.height = 500;
+              this.height = 440;
             } else if (result.breakpoints['(min-width: 992px)']) {
-              this.height = 400;
+              this.height = 440;
             } else {
-              this.height = 275;
+              this.height = 440;
             }
 
             if (this.chart) {

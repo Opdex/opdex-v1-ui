@@ -83,6 +83,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   message: ISidenavMessage;
   historyFilter: HistoryFilter;
   isCurrentMarket: boolean;
+  one = FixedDecimal.One(0);
 
   constructor(
     private _route: ActivatedRoute,

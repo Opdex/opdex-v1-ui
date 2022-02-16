@@ -1,6 +1,6 @@
 <div class="header-section">
   <div class="container">
-    <div class="row align-items-center">
+    <div class="row">
       <div class="col-12 mb-3" *ngIf="!isCurrentMarket">
         <opdex-card [warn]="true">
           This liquidity pool is from an external market.
@@ -15,7 +15,7 @@
 
         <opdex-copy-address [address]="pool?.address"></opdex-copy-address>
 
-        <div class="flex-row-center mt-2 mb-3">
+        <div class="flex-row-center mt-2">
           <div class="badge blue mr-2">{{pool?.transactionFeePercent > 0 ? pool.transactionFeePercent : 0}}% Fee</div>
           <div class="badge purple mr-2" *ngIf="pool?.summary?.staking?.nominated"><mat-icon class="mr-1">{{icons.staking}}</mat-icon> Nominated</div>
           <div class="badge red mr-2" *ngIf="pool?.miningPool?.isActive"><mat-icon class="mr-1">{{icons.mining}}</mat-icon> Mining</div>
@@ -26,40 +26,159 @@
         <opdex-tx-buttons (onSelectOption)="handleTxOption($event)"></opdex-tx-buttons>
       </div>
     </div>
+  </div>
+</div>
 
+<div class="offset-section">
+  <div class="container">
     <div class="row">
-      <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-        <opdex-liquidity-pool-token-card
-          [token]="pool?.tokens?.src"
-          [reserves]="pool?.summary?.reserves?.src"
-          [swapRate]="pool?.summary?.cost?.crsPerSrc"
-          [swapToken]="pool?.tokens?.crs"></opdex-liquidity-pool-token-card>
-      </div>
+      <div class="col-12 col-lg-4 col-xl-3">
+        <div class="row">
+          <div class="col-12 col-sm-6 col-lg-12">
+            <opdex-liquidity-pool-token-card
+              [token]="pool?.tokens?.src"
+              [swapToken]="pool?.tokens?.crs"
+              [swapRate]="pool?.summary?.cost?.crsPerSrc">
+            </opdex-liquidity-pool-token-card>
+          </div>
 
-      <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-        <opdex-liquidity-pool-token-card
-          [token]="pool?.tokens?.crs"
-          [reserves]="pool?.summary?.reserves?.crs"
-          [swapRate]="pool?.summary?.cost?.srcPerCrs"
-          [swapToken]="pool?.tokens?.src"></opdex-liquidity-pool-token-card>
-      </div>
-    </div>
+          <div class="col-12 col-sm-6 col-lg-12">
+            <opdex-liquidity-pool-token-card
+              [token]="pool?.tokens?.crs"
+              [swapToken]="pool?.tokens?.src"
+              [swapRate]="pool?.summary?.cost?.srcPerCrs">
+            </opdex-liquidity-pool-token-card>
+          </div>
 
-    <div class="row">
-      <ng-container *ngFor="let statCard of statCards; let i = index; trackBy: statCardTrackBy">
-        <div *ngIf="statCard.show" class="col-xs-12 col-sm">
-          <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
+          <div class="col-12 col-sm-12 col-lg-12">
+            <opdex-card>
+              <!-- <div class="flex-row-center-between mb-3">
+                <h4 class="mb-0">Pool Overview</h4>
+                <button mat-icon-button color="primary" class="small"><mat-icon>{{icons.add}}</mat-icon></button>
+              </div> -->
+
+              <div class="flex-row-center-between mb-1">
+                <div class="flex-row-center">
+                  <mat-icon class="blue mr-1 tiny">{{icons.liquidityPool}}</mat-icon>
+                  <p class="mb-0 light b-400">Liquidity</p>
+                </div>
+
+                <div class="flex-row-center">
+                  <opdex-change-indicator
+                    [value]="pool?.summary?.reserves?.dailyUsdChangePercent"
+                    *ngIf="!!pool?.summary?.reserves?.dailyUsdChangePercent">
+                  </opdex-change-indicator>
+
+                  <opdex-number class="ml-2" prefix="$" [value]="pool?.summary?.reserves?.usd" [short]="true"></opdex-number>
+                </div>
+              </div>
+
+
+              <div class="flex-row-center-between">
+                <p class="b-400 mb-0">{{pool?.tokens?.crs?.symbol}}</p>
+                <opdex-number [value]="pool?.summary?.reserves?.crs" [short]="true"></opdex-number>
+              </div>
+
+              <div class="flex-row-center-between">
+                <p class="b-400 mb-0">{{pool?.tokens?.src?.symbol}}</p>
+                <opdex-number [value]="pool?.summary?.reserves?.src" [short]="true"></opdex-number>
+              </div>
+
+              <ng-container *ngIf="pool?.summary?.staking">
+                <mat-divider class="mb-2 mt-2" style="position:relative;"></mat-divider>
+
+                <div class="flex-row-center-between mb-1">
+                  <div class="flex-row-center">
+                    <mat-icon class="purple mr-1 tiny">{{icons.staking}}</mat-icon>
+                    <p class="mb-0 light b-400">Staking</p>
+                  </div>
+
+                  <opdex-number prefix="$" [value]="pool?.summary?.staking?.usd" [short]="true"></opdex-number>
+                </div>
+
+                <div class="flex-row-center-between">
+                  <p class="b-400 mb-0">{{pool?.tokens?.staking?.symbol}}</p>
+
+                  <div class="flex-row-center">
+                    <opdex-change-indicator
+                      [value]="pool?.summary?.staking?.dailyWeightChangePercent"
+                      *ngIf="!!pool?.summary?.staking?.dailyWeightChangePercent">
+                    </opdex-change-indicator>
+
+                    <opdex-number class="ml-2" [value]="pool?.summary?.staking?.weight" [short]="true"></opdex-number>
+                  </div>
+                </div>
+              </ng-container>
+
+              <mat-divider class="mb-2 mt-2" style="position:relative;"></mat-divider>
+
+              <div class="flex-row-center-between mb-1">
+                <div class="flex-row-center">
+                  <mat-icon class="green mr-1 tiny">{{icons.volume}}</mat-icon>
+                  <p class="mb-0 light b-400">Daily Volume</p>
+                </div>
+
+                <opdex-number prefix="$" [value]="pool?.summary?.volume?.dailyUsd" [short]="true"></opdex-number>
+              </div>
+
+              <div class="flex-row-center-between">
+                <p class="b-400 mb-0">Rewards</p>
+                <opdex-number prefix="$" [value]="pool?.summary?.rewards?.totalDailyUsd" [short]="true"></opdex-number>
+              </div>
+
+              <ng-container *ngIf="pool?.miningPool">
+                <mat-divider class="mb-2 mt-2" style="position:relative;"></mat-divider>
+
+                <div class="flex-row-center-between mb-1">
+                  <div class="flex-row-center">
+                    <mat-icon class="red mr-1 tiny">{{icons.mining}}</mat-icon>
+                    <p class="mb-0 light b-400">Mining</p>
+                  </div>
+
+                  <!-- <opdex-number prefix="$" [value]="pool?.miningPool?.volume?.dailyUsd" [short]="true"></opdex-number> -->
+                </div>
+
+                <div class="flex-row-center-between">
+                  <p class="b-400 mb-0">{{pool?.tokens?.lp?.symbol}}</p>
+                  <opdex-number [value]="pool?.miningPool?.tokensMining" [short]="true"></opdex-number>
+                </div>
+
+                <div class="flex-row-center-between">
+                  <p class="b-400 mb-0">Reward Per Block</p>
+                  <opdex-number [value]="pool?.miningPool?.rewardPerBlock" [short]="true" [suffix]="pool?.tokens?.staking?.symbol"></opdex-number>
+                </div>
+
+                <div class="flex-row-center-between">
+                  <p class="b-400 mb-0">Reward Per OLPT</p>
+                  <opdex-number [value]="pool?.miningPool?.rewardPerLpt" [short]="true" [suffix]="pool?.tokens?.staking?.symbol"></opdex-number>
+                </div>
+              </ng-container>
+            </opdex-card>
+          </div>
         </div>
-      </ng-container>
-    </div>
+      </div>
 
-    <div class="row d-sm-none mb-3">
-      <div class="col-12">
-        <opdex-tx-buttons (onSelectOption)="handleTxOption($event)"></opdex-tx-buttons>
+      <div class="col-12 col-lg-8 col-xl-9">
+        <div class="row d-sm-none mb-3">
+          <div class="col-12">
+            <opdex-tx-buttons (onSelectOption)="handleTxOption($event)"></opdex-tx-buttons>
+          </div>
+        </div>
+
+        <opdex-card>
+          <opdex-line-chart
+            [chartData]="chartData"
+            [chartOptions]="chartOptions"
+            [selectedChart]="selectedChart"
+            title="{{selectedChart.category}}"
+            (onTypeChange)="handleChartTypeChange($event)"
+            (onTimeChange)="handleChartTimeChange($event)">
+          </opdex-line-chart>
+        </opdex-card>
       </div>
     </div>
 
-    <div *ngIf="context$ | async as context">
+    <div *ngIf="context$ | async as context" class="mt-3">
       <ng-container *ngIf="context.wallet">
         <div class="row" *ngIf="context.wallet">
           <div class="col-12">
@@ -76,18 +195,6 @@
         </div>
       </ng-container>
     </div>
-  </div>
-</div>
-
-<div class="offset-section pb-3 pt-3">
-  <div class="container">
-    <opdex-line-chart
-      [chartData]="chartData"
-      [chartOptions]="chartOptions"
-      [selectedChart]="selectedChart"
-      title="{{selectedChart.category}}"
-      (onTypeChange)="handleChartTypeChange($event)"
-      (onTimeChange)="handleChartTimeChange($event)"></opdex-line-chart>
   </div>
 </div>
 

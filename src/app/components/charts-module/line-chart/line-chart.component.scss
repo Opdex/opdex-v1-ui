@@ -4,15 +4,15 @@
   position: relative;
   padding: 25px 0px;
   display: block;
-  min-height: 275px;
+  min-height: 440px;
   width: 100%;
 
   .chart-container {
-    min-height: 275px;
+    min-height: 440px;
 
     #chartdiv {
       width: 100%;
-      min-height: 275px;
+      min-height: 440px;
       opacity: 1;
       transition: .15s ease-in;
 
@@ -91,13 +91,13 @@
   }
 
   .chart-wrapper {
-    min-height: 400px;
+    min-height: 440px;
 
     .chart-container {
-      min-height: 400px;
+      min-height: 440px;
 
       #chartdiv {
-        min-height: 400px;
+        min-height: 440px;
       }
     }
   }
@@ -105,13 +105,13 @@
 
 @media (min-width: map_get($grid-breakpoints, xl)) {
   .chart-wrapper {
-    min-height: 500px;
+    min-height: 440px;
 
     .chart-container {
-      min-height: 500px;
+      min-height: 440px;
 
       #chartdiv {
-        min-height: 500px;
+        min-height: 440px;
       }
     }
   }

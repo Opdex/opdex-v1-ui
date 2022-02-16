@@ -10,9 +10,9 @@
   </opdex-pool-preview>
 
   <ng-container *ngIf="pool">
-    <opdex-wallet-preview
+    <!-- <opdex-wallet-preview
       [balanceTokens]="[pool.tokens?.staking?.address]"
-      [positionStaking]="[pool.address]"></opdex-wallet-preview>
+      [positionStaking]="[pool.address]"></opdex-wallet-preview> -->
 
     <opdex-card *ngIf="pool?.summary?.staking; else noStaking">
       <opdex-tx-stake-start [data]="data" *ngIf="group.value == 1"></opdex-tx-stake-start>

@@ -60,6 +60,14 @@ export class Market {
     return this._modifiedBlock;
   }
 
+  public get isStaking(): boolean {
+    return !!this._tokens.staking;
+  }
+
+  public get isPublic(): boolean {
+    return this.isStaking || (!this.authPoolCreators && !this.authProviders && !this.authTraders);
+  }
+
   constructor(market: IMarket) {
     this._address = market.address;
     this._owner = market.owner;
