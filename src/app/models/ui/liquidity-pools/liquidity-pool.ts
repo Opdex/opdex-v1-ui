@@ -51,8 +51,15 @@ export class LiquidityPool {
   }
 
   public get trackBy(): string {
-    const { summary, miningPool } = this;
-    return `${this.address}-${summary.cost.crsPerSrc.formattedValue}-${miningPool?.tokensMining?.formattedValue || 0}-${summary.staking?.weight?.formattedValue || 0}`;
+    const { summary, miningPool, address } = this;
+    const { cost, reserves, staking, volume } = summary;
+    const crsPerSrc = cost.crsPerSrc.formattedValue;
+    const miningWeight = miningPool?.tokensMining?.formattedValue || 0;
+    const stakingWeight = staking?.weight?.formattedValue || 0;
+    const volumeUsd = volume.dailyUsd.formattedValue;
+    const liquidityUsd = reserves.usd.formattedValue;
+
+    return `${address}-${crsPerSrc}-${miningWeight}-${stakingWeight}-${volumeUsd}-${liquidityUsd}`;
   }
 
   constructor(pool: ILiquidityPoolResponse) {

@@ -76,7 +76,7 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
   }
 
   trackBy(index: number, position: any): string {
-    return `${index}-${position.name}-${position.address}-${position.balance}-${position.total}`;
+    return `${index}-${position.name}-${position.address}-${position.balance.formattedValue}-${position.total.formattedValue}`;
   }
 
   private getProvisionalPositions$(cursor?: string): Observable<any> {

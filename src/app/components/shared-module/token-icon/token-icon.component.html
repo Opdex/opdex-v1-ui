@@ -1,9 +1,10 @@
 <div class="flex-row" style="position: relative;">
-  <div class="empty"></div>
+  <div class="empty" [ngClass]="{'large': large}"></div>
 
   <div class="token-icon" [ngClass]="{
       'cirrus': token.symbol.includes('CRS'),
-      'odx': token.symbol.includes('ODX')
+      'odx': token.symbol.includes('ODX'),
+      'large': large
     }" [ngStyle]="{'background-image': 'url(' + iconPath + ')'}">
   </div>
 </div>

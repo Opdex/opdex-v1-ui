@@ -72,7 +72,7 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
   }
 
   trackBy(index: number, position: any): string {
-    return `${index}-${position.name}-${position.address}-${position.balance}-${position.total}`;
+    return `${index}-${position.name}-${position.address}-${position.position.formattedValue}-${position.value.formattedValue}-${position.isActive}`;
   }
 
   pageChange(cursor: string): void {

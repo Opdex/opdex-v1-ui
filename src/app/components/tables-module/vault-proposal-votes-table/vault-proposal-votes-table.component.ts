@@ -1,12 +1,10 @@
 import { VaultProposalVotes } from '@sharedModels/ui/vaults/vault-proposal-votes';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
-import { IVaultProposalVoteResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-vote-response-model.interface';
 import { Component, Input, ViewChild, OnChanges, OnDestroy } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { VaultProposalVotesFilter } from '@sharedModels/platform-api/requests/vaults/vault-proposal-votes-filter';
 import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
-import { IVaultProposalVotesResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-votes-response-model.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { VaultsService } from '@sharedServices/platform/vaults.service';
 import { Observable, Subscription } from 'rxjs';
@@ -14,6 +12,7 @@ import { switchMap, tap, take } from 'rxjs/operators';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
 import { TransactionView } from '@sharedModels/transaction-view';
+import { VaultProposalVote } from '@sharedModels/ui/vaults/vault-proposal-vote';
 
 @Component({
   selector: 'opdex-vault-proposal-votes-table',
@@ -27,7 +26,7 @@ export class VaultProposalVotesTableComponent implements OnChanges, OnDestroy {
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
   paging: ICursor;
-  token$: Observable<IVaultProposalVotesResponseModel>;
+  token$: Observable<VaultProposalVote>;
   subscription: Subscription;
   icons = Icons;
   iconSizes = IconSizes;
@@ -79,8 +78,8 @@ export class VaultProposalVotesTableComponent implements OnChanges, OnDestroy {
     this.getVotes$(cursor).pipe(take(1)).subscribe();
   }
 
-  trackBy(index: number, vote: IVaultProposalVoteResponseModel): string {
-    return `${index}-${vote.voter}-${vote.vote}-${vote.balance}`;
+  trackBy(index: number, vote: VaultProposalVote): string {
+    return `${index}-${vote?.trackBy}`;
   }
 
   ngOnDestroy(): void {

@@ -28,6 +28,11 @@ export class AddressPosition {
     return this._value;
   }
 
+  public get trackBy(): string {
+    const { value, amount, token } = this;
+    return `${value.formattedValue}-${amount.formattedValue}-${token.address}`;
+  }
+
   constructor(walletAddress: string, token: Token, position: 'Staking' | 'Mining' | 'Balance', amount: FixedDecimal) {
     this._walletAddress = walletAddress;
     this._token = token;

@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@a
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Icons } from 'src/app/enums/icons';
+import { VaultCertificate } from '@sharedModels/ui/vaults/vault-certificate';
 
 @Component({
   selector: 'opdex-vault-certificates-table',
@@ -13,7 +14,7 @@ export class VaultCertificatesTableComponent implements OnChanges {
   @Input() certificates: VaultCertificates;
 
   displayedColumns: string[];
-  dataSource: MatTableDataSource<any>;
+  dataSource: MatTableDataSource<VaultCertificate>;
   previous: string;
   next: string;
   icons = Icons;
@@ -41,7 +42,7 @@ export class VaultCertificatesTableComponent implements OnChanges {
     this.onPageChange.emit(cursor);
   }
 
-  trackBy(index: number, pool: any) {
-    return pool.name + pool.address
+  trackBy(index: number, certificate: VaultCertificate) {
+    return `${index}-${certificate?.trackBy}`;
   }
 }

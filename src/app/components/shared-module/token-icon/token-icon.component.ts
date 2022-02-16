@@ -10,6 +10,7 @@ export class TokenIconComponent {
   private readonly _baseUrl = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains';
 
   @Input() token: Token;
+  @Input() large: boolean;
 
   public get iconPath(): string {
     if (!this.token) return '';

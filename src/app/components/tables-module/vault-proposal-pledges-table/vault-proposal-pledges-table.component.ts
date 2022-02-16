@@ -11,9 +11,9 @@ import { IndexService } from '@sharedServices/platform/index.service';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
 import { VaultsService } from '@sharedServices/platform/vaults.service';
-import { IVaultProposalPledgeResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-pledge-response-model.interface';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { VaultProposalPledges } from '@sharedModels/ui/vaults/vault-proposal-pledges';
+import { VaultProposalPledge } from '@sharedModels/ui/vaults/vault-proposal-pledge';
 
 @Component({
   selector: 'opdex-vault-proposal-pledges-table',
@@ -25,7 +25,7 @@ export class VaultProposalPledgesTableComponent implements OnChanges, OnDestroy 
   @Input() filter: VaultProposalPledgesFilter;
   @Input() hideProposalIdColumn: boolean;
   displayedColumns: string[];
-  dataSource: MatTableDataSource<any>;
+  dataSource: MatTableDataSource<VaultProposalPledge>;
   paging: ICursor;
   subscription: Subscription;
   icons = Icons;
@@ -73,12 +73,12 @@ export class VaultProposalPledgesTableComponent implements OnChanges, OnDestroy 
         take(1));
   }
 
-  pageChange(cursor: string) {
+  pageChange(cursor: string): void {
     this.getPledges$(cursor).pipe(take(1)).subscribe();
   }
 
-  trackBy(index: number, pledge: IVaultProposalPledgeResponseModel) {
-    return `${index}-${pledge.pledger}-${pledge.pledge}-${pledge.balance}`;
+  trackBy(index: number, pledge: VaultProposalPledge): string {
+    return `${index}-${pledge?.trackBy}`;
   }
 
   ngOnDestroy() {

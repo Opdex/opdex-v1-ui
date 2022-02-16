@@ -325,12 +325,11 @@ export class PoolComponent implements OnInit, OnDestroy {
   }
 
   statCardTrackBy(index: number, statCard: StatCardInfo): string {
-    return `${index}-${statCard.title}-${statCard.value}`;
+    return `${index}-${statCard?.title}-${statCard?.value}`;
   }
 
   positionsTrackBy(index: number, position: AddressPosition): string {
-    if (!!position === false) return index.toString();
-    return `${index}-${position.value}-${position.amount}-${position.token.address}`;
+    return `${index}-${position?.trackBy}`;
   }
 
   ngOnDestroy(): void {

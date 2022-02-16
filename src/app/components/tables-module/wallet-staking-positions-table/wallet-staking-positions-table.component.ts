@@ -72,7 +72,7 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
   }
 
   trackBy(index: number, position: any): string {
-    return `${index}-${position.name}-${position.address}-${position.balance}-${position.total}`;
+    return `${index}-${position.name}-${position.address}-${position.position.formattedValue}-${position.value.formattedValue}-${position.isNominated}`;
   }
 
   pageChange(cursor: string): void {

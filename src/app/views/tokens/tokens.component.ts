@@ -46,8 +46,7 @@ export class TokensComponent implements OnDestroy {
   }
 
   poolsTrackBy(index: number, pool: LiquidityPool): string {
-    if (!!pool === false) return index.toString();;
-    return `${index}-${pool.trackBy}`;
+    return `${index}-${pool?.trackBy}`;
   }
 
   handleTxOption($event: TransactionView) {
