@@ -2,16 +2,23 @@
   <ng-container *ngIf="token; else loading">
     <small class="light">{{token.name}}</small>
     <div class="flex-row-center-between">
-      <a class="body-default no-decoration d-inline-flex align-items-center" routerLink="/tokens/{{token.address}}">
+      <div class="flex-row-center">
         <opdex-token-icon [token]="token"></opdex-token-icon>
-        <h2 class="d-inline-block mb-0 ml-2">{{token.symbol}}</h2>
-      </a>
+
+        <a class="title no-decoration ml-2" href="javascript:void(0)" routerLink="/tokens/{{token.address}}">
+          <h2 class="mb-0">{{token.symbol}}</h2>
+        </a>
+      </div>
 
       <div class="flex-row-center-end">
         <h3 class="mb-0 mr-2 b-300">
           <opdex-number prefix="$" [value]="token.summary.priceUsd" [short]="true"></opdex-number>
         </h3>
-        <opdex-change-indicator [value]="token.summary.dailyPriceChangePercent" *ngIf="token.summary.dailyPriceChangePercent !== null && token.summary.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
+
+        <opdex-change-indicator
+          [value]="token.summary.dailyPriceChangePercent"
+          *ngIf="!!token.summary.dailyPriceChangePercent">
+        </opdex-change-indicator>
       </div>
     </div>
   </ng-container>

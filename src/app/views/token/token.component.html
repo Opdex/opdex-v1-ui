@@ -1,6 +1,6 @@
 <div class="header-section" *ngIf="token">
   <div class="container">
-    <div class="row mb-3 justify-content-between align-items-center">
+    <div class="row mb-3">
       <div class="col-12 mb-3" *ngIf="!isCurrentMarket && token.symbol !== 'CRS'">
         <opdex-card [warn]="true">
           This token does not have a liquidity pool within the current market.
@@ -8,7 +8,7 @@
       </div>
 
       <div class="col-12 col-lg-6 col-xl-8">
-        <div class="flex-row-center mb-3">
+        <div class="flex-row-center mb-2">
           <opdex-token-icon [token]="token" [large]="true"></opdex-token-icon>
           <div class="flex-col-center ml-2">
             <h1 class="mb-1 ml-2">{{token.name}}</h1>
@@ -21,7 +21,10 @@
                   <opdex-number prefix="$" [value]="token.summary.priceUsd" [short]="true" class="mr-2"></opdex-number>
                 </h3>
 
-                <opdex-change-indicator [value]="token.summary.dailyPriceChangePercent" *ngIf="token.summary.dailyPriceChangePercent !== null && token.summary.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
+                <opdex-change-indicator
+                  [value]="token.summary.dailyPriceChangePercent"
+                  *ngIf="!!token.summary.dailyPriceChangePercent">
+                </opdex-change-indicator>
               </div>
             </div>
           </div>
