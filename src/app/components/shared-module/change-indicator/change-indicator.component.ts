@@ -1,3 +1,4 @@
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Component, Input } from '@angular/core';
 import { Icons } from 'src/app/enums/icons';
@@ -8,7 +9,7 @@ import { Icons } from 'src/app/enums/icons';
   styleUrls: ['./change-indicator.component.scss']
 })
 export class ChangeIndicatorComponent {
-  @Input() value: number;
+  @Input() value: FixedDecimal;
   @Input() forceDisplay: boolean = false;
 
   icons = Icons;

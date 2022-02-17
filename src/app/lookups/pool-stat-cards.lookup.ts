@@ -22,7 +22,7 @@ export class PoolStatCardsLookup {
         title: 'Staking',
         value: pool?.summary?.staking?.weight,
         suffix: pool?.tokens?.staking?.symbol,
-        change: pool?.summary?.staking?.dailyWeightChangePercent || 0,
+        change: pool?.summary?.staking?.dailyWeightChangePercent,
         show: pool?.summary?.staking !== null && pool?.summary?.staking !== undefined,
         icon: Icons.staking,
         iconColor: 'stake',

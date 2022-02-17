@@ -1,3 +1,4 @@
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MiningPool } from '@sharedModels/ui/mining-pools/mining-pool';
 import { ILiquidityPoolResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-responses.interface';
 import { LiquidityPoolSummary } from '@sharedModels/ui/liquidity-pools/summaries/liquidity-pool-summary';
@@ -6,7 +7,7 @@ import { LiquidityPoolTokens } from '@sharedModels/ui/liquidity-pools/liquidity-
 export class LiquidityPool {
   private _address: string;
   private _name: string;
-  private _transactionFeePercent: number;
+  private _transactionFeePercent: FixedDecimal;
   private _market: string;
   private _tokens: LiquidityPoolTokens;
   private _miningPool: MiningPool;
@@ -22,7 +23,7 @@ export class LiquidityPool {
     return this._name;
   }
 
-  public get transactionFeePercent(): number {
+  public get transactionFeePercent(): FixedDecimal {
     return this._transactionFeePercent;
   }
 
@@ -67,7 +68,7 @@ export class LiquidityPool {
 
     this._address = pool.address;
     this._name = pool.name;
-    this._transactionFeePercent = pool.transactionFeePercent;
+    this._transactionFeePercent = new FixedDecimal(pool.transactionFeePercent, 1);
     this._market = pool.market;
     this._tokens = new LiquidityPoolTokens(pool.tokens);
     this._miningPool = !!pool.miningPool ? new MiningPool(pool.miningPool) : null;

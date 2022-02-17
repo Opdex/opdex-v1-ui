@@ -17,11 +17,20 @@ export class LiquidityPoolHistory {
     history.results.forEach(history => {
       const time = Date.parse(history.timestamp.toString()) / 1000;
 
-      liquidity.push({ time, value: history.reserves.usd.close });
+      liquidity.push({
+        time,
+        value: parseFloat(history.reserves.usd.close)
+      });
 
-      volume.push({ time, value: history.volume.usd });
+      volume.push({
+        time,
+        value: parseFloat(history.volume.usd)
+      });
 
-      staking.push({ time, value: parseFloat(history.staking.weight.close.split('.')[0]) });
+      staking.push({
+        time,
+        value: parseFloat(history.staking.weight.close.split('.')[0])
+      });
 
       crsPerSrc.push({
         time,
@@ -37,7 +46,7 @@ export class LiquidityPoolHistory {
         high: history.cost.srcPerCrs.high,
         low: history.cost.srcPerCrs.low,
         close: history.cost.srcPerCrs.close,
-      })
+      });
     });
 
     this.liquidity = liquidity;

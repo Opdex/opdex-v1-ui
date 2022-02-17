@@ -1,4 +1,4 @@
-import { IOhlcNumber } from './../Ohlc.interface';
+import { IOhlc } from './../Ohlc.interface';
 
 export interface ITokenGroup {
   crs: IToken;
@@ -8,8 +8,8 @@ export interface ITokenGroup {
 }
 
 export interface ITokenSummary {
-  priceUsd: number;
-  dailyPriceChangePercent: number;
+  priceUsd: string;
+  dailyPriceChangePercent: string;
   createdBlock: number;
   modifiedBlock: number;
 }
@@ -24,7 +24,7 @@ export interface IToken {
   name: string;
   symbol: string;
   decimals: number;
-  sats: number;
+  sats: string;
   totalSupply: string;
   summary: ITokenSummary;
   attributes: string[];
@@ -45,7 +45,7 @@ export interface IWrappedToken {
   modifiedBlock: number;
 }
 export interface ITokenSnapshot {
-  price: IOhlcNumber;
+  price: IOhlc;
   timestamp: Date;
 }
 

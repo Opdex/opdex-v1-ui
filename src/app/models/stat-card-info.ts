@@ -8,7 +8,7 @@ export class StatCardInfo {
     value: FixedDecimal;
     prefix?: string;
     suffix?: string;
-    change?: number = null;
+    change?: FixedDecimal = FixedDecimal.Zero(8);
     helpInfo?: HelpInfo;
     show?: boolean;
     icon?: Icons;

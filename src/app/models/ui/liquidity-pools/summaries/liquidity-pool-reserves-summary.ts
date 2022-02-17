@@ -5,7 +5,7 @@ export class LiquidityPoolReservesSummary {
   private _crs: FixedDecimal;
   private _src: FixedDecimal;
   private _usd: FixedDecimal;
-  private _dailyUsdChangePercent: number;
+  private _dailyUsdChangePercent: FixedDecimal;
 
   public get crs(): FixedDecimal {
     return this._crs;
@@ -19,14 +19,14 @@ export class LiquidityPoolReservesSummary {
     return this._usd;
   }
 
-  public get dailyUsdChangePercent(): number {
+  public get dailyUsdChangePercent(): FixedDecimal {
     return this._dailyUsdChangePercent;
   }
 
   constructor(reserves: IReservesSummaryResponse) {
     this._crs = new FixedDecimal(reserves.crs, 8);
     this._src = new FixedDecimal(reserves.src, reserves.src.split('.')[1].length);
-    this._usd = new FixedDecimal(reserves.usd.toFixed(8), 8);
-    this._dailyUsdChangePercent = reserves.dailyUsdChangePercent;
+    this._usd = new FixedDecimal(reserves.usd, 8);
+    this._dailyUsdChangePercent = new FixedDecimal(reserves.dailyUsdChangePercent, 8);
   }
 }

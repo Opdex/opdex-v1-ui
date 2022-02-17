@@ -7,7 +7,7 @@ export interface ICreateMarketEvent extends ITransactionEvent {
   authPoolCreators: boolean;
   authProviders: boolean;
   authTraders: boolean;
-  transactionFeePercent: number;
+  transactionFeePercent: string;
   stakingToken: string;
   enableMarketFee: boolean;
 }

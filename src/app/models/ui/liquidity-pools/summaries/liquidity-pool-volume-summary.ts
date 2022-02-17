@@ -9,6 +9,6 @@ export class LiquidityPoolVolumeSummary {
   }
 
   constructor(volume: IVolumeSummaryResponse) {
-    this._dailyUsd = new FixedDecimal(volume.dailyUsd.toFixed(8), 8);
+    this._dailyUsd = new FixedDecimal(volume.dailyUsd, 8);
   }
 }

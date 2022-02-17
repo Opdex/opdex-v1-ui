@@ -1,7 +1,7 @@
 import { MarketTokenGroup } from './market-token-group';
 import { MarketSummary } from '@sharedModels/ui/markets/market-summary';
-import { Token } from '@sharedModels/ui/tokens/token';
 import { IMarket } from '@sharedModels/platform-api/responses/markets/market.interface';
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 
 export class Market {
   private _address: string;
@@ -11,7 +11,7 @@ export class Market {
   private _authTraders: boolean;
   private _authProviders: boolean;
   private _marketFeeEnabled: boolean;
-  private _transactionFeePercent: number;
+  private _transactionFeePercent: FixedDecimal;
   private _summary: MarketSummary;
   private _createdBlock: number;
   private _modifiedBlock: number;
@@ -44,7 +44,7 @@ export class Market {
     return this._marketFeeEnabled;
   }
 
-  public get transactionFeePercent(): number {
+  public get transactionFeePercent(): FixedDecimal {
     return this._transactionFeePercent;
   }
 
@@ -68,7 +68,7 @@ export class Market {
     this._authTraders = market.authTraders;
     this._authProviders = market.authProviders;
     this._marketFeeEnabled = market.marketFeeEnabled;
-    this._transactionFeePercent = market.transactionFeePercent;
+    this._transactionFeePercent = new FixedDecimal(market.transactionFeePercent, 3);
     this._summary = new MarketSummary(market.summary);
     this._createdBlock = market.createdBlock;
     this._modifiedBlock = market.modifiedBlock;

@@ -1,6 +1,6 @@
 export interface ICreateStandardMarketQuoteRequest {
   owner: string;
-  transactionFeePercent: number;
+  transactionFeePercent: string;
   authPoolCreators: boolean;
   authLiquidityProviders: boolean;
   authTraders: boolean;
@@ -9,7 +9,7 @@ export interface ICreateStandardMarketQuoteRequest {
 
 export class CreateStandardMarketQuoteRequest {
   private _owner: string;
-  private _transactionFeePercent: number;
+  private _transactionFeePercent: string;
   private _authPoolCreators: boolean;
   private _authLiquidityProviders: boolean;
   private _authTraders: boolean;
@@ -26,7 +26,7 @@ export class CreateStandardMarketQuoteRequest {
     }
   }
 
-  constructor(owner: string, transactionFeePercent: number, authPoolCreators: boolean,
+  constructor(owner: string, transactionFeePercent: string, authPoolCreators: boolean,
               authLiquidityProviders: boolean, authTraders: boolean, enableMarketFee: boolean) {
     this._owner = owner;
     this._transactionFeePercent = transactionFeePercent;

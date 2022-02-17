@@ -16,7 +16,7 @@ import { Icons } from 'src/app/enums/icons';
 interface IPoolPreviewRecord {
   token: Token;
   supply: FixedDecimal;
-  percentageChange: number;
+  percentageChange: FixedDecimal;
   price: FixedDecimal;
 }
 

@@ -10,7 +10,7 @@ export class Token {
   private _name: string;
   private _symbol: string;
   private _decimals: number;
-  private _sats: number;
+  private _sats: string;
   private _totalSupply: FixedDecimal;
   private _summary: TokenSummary;
   private _attributes: string[];
@@ -37,7 +37,7 @@ export class Token {
     return this._decimals;
   }
 
-  public get sats(): number {
+  public get sats(): string {
     return this._sats;
   }
 
