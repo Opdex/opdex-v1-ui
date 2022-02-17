@@ -6,7 +6,7 @@
         <opdex-copy-address [address]="market?.address"></opdex-copy-address>
 
         <div class="flex-row-center mt-2">
-          <div class="badge blue mr-2">{{market?.transactionFeePercent > 0 ? market.transactionFeePercent : 0}}% Fee</div>
+          <div class="badge blue mr-2">{{market?.transactionFeePercent?.bigInt > 0 ? market.transactionFeePercent?.formattedValue : 0}}% Fee</div>
           <div class="badge purple mr-2" *ngIf="market?.isStaking">Staking</div>
           <div class="badge green mr-2" *ngIf="market?.isPublic">Public</div>
         </div>

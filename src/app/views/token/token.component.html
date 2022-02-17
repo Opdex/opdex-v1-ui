@@ -49,6 +49,30 @@
           <div class="col-12 col-sm-6 col-lg-12">
             <opdex-token-summary-card [token]="token"></opdex-token-summary-card>
 
+            <opdex-card *ngIf="token?.address === liquidityPool?.address">
+              <div class="flex-row-center mb-2">
+                <opdex-token-icons [tokens]="[liquidityPool?.tokens?.crs, liquidityPool?.tokens?.src]"></opdex-token-icons>
+                <a class="b-400 no-decoration ml-2" routerLink="/pools/{{liquidityPool?.address}}">{{liquidityPool?.name}}</a>
+              </div>
+
+              <div class="flex-row-center-between">
+                <div class="flex-column">
+                  <opdex-number [value]="one" [suffix]="liquidityPool?.tokens?.lp?.symbol"></opdex-number>
+                  <opdex-number [value]="one" [suffix]="liquidityPool?.tokens?.lp?.symbol"></opdex-number>
+                </div>
+
+                <div class="flex-column">
+                  <p class="mb-0">=</p>
+                  <p class="mb-0">=</p>
+                </div>
+
+                <div class="flex-column">
+                  <opdex-number [value]="crsPerOlpt" [short]="true" [suffix]="liquidityPool?.tokens?.lp?.symbol"></opdex-number>
+                  <opdex-number [value]="srcPerOlpt" [short]="true" [suffix]="liquidityPool?.tokens?.src?.symbol"></opdex-number>
+                </div>
+              </div>
+            </opdex-card>
+
             <opdex-wallet-position-card
               *ngIf="!!context?.wallet"
               [position]="balance">

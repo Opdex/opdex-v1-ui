@@ -76,7 +76,7 @@ export class Market {
     this._authTraders = market.authTraders;
     this._authProviders = market.authProviders;
     this._marketFeeEnabled = market.marketFeeEnabled;
-    this._transactionFeePercent = new FixedDecimal(market.transactionFeePercent, 3);
+    this._transactionFeePercent = new FixedDecimal(market.transactionFeePercent, 1);
     this._summary = new MarketSummary(market.summary);
     this._createdBlock = market.createdBlock;
     this._modifiedBlock = market.modifiedBlock;
