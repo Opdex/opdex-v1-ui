@@ -1,3 +1,4 @@
+import { MatDividerModule } from '@angular/material/divider';
 import { SharedModule } from './../shared-module/shared.module';
 import { SharedPipesModule } from '@sharedPipes/shared-pipes.module';
 import { RouterModule } from '@angular/router';
@@ -23,6 +24,7 @@ import { LiquidityPoolTokenCardComponent } from './liquidity-pool-token-card/liq
 import { MarketTokenCardComponent } from './market-token-card/market-token-card.component';
 import { WalletPositionCardComponent } from './wallet-position-card/wallet-position-card.component';
 import { VaultProposalCardComponent } from './vault-proposal-card/vault-proposal-card.component';
+import { LiquidityPoolSummaryCardComponent } from './liquidity-pool-summary-card/liquidity-pool-summary-card.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,8 @@ import { VaultProposalCardComponent } from './vault-proposal-card/vault-proposal
     LiquidityPoolTokenCardComponent,
     MarketTokenCardComponent,
     WalletPositionCardComponent,
-    VaultProposalCardComponent
+    VaultProposalCardComponent,
+    LiquidityPoolSummaryCardComponent
   ],
   imports: [
     CommonModule,
@@ -48,7 +51,8 @@ import { VaultProposalCardComponent } from './vault-proposal-card/vault-proposal
     SharedModule,
     ModalsModule,
     MatProgressBarModule,
-    SharedModule
+    SharedModule,
+    MatDividerModule
   ],
   exports: [
     CardComponent,
@@ -59,7 +63,8 @@ import { VaultProposalCardComponent } from './vault-proposal-card/vault-proposal
     LiquidityPoolTokenCardComponent,
     MarketTokenCardComponent,
     WalletPositionCardComponent,
-    VaultProposalCardComponent
+    VaultProposalCardComponent,
+    LiquidityPoolSummaryCardComponent
   ]
 })
 export class CardsModule { }

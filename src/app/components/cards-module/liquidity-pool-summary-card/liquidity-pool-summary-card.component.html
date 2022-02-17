@@ -1,0 +1,253 @@
+<opdex-card>
+  <ng-container *ngIf="pool; else loading">
+    <div class="flex-row-center mb-2" *ngIf="showPoolName">
+      <opdex-token-icons [tokens]="[pool?.tokens?.crs, pool?.tokens?.src]"></opdex-token-icons>
+      <a class="ml-2 b-400 no-decoration" routerLink="/pools/{{pool?.address}}">{{pool?.name}}</a>
+    </div>
+
+    <!-- Liquidity -->
+    <div class="flex-row-center-between mb-1">
+      <div class="flex-row-center">
+        <mat-icon class="blue mr-1 tiny">{{icons.liquidityPool}}</mat-icon>
+        <p class="mb-0 light">Liquidity</p>
+      </div>
+
+      <div class="flex-row-center">
+        <opdex-change-indicator
+          [value]="pool?.summary?.reserves?.dailyUsdChangePercent"
+          *ngIf="!!pool?.summary?.reserves?.dailyUsdChangePercent">
+        </opdex-change-indicator>
+
+        <opdex-number
+          class="ml-2"
+          prefix="$"
+          [value]="pool?.summary?.reserves?.usd"
+          [short]="true">
+        </opdex-number>
+      </div>
+    </div>
+
+    <div class="flex-row-center-between">
+      <p class="mb-0">{{pool?.tokens?.crs?.symbol}}</p>
+
+      <opdex-number
+        [value]="pool?.summary?.reserves?.crs"
+        [short]="true">
+      </opdex-number>
+    </div>
+
+    <div class="flex-row-center-between">
+      <p class="mb-0">{{pool?.tokens?.src?.symbol}}</p>
+
+      <opdex-number
+        [value]="pool?.summary?.reserves?.src"
+        [short]="true">
+      </opdex-number>
+    </div>
+
+    <div class="flex-row-center-between" *ngIf="showPoolName">
+      <p class="mb-0">Cost</p>
+
+      <div class="flex-row-center">
+        <opdex-number [value]="one" [suffix]="pool?.tokens?.src?.symbol"></opdex-number>
+        <mat-icon color="primary" class="ml-2 mr-2 small">{{icons.swap}}</mat-icon>
+        <opdex-number [value]="pool?.summary?.cost?.crsPerSrc" [short]="true" [suffix]="pool?.tokens?.crs?.symbol"></opdex-number>
+      </div>
+    </div>
+    <!-- End Liquidity -->
+
+    <!-- Staking -->
+    <ng-container *ngIf="pool?.summary?.staking">
+      <mat-divider class="mb-2 mt-2" style="position:relative;"></mat-divider>
+
+      <div class="flex-row-center-between mb-1">
+        <div class="flex-row-center">
+          <mat-icon class="purple mr-1 tiny">{{icons.staking}}</mat-icon>
+          <p class="mb-0 light">Staking</p>
+        </div>
+
+        <opdex-number
+          prefix="$"
+          [value]="pool?.summary?.staking?.usd"
+          [short]="true">
+        </opdex-number>
+      </div>
+
+      <div class="flex-row-center-between">
+        <p class="mb-0">Weight</p>
+
+        <div class="flex-row-center">
+          <opdex-change-indicator
+            [value]="pool?.summary?.staking?.dailyWeightChangePercent"
+            *ngIf="!!pool?.summary?.staking?.dailyWeightChangePercent">
+          </opdex-change-indicator>
+
+          <opdex-number
+            class="ml-2"
+            [value]="pool?.summary?.staking?.weight"
+            [suffix]="pool?.tokens?.staking?.symbol"
+            [short]="true">
+          </opdex-number>
+        </div>
+      </div>
+    </ng-container>
+    <!-- End Staking -->
+
+    <!-- Volume -->
+    <mat-divider class="mb-2 mt-2" style="position:relative;"></mat-divider>
+
+    <div class="flex-row-center-between mb-1">
+      <div class="flex-row-center">
+        <mat-icon class="green mr-1 tiny">{{icons.volume}}</mat-icon>
+        <p class="mb-0 light">Volume <small>(24hr)</small></p>
+      </div>
+
+      <opdex-number prefix="$" [value]="pool?.summary?.volume?.dailyUsd" [short]="true"></opdex-number>
+    </div>
+
+    <div class="flex-row-center-between">
+      <p class="mb-0">Rewards</p>
+      <opdex-number prefix="$" [value]="pool?.summary?.rewards?.totalDailyUsd" [short]="true"></opdex-number>
+    </div>
+    <!-- End Volume -->
+
+    <!-- Mining -->
+    <ng-container *ngIf="pool?.miningPool">
+      <mat-divider class="mb-2 mt-2" style="position:relative;"></mat-divider>
+
+      <div class="flex-row-center-between mb-1">
+        <div class="flex-row-center">
+          <mat-icon class="red mr-1 tiny">{{icons.mining}}</mat-icon>
+          <p class="mb-0 light">Mining</p>
+        </div>
+
+        <opdex-number
+          prefix="$"
+          [value]="miningUsd"
+          [short]="true">
+        </opdex-number>
+      </div>
+
+      <div class="flex-row-center-between">
+        <p class="mb-0">Weight</p>
+
+        <opdex-number
+          [value]="pool?.miningPool?.tokensMining"
+          [short]="true"
+          [suffix]="pool?.tokens?.lp?.symbol">
+        </opdex-number>
+      </div>
+
+      <ng-container *ngIf="pool?.miningPool?.isActive && pool?.miningPool?.miningPeriodEndBlock >= latestBlock">
+        <div class="flex-row-center-between">
+          <p class="mb-0">Block Reward</p>
+
+          <opdex-number
+            [value]="pool?.miningPool?.rewardPerBlock"
+            [short]="true"
+            [suffix]="pool?.tokens?.staking?.symbol">
+          </opdex-number>
+        </div>
+
+        <div class="flex-row-center-between mb-2">
+          <p class="mb-0">End Block</p>
+
+          <opdex-number
+            prefix="#"
+            [value]="pool?.miningPool?.miningPeriodEndBlock">
+          </opdex-number>
+        </div>
+
+        <mat-progress-bar
+          class="mt-3"
+          [value]="100 - ((pool?.miningPool?.miningPeriodEndBlock - latestBlock) / 164250 * 100)">
+        </mat-progress-bar>
+
+        <div class="flex-row-center-between mt-1">
+          <small class="light">Remaining Blocks</small>
+
+          <small>
+            <opdex-number
+              prefix="#"
+              [value]="pool?.miningPool?.miningPeriodEndBlock - latestBlock">
+            </opdex-number>
+          </small>
+        </div>
+      </ng-container>
+    </ng-container>
+    <!-- End Mining -->
+  </ng-container>
+
+  <ng-template #loading>
+    <div class="flex-row-center">
+      <div class="w-50">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+
+      <div class="w-50 flex-column-end">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+    </div>
+
+    <div class="flex-row-center">
+      <div class="w-50">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+
+      <div class="w-50 flex-column-end">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+    </div>
+    <div class="flex-row-center">
+      <div class="w-50">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+
+      <div class="w-50 flex-column-end">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+    </div>
+
+    <mat-divider style="position:relative" class="mb-2 mt-2"></mat-divider>
+
+    <div class="flex-row-center">
+      <div class="w-50">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+
+      <div class="w-50 flex-column-end">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+    </div>
+    <div class="flex-row-center">
+      <div class="w-50">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+
+      <div class="w-50 flex-column-end">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+    </div>
+
+    <mat-divider style="position:relative" class="mb-2 mt-2"></mat-divider>
+
+    <div class="flex-row-center">
+      <div class="w-50">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+
+      <div class="w-50 flex-column-end">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+    </div>
+    <div class="flex-row-center">
+      <div class="w-50">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+
+      <div class="w-50 flex-column-end">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+    </div>
+  </ng-template>
+</opdex-card>

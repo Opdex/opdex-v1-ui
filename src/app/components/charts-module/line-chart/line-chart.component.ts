@@ -9,6 +9,7 @@ import { tap } from 'rxjs/operators';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
+import { TOUCH_BUFFER_MS } from '@angular/cdk/a11y/input-modality/input-modality-detector';
 
 @Component({
   selector: 'opdex-line-chart',
