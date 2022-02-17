@@ -47,71 +47,7 @@
       <div class="col-12 col-lg-4 col-xl-3">
         <div class="row">
           <div class="col-12 col-sm-6 col-lg-12">
-            <opdex-card>
-              <div class="flex-row-center-between">
-                <p class="mb-0">Price</p>
-
-                <div class="flex-row-center">
-                  <opdex-change-indicator
-                    [value]="token?.summary.dailyPriceChangePercent"
-                    *ngIf="!!token?.summary.dailyPriceChangePercent">
-                  </opdex-change-indicator>
-
-                  <opdex-number
-                    prefix="$"
-                    [value]="token?.summary.priceUsd"
-                    [short]="true"
-                    class="ml-2">
-                  </opdex-number>
-                </div>
-              </div>
-
-              <div class="flex-row-center-between">
-                <p class="mb-0">Total Supply</p>
-                <opdex-number [value]="token?.totalSupply" [short]="true"></opdex-number>
-              </div>
-
-              <div class="flex-row-center-between">
-                <p class="mb-0">Decimals</p>
-                <p class="mb-0">{{token?.decimals}}</p>
-              </div>
-
-              <ng-container *ngIf="token?.isStaking && !!token?.distribution">
-                <mat-divider style="position: relative" class="mt-2 mb-2"></mat-divider>
-                <div class="flex-row-center-between mb-1">
-                  <div class="flex-row-center">
-                    <mat-icon class="blue mr-1 tiny">{{icons.tokens}}</mat-icon>
-                    <p class="mb-0 light">Distribution</p>
-                  </div>
-
-                  <span class="badge {{token?.distribution.isReady(latestBlock) ? 'green' : 'red'}}">
-                    {{token?.distribution.isReady(latestBlock) ? 'Available' : 'Not Ready'}}
-                  </span>
-                </div>
-
-                <ng-container *ngIf="token?.distribution.nextDistributionBlock > latestBlock; else distributionReady">
-                  <div class="flex-row-center-between">
-                    <p class="mb-0">Next Distribution</p>
-                    <opdex-number prefix="#" [value]="token?.distribution.nextDistributionBlock"></opdex-number>
-                  </div>
-
-                  <mat-progress-bar class="mt-3" [value]="100 - ((token?.distribution.nextDistributionBlock - latestBlock) / 1971000 * 100)"></mat-progress-bar>
-
-                  <div class="flex-row-center-between mt-1">
-                    <small class="light">Remaining Blocks</small>
-                    <small>
-                      <opdex-number prefix="#" [value]="token?.distribution.nextDistributionBlock - latestBlock"></opdex-number>
-                    </small>
-                  </div>
-                </ng-container>
-
-                <ng-template #distributionReady>
-                  <div class="distribute">
-                    <opdex-tx-quote-submit-button size="small" [disabled]="!context?.wallet" (onSubmit)="distribute()" label="Distribute {{token?.symbol}}"></opdex-tx-quote-submit-button>
-                  </div>
-                </ng-template>
-              </ng-container>
-            </opdex-card>
+            <opdex-token-summary-card [token]="token"></opdex-token-summary-card>
 
             <opdex-wallet-position-card
               *ngIf="!!context?.wallet"

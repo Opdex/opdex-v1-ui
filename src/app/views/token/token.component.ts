@@ -1,5 +1,3 @@
-import { ReviewQuoteComponent } from '@sharedComponents/tx-module/shared/review-quote/review-quote.component';
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { MarketToken } from '@sharedModels/ui/tokens/market-token';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { AddressPosition } from '@sharedModels/address-position';
@@ -28,9 +26,6 @@ import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { LiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { UserContext } from '@sharedModels/user-context';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
-import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 @Component({
   selector: 'opdex-token',
@@ -71,8 +66,6 @@ export class TokenComponent implements OnInit {
   srcPerOlpt: FixedDecimal;
   isCurrentMarket: boolean;
   one = FixedDecimal.One(0);
-  latestBlock: number;
-  quoteErrors: string[]
 
   constructor(
     private _route: ActivatedRoute,
@@ -85,9 +78,7 @@ export class TokenComponent implements OnInit {
     private _lpService: LiquidityPoolsService,
     private _walletService: WalletsService,
     private _envService: EnvironmentsService,
-    private _userContextService: UserContextService,
-    private _bottomSheet: MatBottomSheet,
-    private _platformApiService: PlatformApiService
+    private _userContextService: UserContextService
   ) { }
 
   ngOnInit(): void {
@@ -112,7 +103,6 @@ export class TokenComponent implements OnInit {
     this.subscription.add(
       this._indexService.getLatestBlock$()
         .pipe(
-          tap(latestBlock => this.latestBlock = latestBlock.height),
           switchMap(_ => this._userContextService.getUserContext$().pipe(tap(context => this.context = context))),
           switchMap(_ => this.getToken()),
           tap(_ => this.historyFilter?.refresh()),
@@ -120,15 +110,6 @@ export class TokenComponent implements OnInit {
           switchMap(_ => this.tryGetLiquidityPool()),
           switchMap(_ => this.tryGetWalletBalance()))
         .subscribe());
-  }
-
-  distribute(): void {
-    if (!this.context?.wallet) return;
-
-    this._platformApiService.distributeTokensQuote(this.tokenAddress)
-      .pipe(take(1))
-      .subscribe((quote: ITransactionQuote) => this._bottomSheet.open(ReviewQuoteComponent, { data: quote }),
-                 (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
   private getToken(): Observable<any> {

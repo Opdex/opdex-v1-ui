@@ -1,0 +1,119 @@
+<opdex-card>
+  <ng-container *ngIf="market; else loading">
+    <div class="flex-row-center-between mb-1">
+      <div class="flex-row-center">
+        <mat-icon class="blue mr-1 tiny">{{icons.liquidityPool}}</mat-icon>
+        <p class="mb-0 light b-300">Liquidity</p>
+      </div>
+
+      <div class="flex-row-center">
+        <opdex-change-indicator
+          [value]="market?.summary?.dailyLiquidityUsdChangePercent"
+          *ngIf="!!market?.summary?.dailyLiquidityUsdChangePercent">
+        </opdex-change-indicator>
+
+        <opdex-number class="ml-2" prefix="$" [value]="market?.summary?.liquidityUsd" [short]="true"></opdex-number>
+      </div>
+    </div>
+
+    <ng-container *ngIf="market?.isStaking">
+      <mat-divider class="mb-2 mt-2" style="position:relative;"></mat-divider>
+
+      <div class="flex-row-center-between mb-1">
+        <div class="flex-row-center">
+          <mat-icon class="purple mr-1 tiny">{{icons.staking}}</mat-icon>
+          <p class="mb-0 light b-300">Staking</p>
+        </div>
+
+        <div class="flex-row-center">
+          <opdex-number prefix="$" [value]="market?.summary?.staking?.stakingUsd" [short]="true"></opdex-number>
+        </div>
+      </div>
+
+      <div class="flex-row-center-between">
+        <p class="mb-0">Weight</p>
+
+        <div class="flex-row-center">
+          <opdex-change-indicator
+            [value]="market?.summary?.staking?.dailyStakingWeightChangePercent"
+            *ngIf="!!market?.summary?.staking?.dailyStakingWeightChangePercent">
+          </opdex-change-indicator>
+
+          <opdex-number class="ml-2" [value]="market?.summary?.staking?.stakingWeight" [short]="true" [suffix]="market?.tokens?.staking?.symbol"></opdex-number>
+        </div>
+      </div>
+    </ng-container>
+
+    <mat-divider class="mb-2 mt-2" style="position:relative;"></mat-divider>
+
+    <div class="flex-row-center-between mb-1">
+      <div class="flex-row-center">
+        <mat-icon class="green mr-1 tiny">{{icons.volume}}</mat-icon>
+        <p class="mb-0 light">Volume <small>(24hr)</small></p>
+      </div>
+
+      <opdex-number prefix="$" [value]="market?.summary?.volumeUsd" [short]="true"></opdex-number>
+    </div>
+
+    <div class="flex-row-center-between">
+      <p class="mb-0">Rewards</p>
+      <opdex-number prefix="$" [value]="market?.summary?.rewards?.totalDailyUsd" [short]="true"></opdex-number>
+    </div>
+  </ng-container>
+
+  <ng-template #loading>
+    <div class="flex-row-center">
+      <div class="w-50">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+
+      <div class="w-50 flex-column-end">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+    </div>
+
+    <mat-divider style="position:relative" class="mb-2 mt-2"></mat-divider>
+
+    <div class="flex-row-center">
+      <div class="w-50">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+
+      <div class="w-50 flex-column-end">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+    </div>
+
+    <div class="flex-row-center">
+      <div class="w-50">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+
+      <div class="w-50 flex-column-end">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+    </div>
+
+    <mat-divider style="position:relative" class="mb-2 mt-2"></mat-divider>
+
+    <div class="flex-row-center">
+      <div class="w-50">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+
+      <div class="w-50 flex-column-end">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+    </div>
+
+    <div class="flex-row-center">
+      <div class="w-50">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+
+      <div class="w-50 flex-column-end">
+        <div class="skeleton-bg w-75 mb-1"></div>
+      </div>
+    </div>
+  </ng-template>
+</opdex-card>

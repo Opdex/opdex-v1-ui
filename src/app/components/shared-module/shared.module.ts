@@ -26,6 +26,7 @@ import { TokenIconsComponent } from './token-icons/token-icons.component';
 import { NumberComponent } from './number/number.component';
 import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
 import { TokenNativeChainBadgeComponent } from './token-native-chain-badge/token-native-chain-badge.component';
+import { TxQuoteSubmitButtonComponent } from '../shared-module/tx-quote-submit-button/tx-quote-submit-button.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { TokenNativeChainBadgeComponent } from './token-native-chain-badge/token
     TokenIconsComponent,
     NumberComponent,
     ThemeToggleComponent,
-    TokenNativeChainBadgeComponent
+    TokenNativeChainBadgeComponent,
+    TxQuoteSubmitButtonComponent
   ],
   imports: [
     CommonModule,
@@ -63,7 +65,8 @@ import { TokenNativeChainBadgeComponent } from './token-native-chain-badge/token
     TokenIconsComponent,
     NumberComponent,
     ThemeToggleComponent,
-    TokenNativeChainBadgeComponent
+    TokenNativeChainBadgeComponent,
+    TxQuoteSubmitButtonComponent
   ]
 })
 export class SharedModule { }
