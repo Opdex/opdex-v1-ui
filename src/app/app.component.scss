@@ -15,7 +15,7 @@ $sidebar-width: 100px;
     display: none;
 
     &.pinned {
-      width: 260px;
+      width: 225px;
     }
   }
 
@@ -195,11 +195,11 @@ $sidebar-width: 100px;
   .main-content-container {
     &.sidebar-pinned {
       #desktop-sidenav {
-        width: 260px;
+        width: 225px;
       }
 
       .animation-container {
-        margin-left: 260px;
+        margin-left: 225px;
       }
     }
 

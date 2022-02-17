@@ -22,7 +22,8 @@
         </div>
       </div>
 
-      <div class="d-none d-sm-block col-sm-6 col-xl-4">
+      <div class="col-12 col-sm-6 col-xl-4">
+        <div class="d-sm-none mt-3"></div>
         <opdex-tx-buttons (onSelectOption)="handleTxOption($event)"></opdex-tx-buttons>
       </div>
     </div>
@@ -57,12 +58,6 @@
       </div>
 
       <div class="col-12 col-lg-8 col-xl-9">
-        <div class="row d-sm-none mb-3">
-          <div class="col-12">
-            <opdex-tx-buttons (onSelectOption)="handleTxOption($event)"></opdex-tx-buttons>
-          </div>
-        </div>
-
         <opdex-card>
           <opdex-line-chart
             [chartData]="chartData"

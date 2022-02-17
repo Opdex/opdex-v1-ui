@@ -9,7 +9,6 @@ import { tap } from 'rxjs/operators';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
-import { TOUCH_BUFFER_MS } from '@angular/cdk/a11y/input-modality/input-modality-detector';
 
 @Component({
   selector: 'opdex-line-chart',
@@ -53,15 +52,15 @@ export class LineChartComponent implements OnChanges, OnInit {
 
       this.subscription.add(
         this._breakpointObserver
-          .observe(['(min-width: 992px)', '(min-width: 1440px)'])
+          .observe(['(min-width: 992px)', '(min-width: 1440px)', '(max-width: 667px)'])
           .subscribe((result: BreakpointState) => {
 
             if (result.breakpoints['(min-width: 1440px)']) {
-              this.height = 440;
+              this.height = 450;
             } else if (result.breakpoints['(min-width: 992px)']) {
-              this.height = 440;
+              this.height = 400;
             } else {
-              this.height = 440;
+              this.height = 300;
             }
 
             if (this.chart) {

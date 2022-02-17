@@ -12,13 +12,8 @@
         </div>
       </div>
 
-      <div class="d-none d-sm-block col-sm-6 col-xl-4">
-        <opdex-tx-buttons (onSelectOption)="handleTxOption($event)"></opdex-tx-buttons>
-      </div>
-    </div>
-
-    <div class="row d-sm-none mt-3">
-      <div class="col-12">
+      <div class="col-12 col-sm-6 col-xl-4">
+        <div class="d-sm-none mt-3"></div>
         <opdex-tx-buttons (onSelectOption)="handleTxOption($event)"></opdex-tx-buttons>
       </div>
     </div>
@@ -65,11 +60,6 @@
 
                   <div class="flex-row-center">
                     <opdex-number prefix="$" [value]="market?.summary?.staking?.stakingUsd" [short]="true"></opdex-number>
-
-                    <!-- <opdex-change-indicator
-                      [value]="market?.summary?.staking?.dailyStakingUsdChangePercent"
-                      *ngIf="!!market?.summary?.staking?.dailyStakingUsdChangePercent">
-                    </opdex-change-indicator> -->
                   </div>
                 </div>
 
