@@ -19,8 +19,8 @@ export class LiquidityPoolRewardsSummary {
   }
 
   constructor(rewards: IRewardsSummaryResponse) {
-    this._providerDailyUsd = new FixedDecimal(rewards.providerDailyUsd.toFixed(8), 8);
-    this._marketDailyUsd = new FixedDecimal(rewards.marketDailyUsd.toFixed(8), 8);
-    this._totalDailyUsd = new FixedDecimal(rewards.totalDailyUsd.toFixed(8), 8);
+    this._providerDailyUsd = new FixedDecimal(rewards.providerDailyUsd, 8);
+    this._marketDailyUsd = new FixedDecimal(rewards.marketDailyUsd, 8);
+    this._totalDailyUsd = new FixedDecimal(rewards.totalDailyUsd, 8);
   }
 }

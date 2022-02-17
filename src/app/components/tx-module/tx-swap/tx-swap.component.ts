@@ -139,7 +139,7 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
       .pipe(take(1))
       .subscribe(market => {
         if (!this.tokenIn) this.tokenIn = market.tokens.crs as MarketToken;
-        this.marketFee = new FixedDecimal((market.transactionFeePercent * .01).toFixed(3), 3);
+        this.marketFee = market.transactionFeePercent.multiply(new FixedDecimal('.01', 2));
       });
   }
 

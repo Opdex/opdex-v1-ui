@@ -13,15 +13,15 @@ export class TokenHistory {
 
       line.push({
         time: date,
-        value: history.price.close
+        value: parseFloat(history.price.close)
       });
 
       candle.push({
         time: date,
-        open: history.price.open,
-        high: history.price.high,
-        low: history.price.low,
-        close: history.price.close,
+        open: parseFloat(history.price.open),
+        high: parseFloat(history.price.high),
+        low: parseFloat(history.price.low),
+        close: parseFloat(history.price.close)
       });
     });
 

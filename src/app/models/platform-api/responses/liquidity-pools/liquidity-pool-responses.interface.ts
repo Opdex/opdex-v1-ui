@@ -1,4 +1,3 @@
-import { IMarketToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { ITokenGroup } from "../tokens/token.interface";
 import { IPaging } from '../paging.interface';
 import { IMiningPool } from "../mining-pools/mining-pool.interface";
@@ -8,7 +7,7 @@ export interface ILiquidityPoolsResponse extends IPaging<ILiquidityPoolResponse>
 export interface ILiquidityPoolResponse {
   address: string;
   name: string;
-  transactionFeePercent: number;
+  transactionFeePercent: string;
   market: string;
   tokens: ITokenGroup;
   miningPool: IMiningPool;
@@ -30,24 +29,24 @@ export interface ILiquidityPoolSummaryResponse {
 export interface IReservesSummaryResponse {
   crs: string;
   src: string;
-  usd: number;
-  dailyUsdChangePercent: number;
+  usd: string;
+  dailyUsdChangePercent: string;
 }
 
 export interface IRewardsSummaryResponse {
-  providerDailyUsd: number;
-  marketDailyUsd: number;
-  totalDailyUsd: number;
+  providerDailyUsd: string;
+  marketDailyUsd: string;
+  totalDailyUsd: string;
 }
 
 export interface IVolumeSummaryResponse {
-  dailyUsd: number;
+  dailyUsd: string;
 }
 
 export interface IStakingSummaryResponse {
   weight: string;
-  usd: number;
-  dailyWeightChangePercent: number;
+  usd: string;
+  dailyWeightChangePercent: string;
   nominated: boolean;
 }
 

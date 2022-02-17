@@ -3,7 +3,7 @@ import { ITokenSummary } from '@sharedModels/platform-api/responses/tokens/token
 
 export class TokenSummary {
   private _priceUsd: FixedDecimal;
-  private _dailyPriceChangePercent: number;
+  private _dailyPriceChangePercent: FixedDecimal;
   private _createdBlock: number;
   private _modifiedBlock: number;
 
@@ -11,7 +11,7 @@ export class TokenSummary {
     return this._priceUsd;
   }
 
-  public get dailyPriceChangePercent(): number {
+  public get dailyPriceChangePercent(): FixedDecimal {
     return this._dailyPriceChangePercent;
   }
 
@@ -24,8 +24,8 @@ export class TokenSummary {
   }
 
   constructor(summary: ITokenSummary) {
-    this._priceUsd = !summary?.priceUsd ? FixedDecimal.Zero(8) : new FixedDecimal(summary.priceUsd.toFixed(8), 8);
-    this._dailyPriceChangePercent = summary?.dailyPriceChangePercent || 0.00000000;;
+    this._priceUsd = !summary?.priceUsd ? FixedDecimal.Zero(8) : new FixedDecimal(summary.priceUsd, 8);
+    this._dailyPriceChangePercent = !summary?.dailyPriceChangePercent ? FixedDecimal.Zero(8) : new FixedDecimal(summary?.dailyPriceChangePercent, 8);
     this._createdBlock = summary?.createdBlock || 0;
     this._modifiedBlock = summary?.modifiedBlock || 0;
   }

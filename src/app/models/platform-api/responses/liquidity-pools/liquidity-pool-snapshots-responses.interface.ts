@@ -1,4 +1,4 @@
-import { IOhlcNumber, IOhlcString } from '../Ohlc.interface';
+import { IOhlc } from '../Ohlc.interface';
 import { IPaging } from '../paging.interface';
 
 export interface ILiquidityPoolSnapshotHistoryResponse extends IPaging<ILiquidityPoolSnapshotResponse> {}
@@ -14,29 +14,29 @@ export interface ILiquidityPoolSnapshotResponse {
 }
 
 interface ILiquidityPoolSnapshotReservesResponse {
-  crs: IOhlcString;
-  src: IOhlcString;
-  usd: IOhlcNumber;
+  crs: IOhlc;
+  src: IOhlc;
+  usd: IOhlc;
 }
 
 interface ILiquidityPoolSnapshotRewardsResponse {
-  providerUsd: number;
-  marketUsd: number;
-  totalUsd: number;
+  providerUsd: string;
+  marketUsd: string;
+  totalUsd: string;
 }
 
 interface ILiquidityPoolSnapshotVolumeResponse {
   crs: string;
   src: string;
-  usd: number;
+  usd: string;
 }
 
 interface ILiquidityPoolSnapshotCostResponse {
-  crsPerSrc: IOhlcString;
-  srcPerCrs: IOhlcString;
+  crsPerSrc: IOhlc;
+  srcPerCrs: IOhlc;
 }
 
 interface ILiquidityPoolSnapshotStakingResponse {
-  weight: IOhlcString;
-  usd: IOhlcNumber;
+  weight: IOhlc;
+  usd: IOhlc;
 }

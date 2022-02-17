@@ -16,7 +16,7 @@
         <opdex-copy-address [address]="pool?.address"></opdex-copy-address>
 
         <div class="flex-row-center mt-2">
-          <div class="badge blue mr-2">{{pool?.transactionFeePercent > 0 ? pool.transactionFeePercent : 0}}% Fee</div>
+          <div class="badge blue mr-2">{{pool?.transactionFeePercent?.bigInt > 0 ? pool.transactionFeePercent.formattedValue : 0}}% Fee</div>
           <div class="badge purple mr-2" *ngIf="pool?.summary?.staking?.nominated"><mat-icon class="mr-1">{{icons.staking}}</mat-icon> Nominated</div>
           <div class="badge red mr-2" *ngIf="pool?.miningPool?.isActive"><mat-icon class="mr-1">{{icons.mining}}</mat-icon> Mining</div>
         </div>

@@ -5,7 +5,7 @@ import { MarketRewardsSummary } from '@sharedModels/ui/markets/market-rewards-su
 
 export class MarketSummary {
   private _liquidityUsd: FixedDecimal;
-  private _dailyLiquidityUsdChangePercent: number;
+  private _dailyLiquidityUsdChangePercent: FixedDecimal;
   private _volumeUsd: FixedDecimal;
   private _staking: MarketStakingSummary;
   private _rewards: MarketRewardsSummary;
@@ -16,7 +16,7 @@ export class MarketSummary {
     return this._liquidityUsd;
   }
 
-  public get dailyLiquidityUsdChangePercent(): number {
+  public get dailyLiquidityUsdChangePercent(): FixedDecimal {
     return this._dailyLiquidityUsdChangePercent;
   }
 
@@ -41,9 +41,9 @@ export class MarketSummary {
   }
 
   constructor(summary: IMarketSummaryResponse) {
-    this._liquidityUsd = new FixedDecimal(summary.liquidityUsd.toFixed(8), 8);
-    this._dailyLiquidityUsdChangePercent = summary.dailyLiquidityUsdChangePercent;
-    this._volumeUsd = new FixedDecimal(summary.volumeUsd.toFixed(8), 8);
+    this._liquidityUsd = new FixedDecimal(summary.liquidityUsd, 8);
+    this._dailyLiquidityUsdChangePercent = new FixedDecimal(summary.dailyLiquidityUsdChangePercent, 8);
+    this._volumeUsd = new FixedDecimal(summary.volumeUsd, 8);
     this._staking = new MarketStakingSummary(summary.staking);
     this._rewards = new MarketRewardsSummary(summary.rewards);
     this._createdBlock = summary.createdBlock;

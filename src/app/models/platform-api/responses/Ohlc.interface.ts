@@ -1,13 +1,6 @@
-export interface IOhlcString {
+export interface IOhlc {
   open: string;
   high: string;
   low: string;
   close: string;
-}
-
-export interface IOhlcNumber {
-  open: number;
-  high: number;
-  low: number;
-  close: number;
 }
