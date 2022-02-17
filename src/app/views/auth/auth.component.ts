@@ -8,6 +8,8 @@ import { IconSizes } from 'src/app/enums/icon-sizes';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { JwtService } from '@sharedServices/utility/jwt.service';
+import { Network } from 'src/app/enums/networks';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'opdex-auth',
@@ -27,14 +29,19 @@ export class AuthComponent implements OnInit, OnDestroy {
   percentageTimeRemaining: number;
   connectionId: string;
   reconnecting: boolean;
+  isTestnet: boolean;
+  webSid: SafeUrl;
 
   constructor(
     private _context: UserContextService,
     private _router: Router,
     private _theme: ThemeService,
     private _env: EnvironmentsService,
-    private _jwt: JwtService
-  ) { }
+    private _jwt: JwtService,
+    private _sanitizer: DomSanitizer
+  ) {
+    this.isTestnet = this._env.network === Network.Testnet;
+  }
 
   async ngOnInit() {
     this.subscription.add(
@@ -102,6 +109,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     const url = new URL(this.stratisId.replace('sid:', 'https://'));
     const expiration = parseInt(url.searchParams.get('exp'));
 
+    this.webSid = this._sanitizer.bypassSecurityTrustUrl(this.stratisId.replace('sid:', 'web+sid://'));
     this.expirationTime = new Date(expiration * 1000).getTime();
     this.expirationLength = (this.expirationTime - new Date().getTime()) / 1000;
 
