@@ -1,5 +1,5 @@
 <opdex-card>
-  <ng-container *ngIf="swapToken && token; else loading">
+  <ng-container *ngIf="token; else loading">
     <div class="flex-row-center-between mb-1">
       <small class="light">{{token.name}}</small>
 
@@ -11,21 +11,21 @@
         <opdex-token-icon [token]="token"></opdex-token-icon>
 
         <a class="title no-decoration ml-2" href="javascript:void(0)" routerLink="/tokens/{{token.address}}">
-          <h2 class="mb-0">{{token.symbol}}</h2>
+          <h3 class="mb-0">{{token.symbol}}</h3>
         </a>
       </div>
 
       <div class="flex-row-center-end">
-        <h3 class="mb-0 mr-2 b-300">
+        <h4 class="mb-0 mr-2 b-300">
           <opdex-number prefix="$" [value]="token?.summary?.priceUsd" [short]="true"></opdex-number>
-        </h3>
+        </h4>
 
         <opdex-change-indicator [value]="token?.summary?.dailyPriceChangePercent" *ngIf="token?.summary?.dailyPriceChangePercent !== null && token?.summary?.dailyPriceChangePercent !== undefined"></opdex-change-indicator>
       </div>
     </div>
 
-    <div class="flex-row-center-between mt-2">
-      <div class="flex-row-center">
+    <div class="flex-row-center-end mt-1" *ngIf="reserves || (swapToken && swapRate)">
+      <div class="flex-row-center" *ngIf="reserves">
         <mat-icon color="primary" class="mr-2 tiny">{{icons.lock}}</mat-icon>
 
         <small>
@@ -33,16 +33,12 @@
         </small>
       </div>
 
-      <div class="flex-row-center">
-        <small class="mb-0">
-          <opdex-number [value]="one" [suffix]="token.symbol"></opdex-number>
-        </small>
+      <div class="flex-row-center-end" *ngIf="swapToken && swapRate">
+        <opdex-number [value]="one" [suffix]="token.symbol"></opdex-number>
 
-        <mat-icon color="primary" class="ml-2 mr-2 tiny">{{icons.swap}}</mat-icon>
+        <mat-icon color="primary" class="ml-2 mr-2 small">{{icons.swap}}</mat-icon>
 
-        <small>
-          <opdex-number [value]="swapRate" [short]="true" [suffix]="swapToken.symbol"></opdex-number>
-        </small>
+        <opdex-number [value]="swapRate" [short]="true" [suffix]="swapToken.symbol"></opdex-number>
       </div>
     </div>
   </ng-container>

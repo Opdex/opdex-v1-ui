@@ -3,7 +3,7 @@
     <div class="flex-row-center-between">
       <small class="light b-400">{{position.position}}</small>
       <small>
-        <opdex-number prefix="$" [value]="position.value" [precision]="2"></opdex-number>
+        <opdex-number prefix="$" [value]="position.value" [short]="true"></opdex-number>
       </small>
     </div>
 
@@ -21,7 +21,7 @@
         </p>
       </a>
 
-      <opdex-number [value]="position.amount" [precision]="8"></opdex-number>
+      <opdex-number [value]="position.amount" [short]="true"></opdex-number>
     </div>
   </ng-container>
 

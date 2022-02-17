@@ -24,7 +24,7 @@
                 </div>
 
                 <span class="badge {{miningGovernance.periodRemainingBlocks > 0 ? 'green' : 'red'}}">
-                  {{miningGovernance.periodRemainingBlocks > 0 ? 'Ongoing' : 'Paused'}}
+                  {{miningGovernance.periodRemainingBlocks > 0 ? 'Active' : 'Inactive'}}
                 </span>
               </div>
 
@@ -34,7 +34,7 @@
                   value="{{((miningGovernance.periodBlockDuration - miningGovernance.periodRemainingBlocks) / miningGovernance.periodBlockDuration) * 100}}">
                 </mat-progress-bar>
 
-                <small class="light mt-2">
+                <small class="light mt-1">
                   Ends {{miningGovernance.nominationPeriodEndDate | timeago}} in {{miningGovernance.periodRemainingBlocks | formatNumber:0}} blocks
                 </small>
               </ng-container>
@@ -80,7 +80,7 @@
             </div>
 
             <mat-progress-bar mode="determinate" value="{{ ((12 - miningGovernance.periodsUntilRewardReset) / 12) * 100 }}"></mat-progress-bar>
-            <small class="mt-2 light">Resets in {{miningGovernance.periodsUntilRewardReset}} Nomination Period{{miningGovernance.periodsUntilRewardReset === 1 ? '' : 's'}}</small>
+            <small class="mt-1 light">Resets in {{miningGovernance.periodsUntilRewardReset}} Nomination Period{{miningGovernance.periodsUntilRewardReset === 1 ? '' : 's'}}</small>
           </div>
 
           <ng-template #loadingSecondSkeleton>

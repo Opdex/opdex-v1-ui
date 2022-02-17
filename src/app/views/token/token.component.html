@@ -1,153 +1,107 @@
-<div class="header-section" *ngIf="token">
+<div class="header-section">
   <div class="container">
-    <div class="row mb-3">
-      <div class="col-12 mb-3" *ngIf="!isCurrentMarket && token.symbol !== 'CRS'">
+    <div class="row">
+      <div class="col-12 mb-3" *ngIf="!isCurrentMarket && !!token && token.symbol !== 'CRS'">
         <opdex-card [warn]="true">
           This token does not have a liquidity pool within the current market.
         </opdex-card>
       </div>
 
-      <div class="col-12 col-lg-6 col-xl-8">
-        <div class="flex-row-center mb-2">
+      <div class="col-12 col-sm-7 col-lg-9 col-xl-10">
+        <div class="flex-row-end mb-3">
           <opdex-token-icon [token]="token" [large]="true"></opdex-token-icon>
-          <div class="flex-col-center ml-2">
-            <h1 class="mb-1 ml-2">{{token.name}}</h1>
 
-            <div class="flex-row-center-between ml-2">
-              <h3 class="mb-0 mr-3">{{token.symbol}}</h3>
-
-              <div class="flex-row-center">
-                <h3 class="mb-0">
-                  <opdex-number prefix="$" [value]="token.summary.priceUsd" [short]="true" class="mr-2"></opdex-number>
-                </h3>
-
-                <opdex-change-indicator
-                  [value]="token.summary.dailyPriceChangePercent"
-                  *ngIf="!!token.summary.dailyPriceChangePercent">
-                </opdex-change-indicator>
-              </div>
-            </div>
+          <div class="flex-col-center ml-3">
+            <small class="light">{{token?.symbol}}</small>
+            <h1 class="mb-0">{{token?.name}}</h1>
           </div>
         </div>
 
-        <div class="flex-row-center mb-1" *ngIf="!token.isCrs">
+        <div class="flex-row-center mb-1" *ngIf="!token?.isCrs">
           <opdex-token-native-chain-badge class="mr-2"></opdex-token-native-chain-badge>
           <opdex-copy-address [address]="token?.address" *ngIf="token?.address !== 'CRS'"></opdex-copy-address>
         </div>
 
-        <div class="flex-row-center mb-1" *ngIf="token.wrappedToken">
-          <opdex-token-native-chain-badge class="mr-2" [wrappedToken]="token.wrappedToken" *ngIf="token?.wrappedToken"></opdex-token-native-chain-badge>
-          <opdex-copy-address [address]="token.wrappedToken.address || 'Native Token'"></opdex-copy-address>
+        <div class="flex-row-center mb-1" *ngIf="token?.wrappedToken">
+          <opdex-token-native-chain-badge class="mr-2" [wrappedToken]="token?.wrappedToken" *ngIf="token?.wrappedToken"></opdex-token-native-chain-badge>
+          <opdex-copy-address [address]="token?.wrappedToken?.address || 'Native Token'"></opdex-copy-address>
         </div>
       </div>
 
-      <div class="d-none d-lg-block col-lg-6 col-xl-4">
-        <opdex-tx-buttons (onSelectOption)="handleTxOption($event)" [hideStaking]="true" [hideMining]="true" *ngIf="liquidityPool"></opdex-tx-buttons>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-        <opdex-card>
-          <div class="flex-row-center-between">
-            <p class="mb-0 b-400">Total Supply</p>
-            <opdex-number [value]="token.totalSupply" [short]="true"></opdex-number>
-          </div>
-
-          <div class="flex-row-center-between">
-            <p class="mb-0 b-400">Decimals</p>
-            <p class="mb-0">{{token.decimals}}</p>
-          </div>
-        </opdex-card>
-      </div>
-
-      <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *ngIf="!!liquidityPool">
-        <opdex-card>
-          <ng-container *ngIf="token.address !== liquidityPool.address; else olpt">
-            <div class="flex-row-center-between">
-              <a class="b-400 no-decoration" routerLink="/pools/{{liquidityPool.address}}">{{liquidityPool.name}}</a>
-              <div class="flex-row-center">
-                <mat-icon class="ml-1 mr-1 blue" [ngClass]="iconSizes.tiny">{{icons.lock}}</mat-icon>
-                <opdex-number [value]="liquidityPool.summary.reserves.src" [short]="true" [suffix]="token.symbol"></opdex-number>
-              </div>
-            </div>
-
-            <div class="flex-row-center-between">
-              <opdex-number [value]="one" [suffix]="token.symbol"></opdex-number>
-              <mat-icon class="ml-1 mr-1 blue" [ngClass]="iconSizes.tiny">{{icons.swap}}</mat-icon>
-              <opdex-number [value]="liquidityPool.summary.cost.crsPerSrc" [short]="true" [suffix]="liquidityPool.tokens.crs.symbol"></opdex-number>
-            </div>
-          </ng-container>
-
-          <ng-template #olpt>
-            <div class="flex-row-center-between">
-              <a class="b-400 no-decoration" routerLink="/pools/{{liquidityPool.address}}">{{liquidityPool.name}}</a>
-              <p class="mb-0">
-                1 <small>{{liquidityPool.tokens.lp.symbol}}</small>
-              </p>
-            </div>
-
-            <div class="flex-row-center-between">
-              <opdex-number [value]="crsPerOlpt" [short]="true" [suffix]="liquidityPool.tokens.crs.symbol"></opdex-number>
-              <opdex-number [value]="srcPerOlpt" [short]="true" [suffix]="liquidityPool.tokens.src.symbol"></opdex-number>
-            </div>
-          </ng-template>
-        </opdex-card>
-      </div>
-
-      <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *ngIf="!!context?.wallet">
-        <opdex-wallet-position-card [position]="balance"></opdex-wallet-position-card>
-      </div>
-    </div>
-
-    <div class="row" *ngIf="token.isStaking && !!token.distribution">
-      <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-        <opdex-card>
-          <div class="flex-row-center-between">
-            <p class="b-400 mb-0">Distribution</p>
-
-            <span class="badge {{token.distribution.isReady(latestBlock) ? 'green' : 'red'}}">
-              {{token.distribution.isReady(latestBlock) ? 'Available' : 'Not Ready'}}
-            </span>
-          </div>
-
-          <div class="mt-3" *ngIf="token.distribution.nextDistributionBlock > latestBlock; else distributionReady">
-            <div class="flex-row-center-between">
-              <small class="b-400 light">Next Distribution</small>
-              <small class="light">{{token.distribution.nextDistributionBlock | formatNumber:0}}</small>
-            </div>
-
-            <mat-progress-bar [value]="100 - ((token.distribution.nextDistributionBlock - latestBlock) / 1971000 * 100)"></mat-progress-bar>
-
-            <small class="light">{{token.distribution.nextDistributionBlock - latestBlock | formatNumber:0}} blocks remaining</small>
-          </div>
-
-          <ng-template #distributionReady>
-            <div class="distribute">
-              <opdex-tx-quote-submit-button size="small" [disabled]="!context?.wallet" (onSubmit)="distribute()" label="Distribute {{token.symbol}}"></opdex-tx-quote-submit-button>
-            </div>
-          </ng-template>
-        </opdex-card>
-      </div>
-    </div>
-
-    <div class="row d-lg-none">
-      <div class="col-12">
-        <opdex-tx-buttons (onSelectOption)="handleTxOption($event)" [hideStaking]="true" [hideMining]="true"></opdex-tx-buttons>
+      <div class="col-12 col-sm-5 col-lg-3 col-xl-2">
+        <div class="d-sm-none mt-3"></div>
+        <opdex-tx-buttons
+          (onSelectOption)="handleTxOption($event)"
+          [hideStaking]="true"
+          [hideMining]="true"
+          *ngIf="liquidityPool">
+        </opdex-tx-buttons>
       </div>
     </div>
   </div>
 </div>
 
-<div class="offset-section pb-3 pt-3">
+<div class="offset-section">
   <div class="container">
-    <opdex-line-chart
-      [chartData]="chartData"
-      [chartOptions]="chartOptions"
-      [selectedChart]="selectedChart"
-      title="{{selectedChart.category}}"
-      (onTypeChange)="handleChartTypeChange($event)"
-      (onTimeChange)="handleChartTimeChange($event)"></opdex-line-chart>
+    <div class="row">
+      <div class="col-12 col-lg-4 col-xl-3">
+        <div class="row">
+          <div class="col-12 col-sm-6 col-lg-12">
+            <opdex-token-summary-card [token]="token"></opdex-token-summary-card>
+
+            <opdex-card *ngIf="token?.address === liquidityPool?.address">
+              <div class="flex-row-center mb-2">
+                <opdex-token-icons [tokens]="[liquidityPool?.tokens?.crs, liquidityPool?.tokens?.src]"></opdex-token-icons>
+                <a class="b-400 no-decoration ml-2" routerLink="/pools/{{liquidityPool?.address}}">{{liquidityPool?.name}}</a>
+              </div>
+
+              <div class="flex-row-center-between">
+                <div class="flex-column">
+                  <opdex-number [value]="one" [suffix]="liquidityPool?.tokens?.lp?.symbol"></opdex-number>
+                  <opdex-number [value]="one" [suffix]="liquidityPool?.tokens?.lp?.symbol"></opdex-number>
+                </div>
+
+                <div class="flex-column">
+                  <p class="mb-0">=</p>
+                  <p class="mb-0">=</p>
+                </div>
+
+                <div class="flex-column">
+                  <opdex-number [value]="crsPerOlpt" [short]="true" [suffix]="liquidityPool?.tokens?.lp?.symbol"></opdex-number>
+                  <opdex-number [value]="srcPerOlpt" [short]="true" [suffix]="liquidityPool?.tokens?.src?.symbol"></opdex-number>
+                </div>
+              </div>
+            </opdex-card>
+
+            <opdex-wallet-position-card
+              *ngIf="!!context?.wallet"
+              [position]="balance">
+            </opdex-wallet-position-card>
+          </div>
+
+          <div class="col-12 col-sm-6 col-lg-12">
+            <opdex-liquidity-pool-summary-card
+              [pool]="liquidityPool"
+              [showPoolName]="true"
+              *ngIf="token?.address !== 'CRS' && token?.isNonProvisional">
+            </opdex-liquidity-pool-summary-card>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-8 col-xl-9">
+        <opdex-card>
+          <opdex-line-chart
+            [chartData]="chartData"
+            [chartOptions]="chartOptions"
+            [selectedChart]="selectedChart"
+            title="{{selectedChart.category}}"
+            (onTypeChange)="handleChartTypeChange($event)"
+            (onTimeChange)="handleChartTimeChange($event)">
+          </opdex-line-chart>
+        </opdex-card>
+      </div>
+    </div>
   </div>
 </div>
 

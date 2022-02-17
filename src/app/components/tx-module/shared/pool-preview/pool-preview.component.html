@@ -29,17 +29,20 @@
   </div>
 
   <opdex-card class="pool-summary" *ngIf="pool">
-    <div class="flex-row-center mb-2">
-      <opdex-token-icons [tokens]="[pool.tokens.crs, pool.tokens.src]"></opdex-token-icons>
+    <div class="flex-row-center-between">
+      <div class="flex-row-center">
+        <opdex-token-icons [tokens]="[pool.tokens.crs, pool.tokens.src]"></opdex-token-icons>
 
-      <a class="no-decoration ml-2" routerLink="/pools/{{pool?.address}}">
-        <h4 class="d-flex mb-0">{{pool.name}}</h4>
-      </a>
+        <a class="no-decoration ml-2" routerLink="/pools/{{pool?.address}}">
+          <h4 class="d-flex mb-0">{{pool.name}}</h4>
+        </a>
+      </div>
+
+      <button mat-icon-button [ngClass]="iconSizes.tiny" (click)="clearPool()">
+        <mat-icon>{{icons.close}}</mat-icon>
+      </button>
     </div>
 
-    <button mat-icon-button [ngClass]="iconSizes.tiny" class="exit" (click)="clearPool()">
-      <mat-icon>{{icons.close}}</mat-icon>
-    </button>
 
     <div *ngIf="poolPreviewRecords?.length">
       <ng-container *ngFor="let preview of poolPreviewRecords; let i = index">

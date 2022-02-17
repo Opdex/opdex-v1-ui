@@ -1,51 +1,55 @@
 <div class="header-section">
   <div class="container">
-    <div class="row mb-3 justify-content-between align-items-center">
+    <div class="row">
       <div class="col-12 col-sm-6 col-xl-8">
         <h1 class="mb-0">Market Overview</h1>
         <opdex-copy-address [address]="market?.address"></opdex-copy-address>
-      </div>
 
-      <div class="d-none d-sm-block col-sm-6 col-xl-4">
-        <opdex-tx-buttons (onSelectOption)="handleTxOption($event)"></opdex-tx-buttons>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-        <opdex-market-token-card [token]="market?.tokens?.crs" [icon]="icons.tokens" iconColor="swap"></opdex-market-token-card>
-      </div>
-
-      <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *ngIf="market?.tokens?.staking">
-        <opdex-market-token-card [token]="market?.tokens?.staking" [icon]="icons.staking" iconColor="stake"></opdex-market-token-card>
-      </div>
-    </div>
-
-    <div class="row" *ngIf="statCards.length > 0">
-      <ng-container *ngFor="let statCard of statCards; let i = index; trackBy: statCardTrackBy">
-        <div *ngIf="statCard.show" class="col-xs-12 col-sm">
-          <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
+        <div class="flex-row-center mt-2">
+          <div class="badge blue mr-2">{{market?.transactionFeePercent?.bigInt > 0 ? market.transactionFeePercent?.formattedValue : 0}}% Fee</div>
+          <div class="badge purple mr-2" *ngIf="market?.isStaking">Staking</div>
+          <div class="badge green mr-2" *ngIf="market?.isPublic">Public</div>
         </div>
-      </ng-container>
-    </div>
+      </div>
 
-    <div class="row d-sm-none">
-      <div class="col-12">
+      <div class="col-12 col-sm-6 col-xl-4">
+        <div class="d-sm-none mt-3"></div>
         <opdex-tx-buttons (onSelectOption)="handleTxOption($event)"></opdex-tx-buttons>
       </div>
     </div>
   </div>
 </div>
 
-<div class="offset-section pb-3 pt-3">
+<div class="offset-section">
   <div class="container">
-    <opdex-line-chart
-      [chartData]="chartData"
-      [chartOptions]="chartOptions"
-      [selectedChart]="selectedChart"
-      title="{{selectedChart.category}}"
-      (onTypeChange)="handleChartTypeChange($event)"
-      (onTimeChange)="handleChartTimeChange($event)"></opdex-line-chart>
+    <div class="row">
+      <div class="col-12 col-lg-4 col-xl-3">
+        <div class="row">
+          <div class="col-12 col-sm-6 col-lg-12">
+            <opdex-market-token-card [token]="market?.tokens?.crs" [icon]="icons.tokens" iconColor="swap"></opdex-market-token-card>
+          </div>
+          <div class="col-12 col-sm-6 col-lg-12">
+            <opdex-market-token-card [token]="market?.tokens?.staking" [icon]="icons.staking" iconColor="stake"></opdex-market-token-card>
+          </div>
+          <div class="col-12 col-sm-12 col-lg-12">
+            <opdex-market-summary-card [market]="market"></opdex-market-summary-card>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-8 col-xl-9">
+        <opdex-card>
+          <opdex-line-chart
+            [chartData]="chartData"
+            [chartOptions]="chartOptions"
+            [selectedChart]="selectedChart"
+            title="{{selectedChart.category}}"
+            (onTypeChange)="handleChartTypeChange($event)"
+            (onTimeChange)="handleChartTimeChange($event)">
+          </opdex-line-chart>
+        </opdex-card>
+      </div>
+    </div>
   </div>
 </div>
 

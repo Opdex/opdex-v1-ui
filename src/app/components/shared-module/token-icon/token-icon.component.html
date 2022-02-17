@@ -2,8 +2,8 @@
   <div class="empty" [ngClass]="{'large': large}"></div>
 
   <div class="token-icon" [ngClass]="{
-      'cirrus': token.symbol.includes('CRS'),
-      'odx': token.symbol.includes('ODX'),
+      'cirrus': token?.symbol?.includes('CRS'),
+      'odx': token?.symbol?.includes('ODX'),
       'large': large
     }" [ngStyle]="{'background-image': 'url(' + iconPath + ')'}">
   </div>

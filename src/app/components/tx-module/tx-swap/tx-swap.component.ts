@@ -321,6 +321,7 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
       .pipe(
         catchError(() => {
           this.tokenOutAmount.setErrors({ invalidAmountInQuote: true });
+          this.resetValues(true);
           return of();
         }),
         filter(quote => quote !== null && quote !== undefined),
@@ -346,6 +347,7 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
       .pipe(
         catchError(() => {
           this.tokenInAmount.setErrors({ invalidAmountOutQuote: true });
+          this.resetValues(false);
           return of();
         }),
         filter(quote => quote !== null && quote !== undefined),
