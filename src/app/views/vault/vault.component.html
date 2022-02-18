@@ -8,27 +8,34 @@
     </div>
 
     <div class="row">
-      <ng-container *ngFor="let statCard of statCards; trackBy: statCardTrackBy">
-        <div *ngIf="statCard.show" class="col-xs-12 col-sm col-xl-3">
-          <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
-        </div>
-      </ng-container>
+      <div class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3">
+        <ng-container *ngFor="let statCard of statCards; trackBy: statCardTrackBy">
+          <opdex-stat-card *ngIf="statCard.show" [statInfo]="statCard"></opdex-stat-card>
+        </ng-container>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-7 col-lg-8 col-xl-9">
+        <opdex-card>
+          <div class="flex-row-center-between mb-1">
+            <h3 class="mb-0">Proposals</h3>
+
+            <button mat-stroked-button
+              color="primary"
+              (click)="openTransactionView('Create')"
+              *ngIf="context.wallet">
+              Create <mat-icon class="small">{{icons.add}}</mat-icon>
+            </button>
+          </div>
+
+          <opdex-vault-proposals-table [filter]="proposalsFilter"></opdex-vault-proposals-table>
+        </opdex-card>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="offset-section pt-5 pb-3" *ngIf="proposals ">
   <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <div class="flex-row-center-between mb-3">
-          <h2 class="mb-0">Proposals</h2>
-
-          <button mat-stroked-button color="primary" (click)="openTransactionView('Create')" *ngIf="context.wallet"><mat-icon>{{icons.add}}</mat-icon> Create Proposal</button>
-        </div>
-      </div>
-    </div>
-
     <div class="scrollable-row" #proposalScrollBar *ngIf="proposals.results.length > 0; else noProposals">
       <div class="scrollable-card" *ngFor="let proposal of proposals.results; trackBy: proposalsTrackBy">
         <opdex-vault-proposal-card [proposal]="proposal" [latestBlock]="latestBlock"></opdex-vault-proposal-card>

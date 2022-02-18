@@ -25,6 +25,7 @@ import { WalletProvisioningPositionsTableComponent } from './wallet-provisioning
 import { SkeletonTableComponent } from './skeleton-table/skeleton-table.component';
 import { VaultProposalPledgesTableComponent } from './vault-proposal-pledges-table/vault-proposal-pledges-table.component';
 import { VaultProposalVotesTableComponent } from './vault-proposal-votes-table/vault-proposal-votes-table.component';
+import { VaultProposalsTableComponent } from './vault-proposals-table/vault-proposals-table.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { VaultProposalVotesTableComponent } from './vault-proposal-votes-table/v
     WalletProvisioningPositionsTableComponent,
     SkeletonTableComponent,
     VaultProposalPledgesTableComponent,
-    VaultProposalVotesTableComponent
+    VaultProposalVotesTableComponent,
+    VaultProposalsTableComponent
   ],
   imports: [
     CommonModule,
@@ -64,7 +66,8 @@ import { VaultProposalVotesTableComponent } from './vault-proposal-votes-table/v
     WalletStakingPositionsTableComponent,
     WalletProvisioningPositionsTableComponent,
     VaultProposalPledgesTableComponent,
-    VaultProposalVotesTableComponent
+    VaultProposalVotesTableComponent,
+    VaultProposalsTableComponent
   ]
 })
 export class TablesModule { }

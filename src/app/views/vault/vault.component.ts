@@ -58,7 +58,7 @@ export class VaultComponent implements OnInit {
     this.proposals = { results: [null, null, null, null], paging: {} } as VaultProposals;
 
     this.proposalsFilter = new VaultProposalsFilter({
-      limit: 4,
+      limit: 5,
       direction: 'DESC'
     } as IVaultProposalsFilter);
 

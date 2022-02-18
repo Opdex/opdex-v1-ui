@@ -88,6 +88,19 @@ export class VaultProposal {
     return `${proposalId}-${status}-${expiration}-${pledgeAmount.formattedValue}-${yesAmount.formattedValue}-${noAmount.formattedValue}`;
   }
 
+  public get percentApproved(): FixedDecimal {
+    const oneHundred = FixedDecimal.OneHundred(0);
+    const zero = FixedDecimal.Zero(0);
+
+    if (this.yesAmount.isZero) return zero;
+    if (this.noAmount.isZero) return oneHundred;
+
+    const totalVotes = this.yesAmount.add(this.noAmount);
+    const percentageYes = this.yesAmount.divide(totalVotes);
+
+    return oneHundred.multiply(percentageYes);
+  }
+
   constructor(proposal: IVaultProposalResponseModel) {
     this._vault = proposal.vault;
     this._token = proposal.token;
