@@ -64,7 +64,12 @@
 
       <ng-template #distributionReady>
         <div class="distribute">
-          <opdex-tx-quote-submit-button size="small" [disabled]="!context?.wallet" (onSubmit)="distribute()" label="Distribute {{token?.symbol}}"></opdex-tx-quote-submit-button>
+          <opdex-tx-quote-submit-button
+            size="small"
+            [disabled]="!context?.wallet"
+            (onSubmit)="distribute()"
+            label="Distribute {{token?.symbol}}">
+          </opdex-tx-quote-submit-button>
         </div>
       </ng-template>
     </ng-container>

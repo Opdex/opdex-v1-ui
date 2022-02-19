@@ -1,3 +1,8 @@
+import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
+import { Vault } from '@sharedModels/ui/vaults/vault';
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
+import { UserContext } from '@sharedModels/user-context';
+import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { VaultProposalsFilter } from '@sharedModels/platform-api/requests/vaults/vault-proposals-filter';
 import { Component, Input, OnChanges, OnDestroy, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
@@ -27,17 +32,27 @@ export class VaultProposalsTableComponent  implements OnChanges, OnDestroy {
   dataSource: MatTableDataSource<VaultProposal>;
   paging: ICursor;
   subscription: Subscription;
+  context: UserContext;
+  vault: Vault;
   icons = Icons;
   iconSizes = IconSizes;
   loading = true;
+  oneHundred = FixedDecimal.OneHundred(0);
 
   constructor(
     private _vaultsService: VaultsService,
     private _indexService: IndexService,
-    private _sidebar: SidenavService
+    private _sidebar: SidenavService,
+    private _userContext: UserContextService,
+    private _env: EnvironmentsService
   ) {
     this.dataSource = new MatTableDataSource<any>();
-    this.displayedColumns = ['proposalId', 'type', 'proposed', 'status', 'progress', 'expiration', 'actions'];
+    this.displayedColumns = ['proposalId', 'type', 'proposed', 'status', 'minimums', 'progress', 'expiration', 'actions'];
+  }
+
+  private get _getVault$(): Observable<Vault> {
+    return this._vaultsService.getVault(this._env.vaultAddress)
+      .pipe(tap(vault => this.vault = vault));
   }
 
   ngOnChanges() {
@@ -48,8 +63,13 @@ export class VaultProposalsTableComponent  implements OnChanges, OnDestroy {
         this._indexService.getLatestBlock$()
           .pipe(
             tap(block => this.latestBlock = block.height),
+            switchMap(_ => this._getVault$),
             switchMap(_ => this.getProposals$(this.filter?.cursor)))
           .subscribe(_ => this.loading = false));
+
+      this.subscription.add(
+        this._userContext.getUserContext$()
+          .subscribe(context => this.context = context));
     }
   }
 
@@ -65,8 +85,7 @@ export class VaultProposalsTableComponent  implements OnChanges, OnDestroy {
         tap((proposals: VaultProposals) => {
           this.paging = proposals.paging;
           this.dataSource.data = proposals.results;
-        }),
-        take(1));
+        }));
   }
 
   pageChange(cursor: string): void {

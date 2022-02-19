@@ -27,7 +27,7 @@
     <div class="flex-row-center">
       <span class="badge mr-1 {{vested ? 'blue' : 'orange'}}">
         {{vested ? 'Vested' : 'Vesting'}}
-        <mat-icon class="ml-1">{{vested ? icons.checkOutline : icons.refresh}}</mat-icon>
+        <!-- <mat-icon class="ml-1">{{vested ? icons.checkOutline : icons.refresh}}</mat-icon> -->
       </span>
 
       <span class="badge mr-1 red" *ngIf="cert.revoked">Revoked</span>

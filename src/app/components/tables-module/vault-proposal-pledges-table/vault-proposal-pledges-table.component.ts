@@ -14,6 +14,8 @@ import { VaultsService } from '@sharedServices/platform/vaults.service';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { VaultProposalPledges } from '@sharedModels/ui/vaults/vault-proposal-pledges';
 import { VaultProposalPledge } from '@sharedModels/ui/vaults/vault-proposal-pledge';
+import { UserContext } from '@sharedModels/user-context';
+import { UserContextService } from '@sharedServices/utility/user-context.service';
 
 @Component({
   selector: 'opdex-vault-proposal-pledges-table',
@@ -28,6 +30,7 @@ export class VaultProposalPledgesTableComponent implements OnChanges, OnDestroy 
   dataSource: MatTableDataSource<VaultProposalPledge>;
   paging: ICursor;
   subscription: Subscription;
+  context: UserContext;
   icons = Icons;
   iconSizes = IconSizes;
   loading = true;
@@ -35,7 +38,9 @@ export class VaultProposalPledgesTableComponent implements OnChanges, OnDestroy 
   constructor(
     private _vaultsService: VaultsService,
     private _indexService: IndexService,
-    private _sidebar: SidenavService) {
+    private _sidebar: SidenavService,
+    private _userContext: UserContextService
+  ) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['pledger', 'pledge', 'balance', 'actions'];
   }
@@ -47,7 +52,11 @@ export class VaultProposalPledgesTableComponent implements OnChanges, OnDestroy 
       this.subscription.add(
         this._indexService.getLatestBlock$()
           .pipe(switchMap(_ => this.getPledges$(this.filter?.cursor)))
-          .subscribe(_ => this.loading = false))
+          .subscribe(_ => this.loading = false));
+
+      this.subscription.add(
+        this._userContext.getUserContext$()
+          .subscribe(context => this.context = context));
     }
 
     if (!!this.hideProposalIdColumn === false) this.displayedColumns.unshift('proposalId')
@@ -81,7 +90,7 @@ export class VaultProposalPledgesTableComponent implements OnChanges, OnDestroy 
     return `${index}-${pledge?.trackBy}`;
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.subscription) this.subscription.unsubscribe();
   }
 }

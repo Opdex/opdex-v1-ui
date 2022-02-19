@@ -54,29 +54,6 @@
   </div>
 </div>
 
-<!-- <div class="offset-section pt-5 pb-3" *ngIf="proposals ">
-  <div class="container">
-    <div class="scrollable-row" #proposalScrollBar *ngIf="proposals.results.length > 0; else noProposals">
-      <div class="scrollable-card" *ngFor="let proposal of proposals.results; trackBy: proposalsTrackBy">
-        <opdex-vault-proposal-card [proposal]="proposal" [latestBlock]="latestBlock"></opdex-vault-proposal-card>
-      </div>
-    </div>
-
-    <ng-template #noProposals>No available proposals.</ng-template>
-
-    <div class="row">
-      <div class="col-12">
-        <div class="paginator">
-          <div class="flex-row-center-center">
-            <button mat-icon-button [disabled]="!proposals?.paging?.previous" (click)="proposalsPageChange(proposals?.paging?.previous)"><mat-icon>{{icons.previous}}</mat-icon></button>
-            <button mat-icon-button [disabled]="!proposals?.paging?.next" (click)="proposalsPageChange(proposals?.paging?.next)"><mat-icon>{{icons.next}}</mat-icon></button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
-
 <div class="pt-5 pb-3 offset-section" *ngIf="!!certificates && !!certificates.results.length">
   <div class="container">
     <div class="row">
@@ -96,7 +73,6 @@
           </div>
         </div>
       </div>
-        <!-- <opdex-vault-certificates-table [certificates]="certificates" (onPageChange)="handlePageChange($event)"></opdex-vault-certificates-table> -->
     </div>
   </div>
 </div>
