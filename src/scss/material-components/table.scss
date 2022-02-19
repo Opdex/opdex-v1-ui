@@ -21,12 +21,12 @@
       }
 
       &:first-of-type {
-        padding-left: 0px !important;
-        padding-right: 8px;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
       }
 
       &:last-of-type {
-        padding-right: 0px !important;
+        padding-right: 8px !important;
         padding-left: 8px !important;
       }
     }
@@ -34,6 +34,10 @@
 
   tr.mat-row {
     height: 50px;
+
+    &.hoverable {
+      cursor: pointer;
+    }
   }
 
   td.mat-cell {
@@ -42,24 +46,24 @@
     padding-right: 8px;
 
     &:first-of-type {
-      padding-left: 0px !important;
+      padding-left: 8px !important;
       padding-right: 8px !important;
     }
 
     &:last-of-type {
-      padding-right: 0px !important;
+      padding-right: 8px !important;
       padding-left: 8px !important;
     }
   }
 
   td.mat-footer-cell {
     &:first-of-type {
-      padding-left: 0px !important;
+      padding-left: 8px !important;
       padding-right: 8px !important;
     }
 
     &:last-of-type {
-      padding-right: 0px !important;
+      padding-right: 8px !important;
       padding-left: 8px !important;
     }
   }

@@ -27,6 +27,7 @@ import { VaultProposalCardComponent } from './vault-proposal-card/vault-proposal
 import { LiquidityPoolSummaryCardComponent } from './liquidity-pool-summary-card/liquidity-pool-summary-card.component';
 import { TokenSummaryCardComponent } from './token-summary-card/token-summary-card.component';
 import { MarketSummaryCardComponent } from './market-summary-card/market-summary-card.component';
+import { VaultCertificateCardComponent } from './vault-certificate-card/vault-certificate-card.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { MarketSummaryCardComponent } from './market-summary-card/market-summary
     VaultProposalCardComponent,
     LiquidityPoolSummaryCardComponent,
     TokenSummaryCardComponent,
-    MarketSummaryCardComponent
+    MarketSummaryCardComponent,
+    VaultCertificateCardComponent
   ],
   imports: [
     CommonModule,
@@ -70,7 +72,8 @@ import { MarketSummaryCardComponent } from './market-summary-card/market-summary
     VaultProposalCardComponent,
     LiquidityPoolSummaryCardComponent,
     TokenSummaryCardComponent,
-    MarketSummaryCardComponent
+    MarketSummaryCardComponent,
+    VaultCertificateCardComponent
   ]
 })
 export class CardsModule { }

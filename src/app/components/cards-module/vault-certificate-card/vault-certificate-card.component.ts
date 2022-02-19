@@ -1,35 +1,38 @@
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { UserContext } from '@sharedModels/user-context';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { Icons } from 'src/app/enums/icons';
-import { Subscription } from 'rxjs';
-import { Token } from '@sharedModels/ui/tokens/token';
+import { VaultCertificate } from '@sharedModels/ui/vaults/vault-certificate';
 import { Component, Input, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ReviewQuoteComponent } from '@sharedComponents/tx-module/shared/review-quote/review-quote.component';
-import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { take } from 'rxjs/operators';
 
 @Component({
-  selector: 'opdex-token-summary-card',
-  templateUrl: './token-summary-card.component.html',
-  styleUrls: ['./token-summary-card.component.scss']
+  selector: 'opdex-vault-certificate-card',
+  templateUrl: './vault-certificate-card.component.html',
+  styleUrls: ['./vault-certificate-card.component.scss']
 })
-export class TokenSummaryCardComponent implements OnDestroy {
-  @Input() token: Token;
-  @Input() showTokenName: boolean;
-  latestBlock: number;
+export class VaultCertificateCardComponent implements OnDestroy {
+  @Input() cert: VaultCertificate;
   context: UserContext;
-  quoteErrors: string[];
-  subscription = new Subscription();
+  latestBlock: number;
   icons = Icons;
+  subscription = new Subscription();
+
+  public get vested(): boolean {
+    return !!this.latestBlock && !! this.cert && this.latestBlock > this.cert.vestingEndBlock;
+  }
 
   constructor(
     private _indexService: IndexService,
     private _userContextService: UserContextService,
     private _platformApiService: PlatformApiService,
+    private _env: EnvironmentsService,
     private _bottomSheet: MatBottomSheet
   ) {
     this.subscription.add(
@@ -41,15 +44,18 @@ export class TokenSummaryCardComponent implements OnDestroy {
         .subscribe(context => this.context = context));
   }
 
-  distribute(): void {
-    if (!this.context?.wallet || !this.token) return;
-
-    this._platformApiService.distributeTokensQuote(this.token.address)
-      .pipe(take(1))
-      .subscribe((quote: ITransactionQuote) => this._bottomSheet.open(ReviewQuoteComponent, { data: quote }),
-                 (error: OpdexHttpError) => this.quoteErrors = error.errors);
+  ngOnInit() {
+    console.log(this.cert)
   }
 
+  quoteRedemption(): void {
+    if (!this.context?.wallet) return;
+
+    this._platformApiService
+      .redeemVaultCertificate(this._env.vaultAddress)
+        .pipe(take(1))
+        .subscribe((quote: ITransactionQuote) => this._bottomSheet.open(ReviewQuoteComponent, { data: quote }));
+  }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();

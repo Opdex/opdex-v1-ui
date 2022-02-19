@@ -1,3 +1,4 @@
+import { RouterModule } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { SharedPipesModule } from '@sharedPipes/shared-pipes.module';
@@ -55,7 +56,8 @@ import { VaultProposalsTableComponent } from './vault-proposals-table/vault-prop
     CardsModule,
     ChartsModule,
     SharedModule,
-    SharedPipesModule
+    SharedPipesModule,
+    RouterModule
   ],
   exports: [
     PoolsTableComponent,

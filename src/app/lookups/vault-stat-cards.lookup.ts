@@ -35,6 +35,7 @@ export class VaultStatCardsLookup {
         value: vault?.totalPledgeMinimum,
         suffix: 'CRS',
         icon: Icons.pledge,
+        iconColor: 'blue',
         helpInfo: {
           title: 'Proposal Pledge Minimum',
           paragraph: 'The minimum number of CRS tokens required to collectively have pledged to move a proposal into the voting stage.'

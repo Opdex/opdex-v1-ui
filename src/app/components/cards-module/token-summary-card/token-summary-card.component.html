@@ -1,5 +1,10 @@
 <opdex-card>
   <ng-container *ngIf="token; else loading">
+    <div class="flex-row-center mb-2" *ngIf="showTokenName">
+      <opdex-token-icon [token]="token"></opdex-token-icon>
+      <a class="ml-2 b-400 no-decoration" routerLink="/tokens/{{token?.address}}">{{token?.name}} <small>({{token?.symbol}})</small></a>
+    </div>
+
     <div class="flex-row-center-between">
       <p class="mb-0">Price</p>
 
@@ -23,7 +28,7 @@
       <opdex-number [value]="token?.totalSupply" [short]="true"></opdex-number>
     </div>
 
-    <div class="flex-row-center-between">
+    <div class="flex-row-center-between" *ngIf="!showTokenName">
       <p class="mb-0">Decimals</p>
       <p class="mb-0">{{token?.decimals}}</p>
     </div>

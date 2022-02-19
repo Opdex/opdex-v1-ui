@@ -1,0 +1,19 @@
+.light-mode {
+  tr.mat-row {
+    &.hoverable {
+      &:hover {
+        background-color: #f4f6f7;
+      }
+    }
+  }
+}
+
+.dark-mode {
+  tr.mat-row {
+    &.hoverable {
+      &:hover {
+        background-color: #141325;
+      }
+    }
+  }
+}

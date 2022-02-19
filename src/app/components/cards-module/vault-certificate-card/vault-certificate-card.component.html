@@ -1,0 +1,41 @@
+<opdex-card>
+  <div class="flex-row-center-between">
+    <h4 class="mb-0">
+      <opdex-number [value]="cert.amount" suffix="ODX" [short]="true"></opdex-number>
+    </h4>
+
+    <button mat-icon-button color="primary" class="tiny" [matMenuTriggerFor]="beforeMenu" *ngIf="context?.wallet">
+      <mat-icon>{{icons.more}}</mat-icon>
+    </button>
+
+    <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
+      <button mat-menu-item class="small"
+        *ngIf="context?.wallet === cert.owner && !cert.redeemed && vested">
+        <mat-icon class="green">{{icons.rewards}}</mat-icon> Redeem
+      </button>
+
+      <button mat-menu-item class="small"
+        *ngIf="!vested && !cert.revoked">
+        <mat-icon class="red">{{icons.closeOutline}}</mat-icon> Revoke
+      </button>
+    </mat-menu>
+  </div>
+
+  <opdex-copy-address [address]="cert.owner"></opdex-copy-address>
+
+  <div class="flex-row-center-between flex-wrap mt-1">
+    <div class="flex-row-center">
+      <span class="badge mr-1 {{vested ? 'blue' : 'orange'}}">
+        {{vested ? 'Vested' : 'Vesting'}}
+        <mat-icon class="ml-1">{{vested ? icons.checkOutline : icons.refresh}}</mat-icon>
+      </span>
+
+      <span class="badge mr-1 red" *ngIf="cert.revoked">Revoked</span>
+      <span class="badge green" *ngIf="cert.redeemed">Redeemed</span>
+    </div>
+
+    <small class="light" *ngIf="!vested">
+      <opdex-number [value]="cert.vestingEndBlock - latestBlock" [short]="true"></opdex-number> Blocks
+    </small>
+  </div>
+</opdex-card>
