@@ -5,6 +5,8 @@ export const checkForUpdates = (swUpdate: SwUpdate): (() => Promise<any>) => {
     new Promise(resolve => {
       swUpdate.checkForUpdate();
 
+      console.log('checking for update...');
+
       swUpdate.versionUpdates
         .subscribe(() => window.location.reload());
 
