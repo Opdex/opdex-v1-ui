@@ -20,7 +20,7 @@ import { TransactionView } from '@sharedModels/transaction-view';
 import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
 import { VaultCertificatesFilter, IVaultCertificatesFilter } from '@sharedModels/platform-api/requests/vaults/vault-certificates-filter';
 import { UserContext } from '@sharedModels/user-context';
-import { VaultProposal } from '@sharedModels/ui/vaults/vault-proposal';
+import { VaultCertificate } from '@sharedModels/ui/vaults/vault-certificate';
 
 @Component({
   selector: 'opdex-vault',
@@ -116,8 +116,8 @@ export class VaultComponent implements OnInit {
     this.getVaultCertificates$().pipe(take(1)).subscribe();
   }
 
-  proposalsTrackBy(index: number, proposal: VaultProposal): string {
-    return `${index}-${proposal?.trackBy}`;
+  certificatesTrackBy(index: number, certificate: VaultCertificate): string {
+    return `${index}-${certificate?.trackBy}`;
   }
 
   statCardTrackBy(index: number, statCard: StatCardInfo): string {
