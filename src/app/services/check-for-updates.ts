@@ -10,11 +10,11 @@ export const checkForUpdates = (swUpdate: SwUpdate): (() => Promise<any>) => {
           updateAvailable => {
             console.log(`Update Available: ${updateAvailable}`);
             if (updateAvailable) window.location.reload();
-            resolve();
           },
           error => {
             console.error(error);
             window.location.reload();
-          });
+          })
+        .finally(() => resolve());
     });
 };
