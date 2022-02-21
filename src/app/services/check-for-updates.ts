@@ -1,8 +1,6 @@
 import { SwUpdate } from "@angular/service-worker";
 
 export const checkForUpdates = (swUpdate: SwUpdate): (() => Promise<any>) => {
-  console.log('getting ready to check for update...');
-
   return (): Promise<void> =>
     new Promise(resolve => {
       console.log('checking for update in promise...');
