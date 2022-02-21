@@ -49,7 +49,7 @@
             </div>
 
             <div class="flex-row-center" *ngIf="(element.status === 'Vote' && element.yesAmount.add(element.noAmount).bigInt < vault.totalVoteMinimum.bigInt) ||
-                                                (element.status === 'Pledge' && element.pledgeAmount < vault.totalPledgeMinimum.bigInt)">
+                                                (element.status === 'Pledge' && element.pledgeAmount.bigInt < vault.totalPledgeMinimum.bigInt)">
               <mat-icon class="blue tiny mr-1">{{icons.refresh}}</mat-icon>
               <span *ngIf="element.status === 'Pledge'">{{element.pledgeAmount.divide(vault.totalPledgeMinimum).multiply(oneHundred).formattedValue | formatNumber:0}}%</span>
               <span *ngIf="element.status === 'Vote'">{{element.yesAmount.add(element.noAmount).divide(vault.totalVoteMinimum).multiply(oneHundred).formattedValue | formatNumber:0}}%</span>
