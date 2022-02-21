@@ -19,6 +19,7 @@ import { take } from 'rxjs/operators';
 })
 export class TokenSummaryCardComponent implements OnDestroy {
   @Input() token: Token;
+  @Input() showTokenName: boolean;
   latestBlock: number;
   context: UserContext;
   quoteErrors: string[];

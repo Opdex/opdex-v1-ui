@@ -1,1 +1,12 @@
-<p>vault-certificate-transaction-summary works!</p>
+<ng-container *ngIf="vaultToken && amount">
+  <div class="flex-row-center">
+    <opdex-number
+      prefix="+"
+      [value]="amount"
+      [short]="true"
+      [stopPropagation]="true">
+    </opdex-number>
+
+    <a class="ml-1 no-decoration" routerLink="/tokens/{{vaultToken.address}}">{{vaultToken.symbol}}</a>
+  </div>
+</ng-container>

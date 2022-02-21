@@ -1,4 +1,3 @@
-import { VaultProposals } from '@sharedModels/ui/vaults/vault-proposals';
 import { VaultCertificates } from '@sharedModels/ui/vaults/vault-certificates';
 import { Vault } from '@sharedModels/ui/vaults/vault';
 import { Token } from '@sharedModels/ui/tokens/token';
@@ -19,9 +18,9 @@ import { StatCardInfo } from '@sharedModels/stat-card-info';
 import { VaultProposalsFilter } from '@sharedModels/platform-api/requests/vaults/vault-proposals-filter';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
-import { VaultCertificatesFilter, IVaultCertificatesFilter, VaultCertificateStatusFilter } from '@sharedModels/platform-api/requests/vaults/vault-certificates-filter';
+import { VaultCertificatesFilter, IVaultCertificatesFilter } from '@sharedModels/platform-api/requests/vaults/vault-certificates-filter';
 import { UserContext } from '@sharedModels/user-context';
-import { VaultProposal } from '@sharedModels/ui/vaults/vault-proposal';
+import { VaultCertificate } from '@sharedModels/ui/vaults/vault-certificate';
 
 @Component({
   selector: 'opdex-vault',
@@ -36,7 +35,6 @@ export class VaultComponent implements OnInit {
   token: Token;
   latestBlock: IBlock;
   statCards: StatCardInfo[];
-  proposals: VaultProposals;
   transactionsRequest: ITransactionsRequest;
   transactionViews = TransactionView;
   icons = Icons;
@@ -55,16 +53,15 @@ export class VaultComponent implements OnInit {
   ) {
     // Init with null to get default/loading animations
     this.statCards = VaultStatCardsLookup.getStatCards(null, null);
-    this.proposals = { results: [null, null, null, null], paging: {} } as VaultProposals;
+    this.certificates = { results: [null, null, null, null], paging: {} } as VaultCertificates;
 
     this.proposalsFilter = new VaultProposalsFilter({
-      limit: 4,
+      limit: 5,
       direction: 'DESC'
     } as IVaultProposalsFilter);
 
     this.certificatesFilter = new VaultCertificatesFilter({
-      status: [VaultCertificateStatusFilter.vesting],
-      limit: 10,
+      limit: 12,
       direction: 'DESC'
     } as IVaultCertificatesFilter);
 
@@ -83,15 +80,8 @@ export class VaultComponent implements OnInit {
         .pipe(
           tap(block => this.latestBlock = block),
           switchMap(_ => this.getVault$()),
-          switchMap(_ => this.getOpenProposals$()),
           switchMap(_ => this.getVaultCertificates$()))
         .subscribe());
-  }
-
-  getOpenProposals$(): Observable<VaultProposals> {
-    return this._vaultsService
-      .getProposals(this.proposalsFilter, this._env.vaultAddress)
-      .pipe(tap(proposals => this.proposals = proposals));
   }
 
   getVault$(): Observable<Token> {
@@ -111,31 +101,30 @@ export class VaultComponent implements OnInit {
       .pipe(tap(response => this.certificates = response));
   }
 
-  handlePageChange($event) {
+  handlePageChange($event): void {
     this.certificatesFilter.cursor = $event;
     this.getVaultCertificates$().pipe(take(1)).subscribe();
   }
 
-  openTransactionView(view: string) {
+  openTransactionView(view: string): void {
     this._sidebar.openSidenav(TransactionView.vaultProposal, { child: view });
   }
 
-  proposalsPageChange(cursor: string) {
-    this.proposalsFilter.cursor = cursor;
-    this.proposals = { results: [null, null, null, null], paging: {} } as VaultProposals;
-    this.proposalScrollBar.nativeElement.scrollTo({left: 0, behavior: 'smooth'});
-    this.getOpenProposals$().pipe(take(1)).subscribe();
+  certificatesPageChange(cursor: string): void {
+    this.certificatesFilter.cursor = cursor;
+    this.certificates = { results: [null, null, null, null], paging: {} } as VaultCertificates;
+    this.getVaultCertificates$().pipe(take(1)).subscribe();
   }
 
-  proposalsTrackBy(index: number, proposal: VaultProposal) {
-    return `${index}-${proposal?.trackBy}`;
+  certificatesTrackBy(index: number, certificate: VaultCertificate): string {
+    return `${index}-${certificate?.trackBy}`;
   }
 
-  statCardTrackBy(index: number, statCard: StatCardInfo) {
+  statCardTrackBy(index: number, statCard: StatCardInfo): string {
     return `${index}-${statCard?.title}-${statCard?.value?.formattedValue}`;
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 }

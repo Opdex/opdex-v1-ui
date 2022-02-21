@@ -2,60 +2,76 @@
   <div class="container">
     <div class="row mb-4">
       <div class="col-12">
-        <h1 class="mb-0">Vault</h1>
+        <h1 class="mb-0">{{token?.symbol}} Vault</h1>
         <opdex-copy-address [address]="vault?.vault"></opdex-copy-address>
       </div>
     </div>
 
     <div class="row">
-      <ng-container *ngFor="let statCard of statCards; trackBy: statCardTrackBy">
-        <div *ngIf="statCard.show" class="col-xs-12 col-sm col-xl-3">
-          <opdex-stat-card [statInfo]="statCard"></opdex-stat-card>
-        </div>
-      </ng-container>
+      <div class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3">
+        <opdex-card>
+          <ng-container *ngFor="let statCard of statCards; trackBy: statCardTrackBy">
+            <ng-container *ngIf="statCard.show">
+              <div class="flex-row-center-between">
+                <div class="d-inline-flex align-items-center mr-3">
+                  <opdex-help-button *ngIf="statCard.helpInfo" [info]="statCard.helpInfo" [icon]="statCard.icon" [iconColor]="statCard.iconColor" class="mr-2"></opdex-help-button>
+                  <p class="mb-0 no-wrap"><span *ngIf="statCard.daily">Daily</span> {{statCard.title}}</p>
+                </div>
+
+                <div class="d-inline-flex align-items-center no-wrap" *ngIf="statCard.value !== null && statCard.value !== undefined; else loadingStatValue">
+                  <opdex-number class="mr-2" [prefix]="statCard.prefix" [suffix]="statCard.suffix" [value]="statCard.value" [short]="true"></opdex-number>
+                  <opdex-change-indicator [value]="statCard.change" *ngIf="statCard.change !== null && statCard.change !== undefined"></opdex-change-indicator>
+                </div>
+
+                <ng-template #loadingStatValue>
+                  <div class="skeleton-bg w-50"></div>
+                </ng-template>
+              </div>
+            </ng-container>
+          </ng-container>
+        </opdex-card>
+
+        <opdex-token-summary-card [token]="token" [showTokenName]="true"></opdex-token-summary-card>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-7 col-lg-8 col-xl-9">
+        <opdex-card>
+          <div class="flex-row-center-between mb-1">
+            <h3 class="mb-0">Proposals</h3>
+
+            <button mat-stroked-button
+              color="primary"
+              (click)="openTransactionView('Create')"
+              *ngIf="context.wallet">
+              Create <mat-icon class="small">{{icons.add}}</mat-icon>
+            </button>
+          </div>
+
+          <opdex-vault-proposals-table [filter]="proposalsFilter"></opdex-vault-proposals-table>
+        </opdex-card>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="offset-section pt-5 pb-3" *ngIf="proposals ">
+<div class="pt-5 pb-3 offset-section" *ngIf="!!certificates && !!certificates.results.length">
   <div class="container">
     <div class="row">
-      <div class="col-12">
-        <div class="flex-row-center-between mb-3">
-          <h2 class="mb-0">Proposals</h2>
-
-          <button mat-stroked-button color="primary" (click)="openTransactionView('Create')" *ngIf="context.wallet"><mat-icon>{{icons.add}}</mat-icon> Create Proposal</button>
-        </div>
+      <div class="col-12 mb-3">
+        <h3 class="d-inline mb-0">Certificates</h3>
       </div>
-    </div>
 
-    <div class="scrollable-row" #proposalScrollBar *ngIf="proposals.results.length > 0; else noProposals">
-      <div class="scrollable-card" *ngFor="let proposal of proposals.results; trackBy: proposalsTrackBy">
-        <opdex-vault-proposal-card [proposal]="proposal" [latestBlock]="latestBlock"></opdex-vault-proposal-card>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *ngFor="let certificate of certificates.results; trackBy: certificatesTrackBy">
+        <opdex-vault-certificate-card [cert]="certificate"></opdex-vault-certificate-card>
       </div>
-    </div>
 
-    <ng-template #noProposals>No available proposals.</ng-template>
-
-    <div class="row">
       <div class="col-12">
         <div class="paginator">
           <div class="flex-row-center-center">
-            <button mat-icon-button [disabled]="!proposals?.paging?.previous" (click)="proposalsPageChange(proposals?.paging?.previous)"><mat-icon>{{icons.previous}}</mat-icon></button>
-            <button mat-icon-button [disabled]="!proposals?.paging?.next" (click)="proposalsPageChange(proposals?.paging?.next)"><mat-icon>{{icons.next}}</mat-icon></button>
+            <button mat-icon-button [disabled]="!certificates?.paging?.previous" (click)="certificatesPageChange(certificates?.paging?.previous)"><mat-icon>{{icons.previous}}</mat-icon></button>
+            <button mat-icon-button [disabled]="!certificates?.paging?.next" (click)="certificatesPageChange(certificates?.paging?.next)"><mat-icon>{{icons.next}}</mat-icon></button>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="pt-5 pb-3 standard-section" *ngIf="!!certificates && !!certificates.results.length">
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <h4 class="d-inline mb-0">Vesting Certificates</h4>
-        <opdex-vault-certificates-table [certificates]="certificates" (onPageChange)="handlePageChange($event)"></opdex-vault-certificates-table>
       </div>
     </div>
   </div>

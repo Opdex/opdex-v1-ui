@@ -1,5 +1,4 @@
 export enum VaultCertificateStatusFilter {
-  all = 'All',
   vesting = 'Vesting',
   redeemed = 'Redeemed',
   revoked = 'Revoked'

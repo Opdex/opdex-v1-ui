@@ -1,0 +1,160 @@
+<ng-container *ngIf="!loading; else loader">
+  <ng-container *ngIf="dataSource?.data?.length; else noResults">
+    <div class="table-container">
+      <table mat-table [dataSource]="dataSource" matSort [trackBy]="trackBy" class="w-100">
+        <ng-container matColumnDef="proposalId" sticky>
+          <th mat-header-cell *matHeaderCellDef>No.</th>
+          <td mat-cell *matCellDef="let element">
+            <span class="b-400">#{{element.proposalId}}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>Type</th>
+          <td mat-cell *matCellDef="let element">
+            <span class="no-wrap" *ngIf="element.type === 'Create'">New Certificate</span>
+            <span class="no-wrap" *ngIf="element.type === 'Revoke'">Revoke Certificate</span>
+            <span class="no-wrap" *ngIf="element.type === 'TotalPledgeMinimum'">Pledge Minimum</span>
+            <span class="no-wrap" *ngIf="element.type === 'TotalVoteMinimum'">Vote Minimum</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="proposed">
+          <th mat-header-cell *matHeaderCellDef>Proposed</th>
+          <td mat-cell *matCellDef="let element">
+            <opdex-number
+              [suffix]="element.type === 'Create' ||
+                        element.type === 'Revoke'
+                          ? 'ODX' : 'CRS'"
+              [value]="element.amount"
+              [short]="true">
+            </opdex-number>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let element">
+            <span class="no-wrap">{{element.status}}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="minimums">
+          <th mat-header-cell *matHeaderCellDef>Minimums</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="flex-row-center" *ngIf="(element.status === 'Pledge' && element.pledgeAmount >= vault.totalPledgeMinimum.bigInt) ||
+                                                (element.status === 'Vote' && element.yesAmount.add(element.noAmount).bigInt >= vault.totalVoteMinimum.bigInt) ||
+                                                (element.status === 'Complete' && element.approved)">
+              <mat-icon class="green tiny mr-1">{{icons.checkOutline}}</mat-icon> Met
+            </div>
+
+            <div class="flex-row-center" *ngIf="(element.status === 'Vote' && element.yesAmount.add(element.noAmount).bigInt < vault.totalVoteMinimum.bigInt) ||
+                                                (element.status === 'Pledge' && element.pledgeAmount < vault.totalPledgeMinimum.bigInt)">
+              <mat-icon class="blue tiny mr-1">{{icons.refresh}}</mat-icon>
+              <span *ngIf="element.status === 'Pledge'">{{element.pledgeAmount.divide(vault.totalPledgeMinimum).multiply(oneHundred).formattedValue | formatNumber:0}}%</span>
+              <span *ngIf="element.status === 'Vote'">{{element.yesAmount.add(element.noAmount).divide(vault.totalVoteMinimum).multiply(oneHundred).formattedValue | formatNumber:0}}%</span>
+            </div>
+
+            <div class="flex-row-center" *ngIf="element.status === 'Complete' && !element.approved">
+              <mat-icon class="red tiny mr-1">{{icons.closeOutline}}</mat-icon> Fail
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="progress">
+          <th mat-header-cell *matHeaderCellDef>Progress</th>
+          <td mat-cell *matCellDef="let element">
+            <opdex-number
+              suffix="CRS"
+              [value]="element.pledgeAmount"
+              *ngIf="element.status === 'Pledge'"
+              [short]="true">
+            </opdex-number>
+
+            <div class="flex-row-center" *ngIf="element.status === 'Vote'">
+              <div class="flex-row-center mr-2">
+                <mat-icon class="tiny green mr-2">{{icons.thumbUp}}</mat-icon>
+                <opdex-number suffix="%" [value]="element.percentApproved" [short]="true"></opdex-number>
+              </div>
+            </div>
+
+            <span class="badge {{element.approved ? 'green' : 'red'}}" *ngIf="element.status === 'Complete'">
+              {{element.approved ? 'Approved' : 'Denied'}}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="expiration">
+          <th mat-header-cell *matHeaderCellDef> Expiration </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="no-wrap" *ngIf="element.expiration > latestBlock">
+              <opdex-number [value]="element.expiration - latestBlock"></opdex-number>
+              Blocks
+            </span>
+            <span class="no-wrap" *ngIf="element.expiration <= latestBlock">Expired</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions" stickyEnd>
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <div class="flex-row-center-end" *ngIf="context?.wallet">
+              <button class="small" mat-icon-button color="primary" [matMenuTriggerFor]="beforeMenu" (click)="$event.stopPropagation()">
+                <mat-icon>{{icons.more}}</mat-icon>
+              </button>
+            </div>
+
+            <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
+              <button mat-menu-item class="small"
+                (click)="openSidebar('Pledge', element.proposalId, false)"
+                *ngIf="element.status === 'Pledge'">
+                <mat-icon class="blue">{{icons.pledge}}</mat-icon> Add Pledge
+              </button>
+
+              <button mat-menu-item class="small"
+                (click)="openSidebar('Pledge', element.proposalId, true)"
+                *ngIf="element.status === 'Pledge' || element.status === 'Vote' || element.status === 'Complete'">
+                <mat-icon class="blue">{{icons.pledge}}</mat-icon> Withdraw Pledge
+              </button>
+
+              <button mat-menu-item class="small"
+                (click)="openSidebar('Vote', element.proposalId, false)"
+                *ngIf="element.status === 'Vote'">
+                <mat-icon class="purple">{{icons.proposal}}</mat-icon> Add Vote
+              </button>
+
+              <button mat-menu-item class="small"
+                (click)="openSidebar('Vote', element.proposalId, true)"
+                *ngIf="element.status === 'Vote' || element.status === 'Complete'">
+                <mat-icon class="purple">{{icons.proposal}}</mat-icon> Withdraw Vote
+              </button>
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" ></tr>
+        <tr mat-row
+          class="hoverable"
+          *matRowDef="let row; columns: displayedColumns;"
+          routerLink="/vault/proposal/{{row.proposalId}}"></tr>
+      </table>
+    </div>
+
+    <div class="paginator">
+      <div class="flex-row-center-center">
+        <button mat-icon-button [disabled]="!paging?.previous" (click)="pageChange(paging?.previous)"><mat-icon>{{icons.previous}}</mat-icon></button>
+        <button mat-icon-button [disabled]="!paging?.next" (click)="pageChange(paging?.next)"><mat-icon>{{icons.next}}</mat-icon></button>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #noResults>
+    <div class="mt-2">
+      <p class="text-center light">No proposals found</p>
+    </div>
+  </ng-template>
+</ng-container>
+
+<ng-template #loader>
+  <opdex-skeleton-table></opdex-skeleton-table>
+</ng-template>
