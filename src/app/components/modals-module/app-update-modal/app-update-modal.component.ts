@@ -10,6 +10,6 @@ export class AppUpdateModalComponent {
   icons = Icons;
 
   update(): void {
-    document.location.reload();
+    window.location.reload();
   }
 }

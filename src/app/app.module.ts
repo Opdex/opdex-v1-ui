@@ -4,7 +4,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { JwtService } from './services/utility/jwt.service';
 import { BrowserModule } from '@angular/platform-browser';
-import { ErrorHandler, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -55,12 +55,13 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ErrorMiddlewareService } from '@sharedServices/middleware/error-middleware.service';
 import { NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule } from 'ngx-google-analytics';
 import { environment } from '@environments/environment';
-import { ServiceWorkerModule } from '@angular/service-worker';
+import { ServiceWorkerModule, SwUpdate } from '@angular/service-worker';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NotificationsModule } from '@sharedComponents/notifications-module/notifications.module';
 import { TradeComponent } from './views/trade/trade.component';
 import { VaultComponent } from './views/vault/vault.component';
 import { VaultProposalComponent } from './views/vault-proposal/vault-proposal.component';
+import { checkForUpdates } from '@sharedServices/check-for-updates';
 
 @NgModule({
   declarations: [
@@ -132,7 +133,18 @@ import { VaultProposalComponent } from './views/vault-proposal/vault-proposal.co
   ],
   providers: [
     JwtService,
-    {provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}},
+    {
+      provide: APP_INITIALIZER,
+      useFactory: checkForUpdates,
+      multi: true,
+      deps: [SwUpdate]
+    },
+    {
+      provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
+      useValue: {
+        hasBackdrop: true
+      }
+    },
     {
       provide: ErrorHandler,
       useClass: ErrorMiddlewareService,
