@@ -1,3 +1,4 @@
+import { IVaultCertificate } from './vault-certificate.interface';
 export interface IVaultProposalResponseModel {
   vault: string;
   token: string;
@@ -13,6 +14,7 @@ export interface IVaultProposalResponseModel {
   noAmount: string;
   pledgeAmount: string;
   approved: boolean;
+  certificate?: IVaultCertificate;
   createdBlock: number;
   modifiedBlock: number;
 }

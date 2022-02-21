@@ -92,6 +92,10 @@ export class TxVaultProposalCreateComponent extends TxBase implements OnDestroy 
         .subscribe());
   }
 
+  ngOnChanges(): void {
+    if (this.data?.form) this.form.patchValue(this.data.form);
+  }
+
   submit(): void {
     const vault = this._env.vaultAddress;
     if (!vault) return;
@@ -146,11 +150,11 @@ export class TxVaultProposalCreateComponent extends TxBase implements OnDestroy 
         tap(result => this.balanceError = !result));
   }
 
-  destroyContext$() {
+  destroyContext$(): void {
     this.context$.unsubscribe();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroyContext$();
     this.subscription.unsubscribe();
   }

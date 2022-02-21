@@ -35,7 +35,6 @@ export class VaultComponent implements OnInit {
   token: Token;
   latestBlock: IBlock;
   statCards: StatCardInfo[];
-  // proposals: VaultProposals;
   transactionsRequest: ITransactionsRequest;
   transactionViews = TransactionView;
   icons = Icons;
@@ -54,7 +53,7 @@ export class VaultComponent implements OnInit {
   ) {
     // Init with null to get default/loading animations
     this.statCards = VaultStatCardsLookup.getStatCards(null, null);
-    // this.proposals = { results: [null, null, null, null], paging: {} } as VaultProposals;
+    this.certificates = { results: [null, null, null, null], paging: {} } as VaultCertificates;
 
     this.proposalsFilter = new VaultProposalsFilter({
       limit: 5,
@@ -81,16 +80,9 @@ export class VaultComponent implements OnInit {
         .pipe(
           tap(block => this.latestBlock = block),
           switchMap(_ => this.getVault$()),
-          // switchMap(_ => this.getOpenProposals$()),
           switchMap(_ => this.getVaultCertificates$()))
         .subscribe());
   }
-
-  // getOpenProposals$(): Observable<VaultProposals> {
-  //   return this._vaultsService
-  //     .getProposals(this.proposalsFilter, this._env.vaultAddress)
-  //     .pipe(tap(proposals => this.proposals = proposals));
-  // }
 
   getVault$(): Observable<Token> {
     return this._vaultsService.getVault()
@@ -109,38 +101,30 @@ export class VaultComponent implements OnInit {
       .pipe(tap(response => this.certificates = response));
   }
 
-  handlePageChange($event) {
+  handlePageChange($event): void {
     this.certificatesFilter.cursor = $event;
     this.getVaultCertificates$().pipe(take(1)).subscribe();
   }
 
-  openTransactionView(view: string) {
+  openTransactionView(view: string): void {
     this._sidebar.openSidenav(TransactionView.vaultProposal, { child: view });
   }
 
-  certificatesPageChange(cursor: string) {
+  certificatesPageChange(cursor: string): void {
     this.certificatesFilter.cursor = cursor;
     this.certificates = { results: [null, null, null, null], paging: {} } as VaultCertificates;
-    // this.proposalScrollBar.nativeElement.scrollTo({left: 0, behavior: 'smooth'});
     this.getVaultCertificates$().pipe(take(1)).subscribe();
   }
 
-  // proposalsPageChange(cursor: string) {
-  //   this.proposalsFilter.cursor = cursor;
-  //   this.proposals = { results: [null, null, null, null], paging: {} } as VaultProposals;
-  //   this.proposalScrollBar.nativeElement.scrollTo({left: 0, behavior: 'smooth'});
-  //   this.getOpenProposals$().pipe(take(1)).subscribe();
-  // }
-
-  proposalsTrackBy(index: number, proposal: VaultProposal) {
+  proposalsTrackBy(index: number, proposal: VaultProposal): string {
     return `${index}-${proposal?.trackBy}`;
   }
 
-  statCardTrackBy(index: number, statCard: StatCardInfo) {
+  statCardTrackBy(index: number, statCard: StatCardInfo): string {
     return `${index}-${statCard?.title}-${statCard?.value?.formattedValue}`;
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 }

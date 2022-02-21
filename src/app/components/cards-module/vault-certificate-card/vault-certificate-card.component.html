@@ -1,41 +1,58 @@
 <opdex-card>
-  <div class="flex-row-center-between">
-    <h4 class="mb-0">
-      <opdex-number [value]="cert.amount" suffix="ODX" [short]="true"></opdex-number>
-    </h4>
+  <ng-container *ngIf="cert; else loading">
+    <div class="flex-row-center-between">
+      <div class="flex-row-center" *ngIf="context?.wallet && context.wallet === cert.owner">
+        <mat-icon class="yellow tiny mr-1">{{icons.rewards}}</mat-icon>
 
-    <button mat-icon-button color="primary" class="tiny" [matMenuTriggerFor]="beforeMenu" *ngIf="context?.wallet">
-      <mat-icon>{{icons.more}}</mat-icon>
-    </button>
+        <h4 class="mb-0">
+          <opdex-number [value]="cert.amount" suffix="ODX" [short]="true"></opdex-number>
+        </h4>
+      </div>
 
-    <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
-      <button mat-menu-item class="small"
-        *ngIf="context?.wallet === cert.owner && !cert.redeemed && vested">
-        <mat-icon class="green">{{icons.rewards}}</mat-icon> Redeem
+      <button mat-icon-button color="primary" class="tiny" [matMenuTriggerFor]="beforeMenu" *ngIf="showMenu">
+        <mat-icon>{{icons.more}}</mat-icon>
       </button>
 
-      <button mat-menu-item class="small"
-        *ngIf="!vested && !cert.revoked">
-        <mat-icon class="red">{{icons.closeOutline}}</mat-icon> Revoke
-      </button>
-    </mat-menu>
-  </div>
+      <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
+        <button mat-menu-item class="small"
+          (click)="quoteRedemption()"
+          *ngIf="showRedemption">
+          <mat-icon class="green">{{icons.rewards}}</mat-icon> Redeem
+        </button>
 
-  <opdex-copy-address [address]="cert.owner"></opdex-copy-address>
-
-  <div class="flex-row-center-between flex-wrap mt-1">
-    <div class="flex-row-center">
-      <span class="badge mr-1 {{vested ? 'blue' : 'orange'}}">
-        {{vested ? 'Vested' : 'Vesting'}}
-        <!-- <mat-icon class="ml-1">{{vested ? icons.checkOutline : icons.refresh}}</mat-icon> -->
-      </span>
-
-      <span class="badge mr-1 red" *ngIf="cert.revoked">Revoked</span>
-      <span class="badge green" *ngIf="cert.redeemed">Redeemed</span>
+        <button mat-menu-item class="small"
+          (click)="revokeProposal()"
+          *ngIf="showRevocation">
+          <mat-icon class="red">{{icons.closeOutline}}</mat-icon> Revoke
+        </button>
+      </mat-menu>
     </div>
 
-    <small class="light" *ngIf="!vested">
-      <opdex-number [value]="cert.vestingEndBlock - latestBlock" [short]="true"></opdex-number> Blocks
-    </small>
-  </div>
+    <opdex-copy-address [address]="cert.owner"></opdex-copy-address>
+
+    <div class="flex-row-center-between flex-wrap mt-1">
+      <div class="flex-row-center">
+        <span class="badge mr-1 blue" *ngIf="vested">Vested</span>
+        <span class="badge mr-1 orange" *ngIf="!vested">Vesting</span>
+        <span class="badge mr-1 red" *ngIf="cert.revoked">Revoked</span>
+        <span class="badge green" *ngIf="cert.redeemed">Redeemed</span>
+      </div>
+
+      <small class="light" *ngIf="!vested">
+        <opdex-number [value]="cert.vestingEndBlock - latestBlock" [short]="true"></opdex-number> Blocks
+      </small>
+    </div>
+  </ng-container>
+
+  <ng-template #loading>
+    <div class="w-100">
+      <div class="skeleton-bg w-50 mb-1"></div>
+      <div class="skeleton-bg w-75 mb-1"></div>
+
+      <div class="flex-row-center mb-1">
+        <div class="skeleton-bg w-25 mr-1"></div>
+        <div class="skeleton-bg w-25"></div>
+      </div>
+    </div>
+  </ng-template>
 </opdex-card>

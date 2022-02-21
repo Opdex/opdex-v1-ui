@@ -1,3 +1,4 @@
+import { VaultCertificate } from '@sharedModels/ui/vaults/vault-certificate';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { IVaultProposalResponseModel } from '@sharedModels/platform-api/responses/vaults/vault-proposal-response-model.interface';
 
@@ -16,6 +17,7 @@ export class VaultProposal {
   private _noAmount: FixedDecimal;
   private _pledgeAmount: FixedDecimal;
   private _approved: boolean;
+  private _certificate?: VaultCertificate;
   private _createdBlock: number;
   private _modifiedBlock: number;
 
@@ -75,6 +77,10 @@ export class VaultProposal {
     return this._approved;
   }
 
+  public get certificate(): VaultCertificate {
+    return this._certificate;
+  }
+
   public get createdBlock(): number {
     return this._createdBlock;
   }
@@ -116,6 +122,7 @@ export class VaultProposal {
     this._noAmount = new FixedDecimal(proposal.noAmount, 8);
     this._pledgeAmount = new FixedDecimal(proposal.pledgeAmount, 8);
     this._approved = proposal.approved;
+    this._certificate = !!proposal.certificate ? new VaultCertificate(proposal.certificate) : null;
     this._createdBlock = proposal.createdBlock;
     this._modifiedBlock = proposal.modifiedBlock;
   }
