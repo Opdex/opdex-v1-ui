@@ -1,15 +1,22 @@
 import { SwUpdate } from "@angular/service-worker";
 
 export const checkForUpdates = (swUpdate: SwUpdate): (() => Promise<any>) => {
+  console.log('getting ready to check for update...');
+
   return (): Promise<void> =>
     new Promise(resolve => {
-      swUpdate.checkForUpdate();
+      console.log('checking for update in promise...');
 
-      console.log('checking for update...');
-
-      swUpdate.versionUpdates
-        .subscribe(() => window.location.reload());
-
-      resolve();
+      swUpdate.checkForUpdate()
+        .then(
+          updateAvailable => {
+            console.log(`Update Available: ${updateAvailable}`);
+            if (updateAvailable) window.location.reload();
+            resolve();
+          },
+          error => {
+            console.error(error);
+            window.location.reload();
+          });
     });
 };

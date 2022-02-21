@@ -70,8 +70,13 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   ) {
     window.addEventListener('resize', this.appHeight);
     this.appHeight();
-    this._appUpdate.versionUpdates.pipe(take(1)).subscribe(_ => this.openAppUpdate());
+
+    this._appUpdate.versionUpdates
+      .pipe(take(1))
+      .subscribe(_ => this.openAppUpdate());
+
     this.configuredForEnv = !!this._env.marketAddress && !!this._env.routerAddress;
+
     setTimeout(() => this.loading = false, 1500);
   }
 
@@ -134,11 +139,11 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     location.reload();
   }
 
-  handleSidenavModeChange(event: 'over' | 'side') {
+  handleSidenavModeChange(event: 'over' | 'side'): void {
     this.sidenavMode = event;
   }
 
-  closeSidenav() {
+  closeSidenav(): void {
     this._sidenav.closeSidenav();
   }
 
@@ -146,15 +151,15 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData.animation;
   }
 
-  handleToggleMenu() {
+  handleToggleMenu(): void {
     this.menuOpen = !this.menuOpen;
   }
 
-  handlePinnedToggle(event: boolean) {
+  handlePinnedToggle(event: boolean): void {
     this.isPinned = event;
   }
 
-  handleRouteChanged(url: string) {
+  handleRouteChanged(url: string): void {
     // dont care about the url just close the menu
     this.menuOpen = false;
   }
@@ -235,7 +240,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     }
   }
 
-  private appHeight() {
+  private appHeight(): void {
     const height = window.innerHeight;
 
     if (height !== this.appHeightRecorded) {
