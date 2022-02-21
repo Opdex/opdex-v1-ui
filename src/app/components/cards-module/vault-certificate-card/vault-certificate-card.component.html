@@ -1,8 +1,8 @@
 <opdex-card>
   <ng-container *ngIf="cert; else loading">
     <div class="flex-row-center-between">
-      <div class="flex-row-center" *ngIf="context?.wallet && context.wallet === cert.owner">
-        <mat-icon class="yellow tiny mr-1">{{icons.rewards}}</mat-icon>
+      <div class="flex-row-center">
+        <mat-icon class="yellow tiny mr-1" *ngIf="context?.wallet && context.wallet === cert.owner">{{icons.rewards}}</mat-icon>
 
         <h4 class="mb-0">
           <opdex-number [value]="cert.amount" suffix="ODX" [short]="true"></opdex-number>
