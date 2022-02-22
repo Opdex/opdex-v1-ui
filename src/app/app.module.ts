@@ -20,7 +20,6 @@ import { CardsModule } from '@sharedComponents/cards-module/cards.module';
 import { SharedModule } from '@sharedComponents/shared-module/shared.module';
 import { MatBottomSheetModule, MAT_BOTTOM_SHEET_DEFAULT_OPTIONS } from '@angular/material/bottom-sheet';
 
-
 import { PoolsComponent } from './views/pools/pools.component';
 import { PoolComponent } from './views/pool/pool.component';
 import { MarketComponent } from './views/market/market.component';

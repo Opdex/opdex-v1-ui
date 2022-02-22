@@ -87,8 +87,6 @@ export class LineChartComponent implements OnChanges, OnInit {
           this.candleSeries.setData(this.chartData);
         }
 
-        this.applyChartOptions();
-
         if (this.loading) {
           this.chart.timeScale().fitContent();
           // this.chart.subscribeCrosshairMove(params => this.crosshairMovedHandler(params));
@@ -105,6 +103,7 @@ export class LineChartComponent implements OnChanges, OnInit {
     setTimeout(() => {
       if (!this.chart) {
         this.chart = createChart('chartdiv', this.options);
+        this.applyChartOptions();
       }
     })
   }
@@ -147,6 +146,7 @@ export class LineChartComponent implements OnChanges, OnInit {
       lineColor: 'rgba(71, 188, 235, .6)',
       lineWidth: <DeepPartial<LineWidth>>4,
       topColor: 'rgba(71, 188, 235, .5)',
+      bottomColor: this.theme === 'light-mode' ? 'rgba(255, 255, 255, .4)' : 'rgba(0, 0, 0, .1)',
       priceLineVisible: true,
       lastValueVisible: false,
       priceFormat: {
@@ -247,6 +247,7 @@ export class LineChartComponent implements OnChanges, OnInit {
       rightPriceScale: {
         borderVisible: false,
         alignLabels: true,
+        autoScale: true
       },
       handleScroll: true,
       handleScale: true

@@ -1,3 +1,5 @@
+import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
+import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { MarketTokens } from '@sharedModels/ui/tokens/market-tokens';
 import { MarketToken } from '@sharedModels/ui/tokens/market-token';
 import { Paging } from '@sharedModels/ui/paging';
@@ -17,6 +19,7 @@ import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
 import { TokenHistory } from '@sharedModels/ui/tokens/token-history';
+import { TransactionView } from '@sharedModels/transaction-view';
 
 @Component({
   selector: 'opdex-tokens-table',
@@ -35,12 +38,18 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private _router: Router, private _tokensService: TokensService, private _indexService: IndexService) {
+  constructor(
+    private _router: Router,
+    private _tokensService: TokensService,
+    private _indexService: IndexService,
+    private _sidebar: SidenavService,
+    private _liquidityPoolsService: LiquidityPoolsService
+  ) {
     this.dataSource = new MatTableDataSource<any>();
-    this.displayedColumns = ['token', 'name', 'interflux', 'price', 'history'];
+    this.displayedColumns = ['token', 'name', 'nativeChain', 'price', 'history', 'actions'];
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     if (this.filter && !this.subscription) {
       this.subscription = new Subscription();
       this.subscription.add(
@@ -79,19 +88,33 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
         }));
   }
 
-  pageChange(cursor: string) {
+  provide(poolAddress: string): void {
+    this._openSidebarWithPool(TransactionView.provide, poolAddress);
+  }
+
+  swap(poolAddress: string): void {
+    this._openSidebarWithPool(TransactionView.swap, poolAddress);
+  }
+
+  pageChange(cursor: string): void {
     this.getTokens$(cursor).pipe(take(1)).subscribe();
   }
 
-  navigate(name: string) {
+  navigate(name: string): void {
     this._router.navigateByUrl(`/tokens/${name}`);
   }
 
-  trackBy(index: number, token: Token) {
+  trackBy(index: number, token: Token): string {
     return `${index}-${token?.trackBy}`;
   }
 
-  ngOnDestroy() {
+  private _openSidebarWithPool(txView: TransactionView, address: string): void {
+    this._liquidityPoolsService.getLiquidityPool(address)
+      .pipe(take(1))
+      .subscribe(pool => this._sidebar.openSidenav(txView, { pool }));
+  }
+
+  ngOnDestroy(): void {
     if (this.subscription) this.subscription.unsubscribe();
   }
 }
