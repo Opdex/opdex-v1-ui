@@ -71,13 +71,14 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     window.addEventListener('resize', this.appHeight);
     this.appHeight();
 
-    this._appUpdate.versionUpdates
-      .pipe(take(1))
-      .subscribe(_ => this.openAppUpdate());
-
     this.configuredForEnv = !!this._env.marketAddress && !!this._env.routerAddress;
 
-    setTimeout(() => this.loading = false, 1500);
+    setTimeout(() => {
+      this.loading = false;
+      this._appUpdate.versionUpdates
+        .pipe(take(1))
+        .subscribe(_ => this.openAppUpdate());
+    }, 1500);
   }
 
   ngAfterContentChecked(): void {

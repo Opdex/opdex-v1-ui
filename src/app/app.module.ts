@@ -52,7 +52,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ErrorMiddlewareService } from '@sharedServices/middleware/error-middleware.service';
-import { NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule } from 'ngx-google-analytics';
+import { NgxGoogleAnalyticsModule } from 'ngx-google-analytics';
 import { environment } from '@environments/environment';
 import { ServiceWorkerModule, SwUpdate } from '@angular/service-worker';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -124,8 +124,6 @@ import { checkForUpdates } from '@sharedServices/check-for-updates';
       }
     }),
     NgxGoogleAnalyticsModule.forRoot(environment.ga),
-    // Should disable automatic posts causing duplicates for views w/ dynamic page titles
-    // NgxGoogleAnalyticsRouterModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: 'registerImmediately'
