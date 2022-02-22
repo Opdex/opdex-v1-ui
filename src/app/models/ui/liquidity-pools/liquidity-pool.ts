@@ -51,6 +51,14 @@ export class LiquidityPool {
     return this._modifiedBlock;
   }
 
+  public get hasStaking(): boolean {
+    return !!this.tokens.staking;
+  }
+
+  public get hasMining(): boolean {
+    return !!this.miningPool;
+  }
+
   public get trackBy(): string {
     const { summary, miningPool, address } = this;
     const { cost, reserves, staking, volume } = summary;

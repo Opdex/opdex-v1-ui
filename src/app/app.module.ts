@@ -124,7 +124,8 @@ import { checkForUpdates } from '@sharedServices/check-for-updates';
       }
     }),
     NgxGoogleAnalyticsModule.forRoot(environment.ga),
-    NgxGoogleAnalyticsRouterModule,
+    // Should disable automatic posts causing duplicates for views w/ dynamic page titles
+    // NgxGoogleAnalyticsRouterModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: 'registerImmediately'

@@ -1,3 +1,4 @@
+import { UserContext } from '@sharedModels/user-context';
 import { Token } from '@sharedModels/ui/tokens/token';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { IndexService } from '@sharedServices/platform/index.service';
@@ -6,7 +7,6 @@ import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
-import { StatCardInfo } from "@sharedModels/stat-card-info";
 import { ITransactionsRequest } from "@sharedModels/platform-api/requests/transactions/transactions-filter";
 import { IAddressBalance } from "@sharedModels/platform-api/responses/wallets/address-balance.interface";
 import { ISidenavMessage, TransactionView } from "@sharedModels/transaction-view";
@@ -24,7 +24,6 @@ import { Icons } from 'src/app/enums/icons';
 import { LiquidityPoolHistory } from '@sharedModels/ui/liquidity-pools/liquidity-pool-history';
 import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
-import { PoolStatCardsLookup } from '@sharedLookups/pool-stat-cards.lookup';
 import { ILiquidityPoolSnapshotHistoryResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-snapshots-responses.interface';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 
@@ -45,6 +44,10 @@ export class PoolComponent implements OnInit, OnDestroy {
   positions: any[];
   iconSizes = IconSizes;
   icons = Icons;
+  context$: Observable<UserContext>;
+  message: ISidenavMessage;
+  historyFilter: HistoryFilter;
+  isCurrentMarket: boolean;
   chartOptions = [
     {
       type: 'line',
@@ -78,12 +81,7 @@ export class PoolComponent implements OnInit, OnDestroy {
     }
   ]
   selectedChart = this.chartOptions[0];
-  statCards: StatCardInfo[];
-  context$: Observable<any>;
-  message: ISidenavMessage;
-  historyFilter: HistoryFilter;
-  isCurrentMarket: boolean;
-  one = FixedDecimal.One(0);
+
 
   constructor(
     private _route: ActivatedRoute,
@@ -97,9 +95,6 @@ export class PoolComponent implements OnInit, OnDestroy {
     private _indexService: IndexService,
     private _env: EnvironmentsService
   ) {
-    // init stat cards with null for loading/default animations
-    this.statCards = PoolStatCardsLookup.getStatCards(this.pool);
-
     this.subscription.add(
       this._sidenav.getStatus()
         .subscribe((message: ISidenavMessage) => this.message = message));
@@ -146,20 +141,18 @@ export class PoolComponent implements OnInit, OnDestroy {
     this._sidenav.openSidenav(view, data);
   }
 
-  private getLiquidityPool(): Observable<any> {
+  private getLiquidityPool(): Observable<LiquidityPool> {
     return this._liquidityPoolsService.getLiquidityPool(this.poolAddress)
       .pipe(
         catchError(_ => of(null)),
-        tap(pool => this.pool = pool),
-        map((pool) => {
-          if (pool === null) {
+        tap((pool: LiquidityPool) => {
+          if (!!pool === false) {
             this._router.navigateByUrl('/pools');
             return;
           }
 
-          var contracts = [pool.address, pool.tokens.src.address];
-
-          if (pool?.miningPool?.address) contracts.push(pool.miningPool.address);
+          const contracts = [pool.address, pool.tokens.src.address];
+          if (pool.hasMining) contracts.push(pool.miningPool.address);
 
           this.transactionsRequest = {
             limit: 15,
@@ -180,16 +173,21 @@ export class PoolComponent implements OnInit, OnDestroy {
             ],
           };
 
-          if (this.pool){
-            this._gaService.pageView(this._route.routeConfig.path, `${this.pool.name} Liquidity Pool`)
-            this._title.setTitle(`${this.pool.name} Liquidity Pool`);
-            this.statCards = PoolStatCardsLookup.getStatCards(this.pool);
-            this.chartOptions.map(o => {
-              if (o.category === 'Staking') o.suffix = pool.tokens.staking?.symbol;
-              return 0;
-            });
+          // This will be true for initial page load or if the pool changes otherwise since we set this.pool below
+          if (!this.pool || pool.address !== this.pool.address) {
+            const name = `${pool.name} Liquidity Pool`;
+            this._title.setTitle(name);
+            this._gaService.pageView(this._route.routeConfig.path, name);
           }
 
+          if (!pool.hasStaking) {
+            this.chartOptions = this.chartOptions.filter(option => option.category !== 'Staking');
+          } else {
+            const index = this.chartOptions.findIndex(option => option.category === 'Staking');
+            this.chartOptions[index].suffix = pool.tokens.staking.symbol;
+          }
+
+          this.pool = pool;
           this.isCurrentMarket = this.pool.market === this._env.marketAddress;
         })
       );
@@ -220,25 +218,19 @@ export class PoolComponent implements OnInit, OnDestroy {
     const context = this._userContext.getUserContext();
 
     if (context.wallet && this.pool) {
-      const crsToken = this.pool.tokens.crs;
-      const srcToken = this.pool.tokens.src;
       const lpToken = this.pool.tokens.lp;
-      const stakingToken = this.pool.tokens?.staking;
 
       const combo = [
-        this.getTokenBalance(context.wallet, crsToken),
-        this.getTokenBalance(context.wallet, srcToken)
+        this.getTokenBalance(context.wallet, this.pool.tokens.crs),
+        this.getTokenBalance(context.wallet, this.pool.tokens.src),
+        this.getTokenBalance(context.wallet, lpToken)
       ];
 
-      // Yes, this can be added to the initial array, but this order is better for UX
-      combo.push(this.getTokenBalance(context.wallet, lpToken));
-
-      // Yes, this could be combined with the above check, but this order is better for UX
-      if (stakingToken) {
-        combo.push(this.getStakingPosition(context.wallet, this.poolAddress, stakingToken));
+      if (this.pool.hasStaking) {
+        combo.push(this.getStakingPosition(context.wallet, this.poolAddress, this.pool.tokens.staking));
       }
 
-      if (this.pool.miningPool) {
+      if (this.pool.hasMining) {
         combo.push(this.getMiningPosition(context.wallet, this.pool.miningPool.address, lpToken));
       }
 
@@ -323,10 +315,6 @@ export class PoolComponent implements OnInit, OnDestroy {
 
   handleTxOption($event: TransactionView): void {
     this._sidenav.openSidenav($event, {pool: this.pool});
-  }
-
-  statCardTrackBy(index: number, statCard: StatCardInfo): string {
-    return `${index}-${statCard?.title}-${statCard?.value}`;
   }
 
   positionsTrackBy(index: number, position: AddressPosition): string {

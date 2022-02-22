@@ -1,3 +1,5 @@
+import { GoogleAnalyticsService } from 'ngx-google-analytics';
+import { Title } from '@angular/platform-browser';
 import { VaultProposalVote } from '@sharedModels/ui/vaults/vault-proposal-vote';
 import { VaultProposalPledge } from '@sharedModels/ui/vaults/vault-proposal-pledge';
 import { Vault } from '@sharedModels/ui/vaults/vault';
@@ -49,11 +51,19 @@ export class VaultProposalComponent {
     private _indexService: IndexService,
     private _sidebar: SidenavService,
     private _route: ActivatedRoute,
-    private _context: UserContextService
+    private _context: UserContextService,
+    private _title: Title,
+    private _gaService: GoogleAnalyticsService
   ) {
     const proposalId = parseInt(this._route.snapshot.paramMap.get('proposalId'));
+    const pageName = `Vault Proposal #${proposalId}`
 
-    this.subscription.add(this._context.getUserContext$().subscribe(context => this.context = context));
+    this._title.setTitle(pageName);
+    this._gaService.pageView(this._route.routeConfig.path, pageName);
+
+    this.subscription.add(
+      this._context.getUserContext$()
+        .subscribe(context => this.context = context));
 
     this.subscription.add(
       this._indexService.getLatestBlock$()

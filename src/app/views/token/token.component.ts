@@ -116,29 +116,41 @@ export class TokenComponent implements OnInit {
     return this._tokensService.getMarketToken(this.tokenAddress)
       .pipe(
         catchError(_ => of(null)),
-        tap(token => {
+        tap((token: MarketToken) => {
           if (token === null) {
             this._router.navigateByUrl('/tokens');
             return;
           }
 
-          this.token = token;
+          const events = [
+            this.transactionEventTypes.SwapEvent,
+            this.transactionEventTypes.AddLiquidityEvent,
+            this.transactionEventTypes.RemoveLiquidityEvent
+          ];
+
+          if (!token.isCrs) {
+            events.push(this.transactionEventTypes.TransferEvent, this.transactionEventTypes.ApprovalEvent)
+
+            token.isStaking
+              ? events.push(this.transactionEventTypes.DistributionEvent)
+              : events.push(this.transactionEventTypes.StartMiningEvent, this.transactionEventTypes.StopMiningEvent);
+          }
 
           this.transactionsRequest = {
             limit: 15,
-            eventTypes: this.token.address === 'CRS'
-                          ? [this.transactionEventTypes.SwapEvent, this.transactionEventTypes.AddLiquidityEvent, this.transactionEventTypes.RemoveLiquidityEvent]
-                          : [this.transactionEventTypes.TransferEvent, this.transactionEventTypes.ApprovalEvent, this.transactionEventTypes.DistributionEvent, this.transactionEventTypes.SwapEvent,
-                          this.transactionEventTypes.AddLiquidityEvent, this.transactionEventTypes.RemoveLiquidityEvent, this.transactionEventTypes.StartMiningEvent, this.transactionEventTypes.StopMiningEvent],
-            contracts: this.token.address === 'CRS' ? [] : [this.token.address, this.token.liquidityPool],
+            eventTypes: events,
+            contracts: token.isCrs ? [] : [token.address, token.liquidityPool],
             direction: 'DESC'
           }
 
-          if (this.token) {
-            this._gaService.pageView(this._route.routeConfig.path, `${this.token.symbol} - ${this.token.name}`)
-            this._title.setTitle(`${this.token.symbol} - ${this.token.name}`);
+          // This will be true for initial page load or if the pool changes otherwise since we set this.token below
+          if (!this.token || token.address !== this.token.address) {
+            const name = `${token.symbol} - ${token.name}`;
+            this._title.setTitle(name);
+            this._gaService.pageView(this._route.routeConfig.path, name);
           }
 
+          this.token = token;
           this.isCurrentMarket = this.token.market === this._envService.marketAddress;
         })
       );
@@ -160,7 +172,7 @@ export class TokenComponent implements OnInit {
   }
 
   private tryGetLiquidityPool(): Observable<LiquidityPool> {
-    if (!this.token || this.token.address === 'CRS') return of(null);
+    if (!this.token || this.token.isCrs) return of(null);
 
     if (this.token.symbol === 'OLPT') {
       return this._lpService.getLiquidityPool(this.token.address)

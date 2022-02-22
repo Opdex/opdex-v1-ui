@@ -11,13 +11,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { delay, map, switchMap, take, tap } from 'rxjs/operators';
 import { LiquidityPoolsFilter, LpOrderBy, MiningStatus } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
-import { StatCardInfo } from '@sharedModels/stat-card-info';
 import { MarketsService } from '@sharedServices/platform/markets.service';
 import { TransactionView } from '@sharedModels/transaction-view';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { TokenOrderByTypes, TokenAttributes, TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
 import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
-import { MarketStatCardsLookup } from '@sharedLookups/market-stat-cards.lookup';
 
 @Component({
   selector: 'opdex-market',
@@ -27,11 +25,15 @@ import { MarketStatCardsLookup } from '@sharedLookups/market-stat-cards.lookup';
 export class MarketComponent implements OnInit, OnDestroy {
   iconSizes = IconSizes;
   icons = Icons;
-  subscription = new Subscription();
   market: Market;
   marketHistory: MarketHistory;
   miningPools$: Observable<LiquidityPool[]>
   transactionsRequest: ITransactionsRequest;
+  tokensFilter: TokensFilter;
+  liquidityPoolsFilter: LiquidityPoolsFilter;
+  miningFilter: LiquidityPoolsFilter;
+  historyFilter: HistoryFilter;
+  poolsWithEnabledMining: LiquidityPool[];
   chartData: any[];
   chartOptions = [
     {
@@ -53,23 +55,15 @@ export class MarketComponent implements OnInit, OnDestroy {
       decimals: 2
     }
   ];
-  statCards: StatCardInfo[];
   selectedChart = this.chartOptions[0];
-  tokensFilter: TokensFilter;
-  liquidityPoolsFilter: LiquidityPoolsFilter;
-  miningFilter: LiquidityPoolsFilter;
-  historyFilter: HistoryFilter;
-  poolsWithEnabledMining: LiquidityPool[];
+  subscription = new Subscription();
 
   constructor(
     private _marketsService: MarketsService,
     private _sidebar: SidenavService,
     private _liquidityPoolsService: LiquidityPoolsService,
     private _indexService: IndexService
-  ) {
-    // Initialize with null to get the default/loading animations
-    this.statCards = MarketStatCardsLookup.getStatCards(null);
-  }
+  ) { }
 
   ngOnInit(): void {
     this.tokensFilter = new TokensFilter({
@@ -104,13 +98,15 @@ export class MarketComponent implements OnInit, OnDestroy {
 
   private getMarket(): Observable<any> {
     return this._marketsService.getMarket()
-      .pipe(tap(market => {
+      .pipe(tap((market: Market) => {
         this.market = market;
-        this.statCards = MarketStatCardsLookup.getStatCards(this.market);
-        this.chartOptions.map(o => {
-          if (o.category === 'Staking') o.suffix = this.market.tokens.staking?.symbol;
-          return 0;
-        });
+
+        if (!market.isStaking) {
+          this.chartOptions = this.chartOptions.filter(option => option.category !== 'Staking');
+        } else {
+          const index = this.chartOptions.findIndex(option => option.category === 'Staking');
+          this.chartOptions[index].suffix = market.tokens.staking.symbol;
+        }
       }));
   }
 
@@ -129,7 +125,7 @@ export class MarketComponent implements OnInit, OnDestroy {
   private getLiquidityPoolsWithMining(): Observable<void> {
     return this._liquidityPoolsService.getLiquidityPools(this.miningFilter)
       .pipe(map(pools => {
-        this.poolsWithEnabledMining = pools?.results || [];
+        this.poolsWithEnabledMining = pools.results;
         return;
       }));
   }
@@ -174,10 +170,6 @@ export class MarketComponent implements OnInit, OnDestroy {
 
   poolsTrackBy(index: number, pool: LiquidityPool): string {
     return `${index}-${pool?.trackBy}`;
-  }
-
-  statCardTrackBy(index: number, statCard: StatCardInfo) {
-    return `${index}-${statCard?.title}-${statCard?.value?.formattedValue}`;
   }
 
   ngOnDestroy() {
