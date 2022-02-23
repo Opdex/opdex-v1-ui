@@ -60,14 +60,22 @@ export abstract class BaseChartComponent {
     this.chart.applyOptions(this.options);
   }
 
-  protected _priceFormatter(price: number, prefix: string): string {
+  protected _priceFormatter(price: number, prefix: string = '', suffix: string = ''): string {
     if (price < 0) return '';
+
+    let fixed = price.toString().includes('.')
+      ? price.toString().split('.')[1].length
+      : 0;
+
+    fixed = fixed > 8 ? 8 : fixed;
 
     const shortNumber = this._shortNumber.transform(price);
 
     if (shortNumber == 'NAN') return '';
 
-    return `${prefix || ''}${shortNumber}`;
+    return shortNumber.includes('<')
+      ? `${prefix}${price.toFixed(fixed)} ${suffix}`
+      : `${prefix}${shortNumber} ${suffix}`;
   }
 
   toggleLock(): void {

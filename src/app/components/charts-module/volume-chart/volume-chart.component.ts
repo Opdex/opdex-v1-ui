@@ -54,7 +54,7 @@ export class VolumeChartComponent extends BaseChartComponent implements OnInit, 
       priceFormat: {
         type: 'custom',
         minMove: 0.01,
-        formatter: (price: number) => this._priceFormatter(price, this.chartData.labelPrefix)
+        formatter: (price: number) => this._priceFormatter(price, this.chartData.labelPrefix, this.chartData.labelSuffix)
       },
       color: 'rgba(71, 188, 235, .8)',
       lastValueVisible: false,

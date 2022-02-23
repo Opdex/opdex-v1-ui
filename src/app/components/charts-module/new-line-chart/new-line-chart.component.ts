@@ -30,25 +30,16 @@ export class NewLineChartComponent extends BaseChartComponent implements OnInit,
     if (!!this.chartData && !!this.series === false) {
       setTimeout(_ => {
         this.addLineSeries();
-        this.series.setData(this._getData());
+        this.series.setData(this.chartData.values as LineData[]);
         this.chart.timeScale().fitContent();
         this.loading = false;
       });
     } else if (!!this.series) {
       // resets data but may be problematic when we want to only append new data
       // Observables and services may be useful here
-      this.series.setData(this._getData());
+      this.series.setData(this.chartData.values as LineData[]);
       this.chart.timeScale().fitContent();
     }
-  }
-
-  private _getData(): LineData[] {
-    const data: LineData[] = [];
-
-    this.chartData.values.forEach(point =>
-      data.push({ value: point.close, time: point.time }));
-
-    return data;
   }
 
   ngOnDestroy(): void {
@@ -67,8 +58,8 @@ export class NewLineChartComponent extends BaseChartComponent implements OnInit,
       lastValueVisible: false,
       priceFormat: {
         type: 'custom',
-        minMove: 0.01,
-        formatter: (price: number) => this._priceFormatter(price, this.chartData.labelPrefix)
+        minMove: 0.00000001,
+        formatter: (price: number) => this._priceFormatter(price, this.chartData.labelPrefix, this.chartData.labelSuffix)
       }
     });
   }

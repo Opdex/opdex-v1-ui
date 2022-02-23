@@ -8,11 +8,25 @@ import { IChartData, IChartsSnapshotHistory } from '@sharedModels/ui/markets/mar
   styleUrls: ['./chart-toolbar.component.scss']
 })
 export class ChartToolbarComponent {
+  private _selectedChart: IChartData;
+
+  public get selectedChart(): IChartData {
+    return this._selectedChart;
+  }
+
+  @Input() set selectedChart(value: IChartData) {
+    if (value.label !== this.selectedChart?.label) {
+      this.selectedChartType = value.chartTypes[0];
+    }
+
+    this._selectedChart = value;
+  }
+
   @Input() chartsHistory: IChartsSnapshotHistory;
-  @Input() selectedChart: IChartData;
   @Output() onSelectChartType = new EventEmitter<string>();
   @Output() onSelectChart = new EventEmitter<string>();
   icons = Icons;
+  selectedChartType: string;
 
   public get latestValue(): string {
     const { values } = this.selectedChart;
@@ -25,7 +39,8 @@ export class ChartToolbarComponent {
     this.onSelectChart.emit(chart);
   }
 
-  selectChartType(type: string) {
+  selectChartType(type: string): void {
+    this.selectedChartType = type;
     this.onSelectChartType.emit(type);
   }
 }

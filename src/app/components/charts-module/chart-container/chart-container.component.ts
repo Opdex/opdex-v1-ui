@@ -12,8 +12,6 @@ export class ChartContainerComponent implements OnChanges {
   selectedChart: IChartData;
   selectedChartType: string;
 
-  constructor() { }
-
   ngOnChanges(): void {
     if (!this.selectedChart && this.chartsHistory) {
       this.selectedChart = this.chartsHistory.charts[0];

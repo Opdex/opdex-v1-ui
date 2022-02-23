@@ -1,18 +1,28 @@
 <div class="chart-toolbar" *ngIf="selectedChart">
   <div class="flex-row-center-between">
     <div class="flex-row-center">
-      <a mat-button [matMenuTriggerFor]="menu" class="pl-0 pr-0 mr-1">
-        <h5 class="b-400 title d-inline mb-0">{{selectedChart.label}}</h5>
-        <mat-icon class="small">{{icons.arrowDropDown}}</mat-icon>
-      </a>
+      <!-- Show dropdown options if more than 1 is available -->
+      <ng-container *ngIf="chartsHistory?.charts?.length > 1; else singleChartOption">
+        <a mat-button [matMenuTriggerFor]="menu" class="pl-0 pr-0">
+          <h5 class="b-400 title d-inline mb-0">{{selectedChart.label}}</h5>
+          <mat-icon class="small">{{icons.arrowDropDown}}</mat-icon>
+        </a>
 
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item
-          (click)="selectChart(option.label)"
-          *ngFor="let option of chartsHistory.charts">
-          {{option.label}}
-        </button>
-      </mat-menu>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item
+            (click)="selectChart(option.label)"
+            *ngFor="let option of chartsHistory.charts">
+            {{option.label}}
+          </button>
+        </mat-menu>
+      </ng-container>
+
+      <!-- Show single label if only a single chart type is available -->
+      <ng-template #singleChartOption>
+        <h5 class="b-400 title d-inline mb-0">{{selectedChart.label}}</h5>
+      </ng-template>
+
+      <span class="light mr-2 ml-2">|</span>
 
       <h5 class="d-inline mb-0">
         {{selectedChart.labelPrefix}}{{latestValue | shortNumber}} {{selectedChart.labelSuffix}}
@@ -24,13 +34,16 @@
       <div class="button-group mr-1" *ngIf="selectedChart.chartTypes.length > 1">
         <button mat-stroked-button
           class="small active"
-          color="primary"
+          color="{{selectedChartType === chartType ? 'primary' : ''}}"
           (click)="selectChartType(chartType)"
           *ngFor="let chartType of selectedChart.chartTypes">
+
           <mat-icon *ngIf="chartType === 'Line'">{{icons.lineChart}}</mat-icon>
           <mat-icon *ngIf="chartType === 'Candle'">{{icons.barChart}}</mat-icon>
         </button>
       </div>
+
+      <span class="light mr-2 ml-2" *ngIf="selectedChart.chartTypes.length > 1 && selectedChart.timeSpans.length > 1">|</span>
 
       <!-- Hide options if there is only 1 that is available -->
       <div class="button-group" *ngIf="selectedChart.timeSpans.length > 1">

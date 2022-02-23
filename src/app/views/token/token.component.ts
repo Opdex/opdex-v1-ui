@@ -1,3 +1,4 @@
+import { TokenSnapshotHistory } from '@sharedModels/ui/tokens/token-history';
 import { MarketToken } from '@sharedModels/ui/tokens/market-token';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { AddressPosition } from '@sharedModels/address-position';
@@ -8,8 +9,6 @@ import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
-import { TokenHistory } from '@sharedModels/ui/tokens/token-history';
-import { IconSizes } from 'src/app/enums/icon-sizes';
 import { catchError, map } from 'rxjs/operators';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
@@ -21,7 +20,7 @@ import { Title } from '@angular/platform-browser';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
 import { Icons } from 'src/app/enums/icons';
 import { TransactionView } from '@sharedModels/transaction-view';
-import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
+import { HistoryFilter } from '@sharedModels/platform-api/requests/history-filter';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { LiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
@@ -38,26 +37,9 @@ export class TokenComponent implements OnInit {
   liquidityPool: LiquidityPool;
   balance: AddressPosition;
   subscription = new Subscription();
-  tokenHistory: TokenHistory;
   transactionEventTypes = TransactionEventTypes;
-  chartData: any[];
-  iconSizes = IconSizes;
   icons = Icons;
-  chartOptions = [
-    {
-      type: 'line',
-      category: 'Line USD',
-      prefix: '$',
-      decimals: 3
-    },
-    {
-      type: 'candle',
-      category: 'OHLC USD',
-      prefix: '$',
-      decimals: 3
-    }
-  ]
-  selectedChart = this.chartOptions[1];
+  chartsHistory: TokenSnapshotHistory;
   transactionsRequest: ITransactionsRequest;
   routerSubscription = new Subscription();
   historyFilter: HistoryFilter;
@@ -112,7 +94,7 @@ export class TokenComponent implements OnInit {
         .subscribe());
   }
 
-  private getToken(): Observable<any> {
+  private getToken(): Observable<MarketToken> {
     return this._tokensService.getMarketToken(this.tokenAddress)
       .pipe(
         catchError(_ => of(null)),
@@ -158,17 +140,12 @@ export class TokenComponent implements OnInit {
 
   private getTokenHistory(): Observable<any> {
     if (!this.token) return of(null);
-
     if (!this.historyFilter) this.historyFilter = new HistoryFilter();
 
     return this._tokensService.getTokenHistory(this.tokenAddress, this.historyFilter)
       .pipe(
         delay(10),
-        tap(tokenHistory => {
-          this.tokenHistory = new TokenHistory(tokenHistory);
-          this.handleChartTypeChange(this.selectedChart.category);
-        })
-      );
+        tap(tokenHistory => this.chartsHistory = new TokenSnapshotHistory(this.token, tokenHistory)));
   }
 
   private tryGetLiquidityPool(): Observable<LiquidityPool> {
@@ -216,34 +193,27 @@ export class TokenComponent implements OnInit {
       }));
   }
 
-  handleChartTypeChange($event): void {
-    this.selectedChart = this.chartOptions.find(options => options.category === $event);
+  // handleChartTimeChange(timeSpan: string): void {
+  //   let startDate = HistoryFilter.startOfDay(new Date());
+  //   let endDate = HistoryFilter.endOfDay(new Date());
+  //   let interval = HistoryInterval.Daily;
 
-    if ($event === 'Line USD') this.chartData = this.tokenHistory.line;
-    else if ($event === 'OHLC USD') this.chartData = this.tokenHistory.candle;
-  }
+  //   if (timeSpan === '1M') {
+  //     startDate = HistoryFilter.historicalDate(startDate, 30);
+  //   } else if (timeSpan === '1W') {
+  //     startDate = HistoryFilter.historicalDate(startDate, 7);
+  //     interval = HistoryInterval.Hourly;
+  //   } else if (timeSpan === '1D') {
+  //     startDate = HistoryFilter.historicalDate(startDate, 1);
+  //     interval = HistoryInterval.Hourly;
+  //   } else {
+  //     startDate = HistoryFilter.historicalDate(startDate, 365);
+  //   }
 
-  handleChartTimeChange(timeSpan: string): void {
-    let startDate = HistoryFilter.startOfDay(new Date());
-    let endDate = HistoryFilter.endOfDay(new Date());
-    let interval = HistoryInterval.Daily;
+  //   this.historyFilter = new HistoryFilter(startDate, endDate, interval);
 
-    if (timeSpan === '1M') {
-      startDate = HistoryFilter.historicalDate(startDate, 30);
-    } else if (timeSpan === '1W') {
-      startDate = HistoryFilter.historicalDate(startDate, 7);
-      interval = HistoryInterval.Hourly;
-    } else if (timeSpan === '1D') {
-      startDate = HistoryFilter.historicalDate(startDate, 1);
-      interval = HistoryInterval.Hourly;
-    } else {
-      startDate = HistoryFilter.historicalDate(startDate, 365);
-    }
-
-    this.historyFilter = new HistoryFilter(startDate, endDate, interval);
-
-    this.getTokenHistory().pipe(take(1)).subscribe();
-  }
+  //   this.getTokenHistory().pipe(take(1)).subscribe();
+  // }
 
   handleTxOption($event: TransactionView): void {
     this._sidebar.openSidenav($event, {pool: this.liquidityPool});

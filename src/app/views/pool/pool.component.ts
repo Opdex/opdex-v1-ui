@@ -1,3 +1,4 @@
+import { LiquidityPoolSnapshotHistory } from '@sharedModels/ui/liquidity-pools/liquidity-pool-history';
 import { UserContext } from '@sharedModels/user-context';
 import { Token } from '@sharedModels/ui/tokens/token';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
@@ -21,8 +22,7 @@ import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { Title } from '@angular/platform-browser';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
 import { Icons } from 'src/app/enums/icons';
-import { LiquidityPoolHistory } from '@sharedModels/ui/liquidity-pools/liquidity-pool-history';
-import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
+import { HistoryFilter } from '@sharedModels/platform-api/requests/history-filter';
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { ILiquidityPoolSnapshotHistoryResponse } from '@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-snapshots-responses.interface';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
@@ -35,7 +35,6 @@ import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 export class PoolComponent implements OnInit, OnDestroy {
   poolAddress: string;
   pool: LiquidityPool;
-  poolHistory: LiquidityPoolHistory;
   subscription = new Subscription();
   routerSubscription = new Subscription();
   transactionsRequest: ITransactionsRequest;
@@ -48,40 +47,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   message: ISidenavMessage;
   historyFilter: HistoryFilter;
   isCurrentMarket: boolean;
-  chartOptions = [
-    {
-      type: 'line',
-      category: 'Liquidity',
-      prefix: '$',
-      decimals: 3
-    },
-    {
-      type: 'bar',
-      category: 'Volume',
-      prefix: '$',
-      decimals: 3
-    },
-    {
-      type: 'line',
-      category: 'Staking',
-      suffix: '',
-      decimals: 2
-    },
-    {
-      type: 'candle',
-      category: 'SRC/CRS',
-      suffix: 'CRS',
-      decimals: 8
-    },
-    {
-      type: 'candle',
-      category: 'CRS/SRC',
-      suffix: 'SRC',
-      decimals: 8
-    }
-  ]
-  selectedChart = this.chartOptions[0];
-
+  chartsHistory: LiquidityPoolSnapshotHistory;
 
   constructor(
     private _route: ActivatedRoute,
@@ -180,13 +146,6 @@ export class PoolComponent implements OnInit, OnDestroy {
             this._gaService.pageView(this._route.routeConfig.path, name);
           }
 
-          if (!pool.hasStaking) {
-            this.chartOptions = this.chartOptions.filter(option => option.category !== 'Staking');
-          } else {
-            const index = this.chartOptions.findIndex(option => option.category === 'Staking');
-            this.chartOptions[index].suffix = pool.tokens.staking.symbol;
-          }
-
           this.pool = pool;
           this.isCurrentMarket = this.pool.market === this._env.marketAddress;
         })
@@ -242,76 +201,36 @@ export class PoolComponent implements OnInit, OnDestroy {
 
   private getPoolHistory(): Observable<ILiquidityPoolSnapshotHistoryResponse> {
     if (!this.pool) return of(null);
-
     if (!this.historyFilter) this.historyFilter = new HistoryFilter();
 
     return this._liquidityPoolsService.getLiquidityPoolHistory(this.poolAddress, this.historyFilter)
       .pipe(
         delay(10),
-        tap(() => {
-          this.chartOptions.map(o => {
-            if (o.category.includes('/') && o.type === 'candle') {
-              const parts = o.category.split('/');
-              const prefixIsCrs = parts[0].includes('CRS');
-
-              if (prefixIsCrs) {
-                o.suffix = this.pool.tokens.src.symbol;
-                o.decimals = this.pool.tokens.src.decimals
-              } else {
-                o.suffix = this.pool.tokens.crs.symbol;
-              }
-
-              o.category = prefixIsCrs
-                ? `${this.pool.tokens.crs.symbol}/${this.pool.tokens.src.symbol}`
-                : `${this.pool.tokens.src.symbol}/${this.pool.tokens.crs.symbol}`;
-            }
-
-            return o;
-          });
-        }),
-        tap((poolHistory: ILiquidityPoolSnapshotHistoryResponse) => {
-          this.poolHistory = new LiquidityPoolHistory(poolHistory);
-          this.handleChartTypeChange(this.selectedChart.category);
-      }));
+        tap((poolHistory: ILiquidityPoolSnapshotHistoryResponse) =>
+          this.chartsHistory = new LiquidityPoolSnapshotHistory(this.pool, poolHistory)));
   }
 
-  handleChartTypeChange($event: string): void {
-    this.selectedChart = this.chartOptions.find(options => options.category === $event);
+  // handleChartTimeChange(timeSpan: string): void {
+  //   let startDate = HistoryFilter.startOfDay(new Date());
+  //   let endDate = HistoryFilter.endOfDay(new Date());
+  //   let interval = HistoryInterval.Daily;
 
-    if ($event === 'Liquidity') {
-      this.chartData = this.poolHistory.liquidity;
-    } else if ($event === 'Volume') {
-      this.chartData = this.poolHistory.volume;
-    } else if ($event === 'Staking') {
-      this.chartData = this.poolHistory.staking;
-    } else if ($event === `${this.pool.tokens.crs.symbol}/${this.pool.tokens.src.symbol}`) {
-      this.chartData = this.poolHistory.srcPerCrs;
-    } else if ($event === `${this.pool.tokens.src.symbol}/${this.pool.tokens.crs.symbol}`) {
-      this.chartData = this.poolHistory.crsPerSrc;
-    }
-  }
+  //   if (timeSpan === '1M') {
+  //     startDate = HistoryFilter.historicalDate(startDate, 30);
+  //   } else if (timeSpan === '1W') {
+  //     startDate = HistoryFilter.historicalDate(startDate, 7);
+  //     interval = HistoryInterval.Hourly;
+  //   } else if (timeSpan === '1D') {
+  //     startDate = HistoryFilter.historicalDate(startDate, 1);
+  //     interval = HistoryInterval.Hourly;
+  //   } else {
+  //     startDate = HistoryFilter.historicalDate(startDate, 365);
+  //   }
 
-  handleChartTimeChange(timeSpan: string): void {
-    let startDate = HistoryFilter.startOfDay(new Date());
-    let endDate = HistoryFilter.endOfDay(new Date());
-    let interval = HistoryInterval.Daily;
+  //   this.historyFilter = new HistoryFilter(startDate, endDate, interval);
 
-    if (timeSpan === '1M') {
-      startDate = HistoryFilter.historicalDate(startDate, 30);
-    } else if (timeSpan === '1W') {
-      startDate = HistoryFilter.historicalDate(startDate, 7);
-      interval = HistoryInterval.Hourly;
-    } else if (timeSpan === '1D') {
-      startDate = HistoryFilter.historicalDate(startDate, 1);
-      interval = HistoryInterval.Hourly;
-    } else {
-      startDate = HistoryFilter.historicalDate(startDate, 365);
-    }
-
-    this.historyFilter = new HistoryFilter(startDate, endDate, interval);
-
-    this.getPoolHistory().pipe(take(1)).subscribe();
-  }
+  //   this.getPoolHistory().pipe(take(1)).subscribe();
+  // }
 
   handleTxOption($event: TransactionView): void {
     this._sidenav.openSidenav($event, {pool: this.pool});

@@ -1,58 +1,65 @@
+import { DataPoint } from './../charts/data-point';
+import { LiquidityPool } from './liquidity-pool';
 import { ILiquidityPoolSnapshotHistoryResponse } from "@sharedModels/platform-api/responses/liquidity-pools/liquidity-pool-snapshots-responses.interface";
+import { OhlcPoint } from "../charts/ohlc-point";
+import { IChartsSnapshotHistory, IChartData } from "../markets/market-history";
 
-export class LiquidityPoolHistory {
-  liquidity: any;
-  volume: any;
-  staking: any;
-  crsPerSrc: any;
-  srcPerCrs: any;
+// Todo: Append new points
+// Todo: Prepend older points
+export class LiquidityPoolSnapshotHistory implements IChartsSnapshotHistory {
+  charts: IChartData[] = [];
 
-  constructor(history: ILiquidityPoolSnapshotHistoryResponse) {
-    const liquidity = [];
-    const volume = [];
-    const staking = [];
-    const crsPerSrc = [];
-    const srcPerCrs = [];
-
-    history.results.forEach(history => {
-      const time = Date.parse(history.timestamp.toString()) / 1000;
-
-      liquidity.push({
-        time,
-        value: parseFloat(history.reserves.usd.close)
-      });
-
-      volume.push({
-        time,
-        value: parseFloat(history.volume.usd)
-      });
-
-      staking.push({
-        time,
-        value: parseFloat(history.staking.weight.close.split('.')[0])
-      });
-
-      crsPerSrc.push({
-        time,
-        open: history.cost.crsPerSrc.open,
-        high: history.cost.crsPerSrc.high,
-        low: history.cost.crsPerSrc.low,
-        close: history.cost.crsPerSrc.close,
-      });
-
-      srcPerCrs.push({
-        time,
-        open: history.cost.srcPerCrs.open,
-        high: history.cost.srcPerCrs.high,
-        low: history.cost.srcPerCrs.low,
-        close: history.cost.srcPerCrs.close,
-      });
+  constructor(pool: LiquidityPool, snapshots: ILiquidityPoolSnapshotHistoryResponse) {
+    this.charts.push({
+      label: 'Liquidity',
+      labelPrefix: '$',
+      labelSuffix: '',
+      chartTypes: ['Line', 'Candle'],
+      timeSpans: ['1D'],
+      values: snapshots.results.map(result =>
+        new OhlcPoint(result.reserves.usd, result.timestamp, 8))
     });
 
-    this.liquidity = liquidity;
-    this.volume = volume;
-    this.staking = staking;
-    this.crsPerSrc = crsPerSrc;
-    this.srcPerCrs = srcPerCrs;
+    this.charts.push({
+      label: 'Volume',
+      labelPrefix: '$',
+      labelSuffix: '',
+      chartTypes: ['Volume'],
+      timeSpans: ['1D'],
+      values: snapshots.results.map(result =>
+        new DataPoint(result.volume.usd, result.timestamp, 8))
+    });
+
+    if (pool.hasStaking) {
+      this.charts.push({
+        label: 'Staking',
+        labelPrefix: '',
+        labelSuffix: pool.tokens.staking.symbol,
+        chartTypes: ['Line', 'Candle'],
+        timeSpans: ['1D'],
+        values: snapshots.results.map(result =>
+          new OhlcPoint(result.staking.usd, result.timestamp, pool.tokens.staking.decimals))
+      });
+    }
+
+    this.charts.push({
+      label: `${pool.tokens.src.symbol}/${pool.tokens.crs.symbol}`,
+      labelPrefix: '',
+      labelSuffix: pool.tokens.crs.symbol,
+      chartTypes: ['Line', 'Candle'],
+      timeSpans: ['1D'],
+      values: snapshots.results.map(result =>
+        new OhlcPoint(result.cost.crsPerSrc, result.timestamp, pool.tokens.crs.decimals))
+    });
+
+    this.charts.push({
+      label: `${pool.tokens.crs.symbol}/${pool.tokens.src.symbol}`,
+      labelPrefix: '',
+      labelSuffix: pool.tokens.src.symbol,
+      chartTypes: ['Line', 'Candle'],
+      timeSpans: ['1D'],
+      values: snapshots.results.map(result =>
+        new OhlcPoint(result.cost.srcPerCrs, result.timestamp, pool.tokens.src.decimals))
+    });
   }
 }

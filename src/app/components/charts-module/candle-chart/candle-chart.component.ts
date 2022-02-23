@@ -55,7 +55,7 @@ export class CandleChartComponent extends BaseChartComponent implements OnInit, 
       priceFormat: {
         type: 'custom',
         minMove: 0.00000001,
-        formatter: (price: number) => this._priceFormatter(price, this.chartData.labelPrefix)
+        formatter: (price: number) => this._priceFormatter(price, this.chartData.labelPrefix, this.chartData.labelSuffix)
       }
     });
   }
