@@ -1,0 +1,41 @@
+<div class="chart-toolbar" *ngIf="selectedChart">
+  <div class="flex-row-center-between">
+    <div class="flex-row-center">
+      <a mat-button [matMenuTriggerFor]="menu" class="pl-0 pr-0 mr-1">
+        <h5 class="b-400 title d-inline mb-0">{{selectedChart.label}}</h5>
+        <mat-icon class="small">{{icons.arrowDropDown}}</mat-icon>
+      </a>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item
+          (click)="selectChart(option.label)"
+          *ngFor="let option of chartsHistory.charts">
+          {{option.label}}
+        </button>
+      </mat-menu>
+
+      <h5 class="d-inline mb-0">
+        {{selectedChart.labelPrefix}}{{latestValue | shortNumber}} {{selectedChart.labelSuffix}}
+      </h5>
+    </div>
+
+    <div class="flex-row-center">
+      <!-- Hide options if there is only 1 that is available -->
+      <div class="button-group mr-1" *ngIf="selectedChart.chartTypes.length > 1">
+        <button mat-stroked-button
+          class="small active"
+          color="primary"
+          (click)="selectChartType(chartType)"
+          *ngFor="let chartType of selectedChart.chartTypes">
+          <mat-icon *ngIf="chartType === 'Line'">{{icons.lineChart}}</mat-icon>
+          <mat-icon *ngIf="chartType === 'Candle'">{{icons.barChart}}</mat-icon>
+        </button>
+      </div>
+
+      <!-- Hide options if there is only 1 that is available -->
+      <div class="button-group" *ngIf="selectedChart.timeSpans.length > 1">
+        <button mat-stroked-button class="small active" color="primary" *ngFor="let timeSpan of selectedChart.timeSpans">{{timeSpan}}</button>
+      </div>
+    </div>
+  </div>
+</div>

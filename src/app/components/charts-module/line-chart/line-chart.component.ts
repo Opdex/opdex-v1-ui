@@ -2,7 +2,8 @@ import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { ShortNumberPipe } from '@sharedPipes/short-number.pipe';
 import { Subscription } from 'rxjs';
 import { ThemeService } from '@sharedServices/utility/theme.service';
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input,
+         OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 import { ResizedEvent } from 'angular-resize-event';
 import { createChart, ISeriesApi, IChartApi, LineWidth, DeepPartial } from 'lightweight-charts';
 import { tap } from 'rxjs/operators';
@@ -40,7 +41,11 @@ export class LineChartComponent implements OnChanges, OnInit {
   iconSizes = IconSizes;
   locked = true;
 
-  constructor(private _theme: ThemeService, private _breakpointObserver: BreakpointObserver, private _shortNumber: ShortNumberPipe) {
+  constructor(
+    private _theme: ThemeService,
+    private _breakpointObserver: BreakpointObserver,
+    private _shortNumber: ShortNumberPipe
+  ) {
     this.subscription.add(this._theme.getTheme()
       .pipe(tap(theme => {
         this.theme = theme
@@ -50,27 +55,27 @@ export class LineChartComponent implements OnChanges, OnInit {
         }
       })).subscribe());
 
-      this.subscription.add(
-        this._breakpointObserver
-          .observe(['(min-width: 992px)', '(min-width: 1440px)', '(max-width: 667px)'])
-          .subscribe((result: BreakpointState) => {
+    this.subscription.add(
+      this._breakpointObserver
+        .observe(['(min-width: 992px)', '(min-width: 1440px)', '(max-width: 667px)'])
+        .subscribe((result: BreakpointState) => {
 
-            if (result.breakpoints['(min-width: 1440px)']) {
-              this.height = 450;
-            } else if (result.breakpoints['(min-width: 992px)']) {
-              this.height = 400;
-            } else {
-              this.height = 300;
-            }
+          if (result.breakpoints['(min-width: 1440px)']) {
+            this.height = 450;
+          } else if (result.breakpoints['(min-width: 992px)']) {
+            this.height = 400;
+          } else {
+            this.height = 300;
+          }
 
-            if (this.chart) {
-              this.chart.resize(this.width, this.height);
-            }
-          }));
+          if (this.chart) {
+            this.chart.resize(this.width, this.height);
+          }
+        }));
   }
 
   ngOnChanges() {
-    if (this.chartData !== null && this.chartData !== undefined && this.selectedChart) {
+    if (!!this.chartData && !!this.selectedChart) {
       // Timeouts required for smooth loading w/ fade
       setTimeout(() => {
         if (this.chartOptions && this.selectedChart.type === 'line') {
@@ -204,7 +209,7 @@ export class LineChartComponent implements OnChanges, OnInit {
   private setLastBarText() {
     if (this.chartData && this.chartData.length > 0) {
       const data = this.chartData[this.chartData.length - 1]
-      const value = data?.close !== undefined ? data.close : data.value;
+      const value = !!data?.close ? data.close : data.value;
 
       this.value = typeof value === 'number' ? value.toFixed(this.selectedChart.decimals) : value;
     }

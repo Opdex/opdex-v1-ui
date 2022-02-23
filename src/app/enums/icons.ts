@@ -66,5 +66,7 @@ export enum Icons {
     rewind = 'sync_problem',
     maintenance = 'sync_disabled',
     closeOutline = 'highlight_off',
-    pledge = 'how_to_vote'
+    pledge = 'how_to_vote',
+    lineChart = 'show_chart',
+    barChart = 'graphic_eq'
 }

@@ -8,11 +8,21 @@ import { CommonModule } from '@angular/common';
 import { LineChartComponent } from './line-chart/line-chart.component';
 import { LineChangeComponent } from './line-change/line-change.component';
 import { AngularResizeEventModule } from 'angular-resize-event';
+import { CandleChartComponent } from './candle-chart/candle-chart.component';
+import { ChartToolbarComponent } from './chart-toolbar/chart-toolbar.component';
+import { ChartContainerComponent } from './chart-container/chart-container.component';
+import { VolumeChartComponent } from './volume-chart/volume-chart.component';
+import { NewLineChartComponent } from './new-line-chart/new-line-chart.component';
 
 @NgModule({
   declarations: [
     LineChartComponent,
-    LineChangeComponent
+    LineChangeComponent,
+    CandleChartComponent,
+    ChartToolbarComponent,
+    ChartContainerComponent,
+    VolumeChartComponent,
+    NewLineChartComponent
   ],
   imports: [
     CommonModule,
@@ -24,7 +34,11 @@ import { AngularResizeEventModule } from 'angular-resize-event';
   ],
   exports: [
     LineChartComponent,
-    LineChangeComponent
+    LineChangeComponent,
+    CandleChartComponent,
+    ChartToolbarComponent,
+    ChartContainerComponent,
+    VolumeChartComponent
   ]
 })
 export class ChartsModule { }

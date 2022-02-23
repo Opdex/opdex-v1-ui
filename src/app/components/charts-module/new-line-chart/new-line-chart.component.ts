@@ -1,0 +1,75 @@
+import { Component, ElementRef, Injector, Input, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { IChartData } from '@sharedModels/ui/markets/market-history';
+import { ShortNumberPipe } from '@sharedPipes/short-number.pipe';
+import { ISeriesApi, DeepPartial, LineWidth, LineData } from 'lightweight-charts';
+import { BaseChartComponent } from '../base-chart.component';
+
+@Component({
+  selector: 'opdex-new-line-chart',
+  templateUrl: './new-line-chart.component.html',
+  styleUrls: ['./new-line-chart.component.scss'],
+  providers: [ShortNumberPipe]
+})
+export class NewLineChartComponent extends BaseChartComponent implements OnInit, OnChanges, OnDestroy {
+  @ViewChild('chartContainer') container: ElementRef;
+  @Input() chartData: IChartData;
+  series: ISeriesApi<'Area'>;
+
+  constructor(
+    protected _shortNumberPipe: ShortNumberPipe,
+    protected _injector: Injector
+  ) {
+    super(_shortNumberPipe, _injector);
+  }
+
+  ngOnInit(): void {
+    this._init('lineChartWrapper');
+  }
+
+  ngOnChanges(): void {
+    if (!!this.chartData && !!this.series === false) {
+      setTimeout(_ => {
+        this.addLineSeries();
+        this.series.setData(this._getData());
+        this.chart.timeScale().fitContent();
+        this.loading = false;
+      });
+    } else if (!!this.series) {
+      // resets data but may be problematic when we want to only append new data
+      // Observables and services may be useful here
+      this.series.setData(this._getData());
+      this.chart.timeScale().fitContent();
+    }
+  }
+
+  private _getData(): LineData[] {
+    const data: LineData[] = [];
+
+    this.chartData.values.forEach(point =>
+      data.push({ value: point.close, time: point.time }));
+
+    return data;
+  }
+
+  ngOnDestroy(): void {
+    this.chart.removeSeries(this.series);
+    this.chart.remove();
+    this.baseSubscription.unsubscribe();
+  }
+
+  private addLineSeries(): void {
+    this.series = this.chart.addAreaSeries({
+      lineColor: 'rgba(71, 188, 235, .6)',
+      lineWidth: <DeepPartial<LineWidth>>4,
+      topColor: 'rgba(71, 188, 235, .5)',
+      bottomColor: this.theme === 'light-mode' ? 'rgba(255, 255, 255, .4)' : 'rgba(0, 0, 0, .1)',
+      priceLineVisible: true,
+      lastValueVisible: false,
+      priceFormat: {
+        type: 'custom',
+        minMove: 0.01,
+        formatter: (price: number) => this._priceFormatter(price, this.chartData.labelPrefix)
+      }
+    });
+  }
+}

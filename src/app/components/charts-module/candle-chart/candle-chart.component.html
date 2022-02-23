@@ -1,0 +1,10 @@
+<div class="chart-wrapper">
+  <div class="lock-overlay" *ngIf="locked"></div>
+  <button mat-icon-button (click)="toggleLock()" class="lock-button">
+    <mat-icon class="{{locked ? 'red' : 'blue'}}">{{locked ? icons.lock : icons.unlock}}</mat-icon>
+  </button>
+
+  <div #chartContainer class="chart-container w-100" (resized)="onResized($event)">
+    <div id="candleChartWrapper" class="chart-container" [ngClass]="{'loading-chart': loading}"></div>
+  </div>
+</div>

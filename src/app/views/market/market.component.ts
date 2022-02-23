@@ -2,7 +2,7 @@ import { Market } from '@sharedModels/ui/markets/market';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { IMarketHistoryResponse } from '@sharedModels/platform-api/responses/markets/market-history-response.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
-import { MarketHistory } from '@sharedModels/ui/markets/market-history';
+import { MarketHistory, MarketSnapshotHistory } from '@sharedModels/ui/markets/market-history';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
@@ -26,7 +26,7 @@ export class MarketComponent implements OnInit, OnDestroy {
   iconSizes = IconSizes;
   icons = Icons;
   market: Market;
-  marketHistory: MarketHistory;
+  // marketHistory: MarketHistory;
   miningPools$: Observable<LiquidityPool[]>
   transactionsRequest: ITransactionsRequest;
   tokensFilter: TokensFilter;
@@ -34,29 +34,30 @@ export class MarketComponent implements OnInit, OnDestroy {
   miningFilter: LiquidityPoolsFilter;
   historyFilter: HistoryFilter;
   poolsWithEnabledMining: LiquidityPool[];
-  chartData: any[];
-  chartOptions = [
-    {
-      type: 'line',
-      category: 'Liquidity',
-      prefix: '$',
-      decimals: 3
-    },
-    {
-      type: 'bar',
-      category: 'Volume',
-      prefix: '$',
-      decimals: 3
-    },
-    {
-      type: 'line',
-      category: 'Staking',
-      suffix: '',
-      decimals: 2
-    }
-  ];
-  selectedChart = this.chartOptions[0];
+  // chartData: any[];
+  // chartOptions = [
+  //   {
+  //     type: 'line',
+  //     category: 'Liquidity',
+  //     prefix: '$',
+  //     decimals: 3
+  //   },
+  //   {
+  //     type: 'bar',
+  //     category: 'Volume',
+  //     prefix: '$',
+  //     decimals: 3
+  //   },
+  //   {
+  //     type: 'line',
+  //     category: 'Staking',
+  //     suffix: '',
+  //     decimals: 2
+  //   }
+  // ];
+  // selectedChart = this.chartOptions[0];
   subscription = new Subscription();
+  chartsHistory: MarketSnapshotHistory;
 
   constructor(
     private _marketsService: MarketsService,
@@ -101,12 +102,12 @@ export class MarketComponent implements OnInit, OnDestroy {
       .pipe(tap((market: Market) => {
         this.market = market;
 
-        if (!market.isStaking) {
-          this.chartOptions = this.chartOptions.filter(option => option.category !== 'Staking');
-        } else {
-          const index = this.chartOptions.findIndex(option => option.category === 'Staking');
-          this.chartOptions[index].suffix = market.tokens.staking.symbol;
-        }
+        // if (!market.isStaking) {
+        //   this.chartOptions = this.chartOptions.filter(option => option.category !== 'Staking');
+        // } else {
+        //   const index = this.chartOptions.findIndex(option => option.category === 'Staking');
+        //   this.chartOptions[index].suffix = market.tokens.staking.symbol;
+        // }
       }));
   }
 
@@ -117,8 +118,9 @@ export class MarketComponent implements OnInit, OnDestroy {
       .pipe(
         delay(10),
         map((marketHistory: IMarketHistoryResponse) => {
-          this.marketHistory = new MarketHistory(marketHistory);
-          this.handleChartTypeChange(this.selectedChart.category);
+          // this.marketHistory = new MarketHistory(marketHistory);
+          this.chartsHistory = new MarketSnapshotHistory(marketHistory);
+          // this.handleChartTypeChange(this.selectedChart.category);
         }));
   }
 
@@ -130,35 +132,35 @@ export class MarketComponent implements OnInit, OnDestroy {
       }));
   }
 
-  handleChartTypeChange($event) {
-    this.selectedChart = this.chartOptions.find(options => options.category === $event);
+  // handleChartTypeChange($event) {
+  //   this.selectedChart = this.chartOptions.find(options => options.category === $event);
 
-    if ($event === 'Liquidity') {
-      this.chartData = this.marketHistory.liquidity;
-    }
+  //   if ($event === 'Liquidity') {
+  //     this.chartData = this.marketHistory.liquidity;
+  //   }
 
-    if ($event === 'Volume') {
-      this.chartData = this.marketHistory.volume;
-    }
+  //   if ($event === 'Volume') {
+  //     this.chartData = this.marketHistory.volume;
+  //   }
 
-    if ($event === 'Staking') {
-      this.chartData = this.marketHistory.staking;
-    }
-  }
+  //   if ($event === 'Staking') {
+  //     this.chartData = this.marketHistory.staking;
+  //   }
+  // }
 
-  handleChartTimeChange(timeSpan: string) {
-    let startDate = HistoryFilter.startOfDay(new Date());
-    let endDate = HistoryFilter.endOfDay(new Date());
+  // handleChartTimeChange(timeSpan: string) {
+  //   let startDate = HistoryFilter.startOfDay(new Date());
+  //   let endDate = HistoryFilter.endOfDay(new Date());
 
-    if (timeSpan === '1M') startDate = HistoryFilter.historicalDate(startDate, 30);
-    else if (timeSpan === '1W') startDate = HistoryFilter.historicalDate(startDate, 7);
-    else if (timeSpan === '1D') startDate = HistoryFilter.historicalDate(startDate, 1);
-    else startDate = HistoryFilter.historicalDate(startDate, 365);
+  //   if (timeSpan === '1M') startDate = HistoryFilter.historicalDate(startDate, 30);
+  //   else if (timeSpan === '1W') startDate = HistoryFilter.historicalDate(startDate, 7);
+  //   else if (timeSpan === '1D') startDate = HistoryFilter.historicalDate(startDate, 1);
+  //   else startDate = HistoryFilter.historicalDate(startDate, 365);
 
-    this.historyFilter = new HistoryFilter(startDate, endDate, HistoryInterval.Daily);
+  //   this.historyFilter = new HistoryFilter(startDate, endDate, HistoryInterval.Daily);
 
-    this.getMarketHistory().pipe(take(1)).subscribe();
-  }
+  //   this.getMarketHistory().pipe(take(1)).subscribe();
+  // }
 
   handleTxOption($event: TransactionView) {
     this._sidebar.openSidenav($event);
