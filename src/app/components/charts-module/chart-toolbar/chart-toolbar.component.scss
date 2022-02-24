@@ -1,15 +1,11 @@
-
-
-
 .chart-toolbar {
   padding-bottom: 10px;
 
-  button {
-    min-width: 0px;
-    padding: 0 .5em;
-
-    &.active {
-      // border-color: #1ca7dc !important;
+  .button-group {
+    button {
+      min-width: 0px;
+      padding: 0 .5em;
+      margin-right: 5px;
     }
   }
 }

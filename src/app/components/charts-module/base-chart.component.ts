@@ -13,7 +13,6 @@ export abstract class BaseChartComponent {
   height: number;
   theme: string;
   loading: boolean = true;
-  locked: boolean = true;
   icons = Icons;
   baseSubscription = new Subscription;
 
@@ -43,7 +42,7 @@ export abstract class BaseChartComponent {
         }));
   }
 
-  onResized(event: ResizedEvent): void {
+  handleResize(event: ResizedEvent): void {
     if (!!this.chart) {
       this.width = event.newRect.width;
       this.chart.resize(event.newRect.width, this.height);
@@ -76,10 +75,6 @@ export abstract class BaseChartComponent {
     return shortNumber.includes('<')
       ? `${prefix}${price.toFixed(fixed)} ${suffix}`
       : `${prefix}${shortNumber} ${suffix}`;
-  }
-
-  toggleLock(): void {
-    this.locked = !this.locked;
   }
 
   public get options(): DeepPartial<ChartOptions> {

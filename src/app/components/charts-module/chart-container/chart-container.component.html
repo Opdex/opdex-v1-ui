@@ -1,14 +1,18 @@
-<opdex-chart-toolbar
-  [selectedChart]="selectedChart"
-  [chartsHistory]="chartsHistory"
-  (onSelectChartType)="handleSelectChartType($event)"
-  (onSelectChart)="handleSelectChart($event)">
-</opdex-chart-toolbar>
+<ng-container *ngIf="selectedChart; else loading">
+  <opdex-chart-toolbar
+    [selectedChart]="selectedChart"
+    [chartsHistory]="chartsHistory"
+    (onSelectChartType)="handleSelectChartType($event)"
+    (onSelectChart)="handleSelectChart($event)">
+  </opdex-chart-toolbar>
 
-<ng-container [ngSwitch]="selectedChartType">
-  <opdex-new-line-chart *ngSwitchCase="'Line'" [chartData]="selectedChart"></opdex-new-line-chart>
-  <opdex-candle-chart *ngSwitchCase="'Candle'" [chartData]="selectedChart"></opdex-candle-chart>
-  <opdex-volume-chart *ngSwitchCase="'Volume'" [chartData]="selectedChart"></opdex-volume-chart>
-  <!-- Todo: should match the charts height, really should display error and chars should have loaders-->
-  <div *ngSwitchDefault style="height: 450px; width: 100%;"></div>
+  <ng-container [ngSwitch]="selectedChartType">
+    <opdex-new-line-chart *ngSwitchCase="'Line'" [chartData]="selectedChart"></opdex-new-line-chart>
+    <opdex-candle-chart *ngSwitchCase="'Candle'" [chartData]="selectedChart"></opdex-candle-chart>
+    <opdex-volume-chart *ngSwitchCase="'Volume'" [chartData]="selectedChart"></opdex-volume-chart>
+  </ng-container>
 </ng-container>
+
+<ng-template #loading>
+  <div class="loading-chart-container"></div>
+</ng-template>

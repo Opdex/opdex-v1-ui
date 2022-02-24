@@ -13,6 +13,7 @@ import { ChartToolbarComponent } from './chart-toolbar/chart-toolbar.component';
 import { ChartContainerComponent } from './chart-container/chart-container.component';
 import { VolumeChartComponent } from './volume-chart/volume-chart.component';
 import { NewLineChartComponent } from './new-line-chart/new-line-chart.component';
+import { ChartTemplateComponent } from './chart-template/chart-template.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { NewLineChartComponent } from './new-line-chart/new-line-chart.component
     ChartToolbarComponent,
     ChartContainerComponent,
     VolumeChartComponent,
-    NewLineChartComponent
+    NewLineChartComponent,
+    ChartTemplateComponent
   ],
   imports: [
     CommonModule,
@@ -35,10 +37,7 @@ import { NewLineChartComponent } from './new-line-chart/new-line-chart.component
   exports: [
     LineChartComponent,
     LineChangeComponent,
-    CandleChartComponent,
-    ChartToolbarComponent,
-    ChartContainerComponent,
-    VolumeChartComponent
+    ChartContainerComponent
   ]
 })
 export class ChartsModule { }

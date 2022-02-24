@@ -1,0 +1,83 @@
+@import 'src/scss/bootstrap-grid';
+
+.chart-wrapper {
+  position: relative;
+  display: block;
+  min-height: 300px;
+  width: 100%;
+
+  .chart-container {
+    min-height: 300px;
+
+    .chart {
+      width: 100%;
+      min-height: 300px;
+      opacity: 1;
+      transition: .15s ease-in-out;
+
+      &.loading-chart {
+        opacity: 0;
+        transition: .15s ease-in-out;
+      }
+    }
+  }
+
+  .lock-overlay {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
+  }
+
+  .lock-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+  }
+}
+
+.loading-chart-container {
+  width: 100%;
+  min-height: 350px; // +50 for chart toolbar
+}
+
+@media (min-width: map_get($grid-breakpoints, md)) {
+  .chart-wrapper {
+    min-height: 400px;
+
+    .chart-container {
+      min-height: 400px;
+
+      .chart {
+        min-height: 400px;
+      }
+    }
+  }
+
+  .loading-chart-container {
+    min-height: 450px; // +50 for chart toolbar
+  }
+}
+
+@media (min-width: map_get($grid-breakpoints, xl)) {
+  .chart-wrapper {
+    min-height: 450px;
+
+    .chart-container {
+      min-height: 450px;
+
+      .chart {
+        min-height: 450px;
+      }
+    }
+  }
+
+  .loading-chart-container {
+    min-height: 500px; // +50 for chart toolbar
+  }
+}

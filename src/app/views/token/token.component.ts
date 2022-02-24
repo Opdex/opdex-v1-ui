@@ -12,7 +12,7 @@ import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { catchError, map } from 'rxjs/operators';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { ITransactionsRequest } from '@sharedModels/platform-api/requests/transactions/transactions-filter';
-import { delay, switchMap, take, tap } from 'rxjs/operators';
+import { delay, switchMap, tap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Observable, Subscription, of } from 'rxjs';

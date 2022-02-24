@@ -34,7 +34,7 @@ export class VolumeChartComponent extends BaseChartComponent implements OnInit, 
         this.series.setData(this.chartData.values as HistogramData[]);
         this.chart.timeScale().fitContent();
         this.loading = false;
-      });
+      }, 200);
     } else if (!!this.series) {
       // resets data but may be problematic when we want to only append new data
       // Observables and services may be useful here
@@ -54,7 +54,8 @@ export class VolumeChartComponent extends BaseChartComponent implements OnInit, 
       priceFormat: {
         type: 'custom',
         minMove: 0.01,
-        formatter: (price: number) => this._priceFormatter(price, this.chartData.labelPrefix, this.chartData.labelSuffix)
+        formatter: (price: number) =>
+          this._priceFormatter(price, this.chartData.labelPrefix, this.chartData.labelSuffix)
       },
       color: 'rgba(71, 188, 235, .8)',
       lastValueVisible: false,
