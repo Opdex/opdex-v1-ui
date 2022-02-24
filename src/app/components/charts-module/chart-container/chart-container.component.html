@@ -7,7 +7,7 @@
   </opdex-chart-toolbar>
 
   <ng-container [ngSwitch]="selectedChartType">
-    <opdex-new-line-chart *ngSwitchCase="'Line'" [chartData]="selectedChart"></opdex-new-line-chart>
+    <opdex-line-chart *ngSwitchCase="'Line'" [chartData]="selectedChart"></opdex-line-chart>
     <opdex-candle-chart *ngSwitchCase="'Candle'" [chartData]="selectedChart"></opdex-candle-chart>
     <opdex-volume-chart *ngSwitchCase="'Volume'" [chartData]="selectedChart"></opdex-volume-chart>
   </ng-container>

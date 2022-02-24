@@ -5,25 +5,23 @@ import { MatMenuModule } from '@angular/material/menu';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { LineChartComponent } from './line-chart/line-chart.component';
 import { LineChangeComponent } from './line-change/line-change.component';
 import { AngularResizeEventModule } from 'angular-resize-event';
 import { CandleChartComponent } from './candle-chart/candle-chart.component';
 import { ChartToolbarComponent } from './chart-toolbar/chart-toolbar.component';
 import { ChartContainerComponent } from './chart-container/chart-container.component';
 import { VolumeChartComponent } from './volume-chart/volume-chart.component';
-import { NewLineChartComponent } from './new-line-chart/new-line-chart.component';
+import { LineChartComponent } from './line-chart/line-chart.component';
 import { ChartTemplateComponent } from './chart-template/chart-template.component';
 
 @NgModule({
   declarations: [
-    LineChartComponent,
     LineChangeComponent,
     CandleChartComponent,
     ChartToolbarComponent,
     ChartContainerComponent,
     VolumeChartComponent,
-    NewLineChartComponent,
+    LineChartComponent,
     ChartTemplateComponent
   ],
   imports: [
@@ -35,7 +33,6 @@ import { ChartTemplateComponent } from './chart-template/chart-template.componen
     SharedPipesModule
   ],
   exports: [
-    LineChartComponent,
     LineChangeComponent,
     ChartContainerComponent
   ]
