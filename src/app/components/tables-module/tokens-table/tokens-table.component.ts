@@ -18,7 +18,7 @@ import { switchMap, map, take, tap } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { HistoryFilter, HistoryInterval } from '@sharedModels/platform-api/requests/history-filter';
-import { TokenHistory } from '@sharedModels/ui/tokens/token-history';
+import { TokenSnapshotHistory } from '@sharedModels/ui/tokens/token-history';
 import { TransactionView } from '@sharedModels/transaction-view';
 
 @Component({
@@ -83,7 +83,7 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
       .pipe(
         take(1),
         map((tokenHistory: ITokenHistoryResponse) => {
-          token.setHistory(new TokenHistory(tokenHistory));
+          token.setHistory(new TokenSnapshotHistory(token, tokenHistory));
           return token;
         }));
   }
