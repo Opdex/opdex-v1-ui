@@ -193,28 +193,6 @@ export class TokenComponent implements OnInit {
       }));
   }
 
-  // handleChartTimeChange(timeSpan: string): void {
-  //   let startDate = HistoryFilter.startOfDay(new Date());
-  //   let endDate = HistoryFilter.endOfDay(new Date());
-  //   let interval = HistoryInterval.Daily;
-
-  //   if (timeSpan === '1M') {
-  //     startDate = HistoryFilter.historicalDate(startDate, 30);
-  //   } else if (timeSpan === '1W') {
-  //     startDate = HistoryFilter.historicalDate(startDate, 7);
-  //     interval = HistoryInterval.Hourly;
-  //   } else if (timeSpan === '1D') {
-  //     startDate = HistoryFilter.historicalDate(startDate, 1);
-  //     interval = HistoryInterval.Hourly;
-  //   } else {
-  //     startDate = HistoryFilter.historicalDate(startDate, 365);
-  //   }
-
-  //   this.historyFilter = new HistoryFilter(startDate, endDate, interval);
-
-  //   this.getTokenHistory().pipe(take(1)).subscribe();
-  // }
-
   handleTxOption($event: TransactionView): void {
     this._sidebar.openSidenav($event, {pool: this.liquidityPool});
   }

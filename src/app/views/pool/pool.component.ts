@@ -15,7 +15,7 @@ import { LiquidityPoolsService } from "@sharedServices/platform/liquidity-pools.
 import { SidenavService } from "@sharedServices/utility/sidenav.service";
 import { UserContextService } from "@sharedServices/utility/user-context.service";
 import { Observable, Subscription, zip, of } from "rxjs";
-import { tap, switchMap, catchError, take, map, delay } from "rxjs/operators";
+import { tap, switchMap, catchError, map, delay } from "rxjs/operators";
 import { IAddressMining } from "@sharedModels/platform-api/responses/wallets/address-mining.interface";
 import { IAddressStaking } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
@@ -209,28 +209,6 @@ export class PoolComponent implements OnInit, OnDestroy {
         tap((poolHistory: ILiquidityPoolSnapshotHistoryResponse) =>
           this.chartsHistory = new LiquidityPoolSnapshotHistory(this.pool, poolHistory)));
   }
-
-  // handleChartTimeChange(timeSpan: string): void {
-  //   let startDate = HistoryFilter.startOfDay(new Date());
-  //   let endDate = HistoryFilter.endOfDay(new Date());
-  //   let interval = HistoryInterval.Daily;
-
-  //   if (timeSpan === '1M') {
-  //     startDate = HistoryFilter.historicalDate(startDate, 30);
-  //   } else if (timeSpan === '1W') {
-  //     startDate = HistoryFilter.historicalDate(startDate, 7);
-  //     interval = HistoryInterval.Hourly;
-  //   } else if (timeSpan === '1D') {
-  //     startDate = HistoryFilter.historicalDate(startDate, 1);
-  //     interval = HistoryInterval.Hourly;
-  //   } else {
-  //     startDate = HistoryFilter.historicalDate(startDate, 365);
-  //   }
-
-  //   this.historyFilter = new HistoryFilter(startDate, endDate, interval);
-
-  //   this.getPoolHistory().pipe(take(1)).subscribe();
-  // }
 
   handleTxOption($event: TransactionView): void {
     this._sidenav.openSidenav($event, {pool: this.pool});

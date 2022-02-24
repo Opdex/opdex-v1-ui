@@ -28,7 +28,6 @@ export class VolumeChartComponent extends BaseChartComponent implements OnInit, 
 
   ngOnChanges(): void {
     if (!!this.chartData && !!this.series === false) {
-      console.log(this.chartData, this.series)
       setTimeout(_ => {
         this.addVolumeSeries();
         this.series.setData(this.chartData.values as HistogramData[]);
