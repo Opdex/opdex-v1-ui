@@ -59,14 +59,7 @@
 
       <div class="col-12 col-lg-8 col-xl-9">
         <opdex-card>
-          <opdex-line-chart
-            [chartData]="chartData"
-            [chartOptions]="chartOptions"
-            [selectedChart]="selectedChart"
-            title="{{selectedChart.category}}"
-            (onTypeChange)="handleChartTypeChange($event)"
-            (onTimeChange)="handleChartTimeChange($event)">
-          </opdex-line-chart>
+          <opdex-chart-container [chartsHistory]="chartsHistory"></opdex-chart-container>
         </opdex-card>
       </div>
     </div>

@@ -1,36 +1,62 @@
+import { Market } from '@sharedModels/ui/markets/market';
+import { LineData } from 'lightweight-charts';
 import { IMarketHistoryResponse } from '@sharedModels/platform-api/responses/markets/market-history-response.interface';
+import { BarData, HistogramData } from 'lightweight-charts';
+import { DataPoint } from '../charts/data-point';
+import { OhlcPoint } from '../charts/ohlc-point';
 
-export class MarketHistory {
-  liquidity: any;
-  volume: any;
-  staking: any;
+// Todo: Append new points
+// Todo: Prepend older points
+export class MarketSnapshotHistory implements IChartsSnapshotHistory {
+  charts: IChartData[] = [];
 
-  constructor(history: IMarketHistoryResponse) {
-    const liquidity = [];
-    const volume = [];
-    const staking = [];
-
-    history.results.forEach(history => {
-      const time = Date.parse(history.timestamp.toString()) / 1000;
-
-      liquidity.push({
-        time,
-        value: parseFloat(history.liquidityUsd.close)
-      });
-
-      volume.push({
-        time,
-        value: parseFloat(history.volumeUsd)
-      });
-
-      staking.push({
-        time,
-        value: parseFloat(history.staking.weight.close.split('.')[0])
-      });
+  constructor(market: Market, snapshots: IMarketHistoryResponse) {
+    // Create Liquidity Charts
+    this.charts.push({
+      label: 'Liquidity',
+      labelPrefix: '$',
+      labelSuffix: '',
+      chartTypes: ['Line', 'Candle'],
+      timeSpans: ['1D'],
+      values: snapshots.results.map(result =>
+        new OhlcPoint(result.liquidityUsd, result.timestamp, 8))
     });
 
-    this.liquidity = liquidity;
-    this.volume = volume;
-    this.staking = staking;
+    // Create Volume Charts
+    this.charts.push({
+      label: 'Volume',
+      labelPrefix: '$',
+      labelSuffix: '',
+      chartTypes: ['Volume'],
+      timeSpans: ['1D'],
+      values: snapshots.results.map(result =>
+        new DataPoint(result.volumeUsd, result.timestamp, 8))
+    });
+
+    // Create Staking Charts
+    if (market.isStaking) {
+      this.charts.push({
+        label: 'Staking',
+        labelPrefix: '',
+        labelSuffix: market.tokens.staking.symbol,
+        chartTypes: ['Line', 'Candle'],
+        timeSpans: ['1D'],
+        values: snapshots.results.map(result =>
+          new OhlcPoint(result.staking.weight, result.timestamp, market.tokens.staking.decimals))
+      });
+    }
   }
+}
+
+export interface IChartsSnapshotHistory {
+  charts: IChartData[];
+}
+
+export interface IChartData {
+  label: string;
+  labelPrefix: string;
+  labelSuffix: string;
+  chartTypes: ('Volume' | 'Line' | 'Candle')[];
+  timeSpans: ('1h' | '1D')[];
+  values: BarData[] | HistogramData[] | LineData[];
 }

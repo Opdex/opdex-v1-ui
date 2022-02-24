@@ -1,20 +1,20 @@
 // import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-// import { LineChartComponent } from './new-line-chart.component';
+// import { ChartTemplateComponent } from './chart-template.component';
 
-// describe('LineChartComponent', () => {
-//   let component: LineChartComponent;
-//   let fixture: ComponentFixture<LineChartComponent>;
+// describe('ChartTemplateComponent', () => {
+//   let component: ChartTemplateComponent;
+//   let fixture: ComponentFixture<ChartTemplateComponent>;
 
 //   beforeEach(async () => {
 //     await TestBed.configureTestingModule({
-//       declarations: [ LineChartComponent ]
+//       declarations: [ ChartTemplateComponent ]
 //     })
 //     .compileComponents();
 //   });
 
 //   beforeEach(() => {
-//     fixture = TestBed.createComponent(LineChartComponent);
+//     fixture = TestBed.createComponent(ChartTemplateComponent);
 //     component = fixture.componentInstance;
 //     fixture.detectChanges();
 //   });

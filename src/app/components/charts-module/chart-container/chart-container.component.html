@@ -1,0 +1,18 @@
+<ng-container *ngIf="selectedChart; else loading">
+  <opdex-chart-toolbar
+    [selectedChart]="selectedChart"
+    [chartsHistory]="chartsHistory"
+    (onSelectChartType)="handleSelectChartType($event)"
+    (onSelectChart)="handleSelectChart($event)">
+  </opdex-chart-toolbar>
+
+  <ng-container [ngSwitch]="selectedChartType">
+    <opdex-line-chart *ngSwitchCase="'Line'" [chartData]="selectedChart"></opdex-line-chart>
+    <opdex-candle-chart *ngSwitchCase="'Candle'" [chartData]="selectedChart"></opdex-candle-chart>
+    <opdex-volume-chart *ngSwitchCase="'Volume'" [chartData]="selectedChart"></opdex-volume-chart>
+  </ng-container>
+</ng-container>
+
+<ng-template #loading>
+  <div class="loading-chart-container"></div>
+</ng-template>

@@ -1,19 +1,19 @@
-import { Component, ElementRef, Injector, Input, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { IChartData } from '@sharedModels/ui/markets/market-history';
-import { ShortNumberPipe } from '@sharedPipes/short-number.pipe';
-import { ISeriesApi, DeepPartial, LineWidth, LineData } from 'lightweight-charts';
+import { ISeriesApi, BarData } from 'lightweight-charts';
+import { Component, OnInit, OnDestroy, OnChanges, Injector, ElementRef, ViewChild, Input } from '@angular/core';
 import { BaseChartComponent } from '../base-chart.component';
+import { ShortNumberPipe } from '@sharedPipes/short-number.pipe';
 
 @Component({
-  selector: 'opdex-line-chart',
-  templateUrl: './line-chart.component.html',
-  styleUrls: ['./line-chart.component.scss'],
+  selector: 'opdex-candle-chart',
+  templateUrl: './candle-chart.component.html',
+  styleUrls: ['./candle-chart.component.scss'],
   providers: [ShortNumberPipe]
 })
-export class LineChartComponent extends BaseChartComponent implements OnInit, OnChanges, OnDestroy {
+export class CandleChartComponent extends BaseChartComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('chartContainer') container: ElementRef;
   @Input() chartData: IChartData;
-  series: ISeriesApi<'Area'>;
+  series: ISeriesApi<'Candlestick'>;
 
   constructor(
     protected _shortNumberPipe: ShortNumberPipe,
@@ -23,21 +23,21 @@ export class LineChartComponent extends BaseChartComponent implements OnInit, On
   }
 
   ngOnInit(): void {
-    this._init('lineChartWrapper');
+    this._init('candleChartWrapper');
   }
 
   ngOnChanges(): void {
     if (!!this.chartData && !!this.series === false) {
       setTimeout(_ => {
-        this.addLineSeries();
-        this.series.setData(this.chartData.values as LineData[]);
+        this.addCandleStickSeries();
+        this.series.setData(this.chartData.values as BarData[]);
         this.chart.timeScale().fitContent();
         this.loading = false;
       }, 200);
     } else if (!!this.series) {
       // resets data but may be problematic when we want to only append new data
       // Observables and services may be useful here
-      this.series.setData(this.chartData.values as LineData[]);
+      this.series.setData(this.chartData.values as BarData[]);
       this.chart.timeScale().fitContent();
     }
   }
@@ -48,14 +48,10 @@ export class LineChartComponent extends BaseChartComponent implements OnInit, On
     this.baseSubscription.unsubscribe();
   }
 
-  private addLineSeries(): void {
-    this.series = this.chart.addAreaSeries({
-      lineColor: 'rgba(71, 188, 235, .6)',
-      lineWidth: <DeepPartial<LineWidth>>4,
-      topColor: 'rgba(71, 188, 235, .5)',
-      bottomColor: this.theme === 'light-mode' ? 'rgba(255, 255, 255, .4)' : 'rgba(0, 0, 0, .1)',
-      priceLineVisible: true,
+  private addCandleStickSeries() {
+    this.series = this.chart.addCandlestickSeries({
       lastValueVisible: false,
+      priceLineVisible: false,
       priceFormat: {
         type: 'custom',
         minMove: 0.00000001,

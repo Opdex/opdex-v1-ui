@@ -1,20 +1,20 @@
 // import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-// import { LineChartComponent } from './new-line-chart.component';
+// import { CandleChartComponent } from './candle-chart.component';
 
-// describe('LineChartComponent', () => {
-//   let component: LineChartComponent;
-//   let fixture: ComponentFixture<LineChartComponent>;
+// describe('CandleChartComponent', () => {
+//   let component: CandleChartComponent;
+//   let fixture: ComponentFixture<CandleChartComponent>;
 
 //   beforeEach(async () => {
 //     await TestBed.configureTestingModule({
-//       declarations: [ LineChartComponent ]
+//       declarations: [ CandleChartComponent ]
 //     })
 //     .compileComponents();
 //   });
 
 //   beforeEach(() => {
-//     fixture = TestBed.createComponent(LineChartComponent);
+//     fixture = TestBed.createComponent(CandleChartComponent);
 //     component = fixture.componentInstance;
 //     fixture.detectChanges();
 //   });

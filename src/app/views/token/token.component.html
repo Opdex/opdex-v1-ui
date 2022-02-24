@@ -49,7 +49,7 @@
           <div class="col-12 col-sm-6 col-lg-12">
             <opdex-token-summary-card [token]="token"></opdex-token-summary-card>
 
-            <opdex-card *ngIf="token?.address === liquidityPool?.address">
+            <opdex-card *ngIf="token && token.address === liquidityPool?.address">
               <div class="flex-row-center mb-2">
                 <opdex-token-icons [tokens]="[liquidityPool?.tokens?.crs, liquidityPool?.tokens?.src]"></opdex-token-icons>
                 <a class="b-400 no-decoration ml-2" routerLink="/pools/{{liquidityPool?.address}}">{{liquidityPool?.name}}</a>
@@ -91,14 +91,7 @@
 
       <div class="col-12 col-lg-8 col-xl-9">
         <opdex-card>
-          <opdex-line-chart
-            [chartData]="chartData"
-            [chartOptions]="chartOptions"
-            [selectedChart]="selectedChart"
-            title="{{selectedChart.category}}"
-            (onTypeChange)="handleChartTypeChange($event)"
-            (onTimeChange)="handleChartTimeChange($event)">
-          </opdex-line-chart>
+          <opdex-chart-container [chartsHistory]="chartsHistory"></opdex-chart-container>
         </opdex-card>
       </div>
     </div>

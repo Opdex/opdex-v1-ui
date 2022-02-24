@@ -1,20 +1,20 @@
 // import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-// import { LineChartComponent } from './new-line-chart.component';
+// import { VolumeChartComponent } from './volume-chart.component';
 
-// describe('LineChartComponent', () => {
-//   let component: LineChartComponent;
-//   let fixture: ComponentFixture<LineChartComponent>;
+// describe('VolumeChartComponent', () => {
+//   let component: VolumeChartComponent;
+//   let fixture: ComponentFixture<VolumeChartComponent>;
 
 //   beforeEach(async () => {
 //     await TestBed.configureTestingModule({
-//       declarations: [ LineChartComponent ]
+//       declarations: [ VolumeChartComponent ]
 //     })
 //     .compileComponents();
 //   });
 
 //   beforeEach(() => {
-//     fixture = TestBed.createComponent(LineChartComponent);
+//     fixture = TestBed.createComponent(VolumeChartComponent);
 //     component = fixture.componentInstance;
 //     fixture.detectChanges();
 //   });

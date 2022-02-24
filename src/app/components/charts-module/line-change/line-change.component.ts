@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild, OnChanges } from '@angular/core';
-import { createChart, DeepPartial, IChartApi, ISeriesApi, LineWidth } from 'lightweight-charts';
+import { createChart, DeepPartial, IChartApi, ISeriesApi, LineData, LineWidth } from 'lightweight-charts';
 
 @Component({
   selector: 'opdex-line-change',
@@ -8,7 +8,7 @@ import { createChart, DeepPartial, IChartApi, ISeriesApi, LineWidth } from 'ligh
 })
 export class LineChangeComponent implements OnChanges, OnInit {
   @ViewChild('chartPreview') container: ElementRef;
-  @Input() chartData: any;
+  @Input() chartData: LineData[];
   type: string = 'Area';
   lineSeries: ISeriesApi<'Area'>;
   chart: IChartApi;

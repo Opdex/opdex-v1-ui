@@ -1,19 +1,19 @@
 import { Component, ElementRef, Injector, Input, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { IChartData } from '@sharedModels/ui/markets/market-history';
 import { ShortNumberPipe } from '@sharedPipes/short-number.pipe';
-import { ISeriesApi, DeepPartial, LineWidth, LineData } from 'lightweight-charts';
+import { ISeriesApi, HistogramData } from 'lightweight-charts';
 import { BaseChartComponent } from '../base-chart.component';
 
 @Component({
-  selector: 'opdex-line-chart',
-  templateUrl: './line-chart.component.html',
-  styleUrls: ['./line-chart.component.scss'],
+  selector: 'opdex-volume-chart',
+  templateUrl: './volume-chart.component.html',
+  styleUrls: ['./volume-chart.component.scss'],
   providers: [ShortNumberPipe]
 })
-export class LineChartComponent extends BaseChartComponent implements OnInit, OnChanges, OnDestroy {
+export class VolumeChartComponent extends BaseChartComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('chartContainer') container: ElementRef;
   @Input() chartData: IChartData;
-  series: ISeriesApi<'Area'>;
+  series: ISeriesApi<'Histogram'>;
 
   constructor(
     protected _shortNumberPipe: ShortNumberPipe,
@@ -23,21 +23,21 @@ export class LineChartComponent extends BaseChartComponent implements OnInit, On
   }
 
   ngOnInit(): void {
-    this._init('lineChartWrapper');
+    this._init('volumeChartWrapper');
   }
 
   ngOnChanges(): void {
     if (!!this.chartData && !!this.series === false) {
       setTimeout(_ => {
-        this.addLineSeries();
-        this.series.setData(this.chartData.values as LineData[]);
+        this.addVolumeSeries();
+        this.series.setData(this.chartData.values as HistogramData[]);
         this.chart.timeScale().fitContent();
         this.loading = false;
       }, 200);
     } else if (!!this.series) {
       // resets data but may be problematic when we want to only append new data
       // Observables and services may be useful here
-      this.series.setData(this.chartData.values as LineData[]);
+      this.series.setData(this.chartData.values as HistogramData[]);
       this.chart.timeScale().fitContent();
     }
   }
@@ -48,20 +48,17 @@ export class LineChartComponent extends BaseChartComponent implements OnInit, On
     this.baseSubscription.unsubscribe();
   }
 
-  private addLineSeries(): void {
-    this.series = this.chart.addAreaSeries({
-      lineColor: 'rgba(71, 188, 235, .6)',
-      lineWidth: <DeepPartial<LineWidth>>4,
-      topColor: 'rgba(71, 188, 235, .5)',
-      bottomColor: this.theme === 'light-mode' ? 'rgba(255, 255, 255, .4)' : 'rgba(0, 0, 0, .1)',
-      priceLineVisible: true,
-      lastValueVisible: false,
+  private addVolumeSeries(): void {
+    this.series = this.chart.addHistogramSeries({
       priceFormat: {
         type: 'custom',
-        minMove: 0.00000001,
+        minMove: 0.01,
         formatter: (price: number) =>
           this._priceFormatter(price, this.chartData.labelPrefix, this.chartData.labelSuffix)
-      }
+      },
+      color: 'rgba(71, 188, 235, .8)',
+      lastValueVisible: false,
+      base: 0,
     });
   }
 }

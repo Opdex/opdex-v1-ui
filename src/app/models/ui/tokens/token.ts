@@ -1,5 +1,5 @@
 import { TokenDistribution } from './token-distribution';
-import { TokenHistory } from './token-history';
+import { TokenSnapshotHistory } from './token-history';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { TokenSummary } from '@sharedModels/ui/tokens/token-summary';
@@ -18,7 +18,7 @@ export class Token {
   private _createdBlock: number;
   private _modifiedBlock: number;
   private _balance?: FixedDecimal;
-  private _history?: TokenHistory;
+  private _history?: TokenSnapshotHistory;
   private _distribution?: TokenDistribution;
 
   public get address(): string {
@@ -69,7 +69,7 @@ export class Token {
     return this._balance;
   }
 
-  public get history(): TokenHistory {
+  public get history(): TokenSnapshotHistory {
     return this._history;
   }
 
@@ -123,7 +123,7 @@ export class Token {
     this._balance = balance;
   }
 
-  public setHistory(history: TokenHistory) {
+  public setHistory(history: TokenSnapshotHistory) {
     this._history = history;
   }
 }
