@@ -5,7 +5,12 @@
     <h4 class="{{quoteReceipt.success ? 'mb-1' : 'mb-3'}}">Transaction Quote</h4>
 
     <ng-container *ngIf="quoteReceipt.success">
-      <opdex-tx-receipt [tx]="quoteReceipt" [showBottomDivider]="false" [showTimeAgo]="false" [collapsed]="false"></opdex-tx-receipt>
+      <opdex-tx-receipt
+        [tx]="quoteReceipt"
+        [showBottomDivider]="false"
+        [showTimeAgo]="false"
+        [collapsed]="false">
+      </opdex-tx-receipt>
 
       <mat-divider></mat-divider>
     </ng-container>
@@ -19,8 +24,21 @@
       <p>{{quote.error.friendly}}</p>
 
       <div class="flex-row-center-between mb-3" *ngIf="!showQrAnyways">
-        <button mat-stroked-button style="flex-basis: 30%" (click)="close()">Cancel</button>
-        <button mat-flat-button color="warn" (click)="showQrAnyways = true; showMethodDetails = true; showParameterDetails = true;" class="ml-3" style="flex-grow: 1;">Continue Anyways</button>
+        <button mat-stroked-button
+          style="flex-basis: 30%"
+          (click)="close()">
+          Cancel
+        </button>
+
+        <button mat-flat-button
+          color="warn"
+          (click)="showQrAnyways = true;
+                   showMethodDetails = true;
+                   showParameterDetails = true;"
+          class="ml-3"
+          style="flex-grow: 1;">
+          Continue Anyways
+        </button>
       </div>
 
       <mat-divider></mat-divider>

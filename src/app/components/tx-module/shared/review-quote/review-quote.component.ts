@@ -126,11 +126,11 @@ export class ReviewQuoteComponent implements OnDestroy {
     this.showMethodDetails = !this.showMethodDetails;
   }
 
-  close() {
+  close(): void {
     this._bottomSheetRef.dismiss(this.txHash);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe();
     this._transactionsService.setQuoteDrawerStatus(false);
   }

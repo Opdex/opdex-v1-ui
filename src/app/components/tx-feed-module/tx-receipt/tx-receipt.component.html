@@ -2,7 +2,15 @@
   <div class="tx-container">
     <div class="flex-row-center w-100 mb-1">
       <div class="icon-container">
-        <mat-icon [ngClass]="[iconSizes.small, (tx.transactionType?.iconColor || 'error')]">{{tx.transactionType?.icon || icons.error}}</mat-icon>
+        <mat-icon
+          *ngIf="tx.success"
+          [ngClass]="[iconSizes.small, (tx.transactionType?.iconColor || 'orange')]">
+          {{tx.transactionType?.icon || icons.warning}}
+        </mat-icon>
+
+        <mat-icon *ngIf="!tx.success" class="small red">
+          {{icons.error}}
+        </mat-icon>
       </div>
 
       <div class="flex-row-center-between w-100">
@@ -41,8 +49,8 @@
     </div>
 
     <ng-template #invalid>
-      <div class="icon-container-offset flex-row-center" >
-        <span *ngIf="tx.success">Unable to read transaction summary.</span>
+      <div class="icon-container-offset flex-row-center">
+        <span *ngIf="tx.success">Unable to read transaction summary, no transaction events found.</span>
         <span *ngIf="!tx.success">{{tx.error.friendly}}</span>
       </div>
     </ng-template>
