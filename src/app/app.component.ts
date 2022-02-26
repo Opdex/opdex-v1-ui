@@ -1,3 +1,4 @@
+import { environment } from '@environments/environment';
 import { IIndexStatus } from './models/platform-api/responses/index/index-status.interface';
 import { AppUpdateModalComponent } from './components/modals-module/app-update-modal/app-update-modal.component';
 import { TransactionReceipt } from './models/ui/transactions/transaction-receipt';
@@ -75,9 +76,6 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
 
     setTimeout(() => {
       this.loading = false;
-      this._appUpdate.versionUpdates
-        .pipe(take(1))
-        .subscribe(_ => this.openAppUpdate());
     }, 1500);
   }
 
@@ -134,6 +132,16 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
           if (message.status === true) await this.sidenav.open()
           else await this.sidenav.close();
         }));
+
+    // Every 60 seconds check for an update
+    if (environment.production) {
+      this.subscription.add(
+        timer(60, 60)
+          .subscribe(async _ => {
+            const updateAvailable = await this._appUpdate.checkForUpdate();
+            if (updateAvailable) this.openAppUpdate();
+          }));
+    }
   }
 
   update(): void {
