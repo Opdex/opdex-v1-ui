@@ -43,7 +43,7 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
     private _env: EnvironmentsService
   ) {
     this.dataSource = new MatTableDataSource<any>();
-    this.displayedColumns = ['pool', 'token', 'balance', 'total', 'actions'];
+    this.displayedColumns = ['pool', 'balance', 'total', 'valueCrs', 'valueSrc', 'actions'];
   }
 
   ngOnChanges() {
@@ -111,10 +111,14 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
             .pipe(map(balances => {
               this.dataSource.data = balances.map(({pool, balance}) => {
                 const amount = new FixedDecimal(balance.balance, pool.tokens.src.decimals);
+                const valueCrs = amount.divide(pool.tokens.lp.totalSupply).multiply(pool.summary.reserves.crs);
+                const valueSrc = amount.divide(pool.tokens.lp.totalSupply).multiply(pool.summary.reserves.src);
 
                 return {
                   pool,
                   balance: amount,
+                  valueCrs: valueCrs,
+                  valueSrc: valueSrc,
                   isCurrentMarket: pool.market === this._env.marketAddress,
                   total: pool.tokens.src.summary.priceUsd.multiply(amount)
                 }
