@@ -38,7 +38,7 @@ export class LiquidityPoolSnapshotHistory implements IChartsSnapshotHistory {
         chartTypes: ['Line', 'Candle'],
         timeSpans: ['1D'],
         values: snapshots.results.map(result =>
-          new OhlcPoint(result.staking.usd, result.timestamp, pool.tokens.staking.decimals))
+          new OhlcPoint(result.staking.weight, result.timestamp, pool.tokens.staking.decimals))
       });
     }
 

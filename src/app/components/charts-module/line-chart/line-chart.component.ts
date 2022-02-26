@@ -52,8 +52,8 @@ export class LineChartComponent extends BaseChartComponent implements OnInit, On
     this.series = this.chart.addAreaSeries({
       lineColor: 'rgba(71, 188, 235, .6)',
       lineWidth: <DeepPartial<LineWidth>>4,
-      topColor: 'rgba(71, 188, 235, .5)',
-      bottomColor: this.theme === 'light-mode' ? 'rgba(255, 255, 255, .4)' : 'rgba(0, 0, 0, .1)',
+      topColor: 'rgba(71, 188, 235, .4)',
+      bottomColor: 'rgba(71, 188, 235, 0)',
       priceLineVisible: true,
       lastValueVisible: false,
       priceFormat: {
