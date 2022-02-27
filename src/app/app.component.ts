@@ -135,12 +135,12 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
 
     // Every 60 seconds check for an update
     if (environment.production) {
-      this.subscription.add(
-        timer(60, 60)
-          .subscribe(async _ => {
-            const updateAvailable = await this._appUpdate.checkForUpdate();
-            if (updateAvailable) this.openAppUpdate();
-          }));
+      // this.subscription.add(
+      //   timer(60, 60)
+      //     .subscribe(async _ => {
+      //       const updateAvailable = await this._appUpdate.checkForUpdate();
+      //       if (updateAvailable) this.openAppUpdate();
+      //     }));
     }
   }
 
