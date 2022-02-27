@@ -133,14 +133,13 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
           else await this.sidenav.close();
         }));
 
-    // Every 60 seconds check for an update
     if (environment.production) {
-      // this.subscription.add(
-      //   timer(60, 60)
-      //     .subscribe(async _ => {
-      //       const updateAvailable = await this._appUpdate.checkForUpdate();
-      //       if (updateAvailable) this.openAppUpdate();
-      //     }));
+      this.subscription.add(
+        timer(60000, 60000) // 60 second delay, 60 second interval
+          .subscribe(async _ => {
+            const updateAvailable = await this._appUpdate.checkForUpdate();
+            if (updateAvailable) this.openAppUpdate();
+          }));
     }
   }
 
