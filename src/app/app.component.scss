@@ -3,6 +3,12 @@
 
 $sidebar-width: 100px;
 
+.loading-main {
+  overflow: hidden;
+  max-height: 100vh;
+  max-width: 100vh;
+}
+
 .main-content-container {
   #desktop-sidenav {
     width: $sidebar-width;

@@ -76,7 +76,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
 
     setTimeout(() => {
       this.loading = false;
-    }, 1500);
+    }, 2000);
   }
 
   ngAfterContentChecked(): void {

@@ -1,4 +1,4 @@
-<main [ngClass]="theme">
+<main [ngClass]="{'loading-main': loading}" class="{{theme}}">
   <mat-sidenav-container (backdropClick)="closeSidenav()" class="w-100 h-100 {{loading ? 'loading' : 'done'}}" *ngIf="configuredForEnv">
     <mat-sidenav #sidenav
       (keydown.escape)="closeSidenav()"

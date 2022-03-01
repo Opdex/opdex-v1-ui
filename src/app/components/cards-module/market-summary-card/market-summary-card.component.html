@@ -3,7 +3,7 @@
     <div class="flex-row-center-between mb-1">
       <div class="flex-row-center">
         <mat-icon class="blue mr-1 tiny">{{icons.liquidityPool}}</mat-icon>
-        <p class="mb-0 light b-300">Liquidity</p>
+        <p class="mb-0 light b-400">Liquidity</p>
       </div>
 
       <div class="flex-row-center">
@@ -22,7 +22,7 @@
       <div class="flex-row-center-between mb-1">
         <div class="flex-row-center">
           <mat-icon class="purple mr-1 tiny">{{icons.staking}}</mat-icon>
-          <p class="mb-0 light b-300">Staking</p>
+          <p class="mb-0 light b-400">Staking</p>
         </div>
 
         <div class="flex-row-center">
@@ -49,7 +49,7 @@
     <div class="flex-row-center-between mb-1">
       <div class="flex-row-center">
         <mat-icon class="green mr-1 tiny">{{icons.volume}}</mat-icon>
-        <p class="mb-0 light">Volume <small>(24hr)</small></p>
+        <p class="mb-0 light b-400">Volume <small>(24hr)</small></p>
       </div>
 
       <opdex-number prefix="$" [value]="market?.summary?.volumeUsd" [short]="true"></opdex-number>

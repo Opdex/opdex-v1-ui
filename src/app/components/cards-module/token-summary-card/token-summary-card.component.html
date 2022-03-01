@@ -38,7 +38,7 @@
       <div class="flex-row-center-between mb-1">
         <div class="flex-row-center">
           <mat-icon class="blue mr-1 tiny">{{icons.tokens}}</mat-icon>
-          <p class="mb-0 light">Distribution</p>
+          <p class="mb-0 light b-400">Distribution</p>
         </div>
 
         <span class="badge {{token?.distribution.isReady(latestBlock) ? 'green' : 'red'}}">
@@ -48,7 +48,7 @@
 
       <ng-container *ngIf="token?.distribution.nextDistributionBlock > latestBlock; else distributionReady">
         <div class="flex-row-center-between">
-          <p class="mb-0">Next Distribution</p>
+          <p class="mb-0">Next Available</p>
           <opdex-number prefix="#" [value]="token?.distribution.nextDistributionBlock"></opdex-number>
         </div>
 

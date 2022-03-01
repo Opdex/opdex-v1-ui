@@ -4,13 +4,16 @@ import { IMarketHistoryResponse } from '@sharedModels/platform-api/responses/mar
 import { BarData, HistogramData } from 'lightweight-charts';
 import { DataPoint } from '../charts/data-point';
 import { OhlcPoint } from '../charts/ohlc-point';
+import { BaseHistory } from '@sharedModels/base-history';
 
 // Todo: Append new points
 // Todo: Prepend older points
-export class MarketSnapshotHistory implements IChartsSnapshotHistory {
+export class MarketSnapshotHistory extends BaseHistory implements IChartsSnapshotHistory {
   charts: IChartData[] = [];
 
   constructor(market: Market, snapshots: IMarketHistoryResponse) {
+    super();
+
     // Create Liquidity Charts
     this.charts.push({
       label: 'Liquidity',
@@ -18,8 +21,8 @@ export class MarketSnapshotHistory implements IChartsSnapshotHistory {
       labelSuffix: '',
       chartTypes: ['Line', 'Candle'],
       timeSpans: ['1D'],
-      values: snapshots.results.map(result =>
-        new OhlcPoint(result.liquidityUsd, result.timestamp, 8))
+      values: this._removeZeros(snapshots.results.map(result =>
+        new OhlcPoint(result.liquidityUsd, result.timestamp, 8)))
     });
 
     // Create Volume Charts
@@ -29,8 +32,8 @@ export class MarketSnapshotHistory implements IChartsSnapshotHistory {
       labelSuffix: '',
       chartTypes: ['Volume'],
       timeSpans: ['1D'],
-      values: snapshots.results.map(result =>
-        new DataPoint(result.volumeUsd, result.timestamp, 8))
+      values: this._removeZeros(snapshots.results.map(result =>
+        new DataPoint(result.volumeUsd, result.timestamp, 8)))
     });
 
     // Create Staking Charts
@@ -41,8 +44,8 @@ export class MarketSnapshotHistory implements IChartsSnapshotHistory {
         labelSuffix: market.tokens.staking.symbol,
         chartTypes: ['Line', 'Candle'],
         timeSpans: ['1D'],
-        values: snapshots.results.map(result =>
-          new OhlcPoint(result.staking.weight, result.timestamp, market.tokens.staking.decimals))
+        values: this._removeZeros(snapshots.results.map(result =>
+          new OhlcPoint(result.staking.weight, result.timestamp, market.tokens.staking.decimals)))
       });
     }
   }
