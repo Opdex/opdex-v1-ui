@@ -15,6 +15,7 @@ import { Observable, of, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, take, tap } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'opdex-tx-vault-proposal-vote',
@@ -105,8 +106,8 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
                  (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
-  handleAddRemoveStatus(): void {
-    this.isWithdrawal = !this.isWithdrawal;
+  handleAddRemoveStatus(event: MatSlideToggleChange): void {
+    this.isWithdrawal = event.checked;
     this.positionType = this.isWithdrawal ? 'ProposalVote' : 'Balance';
   }
 

@@ -1,3 +1,5 @@
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { Vault } from '@sharedModels/ui/vaults/vault';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
@@ -18,6 +20,8 @@ import { switchMap, tap, take } from 'rxjs/operators';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
 import { VaultProposal } from '@sharedModels/ui/vaults/vault-proposal';
+import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
+import { ReviewQuoteComponent } from '@sharedComponents/tx-module/shared/review-quote/review-quote.component';
 
 @Component({
   selector: 'opdex-vault-proposals-table',
@@ -44,7 +48,9 @@ export class VaultProposalsTableComponent  implements OnChanges, OnDestroy {
     private _indexService: IndexService,
     private _sidebar: SidenavService,
     private _userContext: UserContextService,
-    private _env: EnvironmentsService
+    private _env: EnvironmentsService,
+    private _platformApiService: PlatformApiService,
+    private _bottomSheet: MatBottomSheet
   ) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['proposalId', 'type', 'proposed', 'status', 'minimums', 'progress', 'expiration', 'actions'];
@@ -75,6 +81,15 @@ export class VaultProposalsTableComponent  implements OnChanges, OnDestroy {
 
   openSidebar(childView: string, proposalId: number, withdraw: boolean): void {
     this._sidebar.openSidenav(TransactionView.vaultProposal, { child: childView, proposalId, withdraw })
+  }
+
+  quoteCompleteProposal(proposalId: number): void {
+    if (!this.context?.wallet) return;
+
+    this._platformApiService
+      .completeVaultProposal(this._env.vaultAddress, proposalId)
+        .pipe(take(1))
+        .subscribe((quote: ITransactionQuote) => this._bottomSheet.open(ReviewQuoteComponent, { data: quote }));
   }
 
   private getProposals$(cursor?: string): Observable<VaultProposals> {

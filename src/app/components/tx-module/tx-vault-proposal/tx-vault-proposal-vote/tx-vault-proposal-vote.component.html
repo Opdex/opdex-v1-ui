@@ -4,55 +4,61 @@
       <opdex-input-control placeholder="1" [suffixDisabled]="true" label="Proposal #" [formControl]="proposalId"></opdex-input-control>
     </div>
 
-    <div class="mb-3">
-      <opdex-input-control
-        [prefixIcon]="isWithdrawal ? icons.remove : icons.add"
-        [prefixIconDisabled]="false"
-        (onPrefixClick)="handleAddRemoveStatus()"
-        [suffixDisabled]="true"
-        [label]="isWithdrawal ? 'Withdraw' : 'Vote'"
-        [formControl]="amount"
-        [numbersOnly]="true"
-        suffix="CRS">
-        <div class="flex-row-center-end">
-          <span class="success" *ngIf="fiatValue">${{fiatValue | shortNumber}}</span>
-        </div>
-      </opdex-input-control>
-
-      <opdex-percentage-amount-buttons
-        contract="{{ isWithdrawal ? vaultAddress : 'CRS'}}"
-        [token]="crs"
-        [positionType]="positionType"
-        [selected]="percentageSelected"
-        (onPercentageSelect)="handlePercentageSelect($event)"
-        [proposalId]="proposalId.value"
-        *ngIf="crs"></opdex-percentage-amount-buttons>
-<!--
-      <p class="mt-2 mb-0 flex-row-center" *ngIf="balanceError && form.valid && proposalId.value">
-        <mat-icon color="warn" [ngClass]="iconSizes.tiny" class="mr-2">{{icons.error}}</mat-icon>
-        Insufficient Balance
-      </p> -->
-
-      <div class="mt-2" *ngIf="balanceError">
-        <opdex-tx-quote-error
-          [warn]="true"
-          message="Insufficient Balance">
-        </opdex-tx-quote-error>
+    <opdex-input-control
+      [prefixIcon]="isWithdrawal ? icons.remove : icons.add"
+      [prefixIconDisabled]="true"
+      [suffixDisabled]="true"
+      [label]="isWithdrawal ? 'Withdraw' : 'Vote'"
+      [formControl]="amount"
+      [numbersOnly]="true"
+      suffix="CRS">
+      <div class="flex-row-center-end">
+        <span class="success" *ngIf="fiatValue">${{fiatValue | shortNumber}}</span>
       </div>
-    </div>
+    </opdex-input-control>
 
-    <mat-checkbox
-      *ngIf="!isWithdrawal"
-      formControlName="inFavor"
+    <opdex-percentage-amount-buttons
+      contract="{{ isWithdrawal ? vaultAddress : 'CRS'}}"
+      [token]="crs"
+      [positionType]="positionType"
+      [selected]="percentageSelected"
+      (onPercentageSelect)="handlePercentageSelect($event)"
+      [proposalId]="proposalId.value"
+      *ngIf="crs">
+    </opdex-percentage-amount-buttons>
+
+    <mat-slide-toggle
+      class="d-block mt-3"
       color="primary"
-      name="inFavor"
-      value="false"
-      aria-label="In Favor">
-      In Favor
-    </mat-checkbox>
+      [checked]="isWithdrawal"
+      (change)="handleAddRemoveStatus($event)">
+      <span [ngClass]="{'light': !isWithdrawal}">Withdraw Vote</span>
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      *ngIf="!isWithdrawal"
+      class="d-block mt-3"
+      color="primary"
+      formControlName="inFavor">
+      <span [ngClass]="{'light': !inFavor.value}">In Favor</span>
+    </mat-slide-toggle>
+
+    <opdex-card [info]="true" class="d-block mt-3" *ngIf="isWithdrawal">
+      <small>
+        Withdrawing when an active proposal is in vote status will deduct the withdrawn amount from the proposal's votes.
+      </small>
+    </opdex-card>
+
+    <div class="mt-2" *ngIf="balanceError">
+      <opdex-tx-quote-error
+        [warn]="true"
+        message="Insufficient Balance">
+      </opdex-tx-quote-error>
+    </div>
 
     <opdex-tx-quote-submit-button
       [warn]="balanceError"
+      label="Quote {{isWithdrawal ? 'Withdrawal' : 'Vote'}}"
       [disabled]="!form.valid || !context?.wallet || balanceError === undefined"
       (onSubmit)="submit()">
     </opdex-tx-quote-submit-button>

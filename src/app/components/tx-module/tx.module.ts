@@ -23,6 +23,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { TxSwapComponent } from './tx-swap/tx-swap.component';
 import { TxProvideComponent } from './tx-provide/tx-provide.component';
@@ -110,7 +111,8 @@ import { TxQuoteErrorComponent } from './shared/tx-quote-error/tx-quote-error.co
     MatAutocompleteModule,
     MatProgressSpinnerModule,
     MatMenuModule,
-    TxFeedModule
+    TxFeedModule,
+    MatSlideToggleModule
   ],
   exports: [
     TxSwapComponent,

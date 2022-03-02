@@ -11,8 +11,7 @@
     <div class="mb-3">
       <opdex-input-control
         [prefixIcon]="isWithdrawal ? icons.remove : icons.add"
-        [prefixIconDisabled]="false"
-        (onPrefixClick)="handleAddRemoveStatus()"
+        [prefixIconDisabled]="true"
         [suffixDisabled]="true"
         [label]="isWithdrawal ? 'Withdraw' : 'Pledge'"
         [formControl]="amount"
@@ -33,10 +32,19 @@
         *ngIf="crs">
       </opdex-percentage-amount-buttons>
 
-      <!-- <p class="mt-2 mb-0 flex-row-center" *ngIf="balanceError && form.valid && proposalId.value">
-        <mat-icon color="warn" [ngClass]="iconSizes.tiny" class="mr-2">{{icons.error}}</mat-icon>
-        Insufficient Balance
-      </p> -->
+      <mat-slide-toggle
+        class="d-block mt-3"
+        color="primary"
+        [checked]="isWithdrawal"
+        (change)="handleAddRemoveStatus($event)">
+        <span [ngClass]="{'light': !isWithdrawal}">Withdraw Pledge</span>
+      </mat-slide-toggle>
+
+      <opdex-card [info]="true" class="d-block mt-3" *ngIf="isWithdrawal">
+        <small>
+          Withdrawing when an active proposal is in pledge status will deduct the withdrawn amount from the proposal's total.
+        </small>
+      </opdex-card>
 
       <div class="mt-2" *ngIf="balanceError">
         <opdex-tx-quote-error
@@ -48,6 +56,7 @@
 
     <opdex-tx-quote-submit-button
       [warn]="balanceError"
+      label="Quote {{isWithdrawal ? 'Withdrawal' : 'Pledge'}}"
       [disabled]="!form.valid || !context?.wallet || balanceError === undefined"
       (onSubmit)="submit()">
     </opdex-tx-quote-submit-button>

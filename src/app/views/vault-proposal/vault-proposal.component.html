@@ -11,6 +11,7 @@
         <h1 class="mb-2">Proposal #{{proposal?.proposalId}}</h1>
       </div>
     </div>
+
     <div class="row" *ngIf="proposal">
       <div class="col-12 col-md-6">
         <div class="flex-row-center flex-wrap mb-3">
@@ -57,6 +58,13 @@
             <small class="light">{{proposal.expiration - latestBlock.height | formatNumber:0}} blocks remaining</small>
           </div>
         </div>
+
+        <button mat-flat-button
+          color="primary"
+          (click)="quoteCompleteProposal(proposal.proposalId)"
+          *ngIf="context?.wallet && proposal.expiration < latestBlock.height && proposal.status !== 'Complete'">
+          Complete Proposal
+        </button>
       </div>
 
       <div class="col-12 col-md-6">
@@ -78,13 +86,25 @@
 
               <p style="position: absolute; left: 0; right: 0; margin: 0; text-align: center;">
                 <opdex-number [value]="proposal.pledgeAmount" suffix="CRS" [short]="true"></opdex-number>
+                <br>
+                of <opdex-number [value]="vault.totalPledgeMinimum" [short]="true"></opdex-number>
+                <br>
+                minimum
               </p>
             </div>
           </ng-container>
 
           <ng-container *ngIf="proposal.status !== 'Pledge'">
             <div class="flex-column w-100">
-              <p class="light b-400">Votes</p>
+              <div class="mb-3">
+                <p class="light b-400 mb-1">Votes</p>
+                <p class="mb-0" *ngIf="proposal.status !== 'Completed'">
+                  <opdex-number [value]="proposal.yesAmount.add(proposal.noAmount)" [short]="true" suffix="CRS"></opdex-number>
+                  voted of
+                  <opdex-number [value]="vault.totalVoteMinimum" [short]="true"></opdex-number>
+                  minimum
+                </p>
+              </div>
 
               <div class="vote-bar-container">
                 <div class="vote-bar yes mb-1 no-wrap" [ngStyle]="{'min-width': getVotePercentage(proposal.yesAmount, proposal.noAmount).wholeNumber + '%' }">
@@ -167,8 +187,8 @@
 
 <div class="standard-section pt-5 pb-3">
   <div class="container">
-    <div class="row">
-      <div class="col-12">
+    <div class="row justify-content-center">
+      <div class="col-12 col-xl-8">
         <mat-tab-group dynamicHeight [selectedIndex]="proposal && proposal.status === 'Pledge' ? 0 : 1" animationDuration="0ms">
           <mat-tab>
             <ng-template mat-tab-label>

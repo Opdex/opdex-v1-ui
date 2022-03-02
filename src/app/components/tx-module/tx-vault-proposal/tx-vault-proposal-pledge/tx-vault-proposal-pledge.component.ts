@@ -15,6 +15,7 @@ import { VaultProposalPledgeQuoteRequest } from '@sharedModels/platform-api/requ
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 import { Token } from '@sharedModels/ui/tokens/token';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'opdex-tx-vault-proposal-pledge',
@@ -99,8 +100,8 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
                  (error: OpdexHttpError) => this.quoteErrors = error.errors);
   }
 
-  handleAddRemoveStatus(): void {
-    this.isWithdrawal = !this.isWithdrawal;
+  handleAddRemoveStatus(event: MatSlideToggleChange): void {
+    this.isWithdrawal = event.checked;
     this.positionType = this.isWithdrawal ? 'ProposalPledge' : 'Balance';
   }
 

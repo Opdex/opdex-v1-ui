@@ -1,3 +1,4 @@
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
 import { Title } from '@angular/platform-browser';
 import { VaultProposalVote } from '@sharedModels/ui/vaults/vault-proposal-vote';
@@ -5,7 +6,7 @@ import { VaultProposalPledge } from '@sharedModels/ui/vaults/vault-proposal-pled
 import { Vault } from '@sharedModels/ui/vaults/vault';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
-import { catchError } from 'rxjs/operators';
+import { catchError, take } from 'rxjs/operators';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { VaultProposalPledgesFilter, IVaultProposalPledgesFilter } from '@sharedModels/platform-api/requests/vaults/vault-proposal-pledges-filter';
 import { ActivatedRoute } from '@angular/router';
@@ -24,6 +25,10 @@ import { IVaultProposalVotesFilter, VaultProposalVotesFilter } from '@sharedMode
 import { UserContext } from '@sharedModels/user-context';
 import { Token } from '@sharedModels/ui/tokens/token';
 import { VaultProposal } from '@sharedModels/ui/vaults/vault-proposal';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { ReviewQuoteComponent } from '@sharedComponents/tx-module/shared/review-quote/review-quote.component';
+import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
+import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 
 @Component({
   selector: 'opdex-vault-proposal',
@@ -53,7 +58,10 @@ export class VaultProposalComponent {
     private _route: ActivatedRoute,
     private _context: UserContextService,
     private _title: Title,
-    private _gaService: GoogleAnalyticsService
+    private _gaService: GoogleAnalyticsService,
+    private _platformApiService: PlatformApiService,
+    private _bottomSheet: MatBottomSheet,
+    private _env: EnvironmentsService
   ) {
     const proposalId = parseInt(this._route.snapshot.paramMap.get('proposalId'));
     const pageName = `Vault Proposal #${proposalId}`
@@ -126,6 +134,15 @@ export class VaultProposalComponent {
       .pipe(
         catchError(_ => of(null)),
         tap((pledge: VaultProposalPledge) => this.userPledge = pledge));
+  }
+
+  quoteCompleteProposal(proposalId: number): void {
+    if (!this.context?.wallet) return;
+
+    this._platformApiService
+      .completeVaultProposal(this._env.vaultAddress, proposalId)
+        .pipe(take(1))
+        .subscribe((quote: ITransactionQuote) => this._bottomSheet.open(ReviewQuoteComponent, { data: quote }));
   }
 
   openTransactionView(view: string, withdraw: boolean) {
