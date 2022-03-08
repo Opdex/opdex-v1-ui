@@ -1,5 +1,5 @@
 <main [ngClass]="{'loading-main': loading}" class="{{theme}}">
-  <mat-sidenav-container (backdropClick)="closeSidenav()" class="w-100 h-100 {{loading ? 'loading' : 'done'}}" *ngIf="configuredForEnv">
+  <mat-sidenav-container (backdropClick)="closeSidenav()" class="w-100 h-100 {{loading ? 'loading' : 'done'}}" *ngIf="configuredForEnv && !maintenance">
     <mat-sidenav #sidenav
       (keydown.escape)="closeSidenav()"
       position="end"
@@ -56,16 +56,24 @@
     </mat-sidenav-content>
   </mat-sidenav-container>
 
-  <div class="splash header-section coming-soon" *ngIf="!configuredForEnv">
+  <div class="splash header-section coming-soon" *ngIf="!configuredForEnv || maintenance">
     <div class="flex-row-center-center">
       <img src="/assets/logo-light-blue.png" alt="Opdex">
       <h1 class="opdex">OPDEX</h1>
     </div>
-    <h2 class="mt-3 mb-1">Coming Soon</h2>
-    <a mat-button href="https://discord.gg/TnWVDTTrjf" target="_blank" rel="noopener noreferrer" class="discord">
-      <img src="/assets/social/discord-white.svg" class="social-icon" alt="Discord Logo">
-      Join Discord
-    </a>
+
+    <ng-container *ngIf="!maintenance; else maintenanceActive">
+      <h2 class="mt-3 mb-1">Coming Soon</h2>
+      <a mat-button href="https://discord.gg/TnWVDTTrjf" target="_blank" rel="noopener noreferrer" class="discord">
+        <img src="/assets/social/discord-white.svg" class="social-icon" alt="Discord Logo">
+        Join Discord
+      </a>
+    </ng-container>
+
+    <ng-template #maintenanceActive>
+      <h2 class="mt-3 mb-1">Under Maintenance</h2>
+      <p>We'll be back soon, important updates are in the works.</p>
+    </ng-template>
   </div>
 
   <div class="splash header-section" *ngIf="loading">

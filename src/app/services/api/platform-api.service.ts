@@ -85,6 +85,7 @@ import { WalletBalancesFilter } from '@sharedModels/platform-api/requests/wallet
 import { StakingPositionsFilter } from '@sharedModels/platform-api/requests/wallets/staking-positions-filter';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { MarketToken } from '@sharedModels/ui/tokens/market-token';
+import { MaintenanceService } from '@sharedServices/utility/maintenance.service';
 
 @Injectable({
   providedIn: 'root'
@@ -99,9 +100,10 @@ export class PlatformApiService extends RestApiService {
     protected _jwt: JwtService,
     protected _router: Router,
     protected _context: UserContextService,
-    private _env: EnvironmentsService
+    private _env: EnvironmentsService,
+    protected _maintenance: MaintenanceService
   ) {
-    super(_http, _error, _jwt, _context, _router);
+    super(_http, _error, _jwt, _context, _router, _maintenance);
     this.api = this._env.apiUrl;
     this.marketAddress = this._env.marketAddress;
   }

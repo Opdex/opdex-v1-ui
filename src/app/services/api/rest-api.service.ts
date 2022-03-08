@@ -1,13 +1,13 @@
 import { UserContextService } from '@sharedServices/utility/user-context.service';
-import { UserContext } from '@sharedModels/user-context';
 import { JwtService } from './../utility/jwt.service';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from '@sharedServices/utility/error.service';
 import { throwError, Observable, of } from 'rxjs';
-import { catchError, delay, map, mergeMap, retryWhen } from 'rxjs/operators';
+import { catchError, delay, map, mergeMap, retryWhen, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
+import { MaintenanceService } from '@sharedServices/utility/maintenance.service';
 
 // Retryable error codes
 // Note 404 is excluded intentionally due to checking of wallet balances primarily in liquidity pools
@@ -23,7 +23,8 @@ export class RestApiService {
     protected _error: ErrorService,
     protected _jwt: JwtService,
     protected _context: UserContextService,
-    protected _router: Router
+    protected _router: Router,
+    protected _maintenance: MaintenanceService
   ) { }
 
   protected get<T>(endpoint: string, options: object = {}): Observable<T> {
@@ -44,35 +45,40 @@ export class RestApiService {
             })
           )
         }),
-        catchError(error => this.handleError(error))
+        catchError(error => this.handleError(error)),
+        tap(_ => this._maintenance.setMaintenance(false))
       );
   }
 
   protected post<T>(endpoint: string, payload: any, options: object = {}): Observable<T> {
     return this._http.post<T>(endpoint, payload, options)
       .pipe(
-        catchError(error => this.handleError(error))
+        catchError(error => this.handleError(error)),
+        tap(_ => this._maintenance.setMaintenance(false))
       );
   }
 
   protected put<T>(endpoint: string, payload: any, options: object = {}): Observable<T> {
     return this._http.put<T>(endpoint, payload, options)
       .pipe(
-        catchError(error => this.handleError(error))
+        catchError(error => this.handleError(error)),
+        tap(_ => this._maintenance.setMaintenance(false))
       );
   }
 
   protected patch<T>(endpoint: string, payload: any, options: object = {}): Observable<T> {
     return this._http.patch<T>(endpoint, payload, options)
       .pipe(
-        catchError(error => this.handleError(error))
+        catchError(error => this.handleError(error)),
+        tap(_ => this._maintenance.setMaintenance(false))
       );
   }
 
   protected delete<T>(endpoint: string, options: object = {}): Observable<T> {
     return this._http.delete<T>(endpoint, options)
       .pipe(
-        catchError(error => this.handleError(error))
+        catchError(error => this.handleError(error)),
+        tap(_ => this._maintenance.setMaintenance(false))
       );
   }
 
@@ -105,6 +111,10 @@ export class RestApiService {
     const errorResponse = new OpdexHttpError(errors, error.status);
 
     console.error(errorResponse)
+
+    if (errorResponse.status === 503) {
+      this._maintenance.setMaintenance(true);
+    }
 
     // Return an observable with a user-facing error messages
     return throwError(errorResponse);

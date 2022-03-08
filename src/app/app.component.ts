@@ -1,3 +1,4 @@
+import { MaintenanceService } from './services/utility/maintenance.service';
 import { environment } from '@environments/environment';
 import { IIndexStatus } from './models/platform-api/responses/index/index-status.interface';
 import { AppUpdateModalComponent } from './components/modals-module/app-update-modal/app-update-modal.component';
@@ -45,6 +46,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   hubConnection: HubConnection;
   indexStatus: IIndexStatus;
   configuredForEnv: boolean;
+  maintenance: boolean;
   updateOpened = false;
   updateAvailable = false;
   menuOpen = false;
@@ -67,7 +69,8 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     private _transactionService: TransactionsService,
     private _cdRef: ChangeDetectorRef,
     private _appUpdate: SwUpdate,
-    private _env: EnvironmentsService
+    private _env: EnvironmentsService,
+    private _maintenance: MaintenanceService
   ) {
     window.addEventListener('resize', this.appHeight);
     this.appHeight();
@@ -130,6 +133,10 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
           if (message.status === true) await this.sidenav.open()
           else await this.sidenav.close();
         }));
+
+    this.subscription.add(
+      this._maintenance.maintenance$
+        .subscribe(maintenance => this.maintenance = maintenance));
 
     if (environment.production) {
       this.subscription.add(
