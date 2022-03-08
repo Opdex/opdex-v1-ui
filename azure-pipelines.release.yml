@@ -21,4 +21,5 @@ jobs:
                 deploymentMethod: 'auto'
                 deployToSlotOrASE: true
                 slotName: 'staging'
+                appSettings: '-CommitHash $(Build.SourceVersion)'
               displayName: Deploy to App Service
