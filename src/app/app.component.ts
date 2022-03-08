@@ -74,9 +74,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
 
     this.configuredForEnv = !!this._env.marketAddress && !!this._env.routerAddress;
 
-    setTimeout(() => {
-      this.loading = false;
-    }, 2000);
+    setTimeout(() => this.loading = false, 2000);
   }
 
   ngAfterContentChecked(): void {

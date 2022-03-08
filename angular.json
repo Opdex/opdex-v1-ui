@@ -53,6 +53,14 @@
                 }
               ]
             },
+            "mainnet": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.mainnet.ts"
+                }
+              ]
+            },
             "prod": {
               "fileReplacements": [
                 {
@@ -91,6 +99,9 @@
           "configurations": {
             "testnet": {
               "browserTarget": "OpdexUI:build:testnet"
+            },
+            "mainnet": {
+              "browserTarget": "OpdexUI:build:mainnet"
             },
             "production": {
               "browserTarget": "OpdexUI:build:production"

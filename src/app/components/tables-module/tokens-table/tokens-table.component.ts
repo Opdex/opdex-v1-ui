@@ -13,7 +13,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TokensFilter } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
-import { Observable, forkJoin, Subscription } from 'rxjs';
+import { Observable, forkJoin, Subscription, of } from 'rxjs';
 import { switchMap, map, take, tap } from 'rxjs/operators';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
@@ -35,6 +35,7 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
   subscription: Subscription;
   icons = Icons;
   iconSizes = IconSizes;
+  loading = true;
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -51,11 +52,12 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
 
   ngOnChanges(): void {
     if (this.filter && !this.subscription) {
+      this.loading = true;
       this.subscription = new Subscription();
       this.subscription.add(
         this._indexService.getLatestBlock$()
           .pipe(switchMap(_ => this.getTokens$(this.filter?.cursor)))
-          .subscribe())
+          .subscribe(_ => this.loading = false));
     }
   }
 
@@ -65,13 +67,16 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
     return this._tokensService.getTokens(this.filter)
       .pipe(
         switchMap((tokens: MarketTokens) => {
+          if (tokens.results.length === 0) {
+            return of([]) as Observable<MarketToken[]>;
+          }
+
           this.paging = tokens.paging;
           const tokens$: Observable<MarketToken>[] = [];
           tokens.results.forEach(token => tokens$.push(this.getTokenHistory$(token)));
           return forkJoin(tokens$);
         }),
-        tap(tokens => this.dataSource.data = [...tokens]),
-        take(1));
+        tap(tokens => this.dataSource.data = [...tokens]));
   }
 
   private getTokenHistory$(token: MarketToken): Observable<MarketToken> {

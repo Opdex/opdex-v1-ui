@@ -1,85 +1,91 @@
-<ng-container *ngIf="dataSource?.data?.length; else loading">
-  <div class="table-container">
-    <table mat-table [dataSource]="dataSource" matSort [trackBy]="trackBy" class="w-100">
-      <ng-container matColumnDef="token" sticky>
-        <th mat-header-cell *matHeaderCellDef> Token </th>
-        <td mat-cell *matCellDef="let element">
-          <div class="no-wrap flex-row-center">
-            <opdex-token-icon [token]="element"></opdex-token-icon>
-            <span class="ml-2 b-400">{{element.symbol}}</span>
-          </div>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> Name </th>
-        <td mat-cell *matCellDef="let element">
-          <span class="no-wrap">{{element.name}}</span>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="nativeChain">
-        <th mat-header-cell *matHeaderCellDef> Native Chain </th>
-        <td mat-cell *matCellDef="let element">
-          <opdex-token-native-chain-badge [wrappedToken]="element.wrappedToken"></opdex-token-native-chain-badge>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="price">
-        <th mat-header-cell *matHeaderCellDef> Daily Price </th>
-        <td mat-cell *matCellDef="let element">
-          <div class="flex-row-center-between">
-            <div class="flex-row-center no-wrap mr-3">
-              <opdex-change-indicator [value]="element.summary.dailyPriceChangePercent" [forceDisplay]="true" class="mr-2"></opdex-change-indicator>
-              <opdex-number prefix="$" [value]="element.summary.priceUsd" [short]="true"></opdex-number>
+<ng-container *ngIf="!loading; else loader">
+  <ng-container *ngIf="dataSource?.data?.length; else noResults">
+    <div class="table-container">
+      <table mat-table [dataSource]="dataSource" matSort [trackBy]="trackBy" class="w-100">
+        <ng-container matColumnDef="token" sticky>
+          <th mat-header-cell *matHeaderCellDef> Token </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="no-wrap flex-row-center">
+              <opdex-token-icon [token]="element"></opdex-token-icon>
+              <span class="ml-2 b-400">{{element.symbol}}</span>
             </div>
-          </div>
-        </td>
-      </ng-container>
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="history">
-        <th mat-header-cell *matHeaderCellDef style="width: 150px;"> Monthly History </th>
-        <td mat-cell *matCellDef="let element" style="width: 150px;">
-          <div class="w-100 float-right">
-            <opdex-line-change [chartData]="element.history.charts[0].values" *ngIf="element.history"></opdex-line-change>
-          </div>
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="no-wrap">{{element.name}}</span>
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef> </th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-icon-button color="primary" [ngClass]="iconSizes.small" class="float-right" [matMenuTriggerFor]="beforeMenu" (click)="$event.stopPropagation()">
-            <mat-icon>{{icons.more}}</mat-icon>
-          </button>
+        <ng-container matColumnDef="nativeChain">
+          <th mat-header-cell *matHeaderCellDef> Native Chain </th>
+          <td mat-cell *matCellDef="let element">
+            <opdex-token-native-chain-badge [wrappedToken]="element.wrappedToken"></opdex-token-native-chain-badge>
+          </td>
+        </ng-container>
 
-          <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
-            <button mat-menu-item [ngClass]="iconSizes.small" (click)="swap(element.liquidityPool)">
-              <mat-icon class="swap">{{icons.swap}}</mat-icon> Swap
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef> Daily Price </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="flex-row-center-between">
+              <div class="flex-row-center no-wrap mr-3">
+                <opdex-change-indicator [value]="element.summary.dailyPriceChangePercent" [forceDisplay]="true" class="mr-2"></opdex-change-indicator>
+                <opdex-number prefix="$" [value]="element.summary.priceUsd" [short]="true"></opdex-number>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="history">
+          <th mat-header-cell *matHeaderCellDef style="width: 150px;"> Monthly History </th>
+          <td mat-cell *matCellDef="let element" style="width: 150px;">
+            <div class="w-100 float-right">
+              <opdex-line-change [chartData]="element.history.charts[0].values" *ngIf="element.history"></opdex-line-change>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> </th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button color="primary" [ngClass]="iconSizes.small" class="float-right" [matMenuTriggerFor]="beforeMenu" (click)="$event.stopPropagation()">
+              <mat-icon>{{icons.more}}</mat-icon>
             </button>
-            <button mat-menu-item [ngClass]="iconSizes.small" (click)="provide(element.liquidityPool)">
-              <mat-icon class="provide">{{icons.provide}}</mat-icon> Provide
-            </button>
-          </mat-menu>
-        </td>
-      </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row
-        class="hoverable"
-        *matRowDef="let row; columns: displayedColumns;"
-        (click)="navigate(row.address)"></tr>
-    </table>
-  </div>
+            <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
+              <button mat-menu-item [ngClass]="iconSizes.small" (click)="swap(element.liquidityPool)">
+                <mat-icon class="swap">{{icons.swap}}</mat-icon> Swap
+              </button>
+              <button mat-menu-item [ngClass]="iconSizes.small" (click)="provide(element.liquidityPool)">
+                <mat-icon class="provide">{{icons.provide}}</mat-icon> Provide
+              </button>
+            </mat-menu>
+          </td>
+        </ng-container>
 
-  <div class="paginator">
-    <div class="flex-row-center-center">
-      <button mat-icon-button [disabled]="!paging?.previous" (click)="pageChange(paging?.previous)"><mat-icon>{{icons.previous}}</mat-icon></button>
-      <button mat-icon-button [disabled]="!paging?.next" (click)="pageChange(paging?.next)"><mat-icon>{{icons.next}}</mat-icon></button>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row
+          class="hoverable"
+          *matRowDef="let row; columns: displayedColumns;"
+          (click)="navigate(row.address)"></tr>
+      </table>
     </div>
-  </div>
+
+    <div class="paginator">
+      <div class="flex-row-center-center">
+        <button mat-icon-button [disabled]="!paging?.previous" (click)="pageChange(paging?.previous)"><mat-icon>{{icons.previous}}</mat-icon></button>
+        <button mat-icon-button [disabled]="!paging?.next" (click)="pageChange(paging?.next)"><mat-icon>{{icons.next}}</mat-icon></button>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #noResults>
+    <p class="mt-2 text-center light">No tokens found</p>
+  </ng-template>
 </ng-container>
 
-<ng-template #loading>
+<ng-template #loader>
   <opdex-skeleton-table></opdex-skeleton-table>
 </ng-template>
