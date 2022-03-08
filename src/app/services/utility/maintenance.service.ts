@@ -4,13 +4,16 @@ import { Injectable } from '@angular/core';
 @Injectable({ providedIn: 'root' })
 
 export class MaintenanceService {
-  private _maintenance$ = new BehaviorSubject<boolean>(false);
+  private _maintenance = false;
+  private _maintenance$ = new BehaviorSubject<boolean>(this._maintenance);
 
   public get maintenance$(): Observable<boolean> {
     return this._maintenance$.asObservable();
   }
 
   public setMaintenance(isActive: boolean): void {
-    this._maintenance$.next(isActive);
+    if (isActive !== this._maintenance) {
+      this._maintenance$.next(isActive);
+    }
   }
 }
