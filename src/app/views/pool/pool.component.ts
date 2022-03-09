@@ -64,8 +64,6 @@ export class PoolComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this._sidenav.getStatus()
         .subscribe((message: ISidenavMessage) => this.message = message));
-
-    this.positions = [ null, null, null, null ];
   }
 
   ngOnInit(): void {

@@ -15,9 +15,14 @@ export class CardComponent {
   @Input() closable: boolean = false;
   @Input() noPadding: boolean = false;
   @Input() hasToolbar = false;
+  @Input() cardClasses = [];
   iconSizes = IconSizes;
   icons = Icons;
   closed: boolean;
+
+  get classes(): string {
+    return this.cardClasses.join(' ');
+  }
 
   close() {
     this.closed = true;

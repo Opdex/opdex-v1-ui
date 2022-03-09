@@ -4,7 +4,7 @@ import { FixedDecimal } from './types/fixed-decimal';
 export class AddressPosition {
   private _walletAddress: string;
   private _token: Token;
-  private _position: 'Staking' | 'Mining' | 'Balance' | 'Providing';
+  private _position: string;
   private _amount: FixedDecimal;
   private _value: FixedDecimal;
 
@@ -16,7 +16,7 @@ export class AddressPosition {
     return this._token;
   }
 
-  public get position(): 'Staking' | 'Mining' | 'Balance' | 'Providing' {
+  public get position(): string {
     return this._position;
   }
 
@@ -33,11 +33,11 @@ export class AddressPosition {
     return `${value.formattedValue}-${amount.formattedValue}-${token.address}`;
   }
 
-  constructor(walletAddress: string, token: Token, position: 'Staking' | 'Mining' | 'Balance', amount: FixedDecimal) {
+  constructor(walletAddress: string, token: Token, position: string, amount: FixedDecimal) {
     this._walletAddress = walletAddress;
     this._token = token;
     // Balances of OLPT are the users position for providing liquidity
-    this._position = position === 'Balance' && token?.symbol === 'OLPT' ? 'Providing' : position;
+    this._position = position.includes('Balance') && token?.isProvisional ? 'Providing' : position;
     this._amount = amount;
     this._value = this._calcValue();
   }
