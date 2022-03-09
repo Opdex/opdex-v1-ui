@@ -50,9 +50,7 @@
   <div class="container">
     <div class="row mb-5" *ngIf="poolsWithEnabledMining?.length">
       <div class="col-12">
-        <h2 class="mb-3 flex-row-center">
-          <mat-icon class="mr-2 mine">{{icons.mining}}</mat-icon> Liquidity Mining
-        </h2>
+        <h3>Active Mining Pools</h3>
 
         <div class="scrollable-row">
           <ng-container *ngFor="let pool of poolsWithEnabledMining; trackBy: poolsTrackBy">
@@ -66,11 +64,12 @@
 
     <div class="row justify-content-center">
       <div class="col-12">
-        <h4>Top Liquidity Pools</h4>
+        <h3>Top Liquidity Pools</h3>
         <opdex-pools-table [filter]="liquidityPoolsFilter"></opdex-pools-table>
       </div>
+
       <div class="col-12">
-        <h4>Top Tokens</h4>
+        <h3>Top Tokens</h3>
         <opdex-tokens-table [filter]="tokensFilter"></opdex-tokens-table>
       </div>
     </div>

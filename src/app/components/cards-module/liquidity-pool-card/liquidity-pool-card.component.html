@@ -1,6 +1,6 @@
 <opdex-card class="pool-card">
   <ng-container *ngIf="pool !== null && pool !== undefined; else loading">
-    <div class="top-details">
+    <div class="top-details mb-2">
       <div class="flex-row-center">
         <opdex-token-icons [tokens]="[pool.tokens.crs, pool.tokens.src]"></opdex-token-icons>
 
@@ -29,16 +29,28 @@
       </mat-menu>
     </div>
 
-    <div class="bottom-details">
-      <div class="left">
-        <p class="sub-heading">Volume</p>
-        <opdex-number [short]="true" prefix="$" [value]="pool.summary.volume.dailyUsd"></opdex-number>
+    <div class="flex-row-center-between">
+      <div class="flex-row-center">
+        <mat-icon class="green mr-1 tiny">{{icons.volume}}</mat-icon>
+        <p class="mb-0">Volume <small>(24hr)</small></p>
       </div>
 
-      <div class="right">
-        <p class="sub-heading">Liquidity</p>
-        <opdex-number [short]="true" prefix="$" [value]="pool.summary.reserves.usd"></opdex-number>
-      </div>
+      <opdex-number prefix="$" [value]="pool?.summary?.volume?.dailyUsd" [short]="true"></opdex-number>
+    </div>
+
+    <div class="flex-row-center-between">
+      <p class="mb-0 sub-heading">Swap Fees</p>
+      <opdex-number prefix="$" [value]="pool?.summary?.rewards?.totalDailyUsd" [short]="true"></opdex-number>
+    </div>
+
+    <div class="flex-row-center-between">
+      <p class="mb-0 sub-heading">Providing Rewards</p>
+      <opdex-number prefix="$" [value]="pool?.summary?.rewards?.providerDailyUsd" [short]="true"></opdex-number>
+    </div>
+
+    <div class="flex-row-center-between">
+      <p class="mb-0 sub-heading">Staking Rewards</p>
+      <opdex-number prefix="$" [value]="pool?.summary?.rewards?.marketDailyUsd" [short]="true"></opdex-number>
     </div>
   </ng-container>
 

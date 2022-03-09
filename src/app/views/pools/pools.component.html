@@ -12,13 +12,7 @@
       </div>
 
       <div class="pools-by-volume mt-4 mb-4">
-        <div class="row">
-          <div class="col-12">
-            <h2 class="flex-row-center">
-              <mat-icon class="mr-2 primary">{{icons.bars}}</mat-icon> Top Volume
-            </h2>
-          </div>
-        </div>
+        <h3>Top Volume</h3>
 
         <div class="scrollable-row">
           <div class="scrollable-card" *ngFor="let pool of pools?.topVolume; trackBy: poolsTrackBy">
@@ -29,9 +23,7 @@
 
       <div class="row" *ngIf="pools?.mining?.length">
         <div class="col-12">
-          <h2 class="flex-row-center">
-            <mat-icon class="mr-2 mine">{{icons.mining}}</mat-icon> Liquidity Mining
-          </h2>
+          <h3>Active Mining</h3>
 
           <div class="scrollable-row">
             <div class="scrollable-card" *ngFor="let pool of pools.mining; trackBy: poolsTrackBy">

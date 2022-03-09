@@ -1,3 +1,12 @@
 .mat-menu-panel {
   min-height: 0 !important;
+
+  .mat-menu-item {
+    line-height: 2.4em;
+    height: auto;
+
+    .mat-icon {
+      margin-right: .25em;
+    }
+  }
 }
