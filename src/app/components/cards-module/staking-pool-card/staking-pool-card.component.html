@@ -1,5 +1,5 @@
 <opdex-card class="pool-card">
-  <ng-container *ngIf="pool !== null && pool !== undefined; else loading">
+  <ng-container *ngIf="!!pool; else loading">
     <div class="top-details mb-2">
       <div class="flex-row-center">
         <opdex-token-icons [tokens]="[pool.tokens.crs, pool.tokens.src]"></opdex-token-icons>
@@ -51,20 +51,6 @@
         <opdex-number [short]="true" [suffix]="pool.tokens.staking?.symbol" [value]="pool.summary.staking.weight"></opdex-number>
       </div>
     </div>
-
-    <div class="flex-row-center-between">
-      <p class="mb-0 sub-heading">Liquidity</p>
-
-      <div class="flex-row-center">
-        <opdex-change-indicator
-          class="mr-2"
-          [value]="pool.summary.reserves.dailyUsdChangePercent"
-          *ngIf="!!pool.summary.reserves.dailyUsdChangePercent">
-        </opdex-change-indicator>
-
-        <opdex-number [short]="true" prefix="$" [value]="pool.summary.reserves.usd"></opdex-number>
-      </div>
-    </div>
   </ng-container>
 
   <ng-template #loading>
@@ -72,13 +58,13 @@
 
     <div class="flex-row-center">
       <div class="w-50">
-        <div class="skeleton-bg w-50 mb-1"></div>
-        <div class="skeleton-bg w-50 mb-1"></div>
+        <div class="skeleton-bg w-75 mb-1"></div>
+        <div class="skeleton-bg w-75 mb-1"></div>
       </div>
 
       <div class="w-50 flex-column-end">
-        <div class="skeleton-bg w-50 mb-1"></div>
-        <div class="skeleton-bg w-50 mb-1"></div>
+        <div class="skeleton-bg w-75 mb-1"></div>
+        <div class="skeleton-bg w-75 mb-1"></div>
       </div>
     </div>
   </ng-template>

@@ -6,11 +6,11 @@ import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 
 @Component({
-  selector: 'opdex-liquidity-pool-card',
-  templateUrl: './liquidity-pool-card.component.html',
-  styleUrls: ['./liquidity-pool-card.component.scss']
+  selector: 'opdex-liquidity-pool-volume-card',
+  templateUrl: './liquidity-pool-volume-card.component.html',
+  styleUrls: ['./liquidity-pool-volume-card.component.scss']
 })
-export class LiquidityPoolCardComponent {
+export class LiquidityPoolVolumeCardComponent {
   @Input() pool: LiquidityPool;
   icons = Icons;
   iconSizes = IconSizes;

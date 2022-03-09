@@ -16,6 +16,11 @@
       </div>
     </div>
 
+    <div class="flex-row-center-between">
+      <p class="mb-0 sub-heading">Liquidity Pools</p>
+      <opdex-number [value]="market?.summary?.liquidityPoolCount"></opdex-number>
+    </div>
+
     <ng-container *ngIf="market?.isStaking">
       <mat-divider class="mb-2 mt-2" style="position:relative;"></mat-divider>
 

@@ -4,6 +4,7 @@ export interface IMarketSummaryResponse {
   volumeUsd: string;
   staking: IMarketStakingResponse;
   rewards: IMarketRewardsResponse;
+  liquidityPoolCount: number;
   createdBlock: number;
   modifiedBlock: number;
 }
