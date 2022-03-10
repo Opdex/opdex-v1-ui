@@ -36,7 +36,10 @@ export class ChartToolbarComponent {
   }
 
   selectChart(chart: string): void {
-    this.onSelectChart.emit(chart);
+    // Only emit when the chart changes
+    if (chart !== this._selectedChart.label) {
+      this.onSelectChart.emit(chart);
+    }
   }
 
   selectChartType(type: string): void {
