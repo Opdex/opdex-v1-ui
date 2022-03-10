@@ -3,7 +3,7 @@
     <div class="flex-row-center-between mb-1">
       <div class="flex-row-center">
         <mat-icon class="blue mr-1 tiny">{{icons.liquidityPool}}</mat-icon>
-        <p class="mb-0 light b-400">Liquidity</p>
+        <p class="mb-0">Liquidity</p>
       </div>
 
       <div class="flex-row-center">
@@ -16,13 +16,18 @@
       </div>
     </div>
 
+    <div class="flex-row-center-between">
+      <p class="mb-0 sub-heading">Liquidity Pools</p>
+      <opdex-number [value]="market?.summary?.liquidityPoolCount"></opdex-number>
+    </div>
+
     <ng-container *ngIf="market?.isStaking">
       <mat-divider class="mb-2 mt-2" style="position:relative;"></mat-divider>
 
       <div class="flex-row-center-between mb-1">
         <div class="flex-row-center">
           <mat-icon class="purple mr-1 tiny">{{icons.staking}}</mat-icon>
-          <p class="mb-0 light b-400">Staking</p>
+          <p class="mb-0">Staking</p>
         </div>
 
         <div class="flex-row-center">
@@ -31,7 +36,7 @@
       </div>
 
       <div class="flex-row-center-between">
-        <p class="mb-0">Weight</p>
+        <p class="mb-0 sub-heading">Weight</p>
 
         <div class="flex-row-center">
           <opdex-change-indicator
@@ -49,15 +54,25 @@
     <div class="flex-row-center-between mb-1">
       <div class="flex-row-center">
         <mat-icon class="green mr-1 tiny">{{icons.volume}}</mat-icon>
-        <p class="mb-0 light b-400">Volume <small>(24hr)</small></p>
+        <p class="mb-0">Volume <small>(24hr)</small></p>
       </div>
 
       <opdex-number prefix="$" [value]="market?.summary?.volumeUsd" [short]="true"></opdex-number>
     </div>
 
     <div class="flex-row-center-between">
-      <p class="mb-0">Rewards</p>
+      <p class="mb-0 sub-heading">Swap Fees</p>
       <opdex-number prefix="$" [value]="market?.summary?.rewards?.totalDailyUsd" [short]="true"></opdex-number>
+    </div>
+
+    <div class="flex-row-center-between">
+      <p class="mb-0 sub-heading">Providing Rewards</p>
+      <opdex-number prefix="$" [value]="market?.summary?.rewards?.providerDailyUsd" [short]="true"></opdex-number>
+    </div>
+
+    <div class="flex-row-center-between">
+      <p class="mb-0 sub-heading">Staking Rewards</p>
+      <opdex-number prefix="$" [value]="market?.summary?.rewards?.marketDailyUsd" [short]="true"></opdex-number>
     </div>
   </ng-container>
 

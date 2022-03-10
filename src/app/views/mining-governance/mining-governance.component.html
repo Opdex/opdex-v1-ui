@@ -107,10 +107,7 @@
     <div class="mb-4" *ngIf="miningPools$ | async as miningPools">
       <div class="row" *ngIf="miningPools.length">
         <div class="col-12">
-          <h2 class="flex-row-center">
-            <mat-icon class="mine mr-2">{{icons.mining}}</mat-icon>
-            Mining
-          </h2>
+          <h3>Mining Pools</h3>
         </div>
       </div>
       <div class="scrollable-row">
@@ -122,10 +119,7 @@
 
     <div class="row">
       <div class="col-12">
-        <h2 class="flex-row-center">
-          <mat-icon class="stake mr-2">{{icons.staking}}</mat-icon>
-          Nominations
-        </h2>
+        <h3>Nominated Pools</h3>
       </div>
     </div>
 

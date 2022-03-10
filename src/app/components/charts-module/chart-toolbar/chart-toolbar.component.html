@@ -1,5 +1,5 @@
 <div class="chart-toolbar" *ngIf="selectedChart">
-  <div class="flex-row-center-between">
+  <div class="flex-row-center-between" style="margin-bottom: 15px;">
     <div class="flex-row-center">
       <!-- Show dropdown options if more than 1 is available -->
       <ng-container *ngIf="chartsHistory?.charts?.length > 1; else singleChartOption">
@@ -51,4 +51,6 @@
       </div>
     </div>
   </div>
+
+  <mat-divider></mat-divider>
 </div>

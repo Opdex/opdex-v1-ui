@@ -1,3 +1,4 @@
+import { MatDividerModule } from '@angular/material/divider';
 import { SharedPipesModule } from '@sharedPipes/shared-pipes.module';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -30,7 +31,8 @@ import { ChartTemplateComponent } from './chart-template/chart-template.componen
     MatMenuModule,
     MatButtonModule,
     MatIconModule,
-    SharedPipesModule
+    SharedPipesModule,
+    MatDividerModule
   ],
   exports: [
     LineChangeComponent,

@@ -17,7 +17,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 // Module Components
 import { CardComponent } from './card/card.component';
 import { MiningCardComponent } from './mining-card/mining-card.component';
-import { LiquidityPoolCardComponent } from './liquidity-pool-card/liquidity-pool-card.component';
+import { LiquidityPoolVolumeCardComponent } from './liquidity-pool-volume-card/liquidity-pool-volume-card.component';
 import { StakingPoolCardComponent } from './staking-pool-card/staking-pool-card.component';
 import { StatCardComponent } from './stat-card/stat-card.component';
 import { LiquidityPoolTokenCardComponent } from './liquidity-pool-token-card/liquidity-pool-token-card.component';
@@ -33,7 +33,7 @@ import { VaultCertificateCardComponent } from './vault-certificate-card/vault-ce
   declarations: [
     CardComponent,
     MiningCardComponent,
-    LiquidityPoolCardComponent,
+    LiquidityPoolVolumeCardComponent,
     StakingPoolCardComponent,
     StatCardComponent,
     LiquidityPoolTokenCardComponent,
@@ -63,7 +63,7 @@ import { VaultCertificateCardComponent } from './vault-certificate-card/vault-ce
   exports: [
     CardComponent,
     MiningCardComponent,
-    LiquidityPoolCardComponent,
+    LiquidityPoolVolumeCardComponent,
     StakingPoolCardComponent,
     StatCardComponent,
     LiquidityPoolTokenCardComponent,

@@ -9,7 +9,7 @@
     <div class="flex-row-center-between mb-1">
       <div class="flex-row-center">
         <mat-icon class="blue mr-1 tiny">{{icons.liquidityPool}}</mat-icon>
-        <p class="mb-0 light b-400">Liquidity</p>
+        <p class="mb-0">Liquidity</p>
       </div>
 
       <div class="flex-row-center">
@@ -28,7 +28,7 @@
     </div>
 
     <div class="flex-row-center-between">
-      <p class="mb-0">{{pool?.tokens?.crs?.symbol}}</p>
+      <p class="mb-0 sub-heading">{{pool?.tokens?.crs?.symbol}}</p>
 
       <opdex-number
         [value]="pool?.summary?.reserves?.crs"
@@ -37,7 +37,7 @@
     </div>
 
     <div class="flex-row-center-between">
-      <p class="mb-0">{{pool?.tokens?.src?.symbol}}</p>
+      <p class="mb-0 sub-heading">{{pool?.tokens?.src?.symbol}}</p>
 
       <opdex-number
         [value]="pool?.summary?.reserves?.src"
@@ -46,7 +46,7 @@
     </div>
 
     <div class="flex-row-center-between" *ngIf="showPoolName">
-      <p class="mb-0">Cost</p>
+      <p class="mb-0 sub-heading">Cost</p>
 
       <div class="flex-row-center">
         <opdex-number [value]="one" [suffix]="pool?.tokens?.src?.symbol"></opdex-number>
@@ -63,7 +63,7 @@
       <div class="flex-row-center-between mb-1">
         <div class="flex-row-center">
           <mat-icon class="purple mr-1 tiny">{{icons.staking}}</mat-icon>
-          <p class="mb-0 light b-400">Staking</p>
+          <p class="mb-0">Staking</p>
         </div>
 
         <opdex-number
@@ -74,7 +74,7 @@
       </div>
 
       <div class="flex-row-center-between">
-        <p class="mb-0">Weight</p>
+        <p class="mb-0 sub-heading">Weight</p>
 
         <div class="flex-row-center">
           <opdex-change-indicator
@@ -99,15 +99,25 @@
     <div class="flex-row-center-between mb-1">
       <div class="flex-row-center">
         <mat-icon class="green mr-1 tiny">{{icons.volume}}</mat-icon>
-        <p class="mb-0 light b-400">Volume <small>(24hr)</small></p>
+        <p class="mb-0">Volume <small>(24hr)</small></p>
       </div>
 
       <opdex-number prefix="$" [value]="pool?.summary?.volume?.dailyUsd" [short]="true"></opdex-number>
     </div>
 
     <div class="flex-row-center-between">
-      <p class="mb-0">Rewards</p>
+      <p class="mb-0 sub-heading">Swap Fees</p>
       <opdex-number prefix="$" [value]="pool?.summary?.rewards?.totalDailyUsd" [short]="true"></opdex-number>
+    </div>
+
+    <div class="flex-row-center-between">
+      <p class="mb-0 sub-heading">Providing Rewards</p>
+      <opdex-number prefix="$" [value]="pool?.summary?.rewards?.providerDailyUsd" [short]="true"></opdex-number>
+    </div>
+
+    <div class="flex-row-center-between">
+      <p class="mb-0 sub-heading">Staking Rewards</p>
+      <opdex-number prefix="$" [value]="pool?.summary?.rewards?.marketDailyUsd" [short]="true"></opdex-number>
     </div>
     <!-- End Volume -->
 
@@ -118,7 +128,7 @@
       <div class="flex-row-center-between mb-1">
         <div class="flex-row-center">
           <mat-icon class="red mr-1 tiny">{{icons.mining}}</mat-icon>
-          <p class="mb-0 light b-400">Mining</p>
+          <p class="mb-0">Mining</p>
         </div>
 
         <opdex-number
@@ -129,7 +139,7 @@
       </div>
 
       <div class="flex-row-center-between">
-        <p class="mb-0">Weight</p>
+        <p class="mb-0 sub-heading">Weight</p>
 
         <opdex-number
           [value]="pool?.miningPool?.tokensMining"
@@ -140,7 +150,7 @@
 
       <ng-container *ngIf="pool?.miningPool?.isActive && pool?.miningPool?.miningPeriodEndBlock >= latestBlock">
         <div class="flex-row-center-between">
-          <p class="mb-0">Block Reward</p>
+          <p class="mb-0 sub-heading">Block Reward</p>
 
           <opdex-number
             [value]="pool?.miningPool?.rewardPerBlock"
@@ -149,8 +159,8 @@
           </opdex-number>
         </div>
 
-        <div class="flex-row-center-between mb-2">
-          <p class="mb-0">End Block</p>
+        <div class="flex-row-center-between">
+          <p class="mb-0 sub-heading">End Block</p>
 
           <opdex-number
             prefix="#"
@@ -158,21 +168,19 @@
           </opdex-number>
         </div>
 
+        <div class="flex-row-center-between">
+          <p class="mb-0 sub-heading">Blocks Remaining</p>
+
+          <opdex-number
+            prefix="#"
+            [value]="pool?.miningPool?.miningPeriodEndBlock - latestBlock">
+          </opdex-number>
+        </div>
+
         <mat-progress-bar
-          class="mt-3"
+          class="mt-1"
           [value]="100 - ((pool?.miningPool?.miningPeriodEndBlock - latestBlock) / 164250 * 100)">
         </mat-progress-bar>
-
-        <div class="flex-row-center-between mt-1">
-          <small class="light">Remaining Blocks</small>
-
-          <small>
-            <opdex-number
-              prefix="#"
-              [value]="pool?.miningPool?.miningPeriodEndBlock - latestBlock">
-            </opdex-number>
-          </small>
-        </div>
       </ng-container>
     </ng-container>
     <!-- End Mining -->

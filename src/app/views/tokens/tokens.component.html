@@ -12,15 +12,13 @@
 
     <div class="row mt-4">
       <div class="col-12">
-        <h2 class="flex-row-center">
-          <mat-icon class="mr-2 primary">bar_chart</mat-icon> Top Volume
-        </h2>
+        <h3>Top Volume</h3>
       </div>
     </div>
 
     <div class="scrollable-row">
       <div class="scrollable-card" *ngFor="let pool of poolsByVolume; trackBy: poolsTrackBy">
-        <opdex-liquidity-pool-card [pool]="pool"></opdex-liquidity-pool-card>
+        <opdex-liquidity-pool-volume-card [pool]="pool"></opdex-liquidity-pool-volume-card>
       </div>
     </div>
 

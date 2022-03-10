@@ -1,6 +1,6 @@
 <opdex-card class="pool-card" *ngIf="pool">
-  <ng-container *ngIf="pool !== null && pool !== undefined; else loading">
-    <div class="top-details">
+  <ng-container *ngIf="!!pool; else loading">
+    <div class="top-details mb-2">
       <div class="flex-row-center">
         <opdex-token-icons [tokens]="[pool.tokens.crs, pool.tokens.src]"></opdex-token-icons>
 
@@ -25,22 +25,28 @@
         </button>
 
         <button mat-menu-item [ngClass]="iconSizes.small" (click)="transact('collect')">
-          <mat-icon class="collect">{{icons.donut}}</mat-icon>
+          <mat-icon class="purple">{{icons.rewards}}</mat-icon>
           Collect Rewards
         </button>
       </mat-menu>
     </div>
 
-    <div class="bottom-details">
-      <div class="left">
-        <p class="sub-heading">Mining</p>
-        <opdex-number [short]="true" prefix="$" [suffix]="pool.tokens.lp.symbol" [value]="miningUsd"></opdex-number>
+    <div class="flex-row-center-between">
+      <div class="flex-row-center-center">
+        <mat-icon class="tiny mr-1 red">{{icons.mining}}</mat-icon>
+        <p class="mb-0">Mining</p>
       </div>
+      <opdex-number [short]="true" prefix="$" [value]="miningUsd"></opdex-number>
+    </div>
 
-      <div class="right">
-        <p class="sub-heading">Reward per Block</p>
-        <opdex-number [short]="true" [suffix]="pool.tokens.staking?.symbol" [value]="pool.miningPool?.rewardPerBlock"></opdex-number>
-      </div>
+    <div class="flex-row-center-between">
+      <p class="mb-0 sub-heading">Weight</p>
+      <opdex-number [short]="true" [suffix]="pool.tokens.lp.symbol" [value]="pool.miningPool?.tokensMining"></opdex-number>
+    </div>
+
+    <div class="flex-row-center-between">
+      <p class="mb-0 sub-heading">Block Reward</p>
+      <opdex-number [short]="true" [suffix]="pool.tokens.staking?.symbol" [value]="pool.miningPool?.rewardPerBlock"></opdex-number>
     </div>
   </ng-container>
 
@@ -49,13 +55,13 @@
 
     <div class="flex-row-center">
       <div class="w-50">
-        <div class="skeleton-bg w-50 mb-1"></div>
-        <div class="skeleton-bg w-50 mb-1"></div>
+        <div class="skeleton-bg w-75 mb-1"></div>
+        <div class="skeleton-bg w-75 mb-1"></div>
       </div>
 
       <div class="w-50 flex-column-end">
-        <div class="skeleton-bg w-50 mb-1"></div>
-        <div class="skeleton-bg w-50 mb-1"></div>
+        <div class="skeleton-bg w-75 mb-1"></div>
+        <div class="skeleton-bg w-75 mb-1"></div>
       </div>
     </div>
   </ng-template>

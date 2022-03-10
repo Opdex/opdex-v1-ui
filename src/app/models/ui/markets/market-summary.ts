@@ -9,6 +9,7 @@ export class MarketSummary {
   private _volumeUsd: FixedDecimal;
   private _staking: MarketStakingSummary;
   private _rewards: MarketRewardsSummary;
+  private _liquidityPoolCount: number;
   private _createdBlock: number;
   private _modifiedBlock: number;
 
@@ -32,6 +33,10 @@ export class MarketSummary {
     return this._rewards;
   }
 
+  public get liquidityPoolCount(): number {
+    return this._liquidityPoolCount;
+  }
+
   public get createdBlock(): number {
     return this._createdBlock;
   }
@@ -46,6 +51,7 @@ export class MarketSummary {
     this._volumeUsd = new FixedDecimal(summary.volumeUsd, 8);
     this._staking = new MarketStakingSummary(summary.staking);
     this._rewards = new MarketRewardsSummary(summary.rewards);
+    this._liquidityPoolCount = summary.liquidityPoolCount;
     this._createdBlock = summary.createdBlock;
     this._modifiedBlock = summary.modifiedBlock;
   }

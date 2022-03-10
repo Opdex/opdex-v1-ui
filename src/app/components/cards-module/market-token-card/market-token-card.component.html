@@ -11,14 +11,14 @@
       </div>
 
       <div class="flex-row-center-end">
-        <h3 class="mb-0 mr-2 b-300">
-          <opdex-number prefix="$" [value]="token.summary.priceUsd" [short]="true"></opdex-number>
-        </h3>
-
         <opdex-change-indicator
           [value]="token.summary.dailyPriceChangePercent"
           *ngIf="!!token.summary.dailyPriceChangePercent">
         </opdex-change-indicator>
+
+        <h3 class="mb-0 ml-2 b-300">
+          <opdex-number prefix="$" [value]="token.summary.priceUsd" [short]="true"></opdex-number>
+        </h3>
       </div>
     </div>
   </ng-container>
