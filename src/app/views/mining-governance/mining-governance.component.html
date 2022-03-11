@@ -23,7 +23,11 @@
                   <h4 class="mb-0">Status</h4>
                 </div>
 
-                <span class="badge {{miningGovernance.periodRemainingBlocks > 0 ? 'green' : 'red'}}">
+                <span class="badge orange" *ngIf="miningGovernance.periodsUntilRewardReset === 12">
+                  Preparing
+                </span>
+
+                <span class="badge {{miningGovernance.periodRemainingBlocks > 0 ? 'green' : 'red'}}" *ngIf="miningGovernance.periodsUntilRewardReset !== 12">
                   {{miningGovernance.periodRemainingBlocks > 0 ? 'Active' : 'Inactive'}}
                 </span>
               </div>
