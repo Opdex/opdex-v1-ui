@@ -120,7 +120,7 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
                   valueCrs: valueCrs,
                   valueSrc: valueSrc,
                   isCurrentMarket: pool.market === this._env.marketAddress,
-                  total: pool.tokens.src.summary.priceUsd.multiply(amount)
+                  total: pool.tokens.lp.summary.priceUsd.multiply(amount)
                 }
               });
 
