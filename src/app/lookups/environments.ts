@@ -28,10 +28,10 @@ export const environments: IEnvironment[] = [
   },
   {
     apiUrl: 'https://v1-api.opdex.com/v1',
-    marketAddress: '',
-    routerAddress: '',
-    miningGovernanceAddress: '',
-    vaultAddress: '',
+    marketAddress: 'CGmbx89aJdVtFGEUMZfdbRntYkGJgwjUrv',
+    routerAddress: 'CeNa4b95h9YqDc1UZ2YCqmeqXXKqeDdAYW',
+    miningGovernanceAddress: 'CYrKKCyrq816j4nXS1k1cuXagEJWmmjdup',
+    vaultAddress: 'CTzsaNA1yTQwD3YNkZkJQbwupczAnaVW6Q',
     network: Network.Mainnet
   }
 ]
