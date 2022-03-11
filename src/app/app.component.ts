@@ -1,3 +1,4 @@
+import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { environment } from '@environments/environment';
 import { IIndexStatus } from './models/platform-api/responses/index/index-status.interface';
 import { AppUpdateModalComponent } from './components/modals-module/app-update-modal/app-update-modal.component';
@@ -45,6 +46,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   hubConnection: HubConnection;
   indexStatus: IIndexStatus;
   configuredForEnv: boolean;
+  maintenance: boolean;
   updateOpened = false;
   updateAvailable = false;
   menuOpen = false;
@@ -67,7 +69,8 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     private _transactionService: TransactionsService,
     private _cdRef: ChangeDetectorRef,
     private _appUpdate: SwUpdate,
-    private _env: EnvironmentsService
+    private _env: EnvironmentsService,
+    private _platformApiService: PlatformApiService
   ) {
     window.addEventListener('resize', this.appHeight);
     this.appHeight();
@@ -96,8 +99,10 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
       timer(0, 8000)
         .pipe(
           switchMap(_ => this._indexService.refreshStatus$()),
-          tap(_ => this.validateJwt()))
-        .subscribe(indexStatus => this.indexStatus = indexStatus));
+          tap(indexStatus => this.indexStatus = indexStatus),
+          tap(_ => this.validateJwt()),
+          switchMap(_ => this._platformApiService.getApiStatus()))
+        .subscribe(({underMaintenance}) => this.maintenance = underMaintenance));
 
     // Get theme
     this.subscription.add(this._theme.getTheme().subscribe(theme => this.setTheme(theme)));

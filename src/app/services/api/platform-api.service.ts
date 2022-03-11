@@ -85,6 +85,7 @@ import { WalletBalancesFilter } from '@sharedModels/platform-api/requests/wallet
 import { StakingPositionsFilter } from '@sharedModels/platform-api/requests/wallets/staking-positions-filter';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { MarketToken } from '@sharedModels/ui/tokens/market-token';
+import { IApiStatus } from '@sharedModels/platform-api/responses/status/api-status.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -113,6 +114,15 @@ export class PlatformApiService extends RestApiService {
   public getIndexStatus(): Observable<IIndexStatus> {
     const endpoint = `${this.api}/indexer`;
     return this.get<IIndexStatus>(endpoint);
+  }
+
+  ////////////////////////////
+  // Status
+  ////////////////////////////
+
+  public getApiStatus(): Observable<IApiStatus> {
+    const endpoint = `${this.api}/status`;
+    return this.get<IApiStatus>(endpoint);
   }
 
 

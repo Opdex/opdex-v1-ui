@@ -28,7 +28,7 @@ import { ReviewQuoteComponent } from '@sharedComponents/tx-module/shared/review-
   templateUrl: './vault-proposals-table.component.html',
   styleUrls: ['./vault-proposals-table.component.scss']
 })
-export class VaultProposalsTableComponent  implements OnChanges, OnDestroy {
+export class VaultProposalsTableComponent implements OnChanges, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   @Input() filter: VaultProposalsFilter;
   latestBlock: number;

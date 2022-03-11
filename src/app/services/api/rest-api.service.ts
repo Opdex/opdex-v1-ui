@@ -1,5 +1,4 @@
 import { UserContextService } from '@sharedServices/utility/user-context.service';
-import { UserContext } from '@sharedModels/user-context';
 import { JwtService } from './../utility/jwt.service';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -44,36 +43,30 @@ export class RestApiService {
             })
           )
         }),
-        catchError(error => this.handleError(error))
-      );
+        catchError(error => this.handleError(error)));
   }
 
   protected post<T>(endpoint: string, payload: any, options: object = {}): Observable<T> {
     return this._http.post<T>(endpoint, payload, options)
-      .pipe(
-        catchError(error => this.handleError(error))
-      );
+      .pipe(catchError(error => this.handleError(error)));
   }
 
   protected put<T>(endpoint: string, payload: any, options: object = {}): Observable<T> {
     return this._http.put<T>(endpoint, payload, options)
       .pipe(
-        catchError(error => this.handleError(error))
-      );
+        catchError(error => this.handleError(error)));
   }
 
   protected patch<T>(endpoint: string, payload: any, options: object = {}): Observable<T> {
     return this._http.patch<T>(endpoint, payload, options)
       .pipe(
-        catchError(error => this.handleError(error))
-      );
+        catchError(error => this.handleError(error)));
   }
 
   protected delete<T>(endpoint: string, options: object = {}): Observable<T> {
     return this._http.delete<T>(endpoint, options)
       .pipe(
-        catchError(error => this.handleError(error))
-      );
+        catchError(error => this.handleError(error)));
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -104,7 +97,7 @@ export class RestApiService {
 
     const errorResponse = new OpdexHttpError(errors, error.status);
 
-    console.error(errorResponse)
+    console.error(errorResponse);
 
     // Return an observable with a user-facing error messages
     return throwError(errorResponse);
