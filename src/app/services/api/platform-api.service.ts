@@ -85,7 +85,7 @@ import { WalletBalancesFilter } from '@sharedModels/platform-api/requests/wallet
 import { StakingPositionsFilter } from '@sharedModels/platform-api/requests/wallets/staking-positions-filter';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { MarketToken } from '@sharedModels/ui/tokens/market-token';
-import { MaintenanceService } from '@sharedServices/utility/maintenance.service';
+import { IApiStatus } from '@sharedModels/platform-api/responses/status/api-status.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -100,10 +100,9 @@ export class PlatformApiService extends RestApiService {
     protected _jwt: JwtService,
     protected _router: Router,
     protected _context: UserContextService,
-    private _env: EnvironmentsService,
-    protected _maintenance: MaintenanceService
+    private _env: EnvironmentsService
   ) {
-    super(_http, _error, _jwt, _context, _router, _maintenance);
+    super(_http, _error, _jwt, _context, _router);
     this.api = this._env.apiUrl;
     this.marketAddress = this._env.marketAddress;
   }
@@ -115,6 +114,15 @@ export class PlatformApiService extends RestApiService {
   public getIndexStatus(): Observable<IIndexStatus> {
     const endpoint = `${this.api}/indexer`;
     return this.get<IIndexStatus>(endpoint);
+  }
+
+  ////////////////////////////
+  // Status
+  ////////////////////////////
+
+  public getApiStatus(): Observable<IApiStatus> {
+    const endpoint = `${this.api}/status`;
+    return this.get<IApiStatus>(endpoint);
   }
 
 
