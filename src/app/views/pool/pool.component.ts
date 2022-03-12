@@ -115,27 +115,29 @@ export class PoolComponent implements OnInit, OnDestroy {
             return;
           }
 
-          const contracts = [pool.address, pool.tokens.src.address];
-          if (pool.hasMining) contracts.push(pool.miningPool.address);
+          if (!this.transactionsRequest || pool.address !== this.pool?.address) {
+            const contracts = [pool.address, pool.tokens.src.address];
+            if (pool.hasMining) contracts.push(pool.miningPool.address);
 
-          this.transactionsRequest = {
-            limit: 15,
-            direction: "DESC",
-            contracts: contracts,
-            eventTypes: [
-              this.transactionEventTypes.SwapEvent,
-              this.transactionEventTypes.StartStakingEvent,
-              this.transactionEventTypes.StopStakingEvent,
-              this.transactionEventTypes.CollectStakingRewardsEvent,
-              this.transactionEventTypes.StartMiningEvent,
-              this.transactionEventTypes.StopMiningEvent,
-              this.transactionEventTypes.AddLiquidityEvent,
-              this.transactionEventTypes.RemoveLiquidityEvent,
-              this.transactionEventTypes.CollectMiningRewardsEvent,
-              this.transactionEventTypes.EnableMiningEvent,
-              this.transactionEventTypes.NominationEvent
-            ],
-          };
+            this.transactionsRequest = {
+              limit: 15,
+              direction: "DESC",
+              contracts: contracts,
+              eventTypes: [
+                this.transactionEventTypes.SwapEvent,
+                this.transactionEventTypes.StartStakingEvent,
+                this.transactionEventTypes.StopStakingEvent,
+                this.transactionEventTypes.CollectStakingRewardsEvent,
+                this.transactionEventTypes.StartMiningEvent,
+                this.transactionEventTypes.StopMiningEvent,
+                this.transactionEventTypes.AddLiquidityEvent,
+                this.transactionEventTypes.RemoveLiquidityEvent,
+                this.transactionEventTypes.CollectMiningRewardsEvent,
+                this.transactionEventTypes.EnableMiningEvent,
+                this.transactionEventTypes.NominationEvent
+              ],
+            };
+          }
 
           // This will be true for initial page load or if the pool changes otherwise since we set this.pool below
           if (!this.pool || pool.address !== this.pool.address) {

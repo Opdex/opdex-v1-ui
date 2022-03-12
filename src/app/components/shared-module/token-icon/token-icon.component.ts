@@ -25,4 +25,8 @@ export class TokenIconComponent {
       ? `${this._baseUrl}/${chain.toLowerCase()}/assets/${address}/logo.png`
       : `${this._baseUrl}/${chain.toLowerCase()}/info/logo.png`;
   }
+
+  public get backgroundImage(): string {
+    return `url('${this.iconPath}'), url('/assets/tokens/missing.png')`;
+  }
 }

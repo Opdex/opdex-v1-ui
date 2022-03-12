@@ -3,7 +3,6 @@
   height: 24px;
   border-radius: 50%;
   border: 1px solid #ddd;
-  position: relative;
   background-size: cover;
 
   &.cirrus {
@@ -17,32 +16,5 @@
   &.large {
     width: 40px;
     height: 40px;
-  }
-}
-
-.empty {
-  background: #fff;
-  border-radius: 50%;
-  position: absolute;
-  width: 24px;
-  height: 24px;
-  left: 0;
-
-  &::after {
-    content: "\1F978";
-    line-height: 26px;
-    font-size: 24px;
-    position: absolute;
-    left: 0;
-  }
-
-  &.large {
-    width: 40px;
-    height: 40px;
-
-    &::after {
-      line-height: 44px;
-      font-size: 40px;
-    }
   }
 }

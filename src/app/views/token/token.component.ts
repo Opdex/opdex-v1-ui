@@ -104,25 +104,27 @@ export class TokenComponent implements OnInit {
             return;
           }
 
-          const events = [
-            this.transactionEventTypes.SwapEvent,
-            this.transactionEventTypes.AddLiquidityEvent,
-            this.transactionEventTypes.RemoveLiquidityEvent
-          ];
+          if (!this.transactionsRequest || token.address !== this.token?.address) {
+            const events = [
+              this.transactionEventTypes.SwapEvent,
+              this.transactionEventTypes.AddLiquidityEvent,
+              this.transactionEventTypes.RemoveLiquidityEvent
+            ];
 
-          if (!token.isCrs) {
-            events.push(this.transactionEventTypes.TransferEvent, this.transactionEventTypes.ApprovalEvent)
+            if (!token.isCrs) {
+              events.push(this.transactionEventTypes.ApprovalEvent)
 
-            token.isStaking
-              ? events.push(this.transactionEventTypes.DistributionEvent)
-              : events.push(this.transactionEventTypes.StartMiningEvent, this.transactionEventTypes.StopMiningEvent);
-          }
+              token.isStaking
+                ? events.push(this.transactionEventTypes.DistributionEvent)
+                : events.push(this.transactionEventTypes.StartMiningEvent, this.transactionEventTypes.StopMiningEvent);
+            }
 
-          this.transactionsRequest = {
-            limit: 15,
-            eventTypes: events,
-            contracts: token.isCrs ? [] : [token.address, token.liquidityPool],
-            direction: 'DESC'
+            this.transactionsRequest = {
+              limit: 15,
+              eventTypes: events,
+              contracts: token.isCrs ? [] : [token.address, token.liquidityPool],
+              direction: 'DESC'
+            }
           }
 
           // This will be true for initial page load or if the pool changes otherwise since we set this.token below

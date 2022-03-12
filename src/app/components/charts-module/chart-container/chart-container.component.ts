@@ -16,6 +16,11 @@ export class ChartContainerComponent implements OnChanges {
     if (!this.selectedChart && this.chartsHistory) {
       this.selectedChart = this.chartsHistory.charts[0];
       this.selectedChartType = this.chartsHistory.charts[0].chartTypes[0];
+    } else if (this.selectedChart && this.chartsHistory) {
+      const chartIndex = this.chartsHistory.charts.findIndex(chart => chart.label === this.selectedChart.label);
+      if (chartIndex >= 0) {
+        this.selectedChart = this.chartsHistory.charts[chartIndex];
+      }
     }
   }
 
