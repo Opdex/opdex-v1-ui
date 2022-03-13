@@ -32,7 +32,7 @@
             <div class="flex-row-center-between">
               <div class="flex-row-center no-wrap mr-3">
                 <opdex-change-indicator [value]="element.summary.dailyPriceChangePercent" [forceDisplay]="true" class="mr-2"></opdex-change-indicator>
-                <opdex-number prefix="$" [value]="element.summary.priceUsd" [short]="true"></opdex-number>
+                <opdex-number prefix="$" [value]="element.summary.priceUsd" [short]="true" [stopPropagation]="true"></opdex-number>
               </div>
             </div>
           </td>

@@ -16,7 +16,7 @@
         <td mat-cell *matCellDef="let element">
           <div class="no-wrap flex-row-center">
             <opdex-change-indicator [value]="element.summary.reserves.dailyUsdChangePercent" class="mr-2" [forceDisplay]="true"></opdex-change-indicator>
-            <opdex-number [short]="true" prefix="$" [value]="element.summary.reserves.usd"></opdex-number>
+            <opdex-number [short]="true" prefix="$" [value]="element.summary.reserves.usd" [stopPropagation]="true"></opdex-number>
           </div>
         </td>
       </ng-container>
@@ -27,7 +27,7 @@
           <ng-container *ngIf="element.summary.staking; else stakingDisabled">
             <div class="no-wrap flex-row-center">
               <opdex-change-indicator [value]="element.summary.staking?.dailyWeightChangePercent" class="mr-2" [forceDisplay]="true"></opdex-change-indicator>
-              <opdex-number [precision]="0" [suffix]="element.tokens.staking?.symbol" [value]="element.summary.staking?.weight"></opdex-number>
+              <opdex-number [precision]="0" [suffix]="element.tokens.staking?.symbol" [value]="element.summary.staking?.weight" [stopPropagation]="true"></opdex-number>
             </div>
           </ng-container>
           <ng-template #stakingDisabled>
@@ -39,14 +39,14 @@
       <ng-container matColumnDef="volumeDaily">
         <th mat-header-cell *matHeaderCellDef> Volume</th>
         <td mat-cell *matCellDef="let element">
-          <opdex-number [short]="true" prefix="$" [value]="element.summary.volume.dailyUsd"></opdex-number>
+          <opdex-number [short]="true" prefix="$" [value]="element.summary.volume.dailyUsd" [stopPropagation]="true"></opdex-number>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="rewards">
         <th mat-header-cell *matHeaderCellDef> Rewards </th>
         <td mat-cell *matCellDef="let element">
-          <opdex-number [short]="true" prefix="$" [value]="element.summary.rewards.totalDailyUsd"></opdex-number>
+          <opdex-number [short]="true" prefix="$" [value]="element.summary.rewards.totalDailyUsd" [stopPropagation]="true"></opdex-number>
         </td>
       </ng-container>
 
