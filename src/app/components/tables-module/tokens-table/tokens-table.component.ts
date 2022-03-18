@@ -55,7 +55,7 @@ export class TokensTableComponent implements OnChanges, OnDestroy {
       this.loading = true;
       this.subscription = new Subscription();
       this.subscription.add(
-        this._indexService.getLatestBlock$()
+        this._indexService.latestBlock$
           .pipe(switchMap(_ => this.getTokens$(this.filter?.cursor)))
           .subscribe(_ => this.loading = false));
     }

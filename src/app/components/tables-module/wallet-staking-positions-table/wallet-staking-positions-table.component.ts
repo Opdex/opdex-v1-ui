@@ -55,7 +55,7 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
       this.subscription = new Subscription();
 
       this.subscription.add(
-        this._indexService.getLatestBlock$()
+        this._indexService.latestBlock$
           .pipe(switchMap(_ => this.getStakingPositions$(this.filter?.cursor)))
           .subscribe());
     }

@@ -58,7 +58,7 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
     this.context = this._context.getUserContext();
 
     this.subscription.add(
-      this._indexService.getLatestBlock$()
+      this._indexService.latestBlock$
         .pipe(
           switchMap(_ => this._miningGovernanceService.getMiningGovernance(this._env.miningGovernanceAddress)),
           tap((rsp: IMiningGovernance) => this.miningGovernance = new MiningGovernance(rsp)),
@@ -69,15 +69,15 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
     const nominationFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 4, direction: 'DESC', nominationStatus: NominationStatus.Nominated});
 
     this.subscription.add(
-      this._indexService.getLatestBlock$()
+      this._indexService.latestBlock$
         .pipe(switchMap(_ => this._liquidityPoolsService.getLiquidityPools(nominationFilter)))
         .subscribe(pools => this.nominatedPools = pools.results));
 
     this.subscription.add(
-      this._indexService.getStatus$()
+      this._indexService.status$
         .subscribe(status => this.indexStatus = status));
 
-    this.miningPools$ = this._indexService.getLatestBlock$().pipe(switchMap(_ => {
+    this.miningPools$ = this._indexService.latestBlock$.pipe(switchMap(_ => {
       const filter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 4, direction: 'DESC', miningStatus: MiningStatus.Enabled});
       return this._liquidityPoolsService.getLiquidityPools(filter).pipe(map(pools => pools.results));
     }));

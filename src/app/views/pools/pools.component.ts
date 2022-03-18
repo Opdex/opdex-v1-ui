@@ -52,7 +52,7 @@ export class PoolsComponent implements OnInit, OnDestroy {
     const miningFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 4, direction: 'DESC', miningStatus: MiningStatus.Enabled});
     const volumeFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Volume, limit: 4, direction: 'DESC'});
 
-    this.subscription.add(this._indexService.getLatestBlock$()
+    this.subscription.add(this._indexService.latestBlock$
       .pipe(switchMap(_ => {
         return combineLatest([
           this._liquidityPoolsService.getLiquidityPools(volumeFilter),

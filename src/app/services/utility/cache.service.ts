@@ -31,7 +31,7 @@ export abstract class CacheService {
    * @returns Observable T of the cached items type.
    */
   protected getItem<T>(key: string, $value: Observable<T>): Observable<T> {
-    const currentBlock = this._indexService.getLatestBlock();
+    const currentBlock = this._indexService.latestBlock;
     const blockHeight = currentBlock?.height || 0;
 
     // New up an item if it doesn't yet exist
@@ -62,7 +62,7 @@ export abstract class CacheService {
    * @param value The generic value to cache
    */
   protected cacheItem<T>(key: string, value: T): void {
-    const currentBlock = this._indexService.getLatestBlock();
+    const currentBlock = this._indexService.latestBlock;
     const blockHeight = currentBlock?.height || 0;
 
     if (!this.cache[key]) {
@@ -96,7 +96,7 @@ export abstract class CacheService {
       };
     }
 
-    const currentBlock = this._indexService.getLatestBlock();
+    const currentBlock = this._indexService.latestBlock;
     const blockHeight = currentBlock?.height || 0;
 
     if (blockHeight > this.cache[key].lastUpdateBlock) {

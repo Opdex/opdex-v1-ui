@@ -55,7 +55,7 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
       this.subscription = new Subscription();
 
       this.subscription.add(
-        this._indexService.getLatestBlock$()
+        this._indexService.latestBlock$
           .pipe(switchMap(_ => this.getProvisionalPositions$(this.filter?.cursor)))
           .subscribe());
     }

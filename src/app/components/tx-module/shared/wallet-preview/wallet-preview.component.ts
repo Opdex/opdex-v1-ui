@@ -51,7 +51,12 @@ export class WalletPreviewComponent implements OnDestroy {
         switchMap(_ => this.getWalletSummary()))
       .subscribe());
 
-    this.subscription.add(this._indexService.getLatestBlock$().pipe(skip(1), switchMap(_ => this.getWalletSummary())).subscribe());
+    this.subscription.add(
+      this._indexService.latestBlock$
+        .pipe(
+          skip(1),
+          switchMap(_ => this.getWalletSummary()))
+        .subscribe());
   }
 
   ngOnChanges() {

@@ -29,7 +29,7 @@ export class LiquidityPoolSummaryCardComponent implements OnDestroy {
 
   constructor(private _indexService: IndexService) {
     this.subscription.add(
-      this._indexService.getLatestBlock$()
+      this._indexService.latestBlock$
         .subscribe(block => this.latestBlock = block.height));
   }
 

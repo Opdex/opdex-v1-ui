@@ -73,7 +73,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
         switchMap(_ => this.validateBalance()))
       .subscribe();
 
-    this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
+    this.latestSyncedBlock$ = this._indexService.latestBlock$
       .pipe(
         filter(_ => !!this.context.wallet),
         switchMap(_ => this.getAllowance$()))

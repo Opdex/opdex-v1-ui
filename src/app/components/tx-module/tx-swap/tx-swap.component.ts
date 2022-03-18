@@ -116,7 +116,7 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
         .subscribe());
 
     this.subscription.add(
-      this._indexService.getLatestBlock$()
+      this._indexService.latestBlock$
         .pipe(
           tap(block => this.latestBlock = block?.height),
           tap(_ => this.calcDeadline(this.deadlineThreshold)),

@@ -59,7 +59,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
       amount: [null, [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]]
     });
 
-    this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
+    this.latestSyncedBlock$ = this._indexService.latestBlock$
       .pipe(
         filter(_ => !!this.context.wallet),
         switchMap(_ => this.getAllowance$()),

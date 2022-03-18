@@ -15,7 +15,7 @@ import { LiquidityPoolsService } from "@sharedServices/platform/liquidity-pools.
 import { SidenavService } from "@sharedServices/utility/sidenav.service";
 import { UserContextService } from "@sharedServices/utility/user-context.service";
 import { Observable, Subscription, zip, of } from "rxjs";
-import { tap, switchMap, catchError, map, delay } from "rxjs/operators";
+import { tap, switchMap, catchError, map, delay, take } from "rxjs/operators";
 import { IAddressMining } from "@sharedModels/platform-api/responses/wallets/address-mining.interface";
 import { IAddressStaking } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
@@ -87,7 +87,7 @@ export class PoolComponent implements OnInit, OnDestroy {
     }
 
     this.subscription.add(
-      this._indexService.getLatestBlock$()
+      this._indexService.latestBlock$
         .pipe(
           switchMap(_ => this.getLiquidityPool()),
           tap(_ => this.historyFilter?.refresh()),
@@ -109,6 +109,7 @@ export class PoolComponent implements OnInit, OnDestroy {
     return this._liquidityPoolsService.getLiquidityPool(this.poolAddress)
       .pipe(
         catchError(_ => of(null)),
+        take(1),
         tap((pool: LiquidityPool) => {
           if (!!pool === false) {
             this._router.navigateByUrl('/pools');

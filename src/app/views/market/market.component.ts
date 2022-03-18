@@ -61,7 +61,7 @@ export class MarketComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscription.add(
-      this._indexService.getLatestBlock$()
+      this._indexService.latestBlock$
         .pipe(
           switchMap(_ => this._getMarket()),
           tap(_ => this.historyFilter?.refresh()),

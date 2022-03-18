@@ -74,7 +74,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   ) {
     window.addEventListener('resize', this.appHeight);
     this.appHeight();
-
+    this.network = this._env.network;
     this.configuredForEnv = !!this._env.marketAddress && !!this._env.routerAddress;
 
     setTimeout(() => this.loading = false, 2000);
@@ -90,6 +90,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     this.subscription.add(
       this._context.getUserContext$()
         .subscribe(async context => {
+          this.context = context;
           if (!context?.wallet) this.stopHubConnection();
           else if (!this.hubConnection) await this.connectToSignalR();
         }));
@@ -99,6 +100,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
       timer(0, 8000)
         .pipe(
           switchMap(_ => this._indexService.refreshStatus$()),
+          filter(indexStatus => indexStatus.latestBlock.height > 0),
           tap(indexStatus => this.indexStatus = indexStatus),
           tap(_ => this.validateJwt()),
           switchMap(_ => this._platformApiService.getApiStatus()))
@@ -121,9 +123,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     // Watch router events for app updates
     this.subscription.add(
       this.router.events
-      .pipe(
-        filter(event => event instanceof NavigationEnd),
-        filter(_ => this.updateAvailable))
+      .pipe(filter(event => event instanceof NavigationEnd && this.updateAvailable))
       .subscribe(_ => this.update()));
 
     // Listen to tx sidenav events
@@ -215,6 +215,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   }
 
   private async connectToSignalR(): Promise<void> {
+    console.log('connecting to signalr')
     this.hubConnection = new HubConnectionBuilder()
       .withUrl(`${this._env.apiUrl}/socket`, { accessTokenFactory: () => this._jwt.getToken() })
       .configureLogging(LogLevel.Warning)
@@ -237,8 +238,11 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
       this._transactionService.pushBroadcastedTransaction(txHash);
     });
 
-    this.hubConnection.onclose(() => {
-      console.log('closing connection')
+    this.hubConnection.onclose(async () => {
+      console.log('closing connection');
+      if (this.context?.wallet && !this._jwt.isTokenExpired()) {
+        await this.hubConnection.start();
+      }
     });
 
     await this.hubConnection.start();

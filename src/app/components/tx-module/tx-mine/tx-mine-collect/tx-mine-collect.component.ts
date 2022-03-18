@@ -43,7 +43,7 @@ export class TxMineCollectComponent extends TxBase implements OnChanges, OnDestr
     this.pool = pool;
 
     this.subscription.add(
-      this._indexService.getLatestBlock$()
+      this._indexService.latestBlock$
         .pipe(switchMap(_ => this.validateMiningBalance()))
         .subscribe());
   }

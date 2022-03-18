@@ -85,7 +85,7 @@ export class ReviewQuoteComponent implements OnDestroy {
         .subscribe(_ => this._bottomSheetRef.dismiss(this.txHash)));
 
     this.subscription.add(
-      this._indexService.getLatestBlock$()
+      this._indexService.latestBlock$
         .pipe(
           tap(block => this.latestBlock = block),
           filter(_ => !!this.txHash === false),
@@ -103,7 +103,7 @@ export class ReviewQuoteComponent implements OnDestroy {
       to: this.quoteRequest.to,
       gasUsed: quote.gasUsed,
       // Use the service for the first request when component loads, observable wouldn't have emitted yet
-      block: this.latestBlock || this._indexService.getLatestBlock(),
+      block: this.latestBlock || this._indexService.latestBlock,
       success: !!quote.error === false,
       events: quote.events
     } as ITransactionReceipt);
