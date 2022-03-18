@@ -97,7 +97,7 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
         switchMap(allowance => this.validateBalance(allowance.requestToSpend)))
       .subscribe();
 
-    this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
+    this.latestSyncedBlock$ = this._indexService.latestBlock$
       .pipe(
         tap(block => this.latestBlock = block?.height),
         tap(_ => this.calcDeadline(this.deadlineThreshold)),

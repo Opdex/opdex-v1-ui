@@ -33,7 +33,7 @@ export class TokenSummaryCardComponent implements OnDestroy {
     private _bottomSheet: MatBottomSheet
   ) {
     this.subscription.add(
-      this._indexService.getLatestBlock$()
+      this._indexService.latestBlock$
         .subscribe(block => this.latestBlock = block.height));
 
     this.subscription.add(

@@ -74,7 +74,7 @@ export class PoolPreviewComponent implements OnChanges, OnDestroy {
         map((poolAddress: string) => poolAddress ? this._filterPools(poolAddress) : this.pools.slice()));
 
     this.subscription.add(
-      this._indexService.getLatestBlock$()
+      this._indexService.latestBlock$
         .pipe(
           skip(1),
           filter(_ => !!this.pool),

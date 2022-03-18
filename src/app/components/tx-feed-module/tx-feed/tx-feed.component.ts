@@ -50,7 +50,7 @@ export class TxFeedComponent implements OnChanges, OnDestroy {
       }
 
       this.subscription.add(
-        this._indexService.getLatestBlock$()
+        this._indexService.latestBlock$
           .pipe(
             tap(_ => this.transactionsRequest.cursor = null), // reset the cursor
             switchMap(_ => this.getTransactions(this.transactionsRequest)))

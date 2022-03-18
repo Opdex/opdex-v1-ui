@@ -87,7 +87,7 @@ export class TxVaultProposalCreateComponent extends TxBase implements OnDestroy 
     });
 
     this.subscription.add(
-      this._indexService.getLatestBlock$()
+      this._indexService.latestBlock$
         .pipe(switchMap(_ => this.validateBalance()))
         .subscribe());
   }

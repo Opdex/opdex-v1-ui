@@ -41,7 +41,7 @@ export class VaultProposalCardComponent implements OnDestroy {
     private _dialog: MatDialog
   ) {
     this.subscription.add(this._context.getUserContext$().subscribe(context => this.context = context));
-    this.subscription.add(this._indexService.getStatus$().subscribe(status => this.indexStatus = status));
+    this.subscription.add(this._indexService.status$.subscribe(status => this.indexStatus = status));
   }
 
   openSidenav(childView: string, inFavor?: boolean) {

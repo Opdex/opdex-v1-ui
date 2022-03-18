@@ -55,7 +55,7 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
       this.subscription = new Subscription();
 
       this.subscription.add(
-        this._indexService.getLatestBlock$()
+        this._indexService.latestBlock$
           .pipe(switchMap(_ => this.getMiningPositions$(this.filter?.cursor)))
           .subscribe());
     }

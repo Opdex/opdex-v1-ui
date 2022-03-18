@@ -68,5 +68,6 @@ export enum Icons {
     closeOutline = 'highlight_off',
     pledge = 'how_to_vote',
     lineChart = 'show_chart',
-    barChart = 'graphic_eq'
+    barChart = 'graphic_eq',
+    network = 'languages'
 }

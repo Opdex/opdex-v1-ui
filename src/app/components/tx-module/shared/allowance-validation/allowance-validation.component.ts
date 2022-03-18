@@ -48,7 +48,7 @@ export class AllowanceValidationComponent implements OnChanges, OnDestroy {
         }));
 
     this.subscription.add(
-      this._indexService.getStatus$()
+      this._indexService.status$
         .subscribe(status => this.indexStatus = status));
 
     this.subscription.add(

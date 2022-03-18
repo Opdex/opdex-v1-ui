@@ -41,7 +41,7 @@ export class TxQuoteSubmitButtonComponent implements OnDestroy {
         .subscribe(context => this.context = context));
 
     this.subscription.add(
-      this._indexService.getStatus$()
+      this._indexService.status$
         .subscribe(status => this.indexStatus = status));
   }
 

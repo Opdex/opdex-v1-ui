@@ -76,7 +76,7 @@ export class PercentageAmountButtonsComponent implements OnChanges {
       }
 
       this.positionSubscription.add(
-        this._indexService.getLatestBlock$()
+        this._indexService.latestBlock$
           .pipe(switchMap(_ => balance$.pipe(catchError(_ => of('0')))))
           .subscribe(result => this.balance = new FixedDecimal(result, this.token.decimals)));
     }

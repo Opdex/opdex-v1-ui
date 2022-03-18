@@ -21,6 +21,10 @@
         </aside>
 
         <div class="animation-container">
+          <div class="notification-banner purple flex-row-center pl-2 pt-1 pb-1 pr-2" *ngIf="network === 'TESTNET' || network === 'DEVNET'">
+            <mat-icon class="tiny mr-1">{{icons.network}}</mat-icon> <small>{{network}}</small>
+          </div>
+
           <div class="notification-banner primary flex-row-center-center p-2" (click)="update()" style="cursor: pointer" *ngIf="updateAvailable">
             <mat-icon class="small mr-2">{{icons.update}}</mat-icon> App update available, refresh to update.
           </div>

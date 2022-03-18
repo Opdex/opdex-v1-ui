@@ -38,7 +38,7 @@ export class TokensComponent implements OnDestroy {
     const volumeFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Volume, limit: 4, direction: 'DESC'});
 
     this.subscription.add(
-      this._indexService.getLatestBlock$()
+      this._indexService.latestBlock$
         .pipe(
           switchMap(_ => this._liquidityPoolsService.getLiquidityPools(volumeFilter)),
           tap(pools => this.poolsByVolume = pools.results))

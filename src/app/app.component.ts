@@ -74,7 +74,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   ) {
     window.addEventListener('resize', this.appHeight);
     this.appHeight();
-
+    this.network = this._env.network;
     this.configuredForEnv = !!this._env.marketAddress && !!this._env.routerAddress;
 
     setTimeout(() => this.loading = false, 2000);
@@ -99,8 +99,8 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     this.subscription.add(
       timer(0, 8000)
         .pipe(
-          switchMap(_ => this._indexService.refreshStatus$().pipe(catchError(_ => of(null)))),
-          filter(indexStatus => !!indexStatus),
+          switchMap(_ => this._indexService.refreshStatus$()),
+          filter(indexStatus => indexStatus.latestBlock.height > 0),
           tap(indexStatus => this.indexStatus = indexStatus),
           tap(_ => this.validateJwt()),
           switchMap(_ => this._platformApiService.getApiStatus()))
@@ -215,6 +215,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   }
 
   private async connectToSignalR(): Promise<void> {
+    console.log('connecting to signalr')
     this.hubConnection = new HubConnectionBuilder()
       .withUrl(`${this._env.apiUrl}/socket`, { accessTokenFactory: () => this._jwt.getToken() })
       .configureLogging(LogLevel.Warning)
@@ -239,7 +240,9 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
 
     this.hubConnection.onclose(async () => {
       console.log('closing connection');
-      if (this.context?.wallet) await this.hubConnection.start();
+      if (this.context?.wallet && !this._jwt.isTokenExpired()) {
+        await this.hubConnection.start();
+      }
     });
 
     await this.hubConnection.start();

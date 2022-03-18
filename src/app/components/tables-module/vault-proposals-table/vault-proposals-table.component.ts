@@ -66,7 +66,7 @@ export class VaultProposalsTableComponent implements OnChanges, OnDestroy {
       this.loading = true;
       this.subscription = new Subscription();
       this.subscription.add(
-        this._indexService.getLatestBlock$()
+        this._indexService.latestBlock$
           .pipe(
             tap(block => this.latestBlock = block.height),
             switchMap(_ => this._getVault$),

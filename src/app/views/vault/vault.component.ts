@@ -76,7 +76,7 @@ export class VaultComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscription.add(
-      this._indexService.getLatestBlock$()
+      this._indexService.latestBlock$
         .pipe(
           tap(block => this.latestBlock = block),
           switchMap(_ => this.getVault$()),

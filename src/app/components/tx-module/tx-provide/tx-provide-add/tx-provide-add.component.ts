@@ -146,7 +146,7 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
           switchMap(_ => this.validateBalances()))
         .subscribe());
 
-    this.latestSyncedBlock$ = this._indexService.getLatestBlock$()
+    this.latestSyncedBlock$ = this._indexService.latestBlock$
       .pipe(
         tap(block => this.latestBlock = block?.height),
         tap(_ => this.calcDeadline(this.deadlineThreshold)),

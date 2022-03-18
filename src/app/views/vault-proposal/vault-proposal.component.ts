@@ -74,7 +74,7 @@ export class VaultProposalComponent {
         .subscribe(context => this.context = context));
 
     this.subscription.add(
-      this._indexService.getLatestBlock$()
+      this._indexService.latestBlock$
         .pipe(
           tap(block => this.latestBlock = block),
           switchMap(_ => this.getVault$()),
