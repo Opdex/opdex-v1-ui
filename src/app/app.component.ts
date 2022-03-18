@@ -90,6 +90,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     this.subscription.add(
       this._context.getUserContext$()
         .subscribe(async context => {
+          this.context = context;
           if (!context?.wallet) this.stopHubConnection();
           else if (!this.hubConnection) await this.connectToSignalR();
         }));
@@ -98,7 +99,8 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     this.subscription.add(
       timer(0, 8000)
         .pipe(
-          switchMap(_ => this._indexService.refreshStatus$()),
+          switchMap(_ => this._indexService.refreshStatus$().pipe(catchError(_ => of(null)))),
+          filter(indexStatus => !!indexStatus),
           tap(indexStatus => this.indexStatus = indexStatus),
           tap(_ => this.validateJwt()),
           switchMap(_ => this._platformApiService.getApiStatus()))
@@ -121,9 +123,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     // Watch router events for app updates
     this.subscription.add(
       this.router.events
-      .pipe(
-        filter(event => event instanceof NavigationEnd),
-        filter(_ => this.updateAvailable))
+      .pipe(filter(event => event instanceof NavigationEnd && this.updateAvailable))
       .subscribe(_ => this.update()));
 
     // Listen to tx sidenav events
@@ -237,8 +237,9 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
       this._transactionService.pushBroadcastedTransaction(txHash);
     });
 
-    this.hubConnection.onclose(() => {
-      console.log('closing connection')
+    this.hubConnection.onclose(async () => {
+      console.log('closing connection');
+      if (this.context?.wallet) await this.hubConnection.start();
     });
 
     await this.hubConnection.start();
