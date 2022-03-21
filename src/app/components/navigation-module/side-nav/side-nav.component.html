@@ -42,14 +42,24 @@
           <span class="secondary">Vault</span>
         </a>
       </li>
-      <li>
+      <li *ngIf="!context?.wallet">
         <a mat-button
           class="transparent"
-          (click)="emitRouteChange(!context?.wallet ? '/auth' : '/wallet')"
-          routerLink="{{!context?.wallet ? '/auth' : '/wallet'}}"
+          (click)="login()"
+          [matTooltip]="!isPinned && !mobileMenuOpen ? 'Connect Wallet' : null" matTooltipPosition="right">
+          <span class="wallet-indicator invalid"></span>
+          <mat-icon>{{icons.wallet}}</mat-icon>
+          <span class="secondary">Connect</span>
+        </a>
+      </li>
+      <li *ngIf="context?.wallet">
+        <a mat-button
+          class="transparent"
+          (click)="emitRouteChange('/wallet')"
+          routerLink="{{'/wallet'}}"
           routerLinkActive="active"
           [matTooltip]="!isPinned && !mobileMenuOpen ? 'Wallet' : null" matTooltipPosition="right">
-          <span class="wallet-indicator {{context?.wallet ? 'valid' : 'invalid'}}"></span>
+          <span class="wallet-indicator valid"></span>
           <mat-icon>{{icons.wallet}}</mat-icon>
           <span class="secondary">Wallet</span>
         </a>

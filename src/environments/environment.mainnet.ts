@@ -1,12 +1,16 @@
 import { Network } from 'src/app/enums/networks';
 
-// const api = 'http://localhost:44391/v1';
-const api = 'https://v1-api.opdex.com/v1';
+let apiOverride: string;
+let authOverride: string;
+
+// apiOverride = 'http://localhost:44391/v1';
+// authOverride = 'http://localhost:4200';
 
 export const environment = {
   production: false,
   ga: '',
-  apiOverride: api,
-  networkOverride: Network.Mainnet,
-  defaultTheme: 'light-mode'
+  defaultTheme: 'light-mode',
+  network: Network.Mainnet,
+  apiOverride,
+  authOverride
 };

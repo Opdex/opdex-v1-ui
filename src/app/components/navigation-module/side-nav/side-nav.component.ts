@@ -59,6 +59,13 @@ export class SideNavComponent implements OnDestroy {
     this.dialog.open(BugReportModalComponent, { width: '500px' });
   }
 
+  login(): void {
+    const { authUrl } = this._env;
+    const redirect = `${new URL(window.location.href).origin}/auth`;
+
+    window.location.href = `${authUrl}?REDIRECT=${redirect}`;
+  }
+
   logout(): void {
     this._context.setToken('');
     this._router.navigateByUrl('/');
