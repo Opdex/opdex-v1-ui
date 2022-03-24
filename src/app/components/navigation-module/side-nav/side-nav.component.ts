@@ -30,6 +30,7 @@ export class SideNavComponent implements OnDestroy {
   pendingTransactions: string[] = [];
   usesVault: boolean;
   context: UserContext;
+  useNewAuthFlow: boolean;
 
   constructor(
     public dialog: MatDialog,
@@ -42,8 +43,11 @@ export class SideNavComponent implements OnDestroy {
     this.subscription.add(this._context.getUserContext$().subscribe(context => this.context = context));
     this.subscription.add(this._transactionsService.getBroadcastedTransactions$().subscribe(txs => this.pendingTransactions = txs));
     this.latestSyncedBlock$ = this._indexService.latestBlock$;
-    this.network = this._env.network;
-    this.usesVault = !!this._env.vaultAddress;
+
+    const { network, vaultAddress, useNewAuthFlow } = this._env;
+    this.network = network;
+    this.usesVault = !!vaultAddress;
+    this.useNewAuthFlow = useNewAuthFlow;
   }
 
   togglePin(): void {

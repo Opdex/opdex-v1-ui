@@ -36,6 +36,10 @@ export class EnvironmentsService {
     return this._env.network;
   }
 
+  public get useNewAuthFlow(): boolean {
+    return this.network === Network.Devnet ? true : false;
+  }
+
   constructor() {
     const isDevnet = window.location.href.includes('dev-app');
     const isTestnet = window.location.href.includes('test-app');
