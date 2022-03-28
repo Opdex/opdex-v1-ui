@@ -30,14 +30,14 @@ export class LineChartComponent extends BaseChartComponent implements OnInit, On
     if (!!this.chartData && !!this.series === false) {
       setTimeout(_ => {
         this.addLineSeries();
-        this.series.setData(this.chartData.values as LineData[]);
+        this.series.setData([...this.chartData.values] as LineData[]);
         this.chart.timeScale().fitContent();
         this.loading = false;
       }, 200);
     } else if (!!this.series) {
       // resets data but may be problematic when we want to only append new data
       // Observables and services may be useful here
-      this.series.setData(this.chartData.values as LineData[]);
+      this.series.setData([...this.chartData.values] as LineData[]);
     }
   }
 

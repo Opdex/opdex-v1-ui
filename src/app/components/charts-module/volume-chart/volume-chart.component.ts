@@ -30,14 +30,14 @@ export class VolumeChartComponent extends BaseChartComponent implements OnInit, 
     if (!!this.chartData && !!this.series === false) {
       setTimeout(_ => {
         this.addVolumeSeries();
-        this.series.setData(this.chartData.values as HistogramData[]);
+        this.series.setData([...this.chartData.values] as HistogramData[]);
         this.chart.timeScale().fitContent();
         this.loading = false;
       }, 200);
     } else if (!!this.series) {
       // resets data but may be problematic when we want to only append new data
       // Observables and services may be useful here
-      this.series.setData(this.chartData.values as HistogramData[]);
+      this.series.setData([...this.chartData.values] as HistogramData[]);
       this.chart.timeScale().fitContent();
     }
   }

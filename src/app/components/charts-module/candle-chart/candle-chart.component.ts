@@ -30,14 +30,14 @@ export class CandleChartComponent extends BaseChartComponent implements OnInit, 
     if (!!this.chartData && !!this.series === false) {
       setTimeout(_ => {
         this.addCandleStickSeries();
-        this.series.setData(this.chartData.values as BarData[]);
+        this.series.setData([...this.chartData.values] as BarData[]);
         this.chart.timeScale().fitContent();
         this.loading = false;
       }, 200);
     } else if (!!this.series) {
       // resets data but may be problematic when we want to only append new data
       // Observables and services may be useful here
-      this.series.setData(this.chartData.values as BarData[]);
+      this.series.setData([...this.chartData.values] as BarData[]);
       this.chart.timeScale().fitContent();
     }
   }
