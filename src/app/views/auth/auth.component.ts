@@ -1,22 +1,21 @@
-import { ThemeService } from '@sharedServices/utility/theme.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UserContextService } from '@sharedServices/utility/user-context.service';
-import { Router } from '@angular/router';
-import { Subscription, timer } from 'rxjs';
-import { Icons } from 'src/app/enums/icons';
-import { IconSizes } from 'src/app/enums/icon-sizes';
-import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
-import { JwtService } from '@sharedServices/utility/jwt.service';
-import { Network } from 'src/app/enums/networks';
+import { ThemeService } from '@sharedServices/utility/theme.service';
+import { Component } from '@angular/core';
+import { UserContextService } from '@sharedServices/utility/user-context.service';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { Subscription, timer } from 'rxjs';
+import { IconSizes } from 'src/app/enums/icon-sizes';
+import { Icons } from 'src/app/enums/icons';
+import { JwtService } from '@sharedServices/utility/jwt.service';
 
 @Component({
   selector: 'opdex-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss']
 })
-export class AuthComponent implements OnInit, OnDestroy {
+export class AuthComponent {
   subscription = new Subscription();
   error: boolean;
   icons = Icons;
@@ -31,34 +30,58 @@ export class AuthComponent implements OnInit, OnDestroy {
   reconnecting: boolean;
   isTestnet: boolean;
   webSid: SafeUrl;
+  useNewAuthFlow: boolean;
 
   constructor(
     private _context: UserContextService,
     private _router: Router,
     private _theme: ThemeService,
+    private _activatedRoute: ActivatedRoute,
     private _env: EnvironmentsService,
     private _jwt: JwtService,
     private _sanitizer: DomSanitizer
   ) {
-    this.isTestnet = this._env.network === Network.Testnet;
+    this.useNewAuthFlow = this._env.useNewAuthFlow
+
+    if (this.useNewAuthFlow) {
+      const accessToken = this._activatedRoute.snapshot.queryParamMap.get('ACCESS_TOKEN');
+
+      if (!accessToken) {
+        this._router.navigateByUrl('/');
+        return;
+      }
+
+      this._context.setToken(accessToken);
+
+      const { preferences } = this._context.getUserContext();
+
+      if (preferences?.theme) this._theme.setTheme(preferences.theme);
+
+      this._router.navigateByUrl('/wallet');
+    }
   }
 
+  // ********************************** //
+  //        LEGACY FLOW                 //
+  // ********************************** //
   async ngOnInit() {
-    this.subscription.add(
-      this._context.getUserContext$()
-        .subscribe(async context => {
-          if (context?.wallet) {
-            if (context.preferences?.theme) {
-              this._theme.setTheme(context.preferences.theme);
+    if (!this.useNewAuthFlow) {
+      this.subscription.add(
+        this._context.getUserContext$()
+          .subscribe(async context => {
+            if (context?.wallet) {
+              if (context.preferences?.theme) {
+                this._theme.setTheme(context.preferences.theme);
+              }
+
+        this._router.navigateByUrl('/');
+            } else if (!this.hubConnection) {
+              await this.connectToSignalR();
             }
+          }));
 
-            this._router.navigateByUrl('/');
-          } else if (!this.hubConnection) {
-            await this.connectToSignalR();
-          }
-        }));
-
-    this.subscription.add(timer(0, 1000).subscribe(async _ => await this.calcSidExpiration()));
+      this.subscription.add(timer(0, 1000).subscribe(async _ => await this.calcSidExpiration()));
+    }
   }
 
   private async connectToSignalR(): Promise<void> {

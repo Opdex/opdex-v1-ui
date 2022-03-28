@@ -1,3 +1,4 @@
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { JwtService } from './../utility/jwt.service';
 import { Injectable } from '@angular/core';
@@ -22,7 +23,8 @@ export class RestApiService {
     protected _error: ErrorService,
     protected _jwt: JwtService,
     protected _context: UserContextService,
-    protected _router: Router
+    protected _router: Router,
+    protected _env: EnvironmentsService
   ) { }
 
   protected get<T>(endpoint: string, options: object = {}): Observable<T> {
@@ -74,9 +76,9 @@ export class RestApiService {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error);
     } else if (error.status === 401) {
-      // Hack, reload the entire view if we have an expired token
-      if (this._jwt.isTokenExpired()) {
-        this._context.setToken('');
+      this._context.setToken('');
+
+      if (!this._env.useNewAuthFlow) {
         this._router.navigateByUrl('/auth');
       }
     }

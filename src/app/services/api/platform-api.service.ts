@@ -100,9 +100,9 @@ export class PlatformApiService extends RestApiService {
     protected _jwt: JwtService,
     protected _router: Router,
     protected _context: UserContextService,
-    private _env: EnvironmentsService
+    protected _env: EnvironmentsService
   ) {
-    super(_http, _error, _jwt, _context, _router);
+    super(_http, _error, _jwt, _context, _router, _env);
     this.api = this._env.apiUrl;
     this.marketAddress = this._env.marketAddress;
   }

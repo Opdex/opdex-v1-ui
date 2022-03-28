@@ -12,6 +12,10 @@ export class EnvironmentsService {
     return this._env.apiUrl;
   }
 
+  public get authUrl(): string {
+    return this._env.authUrl;
+  }
+
   public get marketAddress(): string {
     return this._env.marketAddress;
   }
@@ -32,15 +36,21 @@ export class EnvironmentsService {
     return this._env.network;
   }
 
+  public get useNewAuthFlow(): boolean {
+    return this.network === Network.Devnet ? true : false;
+  }
+
   constructor() {
     const isDevnet = window.location.href.includes('dev-app');
     const isTestnet = window.location.href.includes('test-app');
 
     let env: IEnvironment;
+    const { production, network, apiOverride, authOverride } = environment;
 
-    if (!environment.production) {
-      env = this._find(environment.networkOverride);
-      env.apiUrl = environment.apiOverride;
+    if (!production) {
+      env = this._find(network);
+      if (apiOverride) env.apiUrl = apiOverride;
+      if (authOverride) env.authUrl = authOverride;
     }
     else if (isDevnet) env = this._find(Network.Devnet);
     else if (isTestnet) env = this._find(Network.Testnet);
