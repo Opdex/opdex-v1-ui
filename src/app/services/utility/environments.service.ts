@@ -40,6 +40,11 @@ export class EnvironmentsService {
     return this.network === Network.Devnet ? true : false;
   }
 
+  public get authRoute(): string {
+    const redirect = `${new URL(window.location.href).origin}/auth`;
+    return `${this.authUrl}?REDIRECT=${redirect}`;
+  }
+
   constructor() {
     const isDevnet = window.location.href.includes('dev-app');
     const isTestnet = window.location.href.includes('test-app');

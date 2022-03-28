@@ -64,10 +64,7 @@ export class SideNavComponent implements OnDestroy {
   }
 
   login(): void {
-    const { authUrl } = this._env;
-    const redirect = `${new URL(window.location.href).origin}/auth`;
-
-    window.location.href = `${authUrl}?REDIRECT=${redirect}`;
+    window.location.href = this._env.authRoute;
   }
 
   logout(): void {

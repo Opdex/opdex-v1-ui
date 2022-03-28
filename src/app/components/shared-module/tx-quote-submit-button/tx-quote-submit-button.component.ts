@@ -1,8 +1,8 @@
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { MaintenanceNotificationModalComponent } from '@sharedComponents/modals-module/maintenance-notification-modal/maintenance-notification-modal.component';
 import { IIndexStatus } from '@sharedModels/platform-api/responses/index/index-status.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { IconSizes } from 'src/app/enums/icon-sizes';
@@ -31,10 +31,10 @@ export class TxQuoteSubmitButtonComponent implements OnDestroy {
 
   constructor(
     private _context: UserContextService,
-    private _router: Router,
     private _sidebarService: SidenavService,
     private _indexService: IndexService,
     private _dialog: MatDialog,
+    private _env: EnvironmentsService
   ) {
     this.subscription.add(
       this._context.getUserContext$()
@@ -46,8 +46,8 @@ export class TxQuoteSubmitButtonComponent implements OnDestroy {
   }
 
   connectWallet(): void {
-    this._router.navigateByUrl('/auth');
     this._sidebarService.closeSidenav();
+    window.location.href = this._env.authRoute;
   }
 
   submit(): void {

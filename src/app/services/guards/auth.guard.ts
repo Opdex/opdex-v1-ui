@@ -1,3 +1,4 @@
+import { EnvironmentsService } from './../utility/environments.service';
 import { CanActivate, CanActivateChild, CanLoad, Router, ActivatedRouteSnapshot, UrlSegment } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
@@ -7,7 +8,8 @@ import { environment } from '@environments/environment';
 export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
   constructor(
     private _context: UserContextService,
-    private _router: Router
+    private _router: Router,
+    private _env: EnvironmentsService
   ) { }
 
   /**
@@ -48,8 +50,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
   }
 
   private fail(): boolean {
-    this._router.navigateByUrl('/auth');
-
+    window.location.href = this._env.authUrl;
     return false;
   }
 }

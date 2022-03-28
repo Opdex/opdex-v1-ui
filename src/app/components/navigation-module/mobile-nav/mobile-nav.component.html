@@ -10,9 +10,20 @@
 
     <button mat-button
       routerLink="{{!context?.wallet ? '/auth' : '/wallet'}}"
-      routerLinkActive="active">
+      routerLinkActive="active"
+      *ngIf="!useNewAuthFlow">
 
       <span class="wallet-indicator {{context?.wallet ? 'valid' : 'invalid'}}"></span>
+      <mat-icon>{{icons.wallet}}</mat-icon>
+    </button>
+
+    <button mat-button (click)="login()" *ngIf="useNewAuthFlow && !context?.wallet">
+      <span class="wallet-indicator invalid"></span>
+      <mat-icon>{{icons.wallet}}</mat-icon>
+    </button>
+
+    <button mat-button routerLink="/wallet" *ngIf="useNewAuthFlow && context?.wallet">
+      <span class="wallet-indicator valid"></span>
       <mat-icon>{{icons.wallet}}</mat-icon>
     </button>
 

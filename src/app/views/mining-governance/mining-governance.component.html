@@ -12,7 +12,7 @@
         <opdex-card>
           <ng-container *ngIf="miningGovernance; else loadingFirstSkeleton">
             <div class="flex-column justify-content-between">
-              <div class="flex-row-center-between mb-3">
+              <div class="flex-row-center-between" [ngClass]="{'mb-3': miningGovernance.periodRemainingBlocks > 0}">
                 <div class="flex-row-center">
                   <opdex-help-button
                     class="mr-1"

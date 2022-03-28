@@ -1,9 +1,10 @@
+import { Component, EventEmitter, Output, OnDestroy } from '@angular/core';
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
+import { UserContext } from '@sharedModels/user-context';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
-import { Component, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { UserContext } from '@sharedModels/user-context';
 
 @Component({
   selector: 'opdex-mobile-nav',
@@ -16,13 +17,25 @@ export class MobileNavComponent implements OnDestroy {
   iconSizes = IconSizes;
   context: UserContext;
   subscription = new Subscription();
+  useNewAuthFlow: boolean;
 
-  constructor(private _context: UserContextService) {
-    this.subscription.add(this._context.getUserContext$().subscribe(context => this.context = context));
+  constructor(
+    private _context: UserContextService,
+    private _env: EnvironmentsService
+  ) {
+    this.subscription.add(
+      this._context.getUserContext$()
+        .subscribe(context => this.context = context));
+
+    this.useNewAuthFlow = this._env.useNewAuthFlow;
   }
 
   toggleMenu() {
     this.onToggleMenu.emit();
+  }
+
+  login():void {
+    window.location.href = this._env.authRoute;
   }
 
   ngOnDestroy() {
