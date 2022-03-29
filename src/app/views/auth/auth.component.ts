@@ -1,3 +1,4 @@
+import { AuthApiService } from './../../services/api/auth-api.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { ThemeService } from '@sharedServices/utility/theme.service';
 import { Component } from '@angular/core';
@@ -9,6 +10,7 @@ import { Subscription, timer } from 'rxjs';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
 import { JwtService } from '@sharedServices/utility/jwt.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'opdex-auth',
@@ -39,25 +41,27 @@ export class AuthComponent {
     private _activatedRoute: ActivatedRoute,
     private _env: EnvironmentsService,
     private _jwt: JwtService,
-    private _sanitizer: DomSanitizer
+    private _sanitizer: DomSanitizer,
+    private _authApi: AuthApiService
   ) {
     this.useNewAuthFlow = this._env.useNewAuthFlow
 
     if (this.useNewAuthFlow) {
-      const accessToken = this._activatedRoute.snapshot.queryParamMap.get('ACCESS_TOKEN');
+      const accessCode = this._activatedRoute.snapshot.queryParamMap.get('access_code');
 
-      if (!accessToken) {
+      if (!accessCode) {
         this._router.navigateByUrl('/');
         return;
       }
 
-      this._context.setToken(accessToken);
-
-      const { preferences } = this._context.getUserContext();
-
-      if (preferences?.theme) this._theme.setTheme(preferences.theme);
-
-      this._router.navigateByUrl('/wallet');
+      this._authApi.verifyAccessCode(accessCode)
+        .pipe(take(1))
+        .subscribe((accessToken: string) => {
+          this._context.setToken(accessToken);
+          const { preferences } = this._context.getUserContext();
+          if (preferences?.theme) this._theme.setTheme(preferences.theme);
+          this._router.navigateByUrl('/wallet');
+        });
     }
   }
 
@@ -86,7 +90,7 @@ export class AuthComponent {
 
   private async connectToSignalR(): Promise<void> {
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(`${this._env.apiUrl}/socket`, { accessTokenFactory: () => this._jwt.getToken() })
+      .withUrl(`${this._env.platformApiUrl}/socket`, { accessTokenFactory: () => this._jwt.getToken() })
       .configureLogging(LogLevel.Error)
       .withAutomaticReconnect()
       .build();

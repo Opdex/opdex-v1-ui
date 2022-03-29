@@ -103,7 +103,7 @@ export class PlatformApiService extends RestApiService {
     protected _env: EnvironmentsService
   ) {
     super(_http, _error, _jwt, _context, _router, _env);
-    this.api = this._env.apiUrl;
+    this.api = this._env.platformApiUrl;
     this.marketAddress = this._env.marketAddress;
   }
 

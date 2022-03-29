@@ -1,5 +1,5 @@
 <section id="auth" class="header-section tx-bg flex-row-center-center">
-  <div class="container">
+  <div class="container" *ngIf="!useNewAuthFlow">
     <opdex-card [info]="true">
       <p class="mb-0">
         By connecting a wallet, you acknowledge that you have read, understand and agree to Opdex Inc.'s

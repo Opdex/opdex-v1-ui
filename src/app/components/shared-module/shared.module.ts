@@ -2,6 +2,7 @@ import { SharedPipesModule } from '@sharedPipes/shared-pipes.module';
 // Angular Core Imports
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 // CDK Imports
 import { ClipboardModule } from '@angular/cdk/clipboard';
@@ -44,6 +45,7 @@ import { TxQuoteSubmitButtonComponent } from '../shared-module/tx-quote-submit-b
   ],
   imports: [
     CommonModule,
+    RouterModule,
     MatCardModule,
     MatIconModule,
     MatTooltipModule,

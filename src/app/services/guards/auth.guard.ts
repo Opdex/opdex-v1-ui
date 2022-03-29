@@ -50,7 +50,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
   }
 
   private fail(): boolean {
-    window.location.href = this._env.authUrl;
+    window.location.href = this._env.authUiUrl;
     return false;
   }
 }

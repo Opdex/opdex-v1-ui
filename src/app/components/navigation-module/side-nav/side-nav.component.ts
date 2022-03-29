@@ -63,10 +63,6 @@ export class SideNavComponent implements OnDestroy {
     this.dialog.open(BugReportModalComponent, { width: '500px' });
   }
 
-  login(): void {
-    window.location.href = this._env.authRoute;
-  }
-
   logout(): void {
     this._context.setToken('');
     this._router.navigateByUrl('/');

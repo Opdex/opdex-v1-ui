@@ -61,6 +61,7 @@ import { TradeComponent } from './views/trade/trade.component';
 import { VaultComponent } from './views/vault/vault.component';
 import { VaultProposalComponent } from './views/vault-proposal/vault-proposal.component';
 import { checkForUpdates } from '@sharedServices/check-for-updates';
+import { LoginComponent } from './views/login/login.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import { checkForUpdates } from '@sharedServices/check-for-updates';
     AuthComponent,
     TradeComponent,
     VaultComponent,
-    VaultProposalComponent
+    VaultProposalComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
