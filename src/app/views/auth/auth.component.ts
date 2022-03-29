@@ -1,4 +1,4 @@
-import { AuthApiService } from './../../services/api/auth-api.service';
+import { AuthApiService } from '@sharedServices/api/auth-api.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { ThemeService } from '@sharedServices/utility/theme.service';
 import { Component } from '@angular/core';

@@ -46,7 +46,7 @@ export class EnvironmentsService {
 
   public get authRoute(): string {
     const redirect = `${new URL(window.location.href).origin}/auth`;
-    return `${this.authUiUrl}?REDIRECT=${redirect}`;
+    return `${this.authUiUrl}?redirect=${redirect}`;
   }
 
   constructor() {
