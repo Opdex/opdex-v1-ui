@@ -26,6 +26,6 @@ export class AuthApiService extends RestApiService {
 
   public verifyAccessCode(accessCode: string): Observable<string> {
     const endpoint = `${this.api}/auth/verify`;
-    return this.post<string>(endpoint, {code: accessCode});
+    return this.post<string>(endpoint, {code: accessCode}, { responseType: 'text' });
   }
 }
