@@ -1,16 +1,16 @@
 import { Network } from 'src/app/enums/networks';
 
-let apiOverride: string;
-let authOverride: string;
+let platformApiOverride: string;
+let authUiOverride: string;
 
-// apiOverride = 'http://localhost:44391/v1';
-// authOverride = 'http://localhost:4200';
+// platformApiOverride = 'http://localhost:44391/v1';
+// authUiOverride = 'http://localhost:4200';
 
 export const environment = {
   production: false,
   ga: '',
   defaultTheme: 'light-mode',
   network: Network.Devnet,
-  apiOverride,
-  authOverride
+  platformApiOverride,
+  authUiOverride
 };

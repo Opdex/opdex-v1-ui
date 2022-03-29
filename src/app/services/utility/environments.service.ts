@@ -8,8 +8,12 @@ import { Network } from 'src/app/enums/networks';
 export class EnvironmentsService {
   private _env: IEnvironment;
 
-  public get apiUrl(): string {
-    return this._env.apiUrl;
+  public get platformApiUrl(): string {
+    return this._env.platformApiUrl;
+  }
+
+  public get authApiUrl(): string {
+    return this._env.authApiUrl;
   }
 
   public get authUrl(): string {
@@ -50,12 +54,12 @@ export class EnvironmentsService {
     const isTestnet = window.location.href.includes('test-app');
 
     let env: IEnvironment;
-    const { production, network, apiOverride, authOverride } = environment;
+    const { production, network, platformApiOverride, authUiOverride } = environment;
 
     if (!production) {
       env = this._find(network);
-      if (apiOverride) env.apiUrl = apiOverride;
-      if (authOverride) env.authUrl = authOverride;
+      if (platformApiOverride) env.platformApiUrl = platformApiOverride;
+      if (authUiOverride) env.authUrl = authUiOverride;
     }
     else if (isDevnet) env = this._find(Network.Devnet);
     else if (isTestnet) env = this._find(Network.Testnet);

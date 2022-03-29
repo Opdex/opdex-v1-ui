@@ -1,8 +1,9 @@
 import { Network } from "../enums/networks";
 
 export interface IEnvironment {
-  apiUrl: string;
+  platformApiUrl: string;
   authUrl: string;
+  authApiUrl: string;
   marketAddress: string;
   routerAddress: string;
   miningGovernanceAddress: string;
@@ -13,7 +14,7 @@ export interface IEnvironment {
 export const environments: IEnvironment[] = [
   // Local Environment
   // {
-  //   apiUrl: 'http://localhost:44391/v1',
+  //   platformApiUrl: 'http://localhost:44391/v1',
   //   authUrl: 'https://dev-auth.opdex.com',
   //   marketAddress: 'PTfHL6rJT4doifQAoBdufdCA5DTdVi3cde',
   //   routerAddress: 'P8pL7bEynLesHE7qy9RtmEqdJKkAcNYFNj',
@@ -23,7 +24,8 @@ export const environments: IEnvironment[] = [
   // },
   // Devnet Environment
   {
-    apiUrl: 'https://v1-dev-api.opdex.com/v1',
+    platformApiUrl: 'https://v1-dev-api.opdex.com/v1',
+    authApiUrl: 'https://dev-auth.opdex.com/v1',
     authUrl: 'https://dev-auth.opdex.com',
     marketAddress: 'PXToW7DpAhVAYn9Ye3TLs91jV22NqLmHWx',
     routerAddress: 'PNzmDwtPNt5EYukJZzjShsHHrjpe2y594x',
@@ -33,7 +35,8 @@ export const environments: IEnvironment[] = [
   },
   // Testnet Environment
   {
-    apiUrl: 'https://v1-test-api.opdex.com/v1',
+    platformApiUrl: 'https://v1-test-api.opdex.com/v1',
+    authApiUrl: 'https://test-auth.opdex.com/v1',
     authUrl: 'https://test-auth.opdex.com',
     marketAddress: 't7RorA7xQCMVYKPM1ibPE1NSswaLbpqLQb',
     routerAddress: 'tAFxpxRdcV9foADqD6gK3c8sY5MeANzFp5',
@@ -43,7 +46,8 @@ export const environments: IEnvironment[] = [
   },
   // Mainnet Environment
   {
-    apiUrl: 'https://v1-api.opdex.com/v1',
+    platformApiUrl: 'https://v1-api.opdex.com/v1',
+    authApiUrl: 'https://auth.opdex.com/v1',
     authUrl: 'https://auth.opdex.com',
     marketAddress: 'CGmbx89aJdVtFGEUMZfdbRntYkGJgwjUrv',
     routerAddress: 'CeNa4b95h9YqDc1UZ2YCqmeqXXKqeDdAYW',

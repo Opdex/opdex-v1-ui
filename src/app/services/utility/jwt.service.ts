@@ -11,9 +11,11 @@ export class JwtService {
 
   constructor(private _storage: StorageService, private _env: EnvironmentsService) { }
 
-  public getAllowedDomain(): string {
-    const { host } = new URL(this._env.apiUrl);
-    return host;
+  public get allowedDomains(): string[] {
+    const platformApi = new URL(this._env.platformApiUrl);
+    const authApi = new URL(this._env.authApiUrl);
+
+    return [platformApi.host, authApi.host];
   }
 
   /**
@@ -79,6 +81,6 @@ export class JwtService {
 export function jwtOptionsFactory(jwtService: JwtService) {
   return {
     tokenGetter: () => jwtService.getToken(),
-    allowedDomains: [jwtService.getAllowedDomain()]
+    allowedDomains: [...jwtService.allowedDomains]
   }
 }
