@@ -16,8 +16,8 @@ export class EnvironmentsService {
     return this._env.authApiUrl;
   }
 
-  public get authUrl(): string {
-    return this._env.authUrl;
+  public get authUiUrl(): string {
+    return this._env.authUiUrl;
   }
 
   public get marketAddress(): string {
@@ -46,7 +46,7 @@ export class EnvironmentsService {
 
   public get authRoute(): string {
     const redirect = `${new URL(window.location.href).origin}/auth`;
-    return `${this.authUrl}?REDIRECT=${redirect}`;
+    return `${this.authUiUrl}?REDIRECT=${redirect}`;
   }
 
   constructor() {
@@ -54,12 +54,13 @@ export class EnvironmentsService {
     const isTestnet = window.location.href.includes('test-app');
 
     let env: IEnvironment;
-    const { production, network, platformApiOverride, authUiOverride } = environment;
+    const { production, network, platformApiOverride, authUiOverride, authApiOverride } = environment;
 
     if (!production) {
       env = this._find(network);
       if (platformApiOverride) env.platformApiUrl = platformApiOverride;
-      if (authUiOverride) env.authUrl = authUiOverride;
+      if (authUiOverride) env.authUiUrl = authUiOverride;
+      if (authApiOverride) env.authApiUrl = authApiOverride;
     }
     else if (isDevnet) env = this._find(Network.Devnet);
     else if (isTestnet) env = this._find(Network.Testnet);
