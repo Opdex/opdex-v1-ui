@@ -51,6 +51,8 @@ export class AuthComponent {
         return;
       }
 
+      // Todo: Retrieve access code and redeem for JWT through auth.opdex.com
+
       this._context.setToken(accessToken);
 
       const { preferences } = this._context.getUserContext();
