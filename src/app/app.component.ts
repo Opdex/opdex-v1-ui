@@ -217,7 +217,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   private async connectToSignalR(): Promise<void> {
     console.log('connecting to signalr')
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(`${this._env.apiUrl}/socket`, { accessTokenFactory: () => this._jwt.getToken() })
+      .withUrl(`${this._env.platformApiUrl}/socket`, { accessTokenFactory: () => this._jwt.getToken() })
       .configureLogging(LogLevel.Warning)
       .withAutomaticReconnect()
       .build();

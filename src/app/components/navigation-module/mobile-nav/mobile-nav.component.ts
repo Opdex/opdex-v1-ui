@@ -34,10 +34,6 @@ export class MobileNavComponent implements OnDestroy {
     this.onToggleMenu.emit();
   }
 
-  login():void {
-    window.location.href = this._env.authRoute;
-  }
-
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

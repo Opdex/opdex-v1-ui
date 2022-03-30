@@ -45,11 +45,6 @@ export class TxQuoteSubmitButtonComponent implements OnDestroy {
         .subscribe(status => this.indexStatus = status));
   }
 
-  connectWallet(): void {
-    this._sidebarService.closeSidenav();
-    window.location.href = this._env.authRoute;
-  }
-
   submit(): void {
     if (!!this.indexStatus?.available === false) {
       this._dialog.open(MaintenanceNotificationModalComponent, {width: '500px', autoFocus: false})

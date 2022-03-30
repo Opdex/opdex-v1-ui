@@ -1,3 +1,4 @@
+import { LoginComponent } from './views/login/login.component';
 import { NgModule } from '@angular/core';
 import { VaultComponent } from './views/vault/vault.component';
 import { TradeComponent } from './views/trade/trade.component';
@@ -27,6 +28,7 @@ const routes: Routes = [
   { path: 'vault/proposal/:proposalId', component: VaultProposalComponent, data: { animation: 'VaultProposalView' } },
   { path: 'auth', component: AuthComponent, data: { animation: 'AuthView', title: 'Connect'} },
   { path: 'trade', component: TradeComponent, data: { animation: 'TradeView', title: 'Trade'} },
+  { path: 'login', component: LoginComponent, data: { animation: 'LoginView', title: 'Login'} },
   { path: '**', component: NotFoundComponent, data: { animation: 'NotFoundView', title: 'Page Not Found'} },
 ];
 
