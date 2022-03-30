@@ -1,7 +1,7 @@
 <div class="header-section">
   <div class="container">
     <div class="row">
-      <div class="col-12 mb-3" *ngIf="!isCurrentMarket">
+      <div class="col-12 mb-3" *ngIf="pool && !isCurrentMarket">
         <opdex-card [warn]="true">
           This liquidity pool is from an external market.
         </opdex-card>

@@ -27,18 +27,20 @@ export class LineChartComponent extends BaseChartComponent implements OnInit, On
   }
 
   ngOnChanges(): void {
-    if (!!this.chartData && !!this.series === false) {
-      setTimeout(_ => {
+    setTimeout(() => {
+      if (!this.chartData) return;
+
+      const data = [...this.chartData.values] as LineData[];
+
+      if (!this.series) {
         this.addLineSeries();
-        this.series.setData(this.chartData.values as LineData[]);
+        this.series.setData(data);
         this.chart.timeScale().fitContent();
         this.loading = false;
-      }, 200);
-    } else if (!!this.series) {
-      // resets data but may be problematic when we want to only append new data
-      // Observables and services may be useful here
-      this.series.setData(this.chartData.values as LineData[]);
-    }
+      } else {
+        this.series.setData(data);
+      }
+    }, 200);
   }
 
   ngOnDestroy(): void {
