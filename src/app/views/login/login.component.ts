@@ -1,5 +1,5 @@
-import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { Component } from '@angular/core';
+import { AuthService } from '@sharedServices/utility/auth.service';
 
 @Component({
   selector: 'opdex-login',
@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  constructor(private _env: EnvironmentsService) {
-    window.location.href = this._env.authRoute;
+  constructor(private _authService: AuthService) {
+    this._authService.login();
   }
 }

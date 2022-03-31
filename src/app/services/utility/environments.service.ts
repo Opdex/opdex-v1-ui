@@ -44,9 +44,9 @@ export class EnvironmentsService {
     return this.network !== Network.Mainnet;
   }
 
-  public get authRoute(): string {
+  public getAuthRoute(state: string): string {
     const redirect = `${new URL(window.location.href).origin}/auth`;
-    return `${this.authUiUrl}?redirect=${redirect}`;
+    return `${this.authUiUrl}?redirect_uri=${redirect}&state=${state}`;
   }
 
   constructor() {
