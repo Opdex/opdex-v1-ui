@@ -1,11 +1,15 @@
 import { ThemeService } from './theme.service';
 import { UserContextService } from './user-context.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
+import { Router } from '@angular/router';
 import { AuthApiService } from '@sharedServices/api/auth-api.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { StorageService } from './storage.service';
 import { Injectable } from "@angular/core";
+import { SHA256 } from "crypto-js";
+import { v4 as uuidv4 } from 'uuid';
+
+const AUTH_STATE: string = 'auth-state';
+const CODE_VERIFIER: string = 'code-verifier';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -13,49 +17,56 @@ export class AuthService {
     private _storage: StorageService,
     private _env: EnvironmentsService,
     private _authApi: AuthApiService,
-    private _platformApi: PlatformApiService,
-    private _route: ActivatedRoute,
     private _context: UserContextService,
     private _router: Router,
-    private _theme: ThemeService,
+    private _theme: ThemeService
   ) { }
 
   login(): void {
-    const state = {
+    const codeVerifier = uuidv4();
+    const codeChallenge = btoa(SHA256(codeVerifier).toString());
+    const stateEncoded = btoa(JSON.stringify({
       nonce: this._guid(),
-      // Todo: If /login view is used, will need to check and adjust to / or /wallet
-      route: window.location.href
-    };
+      route: window.location.href.includes('login')
+        ? window.location.href.replace('login', 'wallet')
+        : window.location.href
+    }));
 
-    const stateEncoded = btoa(JSON.stringify(state));
-    console.log(stateEncoded);
+    this._storage.setLocalStorage(AUTH_STATE, stateEncoded);
+    this._storage.setLocalStorage(CODE_VERIFIER, codeVerifier);
 
-    this._storage.setLocalStorage('auth-state', stateEncoded);
-
-    const authRoute = this._env.getAuthRoute(stateEncoded);
-
-    window.location.href = authRoute;
+    window.location.href = this._env.getAuthRoute(stateEncoded, codeChallenge);
   }
 
-  async verify(accessCode: string, state: string): Promise<void> {
-    const stateEncoded = this._storage.getLocalStorage('auth-state');
+  async verify(accessCode: string, state: string, codeChallenge: string): Promise<void> {
+    const stateEncoded = this._storage.getLocalStorage<string>(AUTH_STATE);
+    const codeVerifier = this._storage.getLocalStorage<string>(CODE_VERIFIER);
+    const verifierChallenge = btoa(SHA256(codeVerifier).toString());
 
-    if (stateEncoded !== state) return;
+    // Todo: Will need to test this against API, not sure if base64 is returned on redirect or not
+    if (stateEncoded !== state || verifierChallenge !== codeChallenge) return;
 
     try {
+      // Verify Token
       const stateDecoded = JSON.parse(atob(stateEncoded));
-      const route = new URL(stateDecoded.route);
       const token = await this._authApi.verifyAccessCode(accessCode).toPromise();
       this._context.setToken(token);
+
+      // Clear Storage
+      this._storage.removeLocalStorage(AUTH_STATE);
+      this._storage.removeLocalStorage(CODE_VERIFIER);
+
+      // Set Theme
       const { preferences } = this._context.getUserContext();
       if (preferences?.theme) this._theme.setTheme(preferences.theme);
 
-      // Todo: Use state route
-      // -- include all query params etc
-      // this._router.navigateByUrl('/wallet');
+      // Build and Route
+      let queryParams = {};
+      const { searchParams, pathname } = new URL(stateDecoded.route);
+      searchParams.forEach((value: string, key: string) => queryParams[key] = value);
+      this._router.navigate([pathname], {queryParams});
     } catch(error) {
-      // Todo: Handle error
-      return;
+      return; // Todo: Handle error
     }
   }
 
