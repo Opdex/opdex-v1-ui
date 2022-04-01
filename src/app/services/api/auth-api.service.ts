@@ -30,6 +30,6 @@ export class AuthApiService extends RestApiService {
       .set('Content-Type', 'application/x-www-form-urlencoded')
       .set('Accept', 'text');
 
-    return this.post<string>(endpoint, {code, code_verifier: codeVerifier}, { headers });
+    return this.post<string>(endpoint, {Code: code, CodeVerifier: codeVerifier}, { headers });
   }
 }
