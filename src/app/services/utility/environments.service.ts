@@ -44,9 +44,9 @@ export class EnvironmentsService {
     return this.network !== Network.Mainnet;
   }
 
-  public get authRoute(): string {
-    const redirect = `${new URL(window.location.href).origin}/auth`;
-    return `${this.authUiUrl}?redirect=${redirect}`;
+  public getAuthRoute(state: string, codeChallenge: string): string {
+    const redirect = `${new URL(window.location.href).origin}/auth`.replace('http://', 'https://');
+    return `${this.authApiUrl}/auth/authorize?redirect_uri=${redirect}&state=${state}&code_challenge=${codeChallenge}&code_challenge_method=S256`;
   }
 
   constructor() {

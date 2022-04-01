@@ -1,6 +1,5 @@
 import { Token } from '@sharedModels/ui/tokens/token';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
-import { IToken } from '@sharedModels/platform-api/responses/tokens/token.interface';
 import { FixedDecimal } from "@sharedModels/types/fixed-decimal";
 
 export interface ITokenSwapQuote {
