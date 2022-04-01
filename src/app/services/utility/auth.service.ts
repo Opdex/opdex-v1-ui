@@ -43,13 +43,23 @@ export class AuthService {
     const codeVerifier = this._storage.getLocalStorage<string>(CODE_VERIFIER);
     const verifierChallenge = btoa(SHA256(codeVerifier).toString());
 
+    if (stateEncoded !== state) {
+      console.log('invalid state');
+      console.group(`state encoded: ${stateEncoded} does not match ${state}`);
+      return;
+    }
+
     // Todo: Will need to test this against API, not sure if base64 is returned on redirect or not
-    if (stateEncoded !== state || verifierChallenge !== codeChallenge) return;
+    if (verifierChallenge !== codeChallenge){
+      console.log('invalid code challenge');
+      console.group(`verifierChallenge: ${verifierChallenge} does not match ${codeChallenge}`);
+      return;
+    }
 
     try {
       // Verify Token
       const stateDecoded = JSON.parse(atob(stateEncoded));
-      const token = await this._authApi.verifyAccessCode(accessCode).toPromise();
+      const token = await this._authApi.verifyAccessCode(accessCode, codeVerifier).toPromise();
       this._context.setToken(token);
 
       // Clear Storage
@@ -66,6 +76,8 @@ export class AuthService {
       searchParams.forEach((value: string, key: string) => queryParams[key] = value);
       this._router.navigate([pathname], {queryParams});
     } catch(error) {
+      console.log(error);
+      console.log('thrown error')
       return; // Todo: Handle error
     }
   }
