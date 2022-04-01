@@ -75,15 +75,14 @@ export class AuthService {
   }
 
   private _encodeBase64Url(value: string): string {
-    const base64 = btoa(value)
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_').replace(/=/, '');
-
-    return this._padRight(base64, base64.length + (4 - base64.length % 4) % 4, '=');
+    return btoa(value).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
   }
 
   private _decodeBase64Url(value: string): string {
-    return atob(value.replace(/-/g, '+').replace(/_/g, '/'));
+    value = value.replace(/-/g, '+').replace(/_/g, '/');
+    value = this._padRight(value, value.length + (4 - value.length % 4) % 4, '=')
+
+    return atob(value);
   }
 
   private _guid(length: number = 10): string {
