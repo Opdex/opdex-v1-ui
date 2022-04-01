@@ -23,9 +23,9 @@ export class AuthService {
   ) { }
 
   login(): void {
-    const codeVerifier = uuidv4();
-    const codeChallenge = btoa(SHA256(codeVerifier).toString());
-    const stateEncoded = btoa(JSON.stringify({
+    const codeVerifier = uuidv4().replace(/-/g, '');
+    const codeChallenge = this._encodeBase64Url(SHA256(codeVerifier).toString());
+    const stateEncoded = this._encodeBase64Url(JSON.stringify({
       nonce: this._guid(),
       route: window.location.href.includes('login')
         ? window.location.href.replace('login', 'wallet')
@@ -50,7 +50,7 @@ export class AuthService {
 
     try {
       // Verify Token
-      const stateDecoded = JSON.parse(atob(stateEncoded));
+      const stateDecoded = JSON.parse(this._decodeBase64Url(stateEncoded));
       const token = await this._authApi.verifyAccessCode(accessCode, codeVerifier).toPromise();
       this._context.setToken(token);
 
@@ -74,6 +74,18 @@ export class AuthService {
     }
   }
 
+  private _encodeBase64Url(value: string): string {
+    const base64 = btoa(value)
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_').replace(/=/, '');
+
+    return this._padRight(base64, base64.length + (4 - base64.length % 4) % 4, '=');
+  }
+
+  private _decodeBase64Url(value: string): string {
+    return atob(value.replace(/-/g, '+').replace(/_/g, '/'));
+  }
+
   private _guid(length: number = 10): string {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
@@ -83,5 +95,15 @@ export class AuthService {
     }
 
     return result;
+  }
+
+  private _padRight(value: string, number: number, pad: string) {
+    if (number > value.length) {
+      for(let i = 0; i < number - value.length; i++) {
+        value += pad;
+      }
+    }
+
+    return value;
   }
 }
