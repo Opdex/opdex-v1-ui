@@ -69,14 +69,13 @@ export class AuthComponent {
     } else {
       const accessCode = this._activatedRoute.snapshot.queryParamMap.get('code');
       const state = this._activatedRoute.snapshot.queryParamMap.get('state');
-      const codeChallenge = this._activatedRoute.snapshot.queryParamMap.get('code_challenge');
 
       if (!accessCode || !state) {
         this._router.navigateByUrl('/');
         return;
       }
 
-      await this._authService.verify(accessCode, state, codeChallenge);
+      await this._authService.verify(accessCode, state);
     }
   }
 

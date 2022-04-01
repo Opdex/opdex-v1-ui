@@ -38,21 +38,13 @@ export class AuthService {
     window.location.href = this._env.getAuthRoute(stateEncoded, codeChallenge);
   }
 
-  async verify(accessCode: string, state: string, codeChallenge: string): Promise<void> {
+  async verify(accessCode: string, state: string): Promise<void> {
     const stateEncoded = this._storage.getLocalStorage<string>(AUTH_STATE);
     const codeVerifier = this._storage.getLocalStorage<string>(CODE_VERIFIER);
-    const verifierChallenge = btoa(SHA256(codeVerifier).toString());
 
     if (stateEncoded !== state) {
       console.log('invalid state');
       console.group(`state encoded: ${stateEncoded} does not match ${state}`);
-      return;
-    }
-
-    // Todo: Will need to test this against API, not sure if base64 is returned on redirect or not
-    if (verifierChallenge !== codeChallenge){
-      console.log('invalid code challenge');
-      console.group(`verifierChallenge: ${verifierChallenge} does not match ${codeChallenge}`);
       return;
     }
 
