@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { EnvironmentsService } from "@sharedServices/utility/environments.service";
@@ -26,6 +26,10 @@ export class AuthApiService extends RestApiService {
 
   public verifyAccessCode(code: string, codeVerifier: string): Observable<string> {
     const endpoint = `${this.api}/auth/token`;
-    return this.post<string>(endpoint, {code, codeVerifier}, { responseType: 'text' });
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/x-www-form-urlencoded')
+      .set('Accept', 'text');
+
+    return this.post<string>(endpoint, {code, codeVerifier}, { headers });
   }
 }
