@@ -1,8 +1,7 @@
-import { EnvironmentsService } from '@sharedServices/utility/environments.service';
+import { AuthService } from '@sharedServices/utility/auth.service';
 import { MaintenanceNotificationModalComponent } from '@sharedComponents/modals-module/maintenance-notification-modal/maintenance-notification-modal.component';
 import { IIndexStatus } from '@sharedModels/platform-api/responses/index/index-status.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
-import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { Subscription } from 'rxjs';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { IconSizes } from 'src/app/enums/icon-sizes';
@@ -31,10 +30,9 @@ export class TxQuoteSubmitButtonComponent implements OnDestroy {
 
   constructor(
     private _context: UserContextService,
-    private _sidebarService: SidenavService,
     private _indexService: IndexService,
     private _dialog: MatDialog,
-    private _env: EnvironmentsService
+    private _authService: AuthService
   ) {
     this.subscription.add(
       this._context.getUserContext$()
@@ -43,6 +41,10 @@ export class TxQuoteSubmitButtonComponent implements OnDestroy {
     this.subscription.add(
       this._indexService.status$
         .subscribe(status => this.indexStatus = status));
+  }
+
+  login(): void {
+    this._authService.login();
   }
 
   submit(): void {

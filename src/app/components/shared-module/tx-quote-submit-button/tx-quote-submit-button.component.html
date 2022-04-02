@@ -18,7 +18,7 @@
   color="primary"
   class="mt-3 w-100"
   [ngClass]="size"
-  routerLink="/login"
+  (click)="login()"
   *ngIf="!!context?.wallet === false">
   <span class="flex-row-center-center">
     Connect Wallet <mat-icon class="ml-1 tiny">{{icons.wallet}}</mat-icon>

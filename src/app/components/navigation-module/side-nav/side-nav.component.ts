@@ -1,3 +1,4 @@
+import { AuthService } from '@sharedServices/utility/auth.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { Router } from '@angular/router';
 import { TransactionsService } from '@sharedServices/platform/transactions.service';
@@ -38,7 +39,8 @@ export class SideNavComponent implements OnDestroy {
     private _indexService: IndexService,
     private _transactionsService: TransactionsService,
     private _router: Router,
-    private _env: EnvironmentsService
+    private _env: EnvironmentsService,
+    private _authService: AuthService
   ) {
     this.subscription.add(this._context.getUserContext$().subscribe(context => this.context = context));
     this.subscription.add(this._transactionsService.getBroadcastedTransactions$().subscribe(txs => this.pendingTransactions = txs));
@@ -48,6 +50,10 @@ export class SideNavComponent implements OnDestroy {
     this.network = network;
     this.usesVault = !!vaultAddress;
     this.useNewAuthFlow = useNewAuthFlow;
+  }
+
+  login(): void {
+    this._authService.login();
   }
 
   togglePin(): void {

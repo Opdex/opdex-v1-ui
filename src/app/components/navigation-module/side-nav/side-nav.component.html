@@ -45,7 +45,7 @@
       <li *ngIf="!context?.wallet">
         <a mat-button *ngIf="useNewAuthFlow"
           class="transparent"
-          routerLink="/login"
+          (click)="login()"
           [matTooltip]="!isPinned && !mobileMenuOpen ? 'Connect Wallet' : null" matTooltipPosition="right">
           <span class="wallet-indicator invalid"></span>
           <mat-icon>{{icons.wallet}}</mat-icon>

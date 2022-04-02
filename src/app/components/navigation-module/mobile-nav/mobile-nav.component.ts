@@ -1,3 +1,4 @@
+import { AuthService } from '@sharedServices/utility/auth.service';
 import { Component, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
@@ -21,13 +22,18 @@ export class MobileNavComponent implements OnDestroy {
 
   constructor(
     private _context: UserContextService,
-    private _env: EnvironmentsService
+    private _env: EnvironmentsService,
+    private _authService: AuthService
   ) {
     this.subscription.add(
       this._context.getUserContext$()
         .subscribe(context => this.context = context));
 
     this.useNewAuthFlow = this._env.useNewAuthFlow;
+  }
+
+  login(): void {
+    this._authService.login();
   }
 
   toggleMenu() {
