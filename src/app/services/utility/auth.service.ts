@@ -23,7 +23,7 @@ export class AuthService {
   ) { }
 
   login(): void {
-    const codeVerifier = uuidv4().replace(/-/g, '');
+    const codeVerifier = this._encodeBase64Url(uuidv4().replace(/-/g, ''));
     const codeChallenge = this._encodeBase64Url(SHA256(codeVerifier).toString());
     const stateEncoded = this._encodeBase64Url(JSON.stringify({
       nonce: this._guid(),
