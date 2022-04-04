@@ -68,6 +68,12 @@ export class AuthComponent {
 
       this.subscription.add(timer(0, 1000).subscribe(async _ => await this.calcSidExpiration()));
     } else {
+      const currentContext = this._context.getUserContext();
+      if (currentContext.wallet) {
+        this._router.navigateByUrl('/');
+        return;
+      }
+
       const accessCode = this._activatedRoute.snapshot.queryParamMap.get('code');
       const state = this._activatedRoute.snapshot.queryParamMap.get('state');
       const verification = await this._authService.verify(accessCode, state);
