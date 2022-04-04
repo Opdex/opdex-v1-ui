@@ -32,6 +32,7 @@ export class AuthComponent {
   isTestnet: boolean;
   webSid: SafeUrl;
   useNewAuthFlow: boolean;
+  authFailure: boolean;
 
   constructor(
     private _context: UserContextService,
@@ -69,14 +70,21 @@ export class AuthComponent {
     } else {
       const accessCode = this._activatedRoute.snapshot.queryParamMap.get('code');
       const state = this._activatedRoute.snapshot.queryParamMap.get('state');
+      const verification = await this._authService.verify(accessCode, state);
 
-      if (!accessCode || !state) {
-        this._router.navigateByUrl('/');
-        return;
+      this.authFailure = !verification.success;
+
+      if (verification.success) {
+        const { preferences } = this._context.getUserContext();
+        if (preferences?.theme) this._theme.setTheme(preferences.theme);
+
+        this._router.navigate([verification.routePath], verification.routeQueryParams);
       }
-
-      await this._authService.verify(accessCode, state);
     }
+  }
+
+  login(): void {
+    this._authService.login();
   }
 
   private async connectToSignalR(): Promise<void> {
