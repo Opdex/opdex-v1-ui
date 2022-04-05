@@ -1,9 +1,14 @@
+type AuthVerificationOptions = {
+  route?: URL;
+  error?: string | any;
+}
+
 export class AuthVerification {
-  private _success: boolean;
   private _route: URL;
+  private _error: string | any;
 
   public get success(): boolean {
-    return this._success;
+    return !this._error;
   }
 
   public get route(): URL {
@@ -26,8 +31,12 @@ export class AuthVerification {
     return queryParams;
   }
 
-  constructor(success: boolean, route: URL) {
-    this._success = success;
-    this._route = route;
+  constructor(options: AuthVerificationOptions) {
+    if (options.error) {
+      console.error(options.error);
+      this._error = options.error;
+    } else {
+      this._route = options.route;
+    }
   }
 }
