@@ -132,6 +132,20 @@
         </button>
       </div>
 
+      <div class="flex-row-center no-wrap">
+        <a mat-button class="small d-inline pl-0 pr-0 transparent" href="https://docs.opdex.com/docs/knowledge-center-overview" target="_blank" rel="noopener noreferrer">
+          <mat-icon class="mr-2">{{icons.help}}</mat-icon>
+          <small>Help</small>
+        </a>
+      </div>
+
+      <div class="flex-row-center no-wrap">
+        <a mat-button class="small d-inline pl-0 pr-0 transparent" href="https://interflux.stratisplatform.com" target="_blank" rel="noopener noreferrer">
+          <mat-icon class="mr-2">{{icons.interflux}}</mat-icon>
+          <small>InterFlux</small>
+        </a>
+      </div>
+
       <div class="flex-row-center no-wrap" *ngIf="context?.wallet">
         <button mat-button class="small d-inline pl-0 pr-0 transparent" (click)="logout()">
           <mat-icon class="mr-2">{{icons.exit}}</mat-icon>

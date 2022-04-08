@@ -1,6 +1,6 @@
 @import 'src/scss/colors';
 
-button {
+button, .mat-button, .mat-icon-button {
   display: flex;
   flex-direction: row;
   justify-content: center;

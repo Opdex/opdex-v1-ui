@@ -9,30 +9,32 @@ import { IChartData, IChartsSnapshotHistory } from '@sharedModels/ui/markets/mar
 })
 export class ChartToolbarComponent {
   private _selectedChart: IChartData;
+  selectedChartType: string;
+  latestValue: string;
+  icons = Icons;
 
-  public get selectedChart(): IChartData {
-    return this._selectedChart;
-  }
-
+  @Output() onSelectChartType = new EventEmitter<string>();
+  @Output() onSelectChart = new EventEmitter<string>();
+  @Input() chartsHistory: IChartsSnapshotHistory;
   @Input() set selectedChart(value: IChartData) {
     if (value.label !== this.selectedChart?.label) {
       this.selectedChartType = value.chartTypes[0];
     }
 
     this._selectedChart = value;
+    this._setLatestValue();
   }
 
-  @Input() chartsHistory: IChartsSnapshotHistory;
-  @Output() onSelectChartType = new EventEmitter<string>();
-  @Output() onSelectChart = new EventEmitter<string>();
-  icons = Icons;
-  selectedChartType: string;
+  public get selectedChart(): IChartData {
+    return this._selectedChart;
+  }
 
-  public get latestValue(): string {
+  private _setLatestValue() {
     const { values } = this.selectedChart;
     const last = values[values.length - 1] as any;
     const lastValue = last?.close || last?.value;
-    return !!lastValue ? lastValue.toString() : ''
+
+    this.latestValue = !!lastValue ? lastValue.toFixed(8) : '0'
   }
 
   selectChart(chart: string): void {

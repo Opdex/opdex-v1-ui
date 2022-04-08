@@ -5,7 +5,6 @@ import { JwtService } from './jwt.service';
 import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
-
 export class UserContextService {
   private userContext$ = new BehaviorSubject<UserContext>(new UserContext());
   private _token: string;
