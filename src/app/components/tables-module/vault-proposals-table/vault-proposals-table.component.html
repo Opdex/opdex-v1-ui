@@ -107,7 +107,7 @@
             <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
               <button mat-menu-item class="small"
                 (click)="openSidebar('Pledge', element.proposalId, false)"
-                *ngIf="element.status === 'Pledge'">
+                *ngIf="element.status === 'Pledge' && element.expiration > latestBlock">
                 <mat-icon class="blue">{{icons.pledge}}</mat-icon> Add Pledge
               </button>
 
@@ -119,7 +119,7 @@
 
               <button mat-menu-item class="small"
                 (click)="openSidebar('Vote', element.proposalId, false)"
-                *ngIf="element.status === 'Vote'">
+                *ngIf="element.status === 'Vote' && element.expiration > latestBlock">
                 <mat-icon class="purple">{{icons.proposal}}</mat-icon> Add Vote
               </button>
 

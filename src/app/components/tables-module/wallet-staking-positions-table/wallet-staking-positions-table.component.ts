@@ -1,5 +1,5 @@
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
-import { OnDestroy } from '@angular/core';
+import { EventEmitter, OnDestroy, Output } from '@angular/core';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { StakingPositionsFilter } from '@sharedModels/platform-api/requests/wallets/staking-positions-filter';
 import { Component, Input, OnChanges, ViewChild } from '@angular/core';
@@ -26,6 +26,7 @@ import { switchMap, take, map } from 'rxjs/operators';
 export class WalletStakingPositionsTableComponent implements OnChanges, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   @Input() filter: StakingPositionsFilter;
+  @Output() onNumRecordsCount = new EventEmitter<string>();
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
   subscription: Subscription;
@@ -88,6 +89,8 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
     return this._walletsService.getStakingPositions(context.wallet, this.filter)
       .pipe(
         switchMap(response => {
+          this.onNumRecordsCount.emit(this._numRecords(response.paging, response.results));
+
           if (response.results.length === 0) {
             this.dataSource.data = [];
             return of(response);
@@ -127,6 +130,12 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
               this.paging = response.paging;
             }));
         }));
+  }
+
+  private _numRecords(paging: ICursor, records: any[]): string {
+    return paging.next || paging.previous
+      ? `${this.filter.limit}+`
+      : records.length.toString();
   }
 
   ngOnDestroy(): void {

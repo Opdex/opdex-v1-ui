@@ -38,6 +38,10 @@
     color: white;
   }
 
+  &.gray {
+    background: $gray-primary;
+  }
+
   .mat-icon {
     font-size: 1em !important;
     line-height: 1em !important;

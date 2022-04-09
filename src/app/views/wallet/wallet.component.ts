@@ -21,6 +21,11 @@ import { WalletBalancesFilter } from '@sharedModels/platform-api/requests/wallet
 import { StakingPositionsFilter } from '@sharedModels/platform-api/requests/wallets/staking-positions-filter';
 import { MiningPositionsFilter } from '@sharedModels/platform-api/requests/wallets/mining-positions-filter';
 
+type CollapsableTable<T> = {
+  filter: T,
+  collapse?: boolean,
+  count?: string
+}
 @Component({
   selector: 'opdex-wallet',
   templateUrl: './wallet.component.html',
@@ -32,22 +37,16 @@ export class WalletComponent implements OnInit {
   showPreferences: boolean;
   crsBalance: IAddressBalance;
   crsBalanceValue: FixedDecimal;
-  showProposals: boolean;
-  pledgesFilter: VaultProposalPledgesFilter;
-  votesFilter: VaultProposalVotesFilter;
-  walletBalancesFilter: WalletBalancesFilter;
-  provisionalBalancesFilter: WalletBalancesFilter;
-  transactionsRequest: ITransactionsRequest;
-  stakingFilter: StakingPositionsFilter;
-  miningFilter: MiningPositionsFilter;
-  balanceCollapse: boolean = false;
-  providingCollapse: boolean = true;
-  miningCollapse: boolean = true;
-  stakingCollapse: boolean = true;
-  pledgingCollapse: boolean = true;
-  votingCollapse: boolean = true;
   icons = Icons;
   iconSizes = IconSizes;
+  showProposals: boolean;
+  transactionsRequest: ITransactionsRequest;
+  pledges: CollapsableTable<VaultProposalPledgesFilter>;
+  votes: CollapsableTable<VaultProposalVotesFilter>;
+  balances: CollapsableTable<WalletBalancesFilter>;
+  providing: CollapsableTable<WalletBalancesFilter>;
+  staking: CollapsableTable<StakingPositionsFilter>;
+  mining: CollapsableTable<MiningPositionsFilter>;
 
   constructor(
     private _context: UserContextService,
@@ -61,7 +60,7 @@ export class WalletComponent implements OnInit {
     this.showProposals = !!this._env.vaultAddress;
 
     if (!this.wallet || !this.wallet.wallet) {
-      this._router.navigateByUrl('/auth');
+      this._router.navigateByUrl('/');
     }
 
     this.transactionsRequest = {
@@ -71,41 +70,57 @@ export class WalletComponent implements OnInit {
       sender: this.wallet.wallet
     };
 
-    this.pledgesFilter = new VaultProposalPledgesFilter({
-      pledger: this.wallet.wallet,
-      limit: 5,
-      direction: 'DESC',
-      includeZeroBalances: false
-    });
+    this.pledges = {
+      filter: new VaultProposalPledgesFilter({
+        pledger: this.wallet.wallet,
+        limit: 5,
+        direction: 'DESC',
+        includeZeroBalances: false
+      })
+    };
 
-    this.votesFilter = new VaultProposalVotesFilter({
-      voter: this.wallet.wallet,
-      limit: 5,
-      direction: 'DESC',
-      includeZeroBalances: false
-    });
+    this.votes = {
+      filter: new VaultProposalVotesFilter({
+        voter: this.wallet.wallet,
+        limit: 5,
+        direction: 'DESC',
+        includeZeroBalances: false
+      })
+    };
 
-    this.walletBalancesFilter = new WalletBalancesFilter({
-      tokenAttributes: [TokenAttributes.NonProvisional],
-      limit: 5,
-      direction: 'DESC',
-      includeZeroBalances: false});
+    this.balances = {
+      filter: new WalletBalancesFilter({
+        tokenAttributes: [TokenAttributes.NonProvisional],
+        limit: 5,
+        direction: 'DESC',
+        includeZeroBalances: false
+      })
+    };
 
-    this.provisionalBalancesFilter = new WalletBalancesFilter({
-      tokenAttributes: [TokenAttributes.Provisional],
-      limit: 5,
-      direction: 'DESC',
-      includeZeroBalances: false});
+    this.providing = {
+      filter: new WalletBalancesFilter({
+        tokenAttributes: [TokenAttributes.Provisional],
+        limit: 5,
+        direction: 'DESC',
+        includeZeroBalances: false
+      })
+    };
 
-    this.stakingFilter = new StakingPositionsFilter({
-      limit: 5,
-      direction: 'DESC',
-      includeZeroAmounts: false});
+    this.staking = {
+      filter: new StakingPositionsFilter({
+        limit: 5,
+        direction: 'DESC',
+        includeZeroAmounts: false
+      })
+    };
 
-    this.miningFilter = new MiningPositionsFilter({
-      limit: 5,
-      direction: 'DESC',
-      includeZeroAmounts: false});
+    this.mining = {
+      filter: new MiningPositionsFilter({
+        limit: 5,
+        direction: 'DESC',
+        includeZeroAmounts: false
+      })
+    };
   }
 
   ngOnInit(): void {
@@ -119,6 +134,14 @@ export class WalletComponent implements OnInit {
         }),
         take(1))
       .subscribe();
+  }
+
+  handleCount(count: string, type: string) {
+    this[type].count = count;
+
+    if (this[type].collapse === undefined) {
+      this[type].collapse = count == '0'
+    }
   }
 
   handleDeadlineChange(threshold: number): void {
@@ -139,27 +162,7 @@ export class WalletComponent implements OnInit {
     this._sidebar.openSidenav($event);
   }
 
-  toggleBalanceCollapse(): void {
-    this.balanceCollapse = !this.balanceCollapse;
-  }
-
-  toggleProvidingCollapse(): void {
-    this.providingCollapse = !this.providingCollapse;
-  }
-
-  toggleMiningCollapse(): void {
-    this.miningCollapse = !this.miningCollapse;
-  }
-
-  toggleStakingCollapse(): void {
-    this.stakingCollapse = !this.stakingCollapse;
-  }
-
-  togglePledgingCollapse(): void {
-    this.pledgingCollapse = !this.pledgingCollapse;
-  }
-
-  toggleVotingCollapse(): void {
-    this.votingCollapse = !this.votingCollapse;
+  toggleTableCollapse(table: string) {
+    this[table].collapse = !this[table].collapse;
   }
 }

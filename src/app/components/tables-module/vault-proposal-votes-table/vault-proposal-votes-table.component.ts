@@ -1,6 +1,6 @@
 import { VaultProposalVotes } from '@sharedModels/ui/vaults/vault-proposal-votes';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
-import { Component, Input, ViewChild, OnChanges, OnDestroy } from '@angular/core';
+import { Component, Input, ViewChild, OnChanges, OnDestroy, EventEmitter, Output } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { VaultProposalVotesFilter } from '@sharedModels/platform-api/requests/vaults/vault-proposal-votes-filter';
@@ -25,6 +25,7 @@ export class VaultProposalVotesTableComponent implements OnChanges, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   @Input() filter: VaultProposalVotesFilter;
   @Input() hideProposalIdColumn: boolean;
+  @Output() onNumRecordsCount = new EventEmitter<string>();
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
   paging: ICursor;
@@ -78,8 +79,15 @@ export class VaultProposalVotesTableComponent implements OnChanges, OnDestroy {
         tap((votes: VaultProposalVotes) => {
           this.paging = votes.paging;
           this.dataSource.data = votes.results;
+          this.onNumRecordsCount.emit(this._numRecords(votes.paging, votes.results));
         }),
         take(1));
+  }
+
+  private _numRecords(paging: ICursor, records: VaultProposalVote[]): string {
+    return paging.next || paging.previous
+      ? `${this.filter.limit}+`
+      : records.length.toString();
   }
 
   pageChange(cursor: string): void {

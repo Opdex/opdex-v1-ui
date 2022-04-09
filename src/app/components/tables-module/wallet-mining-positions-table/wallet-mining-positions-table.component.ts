@@ -1,5 +1,5 @@
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
-import { OnDestroy } from '@angular/core';
+import { EventEmitter, OnDestroy, Output } from '@angular/core';
 import { Component, Input, OnChanges, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -26,6 +26,7 @@ import { Icons } from 'src/app/enums/icons';
 export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   @Input() filter: MiningPositionsFilter;
+  @Output() onNumRecordsCount = new EventEmitter<string>();
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
   subscription: Subscription;
@@ -88,6 +89,8 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
     return this._walletsService.getMiningPositions(context.wallet, this.filter)
       .pipe(
         switchMap(response => {
+          this.onNumRecordsCount.emit(this._numRecords(response.paging, response.results));
+
           if (response.results.length === 0) {
             this.dataSource.data = [];
             return of(response);
@@ -127,6 +130,12 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
                 this.paging = response.paging;
               }));
         }));
+  }
+
+  private _numRecords(paging: ICursor, records: any[]): string {
+    return paging.next || paging.previous
+      ? `${this.filter.limit}+`
+      : records.length.toString();
   }
 
   ngOnDestroy(): void {

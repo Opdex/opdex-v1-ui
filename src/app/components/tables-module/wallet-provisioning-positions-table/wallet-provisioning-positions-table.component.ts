@@ -1,6 +1,6 @@
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
-import { Component, OnChanges, OnDestroy, ViewChild, Input } from "@angular/core";
+import { Component, OnChanges, OnDestroy, ViewChild, Input, EventEmitter, Output } from "@angular/core";
 import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import { Router } from "@angular/router";
@@ -25,6 +25,7 @@ import { Icons } from "src/app/enums/icons";
 export class WalletProvisioningPositionsTableComponent implements OnChanges, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   @Input() filter: WalletBalancesFilter;
+  @Output() onNumRecordsCount = new EventEmitter<string>();
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
   subscription: Subscription;
@@ -88,6 +89,8 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
     return this._walletsService.getWalletBalances(context.wallet, this.filter)
       .pipe(
         switchMap(response => {
+          this.onNumRecordsCount.emit(this._numRecords(response.paging, response.results));
+
           if (response.results.length === 0) {
             this.dataSource.data = [];
             return of(response);
@@ -128,6 +131,12 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
             return { paging: response.paging, results: balances };
           }));
         }));
+  }
+
+  private _numRecords(paging: ICursor, records: any[]): string {
+    return paging.next || paging.previous
+      ? `${this.filter.limit}+`
+      : records.length.toString();
   }
 
   ngOnDestroy(): void {

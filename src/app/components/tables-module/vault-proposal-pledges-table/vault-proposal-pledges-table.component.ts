@@ -1,5 +1,5 @@
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
-import { OnDestroy } from '@angular/core';
+import { EventEmitter, OnDestroy, Output } from '@angular/core';
 import { VaultProposalPledgesFilter } from '@sharedModels/platform-api/requests/vaults/vault-proposal-pledges-filter';
 import { Component, Input, OnChanges, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
@@ -26,6 +26,7 @@ export class VaultProposalPledgesTableComponent implements OnChanges, OnDestroy 
   @ViewChild(MatSort) sort: MatSort;
   @Input() filter: VaultProposalPledgesFilter;
   @Input() hideProposalIdColumn: boolean;
+  @Output() onNumRecordsCount = new EventEmitter<string>();
   displayedColumns: string[];
   dataSource: MatTableDataSource<VaultProposalPledge>;
   paging: ICursor;
@@ -78,8 +79,15 @@ export class VaultProposalPledgesTableComponent implements OnChanges, OnDestroy 
         tap((pledges: VaultProposalPledges) => {
           this.paging = pledges.paging;
           this.dataSource.data = pledges.results;
+          this.onNumRecordsCount.emit(this._numRecords(pledges.paging, pledges.results));
         }),
         take(1));
+  }
+
+  private _numRecords(paging: ICursor, records: VaultProposalPledge[]): string {
+    return paging.next || paging.previous
+      ? `${this.filter.limit}+`
+      : records.length.toString();
   }
 
   pageChange(cursor: string): void {

@@ -23,26 +23,26 @@ export class ShortNumberPipe implements PipeTransform {
 
     if (isValidNumber !== -1) {
       const hasDecimal = value.includes('.');
-      const decimalSubstring = hasDecimal ?  value.substring(value.indexOf('.'), value.length) : '';
-      const leftOfDecimalSubString = hasDecimal ? value.substring(0, value.indexOf('.')) : value;
+      const fraction = hasDecimal ?  value.substring(value.indexOf('.'), value.length) : '';
+      const whole = hasDecimal ? value.substring(0, value.indexOf('.')) : value;
 
-      if (leftOfDecimalSubString.length > 3) {
-        if (leftOfDecimalSubString.length >= this.shortNumberTypes.thousands.digitCount && leftOfDecimalSubString.length < this.shortNumberTypes.millions.digitCount) {
-          value = this.createShortValue(value, this.shortNumberTypes.thousands, leftOfDecimalSubString.length);
-        }
-        if (leftOfDecimalSubString.length >= this.shortNumberTypes.millions.digitCount && leftOfDecimalSubString.length < this.shortNumberTypes.billions.digitCount) {
-          value = this.createShortValue(value, this.shortNumberTypes.millions, leftOfDecimalSubString.length);
-        }
-        if (leftOfDecimalSubString.length >= this.shortNumberTypes.billions.digitCount && leftOfDecimalSubString.length < this.shortNumberTypes.trillions.digitCount) {
-          value = this.createShortValue(value, this.shortNumberTypes.billions, leftOfDecimalSubString.length);
-        }
-        if (leftOfDecimalSubString.length >= this.shortNumberTypes.trillions.digitCount && leftOfDecimalSubString.length) {
-          value = this.createShortValue(value, this.shortNumberTypes.trillions, leftOfDecimalSubString.length);
+      if (whole.length > 3) {
+        const { thousands, millions, billions, trillions } = this.shortNumberTypes;
+        const types = [thousands, millions, billions, trillions];
+
+        for (let i = 0; i < types.length; i++) {
+          const last = i === types.length - 1;
+          const isGreaterThanCurrent = whole.length >= types[i].digitCount;
+          const isLessThanNext = !!types[i+1] && whole.length < types[i+1].digitCount;
+
+          if (isGreaterThanCurrent && (last || isLessThanNext)) {
+            value = this.createShortValue(value, types[i], whole.length);
+          }
         }
       } else {
-        if(leftOfDecimalSubString.length <= 3 && leftOfDecimalSubString.length > 0 && leftOfDecimalSubString != '0') {
-          if (decimalSubstring.length != 0) {
-            value =  decimalSubstring === '' || parseFloat(decimalSubstring) === 0  ? leftOfDecimalSubString : parseFloat(value).toFixed(2);
+        if(whole.length <= 3 && whole.length > 0 && whole != '0') {
+          if (fraction.length != 0) {
+            value =  fraction === '' || parseFloat(fraction) === 0  ? whole : parseFloat(value).toFixed(2);
           }
         } else {
           const fourDecimals = `${parseFloat(value).toFixed(4)}`;

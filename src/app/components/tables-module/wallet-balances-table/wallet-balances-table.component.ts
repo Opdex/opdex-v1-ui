@@ -1,3 +1,4 @@
+import { IAddressBalance } from '@sharedModels/platform-api/responses/wallets/address-balance.interface';
 import { MarketToken } from '@sharedModels/ui/tokens/market-token';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
@@ -6,7 +7,7 @@ import { UserContextService } from '@sharedServices/utility/user-context.service
 import { IndexService } from '@sharedServices/platform/index.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
-import { Component, Input, OnChanges, ViewChild, OnDestroy } from '@angular/core';
+import { Component, Input, OnChanges, ViewChild, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -29,6 +30,7 @@ import { LiquidityPoolsFilter, ILiquidityPoolsFilter } from '@sharedModels/platf
 export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   @Input() filter: WalletBalancesFilter;
+  @Output() onNumRecordsCount = new EventEmitter<string>();
   displayedColumns: string[];
   dataSource: MatTableDataSource<any>;
   subscription: Subscription;
@@ -107,6 +109,8 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
     return this._walletsService.getWalletBalances(context.wallet, this.filter)
       .pipe(
         switchMap(response => {
+          this.onNumRecordsCount.emit(this._numRecords(response.paging, response.results))
+
           if (response.results.length === 0) {
             this.dataSource.data = [];
             return of(response);
@@ -145,6 +149,12 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
               return { paging: response.paging, results: balances };
             }));
         }));
+  }
+
+  private _numRecords(paging: ICursor, records: IAddressBalance[]): string {
+    return paging.next || paging.previous
+      ? `${this.filter.limit}+`
+      : records.length.toString();
   }
 
   ngOnDestroy(): void {

@@ -28,102 +28,108 @@
       <div class="row">
         <div class="col-12 col-sm-6 col-xl-8">
           <div class="mb-3">
-            <div class="flex-row-center-between clickable" (click)="toggleBalanceCollapse()">
+            <div class="flex-row-center-between clickable" (click)="toggleTableCollapse('balances')">
               <div class="flex-row-center">
                 <mat-icon color="primary" class="small mr-2">{{icons.tokens}}</mat-icon>
                 <h4 class="mb-0">Balances</h4>
+                <span class="ml-2 badge {{balances.count && balances.count !== '0' ? 'blue' : 'gray'}}">{{balances.count || 0}}</span>
               </div>
 
-              <button mat-icon-button color="primary" class="small"><mat-icon>{{balanceCollapse ? icons.add : icons.remove}}</mat-icon></button>
+              <button mat-icon-button color="primary" class="small"><mat-icon>{{balances.collapse ? icons.add : icons.remove}}</mat-icon></button>
             </div>
 
-            <div [@collapse]="balanceCollapse">
-              <opdex-wallet-balances-table [filter]="walletBalancesFilter"></opdex-wallet-balances-table>
+            <div [@collapse]="balances.collapse">
+              <opdex-wallet-balances-table [filter]="balances.filter" (onNumRecordsCount)="handleCount($event, 'balances')"></opdex-wallet-balances-table>
             </div>
 
-            <mat-divider *ngIf="balanceCollapse" class="mt-3"></mat-divider>
+            <mat-divider *ngIf="balances.collapse" class="mt-3"></mat-divider>
           </div>
 
           <div class="mb-3">
-            <div class="flex-row-center-between clickable" (click)="toggleProvidingCollapse()">
+            <div class="flex-row-center-between clickable" (click)="toggleTableCollapse('providing')">
               <div class="flex-row-center">
                 <mat-icon class="small provide mr-2">{{icons.provide}}</mat-icon>
                 <h4 class="mb-0">Providing</h4>
+                <span class="ml-2 badge {{providing.count && providing.count !== '0' ? 'blue' : 'gray'}}">{{providing.count || 0}}</span>
               </div>
 
-              <button mat-icon-button color="primary" class="small"><mat-icon>{{providingCollapse ? icons.add : icons.remove}}</mat-icon></button>
+              <button mat-icon-button color="primary" class="small"><mat-icon>{{providing.collapse ? icons.add : icons.remove}}</mat-icon></button>
             </div>
 
-            <div [@collapse]="providingCollapse">
-              <opdex-wallet-provisioning-positions-table [filter]="provisionalBalancesFilter"></opdex-wallet-provisioning-positions-table>
+            <div [@collapse]="providing.collapse">
+              <opdex-wallet-provisioning-positions-table [filter]="providing.filter" (onNumRecordsCount)="handleCount($event, 'providing')"></opdex-wallet-provisioning-positions-table>
             </div>
 
-            <mat-divider *ngIf="providingCollapse" class="mt-3"></mat-divider>
+            <mat-divider *ngIf="providing.collapse" class="mt-3"></mat-divider>
           </div>
 
           <div class="mb-3">
-            <div class="flex-row-center-between clickable" (click)="toggleMiningCollapse()">
+            <div class="flex-row-center-between clickable" (click)="toggleTableCollapse('mining')">
               <div class="flex-row-center">
                 <mat-icon class="small mine mr-2">{{icons.mining}}</mat-icon>
                 <h4 class="mb-0">Mining</h4>
+                <span class="ml-2 badge {{mining.count && mining.count !== '0' ? 'blue' : 'gray'}}">{{mining.count || 0}}</span>
               </div>
 
-              <button mat-icon-button color="primary" class="small"><mat-icon>{{miningCollapse ? icons.add : icons.remove}}</mat-icon></button>
+              <button mat-icon-button color="primary" class="small"><mat-icon>{{mining.collapse ? icons.add : icons.remove}}</mat-icon></button>
             </div>
 
-            <div [@collapse]="miningCollapse">
-              <opdex-wallet-mining-positions-table [filter]="miningFilter"></opdex-wallet-mining-positions-table>
+            <div [@collapse]="mining.collapse">
+              <opdex-wallet-mining-positions-table [filter]="mining.filter" (onNumRecordsCount)="handleCount($event, 'mining')"></opdex-wallet-mining-positions-table>
             </div>
 
-            <mat-divider *ngIf="miningCollapse" class="mt-3"></mat-divider>
+            <mat-divider *ngIf="mining.collapse" class="mt-3"></mat-divider>
           </div>
 
           <div class="mb-3">
-            <div class="flex-row-center-between clickable" (click)="toggleStakingCollapse()">
+            <div class="flex-row-center-between clickable" (click)="toggleTableCollapse('staking')">
               <div class="flex-row-center">
                 <mat-icon class="small stake mr-2">{{icons.staking}}</mat-icon>
                 <h4 class="mb-0">Staking</h4>
+                <span class="ml-2 badge {{staking.count && staking.count !== '0' ? 'blue' : 'gray'}}">{{staking.count || 0}}</span>
               </div>
 
-              <button mat-icon-button color="primary" class="small"><mat-icon>{{stakingCollapse ? icons.add : icons.remove}}</mat-icon></button>
+              <button mat-icon-button color="primary" class="small"><mat-icon>{{staking.collapse ? icons.add : icons.remove}}</mat-icon></button>
             </div>
 
-            <div [@collapse]="stakingCollapse">
-              <opdex-wallet-staking-positions-table [filter]="stakingFilter"></opdex-wallet-staking-positions-table>
+            <div [@collapse]="staking.collapse">
+              <opdex-wallet-staking-positions-table [filter]="staking.filter" (onNumRecordsCount)="handleCount($event, 'staking')"></opdex-wallet-staking-positions-table>
             </div>
 
-            <mat-divider *ngIf="stakingCollapse" class="mt-3"></mat-divider>
+            <mat-divider *ngIf="staking.collapse" class="mt-3"></mat-divider>
           </div>
 
           <div class="mb-3" *ngIf="showProposals">
-            <div class="flex-row-center-between clickable" (click)="togglePledgingCollapse()">
+            <div class="flex-row-center-between clickable" (click)="toggleTableCollapse('pledges')">
               <div class="flex-row-center">
                 <mat-icon class="small blue mr-2">{{icons.pledge}}</mat-icon>
                 <h4 class="mb-0">Proposal Pledges</h4>
+                <span class="ml-2 badge {{pledges.count && pledges.count !== '0' ? 'blue' : 'gray'}}">{{pledges.count || 0}}</span>
               </div>
 
-              <button mat-icon-button color="primary" class="small"><mat-icon>{{pledgingCollapse ? icons.add : icons.remove}}</mat-icon></button>
+              <button mat-icon-button color="primary" class="small"><mat-icon>{{pledges.collapse ? icons.add : icons.remove}}</mat-icon></button>
             </div>
 
-            <div [@collapse]="pledgingCollapse">
-              <opdex-vault-proposal-pledges-table [filter]="pledgesFilter"></opdex-vault-proposal-pledges-table>
+            <div [@collapse]="pledges.collapse">
+              <opdex-vault-proposal-pledges-table [filter]="pledges.filter" (onNumRecordsCount)="handleCount($event, 'pledges')"></opdex-vault-proposal-pledges-table>
             </div>
 
-            <mat-divider *ngIf="pledgingCollapse" class="mt-3"></mat-divider>
+            <mat-divider *ngIf="pledges.collapse" class="mt-3"></mat-divider>
           </div>
 
           <div class="mb-3" *ngIf="showProposals">
-            <div class="flex-row-center-between clickable" (click)="toggleVotingCollapse()">
+            <div class="flex-row-center-between clickable" (click)="toggleTableCollapse('votes')">
               <div class="flex-row-center">
                 <mat-icon class="small stake mr-2">{{icons.proposal}}</mat-icon>
                 <h4 class="mb-0">Proposal Votes</h4>
+                <span class="ml-2 badge {{votes.count && votes.count !== '0' ? 'blue' : 'gray'}}">{{votes.count || 0}}</span>
               </div>
 
-              <button mat-icon-button color="primary" class="small"><mat-icon>{{votingCollapse ? icons.add : icons.remove}}</mat-icon></button>
+              <button mat-icon-button color="primary" class="small"><mat-icon>{{votes.collapse ? icons.add : icons.remove}}</mat-icon></button>
             </div>
 
-            <div [@collapse]="votingCollapse">
-              <opdex-vault-proposal-votes-table [filter]="votesFilter"></opdex-vault-proposal-votes-table>
+            <div [@collapse]="votes.collapse">
+              <opdex-vault-proposal-votes-table [filter]="votes.filter" (onNumRecordsCount)="handleCount($event, 'votes')"></opdex-vault-proposal-votes-table>
             </div>
           </div>
         </div>
