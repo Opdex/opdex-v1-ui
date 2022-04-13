@@ -91,10 +91,14 @@ export class PoolComponent implements OnInit, OnDestroy {
         .pipe(
           switchMap(_ => this.getLiquidityPool()),
           tap(_ => this.historyFilter?.refresh()),
-          switchMap(_ => this.getPoolHistory()),
-          switchMap(_ => this.getWalletSummary())
-        ).subscribe());
-    }
+          switchMap(_ => this.getPoolHistory())
+        ).subscribe(_ => {
+          // Only need to do this once on page load
+          // if (!this.positions?.length) {
+          //   this.getWalletSummary();
+          // }
+        }));
+  }
 
   openTransactionSidebar(view: TransactionView, childView: string = null) {
     const data = {
@@ -174,31 +178,29 @@ export class PoolComponent implements OnInit, OnDestroy {
           map((result: IAddressMining) => new AddressPosition(walletAddress, token, 'Mining', new FixedDecimal(result?.amount || '0', token.decimals))));
   }
 
-  private getWalletSummary(): Observable<AddressPosition[]> {
-    const context = this._userContext.getUserContext();
+  // getWalletSummary(): void {
+  //   const context = this._userContext.getUserContext();
 
-    if (context.wallet && this.pool) {
-      const lpToken = this.pool.tokens.lp;
+  //   if (context.wallet && this.pool) {
+  //     const lpToken = this.pool.tokens.lp;
 
-      const combo = [
-        this.getTokenBalance(context.wallet, this.pool.tokens.crs),
-        this.getTokenBalance(context.wallet, this.pool.tokens.src),
-        this.getTokenBalance(context.wallet, lpToken)
-      ];
+  //     const combo = [
+  //       this.getTokenBalance(context.wallet, this.pool.tokens.crs),
+  //       this.getTokenBalance(context.wallet, this.pool.tokens.src),
+  //       this.getTokenBalance(context.wallet, lpToken)
+  //     ];
 
-      if (this.pool.hasStaking) {
-        combo.push(this.getStakingPosition(context.wallet, this.poolAddress, this.pool.tokens.staking));
-      }
+  //     if (this.pool.hasStaking) {
+  //       combo.push(this.getStakingPosition(context.wallet, this.poolAddress, this.pool.tokens.staking));
+  //     }
 
-      if (this.pool.hasMining) {
-        combo.push(this.getMiningPosition(context.wallet, this.pool.miningPool.address, lpToken));
-      }
+  //     if (this.pool.hasMining) {
+  //       combo.push(this.getMiningPosition(context.wallet, this.pool.miningPool.address, lpToken));
+  //     }
 
-      return zip(...combo).pipe(tap(results => this.positions = results));
-    }
-
-    return of([]);
-  }
+  //     zip(...combo).pipe(tap(results => this.positions = results), take(1)).subscribe();
+  //   }
+  // }
 
   private getPoolHistory(): Observable<ILiquidityPoolSnapshotHistoryResponse> {
     if (!this.pool) return of(null);

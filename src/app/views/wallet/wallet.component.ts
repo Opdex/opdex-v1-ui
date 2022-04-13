@@ -1,3 +1,4 @@
+import { catchError } from 'rxjs/operators';
 import { Token } from '@sharedModels/ui/tokens/token';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { TokenAttributes } from '@sharedModels/platform-api/requests/tokens/tokens-filter';
@@ -20,6 +21,7 @@ import { VaultProposalVotesFilter } from '@sharedModels/platform-api/requests/va
 import { WalletBalancesFilter } from '@sharedModels/platform-api/requests/wallets/wallet-balances-filter';
 import { StakingPositionsFilter } from '@sharedModels/platform-api/requests/wallets/staking-positions-filter';
 import { MiningPositionsFilter } from '@sharedModels/platform-api/requests/wallets/mining-positions-filter';
+import { of } from 'rxjs';
 
 type CollapsableTable<T> = {
   filter: T,
@@ -126,6 +128,11 @@ export class WalletComponent implements OnInit {
   ngOnInit(): void {
     this._walletsService.getBalance(this.wallet.wallet, 'CRS')
       .pipe(
+        catchError(_ => of({
+          owner: this.wallet.wallet,
+          token: 'CRS',
+          balance: '0.00000000'
+        } as IAddressBalance)),
         tap(crsBalance => this.crsBalance = crsBalance),
         switchMap(crsBalance => this._tokensService.getMarketToken(crsBalance.token)),
         tap((token: Token) => {
