@@ -41,7 +41,7 @@ export class EnvironmentsService {
   }
 
   public get useNewAuthFlow(): boolean {
-    return this.network !== Network.Mainnet;
+    return true;
   }
 
   public getAuthRoute(state: string, codeChallenge: string): string {
