@@ -1,3 +1,6 @@
+import { IAddressBalance } from '@sharedModels/platform-api/responses/wallets/address-balance.interface';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
+import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Component, OnChanges, OnDestroy, ViewChild, Input, EventEmitter, Output } from "@angular/core";
@@ -12,7 +15,7 @@ import { IndexService } from "@sharedServices/platform/index.service";
 import { WalletsService } from "@sharedServices/platform/wallets.service";
 import { SidenavService } from "@sharedServices/utility/sidenav.service";
 import { UserContextService } from "@sharedServices/utility/user-context.service";
-import { Subscription, Observable, of, forkJoin } from "rxjs";
+import { Subscription, Observable, of, forkJoin, combineLatest } from "rxjs";
 import { switchMap, take, map } from "rxjs/operators";
 import { IconSizes } from "src/app/enums/icon-sizes";
 import { Icons } from "src/app/enums/icons";
@@ -33,7 +36,6 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
   icons = Icons;
   iconSizes = IconSizes;
 
-
   constructor(
     private _router: Router,
     private _sidebar: SidenavService,
@@ -41,7 +43,8 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
     private _liquidityPoolService: LiquidityPoolsService,
     private _indexService: IndexService,
     private _userContext: UserContextService,
-    private _env: EnvironmentsService
+    private _env: EnvironmentsService,
+    private _platformApi: PlatformApiService
   ) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['pool', 'balance', 'total', 'valueCrs', 'valueSrc', 'actions'];
@@ -80,6 +83,25 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
     return `${index}-${position.name}-${position.address}-${position.balance.formattedValue}-${position.total.formattedValue}`;
   }
 
+  refreshBalance(pool: string): void {
+    const {wallet} = this._userContext.getUserContext();
+
+    combineLatest([
+      this._liquidityPoolService.getLiquidityPool(pool),
+      this._platformApi.refreshBalance(wallet, pool)
+    ])
+    .pipe(take(1))
+    .subscribe(([liquidityPool, balance]) => {
+      this.dataSource.data = this.dataSource.data.map(item => {
+        if (item.pool.address === pool) {
+          return this._buildRecord(liquidityPool, balance);
+        }
+
+        return item;
+      });
+    });
+  }
+
   private getProvisionalPositions$(cursor?: string): Observable<any> {
     const context = this._userContext.getUserContext();
     if (!!context.wallet === false) return of(null);
@@ -112,25 +134,27 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
 
           return forkJoin(balances$)
             .pipe(map(balances => {
-              this.dataSource.data = balances.map(({pool, balance}) => {
-                const amount = new FixedDecimal(balance.balance, pool.tokens.src.decimals);
-                const valueCrs = amount.divide(pool.tokens.lp.totalSupply).multiply(pool.summary.reserves.crs);
-                const valueSrc = amount.divide(pool.tokens.lp.totalSupply).multiply(pool.summary.reserves.src);
-
-                return {
-                  pool,
-                  balance: amount,
-                  valueCrs: valueCrs,
-                  valueSrc: valueSrc,
-                  isCurrentMarket: pool.market === this._env.marketAddress,
-                  total: pool.tokens.lp.summary.priceUsd.multiply(amount)
-                }
-              });
+              this.dataSource.data = balances.map(({pool, balance}) => this._buildRecord(pool, balance));
 
             this.paging = response.paging;
             return { paging: response.paging, results: balances };
           }));
         }));
+  }
+
+  private _buildRecord(pool: LiquidityPool, balance: IAddressBalance): any {
+    const amount = new FixedDecimal(balance.balance, pool.tokens.src.decimals);
+    const valueCrs = amount.divide(pool.tokens.lp.totalSupply).multiply(pool.summary.reserves.crs);
+    const valueSrc = amount.divide(pool.tokens.lp.totalSupply).multiply(pool.summary.reserves.src);
+
+    return {
+      pool,
+      balance: amount,
+      valueCrs: valueCrs,
+      valueSrc: valueSrc,
+      isCurrentMarket: pool.market === this._env.marketAddress,
+      total: pool.tokens.lp.summary.priceUsd.multiply(amount)
+    }
   }
 
   private _numRecords(paging: ICursor, records: any[]): string {

@@ -1,3 +1,4 @@
+import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { IAddressBalance } from '@sharedModels/platform-api/responses/wallets/address-balance.interface';
 import { MarketToken } from '@sharedModels/ui/tokens/market-token';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
@@ -16,7 +17,7 @@ import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
-import { of, Observable, forkJoin, Subscription } from 'rxjs';
+import { of, Observable, forkJoin, Subscription, combineLatest } from 'rxjs';
 import { switchMap, catchError, take, map } from 'rxjs/operators';
 import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
 import { WalletBalancesFilter } from '@sharedModels/platform-api/requests/wallets/wallet-balances-filter';
@@ -47,6 +48,7 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
     private _indexService: IndexService,
     private _userContext: UserContextService,
     private _liquidityPoolService: LiquidityPoolsService,
+    private _platformApi: PlatformApiService,
     private _env: EnvironmentsService
   ) {
     this.dataSource = new MatTableDataSource<any>();
@@ -100,6 +102,27 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
     this.getWalletBalances$(cursor).pipe(take(1)).subscribe();
   }
 
+  refreshBalance(token: string): void {
+    const {wallet} = this._userContext.getUserContext();
+
+    combineLatest([
+      this._tokensService.getMarketToken(token),
+      this._platformApi.refreshBalance(wallet, token)
+    ])
+    .pipe(take(1))
+    .subscribe(([marketToken, balance]) => {
+      marketToken.setBalance(new FixedDecimal(balance.balance, marketToken.decimals));
+
+      this.dataSource.data = this.dataSource.data.map(item => {
+        if (item.token.address === token) {
+          return this._buildRecord(marketToken);
+        }
+
+        return item;
+      });
+    });
+  }
+
   private getWalletBalances$(cursor?: string): Observable<any> {
     const context = this._userContext.getUserContext();
     if (!!context.wallet === false) return of(null);
@@ -137,18 +160,19 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
 
           return forkJoin(balances$)
             .pipe(map(balances => {
-              this.dataSource.data = balances.map(token => {
-                return {
-                  token,
-                  isCurrentMarket: token.market === this._env.marketAddress,
-                  total: token.summary.priceUsd.multiply(token.balance)
-                }
-              });
-
+              this.dataSource.data = balances.map(token => this._buildRecord(token));
               this.paging = response.paging;
               return { paging: response.paging, results: balances };
             }));
         }));
+  }
+
+  private _buildRecord(token: MarketToken): any {
+    return {
+      token,
+      isCurrentMarket: token.market === this._env.marketAddress,
+      total: token.summary.priceUsd.multiply(token.balance)
+    }
   }
 
   private _numRecords(paging: ICursor, records: IAddressBalance[]): string {

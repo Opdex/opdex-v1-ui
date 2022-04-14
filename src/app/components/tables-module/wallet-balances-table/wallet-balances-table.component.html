@@ -36,7 +36,17 @@
           <td mat-cell *matCellDef="let element">
             <div class="flex-row-center-end">
               <button mat-mini-fab class="tiny blue flat mr-1" (click)="openSidebar(transactionViews.swap, element.token.address)" matTooltip="Swap" [disabled]="!element.isCurrentMarket"><mat-icon>{{icons.swap}}</mat-icon></button>
-              <button mat-mini-fab class="tiny green flat" (click)="openSidebar(transactionViews.provide, element.token.address)" matTooltip="Provision" [disabled]="!element.isCurrentMarket"><mat-icon>{{icons.provide}}</mat-icon></button>
+              <button mat-mini-fab class="tiny green flat mr-1" (click)="openSidebar(transactionViews.provide, element.token.address)" matTooltip="Provision" [disabled]="!element.isCurrentMarket"><mat-icon>{{icons.provide}}</mat-icon></button>
+
+              <button mat-icon-button color="primary" [ngClass]="iconSizes.small" class="float-right" [matMenuTriggerFor]="beforeMenu" (click)="$event.stopPropagation()">
+                <mat-icon>{{icons.more}}</mat-icon>
+              </button>
+
+              <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
+                <button mat-menu-item [ngClass]="iconSizes.small" (click)="refreshBalance(element.token.address)">
+                  <mat-icon class="swap">{{icons.refresh}}</mat-icon> Refresh
+                </button>
+              </mat-menu>
             </div>
           </td>
         </ng-container>
