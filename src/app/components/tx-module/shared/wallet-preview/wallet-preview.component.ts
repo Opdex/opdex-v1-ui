@@ -97,7 +97,7 @@ export class WalletPreviewComponent implements OnDestroy {
       .pipe(
         map(([token, result]: [MarketToken, IAddressBalance]) => {
           const amount = new FixedDecimal(result.balance, token.decimals);
-          return new AddressPosition(walletAddress, token, 'Balance', amount);
+          return new AddressPosition(walletAddress, token, 'Balance', amount, result.modifiedBlock);
         }),
         take(1));
   }
@@ -115,7 +115,7 @@ export class WalletPreviewComponent implements OnDestroy {
           if (!liquidityPool.summary.staking) return null as AddressPosition;
 
           const amount = new FixedDecimal(result.amount, liquidityPool.tokens.staking?.decimals);
-          return new AddressPosition(walletAddress, liquidityPool.tokens.staking, 'Staking', amount);
+          return new AddressPosition(walletAddress, liquidityPool.tokens.staking, 'Staking', amount, result.modifiedBlock);
         }),
         take(1));
   }
@@ -132,7 +132,7 @@ export class WalletPreviewComponent implements OnDestroy {
           return this._tokenService.getMarketToken(miningPool.liquidityPool)
             .pipe(map(token => {
               const amount = new FixedDecimal(result.amount, token.decimals);
-              return new AddressPosition(walletAddress, token, 'Mining', amount);
+              return new AddressPosition(walletAddress, token, 'Mining', amount, result.modifiedBlock);
             }));
         }),
         take(1));

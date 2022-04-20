@@ -33,19 +33,27 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="actions">
+        <ng-container matColumnDef="actions" stickyEnd>
           <th mat-header-cell *matHeaderCellDef> </th>
           <td mat-cell *matCellDef="let element">
             <div class="flex-row-center-end">
-              <button mat-mini-fab class="tiny green flat mr-1" (click)="openSidebar('start', element.liquidityPoolAddress)" matTooltip="Start Staking" [disabled]="!element.isCurrentMarket"><mat-icon>{{icons.add}}</mat-icon></button>
-              <button mat-mini-fab class="tiny red flat mr-1" (click)="openSidebar('stop', element.liquidityPoolAddress)" matTooltip="Stop Staking" [disabled]="!element.isCurrentMarket"><mat-icon>{{icons.remove}}</mat-icon></button>
-              <button mat-mini-fab class="tiny purple flat mr-1" (click)="openSidebar('collect', element.liquidityPoolAddress)" matTooltip="Collect Rewards" [disabled]="!element.isCurrentMarket"><mat-icon>{{icons.rewards}}</mat-icon></button>
-
               <button mat-icon-button color="primary" [ngClass]="iconSizes.small" class="float-right" [matMenuTriggerFor]="beforeMenu" (click)="$event.stopPropagation()">
                 <mat-icon>{{icons.more}}</mat-icon>
               </button>
 
               <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
+                <button mat-menu-item (click)="openSidebar('start', element.liquidityPoolAddress)" [disabled]="!element.isCurrentMarket">
+                  <mat-icon class="green">{{icons.add}}</mat-icon> Start Staking
+                </button>
+
+                <button mat-menu-item (click)="openSidebar('stop', element.liquidityPoolAddress)" [disabled]="!element.isCurrentMarket">
+                  <mat-icon class="red">{{icons.remove}}</mat-icon> Stop Staking
+                </button>
+
+                <button mat-menu-item (click)="openSidebar('collect', element.liquidityPoolAddress)" [disabled]="!element.isCurrentMarket">
+                  <mat-icon class="purple">{{icons.rewards}}</mat-icon> Collect Rewards
+                </button>
+
                 <button mat-menu-item [ngClass]="iconSizes.small" (click)="refreshPosition(element.liquidityPoolAddress)">
                   <mat-icon class="blue">{{icons.refresh}}</mat-icon> Refresh
                 </button>

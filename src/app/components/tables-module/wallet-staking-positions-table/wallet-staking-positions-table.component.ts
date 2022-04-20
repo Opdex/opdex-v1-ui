@@ -93,13 +93,8 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
     ])
     .pipe(take(1))
     .subscribe(([liquidityPool, position]) => {
-      this.dataSource.data = this.dataSource.data.map(item => {
-        if (item.liquidityPoolAddress === liquidityPoolAddress) {
-          return this._buildRecord(liquidityPool, position);
-        }
-
-        return item;
-      });
+      this.dataSource.data = this.dataSource.data.map(item =>
+        item.liquidityPoolAddress === liquidityPoolAddress ? this._buildRecord(liquidityPool, position) : item);
     });
   }
 

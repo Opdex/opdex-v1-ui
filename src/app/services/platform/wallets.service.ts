@@ -35,6 +35,11 @@ export class WalletsService extends CacheService {
     return this.getItem(`wallet-balance-${wallet}-${token}`, stream$);
   }
 
+  refreshBalance(wallet: string, token: string): Observable<IAddressBalance> {
+    return this._platformApi.refreshBalance(wallet, token)
+      .pipe(tap(balance => this.cacheItem(`wallet-balance-${wallet}-${token}`, balance)));
+  }
+
   getWalletBalances(wallet: string, request: WalletBalancesFilter): Observable<IAddressBalances> {
     return this.getItem(`wallet-balances-${wallet}-${request.buildQueryString()}`, this._platformApi.getWalletBalances(wallet, request))
       .pipe(tap(balances => balances.results.forEach(balance => this.cacheItem(`wallet-balance-${wallet}-${balance.token}`, balance))));

@@ -1,4 +1,4 @@
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
+import { AddressPosition } from '@sharedModels/address-position';
 import { IAddressBalance } from '@sharedModels/platform-api/responses/wallets/address-balance.interface';
 import { MarketToken } from '@sharedModels/ui/tokens/market-token';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
@@ -48,7 +48,6 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
     private _indexService: IndexService,
     private _userContext: UserContextService,
     private _liquidityPoolService: LiquidityPoolsService,
-    private _platformApi: PlatformApiService,
     private _env: EnvironmentsService
   ) {
     this.dataSource = new MatTableDataSource<any>();
@@ -84,10 +83,7 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
     } as ILiquidityPoolsFilter);
 
     return this._liquidityPoolService.getLiquidityPools(filter)
-      .pipe(map(pools => {
-        const pool = pools?.results?.length ? pools.results[0] : null;
-        return pool;
-      }));
+      .pipe(map(pools => pools?.results?.length ? pools.results[0] : null));
   }
 
   navigate(name: string) {
@@ -95,7 +91,7 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
   }
 
   trackBy(index: number, position: any): string {
-    return `${index}-${position.name}-${position.address}-${position.token.balance.formattedValue}-${position.total.formattedValue}`;
+    return `${index}-${position.name}-${position.address}-${position.token.position.formattedValue}-${position.token.position.value}`;
   }
 
   pageChange(cursor: string): void {
@@ -107,19 +103,16 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
 
     combineLatest([
       this._tokensService.getMarketToken(token),
-      this._platformApi.refreshBalance(wallet, token)
+      this._walletsService.refreshBalance(wallet, token)
     ])
     .pipe(take(1))
     .subscribe(([marketToken, balance]) => {
-      marketToken.setBalance(new FixedDecimal(balance.balance, marketToken.decimals));
+      const balanceFixed = new FixedDecimal(balance.balance, marketToken.decimals);
+      const position = new AddressPosition(wallet, marketToken, 'Balance', balanceFixed, balance.modifiedBlock);
+      marketToken.setPosition(position);
 
-      this.dataSource.data = this.dataSource.data.map(item => {
-        if (item.token.address === token) {
-          return this._buildRecord(marketToken);
-        }
-
-        return item;
-      });
+      this.dataSource.data = this.dataSource.data.map(item =>
+        item.token.address === token ? this._buildRecord(marketToken) : item);
     });
   }
 
@@ -145,18 +138,18 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
             const tokenDetails$: Observable<MarketToken> =
               this._tokensService.getMarketToken(balance.token)
                 .pipe(
-                  // Fallback to tokens when necessary
-                  // Todo: Backend really should return average token prices
                   catchError(_ => this._tokensService.getToken(balance.token) as Observable<MarketToken>),
                   take(1),
                   map(token => {
-                    token.setBalance(new FixedDecimal(balance.balance, token.decimals));
+                    const balanceFixed = new FixedDecimal(balance.balance, token.decimals);
+                    const position = new AddressPosition(context.wallet, token, 'Balance', balanceFixed, balance.modifiedBlock);
+                    token.setPosition(position);
                     return token;
                   })
                 );
 
             balances$.push(tokenDetails$);
-          })
+          });
 
           return forkJoin(balances$)
             .pipe(map(balances => {
@@ -171,14 +164,11 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
     return {
       token,
       isCurrentMarket: token.market === this._env.marketAddress,
-      total: token.summary.priceUsd.multiply(token.balance)
     }
   }
 
   private _numRecords(paging: ICursor, records: IAddressBalance[]): string {
-    return paging.next || paging.previous
-      ? `${this.filter.limit}+`
-      : records.length.toString();
+    return paging.next || paging.previous ? `${this.filter.limit}+` : records.length.toString();
   }
 
   ngOnDestroy(): void {

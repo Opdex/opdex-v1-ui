@@ -157,26 +157,26 @@ export class PoolComponent implements OnInit, OnDestroy {
       );
   }
 
-  private getTokenBalance(walletAddress: string, token: Token): Observable<AddressPosition> {
-    return this._walletService.getBalance(walletAddress, token.address)
-        .pipe(
-          catchError(() => of(null)),
-          map((result: IAddressBalance) => new AddressPosition(walletAddress, token, 'Balance', new FixedDecimal(result?.balance || '0', token.decimals))));
-  }
+  // private getTokenBalance(walletAddress: string, token: Token): Observable<AddressPosition> {
+  //   return this._walletService.getBalance(walletAddress, token.address)
+  //       .pipe(
+  //         catchError(() => of(null)),
+  //         map((result: IAddressBalance) => new AddressPosition(walletAddress, token, 'Balance', new FixedDecimal(result?.balance || '0', token.decimals))));
+  // }
 
-  private getStakingPosition(walletAddress: string, liquidityPoolAddress: string, token: Token): Observable<AddressPosition> {
-    return this._walletService.getStakingPosition(walletAddress, liquidityPoolAddress)
-        .pipe(
-          catchError(() => of(null)),
-          map((result: IAddressStaking) => new AddressPosition(walletAddress, token, 'Staking', new FixedDecimal(result?.amount || '0', token.decimals))));
-  }
+  // private getStakingPosition(walletAddress: string, liquidityPoolAddress: string, token: Token): Observable<AddressPosition> {
+  //   return this._walletService.getStakingPosition(walletAddress, liquidityPoolAddress)
+  //       .pipe(
+  //         catchError(() => of(null)),
+  //         map((result: IAddressStaking) => new AddressPosition(walletAddress, token, 'Staking', new FixedDecimal(result?.amount || '0', token.decimals))));
+  // }
 
-  private getMiningPosition(walletAddress: string, miningPoolAddress: string, token: Token): Observable<AddressPosition> {
-    return this._walletService.getMiningPosition(walletAddress, miningPoolAddress)
-        .pipe(
-          catchError(() => of(null)),
-          map((result: IAddressMining) => new AddressPosition(walletAddress, token, 'Mining', new FixedDecimal(result?.amount || '0', token.decimals))));
-  }
+  // private getMiningPosition(walletAddress: string, miningPoolAddress: string, token: Token): Observable<AddressPosition> {
+  //   return this._walletService.getMiningPosition(walletAddress, miningPoolAddress)
+  //       .pipe(
+  //         catchError(() => of(null)),
+  //         map((result: IAddressMining) => new AddressPosition(walletAddress, token, 'Mining', new FixedDecimal(result?.amount || '0', token.decimals))));
+  // }
 
   // getWalletSummary(): void {
   //   const context = this._userContext.getUserContext();

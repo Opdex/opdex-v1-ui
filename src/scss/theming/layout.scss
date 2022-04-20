@@ -10,6 +10,10 @@
 
     .mat-card {
       background: #141325 !important;
+
+      .mat-table {
+        background: #141325 !important;
+      }
     }
   }
 
@@ -28,12 +32,16 @@
 
     &.blend-cards {
       .mat-card {
-        background: #fff !important
+        background: #fff !important;
       }
     }
 
     .mat-card {
-      background: #f4f6f7 !important
+      background: #f4f6f7 !important;
+
+      .mat-table {
+        background: #f4f6f7 !important;
+      }
     }
   }
 

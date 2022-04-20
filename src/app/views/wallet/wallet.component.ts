@@ -37,7 +37,7 @@ type CollapsableTable<T> = {
 export class WalletComponent implements OnInit {
   wallet: any;
   showPreferences: boolean;
-  crsBalance: IAddressBalance;
+  crsBalance: FixedDecimal;
   crsBalanceValue: FixedDecimal;
   icons = Icons;
   iconSizes = IconSizes;
@@ -126,21 +126,7 @@ export class WalletComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._walletsService.getBalance(this.wallet.wallet, 'CRS')
-      .pipe(
-        catchError(_ => of({
-          owner: this.wallet.wallet,
-          token: 'CRS',
-          balance: '0.00000000'
-        } as IAddressBalance)),
-        tap(crsBalance => this.crsBalance = crsBalance),
-        switchMap(crsBalance => this._tokensService.getMarketToken(crsBalance.token)),
-        tap((token: Token) => {
-          const crsBalanceFixed = new FixedDecimal(this.crsBalance.balance, 8);
-          this.crsBalanceValue = crsBalanceFixed.multiply(token.summary.priceUsd);
-        }),
-        take(1))
-      .subscribe();
+    this._refreshCrsBalance();
   }
 
   handleCount(count: string, type: string) {
@@ -171,5 +157,20 @@ export class WalletComponent implements OnInit {
 
   toggleTableCollapse(table: string) {
     this[table].collapse = !this[table].collapse;
+  }
+
+  private _refreshCrsBalance(): void {
+    this._walletsService.getBalance(this.wallet.wallet, 'CRS')
+    .pipe(
+      catchError(_ => of({
+        owner: this.wallet.wallet,
+        token: 'CRS',
+        balance: '0.00000000'
+      } as IAddressBalance)),
+      tap(crsBalance => this.crsBalance = new FixedDecimal(crsBalance.balance, 8)),
+      switchMap(_ => this._tokensService.getMarketToken('CRS')),
+      tap((crs: Token) => this.crsBalanceValue = this.crsBalance.multiply(crs.summary.priceUsd)),
+      take(1))
+    .subscribe();
   }
 }

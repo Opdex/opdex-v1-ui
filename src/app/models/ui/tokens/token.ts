@@ -1,3 +1,4 @@
+import { AddressPosition } from '@sharedModels/address-position';
 import { TokenDistribution } from './token-distribution';
 import { TokenSnapshotHistory } from './token-history';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
@@ -17,7 +18,7 @@ export class Token {
   private _wrappedToken: WrappedToken;
   private _createdBlock: number;
   private _modifiedBlock: number;
-  private _balance?: FixedDecimal;
+  private _position?: AddressPosition;
   private _history?: TokenSnapshotHistory;
   private _distribution?: TokenDistribution;
 
@@ -65,8 +66,8 @@ export class Token {
     return this._modifiedBlock;
   }
 
-  public get balance(): FixedDecimal {
-    return this._balance;
+  public get position(): AddressPosition {
+    return this._position;
   }
 
   public get history(): TokenSnapshotHistory {
@@ -119,8 +120,8 @@ export class Token {
     this._modifiedBlock = token.modifiedBlock;
   }
 
-  public setBalance(balance: FixedDecimal): void {
-    this._balance = balance;
+  public setPosition(position: AddressPosition): void {
+    this._position = position;
   }
 
   public setHistory(history: TokenSnapshotHistory) {

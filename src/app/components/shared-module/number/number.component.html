@@ -1,6 +1,6 @@
 <div
-  class="number"
-  *ngIf="fixed"
+  class="number overflow-ellipsis"
+  *ngIf="fixed; else loading"
   [matTooltip]="copied ? 'Copied!' : (fixed | formatNumber:decimals)"
   matTooltipClass="number-tooltip"
   matTooltipPosition="below"
@@ -21,3 +21,7 @@
 
   <small class="suffix ml-1" *ngIf="suffix">{{suffix}}</small>
 </div>
+
+<ng-template #loading>
+  <div class="skeleton-bg w-100"></div>
+</ng-template>

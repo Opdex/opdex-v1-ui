@@ -76,8 +76,8 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
     this._router.navigateByUrl(`/pools/${name}`);
   }
 
-  trackBy(index: number, position: any): string {
-    return `${index}-${position.name}-${position.address}-${position.position.formattedValue}-${position.value.formattedValue}-${position.isActive}`;
+  trackBy(index: number, record: any): string {
+    return `${index}-${record.name}-${record.address}-${record.position.formattedValue}-${record.value.formattedValue}-${record.isActive}`;
   }
 
   pageChange(cursor: string): void {
@@ -93,13 +93,8 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
     ])
     .pipe(take(1))
     .subscribe(([liquidityPool, position]) => {
-      this.dataSource.data = this.dataSource.data.map(item => {
-        if (item.liquidityPoolAddress === liquidityPoolAddress) {
-          return this._buildRecord(liquidityPool, position);
-        }
-
-        return item;
-      });
+      this.dataSource.data = this.dataSource.data.map(item =>
+        item.liquidityPoolAddress === liquidityPoolAddress ? this._buildRecord(liquidityPool, position) : item);
     });
   }
 

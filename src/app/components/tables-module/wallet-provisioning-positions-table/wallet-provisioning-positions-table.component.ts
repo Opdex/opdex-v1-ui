@@ -88,17 +88,12 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
 
     combineLatest([
       this._liquidityPoolService.getLiquidityPool(pool),
-      this._platformApi.refreshBalance(wallet, pool)
+      this._walletsService.refreshBalance(wallet, pool)
     ])
     .pipe(take(1))
     .subscribe(([liquidityPool, balance]) => {
-      this.dataSource.data = this.dataSource.data.map(item => {
-        if (item.pool.address === pool) {
-          return this._buildRecord(liquidityPool, balance);
-        }
-
-        return item;
-      });
+      this.dataSource.data = this.dataSource.data.map(item =>
+        item.token.address === liquidityPool.address ? this._buildRecord(liquidityPool, balance) : item);
     });
   }
 
@@ -143,7 +138,7 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
   }
 
   private _buildRecord(pool: LiquidityPool, balance: IAddressBalance): any {
-    const amount = new FixedDecimal(balance.balance, pool.tokens.src.decimals);
+    const amount = new FixedDecimal(balance.balance, pool.tokens.lp.decimals);
     const valueCrs = amount.divide(pool.tokens.lp.totalSupply).multiply(pool.summary.reserves.crs);
     const valueSrc = amount.divide(pool.tokens.lp.totalSupply).multiply(pool.summary.reserves.src);
 
