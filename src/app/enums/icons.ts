@@ -70,5 +70,6 @@ export enum Icons {
     lineChart = 'show_chart',
     barChart = 'graphic_eq',
     network = 'languages',
-    interflux = 'shuffle'
+    interflux = 'shuffle',
+    info = 'info'
 }

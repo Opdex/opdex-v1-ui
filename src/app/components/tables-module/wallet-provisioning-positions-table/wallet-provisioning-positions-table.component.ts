@@ -1,3 +1,5 @@
+import { IAddressBalance } from '@sharedModels/platform-api/responses/wallets/address-balance.interface';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Component, OnChanges, OnDestroy, ViewChild, Input, EventEmitter, Output } from "@angular/core";
@@ -32,7 +34,6 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
   paging: ICursor;
   icons = Icons;
   iconSizes = IconSizes;
-
 
   constructor(
     private _router: Router,
@@ -80,6 +81,20 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
     return `${index}-${position.name}-${position.address}-${position.balance.formattedValue}-${position.total.formattedValue}`;
   }
 
+  async refreshBalance(pool: string): Promise<void> {
+    const {wallet} = this._userContext.getUserContext();
+
+    this.dataSource.data = this.dataSource.data.map(item => {
+      if (item.pool.address === pool) {
+        item.refreshing = true;
+      }
+
+      return item;
+    });
+
+    await this._walletsService.refreshBalance(wallet, pool).toPromise();
+  }
+
   private getProvisionalPositions$(cursor?: string): Observable<any> {
     const context = this._userContext.getUserContext();
     if (!!context.wallet === false) return of(null);
@@ -112,25 +127,27 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
 
           return forkJoin(balances$)
             .pipe(map(balances => {
-              this.dataSource.data = balances.map(({pool, balance}) => {
-                const amount = new FixedDecimal(balance.balance, pool.tokens.src.decimals);
-                const valueCrs = amount.divide(pool.tokens.lp.totalSupply).multiply(pool.summary.reserves.crs);
-                const valueSrc = amount.divide(pool.tokens.lp.totalSupply).multiply(pool.summary.reserves.src);
-
-                return {
-                  pool,
-                  balance: amount,
-                  valueCrs: valueCrs,
-                  valueSrc: valueSrc,
-                  isCurrentMarket: pool.market === this._env.marketAddress,
-                  total: pool.tokens.lp.summary.priceUsd.multiply(amount)
-                }
-              });
+              this.dataSource.data = balances.map(({pool, balance}) => this._buildRecord(pool, balance));
 
             this.paging = response.paging;
             return { paging: response.paging, results: balances };
           }));
         }));
+  }
+
+  private _buildRecord(pool: LiquidityPool, balance: IAddressBalance): any {
+    const amount = new FixedDecimal(balance.balance, pool.tokens.lp.decimals);
+    const valueCrs = amount.divide(pool.tokens.lp.totalSupply).multiply(pool.summary.reserves.crs);
+    const valueSrc = amount.divide(pool.tokens.lp.totalSupply).multiply(pool.summary.reserves.src);
+
+    return {
+      pool,
+      balance: amount,
+      valueCrs: valueCrs,
+      valueSrc: valueSrc,
+      isCurrentMarket: pool.market === this._env.marketAddress,
+      total: pool.tokens.lp.summary.priceUsd.multiply(amount)
+    }
   }
 
   private _numRecords(paging: ICursor, records: any[]): string {

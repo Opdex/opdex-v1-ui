@@ -27,7 +27,7 @@
           <ng-container *ngIf="element.summary.staking; else stakingDisabled">
             <div class="no-wrap flex-row-center">
               <opdex-change-indicator [value]="element.summary.staking?.dailyWeightChangePercent" class="mr-2" [forceDisplay]="true"></opdex-change-indicator>
-              <opdex-number [precision]="0" [suffix]="element.tokens.staking?.symbol" [value]="element.summary.staking?.weight" [stopPropagation]="true"></opdex-number>
+              <opdex-number [precision]="0" [short]="true" [suffix]="element.tokens.staking?.symbol" [value]="element.summary.staking?.weight" [stopPropagation]="true"></opdex-number>
             </div>
           </ng-container>
           <ng-template #stakingDisabled>
@@ -37,14 +37,14 @@
       </ng-container>
 
       <ng-container matColumnDef="volumeDaily">
-        <th mat-header-cell *matHeaderCellDef> Volume</th>
+        <th mat-header-cell *matHeaderCellDef> Daily Volume</th>
         <td mat-cell *matCellDef="let element">
           <opdex-number [short]="true" prefix="$" [value]="element.summary.volume.dailyUsd" [stopPropagation]="true"></opdex-number>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="rewards">
-        <th mat-header-cell *matHeaderCellDef> Rewards </th>
+        <th mat-header-cell *matHeaderCellDef> Daily Rewards </th>
         <td mat-cell *matCellDef="let element">
           <opdex-number [short]="true" prefix="$" [value]="element.summary.rewards.totalDailyUsd" [stopPropagation]="true"></opdex-number>
         </td>

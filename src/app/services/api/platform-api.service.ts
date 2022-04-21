@@ -453,9 +453,19 @@ export class PlatformApiService extends RestApiService {
     return this.get<IAddressStaking>(endpoint);
   }
 
+  public refreshStakingPosition(owner: string, liquidityPool: string): Observable<IAddressStaking> {
+    const endpoint = `${this.api}/wallets/${owner}/staking/${liquidityPool}`;
+    return this.post<IAddressStaking>(endpoint, {});
+  }
+
   public getMiningPosition(owner: string, miningPool: string): Observable<IAddressMining> {
     const endpoint = `${this.api}/wallets/${owner}/mining/${miningPool}`;
     return this.get<IAddressMining>(endpoint);
+  }
+
+  public refreshMiningPosition(owner: string, miningPool: string): Observable<IAddressMining> {
+    const endpoint = `${this.api}/wallets/${owner}/mining/${miningPool}`;
+    return this.post<IAddressMining>(endpoint, {});
   }
 
   public getMiningPositions(owner: string, request: MiningPositionsFilter): Observable<IAddressMiningPositions> {

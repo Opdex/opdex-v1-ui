@@ -12,12 +12,18 @@
         </div>
       </div>
 
-      <div class="row mt-3" *ngIf="crsBalance">
+      <div class="row mt-3">
         <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-          <p class="big-balance">{{crsBalance.balance | formatNumber:8 }} <small>CRS</small></p>
-          <p class="mb-0 positive-value">
-            <opdex-number prefix="$" [value]="crsBalanceValue"></opdex-number>
+          <p class="big-balance" *ngIf="crsBalance">
+            <opdex-number [value]="crsBalance" suffix="CRS"></opdex-number>
           </p>
+
+          <p class="b-500 mb-0 positive-value" *ngIf="crsBalanceValue">
+            <opdex-number prefix="$" [value]="crsBalanceValue" [short]="true"></opdex-number>
+          </p>
+
+          <div class="skeleton-bg mb-1" style="max-width: 200px;" *ngIf="!crsBalance"></div>
+          <div class="skeleton-bg" style="max-width: 200px;" *ngIf="!crsBalanceValue"></div>
         </div>
       </div>
     </div>
@@ -27,7 +33,7 @@
     <div class="container">
       <div class="row">
         <div class="col-12 col-sm-6 col-xl-8">
-          <div class="mb-3">
+          <opdex-card>
             <div class="flex-row-center-between clickable" (click)="toggleTableCollapse('balances')">
               <div class="flex-row-center">
                 <mat-icon color="primary" class="small mr-2">{{icons.tokens}}</mat-icon>
@@ -39,13 +45,13 @@
             </div>
 
             <div [@collapse]="balances.collapse">
-              <opdex-wallet-balances-table [filter]="balances.filter" (onNumRecordsCount)="handleCount($event, 'balances')"></opdex-wallet-balances-table>
+              <div class="mt-2">
+                <opdex-wallet-balances-table [filter]="balances.filter" (onNumRecordsCount)="handleCount($event, 'balances')"></opdex-wallet-balances-table>
+              </div>
             </div>
+          </opdex-card>
 
-            <mat-divider *ngIf="balances.collapse" class="mt-3"></mat-divider>
-          </div>
-
-          <div class="mb-3">
+          <opdex-card>
             <div class="flex-row-center-between clickable" (click)="toggleTableCollapse('providing')">
               <div class="flex-row-center">
                 <mat-icon class="small provide mr-2">{{icons.provide}}</mat-icon>
@@ -57,13 +63,13 @@
             </div>
 
             <div [@collapse]="providing.collapse">
-              <opdex-wallet-provisioning-positions-table [filter]="providing.filter" (onNumRecordsCount)="handleCount($event, 'providing')"></opdex-wallet-provisioning-positions-table>
+              <div class="mt-2">
+                <opdex-wallet-provisioning-positions-table [filter]="providing.filter" (onNumRecordsCount)="handleCount($event, 'providing')"></opdex-wallet-provisioning-positions-table>
+              </div>
             </div>
+          </opdex-card>
 
-            <mat-divider *ngIf="providing.collapse" class="mt-3"></mat-divider>
-          </div>
-
-          <div class="mb-3">
+          <opdex-card>
             <div class="flex-row-center-between clickable" (click)="toggleTableCollapse('mining')">
               <div class="flex-row-center">
                 <mat-icon class="small mine mr-2">{{icons.mining}}</mat-icon>
@@ -75,13 +81,14 @@
             </div>
 
             <div [@collapse]="mining.collapse">
-              <opdex-wallet-mining-positions-table [filter]="mining.filter" (onNumRecordsCount)="handleCount($event, 'mining')"></opdex-wallet-mining-positions-table>
+              <div class="mt-2">
+                <opdex-wallet-mining-positions-table [filter]="mining.filter" (onNumRecordsCount)="handleCount($event, 'mining')"></opdex-wallet-mining-positions-table>
+              </div>
             </div>
 
-            <mat-divider *ngIf="mining.collapse" class="mt-3"></mat-divider>
-          </div>
+          </opdex-card>
 
-          <div class="mb-3">
+          <opdex-card>
             <div class="flex-row-center-between clickable" (click)="toggleTableCollapse('staking')">
               <div class="flex-row-center">
                 <mat-icon class="small stake mr-2">{{icons.staking}}</mat-icon>
@@ -93,13 +100,13 @@
             </div>
 
             <div [@collapse]="staking.collapse">
-              <opdex-wallet-staking-positions-table [filter]="staking.filter" (onNumRecordsCount)="handleCount($event, 'staking')"></opdex-wallet-staking-positions-table>
+              <div class="mt-2">
+                <opdex-wallet-staking-positions-table [filter]="staking.filter" (onNumRecordsCount)="handleCount($event, 'staking')"></opdex-wallet-staking-positions-table>
+              </div>
             </div>
+          </opdex-card>
 
-            <mat-divider *ngIf="staking.collapse" class="mt-3"></mat-divider>
-          </div>
-
-          <div class="mb-3" *ngIf="showProposals">
+          <opdex-card *ngIf="showProposals">
             <div class="flex-row-center-between clickable" (click)="toggleTableCollapse('pledges')">
               <div class="flex-row-center">
                 <mat-icon class="small blue mr-2">{{icons.pledge}}</mat-icon>
@@ -111,13 +118,13 @@
             </div>
 
             <div [@collapse]="pledges.collapse">
-              <opdex-vault-proposal-pledges-table [filter]="pledges.filter" (onNumRecordsCount)="handleCount($event, 'pledges')"></opdex-vault-proposal-pledges-table>
+              <div class="mt-2">
+                <opdex-vault-proposal-pledges-table [filter]="pledges.filter" (onNumRecordsCount)="handleCount($event, 'pledges')"></opdex-vault-proposal-pledges-table>
+              </div>
             </div>
+          </opdex-card>
 
-            <mat-divider *ngIf="pledges.collapse" class="mt-3"></mat-divider>
-          </div>
-
-          <div class="mb-3" *ngIf="showProposals">
+          <opdex-card *ngIf="showProposals">
             <div class="flex-row-center-between clickable" (click)="toggleTableCollapse('votes')">
               <div class="flex-row-center">
                 <mat-icon class="small stake mr-2">{{icons.proposal}}</mat-icon>
@@ -129,9 +136,11 @@
             </div>
 
             <div [@collapse]="votes.collapse">
-              <opdex-vault-proposal-votes-table [filter]="votes.filter" (onNumRecordsCount)="handleCount($event, 'votes')"></opdex-vault-proposal-votes-table>
+              <div class="mt-2">
+                <opdex-vault-proposal-votes-table [filter]="votes.filter" (onNumRecordsCount)="handleCount($event, 'votes')"></opdex-vault-proposal-votes-table>
+              </div>
             </div>
-          </div>
+          </opdex-card>
         </div>
 
         <div class="col-12 col-sm-6 col-xl-4">

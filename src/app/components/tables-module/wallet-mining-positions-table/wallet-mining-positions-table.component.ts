@@ -1,3 +1,5 @@
+import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { EventEmitter, OnDestroy, Output } from '@angular/core';
 import { Component, Input, OnChanges, ViewChild } from '@angular/core';
@@ -44,7 +46,7 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
     private _env: EnvironmentsService
   ) {
     this.dataSource = new MatTableDataSource<any>();
-    this.displayedColumns = ['pool', 'status', 'position', 'value', 'actions'];
+    this.displayedColumns = ['pool', 'status', 'position', 'value', 'valueCrs', 'valueSrc', 'actions'];
   }
 
   ngOnChanges() {
@@ -72,12 +74,26 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
     this._router.navigateByUrl(`/pools/${name}`);
   }
 
-  trackBy(index: number, position: any): string {
-    return `${index}-${position.name}-${position.address}-${position.position.formattedValue}-${position.value.formattedValue}-${position.isActive}`;
+  trackBy(index: number, record: any): string {
+    return `${index}-${record.name}-${record.address}-${record.position.formattedValue}-${record.value.formattedValue}-${record.isActive}`;
   }
 
   pageChange(cursor: string): void {
     this.getMiningPositions$(cursor).pipe(take(1)).subscribe();
+  }
+
+  async refreshPosition(liquidityPoolAddress: string, miningPoolAddress: string): Promise<void> {
+    const {wallet} = this._userContext.getUserContext();
+
+    this.dataSource.data = this.dataSource.data.map(item => {
+      if (item.liquidityPoolAddress === liquidityPoolAddress) {
+        item.refreshing = true;
+      }
+
+      return item;
+    });
+
+    await this._walletsService.refreshMiningPosition(wallet, miningPoolAddress).toPromise();
   }
 
   private getMiningPositions$(cursor?: string): Observable<any> {
@@ -109,27 +125,26 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
           return forkJoin(positions$)
             .pipe(
               map(positions => {
-                this.dataSource.data = positions.map(({ pool, position }) => {
-                  const price = pool.tokens.lp.summary.priceUsd;
-                  const amount = new FixedDecimal(position.amount, pool.tokens.lp.decimals);
-
-                  return {
-                    name: pool.name,
-                    poolTokens: [pool.tokens.crs, pool.tokens.src],
-                    miningTokenSymbol: pool.tokens.lp.symbol,
-                    liquidityPoolAddress: pool.address,
-                    miningPoolAddress: position.miningPool,
-                    position: amount,
-                    isActive: pool.miningPool?.isActive === true,
-                    decimals: pool.tokens.lp.decimals,
-                    isCurrentMarket: pool.market === this._env.marketAddress,
-                    value: price.multiply(amount)
-                  }
-                });
-
+                this.dataSource.data = positions.map(({ pool, position }) => this._buildRecord(pool, position));
                 this.paging = response.paging;
               }));
         }));
+  }
+
+  private _buildRecord(pool: LiquidityPool, position: IAddressMining): any {
+    const price = pool.tokens.lp.summary.priceUsd;
+    const amount = new FixedDecimal(position.amount, pool.tokens.lp.decimals);
+    const valueCrs = amount.divide(pool.tokens.lp.totalSupply).multiply(pool.summary.reserves.crs);
+    const valueSrc = amount.divide(pool.tokens.lp.totalSupply).multiply(pool.summary.reserves.src);
+
+    return {
+      pool,
+      position: amount,
+      isCurrentMarket: pool.market === this._env.marketAddress,
+      value: price.multiply(amount),
+      valueCrs,
+      valueSrc
+    }
   }
 
   private _numRecords(paging: ICursor, records: any[]): string {

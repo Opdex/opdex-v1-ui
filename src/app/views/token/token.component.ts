@@ -186,9 +186,9 @@ export class TokenComponent implements OnInit {
 
     return this._walletService.getBalance(this.context.wallet, this.token.address)
       .pipe(
-        catchError(_ => of({balance: '0'})),
+        catchError(_ => of({balance: '0', modifiedBlock: 0})),
         map(balance => {
-        const position = new AddressPosition(this.context.wallet, this.token, 'Balance', new FixedDecimal(balance.balance, this.token.decimals));
+        const position = new AddressPosition(this.context.wallet, this.token, 'Balance', new FixedDecimal(balance.balance, this.token.decimals), balance.modifiedBlock);
 
         this.balance = position;
         return position;

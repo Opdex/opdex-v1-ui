@@ -1,3 +1,4 @@
+import { IAddressStaking } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { EventEmitter, OnDestroy, Output } from '@angular/core';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
@@ -17,6 +18,7 @@ import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { Subscription, of, Observable, forkJoin } from 'rxjs';
 import { switchMap, take, map } from 'rxjs/operators';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 
 @Component({
   selector: 'opdex-wallet-staking-positions-table',
@@ -80,6 +82,20 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
     this.getStakingPositions$(cursor).pipe(take(1)).subscribe();
   }
 
+  async refreshPosition(liquidityPoolAddress: string): Promise<void> {
+    const {wallet} = this._userContext.getUserContext();
+
+    this.dataSource.data = this.dataSource.data.map(item => {
+      if (item.liquidityPoolAddress === liquidityPoolAddress) {
+        item.refreshing = true;
+      }
+
+      return item;
+    });
+
+    await this._walletsService.refreshStakingPosition(wallet, liquidityPoolAddress).toPromise();
+  }
+
   private getStakingPositions$(cursor?: string): Observable<any> {
     const context = this._userContext.getUserContext();
     if (!!context.wallet === false) return of(null);
@@ -110,26 +126,27 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
 
           return forkJoin(positions$)
             .pipe(map(positions => {
-              this.dataSource.data = positions.map(({pool, position}) => {
-                const price = !pool.tokens.staking?.summary ? FixedDecimal.Zero(8) : pool.tokens.staking.summary.priceUsd;
-                const amount = new FixedDecimal(position.amount, pool.tokens.staking?.decimals);
-
-                return {
-                  name: pool.name,
-                  poolTokens: [pool.tokens.crs, pool.tokens.src],
-                  stakingTokenSymbol: pool.tokens.staking?.symbol,
-                  liquidityPoolAddress: pool.address,
-                  position: amount,
-                  decimals: pool.tokens.lp.decimals,
-                  isNominated: pool.summary?.staking.nominated === true,
-                  isCurrentMarket: pool.market === this._env.marketAddress,
-                  value: price.multiply(amount)
-                }
-              });
-
+              this.dataSource.data = positions.map(({pool, position}) => this._buildRecord(pool, position));
               this.paging = response.paging;
             }));
         }));
+  }
+
+  private _buildRecord(pool: LiquidityPool, position: IAddressStaking): any {
+    const price = !pool.tokens.staking?.summary ? FixedDecimal.Zero(8) : pool.tokens.staking.summary.priceUsd;
+    const amount = new FixedDecimal(position.amount, pool.tokens.staking?.decimals);
+
+    return {
+      name: pool.name,
+      poolTokens: [pool.tokens.crs, pool.tokens.src],
+      stakingTokenSymbol: pool.tokens.staking?.symbol,
+      liquidityPoolAddress: pool.address,
+      position: amount,
+      decimals: pool.tokens.lp.decimals,
+      isNominated: pool.summary?.staking?.nominated === true,
+      isCurrentMarket: pool.market === this._env.marketAddress,
+      value: price.multiply(amount)
+    }
   }
 
   private _numRecords(paging: ICursor, records: any[]): string {

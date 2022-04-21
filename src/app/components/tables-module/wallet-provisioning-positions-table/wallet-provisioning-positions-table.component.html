@@ -15,7 +15,10 @@
         <ng-container matColumnDef="balance">
           <th mat-header-cell *matHeaderCellDef> Balance </th>
           <td mat-cell *matCellDef="let element">
-            <opdex-number [value]="element.balance" [suffix]="element.pool.tokens.lp.symbol"></opdex-number>
+            <div class="flex-row-center">
+              <mat-icon class="blue spin tiny mr-1" *ngIf="element.refreshing">{{icons.refresh}}</mat-icon>
+              <opdex-number [value]="element.balance" [suffix]="element.pool.tokens.lp.symbol"></opdex-number>
+            </div>
           </td>
         </ng-container>
 
@@ -40,12 +43,27 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="actions">
+        <ng-container matColumnDef="actions" stickyEnd>
           <th mat-header-cell *matHeaderCellDef>  </th>
           <td mat-cell *matCellDef="let element">
             <div class="flex-row-center-end">
-              <button mat-mini-fab class="tiny green flat mr-1" (click)="openSidebar('add', element.pool.address)" matTooltip="Add Liquidity" [disabled]="!element.isCurrentMarket"><mat-icon>{{icons.add}}</mat-icon></button>
-              <button mat-mini-fab class="tiny red flat" (click)="openSidebar('remove', element.pool.address)" matTooltip="Remove Liquidity" [disabled]="!element.isCurrentMarket"><mat-icon>{{icons.remove}}</mat-icon></button>
+              <button mat-icon-button color="primary" [ngClass]="iconSizes.small" class="float-right" [matMenuTriggerFor]="beforeMenu" (click)="$event.stopPropagation()">
+                <mat-icon>{{icons.more}}</mat-icon>
+              </button>
+
+              <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
+                <button mat-menu-item (click)="openSidebar('add', element.pool.address)" [disabled]="!element.isCurrentMarket">
+                  <mat-icon class="green">{{icons.add}}</mat-icon> Add Liquidity
+                </button>
+
+                <button mat-menu-item (click)="openSidebar('remove', element.pool.address)" [disabled]="!element.isCurrentMarket">
+                  <mat-icon class="red">{{icons.remove}}</mat-icon> Remove Liquidity
+                </button>
+
+                <button mat-menu-item [ngClass]="iconSizes.small" (click)="refreshBalance(element.pool.address)" [disabled]="element.refreshing">
+                  <mat-icon [ngClass]="{'blue': !element.refreshing}">{{icons.refresh}}</mat-icon> Refresh
+                </button>
+              </mat-menu>
             </div>
           </td>
         </ng-container>
