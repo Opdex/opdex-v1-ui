@@ -46,7 +46,7 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
     private _env: EnvironmentsService
   ) {
     this.dataSource = new MatTableDataSource<any>();
-    this.displayedColumns = ['pool', 'status', 'position', 'value', 'actions'];
+    this.displayedColumns = ['pool', 'status', 'position', 'value', 'valueCrs', 'valueSrc', 'actions'];
   }
 
   ngOnChanges() {
@@ -131,21 +131,19 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
         }));
   }
 
-  private _buildRecord(pool: LiquidityPool, position: IAddressMining) {
+  private _buildRecord(pool: LiquidityPool, position: IAddressMining): any {
     const price = pool.tokens.lp.summary.priceUsd;
     const amount = new FixedDecimal(position.amount, pool.tokens.lp.decimals);
+    const valueCrs = amount.divide(pool.tokens.lp.totalSupply).multiply(pool.summary.reserves.crs);
+    const valueSrc = amount.divide(pool.tokens.lp.totalSupply).multiply(pool.summary.reserves.src);
 
     return {
-      name: pool.name,
-      poolTokens: [pool.tokens.crs, pool.tokens.src],
-      miningTokenSymbol: pool.tokens.lp.symbol,
-      liquidityPoolAddress: pool.address,
-      miningPoolAddress: position.miningPool,
+      pool,
       position: amount,
-      isActive: pool.miningPool?.isActive === true,
-      decimals: pool.tokens.lp.decimals,
       isCurrentMarket: pool.market === this._env.marketAddress,
-      value: price.multiply(amount)
+      value: price.multiply(amount),
+      valueCrs,
+      valueSrc
     }
   }
 
