@@ -45,6 +45,11 @@ export class WalletsService extends CacheService {
       .pipe(tap(balances => balances.results.forEach(balance => this.cacheItem(`wallet-balance-${wallet}-${balance.token}`, balance))));
   }
 
+  refreshStakingPosition(wallet: string, liquidityPool: string): Observable<IAddressStaking> {
+    return this._platformApi.refreshStakingPosition(wallet, liquidityPool)
+      .pipe(tap(position => this.cacheItem(`staking-position-${wallet}-${liquidityPool}`, position)));
+  }
+
   getStakingPosition(wallet: string, liquidityPool: string): Observable<IAddressStaking> {
     return this.getItem(`staking-position-${wallet}-${liquidityPool}`, this._platformApi.getStakingPosition(wallet, liquidityPool));
   }
@@ -52,6 +57,11 @@ export class WalletsService extends CacheService {
   getStakingPositions(wallet: string, request: StakingPositionsFilter): Observable<IAddressStakingPositions> {
     return this.getItem(`staking-positions-${wallet}-${request.buildQueryString()}`, this._platformApi.getStakingPositions(wallet, request))
       .pipe(tap(stakingPositions => stakingPositions.results.forEach(stakingPosition => this.cacheItem(`staking-position-${wallet}-${stakingPosition.liquidityPool}`, stakingPosition))));
+  }
+
+  refreshMiningPosition(wallet: string, miningPool: string): Observable<IAddressMining> {
+    return this._platformApi.refreshMiningPosition(wallet, miningPool)
+      .pipe(tap(position => this.cacheItem(`mining-position-${wallet}-${miningPool}`, position)));
   }
 
   getMiningPosition(wallet: string, miningPool: string): Observable<IAddressMining> {

@@ -17,7 +17,7 @@ import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
-import { of, Observable, forkJoin, Subscription, combineLatest } from 'rxjs';
+import { of, Observable, forkJoin, Subscription } from 'rxjs';
 import { switchMap, catchError, take, map } from 'rxjs/operators';
 import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
 import { WalletBalancesFilter } from '@sharedModels/platform-api/requests/wallets/wallet-balances-filter';
@@ -98,22 +98,18 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
     this.getWalletBalances$(cursor).pipe(take(1)).subscribe();
   }
 
-  refreshBalance(token: string): void {
+  async refreshBalance(token: string): Promise<void> {
     const {wallet} = this._userContext.getUserContext();
 
-    combineLatest([
-      this._tokensService.getMarketToken(token),
-      this._walletsService.refreshBalance(wallet, token)
-    ])
-    .pipe(take(1))
-    .subscribe(([marketToken, balance]) => {
-      const balanceFixed = new FixedDecimal(balance.balance, marketToken.decimals);
-      const position = new AddressPosition(wallet, marketToken, 'Balance', balanceFixed, balance.modifiedBlock);
-      marketToken.setPosition(position);
+    this.dataSource.data = this.dataSource.data.map(item => {
+      if (item.token.address === token) {
+        item.refreshing = true;
+      }
 
-      this.dataSource.data = this.dataSource.data.map(item =>
-        item.token.address === token ? this._buildRecord(marketToken) : item);
+      return item;
     });
+
+    await this._walletsService.refreshBalance(wallet, token).toPromise();
   }
 
   private getWalletBalances$(cursor?: string): Observable<any> {
@@ -160,8 +156,9 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
         }));
   }
 
-  private _buildRecord(token: MarketToken): any {
+  private _buildRecord(token: MarketToken, refreshing: boolean = false): any {
     return {
+      refreshing,
       token,
       isCurrentMarket: token.market === this._env.marketAddress,
     }

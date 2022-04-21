@@ -1,5 +1,4 @@
 import { IAddressStaking } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { EventEmitter, OnDestroy, Output } from '@angular/core';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
@@ -17,7 +16,7 @@ import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
-import { Subscription, of, Observable, forkJoin, combineLatest } from 'rxjs';
+import { Subscription, of, Observable, forkJoin } from 'rxjs';
 import { switchMap, take, map } from 'rxjs/operators';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 
@@ -44,8 +43,7 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
     private _liquidityPoolService: LiquidityPoolsService,
     private _indexService: IndexService,
     private _userContext: UserContextService,
-    private _env: EnvironmentsService,
-    private _platformApi: PlatformApiService
+    private _env: EnvironmentsService
   ) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['pool', 'status', 'position', 'value', 'actions'];
@@ -84,18 +82,18 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
     this.getStakingPositions$(cursor).pipe(take(1)).subscribe();
   }
 
-  refreshPosition(liquidityPoolAddress: string): void {
+  async refreshPosition(liquidityPoolAddress: string): Promise<void> {
     const {wallet} = this._userContext.getUserContext();
 
-    combineLatest([
-      this._liquidityPoolService.getLiquidityPool(liquidityPoolAddress),
-      this._platformApi.refreshStakingPosition(wallet, liquidityPoolAddress)
-    ])
-    .pipe(take(1))
-    .subscribe(([liquidityPool, position]) => {
-      this.dataSource.data = this.dataSource.data.map(item =>
-        item.liquidityPoolAddress === liquidityPoolAddress ? this._buildRecord(liquidityPool, position) : item);
+    this.dataSource.data = this.dataSource.data.map(item => {
+      if (item.liquidityPoolAddress === liquidityPoolAddress) {
+        item.refreshing = true;
+      }
+
+      return item;
     });
+
+    await this._walletsService.refreshStakingPosition(wallet, liquidityPoolAddress).toPromise();
   }
 
   private getStakingPositions$(cursor?: string): Observable<any> {

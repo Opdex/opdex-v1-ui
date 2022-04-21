@@ -1,6 +1,5 @@
 import { IAddressBalance } from '@sharedModels/platform-api/responses/wallets/address-balance.interface';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { Component, OnChanges, OnDestroy, ViewChild, Input, EventEmitter, Output } from "@angular/core";
@@ -15,7 +14,7 @@ import { IndexService } from "@sharedServices/platform/index.service";
 import { WalletsService } from "@sharedServices/platform/wallets.service";
 import { SidenavService } from "@sharedServices/utility/sidenav.service";
 import { UserContextService } from "@sharedServices/utility/user-context.service";
-import { Subscription, Observable, of, forkJoin, combineLatest } from "rxjs";
+import { Subscription, Observable, of, forkJoin } from "rxjs";
 import { switchMap, take, map } from "rxjs/operators";
 import { IconSizes } from "src/app/enums/icon-sizes";
 import { Icons } from "src/app/enums/icons";
@@ -43,8 +42,7 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
     private _liquidityPoolService: LiquidityPoolsService,
     private _indexService: IndexService,
     private _userContext: UserContextService,
-    private _env: EnvironmentsService,
-    private _platformApi: PlatformApiService
+    private _env: EnvironmentsService
   ) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['pool', 'balance', 'total', 'valueCrs', 'valueSrc', 'actions'];
@@ -83,18 +81,18 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
     return `${index}-${position.name}-${position.address}-${position.balance.formattedValue}-${position.total.formattedValue}`;
   }
 
-  refreshBalance(pool: string): void {
+  async refreshBalance(pool: string): Promise<void> {
     const {wallet} = this._userContext.getUserContext();
 
-    combineLatest([
-      this._liquidityPoolService.getLiquidityPool(pool),
-      this._walletsService.refreshBalance(wallet, pool)
-    ])
-    .pipe(take(1))
-    .subscribe(([liquidityPool, balance]) => {
-      this.dataSource.data = this.dataSource.data.map(item =>
-        item.token.address === liquidityPool.address ? this._buildRecord(liquidityPool, balance) : item);
+    this.dataSource.data = this.dataSource.data.map(item => {
+      if (item.pool.address === pool) {
+        item.refreshing = true;
+      }
+
+      return item;
     });
+
+    await this._walletsService.refreshBalance(wallet, pool).toPromise();
   }
 
   private getProvisionalPositions$(cursor?: string): Observable<any> {

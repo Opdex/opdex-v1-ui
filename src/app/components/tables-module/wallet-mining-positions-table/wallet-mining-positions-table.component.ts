@@ -1,6 +1,5 @@
 import { IAddressMining } from '@sharedModels/platform-api/responses/wallets/address-mining.interface';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
-import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { EventEmitter, OnDestroy, Output } from '@angular/core';
 import { Component, Input, OnChanges, ViewChild } from '@angular/core';
@@ -16,7 +15,7 @@ import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.
 import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
-import { Subscription, of, Observable, forkJoin, combineLatest } from 'rxjs';
+import { Subscription, of, Observable, forkJoin } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
@@ -44,8 +43,7 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
     private _liquidityPoolService: LiquidityPoolsService,
     private _indexService: IndexService,
     private _userContext: UserContextService,
-    private _env: EnvironmentsService,
-    private _platformApi: PlatformApiService
+    private _env: EnvironmentsService
   ) {
     this.dataSource = new MatTableDataSource<any>();
     this.displayedColumns = ['pool', 'status', 'position', 'value', 'actions'];
@@ -84,18 +82,18 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
     this.getMiningPositions$(cursor).pipe(take(1)).subscribe();
   }
 
-  refreshPosition(liquidityPoolAddress: string, miningPoolAddress: string): void {
+  async refreshPosition(liquidityPoolAddress: string, miningPoolAddress: string): Promise<void> {
     const {wallet} = this._userContext.getUserContext();
 
-    combineLatest([
-      this._liquidityPoolService.getLiquidityPool(liquidityPoolAddress),
-      this._platformApi.refreshMiningPosition(wallet, miningPoolAddress)
-    ])
-    .pipe(take(1))
-    .subscribe(([liquidityPool, position]) => {
-      this.dataSource.data = this.dataSource.data.map(item =>
-        item.liquidityPoolAddress === liquidityPoolAddress ? this._buildRecord(liquidityPool, position) : item);
+    this.dataSource.data = this.dataSource.data.map(item => {
+      if (item.liquidityPoolAddress === liquidityPoolAddress) {
+        item.refreshing = true;
+      }
+
+      return item;
     });
+
+    await this._walletsService.refreshMiningPosition(wallet, miningPoolAddress).toPromise();
   }
 
   private getMiningPositions$(cursor?: string): Observable<any> {
