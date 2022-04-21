@@ -77,10 +77,6 @@ export class RestApiService {
       console.error('An error occurred:', error.error);
     } else if (error.status === 401) {
       this._context.setToken('');
-
-      if (!this._env.useNewAuthFlow) {
-        this._router.navigateByUrl('/auth');
-      }
     }
 
     const errors = [];
