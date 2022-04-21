@@ -1,7 +1,0 @@
-<p class="mb-0" *ngIf="token$ | async as token; else loading;">
-  Created
-  <a class="no-decoration" routerLink="/pools/{{event.liquidityPool}}">{{token.symbol}}/CRS</a>
-  liquidity pool.
-</p>
-
-<ng-template #loading>Created XYZ/CRS liquidity pool.</ng-template>

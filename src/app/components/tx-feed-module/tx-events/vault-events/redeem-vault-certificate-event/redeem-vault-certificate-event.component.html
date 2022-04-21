@@ -1,7 +1,0 @@
-<p class="mb-0" *ngIf="token$ | async as token; else loading;">
-    Redeemed vault certificate for <strong>{{event.amount}}</strong> <a class="no-decoration" routerLink="/tokens/{{token.address}}">{{token.symbol}}</a>.
-</p>
-
-<ng-template #loading>
-    Redeemed vault certificate for <strong>{{event.amount}} ABC</strong>.
-</ng-template>

@@ -1,9 +1,0 @@
-<p class="mb-0" *ngIf="pool$ | async as pool; else loading">
-  Collected
-  <strong>
-    {{event.amount | shortNumber}}
-  </strong>
-  <a class="no-decoration" routerLink="/tokens/{{pool.tokens.lp.address}}">{{pool.tokens.lp.symbol}}</a> staking rewards.
-</p>
-
-<ng-template #loading>Collected <strong>{{event.amount | shortNumber}}</strong> LPT staking rewards.</ng-template>

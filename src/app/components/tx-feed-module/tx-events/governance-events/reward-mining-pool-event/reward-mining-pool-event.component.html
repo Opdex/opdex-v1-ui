@@ -1,7 +1,0 @@
-<p class="mb-0" *ngIf="pool$ | async as pool; else loading">
-  Distributed <strong>{{event.amount | shortNumber}} </strong> <a class="no-decoration" routerLink="/tokens/{{pool.tokens.staking?.symbol}}">{{pool.tokens.staking?.symbol}}</a> to the <a class="no-decoration" routerLink="/pools/{{pool.address}}">{{pool.name}}</a> mining pool.
-</p>
-
-<ng-template #loading>
-  Distributed <strong>{{event.amount | shortNumber}} </strong> to the XYZ/CRS mining pool.
-</ng-template>
