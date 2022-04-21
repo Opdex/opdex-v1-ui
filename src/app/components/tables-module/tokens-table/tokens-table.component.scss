@@ -1,0 +1,11 @@
+@import 'src/scss/bootstrap-grid';
+
+.sm-up {
+  display: none;
+}
+
+@media (min-width: map_get($grid-breakpoints, sm)) {
+  .sm-up {
+    display: table-cell;
+  }
+}
