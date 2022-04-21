@@ -14,13 +14,16 @@
 
       <div class="row mt-3">
         <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-          <p class="big-balance">
+          <p class="big-balance" *ngIf="crsBalance">
             <opdex-number [value]="crsBalance" suffix="CRS"></opdex-number>
           </p>
 
-          <p class="b-500 mb-0 positive-value">
+          <p class="b-500 mb-0 positive-value" *ngIf="crsBalanceValue">
             <opdex-number prefix="$" [value]="crsBalanceValue" [short]="true"></opdex-number>
           </p>
+
+          <div class="skeleton-bg mb-1" style="max-width: 200px;" *ngIf="!crsBalance"></div>
+          <div class="skeleton-bg" style="max-width: 200px;" *ngIf="!crsBalanceValue"></div>
         </div>
       </div>
     </div>
