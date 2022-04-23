@@ -83,7 +83,7 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
   }
 
   async refreshPosition(liquidityPoolAddress: string): Promise<void> {
-    const {wallet} = this._userContext.getUserContext();
+    const {wallet} = this._userContext.userContext;
 
     this.dataSource.data = this.dataSource.data.map(item => {
       if (item.liquidityPoolAddress === liquidityPoolAddress) {
@@ -97,7 +97,7 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
   }
 
   private getStakingPositions$(cursor?: string): Observable<any> {
-    const context = this._userContext.getUserContext();
+    const context = this._userContext.userContext;
     if (!!context.wallet === false) return of(null);
 
     this.filter.cursor = cursor;

@@ -58,7 +58,7 @@ export class WalletComponent implements OnInit {
     private _sidebar: SidenavService,
     private _env: EnvironmentsService
   ) {
-    this.wallet = this._context.getUserContext();
+    this.wallet = this._context.userContext;
     this.showProposals = !!this._env.vaultAddress;
 
     if (!this.wallet || !this.wallet.wallet) {

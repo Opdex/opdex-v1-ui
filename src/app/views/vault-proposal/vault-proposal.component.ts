@@ -70,7 +70,7 @@ export class VaultProposalComponent {
     this._gaService.pageView(this._route.routeConfig.path, pageName);
 
     this.subscription.add(
-      this._context.getUserContext$()
+      this._context.userContext$
         .subscribe(context => this.context = context));
 
     this.subscription.add(

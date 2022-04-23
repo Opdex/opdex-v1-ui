@@ -55,20 +55,17 @@ export class RestApiService {
 
   protected put<T>(endpoint: string, payload: any, options: object = {}): Observable<T> {
     return this._http.put<T>(endpoint, payload, options)
-      .pipe(
-        catchError(error => this.handleError(error)));
+      .pipe(catchError(error => this.handleError(error)));
   }
 
   protected patch<T>(endpoint: string, payload: any, options: object = {}): Observable<T> {
     return this._http.patch<T>(endpoint, payload, options)
-      .pipe(
-        catchError(error => this.handleError(error)));
+      .pipe(catchError(error => this.handleError(error)));
   }
 
   protected delete<T>(endpoint: string, options: object = {}): Observable<T> {
     return this._http.delete<T>(endpoint, options)
-      .pipe(
-        catchError(error => this.handleError(error)));
+      .pipe(catchError(error => this.handleError(error)));
   }
 
   private handleError(error: HttpErrorResponse) {

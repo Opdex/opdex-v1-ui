@@ -16,7 +16,7 @@ export class ThemeService {
     private _context: UserContextService
   ) {
     const defaultTheme =
-      this._context.getUserContext()?.preferences?.theme ||
+      this._context.userContext?.preferences?.theme ||
       this._db.getLocalStorage<string>(this.themeKey, false) ||
       environment.defaultTheme;
 

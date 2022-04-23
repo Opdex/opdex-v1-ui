@@ -27,11 +27,7 @@ export class AuthApiService extends RestApiService {
   }
 
   public auth(request: AuthRequest): Observable<IAuthResponse> {
-    const endpoint = `${this.api}/auth/token`;
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/x-www-form-urlencoded')
-      .set('Accept', 'text');
-
-    return this.post<IAuthResponse>(endpoint, request, { headers });
+    const headers = new HttpHeaders({' Content-Type': 'application/x-www-form-urlencoded'});
+    return this.post<IAuthResponse>(`${this.api}/auth/token`, request, { headers });
   }
 }

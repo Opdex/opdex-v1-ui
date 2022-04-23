@@ -43,7 +43,7 @@ export class TxSidebarComponent implements OnChanges {
       : [...TransactionTypes.filter(type => !!type.view && type.view !== TransactionView.vaultProposal)]
 
     this.subscription.add(
-      this._context.getUserContext$()
+      this._context.userContext$
         .subscribe(context => {
           this.context = context;
 

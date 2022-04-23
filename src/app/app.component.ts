@@ -85,10 +85,11 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    const storedToken = this._context.getToken();
-    this._context.setToken(storedToken);
+    // Get stored token and set immediately
+    this._context.setToken(this._context.token);
+
     this.subscription.add(
-      this._context.getUserContext$()
+      this._context.userContext$
         .subscribe(async context => {
           this.context = context;
           if (!context?.wallet) this.stopHubConnection();
@@ -176,7 +177,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   }
 
   private validateJwt(): void {
-    const userIsLoggedIn = !!this._context.getUserContext()?.wallet;
+    const userIsLoggedIn = !!this._context.userContext?.wallet;
     const tokenIsExpired = this._jwt.isTokenExpired();
 
     if (userIsLoggedIn && tokenIsExpired) {

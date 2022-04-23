@@ -40,7 +40,7 @@ export class VaultProposalCardComponent implements OnDestroy {
     private _indexService: IndexService,
     private _dialog: MatDialog
   ) {
-    this.subscription.add(this._context.getUserContext$().subscribe(context => this.context = context));
+    this.subscription.add(this._context.userContext$.subscribe(context => this.context = context));
     this.subscription.add(this._indexService.status$.subscribe(status => this.indexStatus = status));
   }
 

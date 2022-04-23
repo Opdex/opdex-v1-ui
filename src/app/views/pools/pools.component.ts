@@ -44,7 +44,7 @@ export class PoolsComponent implements OnInit, OnDestroy {
     }
 
     this.subscription.add(
-      this._context.getUserContext$()
+      this._context.userContext$
         .subscribe(context => this.context = context));
   }
 

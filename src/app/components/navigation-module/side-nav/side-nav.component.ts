@@ -41,7 +41,7 @@ export class SideNavComponent implements OnDestroy {
     private _env: EnvironmentsService,
     private _authService: AuthService
   ) {
-    this.subscription.add(this._context.getUserContext$().subscribe(context => this.context = context));
+    this.subscription.add(this._context.userContext$.subscribe(context => this.context = context));
     this.subscription.add(this._transactionsService.getBroadcastedTransactions$().subscribe(txs => this.pendingTransactions = txs));
     this.latestSyncedBlock$ = this._indexService.latestBlock$;
 

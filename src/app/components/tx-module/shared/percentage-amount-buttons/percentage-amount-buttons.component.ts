@@ -37,7 +37,7 @@ export class PercentageAmountButtonsComponent implements OnChanges {
     private _vaultService: VaultsService
   ) {
     this.contextSubscription.add(
-      this._context.getUserContext$()
+      this._context.userContext$
         .pipe(tap(context => this.context = context))
         .subscribe(_ => this.ngOnChanges()));
   }

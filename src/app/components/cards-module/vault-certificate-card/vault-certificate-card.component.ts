@@ -55,7 +55,7 @@ export class VaultCertificateCardComponent implements OnDestroy {
         .subscribe(block => this.latestBlock = block.height));
 
     this.subscription.add(
-      this._userContextService.getUserContext$()
+      this._userContextService.userContext$
         .subscribe(context => this.context = context));
   }
 

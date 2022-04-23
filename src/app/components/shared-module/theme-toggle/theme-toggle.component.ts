@@ -25,7 +25,7 @@ export class ThemeToggleComponent implements OnDestroy {
     private _context: UserContextService,
     private _theme: ThemeService,
   ) {
-    this.subscription.add(this._context.getUserContext$().subscribe(context => this.wallet = context));
+    this.subscription.add(this._context.userContext$.subscribe(context => this.wallet = context));
     this.subscription.add(
       this._theme.getTheme()
         .subscribe(theme => {

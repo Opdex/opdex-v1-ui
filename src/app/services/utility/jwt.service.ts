@@ -3,6 +3,14 @@ import { Injectable } from '@angular/core';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { StorageService } from './storage.service';
 
+
+export function jwtOptionsFactory(jwtService: JwtService) {
+  return {
+    tokenGetter: () => jwtService.getToken(),
+    allowedDomains: [...jwtService.allowedDomains]
+  }
+}
+
 const _jwt = new JwtHelperService();
 
 @Injectable()
@@ -15,79 +23,49 @@ export class JwtService {
   ) { }
 
   public get allowedDomains(): string[] {
-    const platformApi = new URL(this._env.platformApiUrl);
-    const authApi = new URL(this._env.authApiUrl);
-
-    return [platformApi.host, authApi.host];
+    const { host: platformHost } = new URL(this._env.platformApiUrl);
+    const { host: authHost } = new URL(this._env.authApiUrl);
+    return [ platformHost, authHost ];
   }
 
-  /**
-   * Decodes the current users JWT
-   */
+  /** Decodes the current users JWT */
   public decodeToken() {
     const token = this.getToken();
     return _jwt.decodeToken(token);
   }
 
-  /**
-   * Get the expiration date of the current users JWT
-   */
+  /** Get the expiration date of the current users JWT */
   public getTokenExpirationDate(): Date {
     const token = this.getToken();
-
     return _jwt.getTokenExpirationDate(token);
   }
 
   /**
-   * check if a JWT is expired
+   * Checks if a JWT is expired
    * @param offsetSeconds optional offset to check expiration
-   * @returns boolean value
    */
   public isTokenExpired(offsetSeconds?: number): boolean {
     const token = this.getToken();
-
     return _jwt.isTokenExpired(token, offsetSeconds);
   }
 
-  public getTokenSet(): any {
-
-  }
-
-  /**
-   * gets the current JWT from local storage
-   * @returns JWT string
-   */
+  /** Rets the current JWT from local storage */
   public getToken(): string {
     return this._storage.getLocalStorage<any>(this.storageKey);
   }
 
-  /**
-   * removes the current JWT from local storage
-   */
+  /** Removes the current JWT from local storage */
    public removeToken(): void {
     this._storage.removeLocalStorage(this.storageKey);
   }
 
-  /**
-   * sets the current JWT to local storage
-   * @returns JWT string
-   */
+  /** Sets the current JWT to local storage */
    public setToken(data: any): void {
     this._storage.setLocalStorage(this.storageKey, data);
   }
 
-  /**
-   * checks if the current JWT is expired
-   * @returns boolean as success
-   */
+  /** Checks if the current JWT is expired */
   public isAuthorized(): boolean {
     return this.isTokenExpired() === false;
-  }
-}
-
-export function jwtOptionsFactory(jwtService: JwtService) {
-  return {
-    tokenGetter: () => jwtService.getToken(),
-    allowedDomains: [...jwtService.allowedDomains]
   }
 }

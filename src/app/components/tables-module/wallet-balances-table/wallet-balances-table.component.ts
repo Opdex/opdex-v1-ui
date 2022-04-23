@@ -99,7 +99,7 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
   }
 
   async refreshBalance(token: string): Promise<void> {
-    const {wallet} = this._userContext.getUserContext();
+    const {wallet} = this._userContext.userContext;
 
     this.dataSource.data = this.dataSource.data.map(item => {
       if (item.token.address === token) {
@@ -113,7 +113,7 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
   }
 
   private getWalletBalances$(cursor?: string): Observable<any> {
-    const context = this._userContext.getUserContext();
+    const context = this._userContext.userContext;
     if (!!context.wallet === false) return of(null);
 
     this.filter.cursor = cursor;

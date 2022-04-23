@@ -65,7 +65,7 @@ export class VaultComponent implements OnInit {
       direction: 'DESC'
     } as IVaultCertificatesFilter);
 
-    this.subscription.add(this._context.getUserContext$().subscribe(context => this.context = context));
+    this.subscription.add(this._context.userContext$.subscribe(context => this.context = context));
 
     this.transactionsRequest = {
       limit: 15,

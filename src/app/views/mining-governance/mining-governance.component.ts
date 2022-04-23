@@ -55,7 +55,7 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.context = this._context.getUserContext();
+    this.context = this._context.userContext;
 
     this.subscription.add(
       this._indexService.latestBlock$

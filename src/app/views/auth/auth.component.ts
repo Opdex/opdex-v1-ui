@@ -25,7 +25,7 @@ export class AuthComponent {
   ) { }
 
   async ngOnInit() {
-    const currentContext = this._context.getUserContext();
+    const currentContext = this._context.userContext;
 
     if (currentContext.wallet) {
       this._router.navigateByUrl('/');
@@ -39,7 +39,7 @@ export class AuthComponent {
     this.authFailure = !verification.success;
 
     if (verification.success) {
-      const { preferences } = this._context.getUserContext();
+      const { preferences } = this._context.userContext;
       if (preferences?.theme) this._theme.setTheme(preferences.theme);
 
       this._router.navigate([verification.routePath], verification.routeQueryParams);
