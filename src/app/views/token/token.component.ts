@@ -5,7 +5,6 @@ import { AddressPosition } from '@sharedModels/address-position';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { ILiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
-import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
@@ -58,7 +57,6 @@ export class TokenComponent implements OnInit {
     private _sidebar: SidenavService,
     private _indexService: IndexService,
     private _lpService: LiquidityPoolsService,
-    private _walletService: WalletsService,
     private _envService: EnvironmentsService,
     private _userContextService: UserContextService
   ) { }
@@ -89,8 +87,7 @@ export class TokenComponent implements OnInit {
           switchMap(_ => this.getToken()),
           tap(_ => this.historyFilter?.refresh()),
           switchMap(_ => this.getTokenHistory()),
-          switchMap(_ => this.tryGetLiquidityPool()),
-          switchMap(_ => this.tryGetWalletBalance()))
+          switchMap(_ => this.tryGetLiquidityPool()))
         .subscribe());
   }
 
@@ -178,20 +175,6 @@ export class TokenComponent implements OnInit {
         const pool = pools?.results?.length ? pools.results[0] : null;
         this.liquidityPool = pool;
         return pool;
-      }));
-  }
-
-  private tryGetWalletBalance(): Observable<AddressPosition> {
-    if (!!this.context?.wallet === false) return of(null);
-
-    return this._walletService.getBalance(this.context.wallet, this.token.address)
-      .pipe(
-        catchError(_ => of({balance: '0', modifiedBlock: 0})),
-        map(balance => {
-        const position = new AddressPosition(this.context.wallet, this.token, 'Balance', new FixedDecimal(balance.balance, this.token.decimals), balance.modifiedBlock);
-
-        this.balance = position;
-        return position;
       }));
   }
 
