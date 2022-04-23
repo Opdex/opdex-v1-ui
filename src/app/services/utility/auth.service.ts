@@ -1,3 +1,5 @@
+import { IAuthResponse } from '@sharedModels/auth-api/auth-response.interface';
+import { AuthRequest } from '@sharedModels/auth-api/auth-request';
 import { AuthVerification } from '@sharedModels/ui/auth-verification';
 import { UserContextService } from './user-context.service';
 import { AuthApiService } from '@sharedServices/api/auth-api.service';
@@ -7,6 +9,7 @@ import { Injectable } from "@angular/core";
 import { v4 as uuidv4 } from 'uuid';
 import pkceChallenge from "pkce-challenge";
 import { encode, decode } from 'url-safe-base64'
+import { Observable } from 'rxjs';
 
 
 const AUTH_STATE: string = 'auth-state';
@@ -43,9 +46,10 @@ export class AuthService {
     if (stateEncoded !== state) return new AuthVerification({error: `Invalid state!`});
 
     try {
-      const token = await this._authApi.verifyAccessCode(accessCode, codeVerifier).toPromise();
+      const request = new AuthRequest(accessCode, codeVerifier);
+      const token = await this._authApi.auth(request).toPromise();
 
-      this._context.setToken(token);
+      this._context.setToken(token.accessToken);
       this._storage.removeLocalStorage(AUTH_STATE);
       this._storage.removeLocalStorage(CODE_VERIFIER);
 
@@ -53,5 +57,12 @@ export class AuthService {
     } catch(error) {
       return new AuthVerification({error});
     }
+  }
+
+  refresh(): Observable<IAuthResponse> {
+    // Todo: try get refresh token
+    const refreshToken = 'refreshtoken';
+
+    return this._authApi.auth(new AuthRequest(null, null, refreshToken));
   }
 }

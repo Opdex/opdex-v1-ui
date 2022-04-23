@@ -1,6 +1,8 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
+import { AuthRequest } from "@sharedModels/auth-api/auth-request";
+import { IAuthResponse } from "@sharedModels/auth-api/auth-response.interface";
 import { EnvironmentsService } from "@sharedServices/utility/environments.service";
 import { ErrorService } from "@sharedServices/utility/error.service";
 import { JwtService } from "@sharedServices/utility/jwt.service";
@@ -24,16 +26,12 @@ export class AuthApiService extends RestApiService {
     this.api = this._env.authApiUrl;
   }
 
-  public verifyAccessCode(code: string, codeVerifier: string): Observable<string> {
+  public auth(request: AuthRequest): Observable<IAuthResponse> {
     const endpoint = `${this.api}/auth/token`;
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/x-www-form-urlencoded')
       .set('Accept', 'text');
 
-    const body = new URLSearchParams();
-    body.set('code', code);
-    body.set('codeVerifier', codeVerifier);
-
-    return this.post<string>(endpoint, body, { headers });
+    return this.post<IAuthResponse>(endpoint, request, { headers });
   }
 }

@@ -32,6 +32,12 @@ export class UserContextService {
     this.userContext$.next(updatedContext);
   }
 
+  logout(): void {
+    this._token = undefined;
+    this._jwtService.setToken(this._token);
+    this.userContext$.next(new UserContext());
+  }
+
   setUserPreferences(wallet: string, preferences: UserContextPreferences): void {
     this._storage.setLocalStorage(wallet, preferences, true);
 

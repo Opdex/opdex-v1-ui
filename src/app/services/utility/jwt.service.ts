@@ -9,7 +9,10 @@ const _jwt = new JwtHelperService();
 export class JwtService {
   private storageKey = 'jwt';
 
-  constructor(private _storage: StorageService, private _env: EnvironmentsService) { }
+  constructor(
+    private _storage: StorageService,
+    private _env: EnvironmentsService
+  ) { }
 
   public get allowedDomains(): string[] {
     const platformApi = new URL(this._env.platformApiUrl);
@@ -19,7 +22,7 @@ export class JwtService {
   }
 
   /**
-   * @summary Decodes the current users JWT
+   * Decodes the current users JWT
    */
   public decodeToken() {
     const token = this.getToken();
@@ -27,7 +30,7 @@ export class JwtService {
   }
 
   /**
-   * @summary Get the expiration date of the current users JWT
+   * Get the expiration date of the current users JWT
    */
   public getTokenExpirationDate(): Date {
     const token = this.getToken();
@@ -36,7 +39,7 @@ export class JwtService {
   }
 
   /**
-   * @summary check if a JWT is expired
+   * check if a JWT is expired
    * @param offsetSeconds optional offset to check expiration
    * @returns boolean value
    */
@@ -46,8 +49,12 @@ export class JwtService {
     return _jwt.isTokenExpired(token, offsetSeconds);
   }
 
+  public getTokenSet(): any {
+
+  }
+
   /**
-   * @summary gets the current JWT from local storage
+   * gets the current JWT from local storage
    * @returns JWT string
    */
   public getToken(): string {
@@ -55,14 +62,14 @@ export class JwtService {
   }
 
   /**
-   * @summary removes the current JWT from local storage
+   * removes the current JWT from local storage
    */
    public removeToken(): void {
     this._storage.removeLocalStorage(this.storageKey);
   }
 
   /**
-   * @summary sets the current JWT to local storage
+   * sets the current JWT to local storage
    * @returns JWT string
    */
    public setToken(data: any): void {
@@ -70,7 +77,7 @@ export class JwtService {
   }
 
   /**
-   * @summary checks if the current JWT is expired
+   * checks if the current JWT is expired
    * @returns boolean as success
    */
   public isAuthorized(): boolean {

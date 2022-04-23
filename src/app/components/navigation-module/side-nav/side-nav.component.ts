@@ -68,7 +68,7 @@ export class SideNavComponent implements OnDestroy {
   }
 
   logout(): void {
-    this._context.setToken('');
+    this._context.logout();
     this._router.navigateByUrl('/');
     this.emitRouteChange('/');
   }

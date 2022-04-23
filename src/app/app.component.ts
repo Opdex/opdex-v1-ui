@@ -180,6 +180,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     const tokenIsExpired = this._jwt.isTokenExpired();
 
     if (userIsLoggedIn && tokenIsExpired) {
+      // Todo: Use refresh token
       this._context.setToken('');
     }
   }
