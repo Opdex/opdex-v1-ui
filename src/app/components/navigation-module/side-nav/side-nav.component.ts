@@ -51,7 +51,7 @@ export class SideNavComponent implements OnDestroy {
   }
 
   login(): void {
-    this._authService.login();
+    this._authService.prepareLogin();
   }
 
   togglePin(): void {
@@ -68,7 +68,7 @@ export class SideNavComponent implements OnDestroy {
   }
 
   logout(): void {
-    this._context.logout();
+    this._context.remove();
     this._router.navigateByUrl('/');
     this.emitRouteChange('/');
   }

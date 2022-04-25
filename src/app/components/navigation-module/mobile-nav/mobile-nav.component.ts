@@ -28,7 +28,7 @@ export class MobileNavComponent implements OnDestroy {
   }
 
   login(): void {
-    this._authService.login();
+    this._authService.prepareLogin();
   }
 
   toggleMenu() {

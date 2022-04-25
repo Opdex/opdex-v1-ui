@@ -74,7 +74,7 @@ export class RestApiService {
       console.error('An error occurred:', error.error);
     } else if (error.status === 401) {
       // Todo: Use refresh token and retry request
-      this._context.setToken('');
+      this._context.remove();
     }
 
     const errors = [];

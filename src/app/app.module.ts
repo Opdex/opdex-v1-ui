@@ -48,7 +48,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MiningGovernanceComponent } from './views/mining-governance/mining-governance.component';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
-import { jwtOptionsFactory } from '@sharedServices/utility/jwt.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -63,6 +62,7 @@ import { VaultComponent } from './views/vault/vault.component';
 import { VaultProposalComponent } from './views/vault-proposal/vault-proposal.component';
 import { checkForUpdates } from '@sharedServices/check-for-updates';
 import { LoginComponent } from './views/login/login.component';
+import { jwtOptionsFactory } from '@sharedServices/jwt-options-factory';
 
 @NgModule({
   declarations: [

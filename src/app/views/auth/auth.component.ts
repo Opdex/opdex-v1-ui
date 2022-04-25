@@ -34,7 +34,7 @@ export class AuthComponent {
 
     const accessCode = this._activatedRoute.snapshot.queryParamMap.get('code');
     const state = this._activatedRoute.snapshot.queryParamMap.get('state');
-    const verification = await this._authService.verify(accessCode, state);
+    const verification = await this._authService.verifyLogin(accessCode, state);
 
     this.authFailure = !verification.success;
 
@@ -47,6 +47,6 @@ export class AuthComponent {
   }
 
   login(): void {
-    this._authService.login();
+    this._authService.prepareLogin();
   }
 }

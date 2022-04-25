@@ -44,7 +44,7 @@ export class TxQuoteSubmitButtonComponent implements OnDestroy {
   }
 
   login(): void {
-    this._authService.login();
+    this._authService.prepareLogin();
   }
 
   submit(): void {

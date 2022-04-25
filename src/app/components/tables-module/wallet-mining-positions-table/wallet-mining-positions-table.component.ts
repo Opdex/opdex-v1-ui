@@ -15,7 +15,7 @@ import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.
 import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
-import { Subscription, of, Observable, forkJoin } from 'rxjs';
+import { Subscription, of, Observable, forkJoin, lastValueFrom } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
@@ -93,7 +93,7 @@ export class WalletMiningPositionsTableComponent implements OnChanges, OnDestroy
       return item;
     });
 
-    await this._walletsService.refreshMiningPosition(wallet, miningPoolAddress).toPromise();
+    await lastValueFrom(this._walletsService.refreshMiningPosition(wallet, miningPoolAddress));
   }
 
   private getMiningPositions$(cursor?: string): Observable<any> {

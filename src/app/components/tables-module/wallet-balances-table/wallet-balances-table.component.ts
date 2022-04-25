@@ -17,7 +17,7 @@ import { SidenavService } from '@sharedServices/utility/sidenav.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { Icons } from 'src/app/enums/icons';
 import { IconSizes } from 'src/app/enums/icon-sizes';
-import { of, Observable, forkJoin, Subscription } from 'rxjs';
+import { of, Observable, forkJoin, Subscription, lastValueFrom } from 'rxjs';
 import { switchMap, catchError, take, map } from 'rxjs/operators';
 import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
 import { WalletBalancesFilter } from '@sharedModels/platform-api/requests/wallets/wallet-balances-filter';
@@ -109,7 +109,7 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
       return item;
     });
 
-    await this._walletsService.refreshBalance(wallet, token).toPromise();
+    await lastValueFrom(this._walletsService.refreshBalance(wallet, token));
   }
 
   private getWalletBalances$(cursor?: string): Observable<any> {
