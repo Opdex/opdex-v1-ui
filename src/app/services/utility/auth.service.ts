@@ -23,10 +23,10 @@ export class AuthService {
 
   login(): void {
     const challenge = pkceChallenge();
-    const stateEncoded = encode(JSON.stringify({
+    const stateEncoded = btoa(encode(JSON.stringify({
       nonce: uuidv4().replace(/-/g, ''),
       route: window.location.href.replace('login', 'wallet')
-    }));
+    })));
 
     this._storage.setLocalStorage(AUTH_STATE, stateEncoded);
     this._storage.setLocalStorage(CODE_VERIFIER, challenge.code_verifier);
@@ -49,7 +49,7 @@ export class AuthService {
       this._storage.removeLocalStorage(AUTH_STATE);
       this._storage.removeLocalStorage(CODE_VERIFIER);
 
-      return new AuthVerification({route: new URL(JSON.parse(decode(stateEncoded)).route)});
+      return new AuthVerification({route: new URL(JSON.parse(atob(decode(stateEncoded))).route)});
     } catch(error) {
       return new AuthVerification({error});
     }
