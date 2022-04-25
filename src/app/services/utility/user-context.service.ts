@@ -30,7 +30,7 @@ export class UserContextService {
     let preferences = new UserContextPreferences();
 
     if (data.wallet) {
-      preferences = this._storage.getLocalStorage(data?.wallet, true);
+      preferences = this._storage.getLocalStorage(data.wallet, true);
     }
 
     return new UserContext(data.wallet, preferences);
@@ -44,7 +44,7 @@ export class UserContextService {
 
   logout(): void {
     this._token = undefined;
-    this._jwtService.setToken(this._token);
+    this._jwtService.setToken(undefined);
     this._userContext$.next(new UserContext());
   }
 

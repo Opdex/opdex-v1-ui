@@ -9,18 +9,18 @@ export class StorageService {
   keyPrefix: string;
 
   constructor(private _env: EnvironmentsService) {
-    const isDevnet = this._env.network === Network.Devnet;
-
-    const network = isDevnet
-      ? this._env.network.substring(0, 3).toLowerCase()
-      : this._env.network.substring(0, 4).toLowerCase();
+    const network = this._env.network === Network.Devnet
+      ? 'dev'
+      : this._env.network === Network.Testnet
+        ? 'test'
+        : 'main';
 
     this.keyPrefix = `odx-${network}-`;
   }
 
-  private keyWithPrefix(key: string): string {
-    return `${this.keyPrefix}${key}`;
-  }
+  //
+  // LOCAL STORAGE
+  //
 
   /**
    * @summary Get a value form local storage based on the provided key
@@ -28,7 +28,7 @@ export class StorageService {
    * @param parse Defaults to true, set to false to not parse the value (e.g. expecting a string response)
    */
   getLocalStorage<T>(key: string, parse: boolean = true): T {
-    const result = <string>localStorage.getItem(this.keyWithPrefix(key));
+    const result = <string>localStorage.getItem(this._storageKey(key));
 
     return parse === true
       ? JSON.parse(result)
@@ -46,7 +46,7 @@ export class StorageService {
       ? JSON.stringify(data)
       : data as string;
 
-    localStorage.setItem(this.keyWithPrefix(key), dataString);
+    localStorage.setItem(this._storageKey(key), dataString);
   }
 
   /**
@@ -54,8 +54,12 @@ export class StorageService {
    * @param key The key to remove from local storage
    */
   removeLocalStorage(key: string): void {
-    localStorage.removeItem(this.keyWithPrefix(key));
+    localStorage.removeItem(this._storageKey(key));
   }
+
+  //
+  // SESSION STORAGE
+  //
 
   /**
    * @summary Get a value form session storage based on the provided key
@@ -63,7 +67,7 @@ export class StorageService {
    * @param parse Defaults to true, set to false to not parse the value (e.g. expecting a string response)
    */
   getSessionStorage<T>(key: string, parse: boolean = true): T {
-    const result = <string>sessionStorage.getItem(this.keyWithPrefix(key));
+    const result = <string>sessionStorage.getItem(this._storageKey(key));
 
     return parse === true
       ? JSON.parse(result)
@@ -81,7 +85,7 @@ export class StorageService {
       ? JSON.stringify(data)
       : data as string;
 
-    sessionStorage.setItem(this.keyWithPrefix(key), dataString);
+    sessionStorage.setItem(this._storageKey(key), dataString);
   }
 
   /**
@@ -89,6 +93,14 @@ export class StorageService {
    * @param key The key to remove from session storage
    */
   removeSessionStorage(key: string): void {
-    sessionStorage.removeItem(this.keyWithPrefix(key));
+    sessionStorage.removeItem(this._storageKey(key));
+  }
+
+  //
+  // HELPERS
+  //
+
+  private _storageKey(key: string): string {
+    return `${this.keyPrefix}${key}`;
   }
 }

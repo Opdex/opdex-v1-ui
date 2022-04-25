@@ -15,7 +15,7 @@ const _jwt = new JwtHelperService();
 
 @Injectable()
 export class JwtService {
-  private storageKey = 'jwt';
+  private _storageKey = 'jwt';
 
   constructor(
     private _storage: StorageService,
@@ -29,7 +29,7 @@ export class JwtService {
   }
 
   /** Decodes the current users JWT */
-  public decodeToken() {
+  public decodeToken(): any {
     const token = this.getToken();
     return _jwt.decodeToken(token);
   }
@@ -51,17 +51,17 @@ export class JwtService {
 
   /** Rets the current JWT from local storage */
   public getToken(): string {
-    return this._storage.getLocalStorage<any>(this.storageKey);
+    return this._storage.getLocalStorage<any>(this._storageKey);
   }
 
   /** Removes the current JWT from local storage */
    public removeToken(): void {
-    this._storage.removeLocalStorage(this.storageKey);
+    this._storage.removeLocalStorage(this._storageKey);
   }
 
   /** Sets the current JWT to local storage */
-   public setToken(data: any): void {
-    this._storage.setLocalStorage(this.storageKey, data);
+   public setToken(data: string): void {
+    this._storage.setLocalStorage(this._storageKey, data);
   }
 
   /** Checks if the current JWT is expired */
