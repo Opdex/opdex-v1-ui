@@ -8,10 +8,11 @@ export class AuthRequest {
   }
 
   constructor(code?: string, codeVerifier?: string, refreshToken?: string) {
-    const request = new URLSearchParams();
     const grantType = refreshToken ? AuthGrantTypes.RefreshToken : AuthGrantTypes.AuthorizationCode;
+    const request = new URLSearchParams();
 
     request.set('grantType', grantType);
+
     if (grantType === AuthGrantTypes.AuthorizationCode) {
       request.set('code', code);
       request.set('codeVerifier', codeVerifier);

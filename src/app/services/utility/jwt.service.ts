@@ -5,6 +5,7 @@ import { JwtHelperService } from "@auth0/angular-jwt";
 import { StorageService } from './storage.service';
 import { JWT } from '@sharedModels/auth-api/jwt';
 const _jwt = new JwtHelperService();
+
 @Injectable()
 export class JwtService {
   private _storageKey = 'refresh';
@@ -27,7 +28,7 @@ export class JwtService {
   }
 
   public get refreshToken(): string {
-    return this._refreshToken || this._storage.getLocalStorage<string>(this._storageKey);
+    return this._refreshToken || this._storage.getLocalStorage<string>(this._storageKey, false);
   }
 
   public get jwt(): JWT {

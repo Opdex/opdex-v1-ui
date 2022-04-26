@@ -87,7 +87,9 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    await this._authService.refresh();
+    this._authService.refresh()
+      .pipe(take(1))
+      .subscribe();
 
     this.subscription.add(
       this._context.userContext$

@@ -1,3 +1,4 @@
+import { catchError } from 'rxjs/operators';
 import { IAuthResponse } from '@sharedModels/auth-api/auth-response.interface';
 import { JwtService } from '@sharedServices/utility/jwt.service';
 import { AuthRequest } from '@sharedModels/auth-api/auth-request';
@@ -10,7 +11,7 @@ import { Injectable } from "@angular/core";
 import { v4 as uuidv4 } from 'uuid';
 import pkceChallenge from "pkce-challenge";
 import { encode, decode } from 'url-safe-base64'
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Observable, of, tap } from 'rxjs';
 
 
 const AUTH_STATE: string = 'auth-state';
@@ -43,7 +44,10 @@ export class AuthService {
     if (!accessCode) return new AuthVerification({error: 'Code must be provided!'});
 
     const stateEncoded = this._storage.getLocalStorage<string>(AUTH_STATE);
+    this._storage.removeLocalStorage(AUTH_STATE);
+
     const codeVerifier = this._storage.getLocalStorage<string>(CODE_VERIFIER);
+    this._storage.removeLocalStorage(CODE_VERIFIER);
 
     if (stateEncoded !== state) return new AuthVerification({error: `Invalid state!`});
 
@@ -52,8 +56,6 @@ export class AuthService {
       const response = await lastValueFrom(this._authApi.auth(request));
 
       this._context.set(response);
-      this._storage.removeLocalStorage(AUTH_STATE);
-      this._storage.removeLocalStorage(CODE_VERIFIER);
 
       return new AuthVerification({route: new URL(JSON.parse(window.atob(decode(stateEncoded))).route)});
     } catch(error) {
@@ -61,21 +63,16 @@ export class AuthService {
     }
   }
 
-  async refresh(): Promise<IAuthResponse> {
+  refresh(): Observable<IAuthResponse> {
     const { refreshToken } = this._jwt;
 
-    if (!refreshToken) {
-      return undefined;
-    }
+    if (!refreshToken) return of(undefined);
 
     const request = new AuthRequest(null, null, refreshToken);
 
-    try {
-      const response = await lastValueFrom(this._authApi.auth(request));
-      this._context.set(response);
-      return response;
-    } catch {
-      return undefined;
-    }
+    return this._authApi.auth(request)
+      .pipe(
+        tap(response => this._context.set(response)),
+        catchError(_ => of(undefined)));
   }
 }

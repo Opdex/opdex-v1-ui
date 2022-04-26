@@ -16,8 +16,9 @@ export class AuthInterceptor implements HttpInterceptor {
           // -- if token - use refresh token
           // ------------- set new access / refresh tokens
           // ------------- retry request
-          // return this._authService.refresh().pipe(switchMap(_ => next.handle(req)));
           console.log(`401 in interceptor`);
+          return this._authService.refresh()
+            .pipe(switchMap(_ => next.handle(req)));
         }
 
         return throwError(error);

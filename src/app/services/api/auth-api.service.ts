@@ -26,8 +26,11 @@ export class AuthApiService extends RestApiService {
     this.api = this._env.authApiUrl;
   }
 
-  public auth(request: AuthRequest): Observable<IAuthResponse> {
-    const headers = new HttpHeaders({' Content-Type': 'application/x-www-form-urlencoded'});
+  public auth({ request }: AuthRequest): Observable<IAuthResponse> {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/x-www-form-urlencoded')
+      .set('Accept', 'application/json');
+
     return this.post<IAuthResponse>(`${this.api}/auth/token`, request, { headers });
   }
 }
