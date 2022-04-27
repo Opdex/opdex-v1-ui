@@ -19,16 +19,16 @@ export class MobileNavComponent implements OnDestroy {
   subscription = new Subscription();
 
   constructor(
-    private _context: UserContextService,
+    private _userContextService: UserContextService,
     private _authService: AuthService
   ) {
     this.subscription.add(
-      this._context.getUserContext$()
+      this._userContextService.context$
         .subscribe(context => this.context = context));
   }
 
   login(): void {
-    this._authService.login();
+    this._authService.prepareLogin();
   }
 
   toggleMenu() {

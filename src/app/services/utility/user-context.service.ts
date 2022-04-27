@@ -1,56 +1,60 @@
+import { IAuthResponse } from '@sharedModels/auth-api/auth-response.interface';
 import { UserContext, UserContextPreferences } from '@sharedModels/user-context';
 import { StorageService } from './storage.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { JwtService } from './jwt.service';
 import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class UserContextService {
-  private userContext$ = new BehaviorSubject<UserContext>(new UserContext());
-  private _token: string;
+  private _context = new UserContext();
+  private _context$ = new BehaviorSubject<UserContext>(this._context);
 
   constructor(
     private _jwtService: JwtService,
     private _storage: StorageService
   ) { }
 
-  getUserContext$() {
-    return this.userContext$.asObservable();
+  get context$(): Observable<UserContext> {
+    return this._context$.asObservable();
   }
 
-  getToken(): string {
-    return this._token || this._jwtService.getToken();
+  get accessToken(): string {
+    return this._jwtService.accessToken;
   }
 
-  setToken(token: string): void {
-    this._token = token;
+  get userContext(): UserContext {
+    return this._context;
+  }
 
-    this._jwtService.setToken(token);
+  set(resp: IAuthResponse): void {
+    this._jwtService.set(resp);
+    this._context = this._buildUserContext();
+    this._context$.next(this._context)
+  }
 
-    const updatedContext = this.getUserContext();
-
-    this.userContext$.next(updatedContext);
+  remove(): void {
+    this._jwtService.remove();
+    this._context = new UserContext();
+    this._context$.next(this._context);
   }
 
   setUserPreferences(wallet: string, preferences: UserContextPreferences): void {
     this._storage.setLocalStorage(wallet, preferences, true);
-
-    const updatedContext = this.getUserContext();
-
-    this.userContext$.next(updatedContext)
+    this._context$.next(this.userContext)
   }
 
-  getUserContext(): UserContext {
-    const data = this._jwtService.decodeToken();
+  private _buildUserContext(): UserContext {
+    if (!this._jwtService.jwt) return new UserContext();
 
-    if (!data) return new UserContext();
+    const { wallet } = this._jwtService.jwt;
 
     let preferences = new UserContextPreferences();
 
-    if (data.wallet) {
-      preferences = this._storage.getLocalStorage(data?.wallet, true);
+    if (wallet) {
+      preferences = this._storage.getLocalStorage(wallet, true);
     }
 
-    return new UserContext(data.wallet, preferences);
+    return new UserContext(wallet, preferences);
   }
 }

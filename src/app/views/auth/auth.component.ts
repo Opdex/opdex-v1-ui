@@ -17,7 +17,7 @@ export class AuthComponent {
   iconSizes = IconSizes;
 
   constructor(
-    private _context: UserContextService,
+    private _userContextService: UserContextService,
     private _router: Router,
     private _theme: ThemeService,
     private _activatedRoute: ActivatedRoute,
@@ -25,7 +25,7 @@ export class AuthComponent {
   ) { }
 
   async ngOnInit() {
-    const currentContext = this._context.getUserContext();
+    const currentContext = this._userContextService.userContext;
 
     if (currentContext.wallet) {
       this._router.navigateByUrl('/');
@@ -34,12 +34,12 @@ export class AuthComponent {
 
     const accessCode = this._activatedRoute.snapshot.queryParamMap.get('code');
     const state = this._activatedRoute.snapshot.queryParamMap.get('state');
-    const verification = await this._authService.verify(accessCode, state);
+    const verification = await this._authService.verifyLogin(accessCode, state);
 
     this.authFailure = !verification.success;
 
     if (verification.success) {
-      const { preferences } = this._context.getUserContext();
+      const { preferences } = this._userContextService.userContext;
       if (preferences?.theme) this._theme.setTheme(preferences.theme);
 
       this._router.navigate([verification.routePath], verification.routeQueryParams);
@@ -47,6 +47,6 @@ export class AuthComponent {
   }
 
   login(): void {
-    this._authService.login();
+    this._authService.prepareLogin();
   }
 }

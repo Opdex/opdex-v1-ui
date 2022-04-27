@@ -83,7 +83,7 @@ export class TokenComponent implements OnInit {
     this.subscription.add(
       this._indexService.latestBlock$
         .pipe(
-          switchMap(_ => this._userContextService.getUserContext$().pipe(tap(context => this.context = context))),
+          switchMap(_ => this._userContextService.context$.pipe(tap(context => this.context = context))),
           switchMap(_ => this.getToken()),
           tap(_ => this.historyFilter?.refresh()),
           switchMap(_ => this.getTokenHistory()),

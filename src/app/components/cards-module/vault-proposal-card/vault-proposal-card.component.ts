@@ -35,12 +35,12 @@ export class VaultProposalCardComponent implements OnDestroy {
   constructor(
     private _platformApiService: PlatformApiService,
     private _bottomSheet: MatBottomSheet,
-    private _context: UserContextService,
+    private _userContextService: UserContextService,
     private _sidenav: SidenavService,
     private _indexService: IndexService,
     private _dialog: MatDialog
   ) {
-    this.subscription.add(this._context.getUserContext$().subscribe(context => this.context = context));
+    this.subscription.add(this._userContextService.context$.subscribe(context => this.context = context));
     this.subscription.add(this._indexService.status$.subscribe(status => this.indexStatus = status));
   }
 

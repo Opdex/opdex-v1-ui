@@ -45,7 +45,7 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
     private _platformApiService: PlatformApiService,
     private _miningGovernanceService: MiningGovernancesService,
     private _bottomSheet: MatBottomSheet,
-    private _context: UserContextService,
+    private _userContextService: UserContextService,
     private _tokenService: TokensService,
     private _liquidityPoolsService: LiquidityPoolsService,
     private _indexService: IndexService,
@@ -55,7 +55,7 @@ export class MiningGovernanceComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.context = this._context.getUserContext();
+    this.context = this._userContextService.userContext;
 
     this.subscription.add(
       this._indexService.latestBlock$

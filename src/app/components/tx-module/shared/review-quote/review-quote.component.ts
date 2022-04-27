@@ -1,10 +1,9 @@
-import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
 import { ITransactionReceipt } from '@sharedModels/platform-api/responses/transactions/transaction.interface';
 import { TransactionReceipt } from '@sharedModels/ui/transactions/transaction-receipt';
 import { TransactionsService } from '@sharedServices/platform/transactions.service';
-import { filter, switchMap } from 'rxjs/operators';
+import { filter, switchMap, skip } from 'rxjs/operators';
 import { tap } from 'rxjs/operators';
 import { Component, Inject, OnDestroy } from '@angular/core';
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
@@ -51,7 +50,6 @@ export class ReviewQuoteComponent implements OnDestroy {
     public _bottomSheetRef: MatBottomSheetRef<ReviewQuoteComponent>,
     private _transactionsService: TransactionsService,
     private _indexService: IndexService,
-    private _env: EnvironmentsService,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: ITransactionQuote
   ) {
     this.quote = this.data;
@@ -87,6 +85,7 @@ export class ReviewQuoteComponent implements OnDestroy {
     this.subscription.add(
       this._indexService.latestBlock$
         .pipe(
+          skip(1),
           tap(block => this.latestBlock = block),
           filter(_ => !!this.txHash === false),
           switchMap(_ => this._platformApi.replayQuote(new TransactionQuoteRequest(this.data.request).payload)),

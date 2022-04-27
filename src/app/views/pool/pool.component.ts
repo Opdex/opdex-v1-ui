@@ -68,7 +68,7 @@ export class PoolComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.init();
-    this.context$ = this._userContext.getUserContext$();
+    this.context$ = this._userContext.context$;
 
     this.routerSubscription.add(
       this._router.events.subscribe((evt) => {
@@ -179,7 +179,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   // }
 
   // getWalletSummary(): void {
-  //   const context = this._userContext.getUserContext();
+  //   const context = this._userContext.userContext;
 
   //   if (context.wallet && this.pool) {
   //     const lpToken = this.pool.tokens.lp;

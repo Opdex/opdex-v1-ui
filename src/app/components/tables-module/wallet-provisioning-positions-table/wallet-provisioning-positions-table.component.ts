@@ -14,7 +14,7 @@ import { IndexService } from "@sharedServices/platform/index.service";
 import { WalletsService } from "@sharedServices/platform/wallets.service";
 import { SidenavService } from "@sharedServices/utility/sidenav.service";
 import { UserContextService } from "@sharedServices/utility/user-context.service";
-import { Subscription, Observable, of, forkJoin } from "rxjs";
+import { Subscription, Observable, of, forkJoin, lastValueFrom } from "rxjs";
 import { switchMap, take, map } from "rxjs/operators";
 import { IconSizes } from "src/app/enums/icon-sizes";
 import { Icons } from "src/app/enums/icons";
@@ -82,7 +82,7 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
   }
 
   async refreshBalance(pool: string): Promise<void> {
-    const {wallet} = this._userContext.getUserContext();
+    const {wallet} = this._userContext.userContext;
 
     this.dataSource.data = this.dataSource.data.map(item => {
       if (item.pool.address === pool) {
@@ -92,11 +92,11 @@ export class WalletProvisioningPositionsTableComponent implements OnChanges, OnD
       return item;
     });
 
-    await this._walletsService.refreshBalance(wallet, pool).toPromise();
+    await lastValueFrom(this._walletsService.refreshBalance(wallet, pool));
   }
 
   private getProvisionalPositions$(cursor?: string): Observable<any> {
-    const context = this._userContext.getUserContext();
+    const context = this._userContext.userContext;
     if (!!context.wallet === false) return of(null);
 
     this.filter.cursor = cursor;

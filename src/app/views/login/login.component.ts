@@ -8,6 +8,6 @@ import { AuthService } from '@sharedServices/utility/auth.service';
 })
 export class LoginComponent {
   constructor(private _authService: AuthService) {
-    this._authService.login();
+    this._authService.prepareLogin();
   }
 }

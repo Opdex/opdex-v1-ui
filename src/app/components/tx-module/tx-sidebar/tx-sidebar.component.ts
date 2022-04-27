@@ -35,7 +35,7 @@ export class TxSidebarComponent implements OnChanges {
   constructor(
     private _breakpointObserver: BreakpointObserver,
     private _sidenav: SidenavService,
-    private _context: UserContextService,
+    private _userContextService: UserContextService,
     private _env: EnvironmentsService
   ) {
     this.transactionTypes = !!this._env.vaultAddress
@@ -43,7 +43,7 @@ export class TxSidebarComponent implements OnChanges {
       : [...TransactionTypes.filter(type => !!type.view && type.view !== TransactionView.vaultProposal)]
 
     this.subscription.add(
-      this._context.getUserContext$()
+      this._userContextService.context$
         .subscribe(context => {
           this.context = context;
 
