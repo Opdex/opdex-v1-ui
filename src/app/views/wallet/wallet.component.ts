@@ -51,14 +51,14 @@ export class WalletComponent implements OnInit {
   mining: CollapsableTable<MiningPositionsFilter>;
 
   constructor(
-    private _context: UserContextService,
+    private _userContextService: UserContextService,
     private _tokensService: TokensService,
     private _walletsService: WalletsService,
     private _router: Router,
     private _sidebar: SidenavService,
     private _env: EnvironmentsService
   ) {
-    this.wallet = this._context.userContext;
+    this.wallet = this._userContextService.userContext;
     this.showProposals = !!this._env.vaultAddress;
 
     if (!this.wallet || !this.wallet.wallet) {
@@ -139,12 +139,12 @@ export class WalletComponent implements OnInit {
 
   handleDeadlineChange(threshold: number): void {
     this.wallet.preferences.deadlineThreshold = threshold;
-    this._context.setUserPreferences(this.wallet.wallet, this.wallet.preferences);
+    this._userContextService.setUserPreferences(this.wallet.wallet, this.wallet.preferences);
   }
 
   handleToleranceChange(threshold: number): void {
     this.wallet.preferences.toleranceThreshold = threshold;
-    this._context.setUserPreferences(this.wallet.wallet, this.wallet.preferences);
+    this._userContextService.setUserPreferences(this.wallet.wallet, this.wallet.preferences);
   }
 
   togglePreferences(): void {

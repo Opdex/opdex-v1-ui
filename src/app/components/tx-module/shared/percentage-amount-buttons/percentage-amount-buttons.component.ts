@@ -31,13 +31,13 @@ export class PercentageAmountButtonsComponent implements OnChanges {
   percentages: string[] = [ '25', '50', '75', '100' ];
 
   constructor(
-    private _context: UserContextService,
+    private _userContextService: UserContextService,
     private _indexService: IndexService,
     private _walletService: WalletsService,
     private _vaultService: VaultsService
   ) {
     this.contextSubscription.add(
-      this._context.userContext$
+      this._userContextService.context$
         .pipe(tap(context => this.context = context))
         .subscribe(_ => this.ngOnChanges()));
   }

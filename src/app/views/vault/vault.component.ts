@@ -49,7 +49,7 @@ export class VaultComponent implements OnInit {
     private _indexService: IndexService,
     private _env: EnvironmentsService,
     private _sidebar: SidenavService,
-    private _context: UserContextService
+    private _userContextService: UserContextService
   ) {
     // Init with null to get default/loading animations
     this.statCards = VaultStatCardsLookup.getStatCards(null, null);
@@ -65,7 +65,7 @@ export class VaultComponent implements OnInit {
       direction: 'DESC'
     } as IVaultCertificatesFilter);
 
-    this.subscription.add(this._context.userContext$.subscribe(context => this.context = context));
+    this.subscription.add(this._userContextService.context$.subscribe(context => this.context = context));
 
     this.transactionsRequest = {
       limit: 15,

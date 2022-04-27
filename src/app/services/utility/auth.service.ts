@@ -1,4 +1,5 @@
-import { catchError } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
+import { catchError, finalize } from 'rxjs/operators';
 import { IAuthResponse } from '@sharedModels/auth-api/auth-response.interface';
 import { JwtService } from '@sharedServices/utility/jwt.service';
 import { AuthRequest } from '@sharedModels/auth-api/auth-request';
@@ -12,6 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
 import pkceChallenge from "pkce-challenge";
 import { encode, decode } from 'url-safe-base64'
 import { lastValueFrom, Observable, of, tap } from 'rxjs';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 
 const AUTH_STATE: string = 'auth-state';
@@ -19,17 +21,19 @@ const CODE_VERIFIER: string = 'code-verifier';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
+  private _refreshingToken: boolean = false;
+
   constructor(
     private _storage: StorageService,
     private _env: EnvironmentsService,
     private _authApi: AuthApiService,
-    private _context: UserContextService,
+    private _userContextService: UserContextService,
     private _jwt: JwtService
   ) { }
 
   prepareLogin(): void {
     const challenge = pkceChallenge();
-    const stateEncoded = window.btoa(encode(JSON.stringify({
+    const stateEncoded = encode(window.btoa(JSON.stringify({
       nonce: uuidv4().replace(/-/g, ''),
       route: window.location.href.replace('login', 'wallet')
     })));
@@ -55,24 +59,37 @@ export class AuthService {
       const request = new AuthRequest(accessCode, codeVerifier);
       const response = await lastValueFrom(this._authApi.auth(request));
 
-      this._context.set(response);
+      this._userContextService.set(response);
 
-      return new AuthVerification({route: new URL(JSON.parse(window.atob(decode(stateEncoded))).route)});
+      return new AuthVerification({route: new URL(JSON.parse(decode(window.atob(stateEncoded))).route)});
     } catch(error) {
       return new AuthVerification({error});
     }
   }
 
   refresh(): Observable<IAuthResponse> {
-    const { refreshToken } = this._jwt;
+    if (!this._refreshingToken) {
+      this._refreshingToken = true;
 
-    if (!refreshToken) return of(undefined);
+      const { refreshToken } = this._jwt;
 
-    const request = new AuthRequest(null, null, refreshToken);
+      if (!refreshToken) return of(undefined);
 
-    return this._authApi.auth(request)
-      .pipe(
-        tap(response => this._context.set(response)),
-        catchError(_ => of(undefined)));
+      const request = new AuthRequest(null, null, refreshToken);
+
+      return this._authApi.auth(request)
+        .pipe(
+          tap(response => this._userContextService.set(response)),
+          catchError((error: OpdexHttpError) => {
+            if (error.status === 403) {
+              this._userContextService.remove();
+            }
+
+            return of(undefined);
+          }),
+          finalize(() => this._refreshingToken = false));
+    }
+
+    return of(undefined);
   }
 }

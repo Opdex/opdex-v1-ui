@@ -8,15 +8,15 @@ import { Injectable } from '@angular/core';
 @Injectable({ providedIn: 'root' })
 export class UserContextService {
   private _context = new UserContext();
-  private _userContext$ = new BehaviorSubject<UserContext>(this._context);
+  private _context$ = new BehaviorSubject<UserContext>(this._context);
 
   constructor(
     private _jwtService: JwtService,
     private _storage: StorageService
   ) { }
 
-  get userContext$(): Observable<UserContext> {
-    return this._userContext$.asObservable();
+  get context$(): Observable<UserContext> {
+    return this._context$.asObservable();
   }
 
   get accessToken(): string {
@@ -30,18 +30,18 @@ export class UserContextService {
   set(resp: IAuthResponse): void {
     this._jwtService.set(resp);
     this._context = this._buildUserContext();
-    this._userContext$.next(this._context)
+    this._context$.next(this._context)
   }
 
   remove(): void {
     this._jwtService.remove();
     this._context = new UserContext();
-    this._userContext$.next(this._context);
+    this._context$.next(this._context);
   }
 
   setUserPreferences(wallet: string, preferences: UserContextPreferences): void {
     this._storage.setLocalStorage(wallet, preferences, true);
-    this._userContext$.next(this.userContext)
+    this._context$.next(this.userContext)
   }
 
   private _buildUserContext(): UserContext {

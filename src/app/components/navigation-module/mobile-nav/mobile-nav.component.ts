@@ -19,11 +19,11 @@ export class MobileNavComponent implements OnDestroy {
   subscription = new Subscription();
 
   constructor(
-    private _context: UserContextService,
+    private _userContextService: UserContextService,
     private _authService: AuthService
   ) {
     this.subscription.add(
-      this._context.userContext$
+      this._userContextService.context$
         .subscribe(context => this.context = context));
   }
 

@@ -1,27 +1,31 @@
+import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { AuthService } from '@sharedServices/utility/auth.service';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { catchError, Observable, switchMap, throwError } from "rxjs";
 
+const TOKEN_HEADER_KEY = 'authorization';
+
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private _authService: AuthService) { }
+  constructor(
+    private _authService: AuthService,
+    private _userContextService: UserContextService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req)
       .pipe(catchError(error => {
         if (error instanceof HttpErrorResponse && error.status === 401) {
-          // handle error
-          // try get token
-          // -- if token - use refresh token
-          // ------------- set new access / refresh tokens
-          // ------------- retry request
-          console.log(`401 in interceptor`);
           return this._authService.refresh()
-            .pipe(switchMap(_ => next.handle(req)));
+            .pipe(switchMap(_ => next.handle(this._addTokenHeader(req))));
         }
 
         return throwError(error);
       }));
+  }
+
+  private _addTokenHeader(request: HttpRequest<any>) {
+    const token = `Bearer ${this._userContextService.accessToken}`;
+    return request.clone({ headers: request.headers.set(TOKEN_HEADER_KEY, token) });
   }
 }

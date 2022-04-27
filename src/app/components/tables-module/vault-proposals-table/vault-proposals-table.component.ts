@@ -74,7 +74,7 @@ export class VaultProposalsTableComponent implements OnChanges, OnDestroy {
           .subscribe(_ => this.loading = false));
 
       this.subscription.add(
-        this._userContext.userContext$
+        this._userContext.context$
           .subscribe(context => this.context = context));
     }
   }

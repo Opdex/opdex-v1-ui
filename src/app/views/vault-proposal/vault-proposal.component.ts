@@ -56,7 +56,7 @@ export class VaultProposalComponent {
     private _indexService: IndexService,
     private _sidebar: SidenavService,
     private _route: ActivatedRoute,
-    private _context: UserContextService,
+    private _userContextService: UserContextService,
     private _title: Title,
     private _gaService: GoogleAnalyticsService,
     private _platformApiService: PlatformApiService,
@@ -70,7 +70,7 @@ export class VaultProposalComponent {
     this._gaService.pageView(this._route.routeConfig.path, pageName);
 
     this.subscription.add(
-      this._context.userContext$
+      this._userContextService.context$
         .subscribe(context => this.context = context));
 
     this.subscription.add(

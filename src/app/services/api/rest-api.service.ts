@@ -22,7 +22,7 @@ export class RestApiService {
     protected _http: HttpClient,
     protected _error: ErrorService,
     protected _jwt: JwtService,
-    protected _context: UserContextService,
+    protected _userContextService: UserContextService,
     protected _router: Router,
     protected _env: EnvironmentsService
   ) { }
@@ -73,7 +73,7 @@ export class RestApiService {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error);
     } else if (error.status === 403) {
-      this._context.remove();
+      this._userContextService.remove();
     }
 
     const errors = [];

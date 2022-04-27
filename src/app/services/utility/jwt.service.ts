@@ -28,7 +28,7 @@ export class JwtService {
   }
 
   public get refreshToken(): string {
-    return this._refreshToken || this._storage.getLocalStorage<string>(this._storageKey, false);
+    return this._refreshToken || this._storage.getLocalStorage<string>(this._storageKey);
   }
 
   public get jwt(): JWT {
@@ -39,10 +39,10 @@ export class JwtService {
     return _jwt.isTokenExpired(this.accessToken);
   }
 
-  public set({ accessToken, refreshToken }: IAuthResponse): void {
-    this._accessToken = accessToken;
-    this._refreshToken = refreshToken;
-    this._storage.setLocalStorage(this._storageKey, refreshToken);
+  public set({ access_token, refresh_token }: IAuthResponse): void {
+    this._accessToken = access_token;
+    this._refreshToken = refresh_token;
+    this._storage.setLocalStorage(this._storageKey, refresh_token);
   }
 
   public remove(): void {

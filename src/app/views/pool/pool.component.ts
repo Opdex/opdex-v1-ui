@@ -68,7 +68,7 @@ export class PoolComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.init();
-    this.context$ = this._userContext.userContext$;
+    this.context$ = this._userContext.context$;
 
     this.routerSubscription.add(
       this._router.events.subscribe((evt) => {

@@ -29,13 +29,13 @@ export class TxQuoteSubmitButtonComponent implements OnDestroy {
   subscription = new Subscription();
 
   constructor(
-    private _context: UserContextService,
+    private _userContextService: UserContextService,
     private _indexService: IndexService,
     private _dialog: MatDialog,
     private _authService: AuthService
   ) {
     this.subscription.add(
-      this._context.userContext$
+      this._userContextService.context$
         .subscribe(context => this.context = context));
 
     this.subscription.add(

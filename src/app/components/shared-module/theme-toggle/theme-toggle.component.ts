@@ -22,10 +22,10 @@ export class ThemeToggleComponent implements OnDestroy {
   }
 
   constructor(
-    private _context: UserContextService,
+    private _userContextService: UserContextService,
     private _theme: ThemeService,
   ) {
-    this.subscription.add(this._context.userContext$.subscribe(context => this.wallet = context));
+    this.subscription.add(this._userContextService.context$.subscribe(context => this.wallet = context));
     this.subscription.add(
       this._theme.getTheme()
         .subscribe(theme => {
@@ -49,7 +49,7 @@ export class ThemeToggleComponent implements OnDestroy {
         if (!preferences) preferences = new UserContextPreferences();
 
         preferences.theme = theme;
-        this._context.setUserPreferences(wallet, preferences);
+        this._userContextService.setUserPreferences(wallet, preferences);
       }
     }
   }

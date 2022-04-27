@@ -13,7 +13,7 @@ import { AfterContentChecked, ChangeDetectorRef, Component, HostBinding, OnDestr
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { ThemeService } from './services/utility/theme.service';
 import { MatSidenav } from '@angular/material/sidenav';
-import { of, Subscription, timer } from 'rxjs';
+import { lastValueFrom, of, Subscription, timer } from 'rxjs';
 import { FadeAnimation } from '@sharedServices/animations/fade-animation';
 import { Router, RouterOutlet, RoutesRecognized, NavigationEnd } from '@angular/router';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
@@ -63,7 +63,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     public gaService: GoogleAnalyticsService,
     private _theme: ThemeService,
     private _sidenav: SidenavService,
-    private _context: UserContextService,
+    private _userContextService: UserContextService,
     private _title: Title,
     private _indexService: IndexService,
     private _jwt: JwtService,
@@ -87,12 +87,10 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    this._authService.refresh()
-      .pipe(take(1))
-      .subscribe();
+    await lastValueFrom(this._authService.refresh());
 
     this.subscription.add(
-      this._context.userContext$
+      this._userContextService.context$
         .subscribe(async context => {
           this.context = context;
           if (!context.wallet) this.stopHubConnection();
@@ -106,9 +104,11 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
           switchMap(_ => this._indexService.refreshStatus$()),
           filter(indexStatus => indexStatus.latestBlock.height > 0),
           tap(indexStatus => this.indexStatus = indexStatus),
-          tap(_ => this.validateJwt()),
           switchMap(_ => this._platformApiService.getApiStatus()))
-        .subscribe(({underMaintenance}) => this.maintenance = underMaintenance));
+        .subscribe(async ({underMaintenance}) => {
+          this.maintenance = underMaintenance;
+          await this._validateJwt();
+        }));
 
     // Get theme
     this.subscription.add(this._theme.getTheme().subscribe(theme => this.setTheme(theme)));
@@ -179,13 +179,14 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     this.menuOpen = false;
   }
 
-  private validateJwt(): void {
-    const userIsLoggedIn = !!this._context.userContext.wallet;
+  private async _validateJwt(): Promise<void> {
+    const userIsLoggedIn = !!this._userContextService.userContext.wallet;
     const { isExpired } = this._jwt;
 
     if (userIsLoggedIn && isExpired) {
-      // Todo: Use refresh token
-      this._context.remove();
+      await lastValueFrom(this._authService.refresh());
+      // Stops then onclose auto reconnects w/ new jwt
+      await this.stopHubConnection();
     }
   }
 

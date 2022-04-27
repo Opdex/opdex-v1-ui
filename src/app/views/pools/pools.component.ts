@@ -33,7 +33,7 @@ export class PoolsComponent implements OnInit, OnDestroy {
     private _sidebar: SidenavService,
     private _liquidityPoolsService: LiquidityPoolsService,
     private _indexService: IndexService,
-    private _context: UserContextService
+    private _userContextService: UserContextService
   ) {
     this.topPoolsFilter = new LiquidityPoolsFilter({orderBy: LpOrderBy.Liquidity, limit: 10, direction: 'DESC'});
 
@@ -44,7 +44,7 @@ export class PoolsComponent implements OnInit, OnDestroy {
     }
 
     this.subscription.add(
-      this._context.userContext$
+      this._userContextService.context$
         .subscribe(context => this.context = context));
   }
 

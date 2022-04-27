@@ -30,7 +30,7 @@ export abstract class TxBase {
     this._bottomSheet = this._injector.get(MatBottomSheet);
     this._walletsService = this._injector.get(WalletsService);
     this._vaultsService = this._injector.get(VaultsService);
-    this.context$ = this._userContext.userContext$.subscribe(context => this.context = context);
+    this.context$ = this._userContext.context$.subscribe(context => this.context = context);
   }
 
   quote(quote: ITransactionQuote): void {

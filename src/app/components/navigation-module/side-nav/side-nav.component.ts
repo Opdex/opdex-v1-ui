@@ -34,14 +34,14 @@ export class SideNavComponent implements OnDestroy {
 
   constructor(
     public dialog: MatDialog,
-    private _context: UserContextService,
+    private _userContextService: UserContextService,
     private _indexService: IndexService,
     private _transactionsService: TransactionsService,
     private _router: Router,
     private _env: EnvironmentsService,
     private _authService: AuthService
   ) {
-    this.subscription.add(this._context.userContext$.subscribe(context => this.context = context));
+    this.subscription.add(this._userContextService.context$.subscribe(context => this.context = context));
     this.subscription.add(this._transactionsService.getBroadcastedTransactions$().subscribe(txs => this.pendingTransactions = txs));
     this.latestSyncedBlock$ = this._indexService.latestBlock$;
 
@@ -68,7 +68,7 @@ export class SideNavComponent implements OnDestroy {
   }
 
   logout(): void {
-    this._context.remove();
+    this._userContextService.remove();
     this._router.navigateByUrl('/');
     this.emitRouteChange('/');
   }
