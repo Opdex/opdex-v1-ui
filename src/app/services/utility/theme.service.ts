@@ -13,10 +13,10 @@ export class ThemeService {
 
   constructor(
     private _db: StorageService,
-    private _context: UserContextService
+    private _userContextService: UserContextService
   ) {
     const defaultTheme =
-      this._context.getUserContext()?.preferences?.theme ||
+      this._userContextService.userContext?.preferences?.theme ||
       this._db.getLocalStorage<string>(this.themeKey, false) ||
       environment.defaultTheme;
 

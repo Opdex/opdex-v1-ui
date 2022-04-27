@@ -1,3 +1,4 @@
+import { AuthService } from '@sharedServices/utility/auth.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { environment } from '@environments/environment';
 import { IIndexStatus } from './models/platform-api/responses/index/index-status.interface';
@@ -12,7 +13,7 @@ import { AfterContentChecked, ChangeDetectorRef, Component, HostBinding, OnDestr
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { ThemeService } from './services/utility/theme.service';
 import { MatSidenav } from '@angular/material/sidenav';
-import { of, Subscription, timer } from 'rxjs';
+import { lastValueFrom, of, Subscription, timer } from 'rxjs';
 import { FadeAnimation } from '@sharedServices/animations/fade-animation';
 import { Router, RouterOutlet, RoutesRecognized, NavigationEnd } from '@angular/router';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
@@ -62,7 +63,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     public gaService: GoogleAnalyticsService,
     private _theme: ThemeService,
     private _sidenav: SidenavService,
-    private _context: UserContextService,
+    private _userContextService: UserContextService,
     private _title: Title,
     private _indexService: IndexService,
     private _jwt: JwtService,
@@ -70,7 +71,8 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     private _cdRef: ChangeDetectorRef,
     private _appUpdate: SwUpdate,
     private _env: EnvironmentsService,
-    private _platformApiService: PlatformApiService
+    private _platformApiService: PlatformApiService,
+    private _authService: AuthService
   ) {
     window.addEventListener('resize', this.appHeight);
     this.appHeight();
@@ -85,13 +87,13 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    const storedToken = this._context.getToken();
-    this._context.setToken(storedToken);
+    await lastValueFrom(this._authService.refresh());
+
     this.subscription.add(
-      this._context.getUserContext$()
+      this._userContextService.context$
         .subscribe(async context => {
           this.context = context;
-          if (!context?.wallet) this.stopHubConnection();
+          if (!context.wallet) this.stopHubConnection();
           else if (!this.hubConnection) await this.connectToSignalR();
         }));
 
@@ -102,9 +104,11 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
           switchMap(_ => this._indexService.refreshStatus$()),
           filter(indexStatus => indexStatus.latestBlock.height > 0),
           tap(indexStatus => this.indexStatus = indexStatus),
-          tap(_ => this.validateJwt()),
           switchMap(_ => this._platformApiService.getApiStatus()))
-        .subscribe(({underMaintenance}) => this.maintenance = underMaintenance));
+        .subscribe(async ({underMaintenance}) => {
+          this.maintenance = underMaintenance;
+          await this._validateJwt();
+        }));
 
     // Get theme
     this.subscription.add(this._theme.getTheme().subscribe(theme => this.setTheme(theme)));
@@ -175,12 +179,12 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     this.menuOpen = false;
   }
 
-  private validateJwt(): void {
-    const userIsLoggedIn = !!this._context.getUserContext()?.wallet;
-    const tokenIsExpired = this._jwt.isTokenExpired();
+  private async _validateJwt(): Promise<void> {
+    const userIsLoggedIn = !!this._userContextService.userContext.wallet;
+    const { isExpired } = this._jwt;
 
-    if (userIsLoggedIn && tokenIsExpired) {
-      this._context.setToken('');
+    if (userIsLoggedIn && isExpired) {
+      await lastValueFrom(this._authService.refresh());
     }
   }
 
@@ -217,7 +221,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   private async connectToSignalR(): Promise<void> {
     console.log('connecting to signalr')
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(`${this._env.platformApiUrl}/socket`, { accessTokenFactory: () => this._jwt.getToken() })
+      .withUrl(`${this._env.platformApiUrl}/socket`, { accessTokenFactory: () => this._jwt.accessToken })
       .configureLogging(LogLevel.Warning)
       .withAutomaticReconnect()
       .build();
@@ -240,7 +244,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
 
     this.hubConnection.onclose(async () => {
       console.log('closing connection');
-      if (this.context?.wallet && !this._jwt.isTokenExpired()) {
+      if (this.context?.wallet && !this._jwt.isExpired) {
         await this.hubConnection.start();
       }
     });

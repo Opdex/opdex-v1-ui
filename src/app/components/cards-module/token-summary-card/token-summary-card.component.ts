@@ -37,7 +37,7 @@ export class TokenSummaryCardComponent implements OnDestroy {
         .subscribe(block => this.latestBlock = block.height));
 
     this.subscription.add(
-      this._userContextService.getUserContext$()
+      this._userContextService.context$
         .subscribe(context => this.context = context));
   }
 

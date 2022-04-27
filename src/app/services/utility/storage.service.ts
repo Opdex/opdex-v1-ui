@@ -2,41 +2,35 @@ import { EnvironmentsService } from './environments.service';
 import { Injectable } from '@angular/core';
 import { Network } from 'src/app/enums/networks';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class StorageService {
   keyPrefix: string;
 
   constructor(private _env: EnvironmentsService) {
-    const isDevnet = this._env.network === Network.Devnet;
-
-    const network = isDevnet
-      ? this._env.network.substring(0, 3).toLowerCase()
-      : this._env.network.substring(0, 4).toLowerCase();
+    const network = this._env.network === Network.Devnet
+      ? 'dev'
+      : this._env.network === Network.Testnet
+        ? 'test'
+        : 'main';
 
     this.keyPrefix = `odx-${network}-`;
   }
 
-  private keyWithPrefix(key: string): string {
-    return `${this.keyPrefix}${key}`;
-  }
-
   /**
-   * @summary Get a value form local storage based on the provided key
+   * Get a value form local storage based on the provided key
    * @param key The key to search local storage for
    * @param parse Defaults to true, set to false to not parse the value (e.g. expecting a string response)
    */
   getLocalStorage<T>(key: string, parse: boolean = true): T {
-    const result = <string>localStorage.getItem(this.keyWithPrefix(key));
+    const result = <string>localStorage.getItem(this._storageKey(key));
 
-    return parse === true
+    return parse === true && result
       ? JSON.parse(result)
       : result;
   }
 
   /**
-   * @summary Set a value in local storage based on the provided key and data
+   * Set a value in local storage based on the provided key and data
    * @param key The key to store in local storage by
    * @param data The data to persist
    * @param stringify Defaults to true, can be set to false if the provided data is already a string
@@ -46,32 +40,32 @@ export class StorageService {
       ? JSON.stringify(data)
       : data as string;
 
-    localStorage.setItem(this.keyWithPrefix(key), dataString);
+    localStorage.setItem(this._storageKey(key), dataString);
   }
 
   /**
-   * @summary Remove an item from local storage
+   * Remove an item from local storage
    * @param key The key to remove from local storage
    */
   removeLocalStorage(key: string): void {
-    localStorage.removeItem(this.keyWithPrefix(key));
+    localStorage.removeItem(this._storageKey(key));
   }
 
   /**
-   * @summary Get a value form session storage based on the provided key
+   * Get a value form session storage based on the provided key
    * @param key The key to search session storage for
    * @param parse Defaults to true, set to false to not parse the value (e.g. expecting a string response)
    */
   getSessionStorage<T>(key: string, parse: boolean = true): T {
-    const result = <string>sessionStorage.getItem(this.keyWithPrefix(key));
+    const result = <string>sessionStorage.getItem(this._storageKey(key));
 
-    return parse === true
+    return parse === true && result
       ? JSON.parse(result)
       : result;
   }
 
   /**
-   * @summary Set a value in session storage based on the provided key and data
+   * Set a value in session storage based on the provided key and data
    * @param key The key to store in session storage by
    * @param data The data to persist
    * @param stringify Defaults to true, can be set to false if the provided data is already a string
@@ -81,14 +75,18 @@ export class StorageService {
       ? JSON.stringify(data)
       : data as string;
 
-    sessionStorage.setItem(this.keyWithPrefix(key), dataString);
+    sessionStorage.setItem(this._storageKey(key), dataString);
   }
 
   /**
-   * @summary Remove an item from session storage
+   * Remove an item from session storage
    * @param key The key to remove from session storage
    */
   removeSessionStorage(key: string): void {
-    sessionStorage.removeItem(this.keyWithPrefix(key));
+    sessionStorage.removeItem(this._storageKey(key));
+  }
+
+  private _storageKey(key: string): string {
+    return `${this.keyPrefix}${key}`;
   }
 }

@@ -1,3 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
+import { catchError, finalize } from 'rxjs/operators';
+import { IAuthResponse } from '@sharedModels/auth-api/auth-response.interface';
+import { JwtService } from '@sharedServices/utility/jwt.service';
+import { AuthRequest } from '@sharedModels/auth-api/auth-request';
 import { AuthVerification } from '@sharedModels/ui/auth-verification';
 import { UserContextService } from './user-context.service';
 import { AuthApiService } from '@sharedServices/api/auth-api.service';
@@ -7,6 +12,8 @@ import { Injectable } from "@angular/core";
 import { v4 as uuidv4 } from 'uuid';
 import pkceChallenge from "pkce-challenge";
 import { encode, decode } from 'url-safe-base64'
+import { lastValueFrom, Observable, of, tap } from 'rxjs';
+import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 
 const AUTH_STATE: string = 'auth-state';
@@ -14,16 +21,19 @@ const CODE_VERIFIER: string = 'code-verifier';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
+  private _refreshingToken: boolean = false;
+
   constructor(
     private _storage: StorageService,
     private _env: EnvironmentsService,
     private _authApi: AuthApiService,
-    private _context: UserContextService
+    private _userContextService: UserContextService,
+    private _jwt: JwtService
   ) { }
 
-  login(): void {
+  prepareLogin(): void {
     const challenge = pkceChallenge();
-    const stateEncoded = btoa(encode(JSON.stringify({
+    const stateEncoded = encode(window.btoa(JSON.stringify({
       nonce: uuidv4().replace(/-/g, ''),
       route: window.location.href.replace('login', 'wallet')
     })));
@@ -34,24 +44,52 @@ export class AuthService {
     window.location.href = this._env.getAuthRoute(stateEncoded, challenge.code_challenge);
   }
 
-  async verify(accessCode: string, state: string): Promise<AuthVerification> {
+  async verifyLogin(accessCode: string, state: string): Promise<AuthVerification> {
     if (!accessCode) return new AuthVerification({error: 'Code must be provided!'});
 
     const stateEncoded = this._storage.getLocalStorage<string>(AUTH_STATE);
+    this._storage.removeLocalStorage(AUTH_STATE);
+
     const codeVerifier = this._storage.getLocalStorage<string>(CODE_VERIFIER);
+    this._storage.removeLocalStorage(CODE_VERIFIER);
 
     if (stateEncoded !== state) return new AuthVerification({error: `Invalid state!`});
 
     try {
-      const token = await this._authApi.verifyAccessCode(accessCode, codeVerifier).toPromise();
+      const request = new AuthRequest(accessCode, codeVerifier);
+      const response = await lastValueFrom(this._authApi.auth(request));
 
-      this._context.setToken(token);
-      this._storage.removeLocalStorage(AUTH_STATE);
-      this._storage.removeLocalStorage(CODE_VERIFIER);
+      this._userContextService.set(response);
 
-      return new AuthVerification({route: new URL(JSON.parse(atob(decode(stateEncoded))).route)});
+      return new AuthVerification({route: new URL(JSON.parse(decode(window.atob(stateEncoded))).route)});
     } catch(error) {
       return new AuthVerification({error});
     }
+  }
+
+  refresh(): Observable<IAuthResponse> {
+    if (!this._refreshingToken) {
+      this._refreshingToken = true;
+
+      const { refreshToken } = this._jwt;
+
+      if (!refreshToken) return of(undefined);
+
+      const request = new AuthRequest(null, null, refreshToken);
+
+      return this._authApi.auth(request)
+        .pipe(
+          tap(response => this._userContextService.set(response)),
+          catchError((error: OpdexHttpError) => {
+            if (error.status === 403) {
+              this._userContextService.remove();
+            }
+
+            return of(undefined);
+          }),
+          finalize(() => this._refreshingToken = false));
+    }
+
+    return of(undefined);
   }
 }

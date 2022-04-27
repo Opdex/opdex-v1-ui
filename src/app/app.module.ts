@@ -1,3 +1,4 @@
+import { AuthInterceptor } from './services/api/auth.interceptor';
 import { TxFeedModule } from './components/tx-feed-module/tx-feed.module';
 import { ControlsModule } from '@sharedComponents/controls-module/controls.module';
 import { MatInputModule } from '@angular/material/input';
@@ -6,7 +7,7 @@ import { JwtService } from './services/utility/jwt.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -47,7 +48,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MiningGovernanceComponent } from './views/mining-governance/mining-governance.component';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
-import { jwtOptionsFactory } from '@sharedServices/utility/jwt.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -62,6 +62,7 @@ import { VaultComponent } from './views/vault/vault.component';
 import { VaultProposalComponent } from './views/vault-proposal/vault-proposal.component';
 import { checkForUpdates } from '@sharedServices/check-for-updates';
 import { LoginComponent } from './views/login/login.component';
+import { jwtOptionsFactory } from '@sharedServices/jwt-options-factory';
 
 @NgModule({
   declarations: [
@@ -141,14 +142,10 @@ import { LoginComponent } from './views/login/login.component';
     },
     {
       provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS,
-      useValue: {
-        hasBackdrop: true
-      }
+      useValue: { hasBackdrop: true }
     },
-    {
-      provide: ErrorHandler,
-      useClass: ErrorMiddlewareService,
-    }
+    { provide: ErrorHandler, useClass: ErrorMiddlewareService },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

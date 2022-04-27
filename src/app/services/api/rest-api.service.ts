@@ -22,7 +22,7 @@ export class RestApiService {
     protected _http: HttpClient,
     protected _error: ErrorService,
     protected _jwt: JwtService,
-    protected _context: UserContextService,
+    protected _userContextService: UserContextService,
     protected _router: Router,
     protected _env: EnvironmentsService
   ) { }
@@ -55,28 +55,25 @@ export class RestApiService {
 
   protected put<T>(endpoint: string, payload: any, options: object = {}): Observable<T> {
     return this._http.put<T>(endpoint, payload, options)
-      .pipe(
-        catchError(error => this.handleError(error)));
+      .pipe(catchError(error => this.handleError(error)));
   }
 
   protected patch<T>(endpoint: string, payload: any, options: object = {}): Observable<T> {
     return this._http.patch<T>(endpoint, payload, options)
-      .pipe(
-        catchError(error => this.handleError(error)));
+      .pipe(catchError(error => this.handleError(error)));
   }
 
   protected delete<T>(endpoint: string, options: object = {}): Observable<T> {
     return this._http.delete<T>(endpoint, options)
-      .pipe(
-        catchError(error => this.handleError(error)));
+      .pipe(catchError(error => this.handleError(error)));
   }
 
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error);
-    } else if (error.status === 401) {
-      this._context.setToken('');
+    } else if (error.status === 403) {
+      this._userContextService.remove();
     }
 
     const errors = [];

@@ -45,7 +45,7 @@ export class WalletPreviewComponent implements OnDestroy {
     private _indexService: IndexService,
     private _miningPoolService: MiningPoolsService
   ) {
-    this.subscription.add(this._userContext.getUserContext$()
+    this.subscription.add(this._userContext.context$
       .pipe(
         tap(context => this.context = context),
         switchMap(_ => this.getWalletSummary()))

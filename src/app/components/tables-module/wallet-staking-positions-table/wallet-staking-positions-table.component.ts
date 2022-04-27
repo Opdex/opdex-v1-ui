@@ -16,7 +16,7 @@ import { ICursor } from '@sharedModels/platform-api/responses/cursor.interface';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
-import { Subscription, of, Observable, forkJoin } from 'rxjs';
+import { Subscription, of, Observable, forkJoin, lastValueFrom } from 'rxjs';
 import { switchMap, take, map } from 'rxjs/operators';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 
@@ -83,7 +83,7 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
   }
 
   async refreshPosition(liquidityPoolAddress: string): Promise<void> {
-    const {wallet} = this._userContext.getUserContext();
+    const {wallet} = this._userContext.userContext;
 
     this.dataSource.data = this.dataSource.data.map(item => {
       if (item.liquidityPoolAddress === liquidityPoolAddress) {
@@ -93,11 +93,11 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
       return item;
     });
 
-    await this._walletsService.refreshStakingPosition(wallet, liquidityPoolAddress).toPromise();
+    await lastValueFrom(this._walletsService.refreshStakingPosition(wallet, liquidityPoolAddress));
   }
 
   private getStakingPositions$(cursor?: string): Observable<any> {
-    const context = this._userContext.getUserContext();
+    const context = this._userContext.userContext;
     if (!!context.wallet === false) return of(null);
 
     this.filter.cursor = cursor;
