@@ -185,8 +185,6 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
 
     if (userIsLoggedIn && isExpired) {
       await lastValueFrom(this._authService.refresh());
-      // Stops then onclose auto reconnects w/ new jwt
-      await this.stopHubConnection();
     }
   }
 
