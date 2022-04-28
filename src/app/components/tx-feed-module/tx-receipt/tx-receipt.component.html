@@ -14,7 +14,12 @@
       </div>
 
       <div class="flex-row-center-between w-100">
-        <small class="b-400">{{tx?.transactionSummary}}</small>
+        <small class="b-400">
+          <span *ngIf="tx?.transactionSummary === 'Unknown' &&
+                      (quote?.method === 'CollectStakingRewards' || quote?.method === 'CollectMiningRewards');
+                      else unknown">Collect Rewards</span>
+          <ng-template #unknown>{{tx?.transactionSummary}}</ng-template>
+        </small>
 
         <div class="flex-row-center">
           <small *ngIf="showTimeAgo">{{tx?.block?.medianTime | timeago}}</small>
@@ -50,8 +55,14 @@
 
     <ng-template #invalid>
       <div class="icon-container-offset flex-row-center">
-        <span *ngIf="tx.success">Unable to read transaction summary, no transaction events found.</span>
-        <span *ngIf="!tx.success">{{tx.error.friendly}}</span>
+        <ng-container *ngIf="quote?.method !== 'CollectStakingRewards' && quote?.method !== 'CollectMiningRewards'; else noRewards">
+          <span *ngIf="tx.success">Unable to read transaction summary, no transaction events found.</span>
+          <span *ngIf="!tx.success">{{tx.error.friendly}}</span>
+        </ng-container>
+
+        <ng-template #noRewards>
+          No rewards to collect.
+        </ng-template>
       </div>
     </ng-template>
 

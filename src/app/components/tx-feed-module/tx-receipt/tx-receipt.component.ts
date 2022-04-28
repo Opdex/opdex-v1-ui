@@ -1,3 +1,4 @@
+import { ITransactionQuoteRequest } from '@sharedModels/platform-api/requests/transactions/transaction-quote-request';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
@@ -14,6 +15,7 @@ import { Network } from 'src/app/enums/networks';
 })
 export class TxReceiptComponent {
   @Input() tx: TransactionReceipt;
+  @Input() quote: ITransactionQuoteRequest;
   @Input() showBottomDivider: boolean = false;
   @Input() showTimeAgo: boolean = true;
   @Input() collapsed = true;

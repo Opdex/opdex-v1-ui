@@ -7,6 +7,7 @@
     <ng-container *ngIf="quoteReceipt.success">
       <opdex-tx-receipt
         [tx]="quoteReceipt"
+        [quote]="quoteRequest"
         [showBottomDivider]="false"
         [showTimeAgo]="false"
         [collapsed]="false">

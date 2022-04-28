@@ -47,7 +47,6 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
   crsInMin: FixedDecimal;
   srcInMin: FixedDecimal;
   deadlineBlock: number;
-  allowanceTransaction$: Subscription;
   latestSyncedBlock$: Subscription;
   latestBlock: number;
   crsPercentageSelected: string;
@@ -303,7 +302,6 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
   ngOnDestroy(): void {
     this.destroyContext$();
     this.subscription.unsubscribe();
-    if (this.allowanceTransaction$) this.allowanceTransaction$.unsubscribe();
     if (this.latestSyncedBlock$) this.latestSyncedBlock$.unsubscribe();
   }
 }
