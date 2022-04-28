@@ -51,52 +51,6 @@
     <div class="row">
       <div class="col-12 col-lg-4 col-xl-3">
         <opdex-liquidity-pool-summary-card [pool]="pool"></opdex-liquidity-pool-summary-card>
-
-        <!-- <ng-container *ngIf="context$ | async as context">
-          <opdex-card *ngIf="context.wallet">
-            <div class="flex-row-center-between">
-              <p class="mb-1 b-300 flex-row-center">
-                <mat-icon color="primary" class="tiny mr-1">{{icons.wallet}}</mat-icon>
-                Positions
-              </p>
-
-              <small>
-                <a class="no-decoration small flex-row-center-center" href="javascript:void(0)" (click)="getWalletSummary()">
-                  Refresh <mat-icon class="ml-1 tiny">{{icons.refresh}}</mat-icon>
-                </a>
-              </small>
-            </div>
-
-            <ng-container *ngIf="!!positions && positions.length > 0; else loadingPositions">
-              <ng-container *ngFor="let position of positions; let i = index; trackBy: positionsTrackBy">
-                <div class="flex-row-center-between">
-                  <p class="mb-0 sub-heading">{{position?.position}}</p>
-                  <opdex-number [value]="position?.amount" [suffix]="position?.token?.symbol" [short]="true"></opdex-number>
-                </div>
-              </ng-container>
-            </ng-container>
-
-            <ng-template #loadingPositions>
-              <div class="skeleton-bg w-50 mb-1"></div>
-
-              <div class="flex-row-center">
-                <div class="w-50">
-                  <div class="skeleton-bg w-50 mb-1"></div>
-                  <div class="skeleton-bg w-50 mb-1"></div>
-                  <div class="skeleton-bg w-50 mb-1"></div>
-                  <div class="skeleton-bg w-50 mb-1"></div>
-                </div>
-
-                <div class="w-50 flex-column-end">
-                  <div class="skeleton-bg w-50 mb-1"></div>
-                  <div class="skeleton-bg w-50 mb-1"></div>
-                  <div class="skeleton-bg w-50 mb-1"></div>
-                  <div class="skeleton-bg w-50 mb-1"></div>
-                </div>
-              </div>
-            </ng-template>
-          </opdex-card>
-        </ng-container> -->
       </div>
 
       <div class="col-12 col-lg-8 col-xl-9">

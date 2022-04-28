@@ -1,8 +1,6 @@
 import { TokenSnapshotHistory } from '@sharedModels/ui/tokens/token-history';
 import { MarketToken } from '@sharedModels/ui/tokens/market-token';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
-import { AddressPosition } from '@sharedModels/address-position';
-import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { ILiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
@@ -23,7 +21,6 @@ import { HistoryFilter } from '@sharedModels/platform-api/requests/history-filte
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { LiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
-import { UserContext } from '@sharedModels/user-context';
 
 @Component({
   selector: 'opdex-token',
@@ -34,7 +31,6 @@ export class TokenComponent implements OnInit {
   tokenAddress: string;
   token: MarketToken;
   liquidityPool: LiquidityPool;
-  balance: AddressPosition;
   subscription = new Subscription();
   transactionEventTypes = TransactionEventTypes;
   icons = Icons;
@@ -42,7 +38,6 @@ export class TokenComponent implements OnInit {
   transactionsRequest: ITransactionsRequest;
   routerSubscription = new Subscription();
   historyFilter: HistoryFilter;
-  context: UserContext;
   crsPerOlpt: FixedDecimal;
   srcPerOlpt: FixedDecimal;
   isCurrentMarket: boolean;
@@ -58,7 +53,6 @@ export class TokenComponent implements OnInit {
     private _indexService: IndexService,
     private _lpService: LiquidityPoolsService,
     private _envService: EnvironmentsService,
-    private _userContextService: UserContextService
   ) { }
 
   ngOnInit(): void {
@@ -83,7 +77,6 @@ export class TokenComponent implements OnInit {
     this.subscription.add(
       this._indexService.latestBlock$
         .pipe(
-          switchMap(_ => this._userContextService.context$.pipe(tap(context => this.context = context))),
           switchMap(_ => this.getToken()),
           tap(_ => this.historyFilter?.refresh()),
           switchMap(_ => this.getTokenHistory()),
