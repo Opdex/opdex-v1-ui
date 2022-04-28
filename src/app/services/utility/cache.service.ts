@@ -1,7 +1,7 @@
 import { Injector } from '@angular/core';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { Observable, BehaviorSubject, of } from "rxjs";
-import { switchMap, shareReplay } from "rxjs/operators";
+import { switchMap, shareReplay, skip } from "rxjs/operators";
 
 interface ICacheRecord {
   observable: Observable<any>;
@@ -50,6 +50,9 @@ export abstract class CacheService {
     if (blockHeight > this.cache[key].lastUpdateBlock) {
       this.cache[key].lastUpdateBlock = blockHeight;
       this.cache[key].subject.next();
+
+      // Return but skip 1 result, the skipped result will be the initial cached Behavior subject result (stale)
+      return this.cache[key].observable.pipe(skip(1));
     }
 
     // Return cache item observable
