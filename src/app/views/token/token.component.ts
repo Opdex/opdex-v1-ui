@@ -1,11 +1,8 @@
 import { TokenSnapshotHistory } from '@sharedModels/ui/tokens/token-history';
 import { MarketToken } from '@sharedModels/ui/tokens/market-token';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
-import { AddressPosition } from '@sharedModels/address-position';
-import { UserContextService } from '@sharedServices/utility/user-context.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { ILiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
-import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { SidenavService } from '@sharedServices/utility/sidenav.service';
@@ -24,7 +21,6 @@ import { HistoryFilter } from '@sharedModels/platform-api/requests/history-filte
 import { TransactionEventTypes } from 'src/app/enums/transaction-events';
 import { LiquidityPoolsFilter } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
-import { UserContext } from '@sharedModels/user-context';
 
 @Component({
   selector: 'opdex-token',
@@ -35,7 +31,6 @@ export class TokenComponent implements OnInit {
   tokenAddress: string;
   token: MarketToken;
   liquidityPool: LiquidityPool;
-  balance: AddressPosition;
   subscription = new Subscription();
   transactionEventTypes = TransactionEventTypes;
   icons = Icons;
@@ -43,7 +38,6 @@ export class TokenComponent implements OnInit {
   transactionsRequest: ITransactionsRequest;
   routerSubscription = new Subscription();
   historyFilter: HistoryFilter;
-  context: UserContext;
   crsPerOlpt: FixedDecimal;
   srcPerOlpt: FixedDecimal;
   isCurrentMarket: boolean;
@@ -58,9 +52,7 @@ export class TokenComponent implements OnInit {
     private _sidebar: SidenavService,
     private _indexService: IndexService,
     private _lpService: LiquidityPoolsService,
-    private _walletService: WalletsService,
     private _envService: EnvironmentsService,
-    private _userContextService: UserContextService
   ) { }
 
   ngOnInit(): void {
@@ -85,12 +77,10 @@ export class TokenComponent implements OnInit {
     this.subscription.add(
       this._indexService.latestBlock$
         .pipe(
-          switchMap(_ => this._userContextService.context$.pipe(tap(context => this.context = context))),
           switchMap(_ => this.getToken()),
           tap(_ => this.historyFilter?.refresh()),
           switchMap(_ => this.getTokenHistory()),
-          switchMap(_ => this.tryGetLiquidityPool()),
-          switchMap(_ => this.tryGetWalletBalance()))
+          switchMap(_ => this.tryGetLiquidityPool()))
         .subscribe());
   }
 
@@ -178,20 +168,6 @@ export class TokenComponent implements OnInit {
         const pool = pools?.results?.length ? pools.results[0] : null;
         this.liquidityPool = pool;
         return pool;
-      }));
-  }
-
-  private tryGetWalletBalance(): Observable<AddressPosition> {
-    if (!!this.context?.wallet === false) return of(null);
-
-    return this._walletService.getBalance(this.context.wallet, this.token.address)
-      .pipe(
-        catchError(_ => of({balance: '0', modifiedBlock: 0})),
-        map(balance => {
-        const position = new AddressPosition(this.context.wallet, this.token, 'Balance', new FixedDecimal(balance.balance, this.token.decimals), balance.modifiedBlock);
-
-        this.balance = position;
-        return position;
       }));
   }
 

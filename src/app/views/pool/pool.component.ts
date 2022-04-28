@@ -1,24 +1,18 @@
 import { LiquidityPoolSnapshotHistory } from '@sharedModels/ui/liquidity-pools/liquidity-pool-history';
 import { UserContext } from '@sharedModels/user-context';
-import { Token } from '@sharedModels/ui/tokens/token';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { AddressPosition } from '@sharedModels/address-position';
-import { WalletsService } from '@sharedServices/platform/wallets.service';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { ITransactionsRequest } from "@sharedModels/platform-api/requests/transactions/transactions-filter";
-import { IAddressBalance } from "@sharedModels/platform-api/responses/wallets/address-balance.interface";
 import { ISidenavMessage, TransactionView } from "@sharedModels/transaction-view";
 import { LiquidityPoolsService } from "@sharedServices/platform/liquidity-pools.service";
 import { SidenavService } from "@sharedServices/utility/sidenav.service";
 import { UserContextService } from "@sharedServices/utility/user-context.service";
-import { Observable, Subscription, zip, of } from "rxjs";
-import { tap, switchMap, catchError, map, delay, take } from "rxjs/operators";
-import { IAddressMining } from "@sharedModels/platform-api/responses/wallets/address-mining.interface";
-import { IAddressStaking } from '@sharedModels/platform-api/responses/wallets/address-staking.interface';
-import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
+import { Observable, Subscription, of } from "rxjs";
+import { tap, switchMap, catchError, delay, take } from "rxjs/operators";
 import { Title } from '@angular/platform-browser';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
 import { Icons } from 'src/app/enums/icons';
@@ -57,7 +51,6 @@ export class PoolComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _title: Title,
     private _gaService: GoogleAnalyticsService,
-    private _walletService: WalletsService,
     private _indexService: IndexService,
     private _env: EnvironmentsService
   ) {
@@ -92,12 +85,7 @@ export class PoolComponent implements OnInit, OnDestroy {
           switchMap(_ => this.getLiquidityPool()),
           tap(_ => this.historyFilter?.refresh()),
           switchMap(_ => this.getPoolHistory())
-        ).subscribe(_ => {
-          // Only need to do this once on page load
-          // if (!this.positions?.length) {
-          //   this.getWalletSummary();
-          // }
-        }));
+        ).subscribe());
   }
 
   openTransactionSidebar(view: TransactionView, childView: string = null) {
@@ -156,51 +144,6 @@ export class PoolComponent implements OnInit, OnDestroy {
         })
       );
   }
-
-  // private getTokenBalance(walletAddress: string, token: Token): Observable<AddressPosition> {
-  //   return this._walletService.getBalance(walletAddress, token.address)
-  //       .pipe(
-  //         catchError(() => of(null)),
-  //         map((result: IAddressBalance) => new AddressPosition(walletAddress, token, 'Balance', new FixedDecimal(result?.balance || '0', token.decimals))));
-  // }
-
-  // private getStakingPosition(walletAddress: string, liquidityPoolAddress: string, token: Token): Observable<AddressPosition> {
-  //   return this._walletService.getStakingPosition(walletAddress, liquidityPoolAddress)
-  //       .pipe(
-  //         catchError(() => of(null)),
-  //         map((result: IAddressStaking) => new AddressPosition(walletAddress, token, 'Staking', new FixedDecimal(result?.amount || '0', token.decimals))));
-  // }
-
-  // private getMiningPosition(walletAddress: string, miningPoolAddress: string, token: Token): Observable<AddressPosition> {
-  //   return this._walletService.getMiningPosition(walletAddress, miningPoolAddress)
-  //       .pipe(
-  //         catchError(() => of(null)),
-  //         map((result: IAddressMining) => new AddressPosition(walletAddress, token, 'Mining', new FixedDecimal(result?.amount || '0', token.decimals))));
-  // }
-
-  // getWalletSummary(): void {
-  //   const context = this._userContext.userContext;
-
-  //   if (context.wallet && this.pool) {
-  //     const lpToken = this.pool.tokens.lp;
-
-  //     const combo = [
-  //       this.getTokenBalance(context.wallet, this.pool.tokens.crs),
-  //       this.getTokenBalance(context.wallet, this.pool.tokens.src),
-  //       this.getTokenBalance(context.wallet, lpToken)
-  //     ];
-
-  //     if (this.pool.hasStaking) {
-  //       combo.push(this.getStakingPosition(context.wallet, this.poolAddress, this.pool.tokens.staking));
-  //     }
-
-  //     if (this.pool.hasMining) {
-  //       combo.push(this.getMiningPosition(context.wallet, this.pool.miningPool.address, lpToken));
-  //     }
-
-  //     zip(...combo).pipe(tap(results => this.positions = results), take(1)).subscribe();
-  //   }
-  // }
 
   private getPoolHistory(): Observable<ILiquidityPoolSnapshotHistoryResponse> {
     if (!this.pool) return of(null);
