@@ -9,11 +9,11 @@ import { Icons } from 'src/app/enums/icons';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'opdex-pool-preview',
-  templateUrl: './pool-preview.component.html',
-  styleUrls: ['./pool-preview.component.scss']
+  selector: 'opdex-liquidity-pool-selector',
+  templateUrl: './liquidity-pool-selector.component.html',
+  styleUrls: ['./liquidity-pool-selector.component.scss']
 })
-export class PoolPreviewComponent implements OnDestroy {
+export class LiquidityPoolSelectorComponent implements OnDestroy {
   @Input() pool: LiquidityPool;
   @Input() view: TransactionView;
   @Output() onPoolChange: EventEmitter<LiquidityPool> = new EventEmitter();

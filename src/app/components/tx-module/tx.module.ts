@@ -38,7 +38,7 @@ import { TxStakeStopComponent } from './tx-stake/tx-stake-stop/tx-stake-stop.com
 import { TxProvideAddComponent } from './tx-provide/tx-provide-add/tx-provide-add.component';
 import { TxProvideRemoveComponent } from './tx-provide/tx-provide-remove/tx-provide-remove.component';
 import { TxAllowanceComponent } from './tx-allowance/tx-allowance.component';
-import { PoolPreviewComponent } from './shared/pool-preview/pool-preview.component';
+import { LiquidityPoolSelectorComponent } from './shared/liquidity-pool-selector/liquidity-pool-selector.component';
 import { AllowanceValidationComponent } from './shared/allowance-validation/allowance-validation.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { SharedModule } from '@sharedComponents/shared-module/shared.module';
@@ -71,7 +71,7 @@ import { TxQuoteErrorComponent } from './shared/tx-quote-error/tx-quote-error.co
     TxProvideAddComponent,
     TxProvideRemoveComponent,
     TxAllowanceComponent,
-    PoolPreviewComponent,
+    LiquidityPoolSelectorComponent,
     AllowanceValidationComponent,
     ReviewQuoteComponent,
     TxCreatePoolComponent,

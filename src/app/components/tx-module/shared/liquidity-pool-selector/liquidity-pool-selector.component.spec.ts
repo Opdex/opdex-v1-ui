@@ -1,20 +1,20 @@
 // import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-// import { PoolPreviewComponent } from './pool-preview.component';
+// import { LiquidityPoolSelectorComponent } from './pool-preview.component';
 
-// describe('PoolPreviewComponent', () => {
-//   let component: PoolPreviewComponent;
-//   let fixture: ComponentFixture<PoolPreviewComponent>;
+// describe('LiquidityPoolSelectorComponent', () => {
+//   let component: LiquidityPoolSelectorComponent;
+//   let fixture: ComponentFixture<LiquidityPoolSelectorComponent>;
 
 //   beforeEach(async () => {
 //     await TestBed.configureTestingModule({
-//       declarations: [ PoolPreviewComponent ]
+//       declarations: [ LiquidityPoolSelectorComponent ]
 //     })
 //     .compileComponents();
 //   });
 
 //   beforeEach(() => {
-//     fixture = TestBed.createComponent(PoolPreviewComponent);
+//     fixture = TestBed.createComponent(LiquidityPoolSelectorComponent);
 //     component = fixture.componentInstance;
 //     fixture.detectChanges();
 //   });
