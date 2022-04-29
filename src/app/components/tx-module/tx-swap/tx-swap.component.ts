@@ -8,7 +8,6 @@ import { LiquidityPoolsFilter, ILiquidityPoolsFilter } from '@sharedModels/platf
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { ISwapAmountInQuoteResponse } from '@sharedModels/platform-api/responses/tokens/swap-amount-in-quote-response.interface';
-import { IndexService } from '@sharedServices/platform/index.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { Component, Input, OnDestroy, Injector, OnChanges } from '@angular/core';
@@ -79,7 +78,6 @@ export class TxSwapComponent extends TxBase implements OnChanges, OnDestroy {
   constructor(
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
-    private _indexService: IndexService,
     private _liquidityPoolsService: LiquidityPoolsService,
     private _env: EnvironmentsService,
     private _marketsService: MarketsService,

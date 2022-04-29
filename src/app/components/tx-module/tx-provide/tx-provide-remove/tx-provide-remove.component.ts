@@ -1,6 +1,5 @@
 import { map } from 'rxjs/operators';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
-import { IndexService } from '@sharedServices/platform/index.service';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { Component, Input, Injector, OnDestroy, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -66,7 +65,6 @@ export class TxProvideRemoveComponent extends TxBase implements OnChanges, OnDes
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
     protected _injector: Injector,
-    private _indexService: IndexService,
     private _env: EnvironmentsService
   ) {
     super(_injector);

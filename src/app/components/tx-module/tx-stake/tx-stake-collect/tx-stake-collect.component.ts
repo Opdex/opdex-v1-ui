@@ -1,5 +1,4 @@
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
-import { IndexService } from '@sharedServices/platform/index.service';
 import { CollectStakingRewardsRequest } from '@sharedModels/platform-api/requests/liquidity-pools/collect-staking-rewards-request';
 import { Component, Input, OnChanges, Injector, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
@@ -30,8 +29,7 @@ export class TxStakeCollectComponent extends TxBase implements OnChanges, OnDest
   constructor(
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
-    private _indexService: IndexService,
-    protected _injector: Injector,
+    protected _injector: Injector
   ) {
     super(_injector);
 

@@ -1,3 +1,4 @@
+import { IndexService } from '@sharedServices/platform/index.service';
 import { Token } from '@sharedModels/ui/tokens/token';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { VaultsService } from '@sharedServices/platform/vaults.service';
@@ -9,7 +10,7 @@ import { UserContextService } from "@sharedServices/utility/user-context.service
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { Observable, of, Subscription } from 'rxjs';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
 import { UserContext } from '@sharedModels/user-context';
 
@@ -17,10 +18,14 @@ export abstract class TxBase {
   context: UserContext;
   context$: Subscription;
   quoteErrors: string[] = [];
+  lastCrsUpdateHeight = 0;
+  lastCrsResult = false;
+  lastCrsRequest: FixedDecimal;
 
   private _userContext: UserContextService;
   private _bottomSheet: MatBottomSheet;
   private _walletsService: WalletsService;
+  protected _indexService: IndexService;
   protected _vaultsService: VaultsService;
 
   constructor(
@@ -30,6 +35,7 @@ export abstract class TxBase {
     this._bottomSheet = this._injector.get(MatBottomSheet);
     this._walletsService = this._injector.get(WalletsService);
     this._vaultsService = this._injector.get(VaultsService);
+    this._indexService = this._injector.get(IndexService);
     this.context$ = this._userContext.context$.subscribe(context => this.context = context);
   }
 
@@ -54,9 +60,25 @@ export abstract class TxBase {
     if (!token) return of(false);
     if (amountToSpend.bigInt === BigInt(0)) return of(true);
 
+    // Specifically throttle CRS balance checks
+    const { height: latestHeight } = this._indexService.latestBlock;
+    const hasBeenCheckedPreviously = this.lastCrsUpdateHeight > 0;
+    const lessThanFiveBlocks = latestHeight - this.lastCrsUpdateHeight < 5;
+    const requestAmountHasNotChanged = this.lastCrsRequest?.formattedValue === amountToSpend.formattedValue;
+
+    // Return cached results that have had the requested amount checked within the past 5 blocks
+    if (token.isCrs && hasBeenCheckedPreviously && lessThanFiveBlocks && requestAmountHasNotChanged) return of(this.lastCrsResult);
+
     return this._walletsService.getBalance(this.context.wallet, token.address)
       .pipe(
         map(balance => this._isEnough(new FixedDecimal(balance.balance, token.decimals), amountToSpend)),
+        tap(result => {
+          if (token.isCrs) {
+            this.lastCrsResult = result;
+            this.lastCrsUpdateHeight = latestHeight;
+            this.lastCrsRequest = amountToSpend;
+          }
+        }),
         catchError(_ => of(false)));
   }
 
@@ -106,7 +128,7 @@ export abstract class TxBase {
   }
 
   /**
-   * @summary Force the implementation of unsubscribing from the context$ stream.
+   * Force the implementation of unsubscribing from the context$ stream.
    * In good faith, hoping, developers implement the method correctly, and execute it
    * during OnDestroy
    */

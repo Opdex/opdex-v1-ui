@@ -2,7 +2,6 @@ import { Token } from '@sharedModels/ui/tokens/token';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { OnDestroy } from '@angular/core';
 import { EnvironmentsService } from '@sharedServices/utility/environments.service';
-import { IndexService } from '@sharedServices/platform/index.service';
 import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { Component, Input, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -73,7 +72,6 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
   constructor(
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
-    private _indexService: IndexService,
     private _env: EnvironmentsService,
     protected _injector: Injector
   ) {

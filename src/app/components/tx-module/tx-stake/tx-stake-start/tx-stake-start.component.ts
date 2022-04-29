@@ -1,6 +1,5 @@
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { OnDestroy } from '@angular/core';
-import { IndexService } from '@sharedServices/platform/index.service';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TxBase } from '@sharedComponents/tx-module/tx-base.component';
@@ -50,8 +49,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
   constructor(
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
-    protected _injector: Injector,
-    private _indexService: IndexService
+    protected _injector: Injector
   ) {
     super(_injector);
 

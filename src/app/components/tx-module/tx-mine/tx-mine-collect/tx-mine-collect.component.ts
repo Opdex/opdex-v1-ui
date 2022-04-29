@@ -6,7 +6,6 @@ import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 import { ITransactionQuote } from '@sharedModels/platform-api/responses/transactions/transaction-quote.interface';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
-import { IndexService } from '@sharedServices/platform/index.service';
 import { Observable, of, Subscription } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
 
@@ -23,8 +22,7 @@ export class TxMineCollectComponent extends TxBase implements OnChanges, OnDestr
 
   constructor(
     private _platformApi: PlatformApiService,
-    private _indexService: IndexService,
-    protected _injector: Injector,
+    protected _injector: Injector
   ) {
     super(_injector);
   }

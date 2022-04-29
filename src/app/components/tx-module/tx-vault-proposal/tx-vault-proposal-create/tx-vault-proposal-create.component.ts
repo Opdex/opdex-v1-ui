@@ -1,4 +1,3 @@
-import { IndexService } from '@sharedServices/platform/index.service';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { MinimumPledgeVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vaults/minimum-pledge-vault-proposal-quote-request.interface';
 import { CreateCertificateVaultProposalQuoteRequest } from '@sharedModels/platform-api/requests/vaults/create-certificate-vault-proposal-quote-request.interface';
@@ -73,7 +72,6 @@ export class TxVaultProposalCreateComponent extends TxBase implements OnDestroy 
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
     private _tokenService: TokensService,
-    private _indexService: IndexService,
     private _env: EnvironmentsService
   ) {
     super(_injector);

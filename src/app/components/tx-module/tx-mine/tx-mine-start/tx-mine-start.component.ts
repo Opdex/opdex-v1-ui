@@ -13,7 +13,6 @@ import { ITransactionQuote } from '@sharedModels/platform-api/responses/transact
 import { PositiveDecimalNumberRegex } from '@sharedLookups/regex';
 import { FixedDecimal } from '@sharedModels/types/fixed-decimal';
 import { MiningQuote } from '@sharedModels/platform-api/requests/mining-pools/mining-quote';
-import { IndexService } from '@sharedServices/platform/index.service';
 import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 
 @Component({
@@ -50,8 +49,7 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
   constructor(
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
-    protected _injector: Injector,
-    private _indexService: IndexService
+    protected _injector: Injector
   ) {
     super(_injector);
 
