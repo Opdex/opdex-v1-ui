@@ -1,0 +1,25 @@
+<opdex-card>
+  <opdex-liquidity-pool-keyword-filter-control
+    *ngIf="!pool"
+    (onPoolSelect)="selectLiquidityPool($event)">
+  </opdex-liquidity-pool-keyword-filter-control>
+
+  <div class="flex-row-center-between" *ngIf="pool">
+    <div class="flex-row-center-center">
+      <opdex-token-icons [tokens]="[pool.tokens.crs, pool.tokens.src]"></opdex-token-icons>
+
+      <div class="flex-column ml-2">
+        <a class="no-decoration" routerLink="/pools/{{pool?.address}}">
+          <h4 class="mb-0" style="line-height: .9em">{{pool.name}}</h4>
+        </a>
+
+        <opdex-copy-address [address]="pool.address"></opdex-copy-address>
+      </div>
+
+    </div>
+
+    <button mat-icon-button [ngClass]="iconSizes.tiny" (click)="clearPool()">
+      <mat-icon>{{icons.close}}</mat-icon>
+    </button>
+  </div>
+</opdex-card>

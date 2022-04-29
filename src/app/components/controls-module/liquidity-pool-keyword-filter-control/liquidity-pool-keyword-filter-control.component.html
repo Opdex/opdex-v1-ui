@@ -1,0 +1,43 @@
+<mat-form-field floatLabel="always">
+  <mat-label>Select Liquidity Pool</mat-label>
+
+  <button mat-icon-button matPrefix type="button" class="mr-1" disabled>
+    <mat-icon>{{icons.liquidityPool}}</mat-icon>
+  </button>
+
+  <input matInput
+    placeholder="ODX-CRS"
+    aria-label="Liquidity Pool Keyword Search"
+    [matAutocomplete]="filterInputAutoComplete"
+    [formControl]="control"
+    type="text"
+    #filterInput
+    autocomplete="off">
+
+  <mat-autocomplete
+    #filterInputAutoComplete="matAutocomplete"
+    (optionSelected)="selectLiquidityPool($event)">
+    <ng-container *ngIf="liquidityPools?.length > 0; else noPools">
+      <mat-option *ngFor="let pool of liquidityPools" [value]="pool">
+        <div class="flex-row-center" *ngIf="pool !== null; else loading">
+          <opdex-token-icons [tokens]="[pool.tokens.crs, pool.tokens.src]"></opdex-token-icons>
+
+          <div class="flex-column ml-2">
+            <small class="overflow-ellipsis name">{{pool.name}}</small>
+            <small class="overflow-ellipsis light address">{{pool.address}}</small>
+          </div>
+        </div>
+
+        <ng-template #loading>
+          <div class="skeleton-bg mb-1 w-100"></div>
+        </ng-template>
+      </mat-option>
+    </ng-container>
+
+    <ng-template #noPools>
+      <mat-option>
+        <small class="no-results">No results</small>
+      </mat-option>
+    </ng-template>
+  </mat-autocomplete>
+</mat-form-field>
