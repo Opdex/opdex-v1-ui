@@ -42,7 +42,7 @@ export class EnvironmentsService {
 
   public getAuthRoute(state: string, codeChallenge: string): string {
     const redirect = `${new URL(window.location.href).origin}/auth`.replace('http://', 'https://');
-    return `${this.authApiUrl}/auth/authorize?redirect_uri=${redirect}&state=${state}&code_challenge=${codeChallenge}&code_challenge_method=S256`;
+    return `${this.authApiUrl}/auth/authorize?redirect_uri=${redirect}&state=${state}&code_challenge=${codeChallenge}&code_challenge_method=S256&response_type=code`;
   }
 
   constructor() {
