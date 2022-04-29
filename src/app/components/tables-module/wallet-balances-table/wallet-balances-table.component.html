@@ -1,4 +1,4 @@
-<ng-container *ngIf="!!dataSource; else loading">
+<ng-container *ngIf="!loading; else loader">
   <ng-container *ngIf="dataSource?.data?.length; else noResults">
     <div class="table-container">
       <table mat-table [dataSource]="dataSource" matSort [trackBy]="trackBy" class="w-100">
@@ -77,6 +77,6 @@
   </ng-template>
 </ng-container>
 
-<ng-template #loading>
+<ng-template #loader>
   <opdex-skeleton-table></opdex-skeleton-table>
 </ng-template>

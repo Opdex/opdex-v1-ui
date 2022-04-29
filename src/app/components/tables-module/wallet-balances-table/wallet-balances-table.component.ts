@@ -39,6 +39,7 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
   icons = Icons;
   iconSizes = IconSizes;
   transactionViews = TransactionView;
+  loading = true;
 
   constructor(
     private _router: Router,
@@ -56,16 +57,13 @@ export class WalletBalancesTableComponent implements OnChanges, OnDestroy {
 
   ngOnChanges() {
     if (this.filter && !this.subscription) {
-      if (this.subscription && !this.subscription.closed) {
-        this.subscription.unsubscribe();
-      }
-
+      this.loading = true;
       this.subscription = new Subscription();
 
       this.subscription.add(
         this._indexService.latestBlock$
           .pipe(switchMap(_ => this.getWalletBalances$(this.filter?.cursor)))
-          .subscribe());
+          .subscribe(_ => this.loading = false));
     }
   }
 

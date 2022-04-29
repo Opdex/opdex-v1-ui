@@ -35,6 +35,7 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
   paging: ICursor;
   icons = Icons;
   iconSizes = IconSizes;
+  loading = true;
 
   constructor(
     private _router: Router,
@@ -51,16 +52,13 @@ export class WalletStakingPositionsTableComponent implements OnChanges, OnDestro
 
   ngOnChanges() {
     if (this.filter && !this.subscription) {
-      if (this.subscription && !this.subscription.closed) {
-        this.subscription.unsubscribe();
-      }
-
+      this.loading = true;
       this.subscription = new Subscription();
 
       this.subscription.add(
         this._indexService.latestBlock$
           .pipe(switchMap(_ => this.getStakingPositions$(this.filter?.cursor)))
-          .subscribe());
+          .subscribe(_ => this.loading = false));
     }
   }
 
