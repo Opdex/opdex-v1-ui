@@ -17,13 +17,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ToleranceComponent } from './tolerance/tolerance.component';
 import { TokenKeywordFilterControlComponent } from './token-keyword-filter-control/token-keyword-filter-control.component';
 import { SharedModule } from '@sharedComponents/shared-module/shared.module';
+import { LiquidityPoolKeywordFilterControlComponent } from './liquidity-pool-keyword-filter-control/liquidity-pool-keyword-filter-control.component';
 
 @NgModule({
   declarations: [
     DeadlineComponent,
     InputControlComponent,
     ToleranceComponent,
-    TokenKeywordFilterControlComponent
+    TokenKeywordFilterControlComponent,
+    LiquidityPoolKeywordFilterControlComponent
   ],
   imports: [
     CommonModule,
@@ -40,7 +42,8 @@ import { SharedModule } from '@sharedComponents/shared-module/shared.module';
     DeadlineComponent,
     InputControlComponent,
     ToleranceComponent,
-    TokenKeywordFilterControlComponent
+    TokenKeywordFilterControlComponent,
+    LiquidityPoolKeywordFilterControlComponent
   ]
 })
 export class ControlsModule { }

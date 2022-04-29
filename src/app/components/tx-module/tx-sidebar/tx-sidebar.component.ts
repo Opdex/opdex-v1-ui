@@ -88,6 +88,7 @@ export class TxSidebarComponent implements OnChanges {
 
   closeSidenav() {
     this._sidenav.closeSidenav();
+    this.pool = undefined;
   }
 
   handlePoolSelection($event: LiquidityPool) {

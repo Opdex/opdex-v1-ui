@@ -1,76 +1,25 @@
-<div class="pool-details">
-  <div class="pool-selection" *ngIf="!pool">
-    <opdex-card>
-      <form [formGroup]="poolForm" name="liquidity-pool-form" id="liquidity-pool-form">
-        <mat-form-field floatLabel="always">
-          <mat-label>Liquidity Pool</mat-label>
+<opdex-card>
+  <opdex-liquidity-pool-keyword-filter-control
+    *ngIf="!pool"
+    (onPoolSelect)="selectLiquidityPool($event)">
+  </opdex-liquidity-pool-keyword-filter-control>
 
-          <button mat-icon-button matPrefix type="button" class="mr-2" disabled><mat-icon>{{icons.liquidityPool}}</mat-icon></button>
+  <div class="flex-row-center-between" *ngIf="pool">
+    <div class="flex-row-center-center">
+      <opdex-token-icons [tokens]="[pool.tokens.crs, pool.tokens.src]"></opdex-token-icons>
 
-          <input matInput aria-label="Public Key" [matAutocomplete]="auto" [formControl]="poolControl" type="text" placeholder="ODX-CRS">
-
-          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectPool($event)">
-            <ng-container *ngIf="pools$ | async">
-              <mat-option *ngFor="let pool of filteredPools$ | async" [value]="pool">
-                <div class="flex-row-center">
-                  <opdex-token-icons [tokens]="[pool.tokens.crs, pool.tokens.src]"></opdex-token-icons>
-                  <div class="flex-column ml-2">
-                    <small class="overflow-ellipsis" style="font-size: 15px; line-height: 20px">{{pool.name}}</small>
-                    <small class="overflow-ellipsis light" style="font-size: 12px; line-height: 16px;">{{pool.address}}</small>
-                  </div>
-                </div>
-              </mat-option>
-            </ng-container>
-
-          </mat-autocomplete>
-        </mat-form-field>
-      </form>
-    </opdex-card>
-  </div>
-
-  <opdex-card class="pool-summary" *ngIf="pool">
-    <div class="flex-row-center-between">
-      <div class="flex-row-center">
-        <opdex-token-icons [tokens]="[pool.tokens.crs, pool.tokens.src]"></opdex-token-icons>
-
-        <a class="no-decoration ml-2" routerLink="/pools/{{pool?.address}}">
-          <h4 class="d-flex mb-0">{{pool.name}}</h4>
+      <div class="flex-column ml-2">
+        <a class="no-decoration" routerLink="/pools/{{pool?.address}}">
+          <h4 class="mb-0" style="line-height: .9em">{{pool.name}}</h4>
         </a>
+
+        <opdex-copy-address [address]="pool.address"></opdex-copy-address>
       </div>
 
-      <button mat-icon-button [ngClass]="iconSizes.tiny" (click)="clearPool()">
-        <mat-icon>{{icons.close}}</mat-icon>
-      </button>
     </div>
 
-
-    <div *ngIf="poolPreviewRecords?.length">
-      <ng-container *ngFor="let preview of poolPreviewRecords; let i = index">
-        <div class="flex-row-center-between mb-1">
-          <div class="flex-column" style="width: 30%;">
-            <small class="light" *ngIf="i === 0">Token</small>
-            <small class="w-25">{{preview.token.symbol}}</small>
-          </div>
-
-          <div class="flex-column" style="width: 30%;">
-            <small class="light" *ngIf="i === 0">{{showStaking || showMining ? 'Weight' : 'Supply'}}</small>
-            <small class="w-25">
-              <opdex-number [value]="preview.supply" [short]="true"></opdex-number>
-            </small>
-          </div>
-
-          <div class="flex-column" style="width: 40%">
-            <small class="light" *ngIf="i === 0">Price</small>
-            <div class="flex-row-center-between">
-              <small class="mr-2">
-                <opdex-number [value]="preview.price" prefix="$" [short]="true"></opdex-number>
-              </small>
-
-              <opdex-change-indicator [value]="preview.percentageChange" [forceDisplay]="true"></opdex-change-indicator>
-            </div>
-          </div>
-        </div>
-      </ng-container>
-    </div>
-  </opdex-card>
-</div>
+    <button mat-icon-button [ngClass]="iconSizes.tiny" (click)="clearPool()">
+      <mat-icon>{{icons.close}}</mat-icon>
+    </button>
+  </div>
+</opdex-card>

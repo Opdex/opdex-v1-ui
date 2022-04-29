@@ -28,10 +28,10 @@ interface IPoolPreviewRecord {
 export class PoolPreviewComponent implements OnChanges, OnDestroy {
   @Input() pool: LiquidityPool;
   @Input() view: TransactionView;
-  poolForm: FormGroup;
-  pools: LiquidityPool[];
-  filteredPools$: Observable<LiquidityPool[]>;
-  pools$: Observable<LiquidityPool[]>;
+  // poolForm: FormGroup;
+  // pools: LiquidityPool[];
+  // filteredPools$: Observable<LiquidityPool[]>;
+  // pools$: Observable<LiquidityPool[]>;
   iconSizes = IconSizes;
   icons = Icons;
   subscription = new Subscription();
@@ -39,9 +39,9 @@ export class PoolPreviewComponent implements OnChanges, OnDestroy {
 
   @Output() onPoolChange: EventEmitter<LiquidityPool> = new EventEmitter();
 
-  get poolControl(): FormControl {
-    return this.poolForm.get('poolControl') as FormControl;
-  }
+  // get poolControl(): FormControl {
+  //   return this.poolForm.get('poolControl') as FormControl;
+  // }
 
   get showStaking(): boolean {
     return this.view === TransactionView.stake;
@@ -60,44 +60,53 @@ export class PoolPreviewComponent implements OnChanges, OnDestroy {
     private _liquidityPoolsService: LiquidityPoolsService,
     private _indexService: IndexService
   ) {
-    this.poolForm = this._fb.group({
-      poolControl: ['', [Validators.required]]
-    });
+    // this.poolForm = this._fb.group({
+    //   poolControl: ['', [Validators.required]]
+    // });
 
-    this.pools$ = this._liquidityPoolsService
-      .getLiquidityPools(new LiquidityPoolsFilter({limit: 20, orderBy: LpOrderBy.Liquidity}))
-      .pipe(map(pools => pools.results), tap(pools => this.pools = pools));
+    // this.pools$ = this._liquidityPoolsService
+    //   .getLiquidityPools(new LiquidityPoolsFilter({limit: 20, orderBy: LpOrderBy.Liquidity}))
+    //   .pipe(map(pools => pools.results), tap(pools => this.pools = pools));
 
-    this.filteredPools$ = this.poolControl.valueChanges
-      .pipe(
-        startWith(''),
-        map((poolAddress: string) => poolAddress ? this._filterPools(poolAddress) : this.pools.slice()));
+    // this.filteredPools$ = this.poolControl.valueChanges
+    //   .pipe(
+    //     startWith(''),
+    //     map((poolAddress: string) => poolAddress ? this._filterPools(poolAddress) : this.pools.slice()));
 
     this.subscription.add(
       this._indexService.latestBlock$
         .pipe(
           skip(1),
           filter(_ => !!this.pool),
-          switchMap(_ => this._liquidityPoolsService.getLiquidityPool(this.pool.address)),
-          tap(pool => this.pool = pool))
-        .subscribe(_ => this.setRecords()));
+          switchMap(_ => this._liquidityPoolsService.getLiquidityPool(this.pool.address)))
+        .subscribe((pool: LiquidityPool) => {
+          this.pool = pool;
+          this.setRecords();
+        }));
   }
 
   ngOnChanges() {
-    this.setRecords();
+    // this.setRecords();
   }
 
   clearPool() {
-    this.poolControl.setValue('');
+    // this.poolControl.setValue('');
     this.pool = null;
-    this.setRecords();
+    // this.setRecords();
   }
 
-  selectPool($event: MatAutocompleteSelectedEvent) {
-    this.pool = $event.option.value;
+  selectLiquidityPool(pool: LiquidityPool) {
+    if (!pool) return;
+    this.pool = pool;
     this.onPoolChange.emit(this.pool);
     this.setRecords();
   }
+
+  // selectPool($event: MatAutocompleteSelectedEvent) {
+  //   this.pool = $event.option.value;
+  //   this.onPoolChange.emit(this.pool);
+  //   this.setRecords();
+  // }
 
   private setRecords() {
     if (!!this.pool === false) {
@@ -156,18 +165,18 @@ export class PoolPreviewComponent implements OnChanges, OnDestroy {
     }
   }
 
-  private _filterPools(value: string): LiquidityPool[] {
-    if (!value) [];
+  // private _filterPools(value: string): LiquidityPool[] {
+  //   if (!value) [];
 
-    const filterValue = value.toString().toLowerCase();
+  //   const filterValue = value.toString().toLowerCase();
 
-    return this.pools.filter(pool => {
-      var addressMatch = pool.address.toLowerCase().includes(filterValue);
-      var nameMatch = pool.name.toLowerCase().includes(filterValue);
+  //   return this.pools.filter(pool => {
+  //     var addressMatch = pool.address.toLowerCase().includes(filterValue);
+  //     var nameMatch = pool.name.toLowerCase().includes(filterValue);
 
-      return addressMatch || nameMatch;
-    });
-  }
+  //     return addressMatch || nameMatch;
+  //   });
+  // }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
