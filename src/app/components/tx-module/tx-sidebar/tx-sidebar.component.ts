@@ -71,27 +71,26 @@ export class TxSidebarComponent implements OnChanges {
         }));
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     if (this.message && !this.message?.data?.pool && this.pool) {
       this.message.data = { pool: this.pool };
     }
   }
 
-  toggleSidenavMode() {
+  toggleSidenavMode(): void {
     this.sidenavMode = this.sidenavMode == 'over' ? 'side' : 'over';
     this.onModeChange.emit(this.sidenavMode);
   }
 
-  setTransactionView(view: TransactionView) {
+  setTransactionView(view: TransactionView): void {
     this.message.view = view;
   }
 
-  closeSidenav() {
+  closeSidenav(): void {
     this._sidenav.closeSidenav();
-    this.pool = undefined;
   }
 
-  handlePoolSelection($event: LiquidityPool) {
+  handlePoolSelection($event: LiquidityPool): void {
     this.pool = $event;
     this.message.data = { pool: this.pool };
   }

@@ -1,6 +1,6 @@
 import { LiquidityPoolsFilter, ILiquidityPoolsFilter, LpOrderBy } from '@sharedModels/platform-api/requests/liquidity-pools/liquidity-pool-filter';
 import { LiquidityPoolsService } from '@sharedServices/platform/liquidity-pools.service';
-import { LiquidityPool } from './../../../models/ui/liquidity-pools/liquidity-pool';
+import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription, debounceTime, distinctUntilChanged, switchMap, map, Observable, lastValueFrom } from 'rxjs';
@@ -15,7 +15,6 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 })
 export class LiquidityPoolKeywordFilterControlComponent implements OnInit {
   @ViewChild('filterInput') filterInput: ElementRef;
-
   @Output() onPoolSelect = new EventEmitter<LiquidityPool>();
 
   control: FormControl;
@@ -44,7 +43,6 @@ export class LiquidityPoolKeywordFilterControlComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    setTimeout(() => this.filterInput.nativeElement.focus());
     await lastValueFrom(this.getLiquidityPools$(null));
   }
 

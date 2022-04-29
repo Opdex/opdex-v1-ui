@@ -16,8 +16,7 @@
 
   <mat-autocomplete
     #filterInputAutoComplete="matAutocomplete"
-    (optionSelected)="selectLiquidityPool($event)"
-    (closed)="selectLiquidityPool()">
+    (optionSelected)="selectLiquidityPool($event)">
     <ng-container *ngIf="liquidityPools?.length > 0; else noPools">
       <mat-option *ngFor="let pool of liquidityPools" [value]="pool">
         <div class="flex-row-center" *ngIf="pool !== null; else loading">
