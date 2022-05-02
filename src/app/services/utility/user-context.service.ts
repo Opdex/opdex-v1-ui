@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class UserContextService {
-  private _context = new UserContext();
+  private _context = this._buildUserContext();
   private _context$ = new BehaviorSubject<UserContext>(this._context);
 
   constructor(

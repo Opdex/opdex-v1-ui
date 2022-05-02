@@ -78,7 +78,6 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     this.appHeight();
     this.network = this._env.network;
     this.configuredForEnv = !!this._env.marketAddress && !!this._env.routerAddress;
-
     setTimeout(() => this.loading = false, 2000);
   }
 
@@ -87,14 +86,19 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    await lastValueFrom(this._authService.refresh());
-
+    // TODO: On new session, using the refresh token doesn't allow opening up to guarded pages
+    // (i.e. close session, open up at /wallets will redirect to / then refresh the token)
     this.subscription.add(
       this._userContextService.context$
         .subscribe(async context => {
           this.context = context;
-          if (!context.wallet) this.stopHubConnection();
-          else if (!this.hubConnection) await this.connectToSignalR();
+
+          if (!context.wallet) {
+            const auth = await lastValueFrom(this._authService.refresh());
+            if (!auth) await this.stopHubConnection();
+          } else if (!this.hubConnection) {
+            await this.connectToSignalR();
+          }
         }));
 
     // Get index status on timer

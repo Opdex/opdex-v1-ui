@@ -72,8 +72,6 @@ export class RestApiService {
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error);
-    } else if (error.status === 403) {
-      this._userContextService.remove();
     }
 
     const errors = [];
