@@ -61,7 +61,7 @@ export class AuthService {
 
       this._userContextService.set(response);
 
-      return new AuthVerification({route: new URL(JSON.parse(decode(window.atob(stateEncoded))).route)});
+      return new AuthVerification({route: new URL(JSON.parse(window.atob(decode(stateEncoded))).route)});
     } catch(error) {
       return new AuthVerification({error});
     }
