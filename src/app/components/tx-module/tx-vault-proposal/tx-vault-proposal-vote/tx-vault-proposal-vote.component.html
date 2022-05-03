@@ -1,7 +1,12 @@
 <div class="vault-proposal-vote">
   <form [formGroup]="form" name="vault-proposal-vote-form" id="vault-proposal-vote-form">
     <div class="mb-3">
-      <opdex-input-control placeholder="1" [suffixDisabled]="true" label="Proposal #" [formControl]="proposalId"></opdex-input-control>
+      <opdex-input-control
+        placeholder="1"
+        [suffixDisabled]="true"
+        label="Proposal No."
+        [formControl]="proposalId">
+      </opdex-input-control>
     </div>
 
     <opdex-input-control

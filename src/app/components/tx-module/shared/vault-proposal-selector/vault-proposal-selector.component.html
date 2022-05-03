@@ -1,0 +1,15 @@
+<opdex-card *ngIf="!proposal">
+  <form [formGroup]="form" name="proposal-lookup-form" id="proposal-lookup-form" >
+    <opdex-input-control
+      placeholder="1"
+      label="Proposal ID"
+      [formControl]="proposalId">
+    </opdex-input-control>
+  </form>
+</opdex-card>
+
+<opdex-vault-proposal-card
+  [proposal]="proposal"
+  [latestBlock]="latestBlock"
+  *ngIf="proposal">
+</opdex-vault-proposal-card>

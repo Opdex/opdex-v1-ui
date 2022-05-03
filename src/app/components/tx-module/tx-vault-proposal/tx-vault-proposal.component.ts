@@ -1,3 +1,4 @@
+import { VaultProposal } from '@sharedModels/ui/vaults/vault-proposal';
 import { Component, OnChanges, Input } from '@angular/core';
 
 @Component({
@@ -16,5 +17,13 @@ export class TxVaultProposalComponent implements OnChanges {
 
   ngOnChanges() {
     this.child = this.txOptions.find(o => o.action.toLowerCase() == this.data?.child?.toLowerCase())?.value || 1;
+  }
+
+  handleProposalChange($event: VaultProposal) {
+    if (!this.data) {
+      this.data = { proposal: $event }
+    } else {
+      this.data.proposal = $event;
+    }
   }
 }
