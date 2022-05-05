@@ -1,3 +1,4 @@
+import { VaultProposal } from './../../../../models/ui/vaults/vault-proposal';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { Component, Injector, Input, OnChanges, OnDestroy } from '@angular/core';
 import { VaultProposalWithdrawPledgeQuoteRequest } from '@sharedModels/platform-api/requests/vaults/vault-proposal-withdraw-pledge-quote-request.interface';
@@ -35,6 +36,7 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
   positionType: 'Balance' | 'ProposalPledge';
   subscription = new Subscription();
   balanceError: boolean;
+  proposal: VaultProposal;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
@@ -73,10 +75,15 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
 
   ngOnChanges() {
     if (!!this.data) {
-      this.proposalId.setValue(this.data.proposalId);
-      this.isWithdrawal = !!this.data.withdraw;
+      const { proposal, proposalId, withdraw } = this.data;
 
+      this.isWithdrawal = !!withdraw;
       this.positionType = this.isWithdrawal ? 'ProposalPledge' : 'Balance';
+      if (proposal || proposalId) this.proposalId.setValue(proposal?.proposalId || proposalId);
+
+      if (proposal) {
+        this._setProposal(proposal);
+      }
     }
   }
 
@@ -103,6 +110,8 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
   handleAddRemoveStatus(event: MatSlideToggleChange): void {
     this.isWithdrawal = event.checked;
     this.positionType = this.isWithdrawal ? 'ProposalPledge' : 'Balance';
+
+    this._setProposal(this.proposal);
   }
 
   handlePercentageSelect(value: any): void {
@@ -120,6 +129,17 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
       : this._validateBalance$(this.crs, amountNeeded);
 
     return stream$.pipe(tap(result => this.balanceError = !result));
+  }
+
+  private _setProposal(proposal: VaultProposal): void {
+    this.proposal = proposal;
+
+    // Todo: || expired
+    if (!this.isWithdrawal && proposal.status !== 'Pledge') {
+      this.amount.disable();
+    } else {
+      this.amount.enable();
+    }
   }
 
   destroyContext$(): void {

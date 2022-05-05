@@ -1,13 +1,13 @@
 <div class="vault-proposal-vote">
   <form [formGroup]="form" name="vault-proposal-vote-form" id="vault-proposal-vote-form">
-    <div class="mb-3">
+    <!-- <div class="mb-3">
       <opdex-input-control
         placeholder="1"
         [suffixDisabled]="true"
         label="Proposal No."
         [formControl]="proposalId">
       </opdex-input-control>
-    </div>
+    </div> -->
 
     <opdex-input-control
       [prefixIcon]="isWithdrawal ? icons.remove : icons.add"
@@ -64,7 +64,7 @@
     <opdex-tx-quote-submit-button
       [warn]="balanceError"
       label="Quote {{isWithdrawal ? 'Withdrawal' : 'Vote'}}"
-      [disabled]="!form.valid || !context?.wallet || balanceError === undefined"
+      [disabled]="!form.valid || !context?.wallet || balanceError === undefined || !data.proposalId"
       (onSubmit)="submit()">
     </opdex-tx-quote-submit-button>
 

@@ -6,6 +6,7 @@
   <!-- Resets when looking at create proposal form however the form components still know about the proposal -->
   <!-- Makes it seem like a proposal isn't selected but really it is, the select just reset -->
   <opdex-vault-proposal-selector
+    [data]="data"
     (onProposalChange)="handleProposalChange($event)"
     *ngIf="group.value !== 1">
   </opdex-vault-proposal-selector>

@@ -1,15 +1,20 @@
-<opdex-card *ngIf="!proposal">
-  <form [formGroup]="form" name="proposal-lookup-form" id="proposal-lookup-form" >
+<opdex-card >
+  <form [formGroup]="form" name="proposal-lookup-form" id="proposal-lookup-form" *ngIf="!proposal">
     <opdex-input-control
       placeholder="1"
-      label="Proposal ID"
-      [formControl]="proposalId">
+      label="Proposal No."
+      [formControl]="proposalId"
+      [numbersOnly]="true">
     </opdex-input-control>
+    <small class="error" *ngIf="!proposalFound">Invalid Proposal Number</small>
   </form>
+
+  <opdex-vault-proposal-card
+    [proposal]="proposal"
+    [latestBlock]="latestBlock"
+    (onClose)="handleClose()"
+    *ngIf="proposal">
+  </opdex-vault-proposal-card>
 </opdex-card>
 
-<opdex-vault-proposal-card
-  [proposal]="proposal"
-  [latestBlock]="latestBlock"
-  *ngIf="proposal">
-</opdex-vault-proposal-card>
+

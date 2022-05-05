@@ -1,7 +1,7 @@
 import { IndexService } from '@sharedServices/platform/index.service';
 import { VaultProposal } from '@sharedModels/ui/vaults/vault-proposal';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, take } from 'rxjs/operators';
+import { of, Subscription } from 'rxjs';
 import { VaultsService } from '@sharedServices/platform/vaults.service';
 import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -21,6 +21,7 @@ export class VaultProposalSelectorComponent implements OnChanges {
   form: FormGroup;
   proposal: VaultProposal;
   latestBlock: IBlock;
+  proposalFound: boolean = true;
   icons = Icons;
   iconSizes = IconSizes;
   subscription = new Subscription();
@@ -47,11 +48,12 @@ export class VaultProposalSelectorComponent implements OnChanges {
         .pipe(
           debounceTime(400),
           distinctUntilChanged(),
-          switchMap(proposalId => this._vaultsService.getProposal(proposalId)))
-          // Catch Error
+          filter(value => !!value),
+          switchMap(proposalId => this._vaultsService.getProposal(proposalId).pipe(catchError(_ => of(undefined)))))
         .subscribe(proposal => {
           this.proposal = proposal;
           this.onProposalChange.emit(proposal);
+          this.proposalFound = !!proposal;
         }));
   }
 
@@ -59,6 +61,21 @@ export class VaultProposalSelectorComponent implements OnChanges {
     if (!!this.data) {
       // -- data.proposalId
       // -- data.proposal
+
+      if (this.data.proposalId) {
+        this._vaultsService.getProposal(this.data.proposalId)
+          .pipe(take(1))
+          .subscribe(proposal => {
+            this.proposal = proposal;
+            this.onProposalChange.emit(proposal)
+          });
+      }
     }
+  }
+
+  handleClose(): void {
+    this.proposal = null;
+    this.onProposalChange.emit(this.proposal);
+    this.proposalId.setValue(null);
   }
 }

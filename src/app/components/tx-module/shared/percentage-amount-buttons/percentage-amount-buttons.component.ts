@@ -22,6 +22,7 @@ export class PercentageAmountButtonsComponent implements OnChanges {
   @Input() positionType: 'Balance' | 'Staking' | 'Mining' | 'ProposalVote' | 'ProposalPledge';
   @Input() selected: string;
   @Input() proposalId: number;
+  @Input() disable: boolean;
   @Output() onPercentageSelect = new EventEmitter<any>();
 
   contextSubscription = new Subscription();
