@@ -1,7 +1,8 @@
+import { tap } from 'rxjs/operators';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { VaultProposal } from '@sharedModels/ui/vaults/vault-proposal';
-import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, take } from 'rxjs/operators';
-import { of, Subscription } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { Observable, of, Subscription } from 'rxjs';
 import { VaultsService } from '@sharedServices/platform/vaults.service';
 import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -21,7 +22,8 @@ export class VaultProposalSelectorComponent implements OnChanges {
   form: FormGroup;
   proposal: VaultProposal;
   latestBlock: IBlock;
-  proposalFound: boolean = true;
+  error: string;
+  searching: boolean;
   icons = Icons;
   iconSizes = IconSizes;
   subscription = new Subscription();
@@ -36,46 +38,63 @@ export class VaultProposalSelectorComponent implements OnChanges {
     private _indexService: IndexService
   ) {
     this.form = this._fb.group({
-      proposalId: ['', [Validators.required, Validators.min(1)]],
+      proposalId: [undefined, [Validators.required, Validators.min(1)]],
     });
 
     this.subscription.add(
       this._indexService.latestBlock$
-        .subscribe(block => this.latestBlock = block));
+        .pipe(
+          tap(block => this.latestBlock = block),
+          switchMap(_ => this._getProposal$()))
+        .subscribe());
 
     this.subscription.add(
       this.proposalId.valueChanges
         .pipe(
           debounceTime(400),
           distinctUntilChanged(),
-          filter(value => !!value),
-          switchMap(proposalId => this._vaultsService.getProposal(proposalId).pipe(catchError(_ => of(undefined)))))
-        .subscribe(proposal => {
-          this.proposal = proposal;
-          this.onProposalChange.emit(proposal);
-          this.proposalFound = !!proposal;
-        }));
+          switchMap(proposalId => this._getProposal$(proposalId)))
+        .subscribe());
   }
 
   ngOnChanges(): void {
     if (!!this.data) {
-      // -- data.proposalId
-      // -- data.proposal
+      const { proposal, proposalId } = this.data;
+      let id = proposal?.id || proposalId;
 
-      if (this.data.proposalId) {
-        this._vaultsService.getProposal(this.data.proposalId)
-          .pipe(take(1))
-          .subscribe(proposal => {
-            this.proposal = proposal;
-            this.onProposalChange.emit(proposal)
-          });
-      }
+      if (id) this.proposalId.setValue(id);
     }
   }
 
-  handleClose(): void {
-    this.proposal = null;
+  private _getProposal$(id?: number): Observable<VaultProposal> {
+    this.searching = true;
+    const proposalId = id || this.proposal?.proposalId || this.proposalId.value;
+
+    if (!proposalId) {
+      this._setProposal(undefined);
+      return of(undefined);
+    };
+
+    return this._vaultsService.getProposal(proposalId)
+      .pipe(
+        catchError(_ => {
+          this.error = "Invalid proposal number";
+          return of(undefined)
+        }),
+        tap(proposal => {
+          if (!!proposal) this.error = undefined;
+          this._setProposal(proposal);
+        }));
+  }
+
+  private _setProposal(proposal: VaultProposal) {
+    this.proposal = proposal;
     this.onProposalChange.emit(this.proposal);
-    this.proposalId.setValue(null);
+    this.searching = false;
+  }
+
+  handleClose(): void {
+    this._setProposal(undefined);
+    this.proposalId.setValue(undefined);
   }
 }

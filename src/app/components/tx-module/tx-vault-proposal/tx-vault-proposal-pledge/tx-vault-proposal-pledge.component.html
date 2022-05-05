@@ -19,12 +19,12 @@
       [positionType]="positionType"
       [selected]="percentageSelected"
       (onPercentageSelect)="handlePercentageSelect($event)"
-      [proposalId]="proposalId.value"
+      [proposalId]="proposal.proposalId"
       [disable]="amount.disabled"
       *ngIf="crs">
     </opdex-percentage-amount-buttons>
 
-    <small class="error" *ngIf="amount.disabled">Pledge period has ended</small>
+    <small class="error" *ngIf="amount.disabled">Pledging period has ended</small>
 
     <mat-slide-toggle
       class="d-block mt-3"
@@ -34,7 +34,7 @@
       <span [ngClass]="{'light': !isWithdrawal}">Withdraw Pledge</span>
     </mat-slide-toggle>
 
-    <opdex-card [info]="true" class="d-block mt-3" *ngIf="isWithdrawal">
+    <opdex-card [info]="true" class="d-block mt-3" *ngIf="isWithdrawal && proposal.status === 'Pledge' && proposal.expiration >= latestBlock">
       <small>
         Withdrawing when an active proposal is in pledge status will deduct the withdrawn amount from the proposals' total.
       </small>
@@ -50,7 +50,7 @@
     <opdex-tx-quote-submit-button
       [warn]="balanceError"
       label="Quote {{isWithdrawal ? 'Withdrawal' : 'Pledge'}}"
-      [disabled]="!form.valid || !context?.wallet || balanceError === undefined || !data.proposalId"
+      [disabled]="!form.valid || !context?.wallet || balanceError === undefined || !proposal"
       (onSubmit)="submit()">
     </opdex-tx-quote-submit-button>
 

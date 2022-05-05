@@ -6,7 +6,7 @@
       [formControl]="proposalId"
       [numbersOnly]="true">
     </opdex-input-control>
-    <small class="error" *ngIf="!proposalFound">Invalid Proposal Number</small>
+    <small class="error" *ngIf="error">{{error}}</small>
   </form>
 
   <opdex-vault-proposal-card
