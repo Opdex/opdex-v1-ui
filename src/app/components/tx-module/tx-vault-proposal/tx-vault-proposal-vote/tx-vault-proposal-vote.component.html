@@ -1,9 +1,5 @@
 <div class="vault-proposal-vote">
   <form [formGroup]="form" name="vault-proposal-vote-form" id="vault-proposal-vote-form">
-    <div class="mb-3">
-      <opdex-input-control placeholder="1" [suffixDisabled]="true" label="Proposal #" [formControl]="proposalId"></opdex-input-control>
-    </div>
-
     <opdex-input-control
       [prefixIcon]="isWithdrawal ? icons.remove : icons.add"
       [prefixIconDisabled]="true"
@@ -23,9 +19,12 @@
       [positionType]="positionType"
       [selected]="percentageSelected"
       (onPercentageSelect)="handlePercentageSelect($event)"
-      [proposalId]="proposalId.value"
+      [proposalId]="proposal.proposalId"
+      [disable]="amount.disabled"
       *ngIf="crs">
     </opdex-percentage-amount-buttons>
+
+    <small class="error" *ngIf="amount.disabled">{{votingDisabled}}</small>
 
     <mat-slide-toggle
       class="d-block mt-3"
@@ -43,7 +42,7 @@
       <span [ngClass]="{'light': !inFavor.value}">In Favor</span>
     </mat-slide-toggle>
 
-    <opdex-card [info]="true" class="d-block mt-3" *ngIf="isWithdrawal">
+    <opdex-card [info]="true" class="d-block mt-3" *ngIf="isWithdrawal && proposal.status === 'Vote' && proposal.expiration >= latestBlock">
       <small>
         Withdrawing when an active proposal is in vote status will deduct the withdrawn amount from the proposals' votes.
       </small>
@@ -59,7 +58,7 @@
     <opdex-tx-quote-submit-button
       [warn]="balanceError"
       label="Quote {{isWithdrawal ? 'Withdrawal' : 'Vote'}}"
-      [disabled]="!form.valid || !context?.wallet || balanceError === undefined"
+      [disabled]="!form.valid || !context?.wallet || balanceError === undefined || !proposal"
       (onSubmit)="submit()">
     </opdex-tx-quote-submit-button>
 

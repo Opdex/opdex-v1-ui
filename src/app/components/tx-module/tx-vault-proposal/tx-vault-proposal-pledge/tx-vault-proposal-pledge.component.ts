@@ -1,3 +1,4 @@
+import { VaultProposal } from '@sharedModels/ui/vaults/vault-proposal';
 import { TokensService } from '@sharedServices/platform/tokens.service';
 import { Component, Injector, Input, OnChanges, OnDestroy } from '@angular/core';
 import { VaultProposalWithdrawPledgeQuoteRequest } from '@sharedModels/platform-api/requests/vaults/vault-proposal-withdraw-pledge-quote-request.interface';
@@ -35,13 +36,11 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
   positionType: 'Balance' | 'ProposalPledge';
   subscription = new Subscription();
   balanceError: boolean;
+  proposal: VaultProposal;
+  latestBlock: number;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
-  }
-
-  get proposalId(): FormControl {
-    return this.form.get('proposalId') as FormControl;
   }
 
   constructor(
@@ -56,11 +55,12 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
     this.vaultAddress = this._env.vaultAddress;
 
     this.form = this._fb.group({
-      proposalId: ['', [Validators.required, Validators.min(1)]],
       amount: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]]
     });
 
-    this.subscription.add(this._tokenService.getToken('CRS').subscribe(crs => this.crs = crs));
+    this.subscription.add(
+      this._tokenService.getToken('CRS')
+        .subscribe(crs => this.crs = crs));
 
     this.subscription.add(
       this.amount.valueChanges
@@ -69,14 +69,20 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
           distinctUntilChanged(),
           switchMap(_ => this.validateBalance()))
         .subscribe());
+
+    this.subscription.add(
+      this._indexService.latestBlock$
+        .subscribe(block => this.latestBlock = block.height));
   }
 
   ngOnChanges() {
     if (!!this.data) {
-      this.proposalId.setValue(this.data.proposalId);
-      this.isWithdrawal = !!this.data.withdraw;
+      const { proposal, withdraw } = this.data;
 
+      this.isWithdrawal = !!withdraw;
       this.positionType = this.isWithdrawal ? 'ProposalPledge' : 'Balance';
+
+      if (proposal) this._setProposal(proposal);
     }
   }
 
@@ -84,14 +90,14 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
     if (!this.vaultAddress) return;
 
     let quote$: Observable<ITransactionQuote>;
+    const amount = new FixedDecimal(this.amount.value, 8);
 
     if (!this.isWithdrawal) {
-      const request = new VaultProposalPledgeQuoteRequest(new FixedDecimal(this.amount.value, 8));
-      quote$ = this._platformApi.pledgeToVaultProposal(this.vaultAddress, this.proposalId.value, request.payload);
-    }
-    else {
-      const request = new VaultProposalWithdrawPledgeQuoteRequest(new FixedDecimal(this.amount.value, 8));
-      quote$ = this._platformApi.withdrawVaultProposalPledge(this.vaultAddress, this.proposalId.value, request.payload);
+      const request = new VaultProposalPledgeQuoteRequest(amount);
+      quote$ = this._platformApi.pledgeToVaultProposal(this.vaultAddress, this.proposal.proposalId, request.payload);
+    } else {
+      const request = new VaultProposalWithdrawPledgeQuoteRequest(amount);
+      quote$ = this._platformApi.withdrawVaultProposalPledge(this.vaultAddress, this.proposal.proposalId, request.payload);
     }
 
     quote$
@@ -103,6 +109,11 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
   handleAddRemoveStatus(event: MatSlideToggleChange): void {
     this.isWithdrawal = event.checked;
     this.positionType = this.isWithdrawal ? 'ProposalPledge' : 'Balance';
+
+    this._setProposal(this.proposal);
+    this.amount.setValue(undefined);
+    this.amount.markAsUntouched();
+    this.balanceError = false;
   }
 
   handlePercentageSelect(value: any): void {
@@ -116,10 +127,20 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
     const amountNeeded = new FixedDecimal(this.amount.value, this.crs.decimals);
 
     const stream$: Observable<boolean> = this.isWithdrawal
-      ? this._validateVaultPledge$(this.proposalId.value, amountNeeded)
+      ? this._validateVaultPledge$(this.proposal.proposalId, amountNeeded)
       : this._validateBalance$(this.crs, amountNeeded);
 
     return stream$.pipe(tap(result => this.balanceError = !result));
+  }
+
+  private _setProposal(proposal: VaultProposal): void {
+    this.proposal = proposal;
+
+    if (!this.isWithdrawal && (proposal.status !== 'Pledge' || proposal.expiration < this.latestBlock)) {
+      this.amount.disable();
+    } else {
+      this.amount.enable();
+    }
   }
 
   destroyContext$(): void {

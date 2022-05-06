@@ -28,9 +28,10 @@ export abstract class CacheService {
    * @summary Base method to retrieve a sharable cached object.
    * @param key The cached items unique key to look it up by
    * @param $value The api request as observable to use if the cached item doesn't exit.
+   * @param cacheLength Optional number of blocks to cache the record for, default 1.
    * @returns Observable T of the cached items type.
    */
-  protected getItem<T>(key: string, $value: Observable<T>): Observable<T> {
+  protected getItem<T>(key: string, $value: Observable<T>, cacheLength: number = 1): Observable<T> {
     const currentBlock = this._indexService.latestBlock;
     const blockHeight = currentBlock?.height || 0;
 
@@ -46,8 +47,10 @@ export abstract class CacheService {
         );
     }
 
+    const blocksSinceRefresh = blockHeight - this.cache[key].lastUpdateBlock;
+
     // Update, the found record is stale
-    if (blockHeight > this.cache[key].lastUpdateBlock) {
+    if (blocksSinceRefresh >= cacheLength) {
       this.cache[key].lastUpdateBlock = blockHeight;
       this.cache[key].subject.next();
 
@@ -63,8 +66,9 @@ export abstract class CacheService {
    * @summary Manually caches an items response. Good to use when retrieving paginated requests to cache the individual records.
    * @param key The key to store the cached item by
    * @param value The generic value to cache
+   * @param cacheLength Optional number of blocks to cache the record for, default 1.
    */
-  protected cacheItem<T>(key: string, value: T): void {
+  protected cacheItem<T>(key: string, value: T, cacheLength: number = 1): void {
     const currentBlock = this._indexService.latestBlock;
     const blockHeight = currentBlock?.height || 0;
 
@@ -80,7 +84,9 @@ export abstract class CacheService {
         switchMap(_ => of(value)),
         shareReplay(1));
 
-    if (blockHeight > this.cache[key].lastUpdateBlock) {
+    const blocksSinceRefresh = blockHeight - this.cache[key].lastUpdateBlock;
+
+    if (blocksSinceRefresh >= cacheLength) {
       this.cache[key].lastUpdateBlock = blockHeight;
       this.cache[key].subject.next();
     }

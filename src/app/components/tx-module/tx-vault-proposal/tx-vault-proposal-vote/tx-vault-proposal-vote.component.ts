@@ -16,6 +16,7 @@ import { debounceTime, distinctUntilChanged, switchMap, take, tap } from 'rxjs/o
 import { Icons } from 'src/app/enums/icons';
 import { OpdexHttpError } from '@sharedModels/errors/opdex-http-error';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { VaultProposal } from '@sharedModels/ui/vaults/vault-proposal';
 
 @Component({
   selector: 'opdex-tx-vault-proposal-vote',
@@ -35,13 +36,12 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
   positionType: 'Balance' | 'ProposalVote';
   subscription = new Subscription();
   balanceError: boolean;
+  proposal: VaultProposal;
+  latestBlock: number;
+  votingDisabled: string;
 
   get amount(): FormControl {
     return this.form.get('amount') as FormControl;
-  }
-
-  get proposalId(): FormControl {
-    return this.form.get('proposalId') as FormControl;
   }
 
   get inFavor(): FormControl {
@@ -60,12 +60,13 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
     this.vaultAddress = this._env.vaultAddress;
 
     this.form = this._fb.group({
-      proposalId: ['', [Validators.required, Validators.min(1)]],
       amount: ['', [Validators.required, Validators.pattern(PositiveDecimalNumberRegex)]],
       inFavor: [false, Validators.required]
     });
 
-    this.subscription.add(this._tokenService.getToken('CRS').subscribe(crs => this.crs = crs));
+    this.subscription.add(
+        this._tokenService.getToken('CRS')
+          .subscribe(crs => this.crs = crs));
 
     this.subscription.add(
       this.amount.valueChanges
@@ -74,15 +75,21 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
           distinctUntilChanged(),
           switchMap(_ => this.validateBalance()))
         .subscribe());
+
+    this.subscription.add(
+      this._indexService.latestBlock$
+        .subscribe(block => this.latestBlock = block.height));
   }
 
   ngOnChanges() {
     if (!!this.data) {
-      this.proposalId.setValue(this.data.proposalId);
-      this.isWithdrawal = !!this.data.withdraw;
-      this.inFavor.setValue(!!this.data.inFavor);
+      const { proposal, withdraw, inFavor } = this.data;
 
+      this.inFavor.setValue(!!inFavor);
+      this.isWithdrawal = !!withdraw;
       this.positionType = this.isWithdrawal ? 'ProposalVote' : 'Balance';
+
+      if (proposal) this._setProposal(proposal);
     }
   }
 
@@ -90,14 +97,14 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
     if (!this.vaultAddress) return;
 
     let quote$: Observable<ITransactionQuote>;
+    const amount = new FixedDecimal(this.amount.value, 8);
 
     if (!this.isWithdrawal) {
-      const request = new VaultProposalVoteQuoteRequest(new FixedDecimal(this.amount.value, 8), this.inFavor.value);
-      quote$ = this._platformApi.voteOnVaultProposal(this.vaultAddress, this.proposalId.value, request.payload);
-    }
-    else {
-      const request = new VaultProposalWithdrawVoteQuoteRequest(new FixedDecimal(this.amount.value, 8));
-      quote$ = this._platformApi.withdrawVaultProposalVote(this.vaultAddress, this.proposalId.value, request.payload);
+      const request = new VaultProposalVoteQuoteRequest(amount, this.inFavor.value);
+      quote$ = this._platformApi.voteOnVaultProposal(this.vaultAddress, this.proposal.proposalId, request.payload);
+    } else {
+      const request = new VaultProposalWithdrawVoteQuoteRequest(amount);
+      quote$ = this._platformApi.withdrawVaultProposalVote(this.vaultAddress, this.proposal.proposalId, request.payload);
     }
 
     quote$
@@ -109,6 +116,11 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
   handleAddRemoveStatus(event: MatSlideToggleChange): void {
     this.isWithdrawal = event.checked;
     this.positionType = this.isWithdrawal ? 'ProposalVote' : 'Balance';
+
+    this._setProposal(this.proposal);
+    this.amount.setValue(undefined);
+    this.amount.markAsUntouched();
+    this.balanceError = false;
   }
 
   handlePercentageSelect(value: any): void {
@@ -122,10 +134,27 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
     const amountNeeded = new FixedDecimal(this.amount.value, this.crs.decimals);
 
     const stream$: Observable<boolean> = this.isWithdrawal
-      ? this._validateVaultVote$(this.proposalId.value, amountNeeded)
+      ? this._validateVaultVote$(this.proposal.proposalId, amountNeeded)
       : this._validateBalance$(this.crs, amountNeeded);
 
     return stream$.pipe(tap(result => this.balanceError = !result));
+  }
+
+  private _setProposal(proposal: VaultProposal): void {
+    this.proposal = proposal;
+
+    const isNotVotePeriod = proposal.status !== 'Vote';
+    const isExpired = proposal.expiration < this.latestBlock;
+
+    if (!this.isWithdrawal && (isNotVotePeriod || isExpired)) {
+      this.amount.disable();
+      this.votingDisabled = isExpired || proposal.status === 'Complete'
+        ? 'Voting period has ended'
+        : 'Voting period has not started'
+    } else {
+      this.amount.enable();
+      this.votingDisabled = undefined;
+    }
   }
 
   destroyContext$(): void {

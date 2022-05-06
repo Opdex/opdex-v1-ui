@@ -3,7 +3,7 @@
     type="button"
     class="tiny w-100 pl-0 pr-0 b-300"
     *ngFor="let option of percentages"
-    [disabled]="!balance || balance.isZero"
+    [disabled]="!balance || balance.isZero || disable"
     (click)="selectPercentage(option)"
     color="{{selected === option ? 'primary' : ''}}"><small>{{option}}%</small></button>
 </div>

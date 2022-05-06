@@ -10,7 +10,7 @@ import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { IconSizes } from 'src/app/enums/icon-sizes';
 import { Icons } from 'src/app/enums/icons';
 import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interface';
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { ReviewQuoteComponent } from '@sharedComponents/tx-module/shared/review-quote/review-quote.component';
 import { take } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
@@ -25,6 +25,7 @@ import { UserContext } from '@sharedModels/user-context';
 export class VaultProposalCardComponent implements OnDestroy {
   @Input() proposal: VaultProposal;
   @Input() latestBlock: IBlock;
+  @Output() onClose = new EventEmitter<void>();
 
   icons = Icons;
   iconSizes = IconSizes;
@@ -83,5 +84,9 @@ export class VaultProposalCardComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  close(): void {
+    this.onClose.emit();
   }
 }

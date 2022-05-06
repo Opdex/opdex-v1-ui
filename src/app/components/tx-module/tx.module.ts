@@ -55,6 +55,7 @@ import { TxVaultProposalVoteComponent } from './tx-vault-proposal/tx-vault-propo
 import { TxVaultProposalPledgeComponent } from './tx-vault-proposal/tx-vault-proposal-pledge/tx-vault-proposal-pledge.component';
 import { TxQuoteErrorsComponent } from './shared/tx-quote-errors/tx-quote-errors.component';
 import { TxQuoteErrorComponent } from './shared/tx-quote-error/tx-quote-error.component';
+import { VaultProposalSelectorComponent } from './shared/vault-proposal-selector/vault-proposal-selector.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +85,8 @@ import { TxQuoteErrorComponent } from './shared/tx-quote-error/tx-quote-error.co
     TxVaultProposalVoteComponent,
     TxVaultProposalPledgeComponent,
     TxQuoteErrorsComponent,
-    TxQuoteErrorComponent
+    TxQuoteErrorComponent,
+    VaultProposalSelectorComponent
   ],
   imports: [
     CommonModule,

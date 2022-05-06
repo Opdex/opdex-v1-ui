@@ -3,11 +3,14 @@
     <mat-button-toggle [value]="option.value" class="w-100" *ngFor="let option of txOptions">{{option.action}}</mat-button-toggle>
   </mat-button-toggle-group>
 
-  <ng-container>
-    <!-- Only necessary for pledge/vote screens -->
-    <!-- <opdex-wallet-preview [balanceTokens]="['CRS']"></opdex-wallet-preview> -->
+  <opdex-vault-proposal-selector
+    [data]="data"
+    (onProposalChange)="handleProposalChange($event)"
+    *ngIf="group.value !== 1">
+  </opdex-vault-proposal-selector>
 
-    <opdex-card>
+  <ng-container>
+    <opdex-card *ngIf="group.value == 1 || data.proposal">
       <opdex-tx-vault-proposal-create [data]="data" *ngIf="group.value == 1"></opdex-tx-vault-proposal-create>
       <opdex-tx-vault-proposal-pledge [data]="data" *ngIf="group.value == 2"></opdex-tx-vault-proposal-pledge>
       <opdex-tx-vault-proposal-vote [data]="data" *ngIf="group.value == 3"></opdex-tx-vault-proposal-vote>
