@@ -23,16 +23,18 @@ export class WalletsService extends CacheService {
   }
 
   getBalance(wallet: string, token: string): Observable<IAddressBalance> {
+    const isCrs = token === 'CRS';
+    const cacheLength = isCrs ? 5 : 1;
     const stream$ = this._platformApi.getBalance(wallet, token)
       .pipe(catchError((error: OpdexHttpError) => {
-        if (error.status === 404 && token !== 'CRS') {
+        if (error.status === 404 && !isCrs) {
           return this._platformApi.refreshBalance(wallet, token);
         }
 
         return throwError(error);
       }));
 
-    return this.getItem(`wallet-balance-${wallet}-${token}`, stream$);
+    return this.getItem(`wallet-balance-${wallet}-${token}`, stream$, cacheLength);
   }
 
   refreshBalance(wallet: string, token: string): Observable<IAddressBalance> {

@@ -3,8 +3,6 @@
     <mat-button-toggle [value]="option.value" class="w-100" *ngFor="let option of txOptions">{{option.action}}</mat-button-toggle>
   </mat-button-toggle-group>
 
-  <!-- Resets when looking at create proposal form however the form components still know about the proposal -->
-  <!-- Makes it seem like a proposal isn't selected but really it is, the select just reset -->
   <opdex-vault-proposal-selector
     [data]="data"
     (onProposalChange)="handleProposalChange($event)"
@@ -12,9 +10,6 @@
   </opdex-vault-proposal-selector>
 
   <ng-container>
-    <!-- Only necessary for pledge/vote screens -->
-    <!-- <opdex-wallet-preview [balanceTokens]="['CRS']"></opdex-wallet-preview> -->
-
     <opdex-card *ngIf="group.value == 1 || data.proposal">
       <opdex-tx-vault-proposal-create [data]="data" *ngIf="group.value == 1"></opdex-tx-vault-proposal-create>
       <opdex-tx-vault-proposal-pledge [data]="data" *ngIf="group.value == 2"></opdex-tx-vault-proposal-pledge>

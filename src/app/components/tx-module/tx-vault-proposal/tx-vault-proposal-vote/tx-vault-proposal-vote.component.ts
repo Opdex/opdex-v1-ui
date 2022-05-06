@@ -85,7 +85,6 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
     if (!!this.data) {
       const { proposal, withdraw, inFavor } = this.data;
 
-      // this.proposalId.setValue(this.data.proposalId);
       this.inFavor.setValue(!!inFavor);
       this.isWithdrawal = !!withdraw;
       this.positionType = this.isWithdrawal ? 'ProposalVote' : 'Balance';
