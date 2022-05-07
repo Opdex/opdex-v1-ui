@@ -82,11 +82,11 @@ export class VaultProposalCardComponent implements OnDestroy {
       .subscribe(quote => this._bottomSheet.open(ReviewQuoteComponent, { data: quote }))
   }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-
   close(): void {
     this.onClose.emit();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

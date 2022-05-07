@@ -1,3 +1,4 @@
+import { OnDestroy } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { IndexService } from '@sharedServices/platform/index.service';
 import { VaultProposal } from '@sharedModels/ui/vaults/vault-proposal';
@@ -15,7 +16,7 @@ import { IBlock } from '@sharedModels/platform-api/responses/blocks/block.interf
   templateUrl: './vault-proposal-selector.component.html',
   styleUrls: ['./vault-proposal-selector.component.scss']
 })
-export class VaultProposalSelectorComponent implements OnChanges {
+export class VaultProposalSelectorComponent implements OnChanges, OnDestroy {
   @Input() data: any;
   @Output() onProposalChange = new EventEmitter<VaultProposal>();
 
@@ -96,5 +97,9 @@ export class VaultProposalSelectorComponent implements OnChanges {
   handleClose(): void {
     this._setProposal(undefined);
     this.proposalId.setValue(undefined);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }
