@@ -10,7 +10,7 @@
   </opdex-vault-proposal-selector>
 
   <ng-container>
-    <opdex-card *ngIf="group.value == 1 || data.proposal">
+    <opdex-card *ngIf="group.value == 1 || data?.proposal">
       <opdex-tx-vault-proposal-create [data]="data" *ngIf="group.value == 1"></opdex-tx-vault-proposal-create>
       <opdex-tx-vault-proposal-pledge [data]="data" *ngIf="group.value == 2"></opdex-tx-vault-proposal-pledge>
       <opdex-tx-vault-proposal-vote [data]="data" *ngIf="group.value == 3"></opdex-tx-vault-proposal-vote>
