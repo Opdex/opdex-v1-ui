@@ -61,9 +61,26 @@
 
         <button mat-flat-button
           color="primary"
+          class="small"
           (click)="quoteCompleteProposal(proposal.proposalId)"
           *ngIf="context?.wallet && proposal.expiration < latestBlock.height && proposal.status !== 'Complete'">
-          Complete Proposal
+          Finalize
+        </button>
+
+        <button mat-flat-button
+          color="primary"
+          class="small"
+          (click)="openTransactionView('pledge', false)"
+          *ngIf="context?.wallet && proposal.status === 'Pledge' && proposal.expiration >= latestBlock?.height">
+          Pledge
+        </button>
+
+        <button mat-flat-button
+          color="primary"
+          class="small"
+          (click)="openTransactionView('vote', false)"
+          *ngIf="context?.wallet && proposal.status === 'Vote' && proposal.expiration >= latestBlock?.height">
+          Vote
         </button>
       </div>
 
