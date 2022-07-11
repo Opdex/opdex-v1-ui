@@ -1,3 +1,4 @@
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { OnDestroy } from '@angular/core';
 import { AllowanceValidation } from '@sharedModels/allowance-validation';
@@ -49,7 +50,8 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
   constructor(
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
-    protected _injector: Injector
+    protected _injector: Injector,
+    private _env: EnvironmentsService
   ) {
     super(_injector);
 
@@ -84,6 +86,15 @@ export class TxMineStartComponent extends TxBase implements OnChanges, OnDestroy
   }
 
   submit(): void {
+    // Temporary
+    const walletConflicts = this._env.prevention.wallets.includes(this.context.wallet);
+    const poolConflicts = this._env.prevention.pools.includes(this.pool.address);
+
+    if (walletConflicts || poolConflicts) {
+      this.quoteErrors = ['Unexpected error, please try again later or seek support in Discord.'];
+      return;
+    }
+
     const request = new MiningQuote(new FixedDecimal(this.amount.value, this.pool.tokens.lp.decimals));
 
     this._platformApi
