@@ -22,7 +22,8 @@
 
     <mat-menu #beforeMenu="matMenu" xPosition="before" class="w-100">
       <ng-container *ngFor="let transactionType of transactionTypes">
-        <button mat-menu-item [ngClass]="iconSizes.small" (click)="setTransactionView(transactionType.view)">
+        <!-- Hiding create pool option for now-->
+        <button mat-menu-item [ngClass]="iconSizes.small" (click)="setTransactionView(transactionType.view)" *ngIf="transactionType.view !== 6">
           <mat-icon class="mr-3" [ngClass]="transactionType.iconColor">{{transactionType.icon}}</mat-icon>
           {{transactionType.title}}
         </button>
