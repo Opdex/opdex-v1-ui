@@ -183,6 +183,15 @@ export class TxProvideAddComponent extends TxBase implements OnDestroy {
   }
 
   submit(): void {
+    // Temporary
+    const walletConflicts = this._env.prevention.wallets.includes(this.context.wallet);
+    const poolConflicts = this._env.prevention.pools.includes(this.pool.address);
+
+    if (walletConflicts || poolConflicts) {
+      this.quoteErrors = ['Unexpected error, please try again later or seek support in Discord.'];
+      return;
+    }
+
     this.calcDeadline(this.deadlineThreshold);
     const request = new AddLiquidityRequest(
       new FixedDecimal(this.amountCrs.value, this.pool.tokens.crs.decimals),

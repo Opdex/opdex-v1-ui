@@ -1,4 +1,4 @@
-import { IEnvironment } from '@sharedLookups/environments';
+import { IEnvironment, IPrevention } from '@sharedLookups/environments';
 import { environment } from '@environments/environment';
 import { Injectable } from '@angular/core';
 import { environments } from '@sharedLookups/environments';
@@ -38,6 +38,10 @@ export class EnvironmentsService {
 
   public get network(): Network {
     return this._env.network;
+  }
+
+  public get prevention(): IPrevention {
+    return this._env.prevention || { pools: [], wallets: [] }
   }
 
   public getAuthRoute(state: string, codeChallenge: string): string {

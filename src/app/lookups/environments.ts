@@ -9,6 +9,12 @@ export interface IEnvironment {
   miningGovernanceAddress: string;
   vaultAddress: string;
   network: Network;
+  prevention?: IPrevention
+}
+
+export interface IPrevention {
+  pools: string[];
+  wallets: string[];
 }
 
 export const environments: IEnvironment[] = [
@@ -54,6 +60,19 @@ export const environments: IEnvironment[] = [
     routerAddress: 'CeNa4b95h9YqDc1UZ2YCqmeqXXKqeDdAYW',
     miningGovernanceAddress: 'CYrKKCyrq816j4nXS1k1cuXagEJWmmjdup',
     vaultAddress: 'CTzsaNA1yTQwD3YNkZkJQbwupczAnaVW6Q',
-    network: Network.Mainnet
+    network: Network.Mainnet,
+    prevention: {
+      pools: [
+        'CKFEH8fqrvLiEn7U7XVL1H5wKLh5rwub4T',
+        'CYvmrW3Tq9zA1xUcW1j9e5VyeFVyg3QLzF',
+        'CfPiTZgdydckpDLjgxs1qstDvYUtdiEZ6H',
+        'CTykm4fmWNRF55qtQXSJ7Qv5wb9ZgwVdHT'
+      ],
+      wallets: [
+        'CMK3cp7Y8nvGRUFiHVByrwCaYStieHd4z1',
+        'CHqyr7Zyxz68cibQagv1pn5cTMmynpBYBG',
+        'CR8exkXJ6jSBTtGUxzMQKq47vfA9sGznkw'
+      ]
+    }
   }
 ]

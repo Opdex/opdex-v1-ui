@@ -45,9 +45,9 @@
     <div class="container">
       <div class="row">
         <div class="col-12">
-          <div class="flex-row-center-end" *ngIf="context?.wallet">
+          <!-- <div class="flex-row-center-end" *ngIf="context?.wallet">
             <button mat-button color="primary" (click)="createPool()"><mat-icon>{{icons.add}}</mat-icon> Create Pool</button>
-          </div>
+          </div> -->
 
           <opdex-pools-table [filter]="topPoolsFilter"></opdex-pools-table>
         </div>

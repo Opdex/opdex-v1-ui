@@ -1,3 +1,4 @@
+import { EnvironmentsService } from '@sharedServices/utility/environments.service';
 import { LiquidityPool } from '@sharedModels/ui/liquidity-pools/liquidity-pool';
 import { OnDestroy } from '@angular/core';
 import { Component, Input, OnChanges, Injector } from '@angular/core';
@@ -49,7 +50,8 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
   constructor(
     private _fb: FormBuilder,
     private _platformApi: PlatformApiService,
-    protected _injector: Injector
+    protected _injector: Injector,
+    private _env: EnvironmentsService
   ) {
     super(_injector);
 
@@ -85,6 +87,15 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
   }
 
   submit(): void {
+    // Temporary
+    const walletConflicts = this._env.prevention.wallets.includes(this.context.wallet);
+    const poolConflicts = this._env.prevention.pools.includes(this.pool.address);
+
+    if (walletConflicts || poolConflicts) {
+      this.quoteErrors = ['Unexpected error, please try again later or seek support in Discord.'];
+      return;
+    }
+
     const request = new StartStakingRequest(new FixedDecimal(this.amount.value, this.pool.tokens.staking.decimals));
 
     this._platformApi
