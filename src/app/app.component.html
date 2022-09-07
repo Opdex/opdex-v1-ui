@@ -39,6 +39,18 @@
             </ng-container>
           </div>
 
+          <div class="notification-banner orange flex-row-center-between p-2" *ngIf="!hiddenDesktopMessage">
+            <div class="flex-row-center-center">
+              <mat-icon class="small mr-2">{{icons.update}}</mat-icon> Opdex desktop app is available! Website will retire December 2022.
+            </div>
+
+            <div class="flex-row-center-center">
+              <a href="https://github.com/opdex/opdex-desktop/releases" class="body-default" target="_blank">Download</a>
+              <span class="pl-1 pr-1">|</span>
+              <a href="javascript:void(0)" (click)="hideDesktopMessage()" class="body-default">Hide</a>
+            </div>
+          </div>
+
           <div id="page-content">
             <div class="mobile-nav" [ngClass]="{'open': menuOpen}">
               <opdex-side-nav (onRouteChanged)="handleRouteChanged($event)" [mobileMenuOpen]="menuOpen"></opdex-side-nav>

@@ -1,3 +1,4 @@
+import { StorageService } from './services/utility/storage.service';
 import { AuthService } from '@sharedServices/utility/auth.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
 import { environment } from '@environments/environment';
@@ -48,6 +49,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   indexStatus: IIndexStatus;
   configuredForEnv: boolean;
   maintenance: boolean;
+  hiddenDesktopMessage: boolean;
   updateOpened = false;
   updateAvailable = false;
   menuOpen = false;
@@ -72,7 +74,8 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     private _appUpdate: SwUpdate,
     private _env: EnvironmentsService,
     private _platformApiService: PlatformApiService,
-    private _authService: AuthService
+    private _authService: AuthService,
+    private _storageService: StorageService
   ) {
     window.addEventListener('resize', this.appHeight);
     this.appHeight();
@@ -86,6 +89,8 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
+    this._checkHiddenDesktopMessage();
+
     // TODO: On new session, using the refresh token doesn't allow opening up to guarded pages
     // (i.e. close session, open up at /wallets will redirect to / then refresh the token)
     this.subscription.add(
@@ -181,6 +186,26 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   handleRouteChanged(url: string): void {
     // dont care about the url just close the menu
     this.menuOpen = false;
+  }
+
+  hideDesktopMessage(): void {
+    this.hiddenDesktopMessage = true;
+    this._storageService.setLocalStorage('desktop-notification', { hidden: true, dateHidden: new Date()}, true);
+  }
+
+  private _checkHiddenDesktopMessage(): void {
+    const data = this._storageService.getLocalStorage<{hidden: boolean, dateHidden: Date}>('desktop-notification', true);
+
+    const now = new Date();
+    const weekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+
+    // If the date it was hidden was over a week ago, show the message again
+    if (!!data === false || (!!data && data.hidden && new Date(data.dateHidden) < weekAgo)) {
+      this.hiddenDesktopMessage = false;
+      this._storageService.setLocalStorage('desktop-notification', { hidden: false, dateHidden: new Date()}, true);
+    } else {
+      this.hiddenDesktopMessage = data?.hidden || false;
+    }
   }
 
   private async _validateJwt(): Promise<void> {

@@ -12,7 +12,7 @@ export const environment = {
   production: false,
   ga: '',
   defaultTheme: 'light-mode',
-  network: Network.Devnet,
+  network: Network.Mainnet,
   platformApiOverride,
   authApiOverride,
   authUiOverride
