@@ -71,7 +71,7 @@ export class TxStakeStartComponent extends TxBase implements OnChanges, OnDestro
         debounceTime(300),
         distinctUntilChanged(),
         map(amount => {
-          const amountFixed = new FixedDecimal(amount || '0', this.pool.tokens.lp.decimals);
+          const amountFixed = new FixedDecimal(amount || '0', this.pool.tokens.staking.decimals);
           amountFixed.isZero ? this.reset() : this.setFiatValue(amountFixed);
           return amountFixed;
         }),

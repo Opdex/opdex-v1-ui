@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "secure-start": "ng serve -o --ssl --ssl-key ../../localhost-key.pem --ssl-cert ../../localhost.pem",
+    "secure-start:mainnet": "ng serve -o --ssl --ssl-key ../../localhost-key.pem --ssl-cert ../../localhost.pem -c mainnet",
+    "secure-start:testnet": "ng serve -o --ssl --ssl-key ../../localhost-key.pem --ssl-cert ../../localhost.pem -c testnet",
     "build": "ng build",
     "build-prod": "ng build -c prod",
     "test": "ng test",

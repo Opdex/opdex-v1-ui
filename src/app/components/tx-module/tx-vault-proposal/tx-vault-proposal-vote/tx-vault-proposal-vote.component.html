@@ -8,9 +8,6 @@
       [formControl]="amount"
       [numbersOnly]="true"
       suffix="CRS">
-      <div class="flex-row-center-end">
-        <span class="success" *ngIf="fiatValue">${{fiatValue | shortNumber}}</span>
-      </div>
     </opdex-input-control>
 
     <opdex-percentage-amount-buttons

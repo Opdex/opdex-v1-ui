@@ -28,7 +28,6 @@ export class TxVaultProposalVoteComponent extends TxBase implements OnChanges, O
   form: FormGroup;
   icons = Icons;
   iconSizes = IconSizes;
-  fiatValue: string;
   isWithdrawal = false;
   percentageSelected: string;
   crs: Token;

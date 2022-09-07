@@ -28,7 +28,6 @@ export class TxVaultProposalPledgeComponent extends TxBase implements OnChanges,
   form: FormGroup;
   icons = Icons;
   iconSizes = IconSizes;
-  fiatValue: string;
   isWithdrawal = false;
   percentageSelected: string;
   crs: Token;
