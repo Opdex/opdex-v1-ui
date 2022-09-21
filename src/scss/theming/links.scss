@@ -10,6 +10,10 @@ a {
   &.error {
     color: $red-primary !important;
   }
+
+  &.white {
+    color: white !important;
+  }
 }
 
 .light-mode {
