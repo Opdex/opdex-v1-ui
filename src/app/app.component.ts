@@ -1,3 +1,4 @@
+import { WorldTimeApiService } from './services/api/world-time-api.service';
 import { StorageService } from './services/utility/storage.service';
 import { AuthService } from '@sharedServices/utility/auth.service';
 import { PlatformApiService } from '@sharedServices/api/platform-api.service';
@@ -14,7 +15,7 @@ import { AfterContentChecked, ChangeDetectorRef, Component, HostBinding, OnDestr
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { ThemeService } from './services/utility/theme.service';
 import { MatSidenav } from '@angular/material/sidenav';
-import { lastValueFrom, of, Subscription, timer } from 'rxjs';
+import { firstValueFrom, lastValueFrom, of, Subscription, timer } from 'rxjs';
 import { FadeAnimation } from '@sharedServices/animations/fade-animation';
 import { Router, RouterOutlet, RoutesRecognized, NavigationEnd } from '@angular/router';
 import { UserContextService } from '@sharedServices/utility/user-context.service';
@@ -54,9 +55,10 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   updateAvailable = false;
   menuOpen = false;
   isPinned = true;
-  loading = true;
+  initLoad = true;
   icons = Icons;
   subscription = new Subscription();
+  isExpired = false;
 
   constructor(
     public overlayContainer: OverlayContainer,
@@ -75,13 +77,18 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     private _env: EnvironmentsService,
     private _platformApiService: PlatformApiService,
     private _authService: AuthService,
-    private _storageService: StorageService
+    private _storageService: StorageService,
+    private _worldTimeService: WorldTimeApiService
   ) {
     window.addEventListener('resize', this.appHeight);
     this.appHeight();
     this.network = this._env.network;
     this.configuredForEnv = !!this._env.marketAddress && !!this._env.routerAddress;
-    setTimeout(() => this.loading = false, 2000);
+    setTimeout(() => this.initLoad = false, 2000);
+  }
+
+  public get loading(): boolean {
+    return this.isExpired || this.initLoad;
   }
 
   ngAfterContentChecked(): void {
@@ -91,10 +98,13 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   async ngOnInit(): Promise<void> {
     this._checkHiddenDesktopMessage();
 
+    await this._checkWorldTime();
+
     // TODO: On new session, using the refresh token doesn't allow opening up to guarded pages
     // (i.e. close session, open up at /wallets will redirect to / then refresh the token)
     this.subscription.add(
       this._userContextService.context$
+        .pipe(filter(_ => !this.isExpired))
         .subscribe(async context => {
           this.context = context;
 
@@ -110,6 +120,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     this.subscription.add(
       timer(0, 8000)
         .pipe(
+          filter(_ => !this.isExpired),
           switchMap(_ => this._indexService.refreshStatus$()),
           filter(indexStatus => indexStatus.latestBlock.height > 0),
           tap(indexStatus => this.indexStatus = indexStatus),
@@ -155,6 +166,8 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
           .subscribe(async _ => {
             const updateAvailable = await this._appUpdate.checkForUpdate();
             if (updateAvailable) this.openAppUpdate();
+
+            await this._checkWorldTime();
           }));
     }
   }
@@ -206,6 +219,18 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
     } else {
       this.hiddenDesktopMessage = data?.hidden || false;
     }
+  }
+
+  private async _checkWorldTime(): Promise<void> {
+    if (this.isExpired) return;
+
+    const timeResponse = await firstValueFrom(this._worldTimeService.getTime());
+
+    // 12-20-2022 16:00:00 UTC
+    const cutoff = Date.UTC(2022, 11, 20, 16);
+    const cutoffUnix = cutoff / 1000;
+
+    this.isExpired = cutoffUnix <= timeResponse.unixtime;
   }
 
   private async _validateJwt(): Promise<void> {

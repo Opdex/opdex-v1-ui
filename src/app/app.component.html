@@ -96,7 +96,17 @@
   </div>
 
   <div class="splash header-section" *ngIf="loading">
-    <img class="loading-logo" src="/assets/logo-light-blue.png" alt="Opdex">
-    <h1 class="loading-title">OPDEX</h1>
+    <ng-container *ngIf="initLoad; else expired">
+      <img class="loading-logo" src="/assets/logo-light-blue.png" alt="Opdex">
+      <h1 class="loading-title">OPDEX</h1>
+    </ng-container>
+
+    <ng-template #expired>
+      <opdex-card style="max-width: 500px;">
+        <h2 class="text-center">Thank you for using Opdex!</h2>
+        <p>The project has gone entirely decentralized and can be used by downloading the desktop client with Cirrus Core wallets.</p>
+        <p>View the official <a href="https://github.com/opdex/opdex-desktop/releases" target="_blank">GitHub repository</a> to start using the desktop client.</p>
+      </opdex-card>
+    </ng-template>
   </div>
 </main>
