@@ -22,7 +22,7 @@ export class WorldTimeApiService extends RestApiService {
     protected _env: EnvironmentsService
   ) {
     super(_http, _error, _jwt, _context, _router, _env);
-    this.api = 'http://worldtimeapi.org/api/';
+    this.api = 'https://worldtimeapi.org/api/';
   }
 
   public getTime(): Observable<ITImeResponse> {
