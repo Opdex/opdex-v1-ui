@@ -224,13 +224,16 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   private async _checkWorldTime(): Promise<void> {
     if (this.isExpired) return;
 
-    const timeResponse = await firstValueFrom(this._worldTimeService.getTime());
+    const timeResponse = await firstValueFrom(this._worldTimeService.getTime()
+      .pipe(catchError(_ => of(null))));
 
-    // 12-20-2022 16:00:00 UTC
-    const cutoff = Date.UTC(2022, 11, 20, 16);
-    const cutoffUnix = cutoff / 1000;
+    if (timeResponse !== null) {
+      // 12-20-2022 16:00:00 UTC
+      const cutoff = Date.UTC(2022, 11, 20, 16);
+      const cutoffUnix = cutoff / 1000;
 
-    this.isExpired = cutoffUnix <= timeResponse.unixtime;
+      this.isExpired = cutoffUnix <= timeResponse.unixtime;
+    }
   }
 
   private async _validateJwt(): Promise<void> {
